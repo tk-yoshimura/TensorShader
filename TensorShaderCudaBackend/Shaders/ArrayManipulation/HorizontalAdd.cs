@@ -1,0 +1,57 @@
+﻿using System;
+using System.Linq;
+
+namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
+
+    /// <summary>水平加算</summary>
+    public sealed class HorizontalAdd : Shader {
+        /// <summary>識別子</summary>
+        public override sealed string Signature => $"{GetType().Name.Split(',').Last()}";
+
+        /// <summary>コンストラクタ</summary>
+        public HorizontalAdd() { 
+            string code = $@"
+
+            __global__ void horizontal_add(float *inmap, float *outmap, unsigned int n) {{
+
+                unsigned int i = {Defines.IndexX};
+
+                if(i >= n){{
+                    return;
+                }}
+
+                outmap[i] = inmap[i * 2] + inmap[i * 2 + 1];
+            }}";
+
+            this.Kernel = new Kernel(code, "horizontal_add");
+        }
+
+        /// <summary>実行</summary>
+        public override sealed void Execute(Stream stream, params object[] args) {
+            CheckArgument(args);
+
+            uint n = (args.Last() as uint?).Value;
+
+            Kernel.Execute(n, dynamic_shared_memory_bytes: 0, stream, args);
+        }
+
+        /// <summary>引数チェック</summary>
+        protected override void CheckArgument(params object[] args) {
+            if (args == null || args.Length != 3) {
+                throw new ArgumentException(nameof(args));
+            }
+
+            if (!(args[2] is uint n)) {
+                throw new ArgumentException($"{nameof(args)}[2]");
+            }
+
+            if (!(args[0] is CudaArray<float> inmap) || inmap.Length < n * 2) {
+                throw new ArgumentException($"{nameof(args)}[0]");
+            }
+
+            if (!(args[1] is CudaArray<float> outmap) || outmap.Length < n) {
+                throw new ArgumentException($"{nameof(args)}[1]");
+            }
+        }
+    }
+}

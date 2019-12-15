@@ -1,0 +1,61 @@
+﻿using System.Collections.Generic;
+
+namespace TensorShaderCudaBackend {
+
+    /// <summary>インデクサ</summary>
+    public static class Indexer {
+        private readonly static Dictionary<string, Shader> shaders = new Dictionary<string, Shader>();
+        
+        /// <summary>OneHotVector</summary>
+        public static void OneHotVector(uint length, uint channels, CudaArray<float> src, CudaArray<float> dst){
+            string key = $"onehotvector channels={channels}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Indexer.OneHotVector(channels));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src, dst, length * channels, length);
+        }
+
+        /// <summary>ArgMin</summary>
+        public static void ArgMin(uint length, uint channels, CudaArray<float> src, CudaArray<float> dst){
+            string key = $"argmin channels={channels}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Indexer.ArgMin(channels));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src, dst, length * channels, length);
+        }
+
+        /// <summary>ArgMax</summary>
+        public static void ArgMax(uint length, uint channels, CudaArray<float> src, CudaArray<float> dst){
+            string key = $"argmax channels={channels}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Indexer.ArgMax(channels));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src, dst, length * channels, length);
+        }
+
+        /// <summary>Index</summary>
+        public static void Index(uint stride, uint axislength, uint clones, CudaArray<float> dst){
+            string key = "index";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Indexer.Index());
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, dst, stride * axislength * clones, stride, axislength);
+        }
+    }
+}
