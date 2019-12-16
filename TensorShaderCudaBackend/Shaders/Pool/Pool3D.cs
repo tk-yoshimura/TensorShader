@@ -19,10 +19,9 @@ namespace TensorShaderCudaBackend.Shaders.Pool {
         /// <param name="channels">チャネル数</param>
         /// <param name="stride">ストライド</param>
         public Pool3D(uint channels, uint stride) {
-            if (channels < 1) {
+            if (!Limits.CheckChannels(channels)) {
                 throw new ArgumentException(nameof(channels));
             }
-
             if (stride < 2) {
                 throw new ArgumentException(nameof(stride));
             }
@@ -46,8 +45,10 @@ namespace TensorShaderCudaBackend.Shaders.Pool {
 
             for (uint th = 0; th < batches; th++) {
                 for(uint oz = 0; oz < outdepth; oz++) { 
-                    Kernel.Execute((Channels, outwidth, outheight),
-                        dynamic_shared_memory_bytes: 0, stream,
+                    Kernel.Execute(
+                        indexes:(Channels, outwidth, outheight),
+                        dynamic_shared_memory_bytes: 0, 
+                        stream,
                         inmap.ElementPtr(th * Channels * inwidth * inheight * indepth), 
                         outmap.ElementPtr(th * Channels * outwidth * outheight * outdepth),
                         oz,
@@ -63,20 +64,20 @@ namespace TensorShaderCudaBackend.Shaders.Pool {
                 throw new ArgumentException(nameof(args));
             }
 
-            if (!(args[2] is uint inwidth) || inwidth < Stride) {
-                throw new ArgumentException($"{nameof(args)}[2]");
+            if (!(args[2] is uint inwidth) || !Limits.CheckWidth(inwidth, Stride)) {
+                throw new ArgumentException(nameof(inwidth));
             }
 
-            if (!(args[3] is uint inheight) || inheight < Stride) {
-                throw new ArgumentException($"{nameof(args)}[3]");
+            if (!(args[3] is uint inheight) || !Limits.CheckHeight(inheight, Stride)) {
+                throw new ArgumentException(nameof(inheight));
             }
 
-            if (!(args[4] is uint indepth) || indepth < Stride) {
-                throw new ArgumentException($"{nameof(args)}[4]");
+            if (!(args[4] is uint indepth) || !Limits.CheckDepth(indepth, Stride)) {
+                throw new ArgumentException(nameof(indepth));
             }
 
-            if (!(args[5] is uint batches) || batches < 1) {
-                throw new ArgumentException($"{nameof(args)}[5]");
+            if (!(args[5] is uint batches) || !Limits.CheckBatches(batches)) {
+                throw new ArgumentException(nameof(batches));
             }
 
             uint outwidth = inwidth / Stride;
@@ -84,11 +85,11 @@ namespace TensorShaderCudaBackend.Shaders.Pool {
             uint outdepth = indepth / Stride;
 
             if (!(args[0] is CudaArray<float> inmap) || inmap.Length < Channels * inwidth * inheight * indepth * batches) {
-                throw new ArgumentException($"{nameof(args)}[0]");
+                throw new ArgumentException(nameof(inmap));
             }
 
             if (!(args[1] is CudaArray<float> outmap) || outmap.Length < Channels * outwidth * outheight * outdepth * batches) {
-                throw new ArgumentException($"{nameof(args)}[1]");
+                throw new ArgumentException(nameof(outmap));
             }
         }
     }

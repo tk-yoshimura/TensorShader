@@ -68,17 +68,17 @@ namespace TensorShaderCudaBackend.Shaders.Channelwise {
             }
 
             if (!(args[MapArrays + 1] is uint length) || length < 0) {
-                throw new ArgumentException($"{nameof(args)}[{MapArrays + 1}]");
+                throw new ArgumentException(nameof(length));
             }
 
 
             if (!(args[0] is CudaArray<float> vectorarr) || vectorarr.Length < (ulong)Channels) {
-                throw new ArgumentException($"{nameof(args)}[0]");
+                throw new ArgumentException(nameof(vectorarr));
             }
 
             for (int i = 1; i < MapArrays + 1; i++) {
                 if (!(args[i] is CudaArray<float> arr) || arr.Length < length) {
-                    throw new ArgumentException($"{nameof(args)}[{i}]");
+                    throw new ArgumentException($"{nameof(arr)}[{i}]");
                 }
             }
         }

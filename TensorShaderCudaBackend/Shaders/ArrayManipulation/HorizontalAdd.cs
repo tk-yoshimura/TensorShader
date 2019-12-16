@@ -41,16 +41,16 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
                 throw new ArgumentException(nameof(args));
             }
 
-            if (!(args[2] is uint n)) {
-                throw new ArgumentException($"{nameof(args)}[2]");
+            if (!(args[2] is uint n) || n < 1) {
+                throw new ArgumentException(nameof(n));
             }
 
             if (!(args[0] is CudaArray<float> inmap) || inmap.Length < n * 2) {
-                throw new ArgumentException($"{nameof(args)}[0]");
+                throw new ArgumentException(nameof(inmap));
             }
 
             if (!(args[1] is CudaArray<float> outmap) || outmap.Length < n) {
-                throw new ArgumentException($"{nameof(args)}[1]");
+                throw new ArgumentException(nameof(outmap));
             }
         }
     }

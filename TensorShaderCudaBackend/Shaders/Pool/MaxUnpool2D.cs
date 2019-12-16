@@ -63,8 +63,10 @@ namespace TensorShaderCudaBackend.Shaders.Pool {
             }
 
             for (uint th = 0; th < batches; th++) {
-                Kernel.Execute((Channels, inwidth, inheight),
-                    dynamic_shared_memory_bytes: 0, stream,
+                Kernel.Execute(
+                    indexes:(Channels, inwidth, inheight),
+                    dynamic_shared_memory_bytes: 0,
+                    stream,
                     ingrad.ElementPtr(th * Channels * inwidth * inheight), 
                     inpool.ElementPtr(th * Channels * inwidth * inheight), 
                     inmap.ElementPtr(th * Channels * outwidth * outheight), 
@@ -80,34 +82,34 @@ namespace TensorShaderCudaBackend.Shaders.Pool {
                 throw new ArgumentException(nameof(args));
             }
 
-            if (!(args[4] is uint outwidth) || outwidth < Stride) {
-                throw new ArgumentException($"{nameof(args)}[4]");
+            if (!(args[4] is uint outwidth) || !Limits.CheckWidth(outwidth, Stride)) {
+                throw new ArgumentException(nameof(outwidth));
             }
 
-            if (!(args[5] is uint outheight) || outheight < Stride) {
-                throw new ArgumentException($"{nameof(args)}[5]");
+            if (!(args[5] is uint outheight) || !Limits.CheckHeight(outheight, Stride)) {
+                throw new ArgumentException(nameof(outheight));
             }
 
-            if (!(args[6] is uint batches) || batches < 1) {
-                throw new ArgumentException($"{nameof(args)}[6]");
+            if (!(args[6] is uint batches) || !Limits.CheckBatches(batches)) {
+                throw new ArgumentException(nameof(batches));
             }
 
             uint inwidth = outwidth / Stride, inheight = outheight / Stride;
 
             if (!(args[0] is CudaArray<float> ingrad) || ingrad.Length < Channels * inwidth * inheight * batches) {
-                throw new ArgumentException($"{nameof(args)}[0]");
+                throw new ArgumentException(nameof(ingrad));
             }
 
             if (!(args[1] is CudaArray<float> inpool) || inpool.Length < Channels * inwidth * inheight * batches) {
-                throw new ArgumentException($"{nameof(args)}[1]");
+                throw new ArgumentException(nameof(inpool));
             }
 
             if (!(args[2] is CudaArray<float> inmap) || inmap.Length < Channels * outwidth * outheight * batches) {
-                throw new ArgumentException($"{nameof(args)}[2]");
+                throw new ArgumentException(nameof(inmap));
             }
 
             if (!(args[3] is CudaArray<float> outmap) || outmap.Length < Channels * outwidth * outheight * batches) {
-                throw new ArgumentException($"{nameof(args)}[3]");
+                throw new ArgumentException(nameof(outmap));
             }
         }
     }

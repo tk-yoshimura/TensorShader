@@ -41,15 +41,15 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
             }
 
             if (!(args[2] is uint length)) {
-                throw new ArgumentException($"{nameof(args)}[2]");
+                throw new ArgumentException(nameof(length));
             }
 
             if (!(args[0] is CudaArray<float> arr) || arr.Length < length) {
-                throw new ArgumentException($"{nameof(args)}[0]");
+                throw new ArgumentException(nameof(arr));
             }
 
             if (!(args[1] is float)) {
-                throw new ArgumentException($"{nameof(args)}[1]");
+                throw new ArgumentException("const val");
             }
         }
     }

@@ -100,8 +100,11 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             transpose.Execute(stream, filter, transpose_filter, KernelWidth);
 
             for (uint th = 0; th < batches; th++) {
-                Kernel.Execute((OutChannels, outwidth), (Kernel.DefaultBlockSize(OutChannels), 1),
-                    dynamic_shared_memory_bytes: 0, stream,
+                Kernel.Execute(
+                    indexes:(OutChannels, outwidth), 
+                    block:(Kernel.DefaultBlockSize(OutChannels), 1),
+                    dynamic_shared_memory_bytes: 0, 
+                    stream,
                     inmap.ElementPtr(th * InChannels * inwidth), 
                     outmap.ElementPtr(th * OutChannels * outwidth),
                     transpose_filter

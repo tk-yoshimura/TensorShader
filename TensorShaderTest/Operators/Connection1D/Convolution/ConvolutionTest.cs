@@ -14,11 +14,11 @@ namespace TensorShaderTest.Operators.Connection1D {
             float max_err = 0;
 
             foreach (int batch in new int[] { 1, 2 }) {
-                foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 1024 }) {
-                    foreach (int outchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 1024 }) {
+                foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 32, 33 }) {
+                    foreach (int outchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 32, 33 }) {
                         foreach (int kwidth in new int[] { 1, 3, 5 }) {
                             foreach (int stride in new int[] { 1 }) {
-                                foreach (int inwidth in new int[] { kwidth, kwidth * 2, 8, 9, 13, 17 }) {
+                                foreach (int inwidth in new int[] { kwidth, kwidth * 2, 8, 9, 13, 17, 25 }) {
                                     int outwidth = (inwidth - kwidth) / stride + 1;
 
                                     float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();

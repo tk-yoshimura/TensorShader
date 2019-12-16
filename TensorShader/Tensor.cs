@@ -281,10 +281,10 @@ namespace TensorShader {
 
         /// <summary>領域外アクセスチェック</summary>
         public void CheckOverflow() {
-            float[] canary_read = Buffer.Value.Skip(Shape.Length).ToArray();
-
+            float[] value = Buffer.Value;
+            
             for (int i = 0; i < canary_length; i++) {
-                if (canary_read[i] != canary[i]) {
+                if (value[Shape.Length + i] != canary[i]) {
                     throw new IndexOutOfRangeException("Detected out of buffer access.");
                 }
             }

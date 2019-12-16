@@ -54,7 +54,12 @@ namespace TensorShaderCudaBackend.Shaders.Randomize {
 
             object[] kernel_args = (new object[]{ y, length, warps, seed1, seed2, seed3 }).Concat(args.Skip(3)).ToArray();
 
-            Kernel.Execute((WarpSize, warps), dynamic_shared_memory_bytes: 0, stream, kernel_args);
+            Kernel.Execute(
+                indexes:(WarpSize, warps), 
+                dynamic_shared_memory_bytes: 0, 
+                stream, 
+                kernel_args
+            );
         }
 
         /// <summary>引数チェック</summary>
@@ -64,15 +69,15 @@ namespace TensorShaderCudaBackend.Shaders.Randomize {
             }
 
             if (!(args[1] is uint length)) {
-                throw new ArgumentException($"{nameof(args)}[1]");
+                throw new ArgumentException(nameof(length));
             }
 
             if(!(args[2] is Random random) || random == null) { 
-                throw new ArgumentException($"{nameof(args)}[2]");
+                throw new ArgumentException(nameof(random));
             }
 
             if (!(args[0] is CudaArray<float> arr) || arr.Length < length) {
-                throw new ArgumentException($"{nameof(args)}[0]");
+                throw new ArgumentException(nameof(arr));
             }
         }
     }

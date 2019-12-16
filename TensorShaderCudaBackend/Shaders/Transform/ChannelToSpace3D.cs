@@ -21,10 +21,9 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
 
         /// <summary>コンストラクタ</summary>
         public ChannelToSpace3D(uint scale, uint outchannels) {
-            if (outchannels < 1) {
+            if (!Limits.CheckChannels(outchannels)) {
                 throw new ArgumentException(nameof(outchannels));
             }
-
             if (scale < 2) {
                 throw new ArgumentException(nameof(scale));
             }
@@ -71,8 +70,10 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
 
             for (uint th = 0; th < batches; th++) {
                 for(uint iz = 0; iz < indepth; iz++) { 
-                    Kernel.Execute((InChannels, inwidth, inheight),
-                        dynamic_shared_memory_bytes: 0, stream,
+                    Kernel.Execute(
+                        indexes:(InChannels, inwidth, inheight),
+                        dynamic_shared_memory_bytes: 0, 
+                        stream,
                         inmap.ElementPtr(th * InChannels * inwidth * inheight * indepth), 
                         outmap.ElementPtr(th * InChannels * inwidth * inheight * indepth),
                         iz,
@@ -88,30 +89,30 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
                 throw new ArgumentException(nameof(args));
             }
 
-            if (!(args[2] is uint inwidth) || inwidth < 1) {
-                throw new ArgumentException($"{nameof(args)}[2]");
+            if (!(args[2] is uint inwidth) || !Limits.CheckWidth(inwidth)) {
+                throw new ArgumentException(nameof(inwidth));
             }
 
-            if (!(args[3] is uint inheight) || inheight < 1) {
-                throw new ArgumentException($"{nameof(args)}[3]");
+            if (!(args[3] is uint inheight) || !Limits.CheckHeight(inheight)) {
+                throw new ArgumentException(nameof(inheight));
             }
 
-            if (!(args[4] is uint indepth) || indepth < 1) {
-                throw new ArgumentException($"{nameof(args)}[4]");
+            if (!(args[4] is uint indepth) || !Limits.CheckDepth(indepth)) {
+                throw new ArgumentException(nameof(indepth));
             }
 
-            if (!(args[5] is uint batches) || batches < 1) {
-                throw new ArgumentException($"{nameof(args)}[5]");
+            if (!(args[5] is uint batches) || !Limits.CheckBatches(batches)) {
+                throw new ArgumentException(nameof(batches));
             }
 
             uint length = batches * InChannels * inwidth * inheight * indepth;
 
             if (!(args[0] is CudaArray<float> inmap) || inmap.Length < length) {
-                throw new ArgumentException($"{nameof(args)}[0]");
+                throw new ArgumentException(nameof(inmap));
             }
 
             if (!(args[1] is CudaArray<float> outmap) || outmap.Length < length) {
-                throw new ArgumentException($"{nameof(args)}[1]");
+                throw new ArgumentException(nameof(outmap));
             }
         }
     }

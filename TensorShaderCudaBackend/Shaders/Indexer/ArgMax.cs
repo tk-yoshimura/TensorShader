@@ -53,11 +53,16 @@ namespace TensorShaderCudaBackend.Shaders.Indexer {
         public override sealed void Execute(Stream stream, params object[] args) {
             CheckArgument(args);
 
+            CudaArray<float> x = args[0] as CudaArray<float>;
+            CudaArray<float> y = args[1] as CudaArray<float>;
             uint indexes = (args.Last() as uint?).Value;
 
             Kernel.Execute(
-                indexes, dynamic_shared_memory_bytes: 0, stream, 
-                new object[]{ args[0], args[1], args[3] });
+                indexes, 
+                dynamic_shared_memory_bytes: 0, 
+                stream, 
+                x, y, indexes
+            );
         }
 
         /// <summary>引数チェック</summary>
@@ -67,19 +72,19 @@ namespace TensorShaderCudaBackend.Shaders.Indexer {
             }
 
             if (!(args[2] is uint length)) {
-                throw new ArgumentException($"{nameof(args)}[2]");
+                throw new ArgumentException(nameof(length));
             }
 
             if (!(args[3] is uint indexes) || length != indexes * Channels) {
-                throw new ArgumentException($"{nameof(args)}[3]");
+                throw new ArgumentException(nameof(indexes));
             }
 
-            if (!(args[0] is CudaArray<float> x) || x.Length < (ulong)length) {
-                throw new ArgumentException($"{nameof(args)}[0]");
+            if (!(args[0] is CudaArray<float> x) || x.Length < length) {
+                throw new ArgumentException(nameof(x));
             }
 
-            if (!(args[1] is CudaArray<float> v) || v.Length < (ulong)indexes) {
-                throw new ArgumentException($"{nameof(args)}[1]");
+            if (!(args[1] is CudaArray<float> v) || v.Length < indexes) {
+                throw new ArgumentException(nameof(v));
             }
         }
     }

@@ -51,18 +51,18 @@ namespace TensorShaderCudaBackend.Shaders.Elementwise {
             }
 
             if (!(args[Constants + Arrays] is uint length)) {
-                throw new ArgumentException($"{nameof(args)}[{Constants + Arrays}]");
+                throw new ArgumentException(nameof(length));
             }
 
             for (int i = 0; i < Constants; i++) {
                 if (!(args[i] is float)) {
-                    throw new ArgumentException($"{nameof(args)}[{i}]");
+                    throw new ArgumentException("const val");
                 }
             }
 
             for (int i = Constants; i < Constants + Arrays; i++) {
                 if (!(args[i] is CudaArray<float> arr) || arr.Length < length) {
-                    throw new ArgumentException($"{nameof(args)}[{i}]");
+                    throw new ArgumentException($"{nameof(arr)}[{i}]");
                 }
             }
         }

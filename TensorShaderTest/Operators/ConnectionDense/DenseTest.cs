@@ -14,8 +14,8 @@ namespace TensorShaderTest.Operators.ConnectionDense {
             float max_err = 0;
 
             foreach (int batch in new int[] { 1, 2 }) {
-                foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 1024 }) {
-                    foreach (int outchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 1024 }) {
+                foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 32, 33 }) {
+                    foreach (int outchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 32, 33 }) {
                         float[] xval = (new float[inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                         float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 

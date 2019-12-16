@@ -13,7 +13,7 @@ namespace TensorShaderCudaBackend.Shaders.Transpose {
         public uint OutChannels { private set; get; }
 
         /// <summary>実行あたりのポイント数</summary>
-        public static uint SlidesPerPoints => 0x8000; 
+        public static uint PointsPerExecute => 0x8000; 
 
         /// <summary>識別子</summary>
         public override sealed string Signature => 
@@ -21,11 +21,8 @@ namespace TensorShaderCudaBackend.Shaders.Transpose {
 
         /// <summary>コンストラクタ</summary>
         public TransposeKernelChannel(uint inchannels, uint outchannels) {
-            if (inchannels < 1) {
-                throw new ArgumentException(nameof(inchannels));
-            }
-            if (outchannels < 1) {
-                throw new ArgumentException(nameof(outchannels));
+            if (!Limits.CheckChannels(inchannels, outchannels)) {
+                throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
 
             this.InChannels = inchannels;
@@ -59,11 +56,13 @@ namespace TensorShaderCudaBackend.Shaders.Transpose {
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             uint pts = (args[2] as uint?).Value;
             
-            for(uint p = 0; p < pts; p += SlidesPerPoints) { 
-                uint pl = Math.Min(SlidesPerPoints, pts - p);
+            for(uint p = 0; p < pts; p += PointsPerExecute) { 
+                uint pl = Math.Min(PointsPerExecute, pts - p);
 
-                Kernel.Execute((InChannels, OutChannels, pl),
-                    dynamic_shared_memory_bytes: 0, stream,
+                Kernel.Execute(
+                    indexes:(InChannels, OutChannels, pl),
+                    dynamic_shared_memory_bytes: 0, 
+                    stream,
                     inmap, outmap, pl
                 );
             }
@@ -76,17 +75,17 @@ namespace TensorShaderCudaBackend.Shaders.Transpose {
             }
 
             if (!(args[2] is uint pts) || pts < 1) {
-                throw new ArgumentException($"{nameof(args)}[2]");
+                throw new ArgumentException(nameof(pts));
             }
 
             uint length = InChannels * OutChannels * pts;
 
             if (!(args[0] is CudaArray<float> inmap) || inmap.Length < length) {
-                throw new ArgumentException($"{nameof(args)}[0]");
+                throw new ArgumentException(nameof(inmap));
             }
 
             if (!(args[1] is CudaArray<float> outmap) || outmap.Length < length) {
-                throw new ArgumentException($"{nameof(args)}[1]");
+                throw new ArgumentException(nameof(outmap));
             }
         }
     }

@@ -32,16 +32,10 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
         
         /// <summary>コンストラクタ</summary>
         public KernelProduct1D(uint inchannels, uint outchannels, uint kwidth) { 
-            if (inchannels < 1 || inchannels > Limits.Channels) {
-                throw new ArgumentException(nameof(inchannels));
+            if (!Limits.CheckChannels(inchannels, outchannels)) {
+                throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
-            if (outchannels < 1 || outchannels > Limits.Channels) {
-                throw new ArgumentException(nameof(outchannels));
-            }
-            if ((kwidth & 1) != 1) { 
-                throw new ArgumentException(nameof(kwidth));
-            }
-            if (kwidth > MaxKernelSize) { 
+            if (!Limits.CheckKernelSize(kwidth)) { 
                 throw new ArgumentException(nameof(kwidth));
             }
 
@@ -125,8 +119,8 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             for (uint th = 0; th < batches; th++) {
                 Kernel.Execute(
-                    (InChannels, OutChannels, xsets), 
-                    (BlockSize.x, BlockSize.y, 1),
+                    indexes:(InChannels, OutChannels, xsets), 
+                    block:(BlockSize.x, BlockSize.y, 1),
                     dynamic_shared_memory_bytes: 0, stream,
                     inmap.ElementPtr(th * InChannels * inwidth), 
                     outmap.ElementPtr(th * OutChannels * outwidth),
@@ -144,26 +138,26 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 throw new ArgumentException(nameof(args));
             }
 
-            if (!(args[3] is uint inwidth) || inwidth < KernelWidth) {
-                throw new ArgumentException($"{nameof(args)}[3]");
+            if (!(args[3] is uint inwidth) || !Limits.CheckWidth(inwidth, KernelWidth)) {
+                throw new ArgumentException(nameof(inwidth));
             }
 
-            if (!(args[4] is uint batches) || batches < 1) {
-                throw new ArgumentException($"{nameof(args)}[4]");
+            if (!(args[4] is uint batches) || !Limits.CheckBatches(batches)) {
+                throw new ArgumentException(nameof(batches));
             }
 
             uint outwidth = inwidth + 1 - KernelWidth;
 
             if (!(args[0] is CudaArray<float> inmap) || inmap.Length < InChannels * inwidth * batches) {
-                throw new ArgumentException($"{nameof(args)}[0]");
+                throw new ArgumentException(nameof(inmap));
             }
 
             if (!(args[1] is CudaArray<float> outmap) || outmap.Length < OutChannels * outwidth * batches) {
-                throw new ArgumentException($"{nameof(args)}[1]");
+                throw new ArgumentException(nameof(outmap));
             }
 
             if (!(args[2] is CudaArray<float> filter) || filter.Length < InChannels * OutChannels * KernelWidth) {
-                throw new ArgumentException($"{nameof(args)}[2]");
+                throw new ArgumentException(nameof(filter));
             }
         }
     }

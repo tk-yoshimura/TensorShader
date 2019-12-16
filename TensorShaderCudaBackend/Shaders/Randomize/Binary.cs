@@ -40,8 +40,12 @@ namespace TensorShaderCudaBackend.Shaders.Randomize {
 
         /// <summary>実行</summary>
         public override void Execute(Stream stream, params object[] args) {
-            if(args.Length != 4 || !(args[3] is float prob) || prob < 0 || !(prob <= 1)) { 
-                throw new ArgumentException($"{nameof(args)}[3]");
+            if(args.Length != 4){
+                throw new ArgumentException(nameof(args));
+            }
+
+            if (!(args[3] is float prob) || prob < 0 || !(prob <= 1)) {
+                throw new ArgumentException(nameof(prob));
             }
 
             base.Execute(stream, args);

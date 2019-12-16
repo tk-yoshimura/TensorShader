@@ -131,8 +131,11 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                     for (uint oy_offset = 0; oy_offset < outheight; oy_offset += lines_per_execute) {
                         uint lines = Math.Min(lines_per_execute, outheight - oy_offset);
 
-                        Kernel.Execute((OutChannels, outwidth, lines), (Kernel.DefaultBlockSize(OutChannels), 1, 1),
-                            dynamic_shared_memory_bytes: 0, stream,
+                        Kernel.Execute(
+                            indexes:(OutChannels, outwidth, lines), 
+                            block:(Kernel.DefaultBlockSize(OutChannels), 1, 1),
+                            dynamic_shared_memory_bytes: 0, 
+                            stream,
                             inmap.ElementPtr(th * InChannels * inwidth * inheight * indepth), 
                             outmap.ElementPtr(th * OutChannels * outwidth * outheight * outdepth),
                             transpose_filter,
@@ -154,11 +157,11 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 throw new ArgumentException($"{nameof(inwidth)}");
             }
 
-            if (!(args[4] is uint inheight) || !Limits.CheckWidth(inheight, KernelHeight)) {
+            if (!(args[4] is uint inheight) || !Limits.CheckHeight(inheight, KernelHeight)) {
                 throw new ArgumentException($"{nameof(inheight)}");
             }
 
-            if (!(args[5] is uint indepth) || !Limits.CheckWidth(indepth, KernelDepth)) {
+            if (!(args[5] is uint indepth) || !Limits.CheckDepth(indepth, KernelDepth)) {
                 throw new ArgumentException($"{nameof(indepth)}");
             }
 

@@ -22,11 +22,8 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
         
         /// <summary>コンストラクタ</summary>
         public KernelProductDense(uint inchannels, uint outchannels) { 
-            if (inchannels < 1 || inchannels > Limits.Channels) {
-                throw new ArgumentException(nameof(inchannels));
-            }
-            if (outchannels < 1 || outchannels > Limits.Channels) {
-                throw new ArgumentException(nameof(outchannels));
+            if (!Limits.CheckChannels(inchannels, outchannels)) {
+                throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
 
             this.InChannels = inchannels;
@@ -37,12 +34,19 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             string code = $@"
             __global__ void kernelproduct_dense(const float* __restrict__ inmap, const float* __restrict__ outmap, float *filter) {{
 
-                unsigned int inch = {Defines.IndexX}, outch = {Defines.IndexY};
+                unsigned int inch = {Defines.IndexX}, outch = {Defines.IndexY}, th = {Defines.BlockIndexZ};
                 unsigned int tidx = {Defines.ThreadIdX}, tidy = {Defines.ThreadIdY};
 
-                __shared__ float us[{BlockSize.x}], vs[{BlockSize.y}];
+                unsigned int inmap_offset = {InChannels} * th;
+                inmap += inmap_offset;
+
+                unsigned int outmap_offset = {OutChannels} * th;
+                outmap += outmap_offset;
+                
                 unsigned int filter_offset = (inch + {InChannels} * outch) * 2;
                 filter += filter_offset;
+
+                __shared__ float us[{BlockSize.x}], vs[{BlockSize.y}];
 
                 if(tidy == 0 && inch < {InChannels}){{
                     us[tidx] = inmap[inch];
@@ -58,13 +62,8 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
                     float uv = u * v;
 
-                    int uvi = ((*(int*)(&uv)) & 0xFFFFF000);
-
-                    float uv_hi = *(float*)(&uvi);
-                    float uv_lo = uv - uv_hi;
-
-                    filter[0] += uv_hi;
-                    filter[1] += uv_lo;
+                    float tmp = atomicAdd(filter, uv);
+                    atomicAdd(filter + 1, -(((tmp + uv) - tmp) - uv));
                 }}
             }}";
 
@@ -89,14 +88,14 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index:0, InChannels * OutChannels * 2);
             dfloat_filter.ZerosetAsync(stream, InChannels * OutChannels * 2);
 
-            for (uint th = 0; th < batches; th++) {
-                Kernel.Execute((InChannels, OutChannels), BlockSize,
-                    dynamic_shared_memory_bytes: 0, stream,
-                    inmap.ElementPtr(th * InChannels), 
-                    outmap.ElementPtr(th * OutChannels),
-                    dfloat_filter
-                );
-            }
+            Kernel.Execute(
+                indexes:(InChannels, OutChannels, batches), 
+                block:(BlockSize.x, BlockSize.y, 1),
+                dynamic_shared_memory_bytes: 0, stream,
+                inmap,
+                outmap,
+                dfloat_filter
+            );
 
             hadd.Execute(stream, dfloat_filter, filter, InChannels * OutChannels);
         }
@@ -107,20 +106,20 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 throw new ArgumentException(nameof(args));
             }
 
-            if (!(args[3] is uint batches) || batches < 1) {
-                throw new ArgumentException($"{nameof(args)}[3]");
+            if (!(args[3] is uint batches) || !Limits.CheckBatches(batches)) {
+                throw new ArgumentException(nameof(batches));
             }
 
             if (!(args[0] is CudaArray<float> inmap) || inmap.Length < InChannels * batches) {
-                throw new ArgumentException($"{nameof(args)}[0]");
+                throw new ArgumentException(nameof(inmap));
             }
 
             if (!(args[1] is CudaArray<float> outmap) || outmap.Length < OutChannels * batches) {
-                throw new ArgumentException($"{nameof(args)}[1]");
+                throw new ArgumentException(nameof(outmap));
             }
 
             if (!(args[2] is CudaArray<float> filter) || filter.Length < InChannels * OutChannels) {
-                throw new ArgumentException($"{nameof(args)}[2]");
+                throw new ArgumentException(nameof(filter));
             }
         }
     }

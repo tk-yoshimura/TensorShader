@@ -501,6 +501,7 @@
     <Compile Include="Operators\Trivector\TrivectorConvolution\TrivectorMap3D.cs" />
     <Compile Include="Operators\Trivector\TrivectorCast\TrivectorCastTest.cs" />
     <Compile Include="TensorTest.cs" />
+    <Compile Include="TestCaseIterator.cs" />
     <Compile Include="Updaters\OptimizeMethod\AdaDeltaTest.cs" />
     <Compile Include="Updaters\OptimizeMethod\AdaGradTest.cs" />
     <Compile Include="Updaters\OptimizeMethod\AdamaxTest.cs" />

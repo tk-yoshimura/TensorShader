@@ -29,7 +29,7 @@ namespace TensorShaderCudaBackend.Shaders.Padding {
 
         /// <summary>コンストラクタ</summary>
         public Padding2D(uint channels, uint pad_left, uint pad_right, uint pad_top, uint pad_bottom) {
-            if (channels < 1) {
+            if (!Limits.CheckChannels(channels)) {
                 throw new ArgumentException(nameof(channels));
             }
 
@@ -54,8 +54,10 @@ namespace TensorShaderCudaBackend.Shaders.Padding {
             uint outheight = inheight + PadTop + PadBottom;
 
             for (uint th = 0; th < batches; th++) {
-                Kernel.Execute((Channels, outwidth, outheight),
-                    dynamic_shared_memory_bytes: 0, stream,
+                Kernel.Execute(
+                    indexes:(Channels, outwidth, outheight),
+                    dynamic_shared_memory_bytes: 0, 
+                    stream,
                     inmap.ElementPtr(th * Channels * inwidth * inheight), 
                     outmap.ElementPtr(th * Channels * outwidth * outheight),
                     inwidth, outwidth, inheight, outheight
@@ -69,27 +71,27 @@ namespace TensorShaderCudaBackend.Shaders.Padding {
                 throw new ArgumentException(nameof(args));
             }
 
-            if (!(args[2] is uint inwidth) || inwidth < 1) {
-                throw new ArgumentException($"{nameof(args)}[2]");
+            if (!(args[2] is uint inwidth) || !Limits.CheckWidth(inwidth)) {
+                throw new ArgumentException(nameof(inwidth));
             }
 
-            if (!(args[3] is uint inheight) || inheight < 1) {
-                throw new ArgumentException($"{nameof(args)}[3]");
+            if (!(args[3] is uint inheight) || !Limits.CheckHeight(inheight)) {
+                throw new ArgumentException(nameof(inheight));
             }
 
-            if (!(args[4] is uint batches) || batches < 1) {
-                throw new ArgumentException($"{nameof(args)}[4]");
+            if (!(args[4] is uint batches) || !Limits.CheckBatches(batches)) {
+                throw new ArgumentException(nameof(batches));
             }
 
             uint outwidth = inwidth + PadLeft + PadRight;
             uint outheight = inheight + PadTop + PadBottom;
 
             if (!(args[0] is CudaArray<float> inmap) || inmap.Length < Channels * inwidth * inheight * batches) {
-                throw new ArgumentException($"{nameof(args)}[0]");
+                throw new ArgumentException(nameof(inmap));
             }
 
             if (!(args[1] is CudaArray<float> outmap) || outmap.Length < Channels * outwidth * outheight * batches) {
-                throw new ArgumentException($"{nameof(args)}[1]");
+                throw new ArgumentException(nameof(outmap));
             }
         }
     }

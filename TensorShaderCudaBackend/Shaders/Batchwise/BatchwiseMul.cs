@@ -74,7 +74,7 @@ namespace TensorShaderCudaBackend.Shaders.Batchwise {
                 args = args.Skip(1).ToArray();
             }
 
-            Kernel.Execute((map_stride, Batches), dynamic_shared_memory_bytes: 0, stream, args);
+            Kernel.Execute(indexes:(map_stride, Batches), dynamic_shared_memory_bytes: 0, stream, args);
         }
 
         /// <summary>引数チェック</summary>
@@ -84,19 +84,19 @@ namespace TensorShaderCudaBackend.Shaders.Batchwise {
             }
                         
             if (!(args[3] is uint map_stride)) {
-                throw new ArgumentException($"{nameof(args)}[3]");
+                throw new ArgumentException(nameof(map_stride));
             }
 
             if (!(args[0] is CudaArray<float> vectorarr) || vectorarr.Length < (ulong)Batches) {
-                throw new ArgumentException($"{nameof(args)}[0]");
+                throw new ArgumentException(nameof(vectorarr));
             }
 
             if (!(args[1] is CudaArray<float> inmaparr) || inmaparr.Length < (ulong)map_stride * Batches) {
-                throw new ArgumentException($"{nameof(args)}[1]");
+                throw new ArgumentException(nameof(inmaparr));
             }
 
             if (!(args[2] is CudaArray<float> outmaparr) || outmaparr.Length < (ulong)map_stride * Batches) {
-                throw new ArgumentException($"{nameof(args)}[2]");
+                throw new ArgumentException(nameof(outmaparr));
             }
         }
     }

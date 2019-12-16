@@ -32,9 +32,16 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             string code = $@"
 
-            __global__ void dense(const float* __restrict__ inmap, float *outmap, float *filter) {{
+            __global__ void dense(const float* __restrict__ inmap, float *outmap, const float* __restrict__ filter) {{
 
-                unsigned int outch = {Defines.IndexX}, tid = {Defines.ThreadIdX}, threads = {Defines.ThreadsX};
+                unsigned int outch = {Defines.IndexX}, th = {Defines.BlockIndexY};
+                unsigned int tid = {Defines.ThreadIdX}, threads = {Defines.ThreadsX};
+
+                unsigned int inmap_offset = {InChannels} * th;
+                inmap += inmap_offset;
+
+                unsigned int outmap_offset = {OutChannels} * th;
+                outmap += outmap_offset;
 
                 __shared__ float us[{InChannels}];
                 float uv_hi = 0, uv_lo = 0;
@@ -82,14 +89,14 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             transpose.Execute(stream, filter, transpose_filter, 1u);
 
-            for (uint th = 0; th < batches; th++) {
-                Kernel.Execute(OutChannels,
-                    dynamic_shared_memory_bytes: 0, stream,
-                    inmap.ElementPtr(th * InChannels), 
-                    outmap.ElementPtr(th * OutChannels),
-                    transpose_filter
-                );
-            }
+            Kernel.Execute(
+                indexes:(OutChannels, batches), 
+                block:(Kernel.DefaultBlockSize(OutChannels), 1),
+                dynamic_shared_memory_bytes: 0, stream,
+                inmap, 
+                outmap,
+                transpose_filter
+            );
         }
 
         /// <summary>引数チェック</summary>
@@ -98,20 +105,20 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 throw new ArgumentException(nameof(args));
             }
 
-            if (!(args[3] is uint batches) || batches < 1) {
-                throw new ArgumentException($"{nameof(args)}[3]");
+            if (!(args[3] is uint batches) || !Limits.CheckBatches(batches)) {
+                throw new ArgumentException(nameof(batches));
             }
 
             if (!(args[0] is CudaArray<float> inmap) || inmap.Length < InChannels * batches) {
-                throw new ArgumentException($"{nameof(args)}[0]");
+                throw new ArgumentException(nameof(inmap));
             }
 
             if (!(args[1] is CudaArray<float> outmap) || outmap.Length < OutChannels * batches) {
-                throw new ArgumentException($"{nameof(args)}[1]");
+                throw new ArgumentException(nameof(outmap));
             }
 
             if (!(args[2] is CudaArray<float> filter) || filter.Length < InChannels * OutChannels) {
-                throw new ArgumentException($"{nameof(args)}[2]");
+                throw new ArgumentException(nameof(filter));
             }
         }
     }

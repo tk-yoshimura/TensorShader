@@ -39,7 +39,13 @@ namespace TensorShaderCudaBackend.Shaders.Indexer {
                 round *= 2;
             }
 
-            Kernel.Execute(round, dynamic_shared_memory_bytes: 0, stream, new object[]{ y, round, stride, axislength });
+            Kernel.Execute(
+                round, 
+                dynamic_shared_memory_bytes: 0, 
+                stream, 
+                y, 
+                round, stride, axislength 
+            );
 
             while(round * 2 <= length) { 
                 y.CopyToAsync(stream, 0, y, round, round);
@@ -57,19 +63,19 @@ namespace TensorShaderCudaBackend.Shaders.Indexer {
             }
 
             if (!(args[2] is uint stride) || stride < 1) {
-                throw new ArgumentException($"{nameof(args)}[2]");
+                throw new ArgumentException(nameof(stride));
             }
 
             if (!(args[3] is uint axislength) || axislength < 1) {
-                throw new ArgumentException($"{nameof(args)}[3]");
+                throw new ArgumentException(nameof(axislength));
             }
 
             if (!(args[1] is uint length) || length % (stride * axislength) != 0) {
-                throw new ArgumentException($"{nameof(args)}[1]");
+                throw new ArgumentException(nameof(length));
             }
 
-            if (!(args[0] is CudaArray<float> y) || y.Length < (ulong)length) {
-                throw new ArgumentException($"{nameof(args)}[0]");
+            if (!(args[0] is CudaArray<float> y) || y.Length < length) {
+                throw new ArgumentException(nameof(y));
             }
         }
     }

@@ -53,7 +53,9 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
                 uint sl = Math.Min(SlidesPerExecute, slides - s);
 
                 Kernel.Execute(
-                    (copylength, sl), dynamic_shared_memory_bytes: 0, stream,
+                    indexes:(copylength, sl), 
+                    dynamic_shared_memory_bytes: 0, 
+                    stream,
                     inmap.ElementPtr(inmap_offset + inmap_index + s * inmap_stride), 
                     outmap.ElementPtr(outmap_offset + outmap_index + s * outmap_stride),
                     inmap_stride, outmap_stride, copylength, sl
@@ -68,46 +70,46 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
             }
 
             if (!(args[2] is uint inmap_offset)) {
-                throw new ArgumentException($"{nameof(args)}[2]");
+                throw new ArgumentException(nameof(inmap_offset));
             }
 
             if (!(args[4] is uint outmap_offset)) {
-                throw new ArgumentException($"{nameof(args)}[4]");
+                throw new ArgumentException(nameof(outmap_offset));
             }
             
             if (!(args[8] is uint copy_length) || copy_length < 1) {
-                throw new ArgumentException($"{nameof(args)}[8]");
+                throw new ArgumentException(nameof(copy_length));
             }
 
             if (!(args[6] is uint inmap_stride) || inmap_stride < copy_length) {
-                throw new ArgumentException($"{nameof(args)}[6]");
+                throw new ArgumentException(nameof(inmap_stride));
             }
 
             if (!(args[7] is uint outmap_stride) || outmap_stride < copy_length) {
-                throw new ArgumentException($"{nameof(args)}[7]");
+                throw new ArgumentException(nameof(outmap_stride));
             }
 
             if (!(args[3] is uint inmap_index) || inmap_index + copy_length > inmap_stride) {
-                throw new ArgumentException($"{nameof(args)}[3]");
+                throw new ArgumentException(nameof(inmap_index));
             }
 
             if (!(args[5] is uint outmap_index) || outmap_index + copy_length > outmap_stride) {
-                throw new ArgumentException($"{nameof(args)}[5]");
+                throw new ArgumentException(nameof(outmap_index));
             }
 
             if (!(args[9] is uint slides)) {
-                throw new ArgumentException($"{nameof(args)}[9]");
+                throw new ArgumentException(nameof(slides));
             }
 
             uint inmap_length = inmap_offset + inmap_stride * slides;
             uint outmap_length = outmap_offset + outmap_stride * slides;
 
             if (!(args[0] is CudaArray<float> inmap) || inmap.Length < inmap_length) {
-                throw new ArgumentException($"{nameof(args)}[0]");
+                throw new ArgumentException(nameof(inmap));
             }
 
             if (!(args[1] is CudaArray<float> outmap) || outmap.Length < outmap_length) {
-                throw new ArgumentException($"{nameof(args)}[1]");
+                throw new ArgumentException(nameof(outmap));
             }
         }
     }

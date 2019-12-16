@@ -151,8 +151,10 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
                 uint sl = Math.Min(batch_slides, slides - s);
 
                 Kernel.Execute(
-                    indexes:(stride * blocksize, sl), block:(blocksize, 1), 
-                    dynamic_shared_memory_bytes: 0, stream, 
+                    indexes:(stride * blocksize, sl), 
+                    block:(blocksize, 1), 
+                    dynamic_shared_memory_bytes: 0, 
+                    stream, 
                     outmap.ElementPtr(s * stride * axislength), 
                     stride, axislength, sl 
                 );
@@ -166,25 +168,25 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
             }
 
             if (!(args[2] is uint stride) || stride < 1) {
-                throw new ArgumentException($"{nameof(args)}[2]");
+                throw new ArgumentException(nameof(stride));
             }
 
             if (!(args[3] is uint axislength) || axislength < 1) {
-                throw new ArgumentException($"{nameof(args)}[3]");
+                throw new ArgumentException(nameof(axislength));
             }
 
             if (!(args[4] is uint slides) || slides < 0) {
-                throw new ArgumentException($"{nameof(args)}[4]");
+                throw new ArgumentException(nameof(slides));
             }
 
             uint length = stride * axislength * slides;
 
             if (!(args[0] is CudaArray<float> inmap) || inmap.Length < length) {
-                throw new ArgumentException($"{nameof(args)}[0]");
+                throw new ArgumentException(nameof(inmap));
             }
 
             if (!(args[1] is CudaArray<float> outmap) || outmap.Length < length) {
-                throw new ArgumentException($"{nameof(args)}[1]");
+                throw new ArgumentException(nameof(outmap));
             }
         }
     }

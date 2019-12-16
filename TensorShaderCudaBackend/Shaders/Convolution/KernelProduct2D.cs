@@ -41,20 +41,11 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
         
         /// <summary>コンストラクタ</summary>
         public KernelProduct2D(uint inchannels, uint outchannels, uint kwidth, uint kheight) { 
-            if (inchannels < 1 || inchannels > Limits.Channels) {
-                throw new ArgumentException(nameof(inchannels));
+            if (!Limits.CheckChannels(inchannels, outchannels)) {
+                throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
-            if (outchannels < 1 || outchannels > Limits.Channels) {
-                throw new ArgumentException(nameof(outchannels));
-            }
-            if ((kwidth & 1) != 1) { 
-                throw new ArgumentException(nameof(kwidth));
-            }
-            if ((kheight & 1) != 1) { 
-                throw new ArgumentException(nameof(kheight));
-            }
-            if (kwidth * kheight > MaxKernelSize) { 
-                throw new ArgumentException($"{nameof(kwidth)},{nameof(kheight)}");
+            if (!Limits.CheckKernelSize(kwidth, kheight)) { 
+                throw new ArgumentException($"{nameof(kwidth)}, {nameof(kheight)}");
             }
 
             this.InChannels = inchannels;
@@ -153,8 +144,11 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 for (uint oy_offset = 0; oy_offset < outheight; oy_offset += lines_per_execute) {
                     uint lines = Math.Min(lines_per_execute, outheight - oy_offset);
 
-                    Kernel.Execute((InChannels, OutChannels, xsets * lines), (BlockSize.x, BlockSize.y, 1),
-                        dynamic_shared_memory_bytes: 0, stream,
+                    Kernel.Execute(
+                        indexes:(InChannels, OutChannels, xsets * lines), 
+                        block:(BlockSize.x, BlockSize.y, 1),
+                        dynamic_shared_memory_bytes: 0, 
+                        stream,
                         inmap.ElementPtr(th * InChannels * inwidth * inheight), 
                         outmap.ElementPtr(th * OutChannels * outwidth * outheight),
                         dfloat_filter,
@@ -175,31 +169,31 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 throw new ArgumentException(nameof(args));
             }
 
-            if (!(args[3] is uint inwidth) || inwidth < KernelWidth) {
-                throw new ArgumentException($"{nameof(args)}[3]");
+            if (!(args[3] is uint inwidth) || !Limits.CheckWidth(inwidth, KernelWidth)) {
+                throw new ArgumentException(nameof(inwidth));
             }
 
-            if (!(args[4] is uint inheight) || inheight < KernelHeight) {
-                throw new ArgumentException($"{nameof(args)}[4]");
+            if (!(args[4] is uint inheight) || !Limits.CheckHeight(inheight, KernelHeight)) {
+                throw new ArgumentException(nameof(inheight));
             }
 
-            if (!(args[5] is uint batches) || batches < 1) {
-                throw new ArgumentException($"{nameof(args)}[5]");
+            if (!(args[5] is uint batches) || !Limits.CheckBatches(batches)) {
+                throw new ArgumentException(nameof(batches));
             }
 
             uint outwidth = inwidth + 1 - KernelWidth;
             uint outheight = inheight + 1 - KernelHeight;
 
             if (!(args[0] is CudaArray<float> inmap) || inmap.Length < InChannels * inwidth * inheight * batches) {
-                throw new ArgumentException($"{nameof(args)}[0]");
+                throw new ArgumentException(nameof(inmap));
             }
 
             if (!(args[1] is CudaArray<float> outmap) || outmap.Length < OutChannels * outwidth * outheight * batches) {
-                throw new ArgumentException($"{nameof(args)}[1]");
+                throw new ArgumentException(nameof(outmap));
             }
 
             if (!(args[2] is CudaArray<float> filter) || filter.Length < InChannels * OutChannels * KernelWidth * KernelHeight) {
-                throw new ArgumentException($"{nameof(args)}[2]");
+                throw new ArgumentException(nameof(filter));
             }
         }
     }
