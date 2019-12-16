@@ -14,7 +14,7 @@ namespace TensorShaderTest.Operators.Connection3D {
             float max_err = 0;
 
             TestCaseIterator iterator = new TestCaseIterator(
-                times: 3,
+                times: 5,
                 new int[] { 1, 2 },
                 new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 32, 33 },
                 new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 32, 33 },

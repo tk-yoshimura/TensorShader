@@ -60,13 +60,11 @@ namespace TensorShader.Operators.Connection3D {
 
             Tensor inmap1 = tensors[0], inmap2 = tensors[1], outfilter = tensors[2];
 
-            Parallel.For(0, OutChannels, (outch) => {
-                TensorShaderCudaBackend.Convolution.KernelProduct3D((uint)InChannels, (uint)OutChannels,
-                                                                   (uint)inmap1.Width, (uint)inmap1.Height, (uint)inmap1.Depth,
-                                                                   (uint)Batch, (uint)outch,
-                                                                   (uint)KernelWidth, (uint)KernelHeight, (uint)KernelDepth, (uint)Stride,
-                                                                   inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);
-            });
+            TensorShaderCudaBackend.Convolution.KernelProduct3D((uint)InChannels, (uint)OutChannels,
+                                                                (uint)inmap1.Width, (uint)inmap1.Height, (uint)inmap1.Depth,
+                                                                (uint)Batch, 
+                                                                (uint)KernelWidth, (uint)KernelHeight, (uint)KernelDepth, 
+                                                                inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);
         }
 
         /// <summary>操作を実行</summary>

@@ -19,9 +19,6 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
         /// <summary>フィルタサイズ</summary>
         public uint KernelHeight { private set; get; }
 
-        /// <summary>最大カーネルサイズ(8192)</summary>
-        public static uint MaxKernelSize => 0x2000;
-
         /// <summary>実行あたりの積数(2^24=16777216‬)</summary>
         public static uint MulPerExecute => 0x1000000;
 

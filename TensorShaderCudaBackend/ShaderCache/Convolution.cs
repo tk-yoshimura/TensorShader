@@ -183,11 +183,20 @@ namespace TensorShaderCudaBackend {
             shader.Execute(Shader.DefaultStream, inmap, outmap, kernel, outwidth, outheight, outdepth, batch);
         }
 
-
+        /// <summary>カーネル積</summary>
         public static void KernelProduct3D(uint inchannels, uint outchannels, uint inwidth, uint inheight, uint indepth,
-                                    uint batch, uint outch, uint kwidth, uint kheight, uint kdepth, uint stride,
-                                    CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
-            throw new NotImplementedException();
+                                           uint batch, uint kwidth, uint kheight, uint kdepth, 
+                                           CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
+
+            string key = $"kernelproduct_3d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} kdepth={kdepth}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Convolution.KernelProduct3D(inchannels, outchannels, kwidth, kheight, kdepth));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, inmap, outmap, kernel, inwidth, inheight, indepth, batch);
         }
 
 

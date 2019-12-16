@@ -116,6 +116,7 @@
     <Compile Include="Shaders\Convolution\Convolution3D.cs" />
     <Compile Include="Shaders\Convolution\Convolution2D.cs" />
     <Compile Include="Shaders\Convolution\Convolution1D.cs" />
+    <Compile Include="Shaders\Convolution\KernelProduct3D.cs" />
     <Compile Include="Shaders\Convolution\KernelProduct2D.cs" />
     <Compile Include="Shaders\Convolution\KernelProduct1D.cs" />
     <Compile Include="Shaders\Convolution\KernelProductDense.cs" />

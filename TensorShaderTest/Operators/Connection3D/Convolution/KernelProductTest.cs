@@ -13,43 +13,53 @@ namespace TensorShaderTest.Operators.Connection3D {
         public void ExecuteTest() {
             float max_err = 0;
 
-            foreach (int batch in new int[] { 1, 2 }) {
-                foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 32, 33 }) {
-                    foreach (int outchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 32, 33 }) {
-                        foreach ((int kwidth, int kheight, int kdepth) in new (int, int, int)[] { (1, 1, 1), (3, 3, 3), (5, 5, 5), (1, 3, 5), (3, 5, 1), (5, 1, 3) }) {
-                            foreach ((int stride, int inwidth, int inheight, int indepth) in new (int, int, int, int)[] { (1, 13, 13, 13), (2, 17, 17, 17), (3, 19, 19, 19), (1, 17, 19, 13), (2, 13, 17, 19), (3, 19, 13, 17) }) {
-                                int outwidth = (inwidth - kwidth) / stride + 1, outheight = (inheight - kheight) / stride + 1, outdepth = (indepth - kdepth) / stride + 1;
+            TestCaseIterator iterator = new TestCaseIterator(
+                times: 5,
+                new int[] { 1, 2 },
+                new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 32, 33 },
+                new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 32, 33 },
+                new int[] { 1, 3, 5 },
+                new int[] { 1, 3, 5 },
+                new int[] { 1, 3, 5 },
+                new int[] { 5, 7, 12, 13, 17, 19 }, 
+                new int[] { 5, 7, 12, 13, 17, 19 },
+                new int[] { 5, 7, 12, 13, 17, 19 }
+            );
 
-                                float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                                float[] gyval = (new float[outwidth * outheight * outdepth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+            foreach(int[] testcase in iterator) {  
+                int batch = testcase[0], inchannels = testcase[1], outchannels = testcase[2];
+                int kwidth = testcase[3], kheight = testcase[4], kdepth = testcase[5];
+                int inwidth = testcase[6], inheight = testcase[7], indepth = testcase[8];
+                int stride = 1;
 
-                                Map3D x = new Map3D(inchannels, inwidth, inheight, indepth, batch, xval);
-                                Map3D gy = new Map3D(outchannels, outwidth, outheight, outdepth, batch, gyval);
+                int outwidth = (inwidth - kwidth) / stride + 1, outheight = (inheight - kheight) / stride + 1, outdepth = (indepth - kdepth) / stride + 1;
 
-                                Filter3D gw = Reference(x, gy, kwidth, kheight, kdepth, stride);
+                float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+                float[] gyval = (new float[outwidth * outheight * outdepth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-                                OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
-                                OverflowCheckedTensor gy_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), gyval);
+                Map3D x = new Map3D(inchannels, inwidth, inheight, indepth, batch, xval);
+                Map3D gy = new Map3D(outchannels, outwidth, outheight, outdepth, batch, gyval);
 
-                                OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels, outchannels, kwidth, kheight, kdepth));
+                Filter3D gw = Reference(x, gy, kwidth, kheight, kdepth, stride);
 
-                                KernelProduct ope = new KernelProduct(inwidth, inheight, indepth, inchannels, outchannels, kwidth, kheight, kdepth, stride, batch);
+                OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
+                OverflowCheckedTensor gy_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), gyval);
 
-                                ope.Execute(x_tensor, gy_tensor, gw_tensor);
+                OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels, outchannels, kwidth, kheight, kdepth));
 
-                                float[] gw_expect = gw.ToArray();
-                                float[] gw_actual = gw_tensor.State;
+                KernelProduct ope = new KernelProduct(inwidth, inheight, indepth, inchannels, outchannels, kwidth, kheight, kdepth, stride, batch);
 
-                                CollectionAssert.AreEqual(xval, x_tensor.State);
-                                CollectionAssert.AreEqual(gyval, gy_tensor.State);
+                ope.Execute(x_tensor, gy_tensor, gw_tensor);
 
-                                AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{stride},{inwidth},{inheight},{indepth},{batch}");
+                float[] gw_expect = gw.ToArray();
+                float[] gw_actual = gw_tensor.State;
 
-                                Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{stride},{inwidth},{inheight},{indepth},{batch}");
-                            }
-                        }
-                    }
-                }
+                CollectionAssert.AreEqual(xval, x_tensor.State);
+                CollectionAssert.AreEqual(gyval, gy_tensor.State);
+
+                AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{stride},{inwidth},{inheight},{indepth},{batch}");
+
+                Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{stride},{inwidth},{inheight},{indepth},{batch}");
             }
 
             Console.WriteLine($"maxerr:{max_err}");

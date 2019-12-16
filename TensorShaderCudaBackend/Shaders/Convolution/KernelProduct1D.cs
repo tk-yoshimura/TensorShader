@@ -16,9 +16,6 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
         /// <summary>フィルタサイズ</summary>
         public uint KernelWidth { private set; get; }
 
-        /// <summary>最大カーネルサイズ(8192)</summary>
-        public static uint MaxKernelSize => 0x2000;
-
         /// <summary>ブロックサイズ</summary>
         public (uint x, uint y) BlockSize { private set; get; }
 
