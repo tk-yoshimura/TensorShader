@@ -10,7 +10,7 @@
 
             string code = $@"
 
-            __global__ void linearzoom2d(float *inmap, float *outmap, 
+            __global__ void linearzoom_2d(float *inmap, float *outmap, 
                                          unsigned int inwidth, unsigned int outwidth, 
                                          unsigned int inheight) {{
 
@@ -56,7 +56,7 @@
                 outmap[outmap_idx + rd] = (xc + xr + xd + xrd) / 9;
             }}";
 
-            this.Kernel = new Kernel(code, "linearzoom2d");
+            this.Kernel = new Kernel(code, "linearzoom_2d");
         }
     }
 }

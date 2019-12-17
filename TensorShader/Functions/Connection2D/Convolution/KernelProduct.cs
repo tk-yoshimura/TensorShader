@@ -3,9 +3,9 @@ using System;
 namespace TensorShader {
     public abstract partial class VariableNode {
         /// <summary>2次元カーネル積</summary>
-        public static VariableNode KernelProduct2D(VariableNode x, VariableNode y, int kwidth, int kheight, int stride) {
+        public static VariableNode KernelProduct2D(VariableNode x, VariableNode y, int kwidth, int kheight) {
             Function function =
-                new Functions.Connection2D.KernelProduct(x.Shape, y.Shape, kwidth, kheight, stride);
+                new Functions.Connection2D.KernelProduct(x.Shape, y.Shape, kwidth, kheight);
 
             VariableNode w = Apply(function, x, y)[0];
 
@@ -15,9 +15,9 @@ namespace TensorShader {
 
     public partial class Tensor {
         /// <summary>2次元カーネル積</summary>
-        public static Tensor KernelProduct2D(Tensor x, Tensor y, int kwidth, int kheight, int stride) {
+        public static Tensor KernelProduct2D(Tensor x, Tensor y, int kwidth, int kheight) {
             Functions.Connection2D.KernelProduct function =
-                new Functions.Connection2D.KernelProduct(x.Shape, y.Shape, kwidth, kheight, stride);
+                new Functions.Connection2D.KernelProduct(x.Shape, y.Shape, kwidth, kheight);
 
             Tensor w = new Tensor(function.OutShape);
 
@@ -40,12 +40,10 @@ namespace TensorShader.Functions.Connection2D {
         /// <summary>カーネル形状</summary>
         public Shape KernelShape { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>コンストラクタ</summary>
-        public KernelProduct(Shape inshape, Shape outshape, int kwidth, int kheight, int stride) :
-            base(inputs: 2, outputs: 1, allow_resubstitution: false) {
+        public KernelProduct(Shape inshape, Shape outshape, int kwidth, int kheight)
+            : base(inputs: 2, outputs: 1, allow_resubstitution: false) {
+            
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 4) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 4), ("Type", ShapeType.Map)));
             }
@@ -54,14 +52,9 @@ namespace TensorShader.Functions.Connection2D {
                 throw new ArgumentException(ExceptionMessage.TensorElements(outshape, ("Ndim", 4), ("Type", ShapeType.Map)));
             }
 
-            if (stride < 1) {
-                throw new ArgumentException(nameof(stride));
-            }
-
             this.InShape = inshape;
             this.OutShape = outshape;
             this.KernelShape = Shape.Kernel2D(inshape.Channels, outshape.Channels, kwidth, kheight);
-            this.Stride = stride;
         }
 
         /// <summary>出力テンソル形状を返す</summary>
@@ -92,7 +85,7 @@ namespace TensorShader.Functions.Connection2D {
                         InShape.Width, InShape.Height,
                         InShape.Channels, OutShape.Channels,
                         KernelShape.Width, KernelShape.Height,
-                        Stride, InShape.Batch));
+                        InShape.Batch));
         }
     }
 }

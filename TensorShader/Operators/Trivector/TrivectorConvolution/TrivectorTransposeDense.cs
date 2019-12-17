@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.TrivectorConvolution {
     /// <summary>3次元ベクトル転置全結合</summary>
@@ -44,9 +43,7 @@ namespace TensorShader.Operators.TrivectorConvolution {
 
             Tensor inmap = tensors[0], infilter = tensors[1], outmap = tensors[2];
 
-            Parallel.For(0, Batch, (th) => {
-                TensorShaderCudaBackend.Trivector.TransposeDense((uint)InChannels, (uint)OutChannels, (uint)Batch, (uint)th, GradMode, inmap.Buffer, infilter.Buffer, outmap.Buffer);
-            });
+            TensorShaderCudaBackend.Trivector.TransposeDense((uint)InChannels, (uint)OutChannels, (uint)Batch, GradMode, inmap.Buffer, infilter.Buffer, outmap.Buffer);
         }
 
         /// <summary>操作を実行</summary>

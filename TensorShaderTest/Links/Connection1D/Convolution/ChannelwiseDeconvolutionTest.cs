@@ -9,7 +9,7 @@ namespace TensorShaderTest.Links.Connection1D {
         [TestMethod]
         public void ReferenceTest() {
             int channels = 7, kwidth = 3, stride = 2, inwidth = 13;
-            int outwidth = (inwidth - kwidth) / stride + 1, batch = 2;
+            int outwidth = inwidth - kwidth + 1, batch = 2;
 
             float[] xval = (new float[inwidth * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] yval = (new float[outwidth * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();

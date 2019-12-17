@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.QuaternionConvolution {
     /// <summary>四元数カーネル積</summary>
@@ -14,10 +13,7 @@ namespace TensorShader.Operators.QuaternionConvolution {
         /// <summary>フィルタサイズ</summary>
         /// <remarks>奇数を指定すること</remarks>
         public int KernelWidth { private set; get; }
-
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
+        
         /// <summary>転置</summary>
         public bool Transpose { private set; get; }
 
@@ -25,11 +21,7 @@ namespace TensorShader.Operators.QuaternionConvolution {
         public int Batch { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public QuaternionKernelProduct1D(int inwidth, int inchannels, int outchannels, int kwidth, int stride, bool transpose = false, int batch = 1) {
-            if (stride < 1) {
-                throw new ArgumentException(nameof(stride));
-            }
-
+        public QuaternionKernelProduct1D(int inwidth, int inchannels, int outchannels, int kwidth, bool transpose = false, int batch = 1) {
             if (inchannels % 4 != 0) {
                 throw new ArgumentException(ExceptionMessage.ArgumentMultiple(nameof(inchannels), inchannels, 4));
             }
@@ -37,7 +29,7 @@ namespace TensorShader.Operators.QuaternionConvolution {
                 throw new ArgumentException(ExceptionMessage.ArgumentMultiple(nameof(outchannels), outchannels, 4));
             }
 
-            int outwidth = (inwidth - kwidth) / stride + 1;
+            int outwidth = inwidth - kwidth + 1;
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map1D(inchannels, inwidth, batch)),
@@ -48,7 +40,6 @@ namespace TensorShader.Operators.QuaternionConvolution {
             this.InChannels = inchannels;
             this.OutChannels = outchannels;
             this.KernelWidth = kwidth;
-            this.Stride = stride;
             this.Transpose = transpose;
             this.Batch = batch;
         }
@@ -59,14 +50,12 @@ namespace TensorShader.Operators.QuaternionConvolution {
 
             Tensor inmap1 = tensors[0], inmap2 = tensors[1], outfilter = tensors[2];
 
-            Parallel.For(0, OutChannels / 4, (outch) => {
-                TensorShaderCudaBackend.Quaternion.KernelProduct1D((uint)InChannels, (uint)OutChannels,
-                                                                  (uint)inmap1.Width,
-                                                                  (uint)Batch, (uint)outch * 4,
-                                                                  (uint)KernelWidth,
-                                                                  (uint)Stride, Transpose,
-                                                                  inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);
-            });
+            TensorShaderCudaBackend.Quaternion.KernelProduct1D((uint)InChannels, (uint)OutChannels,
+                                                               (uint)inmap1.Width,
+                                                               (uint)Batch, 
+                                                               (uint)KernelWidth,
+                                                               Transpose,
+                                                               inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);
         }
 
         /// <summary>操作を実行</summary>

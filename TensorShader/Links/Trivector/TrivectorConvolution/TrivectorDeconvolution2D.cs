@@ -3,9 +3,9 @@ using static TensorShader.VariableNode;
 namespace TensorShader {
     public partial class Field {
         /// <summary>3次元ベクトル2次元逆畳み込み</summary>
-        public static Field TrivectorDeconvolution2D(Field x, Field w, int stride, Shape outshape = null) {
+        public static Field TrivectorDeconvolution2D(Field x, Field w) {
             Field y = new Field();
-            Link link = new Links.TrivectorConvolution.TrivectorDeconvolution2D(x, w, y, stride, outshape);
+            Link link = new Links.TrivectorConvolution.TrivectorDeconvolution2D(x, w, y);
 
             link.Forward();
 
@@ -17,8 +17,6 @@ namespace TensorShader {
 namespace TensorShader.Links.TrivectorConvolution {
     /// <summary>3次元ベクトル2次元逆畳み込み</summary>
     public class TrivectorDeconvolution2D : Link {
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
 
         /// <summary>出力形状</summary>
         public Shape OutShape { private set; get; }
@@ -33,15 +31,12 @@ namespace TensorShader.Links.TrivectorConvolution {
         protected Field Y => OutField;
 
         /// <summary>コンストラクタ</summary>
-        public TrivectorDeconvolution2D(Field infield, Field kernelfield, Field outfield, int stride, Shape outshape)
-            : base(new Field[] { infield, kernelfield }, outfield) {
-            this.Stride = stride;
-            this.OutShape = outshape;
-        }
+        public TrivectorDeconvolution2D(Field infield, Field kernelfield, Field outfield)
+            : base(new Field[] { infield, kernelfield }, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {
-            Y.AssignValue(TrivectorDeconvolution2D(X.Value, W.Value, Stride, gradmode: false, OutShape));
+            Y.AssignValue(TrivectorDeconvolution2D(X.Value, W.Value, gradmode: false));
         }
 
         /// <summary>逆伝搬</summary>
@@ -51,11 +46,11 @@ namespace TensorShader.Links.TrivectorConvolution {
             }
 
             if (X.EnableBackprop) {
-                X.AddGrad(TrivectorConvolution2D(Y.Grad, W.Value, Stride, gradmode: true));
+                X.AddGrad(TrivectorConvolution2D(Y.Grad, W.Value, gradmode: true));
             }
 
             if (W.EnableBackprop) {
-                W.AddGrad(TrivectorKernelProduct2D(Y.Grad, X.Value, W.Value, W.Shape.Width, W.Shape.Height, Stride, transpose: true));
+                W.AddGrad(TrivectorKernelProduct2D(Y.Grad, X.Value, W.Value, W.Shape.Width, W.Shape.Height, transpose: true));
             }
         }
     }

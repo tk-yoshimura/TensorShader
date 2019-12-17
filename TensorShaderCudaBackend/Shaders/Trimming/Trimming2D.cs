@@ -41,7 +41,7 @@ namespace TensorShaderCudaBackend.Shaders.Trimming {
 
             string code = $@"
 
-            __global__ void trimming2d(float *inmap, float *outmap, 
+            __global__ void trimming_2d(float *inmap, float *outmap, 
                                        unsigned int inwidth, unsigned int outwidth, 
                                        unsigned int outheight) {{
 
@@ -59,7 +59,7 @@ namespace TensorShaderCudaBackend.Shaders.Trimming {
                 outmap[outmap_idx] = inmap[inmap_idx];
             }}";
 
-            this.Kernel = new Kernel(code, "trimming2d");
+            this.Kernel = new Kernel(code, "trimming_2d");
         }
 
         /// <summary>実行</summary>

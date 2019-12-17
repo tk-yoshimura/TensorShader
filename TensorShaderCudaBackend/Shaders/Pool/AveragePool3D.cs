@@ -11,10 +11,10 @@
 
             string code = $@"
 
-            __global__ void averagepool3d(float *inmap, float *outmap, 
-                                          unsigned int oz,
-                                          unsigned int inwidth, unsigned int outwidth, 
-                                          unsigned int inheight, unsigned int outheight) {{
+            __global__ void averagepool_3d(float *inmap, float *outmap, 
+                                           unsigned int oz,
+                                           unsigned int inwidth, unsigned int outwidth, 
+                                           unsigned int inheight, unsigned int outheight) {{
 
                 unsigned int ch = {Defines.IndexX}, ox = {Defines.IndexY}, oy = {Defines.IndexZ};
 
@@ -41,7 +41,7 @@
                 outmap[outmap_idx] = vsum / {Stride * Stride * Stride};
             }}";
 
-            this.Kernel = new Kernel(code, "averagepool3d");
+            this.Kernel = new Kernel(code, "averagepool_3d");
         }
     }
 }

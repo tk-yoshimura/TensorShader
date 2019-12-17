@@ -11,7 +11,7 @@ namespace TensorShaderCudaBackend.API {
             /// <remarks>
             /// configファイルはテキストファイルで作成し
             /// 以下の中から出力する情報を改行区切りで指定する
-            /// gpustarttimestamp, gridsize3d, threadblocksize, dynsmemperblock, stasmemperblock, regperthread
+            /// gpustarttimestamp, gridsize_3d, threadblocksize, dynsmemperblock, stasmemperblock, regperthread
             /// memtransfersize, memtransferdir, streamid, countermodeaggregate, active_warps, active_cycles
             /// </remarks>
             public static void Initialize(string config_filepath, string output_filepath) {

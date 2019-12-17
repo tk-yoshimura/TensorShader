@@ -9,7 +9,7 @@ namespace TensorShaderTest.Links.TrivectorConvolution {
         [TestMethod]
         public void ReferenceTest() {
             int inchannels = 9, outchannels = 12, kwidth = 3, kheight = 5, stride = 2, inwidth = 7, inheight = 8;
-            int outwidth = (inwidth - kwidth) / stride + 1, outheight = (inheight - kheight) / stride + 1, batch = 3;
+            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, batch = 3;
 
             float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();

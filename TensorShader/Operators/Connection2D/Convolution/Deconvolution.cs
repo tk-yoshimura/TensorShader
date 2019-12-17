@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace TensorShader.Operators.Connection2D {
@@ -18,20 +17,14 @@ namespace TensorShader.Operators.Connection2D {
         /// <remarks>奇数を指定すること</remarks>
         public int KernelHeight { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>バッチサイズ</summary>
         public int Batch { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public Deconvolution(int outwidth, int outheight, int inchannels, int outchannels, int kwidth, int kheight, int stride, int batch = 1) {
-            if (stride < 1) {
-                throw new ArgumentException(nameof(stride));
-            }
-
-            int inwidth = (outwidth - kwidth) / stride + 1;
-            int inheight = (outheight - kheight) / stride + 1;
+        public Deconvolution(int outwidth, int outheight, int inchannels, int outchannels, int kwidth, int kheight, int batch = 1) {
+            
+            int inwidth = outwidth - kwidth + 1;
+            int inheight = outheight - kheight + 1;
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map2D(inchannels, inwidth, inheight, batch)),
@@ -43,7 +36,6 @@ namespace TensorShader.Operators.Connection2D {
             this.OutChannels = outchannels;
             this.KernelWidth = kwidth;
             this.KernelHeight = kheight;
-            this.Stride = stride;
             this.Batch = batch;
         }
 

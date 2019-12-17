@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.TrivectorConvolution {
     /// <summary>3次元ベクトル2次元逆畳み込み</summary>
@@ -19,9 +18,6 @@ namespace TensorShader.Operators.TrivectorConvolution {
         /// <remarks>奇数を指定すること</remarks>
         public int KernelHeight { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>勾配</summary>
         public bool GradMode { private set; get; }
 
@@ -29,11 +25,7 @@ namespace TensorShader.Operators.TrivectorConvolution {
         public int Batch { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public TrivectorDeconvolution2D(int outwidth, int outheight, int inchannels, int outchannels, int kwidth, int kheight, int stride, bool gradmode = false, int batch = 1) {
-            if (stride < 1) {
-                throw new ArgumentException(nameof(stride));
-            }
-
+        public TrivectorDeconvolution2D(int outwidth, int outheight, int inchannels, int outchannels, int kwidth, int kheight, bool gradmode = false, int batch = 1) {
             if (inchannels % 3 != 0) {
                 throw new ArgumentException(ExceptionMessage.ArgumentMultiple(nameof(inchannels), inchannels, 3));
             }
@@ -41,8 +33,8 @@ namespace TensorShader.Operators.TrivectorConvolution {
                 throw new ArgumentException(ExceptionMessage.ArgumentMultiple(nameof(outchannels), outchannels, 3));
             }
 
-            int inwidth = (outwidth - kwidth) / stride + 1;
-            int inheight = (outheight - kheight) / stride + 1;
+            int inwidth = outwidth - kwidth + 1;
+            int inheight = outheight - kheight + 1;
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map2D(inchannels, inwidth, inheight, batch)),
@@ -54,7 +46,6 @@ namespace TensorShader.Operators.TrivectorConvolution {
             this.OutChannels = outchannels;
             this.KernelWidth = kwidth;
             this.KernelHeight = kheight;
-            this.Stride = stride;
             this.GradMode = gradmode;
             this.Batch = batch;
         }
@@ -65,14 +56,12 @@ namespace TensorShader.Operators.TrivectorConvolution {
 
             Tensor inmap = tensors[0], infilter = tensors[1], outmap = tensors[2];
 
-            Parallel.For(0, Batch, (th) => {
-                TensorShaderCudaBackend.Trivector.Deconvolution2D((uint)InChannels, (uint)OutChannels,
-                                                                 (uint)outmap.Width, (uint)outmap.Height,
-                                                                 (uint)Batch, (uint)th,
-                                                                 (uint)KernelWidth, (uint)KernelHeight,
-                                                                 (uint)Stride, GradMode,
-                                                                 inmap.Buffer, infilter.Buffer, outmap.Buffer);
-            });
+            TensorShaderCudaBackend.Trivector.Deconvolution2D((uint)InChannels, (uint)OutChannels,
+                                                              (uint)outmap.Width, (uint)outmap.Height,
+                                                              (uint)Batch, 
+                                                              (uint)KernelWidth, (uint)KernelHeight,
+                                                              GradMode,
+                                                              inmap.Buffer, infilter.Buffer, outmap.Buffer);
         }
 
         /// <summary>操作を実行</summary>

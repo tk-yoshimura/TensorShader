@@ -7,11 +7,11 @@ namespace TensorShaderTest.Layers {
     public class ChannelwiseConvolution1DTest {
         [TestMethod]
         public void ExecuteTest() {
-            int channels = 4, inwidth = 13, kwidth = 3, stride = 2, batch = 7;
+            int channels = 4, inwidth = 13, kwidth = 3, batch = 7;
 
             VariableField x = new Tensor(Shape.Map1D(channels, inwidth, batch));
 
-            Layer layer = new ChannelwiseConvolution1D(channels, kwidth, stride, use_bias: true, pad_mode: PaddingMode.Edge, "conv");
+            Layer layer = new ChannelwiseConvolution1D(channels, kwidth, use_bias: true, pad_mode: PaddingMode.Edge, "conv");
 
             Field y = layer.Forward(x);
 

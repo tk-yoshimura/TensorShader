@@ -12,7 +12,7 @@ namespace TensorShaderCudaBackend {
                                       uint trim_left, uint trim_right,
                                       CudaArray<float> inmap, CudaArray<float> outmap) {
 
-            string key = $"trimming1d channels={channels} trim_left={trim_left} trim_right={trim_right}";
+            string key = $"trimming_1d channels={channels} trim_left={trim_left} trim_right={trim_right}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Trimming.Trimming1D(channels, trim_left, trim_right));
@@ -31,7 +31,7 @@ namespace TensorShaderCudaBackend {
                                       CudaArray<float> inmap, CudaArray<float> outmap) {
 
             string key = 
-                $"trimming2d channels={channels} " +
+                $"trimming_2d channels={channels} " +
                 $"trim_left={trim_left} trim_right={trim_right} " +
                 $"trim_top={trim_top} trim_bottom={trim_bottom}";
             
@@ -53,7 +53,7 @@ namespace TensorShaderCudaBackend {
                                       CudaArray<float> inmap, CudaArray<float> outmap) {
 
             string key = 
-                $"trimming3d channels={channels} " +
+                $"trimming_3d channels={channels} " +
                 $"trim_left={trim_left} trim_right={trim_right} " +
                 $"trim_top={trim_top} trim_bottom={trim_bottom} " +
                 $"trim_front={trim_front} trim_rear={trim_rear}";

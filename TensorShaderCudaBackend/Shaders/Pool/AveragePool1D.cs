@@ -11,8 +11,8 @@
 
             string code = $@"
 
-            __global__ void averagepool1d(float *inmap, float *outmap, 
-                                          unsigned int outwidth) {{
+            __global__ void averagepool_1d(float *inmap, float *outmap, 
+                                           unsigned int outwidth) {{
 
                 unsigned int ch = {Defines.IndexX}, ox = {Defines.IndexY};
 
@@ -34,7 +34,7 @@
                 outmap[outmap_idx] = vsum / {Stride};
             }}";
 
-            this.Kernel = new Kernel(code, "averagepool1d");
+            this.Kernel = new Kernel(code, "averagepool_1d");
         }
     }
 }

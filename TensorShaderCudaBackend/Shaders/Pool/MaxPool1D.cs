@@ -12,8 +12,8 @@
             string code = $@"
             #define NEGATIVE_INF __int_as_float(0xff800000)
 
-            __global__ void maxpool1d(float *inmap, float *outmap, 
-                                      unsigned int outwidth) {{
+            __global__ void maxpool_1d(float *inmap, float *outmap, 
+                                       unsigned int outwidth) {{
 
                 unsigned int ch = {Defines.IndexX}, ox = {Defines.IndexY};
 
@@ -35,7 +35,7 @@
                 outmap[outmap_idx] = vmax;
             }}";
 
-            this.Kernel = new Kernel(code, "maxpool1d");
+            this.Kernel = new Kernel(code, "maxpool_1d");
         }
     }
 }

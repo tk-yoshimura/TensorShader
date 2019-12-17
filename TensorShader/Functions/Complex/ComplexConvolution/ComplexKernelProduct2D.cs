@@ -3,9 +3,9 @@ using System;
 namespace TensorShader {
     public abstract partial class VariableNode {
         /// <summary>複素2次元カーネル積</summary>
-        public static VariableNode ComplexKernelProduct2D(VariableNode x, VariableNode y, int kwidth, int kheight, int stride, bool transpose = false) {
+        public static VariableNode ComplexKernelProduct2D(VariableNode x, VariableNode y, int kwidth, int kheight, bool transpose = false) {
             Function function =
-                new Functions.ComplexConvolution.ComplexKernelProduct2D(x.Shape, y.Shape, kwidth, kheight, stride, transpose);
+                new Functions.ComplexConvolution.ComplexKernelProduct2D(x.Shape, y.Shape, kwidth, kheight, transpose);
 
             VariableNode w = Apply(function, x, y)[0];
 
@@ -15,9 +15,9 @@ namespace TensorShader {
 
     public partial class Tensor {
         /// <summary>複素2次元カーネル積</summary>
-        public static Tensor ComplexKernelProduct2D(Tensor x, Tensor y, int kwidth, int kheight, int stride, bool transpose = false) {
+        public static Tensor ComplexKernelProduct2D(Tensor x, Tensor y, int kwidth, int kheight, bool transpose = false) {
             Functions.ComplexConvolution.ComplexKernelProduct2D function =
-                new Functions.ComplexConvolution.ComplexKernelProduct2D(x.Shape, y.Shape, kwidth, kheight, stride, transpose);
+                new Functions.ComplexConvolution.ComplexKernelProduct2D(x.Shape, y.Shape, kwidth, kheight, transpose);
 
             Tensor w = new Tensor(function.OutShape);
 
@@ -40,14 +40,11 @@ namespace TensorShader.Functions.ComplexConvolution {
         /// <summary>カーネル形状</summary>
         public Shape KernelShape { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>転置</summary>
         public bool Transpose { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public ComplexKernelProduct2D(Shape inshape, Shape outshape, int kwidth, int kheight, int stride, bool transpose) :
+        public ComplexKernelProduct2D(Shape inshape, Shape outshape, int kwidth, int kheight, bool transpose) :
             base(inputs: 2, outputs: 1, allow_resubstitution: false) {
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 4) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 4), ("Type", ShapeType.Map)));
@@ -65,14 +62,9 @@ namespace TensorShader.Functions.ComplexConvolution {
                 throw new AggregateException(ExceptionMessage.TensorLengthMultiple("Channels", outshape, outshape.Channels, 2));
             }
 
-            if (stride < 1) {
-                throw new ArgumentException(nameof(stride));
-            }
-
             this.InShape = inshape;
             this.OutShape = outshape;
             this.KernelShape = Shape.Kernel2D(inshape.Channels, outshape.Channels / 2, kwidth, kheight);
-            this.Stride = stride;
             this.Transpose = transpose;
         }
 
@@ -104,7 +96,7 @@ namespace TensorShader.Functions.ComplexConvolution {
                         InShape.Width, InShape.Height,
                         InShape.Channels, OutShape.Channels,
                         KernelShape.Width, KernelShape.Height,
-                        Stride, Transpose, InShape.Batch));
+                        Transpose, InShape.Batch));
         }
     }
 }

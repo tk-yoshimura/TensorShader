@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.Connection3D {
     /// <summary>ポイントごとの3次元畳み込み</summary>
@@ -32,11 +31,9 @@ namespace TensorShader.Operators.Connection3D {
 
             Tensor inmap = tensors[0], infilter = tensors[1], outmap = tensors[2];
 
-            Parallel.For(0, Batch, (th) => {
-                TensorShaderCudaBackend.Convolution.PointwiseConvolution((uint)InChannels, (uint)OutChannels,
-                                                                        (uint)(inmap.Width * inmap.Height * inmap.Depth), (uint)Batch, (uint)th,
-                                                                        inmap.Buffer, infilter.Buffer, outmap.Buffer);
-            });
+            TensorShaderCudaBackend.Convolution.PointwiseConvolution((uint)InChannels, (uint)OutChannels,
+                                                                     (uint)(inmap.Width * inmap.Height * inmap.Depth), (uint)Batch,
+                                                                     inmap.Buffer, infilter.Buffer, outmap.Buffer);
         }
 
         /// <summary>操作を実行</summary>

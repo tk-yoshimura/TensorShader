@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace TensorShader.Operators.Connection1D {
@@ -11,19 +10,12 @@ namespace TensorShader.Operators.Connection1D {
         /// <remarks>奇数を指定すること</remarks>
         public int KernelWidth { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>バッチサイズ</summary>
         public int Batch { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public ChannelwiseKernelProduct(int inwidth, int channels, int kwidth, int stride, int batch = 1) {
-            if (stride < 1) {
-                throw new ArgumentException(nameof(stride));
-            }
-
-            int outwidth = (inwidth - kwidth) / stride + 1;
+        public ChannelwiseKernelProduct(int inwidth, int channels, int kwidth, int batch = 1) {
+            int outwidth = inwidth - kwidth + 1;
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map1D(channels, inwidth, batch)),
@@ -33,7 +25,6 @@ namespace TensorShader.Operators.Connection1D {
 
             this.Channels = channels;
             this.KernelWidth = kwidth;
-            this.Stride = stride;
             this.Batch = batch;
         }
 
@@ -44,10 +35,10 @@ namespace TensorShader.Operators.Connection1D {
             Tensor inmap1 = tensors[0], inmap2 = tensors[1], outfilter = tensors[2];
 
             TensorShaderCudaBackend.Convolution.ChannelwiseKernelProduct1D((uint)Channels,
-                                                                    (uint)inmap1.Width,
-                                                                    (uint)Batch,
-                                                                    (uint)KernelWidth, (uint)Stride,
-                                                                    inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);
+                                                                           (uint)inmap1.Width,
+                                                                           (uint)Batch,
+                                                                           (uint)KernelWidth, 
+                                                                           inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);
         }
 
         /// <summary>操作を実行</summary>

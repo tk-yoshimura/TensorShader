@@ -18,7 +18,7 @@ namespace TensorShaderTest.Operators.Complex {
                         foreach (int kwidth in new int[] { 1, 3, 5 }) {
                             foreach (int stride in new int[] { 1, 2, 3 }) {
                                 foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                                    int outwidth = (inwidth - kwidth) / stride + 1;
+                                    int outwidth = inwidth - kwidth + 1;
 
                                     float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                                     float[] wval = (new float[kwidth * inchannels * outchannels / 2]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
@@ -71,7 +71,7 @@ namespace TensorShaderTest.Operators.Complex {
                             foreach (int kwidth in new int[] { 1, 3, 5 }) {
                                 foreach (int stride in new int[] { 1, 2, 3 }) {
                                     foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                                        int outwidth = (inwidth - kwidth) / stride + 1;
+                                        int outwidth = inwidth - kwidth + 1;
 
                                         float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                                         float[] wval = (new float[kwidth * inchannels * outchannels / 2]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
@@ -127,7 +127,7 @@ namespace TensorShaderTest.Operators.Complex {
 
         public static ComplexMap1D Reference(ComplexMap1D x, ComplexFilter1D w, int kwidth, int stride) {
             int inchannels = x.Channels, outchannels = w.OutChannels, batch = x.Batch;
-            int inw = x.Width, outw = (inw - kwidth) / stride + 1;
+            int inw = x.Width, outw = inw - kwidth + 1;
 
             ComplexMap1D y = new ComplexMap1D(outchannels, outw, batch);
 
@@ -153,7 +153,7 @@ namespace TensorShaderTest.Operators.Complex {
         [TestMethod]
         public void ReferenceTest() {
             int inchannels = 6, outchannels = 8, kwidth = 3, stride = 2, inwidth = 13, batch = 3;
-            int outwidth = (inwidth - kwidth) / stride + 1;
+            int outwidth = inwidth - kwidth + 1;
 
             float[] xval = (new float[batch * inwidth * inchannels]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[kwidth * outchannels * inchannels / 2]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();

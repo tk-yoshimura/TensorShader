@@ -17,7 +17,7 @@ namespace TensorShaderTest.Operators.Connection1D {
                     foreach (int kwidth in new int[] { 1, 3, 5 }) {
                         foreach (int stride in new int[] { 1, 2, 3 }) {
                             foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                                int outwidth = (inwidth - kwidth) / stride + 1;
+                                int outwidth = inwidth - kwidth + 1;
 
                                 float[] xval = (new float[inwidth * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                                 float[] gyval = (new float[outwidth * channels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
@@ -84,7 +84,7 @@ namespace TensorShaderTest.Operators.Connection1D {
             int channels = x.Channels, batch = x.Batch;
             int inw = x.Width, outw = gy.Width;
 
-            if (outw != (inw - kwidth) / stride + 1) {
+            if (outw != inw - kwidth + 1) {
                 throw new ArgumentException("mismatch shape");
             }
 
@@ -112,7 +112,7 @@ namespace TensorShaderTest.Operators.Connection1D {
             int channels = x.Channels, batch = x.Batch;
             int inw = x.Width, outw = gy.Width;
 
-            if (outw < (inw - kwidth) / stride + 1) {
+            if (outw < inw - kwidth + 1) {
                 throw new ArgumentException("mismatch shape");
             }
 
@@ -145,7 +145,7 @@ namespace TensorShaderTest.Operators.Connection1D {
         [TestMethod]
         public void ReferenceTest() {
             int channels = 7, kwidth = 3, stride = 2, inwidth = 13;
-            int outwidth = (inwidth - kwidth) / stride + 1;
+            int outwidth = inwidth - kwidth + 1;
 
             float[] xval = (new float[inwidth * channels]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] gyval = (new float[outwidth * channels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
@@ -175,7 +175,7 @@ namespace TensorShaderTest.Operators.Connection1D {
                     foreach (int kwidth in new int[] { 1, 3, 5 }) {
                         foreach (int stride in new int[] { 1, 2, 3 }) {
                             foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                                int outwidth = (inwidth - kwidth) / stride + 1;
+                                int outwidth = inwidth - kwidth + 1;
 
                                 float[] xval = (new float[inwidth * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                                 float[] gyval = (new float[outwidth * channels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();

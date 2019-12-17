@@ -11,9 +11,9 @@
 
             string code = $@"
 
-            __global__ void averagepool2d(float *inmap, float *outmap, 
-                                          unsigned int inwidth, unsigned int outwidth, 
-                                          unsigned int outheight) {{
+            __global__ void averagepool_2d(float *inmap, float *outmap, 
+                                           unsigned int inwidth, unsigned int outwidth, 
+                                           unsigned int outheight) {{
 
                 unsigned int ch = {Defines.IndexX}, ox = {Defines.IndexY}, oy = {Defines.IndexZ};
 
@@ -38,7 +38,7 @@
                 outmap[outmap_idx] = vsum / {Stride * Stride};
             }}";
 
-            this.Kernel = new Kernel(code, "averagepool2d");
+            this.Kernel = new Kernel(code, "averagepool_2d");
         }
     }
 }

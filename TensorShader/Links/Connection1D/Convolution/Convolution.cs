@@ -3,9 +3,9 @@ using static TensorShader.VariableNode;
 namespace TensorShader {
     public partial class Field {
         /// <summary>1次元畳み込み</summary>
-        public static Field Convolution1D(Field x, Field w, int stride) {
+        public static Field Convolution1D(Field x, Field w) {
             Field y = new Field();
-            Link link = new Links.Connection1D.Convolution(x, w, y, stride);
+            Link link = new Links.Connection1D.Convolution(x, w, y);
 
             link.Forward();
 
@@ -17,8 +17,6 @@ namespace TensorShader {
 namespace TensorShader.Links.Connection1D {
     /// <summary>1次元畳み込み</summary>
     public class Convolution : Link {
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
 
         /// <summary>入力項</summary>
         protected Field X => InFields[0];
@@ -30,14 +28,12 @@ namespace TensorShader.Links.Connection1D {
         protected Field Y => OutField;
 
         /// <summary>コンストラクタ</summary>
-        public Convolution(Field infield, Field kernelfield, Field outfield, int stride)
-            : base(new Field[] { infield, kernelfield }, outfield) {
-            this.Stride = stride;
-        }
+        public Convolution(Field infield, Field kernelfield, Field outfield)
+            : base(new Field[] { infield, kernelfield }, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {
-            Y.AssignValue(Convolution1D(X.Value, W.Value, Stride));
+            Y.AssignValue(Convolution1D(X.Value, W.Value));
         }
 
         /// <summary>逆伝搬</summary>
@@ -47,11 +43,11 @@ namespace TensorShader.Links.Connection1D {
             }
 
             if (X.EnableBackprop) {
-                X.AddGrad(Deconvolution1D(Y.Grad, W.Value, Stride, X.Shape));
+                X.AddGrad(Deconvolution1D(Y.Grad, W.Value));
             }
 
             if (W.EnableBackprop) {
-                W.AddGrad(KernelProduct1D(X.Value, Y.Grad, W.Shape.Width, Stride));
+                W.AddGrad(KernelProduct1D(X.Value, Y.Grad, W.Shape.Width));
             }
         }
     }

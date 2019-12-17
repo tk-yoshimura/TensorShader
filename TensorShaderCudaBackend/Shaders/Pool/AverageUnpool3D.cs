@@ -11,10 +11,10 @@
 
             string code = $@"
 
-            __global__ void averageunpool3d(float *inmap, float *outmap, 
-                                            unsigned int iz, 
-                                            unsigned int inwidth, unsigned int outwidth, 
-                                            unsigned int inheight, unsigned int outheight) {{
+            __global__ void averageunpool_3d(float *inmap, float *outmap, 
+                                             unsigned int iz, 
+                                             unsigned int inwidth, unsigned int outwidth, 
+                                             unsigned int inheight, unsigned int outheight) {{
 
                 unsigned int ch = {Defines.IndexX}, ix = {Defines.IndexY}, iy = {Defines.IndexZ};
 
@@ -41,7 +41,7 @@
                 }}
             }}";
 
-            this.Kernel = new Kernel(code, "averageunpool3d");
+            this.Kernel = new Kernel(code, "averageunpool_3d");
         }
     }
 }

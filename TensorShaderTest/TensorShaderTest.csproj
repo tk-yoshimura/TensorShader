@@ -224,6 +224,7 @@
     <Compile Include="Links\Connection1D\Convolution\PointwiseDeconvolutionTest.cs" />
     <Compile Include="Links\Connection1D\Pad\EdgePaddingTest.cs" />
     <Compile Include="Links\Connection1D\Pad\ZeroPaddingTest.cs" />
+    <Compile Include="Links\Connection1D\Pool\StridePoolingTest.cs" />
     <Compile Include="Links\Connection1D\Pool\AveragePoolingTest.cs" />
     <Compile Include="Links\Connection1D\Pool\MaxPoolingTest.cs" />
     <Compile Include="Links\Connection1D\Transform\ChannelToSpaceTest.cs" />
@@ -231,6 +232,7 @@
     <Compile Include="Links\Connection1D\Trim\TrimmingTest.cs" />
     <Compile Include="Links\Connection1D\Zoom\LinearZoomTest.cs" />
     <Compile Include="Links\Connection1D\Zoom\NeighborZoomTest.cs" />
+    <Compile Include="Links\Connection2D\Pool\StridePoolingTest.cs" />
     <Compile Include="Links\Connection3D\Convolution\ChannelwiseConvolutionTest.cs" />
     <Compile Include="Links\Connection3D\Convolution\ChannelwiseDeconvolutionTest.cs" />
     <Compile Include="Links\Connection3D\Convolution\ConvolutionTest.cs" />
@@ -239,6 +241,7 @@
     <Compile Include="Links\Connection3D\Convolution\PointwiseDeconvolutionTest.cs" />
     <Compile Include="Links\Connection3D\Pad\EdgePaddingTest.cs" />
     <Compile Include="Links\Connection3D\Pad\ZeroPaddingTest.cs" />
+    <Compile Include="Links\Connection3D\Pool\StridePoolingTest.cs" />
     <Compile Include="Links\Connection3D\Pool\AveragePoolingTest.cs" />
     <Compile Include="Links\Connection3D\Pool\MaxPoolingTest.cs" />
     <Compile Include="Links\Connection3D\Transform\ChannelToSpaceTest.cs" />
@@ -411,7 +414,9 @@
     <Compile Include="Operators\Connection1D\Map1D.cs" />
     <Compile Include="Operators\Connection1D\Pad\EdgePaddingTest.cs" />
     <Compile Include="Operators\Connection1D\Pad\ZeroPaddingTest.cs" />
+    <Compile Include="Operators\Connection1D\Pooling\StridePoolingTest.cs" />
     <Compile Include="Operators\Connection1D\Pooling\AveragePoolingTest.cs" />
+    <Compile Include="Operators\Connection1D\Pooling\StrideUnpoolingTest.cs" />
     <Compile Include="Operators\Connection1D\Pooling\AverageUnpoolingTest.cs" />
     <Compile Include="Operators\Connection1D\Pooling\MaxPoolingTest.cs" />
     <Compile Include="Operators\Connection1D\Pooling\MaxUnpoolingTest.cs" />
@@ -426,6 +431,8 @@
     <Compile Include="Operators\Connection2D\Convolution\PointwiseConvolutionTest.cs" />
     <Compile Include="Operators\Connection2D\Convolution\PointwiseDeconvolutionTest.cs" />
     <Compile Include="Operators\Connection2D\Convolution\PointwiseKernelProductTest.cs" />
+    <Compile Include="Operators\Connection2D\Pooling\StridePoolingTest.cs" />
+    <Compile Include="Operators\Connection2D\Pooling\StrideUnpoolingTest.cs" />
     <Compile Include="Operators\Connection3D\Convolution\ChannelwiseConvolutionTest.cs" />
     <Compile Include="Operators\Connection3D\Convolution\ChannelwiseDeconvolutionTest.cs" />
     <Compile Include="Operators\Connection3D\Convolution\ChannelwiseKernelProductTest.cs" />
@@ -439,7 +446,9 @@
     <Compile Include="Operators\Connection3D\Map3D.cs" />
     <Compile Include="Operators\Connection3D\Pad\EdgePaddingTest.cs" />
     <Compile Include="Operators\Connection3D\Pad\ZeroPaddingTest.cs" />
+    <Compile Include="Operators\Connection3D\Pooling\StridePoolingTest.cs" />
     <Compile Include="Operators\Connection3D\Pooling\AveragePoolingTest.cs" />
+    <Compile Include="Operators\Connection3D\Pooling\StrideUnpoolingTest.cs" />
     <Compile Include="Operators\Connection3D\Pooling\AverageUnpoolingTest.cs" />
     <Compile Include="Operators\Connection3D\Pooling\MaxPoolingTest.cs" />
     <Compile Include="Operators\Connection3D\Pooling\MaxUnpoolingTest.cs" />

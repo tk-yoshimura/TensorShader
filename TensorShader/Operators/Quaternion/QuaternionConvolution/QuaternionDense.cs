@@ -44,9 +44,7 @@ namespace TensorShader.Operators.QuaternionConvolution {
 
             Tensor inmap = tensors[0], infilter = tensors[1], outmap = tensors[2];
 
-            Parallel.For(0, Batch, (th) => {
-                TensorShaderCudaBackend.Quaternion.Dense((uint)InChannels, (uint)OutChannels, (uint)Batch, (uint)th, GradMode, inmap.Buffer, infilter.Buffer, outmap.Buffer);
-            });
+            TensorShaderCudaBackend.Quaternion.Dense((uint)InChannels, (uint)OutChannels, (uint)Batch, GradMode, inmap.Buffer, infilter.Buffer, outmap.Buffer);
         }
 
         /// <summary>操作を実行</summary>

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.ComplexConvolution {
     /// <summary>複素カーネル積</summary>
@@ -19,9 +18,6 @@ namespace TensorShader.Operators.ComplexConvolution {
         /// <remarks>奇数を指定すること</remarks>
         public int KernelHeight { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>転置</summary>
         public bool Transpose { private set; get; }
 
@@ -29,11 +25,7 @@ namespace TensorShader.Operators.ComplexConvolution {
         public int Batch { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public ComplexKernelProduct2D(int inwidth, int inheight, int inchannels, int outchannels, int kwidth, int kheight, int stride, bool transpose = false, int batch = 1) {
-            if (stride < 1) {
-                throw new ArgumentException(nameof(stride));
-            }
-
+        public ComplexKernelProduct2D(int inwidth, int inheight, int inchannels, int outchannels, int kwidth, int kheight, bool transpose = false, int batch = 1) {
             if (inchannels % 2 != 0) {
                 throw new ArgumentException(ExceptionMessage.ArgumentMultiple(nameof(inchannels), inchannels, 2));
             }
@@ -41,8 +33,8 @@ namespace TensorShader.Operators.ComplexConvolution {
                 throw new ArgumentException(ExceptionMessage.ArgumentMultiple(nameof(outchannels), outchannels, 2));
             }
 
-            int outwidth = (inwidth - kwidth) / stride + 1;
-            int outheight = (inheight - kheight) / stride + 1;
+            int outwidth = inwidth - kwidth + 1;
+            int outheight = inheight - kheight + 1;
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map2D(inchannels, inwidth, inheight, batch)),
@@ -54,7 +46,6 @@ namespace TensorShader.Operators.ComplexConvolution {
             this.OutChannels = outchannels;
             this.KernelWidth = kwidth;
             this.KernelHeight = kheight;
-            this.Stride = stride;
             this.Transpose = transpose;
             this.Batch = batch;
         }
@@ -65,14 +56,12 @@ namespace TensorShader.Operators.ComplexConvolution {
 
             Tensor inmap1 = tensors[0], inmap2 = tensors[1], outfilter = tensors[2];
 
-            Parallel.For(0, OutChannels / 2, (outch) => {
-                TensorShaderCudaBackend.Complex.KernelProduct2D((uint)InChannels, (uint)OutChannels,
-                                                               (uint)inmap1.Width, (uint)inmap1.Height,
-                                                               (uint)Batch, (uint)outch * 2,
-                                                               (uint)KernelWidth, (uint)KernelHeight,
-                                                               (uint)Stride, Transpose,
-                                                               inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);
-            });
+            TensorShaderCudaBackend.Complex.KernelProduct2D((uint)InChannels, (uint)OutChannels,
+                                                            (uint)inmap1.Width, (uint)inmap1.Height,
+                                                            (uint)Batch, 
+                                                            (uint)KernelWidth, (uint)KernelHeight,
+                                                            Transpose,
+                                                            inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);
         }
 
         /// <summary>操作を実行</summary>

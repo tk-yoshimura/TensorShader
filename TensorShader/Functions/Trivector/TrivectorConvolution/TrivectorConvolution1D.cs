@@ -3,9 +3,9 @@ using System;
 namespace TensorShader {
     public abstract partial class VariableNode {
         /// <summary>3次元ベクトル1次元畳み込み</summary>
-        public static VariableNode TrivectorConvolution1D(VariableNode x, VariableNode w, int stride, bool gradmode = false) {
+        public static VariableNode TrivectorConvolution1D(VariableNode x, VariableNode w, bool gradmode = false) {
             Function function =
-                new Functions.TrivectorConvolution.TrivectorConvolution1D(x.Shape, w.Shape, stride, gradmode);
+                new Functions.TrivectorConvolution.TrivectorConvolution1D(x.Shape, w.Shape, gradmode);
 
             VariableNode y = Apply(function, x, w)[0];
 
@@ -15,9 +15,9 @@ namespace TensorShader {
 
     public partial class Tensor {
         /// <summary>3次元ベクトル1次元畳み込み</summary>
-        public static Tensor TrivectorConvolution1D(Tensor x, Tensor w, int stride, bool gradmode = false) {
+        public static Tensor TrivectorConvolution1D(Tensor x, Tensor w, bool gradmode = false) {
             Functions.TrivectorConvolution.TrivectorConvolution1D function =
-                new Functions.TrivectorConvolution.TrivectorConvolution1D(x.Shape, w.Shape, stride, gradmode);
+                new Functions.TrivectorConvolution.TrivectorConvolution1D(x.Shape, w.Shape, gradmode);
 
             Tensor y = new Tensor(function.OutShape);
 
@@ -40,15 +40,13 @@ namespace TensorShader.Functions.TrivectorConvolution {
         /// <summary>カーネル形状</summary>
         public Shape KernelShape { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>勾配</summary>
         public bool GradMode { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public TrivectorConvolution1D(Shape inshape, Shape kernelshape, int stride, bool gradmode) :
-            base(inputs: 2, outputs: 1, allow_resubstitution: false) {
+        public TrivectorConvolution1D(Shape inshape, Shape kernelshape, bool gradmode)
+            : base(inputs: 2, outputs: 1, allow_resubstitution: false) {
+           
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 3) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 3), ("Type", ShapeType.Map)));
             }
@@ -68,17 +66,12 @@ namespace TensorShader.Functions.TrivectorConvolution {
             if (inshape.Channels / 3 * 4 != kernelshape.InChannels) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(kernelshape, ("InChannels", inshape.Channels / 3 * 4)));
             }
-
-            if (stride < 1) {
-                throw new ArgumentException(nameof(stride));
-            }
-
-            int outwidth = (inshape.Width - kernelshape.Width) / stride + 1;
+            
+            int outwidth = inshape.Width - kernelshape.Width + 1;
 
             this.InShape = inshape;
             this.OutShape = Shape.Map1D(kernelshape.OutChannels * 3, outwidth, inshape.Batch);
             this.KernelShape = kernelshape;
-            this.Stride = stride;
             this.GradMode = gradmode;
         }
 
@@ -110,7 +103,7 @@ namespace TensorShader.Functions.TrivectorConvolution {
                         InShape.Width,
                         InShape.Channels, OutShape.Channels,
                         KernelShape.Width,
-                        Stride, GradMode, InShape.Batch));
+                        GradMode, InShape.Batch));
         }
     }
 }

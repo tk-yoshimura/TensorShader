@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.Connection1D {
     /// <summary>カーネル積</summary>
@@ -15,19 +13,13 @@ namespace TensorShader.Operators.Connection1D {
         /// <remarks>奇数を指定すること</remarks>
         public int KernelWidth { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>バッチサイズ</summary>
         public int Batch { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public KernelProduct(int inwidth, int inchannels, int outchannels, int kwidth, int stride, int batch = 1) {
-            if (stride < 1) {
-                throw new ArgumentException(nameof(stride));
-            }
-
-            int outwidth = (inwidth - kwidth) / stride + 1;
+        public KernelProduct(int inwidth, int inchannels, int outchannels, int kwidth, int batch = 1) {
+            
+            int outwidth = inwidth - kwidth + 1;
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map1D(inchannels, inwidth, batch)),
@@ -38,7 +30,6 @@ namespace TensorShader.Operators.Connection1D {
             this.InChannels = inchannels;
             this.OutChannels = outchannels;
             this.KernelWidth = kwidth;
-            this.Stride = stride;
             this.Batch = batch;
         }
 

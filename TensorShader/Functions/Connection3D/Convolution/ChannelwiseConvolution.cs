@@ -3,9 +3,9 @@ using System;
 namespace TensorShader {
     public abstract partial class VariableNode {
         /// <summary>チャネルごとの3次元畳み込み</summary>
-        public static VariableNode ChannelwiseConvolution3D(VariableNode x, VariableNode w, int stride) {
+        public static VariableNode ChannelwiseConvolution3D(VariableNode x, VariableNode w) {
             Function function =
-                new Functions.Connection3D.ChannelwiseConvolution(x.Shape, w.Shape, stride);
+                new Functions.Connection3D.ChannelwiseConvolution(x.Shape, w.Shape);
 
             VariableNode y = Apply(function, x, w)[0];
 
@@ -15,9 +15,9 @@ namespace TensorShader {
 
     public partial class Tensor {
         /// <summary>チャネルごとの3次元畳み込み</summary>
-        public static Tensor ChannelwiseConvolution3D(Tensor x, Tensor w, int stride) {
+        public static Tensor ChannelwiseConvolution3D(Tensor x, Tensor w) {
             Functions.Connection3D.ChannelwiseConvolution function =
-                new Functions.Connection3D.ChannelwiseConvolution(x.Shape, w.Shape, stride);
+                new Functions.Connection3D.ChannelwiseConvolution(x.Shape, w.Shape);
 
             Tensor y = new Tensor(function.OutShape);
 
@@ -40,12 +40,10 @@ namespace TensorShader.Functions.Connection3D {
         /// <summary>カーネル形状</summary>
         public Shape KernelShape { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>コンストラクタ</summary>
-        public ChannelwiseConvolution(Shape inshape, Shape kernelshape, int stride) :
-            base(inputs: 2, outputs: 1, allow_resubstitution: false) {
+        public ChannelwiseConvolution(Shape inshape, Shape kernelshape)
+            : base(inputs: 2, outputs: 1, allow_resubstitution: false) {
+            
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 5) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 5), ("Type", ShapeType.Map)));
             }
@@ -58,18 +56,13 @@ namespace TensorShader.Functions.Connection3D {
                 throw new ArgumentException(ExceptionMessage.TensorElements(kernelshape, ("InChannels", inshape.Channels)));
             }
 
-            if (stride < 1) {
-                throw new ArgumentException(nameof(stride));
-            }
-
-            int outwidth = (inshape.Width - kernelshape.Width) / stride + 1;
-            int outheight = (inshape.Height - kernelshape.Height) / stride + 1;
-            int outdepth = (inshape.Depth - kernelshape.Depth) / stride + 1;
+            int outwidth = inshape.Width - kernelshape.Width + 1;
+            int outheight = inshape.Height - kernelshape.Height + 1;
+            int outdepth = inshape.Depth - kernelshape.Depth + 1;
 
             this.InShape = inshape;
             this.OutShape = Shape.Map3D(inshape.Channels, outwidth, outheight, outdepth, inshape.Batch);
             this.KernelShape = kernelshape;
-            this.Stride = stride;
         }
 
         /// <summary>出力テンソル形状を返す</summary>
@@ -100,7 +93,7 @@ namespace TensorShader.Functions.Connection3D {
                         InShape.Width, InShape.Height, InShape.Depth,
                         InShape.Channels,
                         KernelShape.Width, KernelShape.Height, KernelShape.Depth,
-                        Stride, InShape.Batch));
+                        InShape.Batch));
         }
     }
 }

@@ -3,9 +3,9 @@ using static TensorShader.VariableNode;
 namespace TensorShader {
     public partial class Field {
         /// <summary>1次元逆畳み込み</summary>
-        public static Field ChannelwiseDeconvolution1D(Field x, Field w, int stride, Shape outshape = null) {
+        public static Field ChannelwiseDeconvolution1D(Field x, Field w) {
             Field y = new Field();
-            Link link = new Links.Connection1D.ChannelwiseDeconvolution(x, w, y, stride, outshape);
+            Link link = new Links.Connection1D.ChannelwiseDeconvolution(x, w, y);
 
             link.Forward();
 
@@ -17,11 +17,6 @@ namespace TensorShader {
 namespace TensorShader.Links.Connection1D {
     /// <summary>1次元逆畳み込み</summary>
     public class ChannelwiseDeconvolution : Link {
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
-        /// <summary>出力形状</summary>
-        public Shape OutShape { private set; get; }
 
         /// <summary>入力項</summary>
         protected Field X => InFields[0];
@@ -33,15 +28,12 @@ namespace TensorShader.Links.Connection1D {
         protected Field Y => OutField;
 
         /// <summary>コンストラクタ</summary>
-        public ChannelwiseDeconvolution(Field infield, Field kernelfield, Field outfield, int stride, Shape outshape)
-            : base(new Field[] { infield, kernelfield }, outfield) {
-            this.Stride = stride;
-            this.OutShape = outshape;
-        }
+        public ChannelwiseDeconvolution(Field infield, Field kernelfield, Field outfield)
+            : base(new Field[] { infield, kernelfield }, outfield) {}
 
         /// <summary>順伝搬</summary>
         public override void Forward() {
-            Y.AssignValue(ChannelwiseDeconvolution1D(X.Value, W.Value, Stride, OutShape));
+            Y.AssignValue(ChannelwiseDeconvolution1D(X.Value, W.Value));
         }
 
         /// <summary>逆伝搬</summary>
@@ -51,12 +43,13 @@ namespace TensorShader.Links.Connection1D {
             }
 
             if (X.EnableBackprop) {
-                X.AddGrad(ChannelwiseConvolution1D(Y.Grad, W.Value, Stride));
+                X.AddGrad(ChannelwiseConvolution1D(Y.Grad, W.Value));
             }
 
             if (W.EnableBackprop) {
-                W.AddGrad(ChannelwiseKernelProduct1D(Y.Grad, X.Value, W.Shape.Width, Stride));
+                W.AddGrad(ChannelwiseKernelProduct1D(Y.Grad, X.Value, W.Shape.Width));
             }
+
         }
     }
 }

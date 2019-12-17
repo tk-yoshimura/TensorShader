@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.QuaternionConvolution {
     /// <summary>四元数全結合カーネル積</summary>
@@ -44,9 +43,7 @@ namespace TensorShader.Operators.QuaternionConvolution {
 
             Tensor inmap1 = tensors[0], inmap2 = tensors[1], outfilter = tensors[2];
 
-            Parallel.For(0, OutChannels / 4, (outch) => {
-                TensorShaderCudaBackend.Quaternion.KernelProductDense((uint)InChannels, (uint)OutChannels, (uint)Batch, (uint)outch * 4, Transpose, inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);
-            });
+            TensorShaderCudaBackend.Quaternion.KernelProductDense((uint)InChannels, (uint)OutChannels, (uint)Batch, Transpose, inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);
         }
 
         /// <summary>操作を実行</summary>

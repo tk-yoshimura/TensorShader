@@ -20,7 +20,7 @@ namespace TensorShaderTest.Operators.Complex {
                                 foreach (int stride in new int[] { 1, 2, 3 }) {
                                     foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
                                         foreach (int inheight in new int[] { 8, 9, 19, 23 }) {
-                                            int outwidth = (inwidth - kwidth) / stride + 1, outheight = (inheight - kheight) / stride + 1;
+                                            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
 
                                             float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                                             float[] wval = (new float[kwidth * kheight * inchannels * outchannels / 2]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
@@ -77,7 +77,7 @@ namespace TensorShaderTest.Operators.Complex {
                                     foreach (int stride in new int[] { 1, 2, 3 }) {
                                         foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
                                             foreach (int inheight in new int[] { 8, 9, 19, 23 }) {
-                                                int outwidth = (inwidth - kwidth) / stride + 1, outheight = (inheight - kheight) / stride + 1;
+                                                int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
 
                                                 float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                                                 float[] wval = (new float[kwidth * kheight * inchannels * outchannels / 2]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
@@ -137,7 +137,7 @@ namespace TensorShaderTest.Operators.Complex {
 
         public static ComplexMap2D Reference(ComplexMap2D y, ComplexFilter2D w, int inw, int inh, int kwidth, int kheight, int stride) {
             int inchannels = w.InChannels, outchannels = w.OutChannels, batch = y.Batch;
-            int outw = (inw - kwidth) / stride + 1, outh = (inh - kheight) / stride + 1;
+            int outw = inw - kwidth + 1, outh = inh - kheight + 1;
 
             if (y.Width != outw || y.Height != outh) {
                 throw new ArgumentException("mismatch shape");
@@ -169,7 +169,7 @@ namespace TensorShaderTest.Operators.Complex {
         [TestMethod]
         public void ReferenceTest() {
             int inchannels = 6, outchannels = 8, kwidth = 3, kheight = 5, stride = 2, inwidth = 13, inheight = 17, batch = 3;
-            int outwidth = (inwidth - kwidth) / stride + 1, outheight = (inheight - kheight) / stride + 1;
+            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
 
             float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[kwidth * kheight * outchannels * inchannels / 2]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();

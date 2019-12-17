@@ -10,9 +10,6 @@ namespace TensorShader.Layers {
         /// <summary>バイアス</summary>
         public ParameterField Bias { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>パディングモード</summary>
         public PaddingMode PaddingMode { private set; get; }
 
@@ -26,7 +23,7 @@ namespace TensorShader.Layers {
         public override int Width => W.Shape.Width;
 
         /// <summary>コンストラクタ</summary>
-        public ChannelwiseConvolution1D(int channels, int kwidth, int stride, bool use_bias, PaddingMode pad_mode, string label)
+        public ChannelwiseConvolution1D(int channels, int kwidth, bool use_bias, PaddingMode pad_mode, string label)
             : base(label) {
             this.W = new ParameterField(
                 new Tensor(Shape.Kernel1D(channels, 1, kwidth)),
@@ -40,7 +37,6 @@ namespace TensorShader.Layers {
                     ParameterCategory.Bias)
                 : null;
 
-            this.Stride = stride;
             this.PaddingMode = pad_mode;
         }
 
@@ -66,7 +62,7 @@ namespace TensorShader.Layers {
                 }
             }
 
-            Field y = ChannelwiseConvolution1D(x, W, Stride);
+            Field y = ChannelwiseConvolution1D(x, W);
 
             if (Bias != null) {
                 y += Bias;

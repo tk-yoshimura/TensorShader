@@ -9,11 +9,11 @@ namespace TensorShaderUtilTest.GraphVisualization {
     public class GraphTest {
         [TestMethod]
         public void BuildTest() {
-            int inchannels = 4, outchannels = 6, inwidth = 13, inheight = 17, kwidth = 3, kheight = 5, stride = 2, batch = 7;
+            int inchannels = 4, outchannels = 6, inwidth = 13, inheight = 17, kwidth = 3, kheight = 5, batch = 7;
 
             VariableField x = new Tensor(Shape.Map2D(inchannels, inwidth, inheight, batch));
 
-            Layer layer = new Convolution2D(inchannels, outchannels, kwidth, kheight, stride, use_bias:true, pad_mode:PaddingMode.Edge, "conv");
+            Layer layer = new Convolution2D(inchannels, outchannels, kwidth, kheight, use_bias:true, pad_mode:PaddingMode.Edge, "conv");
 
             Field y = layer.Forward(x);
 

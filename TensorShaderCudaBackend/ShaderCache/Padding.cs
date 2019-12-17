@@ -12,7 +12,7 @@ namespace TensorShaderCudaBackend {
                                          uint pad_left, uint pad_right,
                                          CudaArray<float> inmap, CudaArray<float> outmap) {
             
-            string key = $"zeropadding1d channels={channels} pad_left={pad_left} pad_right={pad_right}";
+            string key = $"zeropadding_1d channels={channels} pad_left={pad_left} pad_right={pad_right}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Padding.ZeroPadding1D(channels, pad_left, pad_right));
@@ -29,7 +29,7 @@ namespace TensorShaderCudaBackend {
                                          uint pad_left, uint pad_right,
                                          CudaArray<float> inmap, CudaArray<float> outmap) {
             
-            string key = $"edgepadding1d channels={channels} pad_left={pad_left} pad_right={pad_right}";
+            string key = $"edgepadding_1d channels={channels} pad_left={pad_left} pad_right={pad_right}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Padding.EdgePadding1D(channels, pad_left, pad_right));
@@ -48,7 +48,7 @@ namespace TensorShaderCudaBackend {
                                          CudaArray<float> inmap, CudaArray<float> outmap) {
 
             string key = 
-                $"zeropadding2d channels={channels} " +
+                $"zeropadding_2d channels={channels} " +
                 $"pad_left={pad_left} pad_right={pad_right} " +
                 $"pad_top={pad_top} pad_bottom={pad_bottom}";
             
@@ -69,7 +69,7 @@ namespace TensorShaderCudaBackend {
                                          CudaArray<float> inmap, CudaArray<float> outmap) {
 
             string key = 
-                $"edgepadding2d channels={channels} " +
+                $"edgepadding_2d channels={channels} " +
                 $"pad_left={pad_left} pad_right={pad_right} " +
                 $"pad_top={pad_top} pad_bottom={pad_bottom}";
             
@@ -91,7 +91,7 @@ namespace TensorShaderCudaBackend {
                                          CudaArray<float> inmap, CudaArray<float> outmap) {
 
             string key = 
-                $"zeropadding3d channels={channels} " +
+                $"zeropadding_3d channels={channels} " +
                 $"pad_left={pad_left} pad_right={pad_right} " +
                 $"pad_top={pad_top} pad_bottom={pad_bottom} " +
                 $"pad_front={pad_front} pad_rear={pad_rear}";
@@ -115,7 +115,7 @@ namespace TensorShaderCudaBackend {
                                          CudaArray<float> inmap, CudaArray<float> outmap) {
 
             string key = 
-                $"edgepadding3d channels={channels} " +
+                $"edgepadding_3d channels={channels} " +
                 $"pad_left={pad_left} pad_right={pad_right} " +
                 $"pad_top={pad_top} pad_bottom={pad_bottom} " +
                 $"pad_front={pad_front} pad_rear={pad_rear}";

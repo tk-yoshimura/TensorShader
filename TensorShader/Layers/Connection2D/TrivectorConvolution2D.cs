@@ -10,9 +10,6 @@ namespace TensorShader.Layers {
         /// <summary>バイアス</summary>
         public ParameterField Bias { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>パディングモード</summary>
         public PaddingMode PaddingMode { private set; get; }
 
@@ -29,7 +26,7 @@ namespace TensorShader.Layers {
         public override int Height => W.Shape.Height;
 
         /// <summary>コンストラクタ</summary>
-        public TrivectorConvolution2D(int inchannels, int outchannels, int kwidth, int kheight, int stride, bool use_bias, PaddingMode pad_mode, string label)
+        public TrivectorConvolution2D(int inchannels, int outchannels, int kwidth, int kheight, bool use_bias, PaddingMode pad_mode, string label)
             : base(label) {
             this.W = new ParameterField(
                 new Tensor(Shape.Kernel2D(inchannels / 3 * 4, outchannels / 3, kwidth, kheight)),
@@ -43,7 +40,6 @@ namespace TensorShader.Layers {
                     ParameterCategory.Bias)
                 : null;
 
-            this.Stride = stride;
             this.PaddingMode = pad_mode;
         }
 
@@ -70,7 +66,7 @@ namespace TensorShader.Layers {
                 }
             }
 
-            Field y = TrivectorConvolution2D(x, W, Stride);
+            Field y = TrivectorConvolution2D(x, W);
 
             if (Bias != null) {
                 y += Bias;

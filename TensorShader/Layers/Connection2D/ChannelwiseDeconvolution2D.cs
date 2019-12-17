@@ -10,9 +10,6 @@ namespace TensorShader.Layers {
         /// <summary>バイアス</summary>
         public ParameterField Bias { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>パディングモード</summary>
         public PaddingMode PaddingMode { private set; get; }
 
@@ -29,7 +26,7 @@ namespace TensorShader.Layers {
         public override int Height => W.Shape.Height;
 
         /// <summary>コンストラクタ</summary>
-        public ChannelwiseDeconvolution2D(int channels, int kwidth, int kheight, int stride, bool use_bias, PaddingMode pad_mode, string label)
+        public ChannelwiseDeconvolution2D(int channels, int kwidth, int kheight, bool use_bias, PaddingMode pad_mode, string label)
             : base(label) {
             this.W = new ParameterField(
                 new Tensor(Shape.Kernel2D(channels, 1, kwidth, kheight)),
@@ -43,7 +40,6 @@ namespace TensorShader.Layers {
                     ParameterCategory.Bias)
                 : null;
 
-            this.Stride = stride;
             this.PaddingMode = pad_mode;
         }
 
@@ -58,7 +54,7 @@ namespace TensorShader.Layers {
 
         /// <summary>適用</summary>
         public Field Forward(Field x) {
-            Field y = ChannelwiseDeconvolution2D(x, W, Stride);
+            Field y = ChannelwiseDeconvolution2D(x, W);
 
             if (Bias != null) {
                 y += Bias;

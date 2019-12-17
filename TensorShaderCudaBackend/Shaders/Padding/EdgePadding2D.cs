@@ -9,7 +9,7 @@
 
             string code = $@"
 
-            __global__ void edgepadding2d(float *inmap, float *outmap, 
+            __global__ void edgepadding_2d(float *inmap, float *outmap, 
                                           unsigned int inwidth, unsigned int outwidth, 
                                           unsigned int inheight, unsigned int outheight) {{
 
@@ -27,7 +27,7 @@
                 outmap[outmap_idx] = inmap[inmap_idx];
             }}";
 
-            this.Kernel = new Kernel(code, "edgepadding2d");
+            this.Kernel = new Kernel(code, "edgepadding_2d");
         }
     }
 }

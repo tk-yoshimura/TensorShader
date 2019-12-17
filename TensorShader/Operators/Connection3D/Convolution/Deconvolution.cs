@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace TensorShader.Operators.Connection3D {
@@ -22,21 +21,15 @@ namespace TensorShader.Operators.Connection3D {
         /// <remarks>奇数を指定すること</remarks>
         public int KernelDepth { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>バッチサイズ</summary>
         public int Batch { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public Deconvolution(int outwidth, int outheight, int outdepth, int inchannels, int outchannels, int kwidth, int kheight, int kdepth, int stride, int batch = 1) {
-            if (stride < 1) {
-                throw new ArgumentException(nameof(stride));
-            }
-
-            int inwidth = (outwidth - kwidth) / stride + 1;
-            int inheight = (outheight - kheight) / stride + 1;
-            int indepth = (outdepth - kdepth) / stride + 1;
+        public Deconvolution(int outwidth, int outheight, int outdepth, int inchannels, int outchannels, int kwidth, int kheight, int kdepth, int batch = 1) {
+            
+            int inwidth = outwidth - kwidth + 1;
+            int inheight = outheight - kheight + 1;
+            int indepth = outdepth - kdepth + 1;
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map3D(inchannels, inwidth, inheight, indepth, batch)),
@@ -49,7 +42,6 @@ namespace TensorShader.Operators.Connection3D {
             this.KernelWidth = kwidth;
             this.KernelHeight = kheight;
             this.KernelDepth = kdepth;
-            this.Stride = stride;
             this.Batch = batch;
         }
 

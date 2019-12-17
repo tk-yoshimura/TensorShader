@@ -44,8 +44,9 @@ namespace TensorShader.Functions.QuaternionConvolution {
         public bool Transpose { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public QuaternionKernelProductDense(Shape inshape, Shape outshape, bool transpose) :
-            base(inputs: 2, outputs: 1, allow_resubstitution: false) {
+        public QuaternionKernelProductDense(Shape inshape, Shape outshape, bool transpose)
+            : base(inputs: 2, outputs: 1, allow_resubstitution: false) {
+            
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 2) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 2), ("Type", ShapeType.Map)));
             }

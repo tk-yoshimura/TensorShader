@@ -9,7 +9,7 @@
 
             string code = $@"
 
-            __global__ void zeropadding2d(float *inmap, float *outmap, 
+            __global__ void zeropadding_2d(float *inmap, float *outmap, 
                                           unsigned int inwidth, unsigned int outwidth, 
                                           unsigned int inheight, unsigned int outheight) {{
 
@@ -29,7 +29,7 @@
                 outmap[outmap_idx] = v;
             }}";
 
-            this.Kernel = new Kernel(code, "zeropadding2d");
+            this.Kernel = new Kernel(code, "zeropadding_2d");
         }
     }
 }

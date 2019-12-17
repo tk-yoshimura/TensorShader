@@ -3,9 +3,9 @@ using System;
 namespace TensorShader {
     public abstract partial class VariableNode {
         /// <summary>3次元ベクトル2次元カーネル積</summary>
-        public static VariableNode TrivectorKernelProduct2D(VariableNode x, VariableNode y, VariableNode q, int kwidth, int kheight, int stride, bool transpose = false) {
+        public static VariableNode TrivectorKernelProduct2D(VariableNode x, VariableNode y, VariableNode q, int kwidth, int kheight, bool transpose = false) {
             Function function =
-                new Functions.TrivectorConvolution.TrivectorKernelProduct2D(x.Shape, y.Shape, kwidth, kheight, stride, transpose);
+                new Functions.TrivectorConvolution.TrivectorKernelProduct2D(x.Shape, y.Shape, kwidth, kheight, transpose);
 
             VariableNode w = Apply(function, x, y, q)[0];
 
@@ -15,9 +15,9 @@ namespace TensorShader {
 
     public partial class Tensor {
         /// <summary>3次元ベクトル2次元カーネル積</summary>
-        public static Tensor TrivectorKernelProduct2D(Tensor x, Tensor y, Tensor q, int kwidth, int kheight, int stride, bool transpose = false) {
+        public static Tensor TrivectorKernelProduct2D(Tensor x, Tensor y, Tensor q, int kwidth, int kheight, bool transpose = false) {
             Functions.TrivectorConvolution.TrivectorKernelProduct2D function =
-                new Functions.TrivectorConvolution.TrivectorKernelProduct2D(x.Shape, y.Shape, kwidth, kheight, stride, transpose);
+                new Functions.TrivectorConvolution.TrivectorKernelProduct2D(x.Shape, y.Shape, kwidth, kheight, transpose);
 
             Tensor w = new Tensor(function.OutShape);
 
@@ -40,14 +40,11 @@ namespace TensorShader.Functions.TrivectorConvolution {
         /// <summary>カーネル形状</summary>
         public Shape KernelShape { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>転置</summary>
         public bool Transpose { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public TrivectorKernelProduct2D(Shape inshape, Shape outshape, int kwidth, int kheight, int stride, bool transpose) :
+        public TrivectorKernelProduct2D(Shape inshape, Shape outshape, int kwidth, int kheight, bool transpose) :
             base(inputs: 3, outputs: 1, allow_resubstitution: false) {
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 4) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 4), ("Type", ShapeType.Map)));
@@ -64,15 +61,10 @@ namespace TensorShader.Functions.TrivectorConvolution {
             if (outshape.Channels % 3 != 0) {
                 throw new AggregateException(ExceptionMessage.TensorLengthMultiple("Channels", outshape, outshape.Channels, 3));
             }
-
-            if (stride < 1) {
-                throw new ArgumentException(nameof(stride));
-            }
-
+            
             this.InShape = inshape;
             this.OutShape = outshape;
             this.KernelShape = Shape.Kernel2D(inshape.Channels / 3 * 4, outshape.Channels / 3, kwidth, kheight);
-            this.Stride = stride;
             this.Transpose = transpose;
         }
 
@@ -104,7 +96,7 @@ namespace TensorShader.Functions.TrivectorConvolution {
                         InShape.Width, InShape.Height,
                         InShape.Channels, OutShape.Channels,
                         KernelShape.Width, KernelShape.Height,
-                        Stride, Transpose, InShape.Batch));
+                        Transpose, InShape.Batch));
         }
     }
 }

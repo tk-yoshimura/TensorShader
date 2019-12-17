@@ -60,7 +60,7 @@ namespace TensorShaderCudaBackend {
                                   uint batch, uint kwidth, 
                                   CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
 
-            string key = $"convolution1d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth}";
+            string key = $"convolution_1d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.Convolution1D(inchannels, outchannels, kwidth));
@@ -76,7 +76,7 @@ namespace TensorShaderCudaBackend {
                                     uint batch, uint kwidth, 
                                     CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
 
-            string key = $"deconvolution1d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth}";
+            string key = $"deconvolution_1d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.Deconvolution1D(inchannels, outchannels, kwidth));
@@ -108,7 +108,7 @@ namespace TensorShaderCudaBackend {
                                          uint batch, uint kwidth, uint kheight, 
                                          CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
 
-            string key = $"convolution2d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight}";
+            string key = $"convolution_2d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.Convolution2D(inchannels, outchannels, kwidth, kheight));
@@ -124,7 +124,7 @@ namespace TensorShaderCudaBackend {
                                     uint batch, uint kwidth, uint kheight, 
                                     CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
 
-            string key = $"deconvolution2d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight}";
+            string key = $"deconvolution_2d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.Deconvolution2D(inchannels, outchannels, kwidth, kheight));
@@ -156,7 +156,7 @@ namespace TensorShaderCudaBackend {
                                          uint batch, uint kwidth, uint kheight, uint kdepth, 
                                          CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
 
-            string key = $"convolution3d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} kdepth={kdepth}";
+            string key = $"convolution_3d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} kdepth={kdepth}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.Convolution3D(inchannels, outchannels, kwidth, kheight, kdepth));
@@ -172,7 +172,7 @@ namespace TensorShaderCudaBackend {
                                            uint batch, uint kwidth, uint kheight, uint kdepth, 
                                            CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
 
-            string key = $"deconvolution3d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} kdepth={kdepth}";
+            string key = $"deconvolution_3d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} kdepth={kdepth}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.Deconvolution3D(inchannels, outchannels, kwidth, kheight, kdepth));
@@ -201,85 +201,85 @@ namespace TensorShaderCudaBackend {
 
 
         public static void ChannelwiseConvolution1D(uint channels, uint inwidth,
-                                             uint batch, uint th, uint kwidth, uint stride,
-                                             CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                                    uint batch, uint kwidth, 
+                                                    CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
             throw new NotImplementedException();
         }
 
 
         public static void ChannelwiseDeconvolution1D(uint channels, uint outwidth,
-                                               uint batch, uint th, uint kwidth, uint stride,
-                                               CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                                      uint batch, uint kwidth, 
+                                                      CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
             throw new NotImplementedException();
         }
 
 
         public static void ChannelwiseKernelProduct1D(uint channels, uint inwidth,
-                                               uint batch, uint kwidth, uint stride,
-                                               CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
+                                                      uint batch, uint kwidth, 
+                                                      CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
             throw new NotImplementedException();
         }
 
 
         public static void ChannelwiseConvolution2D(uint channels, uint inwidth, uint inheight,
-                                             uint batch, uint th, uint kwidth, uint kheight, uint stride,
-                                             CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                                    uint batch, uint kwidth, uint kheight, 
+                                                    CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
             throw new NotImplementedException();
         }
 
 
         public static void ChannelwiseDeconvolution2D(uint channels, uint outwidth, uint outheight,
-                                               uint batch, uint th, uint kwidth, uint kheight, uint stride,
-                                               CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                                      uint batch, uint kwidth, uint kheight, 
+                                                      CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
             throw new NotImplementedException();
         }
 
 
         public static void ChannelwiseKernelProduct2D(uint channels, uint inwidth, uint inheight,
-                                               uint batch, uint kwidth, uint kheight, uint stride,
-                                               CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
+                                                      uint batch, uint kwidth, uint kheight, 
+                                                      CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
             throw new NotImplementedException();
         }
 
 
         public static void ChannelwiseConvolution3D(uint channels, uint inwidth, uint inheight, uint indepth,
-                                             uint batch, uint th, uint kwidth, uint kheight, uint kdepth, uint stride,
-                                             CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                                    uint batch, uint kwidth, uint kheight, uint kdepth, 
+                                                    CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
             throw new NotImplementedException();
         }
 
 
         public static void ChannelwiseDeconvolution3D(uint channels, uint outwidth, uint outheight, uint outdepth,
-                                               uint batch, uint th, uint kwidth, uint kheight, uint kdepth, uint stride,
-                                               CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                                      uint batch, uint kwidth, uint kheight, uint kdepth, 
+                                                      CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
             throw new NotImplementedException();
         }
 
 
         public static void ChannelwiseKernelProduct3D(uint channels, uint inwidth, uint inheight, uint indepth,
-                                               uint batch, uint kwidth, uint kheight, uint kdepth, uint stride,
-                                               CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
+                                                      uint batch, uint kwidth, uint kheight, uint kdepth, 
+                                                      CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
             throw new NotImplementedException();
         }
 
 
         public static void PointwiseConvolution(uint inchannels, uint outchannels, uint points,
-                                         uint batch, uint th,
-                                         CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                                uint batch, 
+                                                CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
             throw new NotImplementedException();
         }
 
 
         public static void PointwiseDeconvolution(uint inchannels, uint outchannels, uint points,
-                                           uint batch, uint th,
-                                           CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                                  uint batch, 
+                                                  CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
             throw new NotImplementedException();
         }
 
 
         public static void PointwiseKernelProduct(uint inchannels, uint outchannels, uint points,
-                                           uint batch, uint outch,
-                                           CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
+                                                  uint batch, 
+                                                  CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
             throw new NotImplementedException();
         }
     } 

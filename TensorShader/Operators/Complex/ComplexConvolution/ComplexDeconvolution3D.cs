@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.ComplexConvolution {
     /// <summary>複素3次元逆畳み込み</summary>
@@ -23,9 +22,6 @@ namespace TensorShader.Operators.ComplexConvolution {
         /// <remarks>奇数を指定すること</remarks>
         public int KernelDepth { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>勾配</summary>
         public bool GradMode { private set; get; }
 
@@ -33,11 +29,7 @@ namespace TensorShader.Operators.ComplexConvolution {
         public int Batch { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public ComplexDeconvolution3D(int outwidth, int outheight, int outdepth, int inchannels, int outchannels, int kwidth, int kheight, int kdepth, int stride, bool gradmode = false, int batch = 1) {
-            if (stride < 1) {
-                throw new ArgumentException(nameof(stride));
-            }
-
+        public ComplexDeconvolution3D(int outwidth, int outheight, int outdepth, int inchannels, int outchannels, int kwidth, int kheight, int kdepth, bool gradmode = false, int batch = 1) {
             if (inchannels % 2 != 0) {
                 throw new ArgumentException(ExceptionMessage.ArgumentMultiple(nameof(inchannels), inchannels, 2));
             }
@@ -45,9 +37,9 @@ namespace TensorShader.Operators.ComplexConvolution {
                 throw new ArgumentException(ExceptionMessage.ArgumentMultiple(nameof(outchannels), outchannels, 2));
             }
 
-            int inwidth = (outwidth - kwidth) / stride + 1;
-            int inheight = (outheight - kheight) / stride + 1;
-            int indepth = (outdepth - kdepth) / stride + 1;
+            int inwidth = outwidth - kwidth + 1;
+            int inheight = outheight - kheight + 1;
+            int indepth = outdepth - kdepth + 1;
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map3D(inchannels, inwidth, inheight, indepth, batch)),
@@ -60,7 +52,6 @@ namespace TensorShader.Operators.ComplexConvolution {
             this.KernelWidth = kwidth;
             this.KernelHeight = kheight;
             this.KernelDepth = kdepth;
-            this.Stride = stride;
             this.GradMode = gradmode;
             this.Batch = batch;
         }
@@ -71,14 +62,12 @@ namespace TensorShader.Operators.ComplexConvolution {
 
             Tensor inmap = tensors[0], infilter = tensors[1], outmap = tensors[2];
 
-            Parallel.For(0, Batch, (th) => {
-                TensorShaderCudaBackend.Complex.Deconvolution3D((uint)InChannels, (uint)OutChannels,
-                                                               (uint)outmap.Width, (uint)outmap.Height, (uint)outmap.Depth,
-                                                               (uint)Batch, (uint)th,
-                                                               (uint)KernelWidth, (uint)KernelHeight, (uint)KernelDepth,
-                                                               (uint)Stride, GradMode,
-                                                               inmap.Buffer, infilter.Buffer, outmap.Buffer);
-            });
+            TensorShaderCudaBackend.Complex.Deconvolution3D((uint)InChannels, (uint)OutChannels,
+                                                            (uint)outmap.Width, (uint)outmap.Height, (uint)outmap.Depth,
+                                                            (uint)Batch, 
+                                                            (uint)KernelWidth, (uint)KernelHeight, (uint)KernelDepth,
+                                                            GradMode,
+                                                            inmap.Buffer, infilter.Buffer, outmap.Buffer);
         }
 
         /// <summary>操作を実行</summary>

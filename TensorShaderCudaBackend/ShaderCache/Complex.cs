@@ -97,84 +97,84 @@ namespace TensorShaderCudaBackend {
 
 
         public static void Dense(uint inchannels, uint outchannels,
-                          uint batch, uint th, bool gradmode,
+                          uint batch, bool gradmode,
                           CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
             throw new NotImplementedException();
         }
 
 
         public static void TransposeDense(uint inchannels, uint outchannels,
-                                   uint batch, uint th, bool gradmode,
+                                   uint batch, bool gradmode,
                                    CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
             throw new NotImplementedException();
         }
 
 
         public static void KernelProductDense(uint inchannels, uint outchannels,
-                                       uint batch, uint outch, bool transpose,
+                                       uint batch, bool transpose,
                                        CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
             throw new NotImplementedException();
         }
 
 
         public static void Convolution1D(uint inchannels, uint outchannels, uint inwidth,
-                                  uint batch, uint th, uint kwidth, uint stride, bool gradmode,
+                                  uint batch, uint kwidth, bool gradmode,
                                   CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
             throw new NotImplementedException();
         }
 
 
         public static void Deconvolution1D(uint inchannels, uint outchannels, uint outwidth,
-                                    uint batch, uint th, uint kwidth, uint stride, bool gradmode,
+                                    uint batch, uint kwidth, bool gradmode,
                                     CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
             throw new NotImplementedException();
         }
 
 
         public static void KernelProduct1D(uint inchannels, uint outchannels, uint inwidth,
-                                    uint batch, uint outch, uint kwidth, uint stride, bool transpose,
+                                    uint batch, uint kwidth, bool transpose,
                                     CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
             throw new NotImplementedException();
         }
 
 
         public static void Convolution2D(uint inchannels, uint outchannels, uint inwidth, uint inheight,
-                                  uint batch, uint th, uint kwidth, uint kheight, uint stride, bool gradmode,
+                                  uint batch, uint kwidth, uint kheight, bool gradmode,
                                   CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
             throw new NotImplementedException();
         }
 
 
         public static void Deconvolution2D(uint inchannels, uint outchannels, uint outwidth, uint outheight,
-                                    uint batch, uint th, uint kwidth, uint kheight, uint stride, bool gradmode,
+                                    uint batch, uint kwidth, uint kheight, bool gradmode,
                                     CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
             throw new NotImplementedException();
         }
 
 
         public static void KernelProduct2D(uint inchannels, uint outchannels, uint inwidth, uint inheight,
-                                    uint batch, uint outch, uint kwidth, uint kheight, uint stride, bool transpose,
+                                    uint batch, uint kwidth, uint kheight, bool transpose,
                                     CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
             throw new NotImplementedException();
         }
 
 
         public static void Convolution3D(uint inchannels, uint outchannels, uint inwidth, uint inheight, uint indepth,
-                                  uint batch, uint th, uint kwidth, uint kheight, uint kdepth, uint stride, bool gradmode,
+                                  uint batch, uint kwidth, uint kheight, uint kdepth, bool gradmode,
                                   CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
             throw new NotImplementedException();
         }
 
 
         public static void Deconvolution3D(uint inchannels, uint outchannels, uint outwidth, uint outheight, uint outdepth,
-                                    uint batch, uint th, uint kwidth, uint kheight, uint kdepth, uint stride, bool gradmode,
+                                    uint batch, uint kwidth, uint kheight, uint kdepth, bool gradmode,
                                     CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
             throw new NotImplementedException();
         }
 
 
         public static void KernelProduct3D(uint inchannels, uint outchannels, uint inwidth, uint inheight, uint indepth,
-                                    uint batch, uint outch, uint kwidth, uint kheight, uint kdepth, uint stride, bool transpose,
+                                    uint batch, uint kwidth, uint kheight, uint kdepth, bool transpose,
                                     CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
             throw new NotImplementedException();
         }

@@ -3,9 +3,9 @@ using static TensorShader.VariableNode;
 namespace TensorShader {
     public partial class Field {
         /// <summary>複素1次元逆畳み込み</summary>
-        public static Field ComplexDeconvolution1D(Field x, Field w, int stride, Shape outshape = null) {
+        public static Field ComplexDeconvolution1D(Field x, Field w) {
             Field y = new Field();
-            Link link = new Links.ComplexConvolution.ComplexDeconvolution1D(x, w, y, stride, outshape);
+            Link link = new Links.ComplexConvolution.ComplexDeconvolution1D(x, w, y);
 
             link.Forward();
 
@@ -17,11 +17,6 @@ namespace TensorShader {
 namespace TensorShader.Links.ComplexConvolution {
     /// <summary>複素1次元逆畳み込み</summary>
     public class ComplexDeconvolution1D : Link {
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
-        /// <summary>出力形状</summary>
-        public Shape OutShape { private set; get; }
 
         /// <summary>入力項</summary>
         protected Field X => InFields[0];
@@ -33,15 +28,12 @@ namespace TensorShader.Links.ComplexConvolution {
         protected Field Y => OutField;
 
         /// <summary>コンストラクタ</summary>
-        public ComplexDeconvolution1D(Field infield, Field kernelfield, Field outfield, int stride, Shape outshape)
-            : base(new Field[] { infield, kernelfield }, outfield) {
-            this.Stride = stride;
-            this.OutShape = outshape;
-        }
+        public ComplexDeconvolution1D(Field infield, Field kernelfield, Field outfield)
+            : base(new Field[] { infield, kernelfield }, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {
-            Y.AssignValue(ComplexDeconvolution1D(X.Value, W.Value, Stride, gradmode: false, OutShape));
+            Y.AssignValue(ComplexDeconvolution1D(X.Value, W.Value, gradmode: false));
         }
 
         /// <summary>逆伝搬</summary>
@@ -51,11 +43,11 @@ namespace TensorShader.Links.ComplexConvolution {
             }
 
             if (X.EnableBackprop) {
-                X.AddGrad(ComplexConvolution1D(Y.Grad, W.Value, Stride, gradmode: true));
+                X.AddGrad(ComplexConvolution1D(Y.Grad, W.Value, gradmode: true));
             }
 
             if (W.EnableBackprop) {
-                W.AddGrad(ComplexKernelProduct1D(Y.Grad, X.Value, W.Shape.Width, Stride, transpose: true));
+                W.AddGrad(ComplexKernelProduct1D(Y.Grad, X.Value, W.Shape.Width, transpose: true));
             }
         }
     }

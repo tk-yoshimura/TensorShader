@@ -148,6 +148,12 @@
     <Compile Include="Shaders\Padding\ZeroPadding2D.cs" />
     <Compile Include="Shaders\Padding\ZeroPadding1D.cs" />
     <Compile Include="Shaders\Padding\Padding1D.cs" />
+    <Compile Include="Shaders\Pool\StrideUnpool3D.cs" />
+    <Compile Include="Shaders\Pool\StrideUnpool2D.cs" />
+    <Compile Include="Shaders\Pool\StrideUnpool1D.cs" />
+    <Compile Include="Shaders\Pool\StridePool3D.cs" />
+    <Compile Include="Shaders\Pool\StridePool2D.cs" />
+    <Compile Include="Shaders\Pool\StridePool1D.cs" />
     <Compile Include="Shaders\Pool\MaxUnpool3D.cs" />
     <Compile Include="Shaders\Pool\MaxUnpool2D.cs" />
     <Compile Include="Shaders\Pool\MaxUnpool1D.cs" />

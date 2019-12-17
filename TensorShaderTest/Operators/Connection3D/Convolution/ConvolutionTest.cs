@@ -32,7 +32,7 @@ namespace TensorShaderTest.Operators.Connection3D {
                 int inwidth = testcase[6], inheight = testcase[7], indepth = testcase[8];
                 int stride = 1;
                                 
-                int outwidth = (inwidth - kwidth) / stride + 1, outheight = (inheight - kheight) / stride + 1, outdepth = (indepth - kdepth) / stride + 1;
+                int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;
 
                 float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                 float[] wval = (new float[kwidth * kheight * kdepth * inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
@@ -88,7 +88,7 @@ namespace TensorShaderTest.Operators.Connection3D {
         public static Map3D Reference(Map3D x, Filter3D w, int kwidth, int kheight, int kdepth, int stride) {
             int inchannels = x.Channels, outchannels = w.OutChannels, batch = x.Batch;
             int inw = x.Width, inh = x.Height, ind = x.Depth;
-            int outw = (inw - kwidth) / stride + 1, outh = (inh - kheight) / stride + 1, outd = (ind - kdepth) / stride + 1;
+            int outw = inw - kwidth + 1, outh = inh - kheight + 1, outd = ind - kdepth + 1;
 
             Map3D y = new Map3D(outchannels, outw, outh, outd, batch);
 
@@ -122,7 +122,7 @@ namespace TensorShaderTest.Operators.Connection3D {
         public static Map3D OptimizedReference(Map3D x, Filter3D w, int kwidth, int kheight, int kdepth, int stride) {
             int inchannels = x.Channels, outchannels = w.OutChannels, batch = x.Batch;
             int inw = x.Width, inh = x.Height, ind = x.Depth;
-            int outw = (inw - kwidth) / stride + 1, outh = (inh - kheight) / stride + 1, outd = (ind - kdepth) / stride + 1;
+            int outw = inw - kwidth + 1, outh = inh - kheight + 1, outd = ind - kdepth + 1;
 
             Map3D y = new Map3D(outchannels, outw, outh, outd, batch);
 
@@ -170,7 +170,7 @@ namespace TensorShaderTest.Operators.Connection3D {
         [TestMethod]
         public void ReferenceTest() {
             int inchannels = 2, outchannels = 3, kwidth = 3, kheight = 5, kdepth = 7, stride = 2, inwidth = 13, inheight = 12, indepth = 11, batch = 2;
-            int outwidth = (inwidth - kwidth) / stride + 1, outheight = (inheight - kheight) / stride + 1, outdepth = (indepth - kdepth) / stride + 1;
+            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;
 
             float[] xval = (new float[batch * inwidth * inheight * indepth * inchannels]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[kwidth * kheight * kdepth * outchannels * inchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
@@ -305,7 +305,7 @@ namespace TensorShaderTest.Operators.Connection3D {
                     foreach (int outchannels in new int[] { 7, 13 }) {
                         foreach ((int kwidth, int kheight, int kdepth) in new (int, int, int)[] { (1, 1, 1), (3, 3, 3), (5, 5, 5), (1, 3, 5), (3, 5, 1), (5, 1, 3) }) {
                             foreach ((int stride, int inwidth, int inheight, int indepth) in new (int, int, int, int)[] { (1, 13, 13, 13), (2, 17, 17, 17), (3, 19, 19, 19), (1, 17, 19, 13), (2, 13, 17, 19), (3, 19, 13, 17) }) {
-                                int outwidth = (inwidth - kwidth) / stride + 1, outheight = (inheight - kheight) / stride + 1, outdepth = (indepth - kdepth) / stride + 1;
+                                int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;
 
                                 float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                                 float[] wval = (new float[kwidth * kheight * kdepth * inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();

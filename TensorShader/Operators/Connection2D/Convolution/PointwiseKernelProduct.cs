@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.Connection2D {
     /// <summary>ポイントごとのカーネル積</summary>
@@ -32,12 +31,10 @@ namespace TensorShader.Operators.Connection2D {
 
             Tensor inmap1 = tensors[0], inmap2 = tensors[1], outfilter = tensors[2];
 
-            Parallel.For(0, OutChannels, (outch) => {
-                TensorShaderCudaBackend.Convolution.PointwiseKernelProduct((uint)InChannels, (uint)OutChannels,
-                                                                          (uint)(inmap1.Width * inmap1.Height),
-                                                                          (uint)Batch, (uint)outch,
-                                                                          inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);
-            });
+            TensorShaderCudaBackend.Convolution.PointwiseKernelProduct((uint)InChannels, (uint)OutChannels,
+                                                                       (uint)(inmap1.Width * inmap1.Height),
+                                                                       (uint)Batch, 
+                                                                       inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);
         }
 
         /// <summary>操作を実行</summary>

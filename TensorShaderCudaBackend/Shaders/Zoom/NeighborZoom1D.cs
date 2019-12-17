@@ -10,7 +10,7 @@
 
             string code = $@"
 
-            __global__ void neighborzoom1d(float *inmap, float *outmap, 
+            __global__ void neighborzoom_1d(float *inmap, float *outmap, 
                                            unsigned int inwidth) {{
 
                 unsigned int ch = {Defines.IndexX}, ix = {Defines.IndexY};
@@ -31,7 +31,7 @@
                 outmap[outmap_idx + r] = x;
             }}";
 
-            this.Kernel = new Kernel(code, "neighborzoom1d");
+            this.Kernel = new Kernel(code, "neighborzoom_1d");
         }
     }
 }

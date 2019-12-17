@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace TensorShader.Operators.Connection3D {
@@ -19,21 +18,14 @@ namespace TensorShader.Operators.Connection3D {
         /// <remarks>奇数を指定すること</remarks>
         public int KernelDepth { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>バッチサイズ</summary>
         public int Batch { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public ChannelwiseKernelProduct(int inwidth, int inheight, int indepth, int channels, int kwidth, int kheight, int kdepth, int stride, int batch = 1) {
-            if (stride < 1) {
-                throw new ArgumentException(nameof(stride));
-            }
-
-            int outwidth = (inwidth - kwidth) / stride + 1;
-            int outheight = (inheight - kheight) / stride + 1;
-            int outdepth = (indepth - kdepth) / stride + 1;
+        public ChannelwiseKernelProduct(int inwidth, int inheight, int indepth, int channels, int kwidth, int kheight, int kdepth, int batch = 1) {
+            int outwidth = inwidth - kwidth + 1;
+            int outheight = inheight - kheight + 1;
+            int outdepth = indepth - kdepth + 1;
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map3D(channels, inwidth, inheight, indepth, batch)),
@@ -45,7 +37,6 @@ namespace TensorShader.Operators.Connection3D {
             this.KernelWidth = kwidth;
             this.KernelHeight = kheight;
             this.KernelDepth = kdepth;
-            this.Stride = stride;
             this.Batch = batch;
         }
 
@@ -56,10 +47,10 @@ namespace TensorShader.Operators.Connection3D {
             Tensor inmap1 = tensors[0], inmap2 = tensors[1], outfilter = tensors[2];
 
             TensorShaderCudaBackend.Convolution.ChannelwiseKernelProduct3D((uint)Channels,
-                                                                          (uint)inmap1.Width, (uint)inmap1.Height, (uint)inmap1.Depth,
-                                                                          (uint)Batch,
-                                                                          (uint)KernelWidth, (uint)KernelHeight, (uint)KernelDepth, (uint)Stride,
-                                                                          inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);
+                                                                           (uint)inmap1.Width, (uint)inmap1.Height, (uint)inmap1.Depth,
+                                                                           (uint)Batch,
+                                                                           (uint)KernelWidth, (uint)KernelHeight, (uint)KernelDepth, 
+                                                                           inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);
         }
 
         /// <summary>操作を実行</summary>

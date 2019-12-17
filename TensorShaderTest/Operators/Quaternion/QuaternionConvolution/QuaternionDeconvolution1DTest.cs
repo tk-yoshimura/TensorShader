@@ -18,7 +18,7 @@ namespace TensorShaderTest.Operators.Quaternion {
                         foreach (int kwidth in new int[] { 1, 3, 5 }) {
                             foreach (int stride in new int[] { 1, 2, 3 }) {
                                 foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                                    int outwidth = (inwidth - kwidth) / stride + 1;
+                                    int outwidth = inwidth - kwidth + 1;
 
                                     float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                                     float[] wval = (new float[kwidth * inchannels * outchannels / 4]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
@@ -71,7 +71,7 @@ namespace TensorShaderTest.Operators.Quaternion {
                             foreach (int kwidth in new int[] { 1, 3, 5 }) {
                                 foreach (int stride in new int[] { 1, 2, 3 }) {
                                     foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                                        int outwidth = (inwidth - kwidth) / stride + 1;
+                                        int outwidth = inwidth - kwidth + 1;
 
                                         float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                                         float[] wval = (new float[kwidth * inchannels * outchannels / 4]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
@@ -129,7 +129,7 @@ namespace TensorShaderTest.Operators.Quaternion {
 
         public static QuaternionMap1D Reference(QuaternionMap1D y, QuaternionFilter1D w, int inw, int kwidth, int stride) {
             int inchannels = w.InChannels, outchannels = w.OutChannels, batch = y.Batch;
-            int outw = (inw - kwidth) / stride + 1;
+            int outw = inw - kwidth + 1;
 
             if (y.Width != outw) {
                 throw new ArgumentException("mismatch shape");
@@ -157,7 +157,7 @@ namespace TensorShaderTest.Operators.Quaternion {
         [TestMethod]
         public void ReferenceTest() {
             int inchannels = 8, outchannels = 12, kwidth = 3, stride = 2, inwidth = 13, batch = 3;
-            int outwidth = (inwidth - kwidth) / stride + 1;
+            int outwidth = inwidth - kwidth + 1;
 
             float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[kwidth * outchannels * inchannels / 4]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();

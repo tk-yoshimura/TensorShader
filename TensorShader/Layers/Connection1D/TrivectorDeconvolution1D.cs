@@ -10,9 +10,6 @@ namespace TensorShader.Layers {
         /// <summary>バイアス</summary>
         public ParameterField Bias { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>パディングモード</summary>
         public PaddingMode PaddingMode { private set; get; }
 
@@ -26,7 +23,7 @@ namespace TensorShader.Layers {
         public override int Width => W.Shape.Width;
 
         /// <summary>コンストラクタ</summary>
-        public TrivectorDeconvolution1D(int inchannels, int outchannels, int kwidth, int stride, bool use_bias, PaddingMode pad_mode, string label)
+        public TrivectorDeconvolution1D(int inchannels, int outchannels, int kwidth, bool use_bias, PaddingMode pad_mode, string label)
             : base(label) {
             this.W = new ParameterField(
                 new Tensor(Shape.Kernel1D(outchannels / 3 * 4, inchannels / 3, kwidth)),
@@ -40,7 +37,6 @@ namespace TensorShader.Layers {
                     ParameterCategory.Bias)
                 : null;
 
-            this.Stride = stride;
             this.PaddingMode = pad_mode;
         }
 
@@ -55,7 +51,7 @@ namespace TensorShader.Layers {
 
         /// <summary>適用</summary>
         public Field Forward(Field x) {
-            Field y = TrivectorDeconvolution1D(x, W, Stride);
+            Field y = TrivectorDeconvolution1D(x, W);
 
             if (Bias != null) {
                 y += Bias;

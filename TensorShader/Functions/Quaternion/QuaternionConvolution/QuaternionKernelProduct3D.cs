@@ -3,9 +3,9 @@ using System;
 namespace TensorShader {
     public abstract partial class VariableNode {
         /// <summary>四元数3次元カーネル積</summary>
-        public static VariableNode QuaternionKernelProduct3D(VariableNode x, VariableNode y, int kwidth, int kheight, int kdepth, int stride, bool transpose = false) {
+        public static VariableNode QuaternionKernelProduct3D(VariableNode x, VariableNode y, int kwidth, int kheight, int kdepth, bool transpose = false) {
             Function function =
-                new Functions.QuaternionConvolution.QuaternionKernelProduct3D(x.Shape, y.Shape, kwidth, kheight, kdepth, stride, transpose);
+                new Functions.QuaternionConvolution.QuaternionKernelProduct3D(x.Shape, y.Shape, kwidth, kheight, kdepth, transpose);
 
             VariableNode w = Apply(function, x, y)[0];
 
@@ -15,9 +15,9 @@ namespace TensorShader {
 
     public partial class Tensor {
         /// <summary>四元数3次元カーネル積</summary>
-        public static Tensor QuaternionKernelProduct3D(Tensor x, Tensor y, int kwidth, int kheight, int kdepth, int stride, bool transpose = false) {
+        public static Tensor QuaternionKernelProduct3D(Tensor x, Tensor y, int kwidth, int kheight, int kdepth, bool transpose = false) {
             Functions.QuaternionConvolution.QuaternionKernelProduct3D function =
-                new Functions.QuaternionConvolution.QuaternionKernelProduct3D(x.Shape, y.Shape, kwidth, kheight, kdepth, stride, transpose);
+                new Functions.QuaternionConvolution.QuaternionKernelProduct3D(x.Shape, y.Shape, kwidth, kheight, kdepth, transpose);
 
             Tensor w = new Tensor(function.OutShape);
 
@@ -40,14 +40,11 @@ namespace TensorShader.Functions.QuaternionConvolution {
         /// <summary>カーネル形状</summary>
         public Shape KernelShape { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>転置</summary>
         public bool Transpose { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public QuaternionKernelProduct3D(Shape inshape, Shape outshape, int kwidth, int kheight, int kdepth, int stride, bool transpose) :
+        public QuaternionKernelProduct3D(Shape inshape, Shape outshape, int kwidth, int kheight, int kdepth, bool transpose) :
             base(inputs: 2, outputs: 1, allow_resubstitution: false) {
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 5) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 5), ("Type", ShapeType.Map)));
@@ -64,15 +61,10 @@ namespace TensorShader.Functions.QuaternionConvolution {
             if (outshape.InChannels % 4 != 0) {
                 throw new AggregateException(ExceptionMessage.TensorLengthMultiple("Channels", outshape, outshape.Channels, 4));
             }
-
-            if (stride < 1) {
-                throw new ArgumentException(nameof(stride));
-            }
-
+            
             this.InShape = inshape;
             this.OutShape = outshape;
             this.KernelShape = Shape.Kernel3D(inshape.Channels, outshape.Channels / 4, kwidth, kheight, kdepth);
-            this.Stride = stride;
             this.Transpose = transpose;
         }
 
@@ -104,7 +96,7 @@ namespace TensorShader.Functions.QuaternionConvolution {
                         InShape.Width, InShape.Height, InShape.Depth,
                         InShape.Channels, OutShape.Channels,
                         KernelShape.Width, KernelShape.Height, KernelShape.Depth,
-                        Stride, Transpose, InShape.Batch));
+                        Transpose, InShape.Batch));
         }
     }
 }

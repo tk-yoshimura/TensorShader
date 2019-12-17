@@ -130,6 +130,10 @@
     <Compile Include="Functions\Connection1D\Convolution\PointwiseConvolution.cs" />
     <Compile Include="Functions\Connection1D\Convolution\PointwiseDeconvolution.cs" />
     <Compile Include="Functions\Connection1D\Convolution\PointwiseKernelProduct.cs" />
+    <Compile Include="Functions\Connection1D\Pool\StridePooling.cs" />
+    <Compile Include="Functions\Connection1D\Pool\StrideUnpooling.cs" />
+    <Compile Include="Functions\Connection2D\Pool\StridePooling.cs" />
+    <Compile Include="Functions\Connection2D\Pool\StrideUnpooling.cs" />
     <Compile Include="Functions\Connection3D\Convolution\ChannelwiseConvolution.cs" />
     <Compile Include="Functions\Connection3D\Convolution\ChannelwiseDeconvolution.cs" />
     <Compile Include="Functions\Connection3D\Convolution\ChannelwiseKernelProduct.cs" />
@@ -142,7 +146,9 @@
     <Compile Include="Functions\Connection3D\Pad\EdgePadding.cs" />
     <Compile Include="Functions\Connection3D\Pad\Padding.cs" />
     <Compile Include="Functions\Connection3D\Pad\ZeroPadding.cs" />
+    <Compile Include="Functions\Connection3D\Pool\StridePooling.cs" />
     <Compile Include="Functions\Connection3D\Pool\AveragePooling.cs" />
+    <Compile Include="Functions\Connection3D\Pool\StrideUnpooling.cs" />
     <Compile Include="Functions\Connection3D\Pool\AverageUnpooling.cs" />
     <Compile Include="Functions\Connection3D\Pool\MaxPooling.cs" />
     <Compile Include="Functions\Connection3D\Pool\MaxUnpooling.cs" />
@@ -443,6 +449,8 @@
     <Compile Include="Links\Connection1D\Convolution\ChannelwiseDeconvolution.cs" />
     <Compile Include="Links\Connection1D\Convolution\PointwiseConvolution.cs" />
     <Compile Include="Links\Connection1D\Convolution\PointwiseDeconvolution.cs" />
+    <Compile Include="Links\Connection1D\Pool\StridePooling.cs" />
+    <Compile Include="Links\Connection2D\Pool\StridePooling.cs" />
     <Compile Include="Links\Connection3D\Convolution\ChannelwiseConvolution.cs" />
     <Compile Include="Links\Connection3D\Convolution\ChannelwiseDeconvolution.cs" />
     <Compile Include="Links\Connection3D\Convolution\Convolution.cs" />
@@ -451,6 +459,7 @@
     <Compile Include="Links\Connection3D\Convolution\PointwiseDeconvolution.cs" />
     <Compile Include="Links\Connection3D\Pad\EdgePadding.cs" />
     <Compile Include="Links\Connection3D\Pad\ZeroPadding.cs" />
+    <Compile Include="Links\Connection3D\Pool\StridePooling.cs" />
     <Compile Include="Links\Connection3D\Pool\AveragePooling.cs" />
     <Compile Include="Links\Connection3D\Pool\MaxPooling.cs" />
     <Compile Include="Links\Connection3D\Transform\ChannelToSpace.cs" />
@@ -681,7 +690,9 @@
     <Compile Include="Operators\Connection1D\Pad\EdgePadding.cs" />
     <Compile Include="Operators\Connection1D\Pad\Padding.cs" />
     <Compile Include="Operators\Connection1D\Pad\ZeroPadding.cs" />
+    <Compile Include="Operators\Connection1D\Pool\StridePooling.cs" />
     <Compile Include="Operators\Connection1D\Pool\AveragePooling.cs" />
+    <Compile Include="Operators\Connection1D\Pool\StrideUnpooling.cs" />
     <Compile Include="Operators\Connection1D\Pool\AverageUnpooling.cs" />
     <Compile Include="Operators\Connection1D\Pool\MaxPooling.cs" />
     <Compile Include="Operators\Connection1D\Pool\MaxUnpooling.cs" />
@@ -697,6 +708,8 @@
     <Compile Include="Operators\Connection2D\Convolution\PointwiseConvolution.cs" />
     <Compile Include="Operators\Connection2D\Convolution\PointwiseDeconvolution.cs" />
     <Compile Include="Operators\Connection2D\Convolution\PointwiseKernelProduct.cs" />
+    <Compile Include="Operators\Connection2D\Pool\StridePooling.cs" />
+    <Compile Include="Operators\Connection2D\Pool\StrideUnpooling.cs" />
     <Compile Include="Operators\Connection3D\Convolution\ChannelwiseConvolution.cs" />
     <Compile Include="Operators\Connection3D\Convolution\ChannelwiseDeconvolution.cs" />
     <Compile Include="Operators\Connection3D\Convolution\ChannelwiseKernelProduct.cs" />
@@ -709,7 +722,9 @@
     <Compile Include="Operators\Connection3D\Pad\EdgePadding.cs" />
     <Compile Include="Operators\Connection3D\Pad\Padding.cs" />
     <Compile Include="Operators\Connection3D\Pad\ZeroPadding.cs" />
+    <Compile Include="Operators\Connection3D\Pool\StridePooling.cs" />
     <Compile Include="Operators\Connection3D\Pool\AveragePooling.cs" />
+    <Compile Include="Operators\Connection3D\Pool\StrideUnpooling.cs" />
     <Compile Include="Operators\Connection3D\Pool\AverageUnpooling.cs" />
     <Compile Include="Operators\Connection3D\Pool\MaxPooling.cs" />
     <Compile Include="Operators\Connection3D\Pool\MaxUnpooling.cs" />

@@ -13,10 +13,10 @@ namespace TensorShaderCudaBackend.Shaders.Pool {
 
             string code = $@"
 
-            __global__ void maxunpool3d(float *ingrad, float *inpool, float *inmap, float *outmap, 
-                                        unsigned int iz, 
-                                        unsigned int inwidth, unsigned int outwidth, 
-                                        unsigned int inheight, unsigned int outheight) {{
+            __global__ void maxunpool_3d(float *ingrad, float *inpool, float *inmap, float *outmap, 
+                                         unsigned int iz, 
+                                         unsigned int inwidth, unsigned int outwidth, 
+                                         unsigned int inheight, unsigned int outheight) {{
 
                 unsigned int ch = {Defines.IndexX}, ix = {Defines.IndexY}, iy = {Defines.IndexZ};
 
@@ -44,7 +44,7 @@ namespace TensorShaderCudaBackend.Shaders.Pool {
                 }}
             }}";
 
-            this.Kernel = new Kernel(code, "maxunpool3d");
+            this.Kernel = new Kernel(code, "maxunpool_3d");
         }
 
         /// <summary>実行</summary>

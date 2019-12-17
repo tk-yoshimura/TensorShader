@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.Connection2D {
     /// <summary>ポイントごとの2次元逆畳み込み</summary>
@@ -32,11 +31,9 @@ namespace TensorShader.Operators.Connection2D {
 
             Tensor inmap = tensors[0], infilter = tensors[1], outmap = tensors[2];
 
-            Parallel.For(0, Batch, (th) => {
-                TensorShaderCudaBackend.Convolution.PointwiseDeconvolution((uint)InChannels, (uint)OutChannels,
-                                                                          (uint)(inmap.Width * inmap.Height), (uint)Batch, (uint)th,
-                                                                          inmap.Buffer, infilter.Buffer, outmap.Buffer);
-            });
+            TensorShaderCudaBackend.Convolution.PointwiseDeconvolution((uint)InChannels, (uint)OutChannels,
+                                                                       (uint)(inmap.Width * inmap.Height), (uint)Batch, 
+                                                                       inmap.Buffer, infilter.Buffer, outmap.Buffer);
         }
 
         /// <summary>操作を実行</summary>

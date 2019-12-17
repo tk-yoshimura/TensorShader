@@ -21,7 +21,7 @@ namespace TensorShaderTest.Operators.Connection2D {
                                 foreach (int stride in new int[] { 1 }) {
                                     foreach (int inwidth in new int[] { kwidth, kwidth * 2, 8, 9, 13, 17, 25 }) {
                                         foreach (int inheight in new int[] { kheight, kheight * 2, 8, 9, 13, 17, 25 }) {
-                                            int outwidth = (inwidth - kwidth) / stride + 1, outheight = (inheight - kheight) / stride + 1;
+                                            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
 
                                             float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-4f).ToArray();
                                             float[] wval = (new float[kwidth * kheight * inchannels * outchannels]).Select((_, idx) => idx * 1e-4f).Reverse().ToArray();
@@ -85,7 +85,7 @@ namespace TensorShaderTest.Operators.Connection2D {
 
         public static Map2D Reference(Map2D y, Filter2D w, int inw, int inh, int kwidth, int kheight, int stride) {
             int inchannels = w.InChannels, outchannels = w.OutChannels, batch = y.Batch;
-            int outw = (inw - kwidth) / stride + 1, outh = (inh - kheight) / stride + 1;
+            int outw = inw - kwidth + 1, outh = inh - kheight + 1;
 
             if (y.Width != outw || y.Height != outh) {
                 throw new ArgumentException("mismatch shape");
@@ -116,7 +116,7 @@ namespace TensorShaderTest.Operators.Connection2D {
 
         public static Map2D Reference2(Map2D y, Filter2D w, int inw, int inh, int kwidth, int kheight, int stride) {
             int inchannels = w.InChannels, outchannels = w.OutChannels, batch = y.Batch;
-            int outw = (inw - kwidth) / stride + 1, outh = (inh - kheight) / stride + 1;
+            int outw = inw - kwidth + 1, outh = inh - kheight + 1;
 
             if (y.Width != outw || y.Height != outh) {
                 throw new ArgumentException("mismatch shape");
@@ -180,7 +180,7 @@ namespace TensorShaderTest.Operators.Connection2D {
 
         public static Map2D OptimizedReference(Map2D y, Filter2D w, int inw, int inh, int kwidth, int kheight, int stride) {
             int inchannels = w.InChannels, outchannels = w.OutChannels, batch = y.Batch;
-            int outw = (inw - kwidth) / stride + 1, outh = (inh - kheight) / stride + 1;
+            int outw = inw - kwidth + 1, outh = inh - kheight + 1;
 
             if (y.Width != outw || y.Height != outh) {
                 throw new ArgumentException("mismatch shape");
@@ -270,7 +270,7 @@ namespace TensorShaderTest.Operators.Connection2D {
         [TestMethod]
         public void ReferenceTest() {
             int inchannels = 7, outchannels = 11, kwidth = 3, kheight = 5, stride = 2, inwidth = 13, inheight = 17, batch = 2;
-            int outwidth = (inwidth - kwidth) / stride + 1, outheight = (inheight - kheight) / stride + 1;
+            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
 
             float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[kwidth * kheight * outchannels * inchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
@@ -919,7 +919,7 @@ namespace TensorShaderTest.Operators.Connection2D {
                                 foreach (int stride in new int[] { 1, 2, 3 }) {
                                     foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
                                         foreach (int inheight in new int[] { 8, 9, 19, 23 }) {
-                                            int outwidth = (inwidth - kwidth) / stride + 1, outheight = (inheight - kheight) / stride + 1;
+                                            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
 
                                             float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-4f).ToArray();
                                             float[] wval = (new float[kwidth * kheight * inchannels * outchannels]).Select((_, idx) => idx * 1e-4f).Reverse().ToArray();

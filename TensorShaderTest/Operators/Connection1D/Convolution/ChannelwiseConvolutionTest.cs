@@ -17,7 +17,7 @@ namespace TensorShaderTest.Operators.Connection1D {
                     foreach (int kwidth in new int[] { 1, 3, 5 }) {
                         foreach (int stride in new int[] { 1, 2, 3 }) {
                             foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                                int outwidth = (inwidth - kwidth) / stride + 1;
+                                int outwidth = inwidth - kwidth + 1;
 
                                 float[] xval = (new float[inwidth * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                                 float[] wval = (new float[kwidth * channels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
@@ -81,7 +81,7 @@ namespace TensorShaderTest.Operators.Connection1D {
 
         public static Map1D Reference(Map1D x, Filter1D w, int kwidth, int stride) {
             int channels = x.Channels, batch = x.Batch;
-            int inw = x.Width, outw = (inw - kwidth) / stride + 1;
+            int inw = x.Width, outw = inw - kwidth + 1;
 
             Map1D y = new Map1D(channels, outw, batch);
 
@@ -100,7 +100,7 @@ namespace TensorShaderTest.Operators.Connection1D {
 
         public static Map1D OptimizedReference(Map1D x, Filter1D w, int kwidth, int stride) {
             int channels = x.Channels, batch = x.Batch;
-            int inw = x.Width, outw = (inw - kwidth) / stride + 1;
+            int inw = x.Width, outw = inw - kwidth + 1;
 
             Map1D y = new Map1D(channels, outw, batch);
 
@@ -131,7 +131,7 @@ namespace TensorShaderTest.Operators.Connection1D {
         [TestMethod]
         public void ReferenceTest() {
             int channels = 7, kwidth = 3, stride = 2, inwidth = 13, batch = 2;
-            int outwidth = (inwidth - kwidth) / stride + 1;
+            int outwidth = inwidth - kwidth + 1;
 
             float[] xval = (new float[batch * inwidth * channels]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[kwidth * channels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
@@ -170,7 +170,7 @@ namespace TensorShaderTest.Operators.Connection1D {
                     foreach (int kwidth in new int[] { 1, 3, 5 }) {
                         foreach (int stride in new int[] { 1, 2, 3 }) {
                             foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                                int outwidth = (inwidth - kwidth) / stride + 1;
+                                int outwidth = inwidth - kwidth + 1;
 
                                 float[] xval = (new float[inwidth * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                                 float[] wval = (new float[kwidth * channels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();

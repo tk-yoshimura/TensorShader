@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.TrivectorConvolution {
     /// <summary>3次元ベクトル3次元畳み込み</summary>
@@ -23,9 +22,6 @@ namespace TensorShader.Operators.TrivectorConvolution {
         /// <remarks>奇数を指定すること</remarks>
         public int KernelDepth { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>勾配</summary>
         public bool GradMode { private set; get; }
 
@@ -33,11 +29,7 @@ namespace TensorShader.Operators.TrivectorConvolution {
         public int Batch { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public TrivectorConvolution3D(int inwidth, int inheight, int indepth, int inchannels, int outchannels, int kwidth, int kheight, int kdepth, int stride, bool gradmode = false, int batch = 1) {
-            if (stride < 1) {
-                throw new ArgumentException(nameof(stride));
-            }
-
+        public TrivectorConvolution3D(int inwidth, int inheight, int indepth, int inchannels, int outchannels, int kwidth, int kheight, int kdepth, bool gradmode = false, int batch = 1) {
             if (inchannels % 3 != 0) {
                 throw new ArgumentException(ExceptionMessage.ArgumentMultiple(nameof(inchannels), inchannels, 3));
             }
@@ -45,9 +37,9 @@ namespace TensorShader.Operators.TrivectorConvolution {
                 throw new ArgumentException(ExceptionMessage.ArgumentMultiple(nameof(outchannels), outchannels, 3));
             }
 
-            int outwidth = (inwidth - kwidth) / stride + 1;
-            int outheight = (inheight - kheight) / stride + 1;
-            int outdepth = (indepth - kdepth) / stride + 1;
+            int outwidth = inwidth - kwidth + 1;
+            int outheight = inheight - kheight + 1;
+            int outdepth = indepth - kdepth + 1;
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map3D(inchannels, inwidth, inheight, indepth, batch)),
@@ -60,7 +52,6 @@ namespace TensorShader.Operators.TrivectorConvolution {
             this.KernelWidth = kwidth;
             this.KernelHeight = kheight;
             this.KernelDepth = kdepth;
-            this.Stride = stride;
             this.GradMode = gradmode;
             this.Batch = batch;
         }
@@ -71,14 +62,12 @@ namespace TensorShader.Operators.TrivectorConvolution {
 
             Tensor inmap = tensors[0], infilter = tensors[1], outmap = tensors[2];
 
-            Parallel.For(0, Batch, (th) => {
-                TensorShaderCudaBackend.Trivector.Convolution3D((uint)InChannels, (uint)OutChannels,
-                                                               (uint)inmap.Width, (uint)inmap.Height, (uint)inmap.Depth,
-                                                               (uint)Batch, (uint)th,
-                                                               (uint)KernelWidth, (uint)KernelHeight, (uint)KernelDepth,
-                                                               (uint)Stride, GradMode,
-                                                               inmap.Buffer, infilter.Buffer, outmap.Buffer);
-            });
+            TensorShaderCudaBackend.Trivector.Convolution3D((uint)InChannels, (uint)OutChannels,
+                                                            (uint)inmap.Width, (uint)inmap.Height, (uint)inmap.Depth,
+                                                            (uint)Batch, 
+                                                            (uint)KernelWidth, (uint)KernelHeight, (uint)KernelDepth,
+                                                            GradMode,
+                                                            inmap.Buffer, infilter.Buffer, outmap.Buffer);
         }
 
         /// <summary>操作を実行</summary>

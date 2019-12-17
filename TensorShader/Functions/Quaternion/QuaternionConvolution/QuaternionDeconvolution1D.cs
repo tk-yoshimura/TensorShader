@@ -3,15 +3,9 @@ using System;
 namespace TensorShader {
     public abstract partial class VariableNode {
         /// <summary>四元数1次元逆畳み込み</summary>
-        public static VariableNode QuaternionDeconvolution1D(VariableNode x, VariableNode w, int stride, bool gradmode = false, Shape outshape = null) {
-            if (outshape == null) {
-                int outwidth = (x.Shape.Width - 1) * stride + w.Shape.Width;
-
-                outshape = Shape.Map1D(w.Shape.InChannels, outwidth, x.Shape.Batch);
-            }
-
+        public static VariableNode QuaternionDeconvolution1D(VariableNode x, VariableNode w, bool gradmode = false) {
             Function function =
-                new Functions.QuaternionConvolution.QuaternionDeconvolution1D(outshape, w.Shape, stride, gradmode);
+                new Functions.QuaternionConvolution.QuaternionDeconvolution1D(x.Shape, w.Shape, gradmode);
 
             VariableNode y = Apply(function, x, w)[0];
 
@@ -21,15 +15,9 @@ namespace TensorShader {
 
     public partial class Tensor {
         /// <summary>四元数1次元逆畳み込み</summary>
-        public static Tensor QuaternionDeconvolution1D(Tensor x, Tensor w, int stride, bool gradmode = false, Shape outshape = null) {
-            if (outshape == null) {
-                int outwidth = (x.Shape.Width - 1) * stride + w.Shape.Width;
-
-                outshape = Shape.Map1D(w.Shape.InChannels, outwidth, x.Shape.Batch);
-            }
-
+        public static Tensor QuaternionDeconvolution1D(Tensor x, Tensor w, bool gradmode = false) {
             Functions.QuaternionConvolution.QuaternionDeconvolution1D function =
-                new Functions.QuaternionConvolution.QuaternionDeconvolution1D(outshape, w.Shape, stride, gradmode);
+                new Functions.QuaternionConvolution.QuaternionDeconvolution1D(x.Shape, w.Shape, gradmode);
 
             Tensor y = new Tensor(function.OutShape);
 
@@ -52,45 +40,37 @@ namespace TensorShader.Functions.QuaternionConvolution {
         /// <summary>カーネル形状</summary>
         public Shape KernelShape { private set; get; }
 
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
-
         /// <summary>勾配</summary>
         public bool GradMode { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public QuaternionDeconvolution1D(Shape outshape, Shape kernelshape, int stride, bool gradmode) :
+        public QuaternionDeconvolution1D(Shape inshape, Shape kernelshape, bool gradmode) :
             base(inputs: 2, outputs: 1, allow_resubstitution: false) {
-            if (outshape.Type != ShapeType.Map || outshape.Ndim != 3) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(outshape, ("Ndim", 3), ("Type", ShapeType.Map)));
+            if (inshape.Type != ShapeType.Map || inshape.Ndim != 3) {
+                throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 3), ("Type", ShapeType.Map)));
             }
 
             if (kernelshape.Type != ShapeType.Kernel || kernelshape.Ndim != 3) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(kernelshape, ("Ndim", 3), ("Type", ShapeType.Kernel)));
             }
 
-            if (outshape.Channels % 4 != 0) {
-                throw new AggregateException(ExceptionMessage.TensorLengthMultiple("Channels", outshape, outshape.Channels, 4));
+            if (inshape.Channels % 4 != 0) {
+                throw new AggregateException(ExceptionMessage.TensorLengthMultiple("Channels", inshape, inshape.Channels, 4));
             }
 
             if (kernelshape.InChannels % 4 != 0) {
                 throw new AggregateException(ExceptionMessage.TensorLengthMultiple("InChannels", kernelshape, kernelshape.Channels, 4));
             }
 
-            if (outshape.Channels != kernelshape.InChannels) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(kernelshape, ("InChannels", outshape.Channels)));
+            if (inshape.Channels != kernelshape.OutChannels * 4) {
+                throw new ArgumentException(ExceptionMessage.TensorElements(kernelshape, ("OutChannels", inshape.Channels)));
             }
 
-            if (stride < 1) {
-                throw new ArgumentException(nameof(stride));
-            }
+            int outwidth = inshape.Width + kernelshape.Width - 1;
 
-            int inwidth = (outshape.Width - kernelshape.Width) / stride + 1;
-
-            this.InShape = Shape.Map1D(kernelshape.OutChannels * 4, inwidth, outshape.Batch);
-            this.OutShape = outshape;
+            this.InShape = inshape;
+            this.OutShape = Shape.Map1D(kernelshape.InChannels, outwidth, inshape.Batch);
             this.KernelShape = kernelshape;
-            this.Stride = stride;
             this.GradMode = gradmode;
         }
 
@@ -122,7 +102,7 @@ namespace TensorShader.Functions.QuaternionConvolution {
                         OutShape.Width,
                         InShape.Channels, OutShape.Channels,
                         KernelShape.Width,
-                        Stride, GradMode, InShape.Batch));
+                        GradMode, InShape.Batch));
         }
     }
 }

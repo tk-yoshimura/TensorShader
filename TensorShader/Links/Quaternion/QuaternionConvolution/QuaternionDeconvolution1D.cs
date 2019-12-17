@@ -3,9 +3,9 @@ using static TensorShader.VariableNode;
 namespace TensorShader {
     public partial class Field {
         /// <summary>四元数1次元逆畳み込み</summary>
-        public static Field QuaternionDeconvolution1D(Field x, Field w, int stride, Shape outshape = null) {
+        public static Field QuaternionDeconvolution1D(Field x, Field w) {
             Field y = new Field();
-            Link link = new Links.QuaternionConvolution.QuaternionDeconvolution1D(x, w, y, stride, outshape);
+            Link link = new Links.QuaternionConvolution.QuaternionDeconvolution1D(x, w, y);
 
             link.Forward();
 
@@ -17,8 +17,6 @@ namespace TensorShader {
 namespace TensorShader.Links.QuaternionConvolution {
     /// <summary>四元数1次元逆畳み込み</summary>
     public class QuaternionDeconvolution1D : Link {
-        /// <summary>ストライド</summary>
-        public int Stride { private set; get; }
 
         /// <summary>出力形状</summary>
         public Shape OutShape { private set; get; }
@@ -33,15 +31,12 @@ namespace TensorShader.Links.QuaternionConvolution {
         protected Field Y => OutField;
 
         /// <summary>コンストラクタ</summary>
-        public QuaternionDeconvolution1D(Field infield, Field kernelfield, Field outfield, int stride, Shape outshape)
-            : base(new Field[] { infield, kernelfield }, outfield) {
-            this.Stride = stride;
-            this.OutShape = outshape;
-        }
+        public QuaternionDeconvolution1D(Field infield, Field kernelfield, Field outfield)
+            : base(new Field[] { infield, kernelfield }, outfield) { }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {
-            Y.AssignValue(QuaternionDeconvolution1D(X.Value, W.Value, Stride, gradmode: false, OutShape));
+            Y.AssignValue(QuaternionDeconvolution1D(X.Value, W.Value, gradmode: false));
         }
 
         /// <summary>逆伝搬</summary>
@@ -51,11 +46,11 @@ namespace TensorShader.Links.QuaternionConvolution {
             }
 
             if (X.EnableBackprop) {
-                X.AddGrad(QuaternionConvolution1D(Y.Grad, W.Value, Stride, gradmode: true));
+                X.AddGrad(QuaternionConvolution1D(Y.Grad, W.Value, gradmode: true));
             }
 
             if (W.EnableBackprop) {
-                W.AddGrad(QuaternionKernelProduct1D(Y.Grad, X.Value, W.Shape.Width, Stride, transpose: true));
+                W.AddGrad(QuaternionKernelProduct1D(Y.Grad, X.Value, W.Shape.Width, transpose: true));
             }
         }
     }

@@ -9,21 +9,21 @@ namespace MNIST {
                 new Convolution2D(
                     inchannels: 1, outchannels: 4,
                     kwidth: 3, kheight: 3,
-                    stride: 1, use_bias: true,
+                    use_bias: true,
                     pad_mode: PaddingMode.Zero, label: "conv1");
 
             Convolution2D conv2 =
                 new Convolution2D(
                     inchannels: 4, outchannels: 8,
                     kwidth: 3, kheight: 3,
-                    stride: 1, use_bias: true,
+                    use_bias: true,
                     pad_mode: PaddingMode.Zero, label: "conv2");
 
             Convolution2D conv3 =
                 new Convolution2D(
                     inchannels: 8, outchannels: 16,
                     kwidth: 3, kheight: 3,
-                    stride: 1, use_bias: true,
+                    use_bias: true,
                     pad_mode: PaddingMode.Zero, label: "conv3");
 
             Field h1 = Relu(conv1.Forward(x));

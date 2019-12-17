@@ -9,7 +9,7 @@
 
             string code = $@"
 
-            __global__ void zeropadding1d(float *inmap, float *outmap, 
+            __global__ void zeropadding_1d(float *inmap, float *outmap, 
                                           unsigned int inwidth, unsigned int outwidth) {{
 
                 unsigned int ch = {Defines.IndexX}, ox = {Defines.IndexY};
@@ -27,7 +27,7 @@
                 outmap[outmap_idx] = v;
             }}";
 
-            this.Kernel = new Kernel(code, "zeropadding1d");
+            this.Kernel = new Kernel(code, "zeropadding_1d");
         }
     }
 }
