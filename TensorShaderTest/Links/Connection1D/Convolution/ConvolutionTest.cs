@@ -8,7 +8,7 @@ namespace TensorShaderTest.Links.Connection1D {
     public class ConvolutionTest {
         [TestMethod]
         public void ReferenceTest() {
-            int inchannels = 7, outchannels = 11, kwidth = 3, stride = 2, inwidth = 13;
+            int inchannels = 7, outchannels = 11, kwidth = 3, inwidth = 13;
             int outwidth = inwidth - kwidth + 1, batch = 2;
 
             float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -23,7 +23,7 @@ namespace TensorShaderTest.Links.Connection1D {
             ParameterField w = wtensor;
             VariableField y_actual = ytensor;
 
-            Field y_expect = Convolution1D(x, w, stride);
+            Field y_expect = Convolution1D(x, w);
             Field err = Abs(y_expect - y_actual);
 
             (Flow flow, Parameters Parameters) = Flow.Optimize(err);

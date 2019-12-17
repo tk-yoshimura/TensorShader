@@ -44,8 +44,9 @@ namespace TensorShader.Functions.TrivectorConvolution {
         public bool Transpose { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public TrivectorKernelProduct2D(Shape inshape, Shape outshape, int kwidth, int kheight, bool transpose) :
-            base(inputs: 3, outputs: 1, allow_resubstitution: false) {
+        public TrivectorKernelProduct2D(Shape inshape, Shape outshape, int kwidth, int kheight, bool transpose)
+            : base(inputs: 3, outputs: 1, allow_resubstitution: false) {
+            
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 4) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 4), ("Type", ShapeType.Map)));
             }

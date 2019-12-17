@@ -17,38 +17,36 @@ namespace TensorShaderTest.Operators.Connection1D {
                 foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 32, 33 }) {
                     foreach (int outchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 32, 33 }) {
                         foreach (int kwidth in new int[] { 1, 3, 5 }) {
-                            foreach (int stride in new int[] { 1 }) {
-                                foreach (int inwidth in new int[] { kwidth, kwidth * 2, 8, 9, 13, 17, 25 }) {
-                                    int outwidth = inwidth - kwidth + 1;
+                            foreach (int inwidth in new int[] { kwidth, kwidth * 2, 8, 9, 13, 17, 25 }) {
+                                int outwidth = inwidth - kwidth + 1;
 
-                                    float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                                    float[] gyval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+                                float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+                                float[] gyval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-                                    Map1D x = new Map1D(inchannels, inwidth, batch, xval);
-                                    Map1D gy = new Map1D(outchannels, outwidth, batch, gyval);
+                                Map1D x = new Map1D(inchannels, inwidth, batch, xval);
+                                Map1D gy = new Map1D(outchannels, outwidth, batch, gyval);
 
-                                    Filter1D gw = Reference(x, gy, kwidth, stride);
+                                Filter1D gw = Reference(x, gy, kwidth);
 
-                                    OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth, batch), xval);
-                                    OverflowCheckedTensor gy_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth, batch), gyval);
+                                OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth, batch), xval);
+                                OverflowCheckedTensor gy_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth, batch), gyval);
 
-                                    OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels, outchannels, kwidth));
+                                OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels, outchannels, kwidth));
 
-                                    KernelProduct ope = new KernelProduct(inwidth, inchannels, outchannels, kwidth, stride, batch);
+                                KernelProduct ope = new KernelProduct(inwidth, inchannels, outchannels, kwidth, batch);
 
-                                    ope.Execute(x_tensor, gy_tensor, gw_tensor);
+                                ope.Execute(x_tensor, gy_tensor, gw_tensor);
 
-                                    float[] gw_expect = gw.ToArray();
-                                    float[] gw_actual = gw_tensor.State;
+                                float[] gw_expect = gw.ToArray();
+                                float[] gw_actual = gw_tensor.State;
 
-                                    CollectionAssert.AreEqual(xval, x_tensor.State);
-                                    CollectionAssert.AreEqual(gyval, gy_tensor.State);
+                                CollectionAssert.AreEqual(xval, x_tensor.State);
+                                CollectionAssert.AreEqual(gyval, gy_tensor.State);
 
-                                    AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{stride},{inwidth},{batch}");
+                                AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{inwidth},{batch}");
 
-                                    Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{stride},{inwidth},{batch}");
+                                Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{inwidth},{batch}");
 
-                                }
                             }
                         }
                     }
@@ -60,15 +58,15 @@ namespace TensorShaderTest.Operators.Connection1D {
 
         [TestMethod]
         public void SpeedTest() {
-            int inwidth = 512, inchannels = 32, outchannels = 32, ksize = 3, stride = 1;
-            int outwidth = (inwidth - ksize) / stride + 1;
+            int inwidth = 512, inchannels = 32, outchannels = 32, ksize = 3;
+            int outwidth = inwidth - ksize + 1;
 
             OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth));
             OverflowCheckedTensor gy_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth));
 
             OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels, outchannels, ksize));
 
-            KernelProduct ope = new KernelProduct(inwidth, inchannels, outchannels, ksize, stride);
+            KernelProduct ope = new KernelProduct(inwidth, inchannels, outchannels, ksize);
 
             Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/kernelproduct_1d_atomic_xset16_3.nvvp");
             Cuda.Profiler.Start();
@@ -78,7 +76,7 @@ namespace TensorShaderTest.Operators.Connection1D {
             Cuda.Profiler.Stop();
         }
 
-        public static Filter1D Reference(Map1D x, Map1D gy, int kwidth, int stride) {
+        public static Filter1D Reference(Map1D x, Map1D gy, int kwidth) {
             int inchannels = x.Channels, outchannels = gy.Channels, batch = x.Batch;
             int inw = x.Width, outw = gy.Width;
 
@@ -94,7 +92,7 @@ namespace TensorShaderTest.Operators.Connection1D {
                         for (inch = 0; inch < inchannels; inch++) {
                             double sum = 0;
 
-                            for (int ix = kx, ox = 0; ox < outw; ix += stride, ox++) {
+                            for (int ix = kx, ox = 0; ox < outw; ix++, ox++) {
                                 sum += x[inch, ix, th] * gy[outch, ox, th];
                             }
 
@@ -107,7 +105,7 @@ namespace TensorShaderTest.Operators.Connection1D {
             return w;
         }
 
-        public static Filter1D OptimizedReference(Map1D x, Map1D gy, int kwidth, int stride) {
+        public static Filter1D OptimizedReference(Map1D x, Map1D gy, int kwidth) {
             int inchannels = x.Channels, outchannels = gy.Channels, batch = x.Batch;
             int inw = x.Width, outw = gy.Width;
 
@@ -130,7 +128,7 @@ namespace TensorShaderTest.Operators.Connection1D {
                             for (int ox = 0; ox < outw; ox++) {
                                 sum += x[inmap_idx] * gy[outmap_idx];
 
-                                inmap_idx += inchannels * stride;
+                                inmap_idx += inchannels;
                                 outmap_idx += outchannels;
                             }
 
@@ -145,7 +143,7 @@ namespace TensorShaderTest.Operators.Connection1D {
 
         [TestMethod]
         public void ReferenceTest() {
-            int inchannels = 7, outchannels = 11, kwidth = 3, stride = 2, inwidth = 13;
+            int inchannels = 7, outchannels = 11, kwidth = 3, inwidth = 13;
             int outwidth = inwidth - kwidth + 1;
 
             float[] xval = (new float[inwidth * inchannels]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -154,7 +152,7 @@ namespace TensorShaderTest.Operators.Connection1D {
             Map1D x = new Map1D(inchannels, inwidth, 1, xval);
             Map1D gy = new Map1D(outchannels, outwidth, 1, gyval);
 
-            Filter1D gw = Reference(x, gy, kwidth, stride);
+            Filter1D gw = Reference(x, gy, kwidth);
 
             float[] gw_expect = {
                 5.180000e-03f, 5.405000e-03f, 5.630000e-03f, 5.855000e-03f, 6.080000e-03f,
@@ -208,7 +206,7 @@ namespace TensorShaderTest.Operators.Connection1D {
 
             float[] gw_actual = gw.ToArray();
 
-            AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{kwidth},{stride},{inwidth}");
+            AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{kwidth},{inwidth}");
         }
 
         [TestMethod]
@@ -219,26 +217,24 @@ namespace TensorShaderTest.Operators.Connection1D {
                 foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20 }) {
                     foreach (int outchannels in new int[] { 7, 13 }) {
                         foreach (int kwidth in new int[] { 1, 3, 5 }) {
-                            foreach (int stride in new int[] { 1, 2, 3 }) {
-                                foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                                    int outwidth = inwidth - kwidth + 1;
+                            foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
+                                int outwidth = inwidth - kwidth + 1;
 
-                                    float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                                    float[] gyval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+                                float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+                                float[] gyval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-                                    Map1D x = new Map1D(inchannels, inwidth, batch, xval);
-                                    Map1D gy = new Map1D(outchannels, outwidth, batch, gyval);
+                                Map1D x = new Map1D(inchannels, inwidth, batch, xval);
+                                Map1D gy = new Map1D(outchannels, outwidth, batch, gyval);
 
-                                    Filter1D gw = Reference(x, gy, kwidth, stride);
-                                    Filter1D gw_optimized = OptimizedReference(x, gy, kwidth, stride);
+                                Filter1D gw = Reference(x, gy, kwidth);
+                                Filter1D gw_optimized = OptimizedReference(x, gy, kwidth);
 
-                                    float[] gw_expect = gw.ToArray();
-                                    float[] gw_actual = gw_optimized.ToArray();
+                                float[] gw_expect = gw.ToArray();
+                                float[] gw_actual = gw_optimized.ToArray();
 
-                                    AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{stride},{inwidth},{batch}");
+                                AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{inwidth},{batch}");
 
-                                    Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{stride},{inwidth},{batch}");
-                                }
+                                Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{inwidth},{batch}");
                             }
                         }
                     }

@@ -59,6 +59,7 @@ namespace TensorShader.Functions.Connection3D {
         /// <summary>コンストラクタ</summary>
         public StrideUnpooling(Shape outshape, int stride)
             : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             if (outshape.Type != ShapeType.Map || outshape.Ndim != 5) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(outshape, ("Ndim", 5), ("Type", ShapeType.Map)));
             }

@@ -34,6 +34,7 @@ namespace TensorShader.Functions.ArrayManipulation {
         /// <summary>結合</summary>
         public Concat(int inputs, int axis)
             : base(inputs, outputs: 1, allow_resubstitution: false) {
+
             this.Axis = axis;
         }
 

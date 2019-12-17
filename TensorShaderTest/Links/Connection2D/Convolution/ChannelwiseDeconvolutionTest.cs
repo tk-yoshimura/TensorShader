@@ -8,7 +8,7 @@ namespace TensorShaderTest.Links.Connection2D {
     public class ChannelwiseDeconvolutionTest {
         [TestMethod]
         public void ReferenceTest() {
-            int channels = 7, kwidth = 3, kheight = 5, stride = 2, inwidth = 13, inheight = 17;
+            int channels = 7, kwidth = 3, kheight = 5, inwidth = 13, inheight = 17;
             int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, batch = 2;
 
             float[] xval = (new float[inwidth * inheight * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -23,7 +23,7 @@ namespace TensorShaderTest.Links.Connection2D {
             ParameterField w = wtensor;
             ParameterField y = ytensor;
 
-            Field x_expect = ChannelwiseDeconvolution2D(y, w, stride, Shape.Map2D(channels, inwidth, inheight, batch));
+            Field x_expect = ChannelwiseDeconvolution2D(y, w);
             Field err = Abs(x_expect - x_actual);
             OutputNode err_node = err.Value.Save();
 

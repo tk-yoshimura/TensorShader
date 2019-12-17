@@ -16,7 +16,7 @@ namespace TensorShaderTest.Operators.Complex {
                 foreach (int inchannels in new int[] { 2, 4, 10, 20 }) {
                     foreach (int outchannels in new int[] { 6, 14 }) {
                         foreach ((int kwidth, int kheight, int kdepth) in new (int, int, int)[] { (1, 1, 1), (3, 3, 3), (5, 5, 5), (1, 3, 5), (3, 5, 1), (5, 1, 3) }) {
-                            foreach ((int stride, int inwidth, int inheight, int indepth) in new (int, int, int, int)[] { (1, 13, 13, 13), (2, 17, 17, 17), (3, 19, 19, 19), (1, 17, 19, 13), (2, 13, 17, 19), (3, 19, 13, 17) }) {
+                            foreach ((int inwidth, int inheight, int indepth) in new (int, int, int)[] { (13, 13, 13), (17, 17, 17), (19, 19, 19), (17, 19, 13), (13, 17, 19), (19, 13, 17) }) {
                                 int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;
 
                                 float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -31,14 +31,14 @@ namespace TensorShaderTest.Operators.Complex {
                                 ComplexMap3D x = new ComplexMap3D(inchannels / 2, inwidth, inheight, indepth, batch, xcval);
                                 ComplexMap3D y = new ComplexMap3D(outchannels / 2, outwidth, outheight, outdepth, batch, ycval);
 
-                                ComplexFilter3D gw = Reference(x, y, kwidth, kheight, kdepth, stride);
+                                ComplexFilter3D gw = Reference(x, y, kwidth, kheight, kdepth);
 
                                 OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
                                 OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), yval);
 
                                 OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels, outchannels / 2, kwidth, kheight, kdepth));
 
-                                ComplexKernelProduct3D ope = new ComplexKernelProduct3D(inwidth, inheight, indepth, inchannels, outchannels, kwidth, kheight, kdepth, stride, transpose: false, batch);
+                                ComplexKernelProduct3D ope = new ComplexKernelProduct3D(inwidth, inheight, indepth, inchannels, outchannels, kwidth, kheight, kdepth, transpose: false, batch);
 
                                 ope.Execute(x_tensor, y_tensor, gw_tensor);
 
@@ -48,9 +48,9 @@ namespace TensorShaderTest.Operators.Complex {
                                 CollectionAssert.AreEqual(xval, x_tensor.State);
                                 CollectionAssert.AreEqual(yval, y_tensor.State);
 
-                                AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{stride},{inwidth},{inheight},{indepth},{batch}");
+                                AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
 
-                                Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{stride},{inwidth},{inheight},{indepth},{batch}");
+                                Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
 
                             }
                         }
@@ -68,7 +68,7 @@ namespace TensorShaderTest.Operators.Complex {
                     foreach (int inchannels in new int[] { 2, 4, 10, 20 }) {
                         foreach (int outchannels in new int[] { 6, 14 }) {
                             foreach ((int kwidth, int kheight, int kdepth) in new (int, int, int)[] { (1, 1, 1), (3, 3, 3), (5, 5, 5), (1, 3, 5), (3, 5, 1), (5, 1, 3) }) {
-                                foreach ((int stride, int inwidth, int inheight, int indepth) in new (int, int, int, int)[] { (1, 13, 13, 13), (2, 17, 17, 17), (3, 19, 19, 19), (1, 17, 19, 13), (2, 13, 17, 19), (3, 19, 13, 17) }) {
+                                foreach ((int inwidth, int inheight, int indepth) in new (int, int, int)[] { (13, 13, 13), (17, 17, 17), (19, 19, 19), (17, 19, 13), (13, 17, 19), (19, 13, 17) }) {
                                     int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;
 
                                     float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -79,7 +79,7 @@ namespace TensorShaderTest.Operators.Complex {
 
                                     OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels, outchannels / 2, kwidth, kheight, kdepth));
 
-                                    ComplexKernelProduct3D ope = new ComplexKernelProduct3D(inwidth, inheight, indepth, inchannels, outchannels, kwidth, kheight, kdepth, stride, transpose, batch);
+                                    ComplexKernelProduct3D ope = new ComplexKernelProduct3D(inwidth, inheight, indepth, inchannels, outchannels, kwidth, kheight, kdepth, transpose, batch);
 
                                     ope.Execute(x_tensor, y_tensor, gw_tensor);
 
@@ -88,7 +88,7 @@ namespace TensorShaderTest.Operators.Complex {
 
                                     gw_tensor.CheckOverflow();
 
-                                    Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{stride},{inwidth},{inheight},{indepth},{batch},{transpose}");
+                                    Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch},{transpose}");
 
                                 }
                             }
@@ -100,15 +100,15 @@ namespace TensorShaderTest.Operators.Complex {
 
         [TestMethod]
         public void SpeedTest() {
-            int inwidth = 32, inheight = 32, indepth = 32, inchannels = 32, outchannels = 32, ksize = 3, stride = 2;
-            int outwidth = (inwidth - ksize) / stride + 1, outheight = (inheight - ksize) / stride + 1, outdepth = (indepth - ksize) / stride + 1;
+            int inwidth = 32, inheight = 32, indepth = 32, inchannels = 32, outchannels = 32, ksize = 3;
+            int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1, outdepth = indepth - ksize + 1;
 
             OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, inwidth, inheight, indepth));
             OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth));
 
             OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels, outchannels / 2, ksize, ksize, ksize));
 
-            ComplexKernelProduct3D ope = new ComplexKernelProduct3D(inwidth, inheight, indepth, inchannels, outchannels, ksize, ksize, ksize, stride);
+            ComplexKernelProduct3D ope = new ComplexKernelProduct3D(inwidth, inheight, indepth, inchannels, outchannels, ksize, ksize, ksize);
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -123,11 +123,11 @@ namespace TensorShaderTest.Operators.Complex {
             Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
         }
 
-        public static ComplexFilter3D Reference(ComplexMap3D x, ComplexMap3D gy, int kwidth, int kheight, int kdepth, int stride) {
+        public static ComplexFilter3D Reference(ComplexMap3D x, ComplexMap3D gy, int kwidth, int kheight, int kdepth) {
             int inchannels = x.Channels, outchannels = gy.Channels, batch = x.Batch;
             int inw = x.Width, inh = x.Height, ind = x.Depth, outw = gy.Width, outh = gy.Height, outd = gy.Depth;
 
-            if (outw != inw - kwidth + 1 || outh != inh - kheight + 1 || outd != (ind - kdepth) / stride + 1) {
+            if (outw != inw - kwidth + 1 || outh != inh - kheight + 1 || outd != ind - kdepth + 1) {
                 throw new ArgumentException("mismatch shape");
             }
 
@@ -145,9 +145,9 @@ namespace TensorShaderTest.Operators.Complex {
                                 for (inch = 0; inch < inchannels; inch++) {
                                     System.Numerics.Complex sum = 0;
 
-                                    for (int ix, iy, iz = kz, ox, oy, oz = 0; oz < outd; iz += stride, oz++) {
-                                        for (iy = ky, oy = 0; oy < outh; iy += stride, oy++) {
-                                            for (ix = kx, ox = 0; ox < outw; ix += stride, ox++) {
+                                    for (int ix, iy, iz = kz, ox, oy, oz = 0; oz < outd; iz++, oz++) {
+                                        for (iy = ky, oy = 0; oy < outh; iy++, oy++) {
+                                            for (ix = kx, ox = 0; ox < outw; ix++, ox++) {
                                                 sum += mul_grad(gy[outch, ox, oy, oz, th], x[inch, ix, iy, iz, th]);
                                             }
                                         }
@@ -167,7 +167,7 @@ namespace TensorShaderTest.Operators.Complex {
 
         [TestMethod]
         public void ReferenceTest() {
-            int inchannels = 6, outchannels = 8, kwidth = 3, kheight = 5, kdepth = 7, stride = 2, inwidth = 13, inheight = 12, indepth = 11;
+            int inchannels = 6, outchannels = 8, kwidth = 3, kheight = 5, kdepth = 7, inwidth = 13, inheight = 12, indepth = 11;
             int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1, batch = 1;
 
             float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -182,7 +182,7 @@ namespace TensorShaderTest.Operators.Complex {
             ComplexMap3D x = new ComplexMap3D(inchannels / 2, inwidth, inheight, indepth, batch, xcval);
             ComplexMap3D y = new ComplexMap3D(outchannels / 2, outwidth, outheight, outdepth, batch, ycval);
 
-            ComplexFilter3D gw = Reference(x, y, kwidth, kheight, kdepth, stride);
+            ComplexFilter3D gw = Reference(x, y, kwidth, kheight, kdepth);
 
             float[] gw_expect = {
                 5.348116800e+01f,  -1.747440000e-01f,  5.356483200e+01f,  -1.748880000e-01f,  5.364849600e+01f,  -1.750320000e-01f,
@@ -609,7 +609,7 @@ namespace TensorShaderTest.Operators.Complex {
 
             float[] gw_actual = gw.ToArray();
 
-            AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{stride},{inwidth},{inheight},{indepth},{batch}");
+            AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
         }
     }
 }

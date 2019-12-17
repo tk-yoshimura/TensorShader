@@ -36,6 +36,7 @@ namespace TensorShader.Functions.ArrayManipulation {
         /// <summary>コンストラクタ</summary>
         public ExtractChannel(int index, int channels)
             : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.Index = index;
             this.Channels = channels;
         }

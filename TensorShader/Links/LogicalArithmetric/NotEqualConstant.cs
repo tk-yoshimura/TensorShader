@@ -23,6 +23,7 @@ namespace TensorShader.Links.LogicalArithmetric {
         /// <summary>コンストラクタ</summary>
         public NotEqualConstant(Field infield, Field outfield, float c)
             : base(infield, outfield) {
+
             this.Constant = c;
         }
 

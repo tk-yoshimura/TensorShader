@@ -39,6 +39,7 @@ namespace TensorShader.Functions.ArrayManipulation {
         /// <summary>コンストラクタ</summary>
         public Separate(int axis, int[] lengths)
             : base(inputs: 1, outputs: lengths.Length, allow_resubstitution: false) {
+
             this.lengths = (int[])lengths.Clone();
             this.Axis = axis;
         }

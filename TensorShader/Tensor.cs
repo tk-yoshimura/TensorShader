@@ -211,8 +211,8 @@ namespace TensorShader {
 
     /// <summary>バッファ共有テンソル</summary>
     internal class TemporaryTensor : Tensor {
-        public TemporaryTensor(Shape shape, CudaArray<float> array) :
-            base(shape, array) { }
+        public TemporaryTensor(Shape shape, CudaArray<float> array)
+            : base(shape, array) { }
     }
 
     /// <summary>領域外アクセスチェック有効テンソル</summary>

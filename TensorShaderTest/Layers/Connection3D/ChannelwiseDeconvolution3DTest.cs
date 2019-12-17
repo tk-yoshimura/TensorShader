@@ -7,11 +7,11 @@ namespace TensorShaderTest.Layers {
     public class ChannelwiseDeconvolution3DTest {
         [TestMethod]
         public void ExecuteTest() {
-            int channels = 4, inwidth = 13, inheight = 17, indepth = 19, kwidth = 3, kheight = 5, kdepth = 7, stride = 2, batch = 7;
+            int channels = 4, inwidth = 13, inheight = 17, indepth = 19, kwidth = 3, kheight = 5, kdepth = 7, batch = 7;
 
             VariableField x = new Tensor(Shape.Map3D(channels, inwidth, inheight, indepth, batch));
 
-            Layer layer = new ChannelwiseDeconvolution3D(channels, kwidth, kheight, kdepth, stride, use_bias: true, pad_mode: PaddingMode.Edge, label: "conv");
+            Layer layer = new ChannelwiseDeconvolution3D(channels, kwidth, kheight, kdepth, use_bias: true, pad_mode: PaddingMode.Edge, label: "conv");
 
             Field y = layer.Forward(x);
 

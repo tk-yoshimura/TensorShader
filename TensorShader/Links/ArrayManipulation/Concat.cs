@@ -31,6 +31,7 @@ namespace TensorShader.Links.ArrayManipulation {
         /// <summary>コンストラクタ</summary>
         public Concat(int axis, Field[] infields, Field outfield)
             : base(infields, outfield) {
+
             this.Axis = axis;
         }
 

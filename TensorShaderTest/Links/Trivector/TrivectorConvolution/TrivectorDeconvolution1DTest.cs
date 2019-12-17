@@ -8,7 +8,7 @@ namespace TensorShaderTest.Links.TrivectorConvolution {
     public class TrivectorDeconvolution1DTest {
         [TestMethod]
         public void ReferenceTest() {
-            int inchannels = 9, outchannels = 12, kwidth = 3, stride = 2, inwidth = 7;
+            int inchannels = 9, outchannels = 12, kwidth = 3, inwidth = 7;
             int outwidth = inwidth - kwidth + 1, batch = 3;
 
             float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -23,7 +23,7 @@ namespace TensorShaderTest.Links.TrivectorConvolution {
             ParameterField w = wtensor;
             ParameterField y = ytensor;
 
-            Field x_expect = TrivectorDeconvolution1D(y, w, stride, Shape.Map1D(inchannels, inwidth, batch));
+            Field x_expect = TrivectorDeconvolution1D(y, w);
             Field err = x_expect - x_actual;
 
             (Flow flow, Parameters Parameters) = Flow.Optimize(err);

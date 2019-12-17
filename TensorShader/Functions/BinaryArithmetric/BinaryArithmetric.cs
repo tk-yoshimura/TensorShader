@@ -34,6 +34,7 @@ namespace TensorShader.Functions.BinaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public BinaryArithmetric(Operators.BinaryArithmetric.BinaryArithmetric binary_operator)
             : base(inputs: 2, outputs: 1, allow_resubstitution: true) {
+
             this.binary_operator = binary_operator;
         }
 

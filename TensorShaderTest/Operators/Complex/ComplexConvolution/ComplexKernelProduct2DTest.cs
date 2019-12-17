@@ -17,45 +17,43 @@ namespace TensorShaderTest.Operators.Complex {
                     foreach (int outchannels in new int[] { 6, 14 }) {
                         foreach (int kheight in new int[] { 1, 3, 5 }) {
                             foreach (int kwidth in new int[] { 1, 3, 5 }) {
-                                foreach (int stride in new int[] { 1, 2, 3 }) {
-                                    foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                                        foreach (int inheight in new int[] { 8, 9, 19, 23 }) {
-                                            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
+                                foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
+                                    foreach (int inheight in new int[] { 8, 9, 19, 23 }) {
+                                        int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
 
-                                            float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                                            float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+                                        float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+                                        float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-                                            System.Numerics.Complex[] xcval = (new System.Numerics.Complex[xval.Length / 2])
-                                                .Select((_, idx) => new System.Numerics.Complex(xval[idx * 2], xval[idx * 2 + 1])).ToArray();
+                                        System.Numerics.Complex[] xcval = (new System.Numerics.Complex[xval.Length / 2])
+                                            .Select((_, idx) => new System.Numerics.Complex(xval[idx * 2], xval[idx * 2 + 1])).ToArray();
 
-                                            System.Numerics.Complex[] ycval = (new System.Numerics.Complex[yval.Length / 2])
-                                                .Select((_, idx) => new System.Numerics.Complex(yval[idx * 2], yval[idx * 2 + 1])).ToArray();
+                                        System.Numerics.Complex[] ycval = (new System.Numerics.Complex[yval.Length / 2])
+                                            .Select((_, idx) => new System.Numerics.Complex(yval[idx * 2], yval[idx * 2 + 1])).ToArray();
 
-                                            ComplexMap2D x = new ComplexMap2D(inchannels / 2, inwidth, inheight, batch, xcval);
-                                            ComplexMap2D y = new ComplexMap2D(outchannels / 2, outwidth, outheight, batch, ycval);
+                                        ComplexMap2D x = new ComplexMap2D(inchannels / 2, inwidth, inheight, batch, xcval);
+                                        ComplexMap2D y = new ComplexMap2D(outchannels / 2, outwidth, outheight, batch, ycval);
 
-                                            ComplexFilter2D gw = Reference(x, y, kwidth, kheight, stride);
+                                        ComplexFilter2D gw = Reference(x, y, kwidth, kheight);
 
-                                            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
-                                            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
+                                        OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
+                                        OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
 
-                                            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels, outchannels / 2, kwidth, kheight));
+                                        OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels, outchannels / 2, kwidth, kheight));
 
-                                            ComplexKernelProduct2D ope = new ComplexKernelProduct2D(inwidth, inheight, inchannels, outchannels, kwidth, kheight, stride, transpose: false, batch);
+                                        ComplexKernelProduct2D ope = new ComplexKernelProduct2D(inwidth, inheight, inchannels, outchannels, kwidth, kheight, transpose: false, batch);
 
-                                            ope.Execute(x_tensor, y_tensor, gw_tensor);
+                                        ope.Execute(x_tensor, y_tensor, gw_tensor);
 
-                                            float[] gw_expect = gw.ToArray();
-                                            float[] gw_actual = gw_tensor.State;
+                                        float[] gw_expect = gw.ToArray();
+                                        float[] gw_actual = gw_tensor.State;
 
-                                            CollectionAssert.AreEqual(xval, x_tensor.State);
-                                            CollectionAssert.AreEqual(yval, y_tensor.State);
+                                        CollectionAssert.AreEqual(xval, x_tensor.State);
+                                        CollectionAssert.AreEqual(yval, y_tensor.State);
 
-                                            AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{stride},{inwidth},{inheight},{batch}");
+                                        AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
 
-                                            Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{stride},{inwidth},{inheight},{batch}");
+                                        Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
 
-                                        }
                                     }
                                 }
                             }
@@ -75,31 +73,29 @@ namespace TensorShaderTest.Operators.Complex {
                         foreach (int outchannels in new int[] { 6, 14 }) {
                             foreach (int kheight in new int[] { 1, 3, 5 }) {
                                 foreach (int kwidth in new int[] { 1, 3, 5 }) {
-                                    foreach (int stride in new int[] { 1, 2, 3 }) {
-                                        foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                                            foreach (int inheight in new int[] { 8, 9, 19, 23 }) {
-                                                int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
+                                    foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
+                                        foreach (int inheight in new int[] { 8, 9, 19, 23 }) {
+                                            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
 
-                                                float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                                                float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+                                            float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+                                            float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-                                                OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
-                                                OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
+                                            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
+                                            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
 
-                                                OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels, outchannels / 2, kwidth, kheight));
+                                            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels, outchannels / 2, kwidth, kheight));
 
-                                                ComplexKernelProduct2D ope = new ComplexKernelProduct2D(inwidth, inheight, inchannels, outchannels, kwidth, kheight, stride, transpose, batch);
+                                            ComplexKernelProduct2D ope = new ComplexKernelProduct2D(inwidth, inheight, inchannels, outchannels, kwidth, kheight, transpose, batch);
 
-                                                ope.Execute(x_tensor, y_tensor, gw_tensor);
+                                            ope.Execute(x_tensor, y_tensor, gw_tensor);
 
-                                                CollectionAssert.AreEqual(xval, x_tensor.State);
-                                                CollectionAssert.AreEqual(yval, y_tensor.State);
+                                            CollectionAssert.AreEqual(xval, x_tensor.State);
+                                            CollectionAssert.AreEqual(yval, y_tensor.State);
 
-                                                gw_tensor.CheckOverflow();
+                                            gw_tensor.CheckOverflow();
 
-                                                Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{stride},{inwidth},{inheight},{batch},{transpose}");
+                                            Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{inwidth},{inheight},{batch},{transpose}");
 
-                                            }
                                         }
                                     }
                                 }
@@ -112,15 +108,15 @@ namespace TensorShaderTest.Operators.Complex {
 
         [TestMethod]
         public void SpeedTest() {
-            int inwidth = 512, inheight = 512, inchannels = 32, outchannels = 32, ksize = 3, stride = 2;
-            int outwidth = (inwidth - ksize) / stride + 1, outheight = (inheight - ksize) / stride + 1;
+            int inwidth = 512, inheight = 512, inchannels = 32, outchannels = 32, ksize = 3;
+            int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1;
 
             OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight));
             OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight));
 
             OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels, outchannels / 2, ksize, ksize));
 
-            ComplexKernelProduct2D ope = new ComplexKernelProduct2D(inwidth, inheight, inchannels, outchannels, ksize, ksize, stride);
+            ComplexKernelProduct2D ope = new ComplexKernelProduct2D(inwidth, inheight, inchannels, outchannels, ksize, ksize);
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -135,7 +131,7 @@ namespace TensorShaderTest.Operators.Complex {
             Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
         }
 
-        public static ComplexFilter2D Reference(ComplexMap2D x, ComplexMap2D gy, int kwidth, int kheight, int stride) {
+        public static ComplexFilter2D Reference(ComplexMap2D x, ComplexMap2D gy, int kwidth, int kheight) {
             int inchannels = x.Channels, outchannels = gy.Channels, batch = x.Batch;
             int inw = x.Width, inh = x.Height, outw = gy.Width, outh = gy.Height;
 
@@ -156,8 +152,8 @@ namespace TensorShaderTest.Operators.Complex {
                             for (inch = 0; inch < inchannels; inch++) {
                                 System.Numerics.Complex sum = 0;
 
-                                for (int ix, iy = ky, ox, oy = 0; oy < outh; iy += stride, oy++) {
-                                    for (ix = kx, ox = 0; ox < outw; ix += stride, ox++) {
+                                for (int ix, iy = ky, ox, oy = 0; oy < outh; iy++, oy++) {
+                                    for (ix = kx, ox = 0; ox < outw; ix++, ox++) {
                                         sum += mul_grad(gy[outch, ox, oy, th], x[inch, ix, iy, th]);
                                     }
                                 }
@@ -175,7 +171,7 @@ namespace TensorShaderTest.Operators.Complex {
 
         [TestMethod]
         public void ReferenceTest() {
-            int inchannels = 6, outchannels = 8, kwidth = 3, kheight = 5, stride = 2, inwidth = 13, inheight = 17;
+            int inchannels = 6, outchannels = 8, kwidth = 3, kheight = 5, inwidth = 13, inheight = 17;
             int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, batch = 1;
 
             float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -190,7 +186,7 @@ namespace TensorShaderTest.Operators.Complex {
             ComplexMap2D x = new ComplexMap2D(inchannels / 2, inwidth, inheight, batch, xcval);
             ComplexMap2D y = new ComplexMap2D(outchannels / 2, outwidth, outheight, batch, ycval);
 
-            ComplexFilter2D gw = Reference(x, y, kwidth, kheight, stride);
+            ComplexFilter2D gw = Reference(x, y, kwidth, kheight);
 
             float[] gw_expect = {
                 4.600008000e+00f,  -2.809800000e-02f,  4.628652000e+00f,  -2.818200000e-02f,  4.657296000e+00f,  -2.826600000e-02f,
@@ -257,7 +253,7 @@ namespace TensorShaderTest.Operators.Complex {
 
             float[] gw_actual = gw.ToArray();
 
-            AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{stride},{inwidth},{inheight},{batch}");
+            AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
         }
     }
 }

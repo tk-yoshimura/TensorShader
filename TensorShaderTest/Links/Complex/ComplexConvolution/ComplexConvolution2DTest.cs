@@ -8,7 +8,7 @@ namespace TensorShaderTest.Links.ComplexConvolution {
     public class ComplexConvolution2DTest {
         [TestMethod]
         public void ReferenceTest() {
-            int inchannels = 6, outchannels = 8, kwidth = 3, kheight = 5, stride = 2, inwidth = 13, inheight = 17;
+            int inchannels = 6, outchannels = 8, kwidth = 3, kheight = 5, inwidth = 13, inheight = 17;
             int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, batch = 3;
 
             float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -23,7 +23,7 @@ namespace TensorShaderTest.Links.ComplexConvolution {
             ParameterField w = wtensor;
             VariableField y_actual = ytensor;
 
-            Field y_expect = ComplexConvolution2D(x, w, stride);
+            Field y_expect = ComplexConvolution2D(x, w);
             Field err = y_expect - y_actual;
 
             (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -40,7 +40,7 @@ namespace TensorShaderTest.Links.ComplexConvolution {
 
         [TestMethod]
         public void TheoreticalTest() {
-            int inchannels = 6, outchannels = 8, kwidth = 3, kheight = 5, stride = 2, inwidth = 13, inheight = 17;
+            int inchannels = 6, outchannels = 8, kwidth = 3, kheight = 5, inwidth = 13, inheight = 17;
             int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, batch = 3;
 
             float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -58,8 +58,8 @@ namespace TensorShaderTest.Links.ComplexConvolution {
             Field x_real = ComplexReal(x), x_imag = ComplexImag(x);
             Field w_real = ComplexReal(w), w_imag = ComplexImag(w);
 
-            Field y_real = Convolution2D(x_real, w_real, stride) - Convolution2D(x_imag, w_imag, stride);
-            Field y_imag = Convolution2D(x_imag, w_real, stride) + Convolution2D(x_real, w_imag, stride);
+            Field y_real = Convolution2D(x_real, w_real) - Convolution2D(x_imag, w_imag);
+            Field y_imag = Convolution2D(x_imag, w_real) + Convolution2D(x_real, w_imag);
 
             Field y_expect = ComplexCast(y_real, y_imag);
 

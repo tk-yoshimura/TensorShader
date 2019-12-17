@@ -57,6 +57,7 @@ namespace TensorShader {
         /// <param name="innodes">入力ノード</param>
         protected VariableNode(Shape shape, params Node[] innodes)
             : base(innodes) {
+
             this.Shape = shape;
         }
 

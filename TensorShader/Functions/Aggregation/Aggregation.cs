@@ -9,6 +9,7 @@ namespace TensorShader.Functions.Aggregation {
         /// <summary>コンストラクタ</summary>
         public Aggregation(int axis)
             : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.Axis = axis;
         }
 

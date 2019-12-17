@@ -34,6 +34,7 @@ namespace TensorShader.Functions.FactorArithmetric {
         /// <summary>コンストラクタ</summary>
         public FactorArithmetric(Operators.FactorArithmetric.FactorArithmetric factorbinary_operator)
             : base(inputs: 2, outputs: 1, allow_resubstitution: false) {
+
             this.factorbinary_operator = factorbinary_operator;
         }
 

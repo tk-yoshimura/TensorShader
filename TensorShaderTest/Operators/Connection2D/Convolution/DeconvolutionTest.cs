@@ -18,38 +18,36 @@ namespace TensorShaderTest.Operators.Connection2D {
                     foreach (int outchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 32, 33 }) {
                         foreach (int kheight in new int[] { 1, 3, 5 }) {
                             foreach (int kwidth in new int[] { 1, 3, 5 }) {
-                                foreach (int stride in new int[] { 1 }) {
-                                    foreach (int inwidth in new int[] { kwidth, kwidth * 2, 8, 9, 13, 17, 25 }) {
-                                        foreach (int inheight in new int[] { kheight, kheight * 2, 8, 9, 13, 17, 25 }) {
-                                            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
+                                foreach (int inwidth in new int[] { kwidth, kwidth * 2, 8, 9, 13, 17, 25 }) {
+                                    foreach (int inheight in new int[] { kheight, kheight * 2, 8, 9, 13, 17, 25 }) {
+                                        int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
 
-                                            float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-4f).ToArray();
-                                            float[] wval = (new float[kwidth * kheight * inchannels * outchannels]).Select((_, idx) => idx * 1e-4f).Reverse().ToArray();
+                                        float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-4f).ToArray();
+                                        float[] wval = (new float[kwidth * kheight * inchannels * outchannels]).Select((_, idx) => idx * 1e-4f).Reverse().ToArray();
 
-                                            Map2D y = new Map2D(outchannels, outwidth, outheight, batch, yval);
-                                            Filter2D w = new Filter2D(inchannels, outchannels, kwidth, kheight, wval);
+                                        Map2D y = new Map2D(outchannels, outwidth, outheight, batch, yval);
+                                        Filter2D w = new Filter2D(inchannels, outchannels, kwidth, kheight, wval);
 
-                                            Map2D x = Reference(y, w, inwidth, inheight, kwidth, kheight, stride);
+                                        Map2D x = Reference(y, w, inwidth, inheight, kwidth, kheight);
 
-                                            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
-                                            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels, outchannels, kwidth, kheight), wval);
+                                        OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
+                                        OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels, outchannels, kwidth, kheight), wval);
 
-                                            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch));
+                                        OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch));
 
-                                            Deconvolution ope = new Deconvolution(inwidth, inheight, outchannels, inchannels, kwidth, kheight, stride, batch);
+                                        Deconvolution ope = new Deconvolution(inwidth, inheight, outchannels, inchannels, kwidth, kheight, batch);
 
-                                            ope.Execute(y_tensor, w_tensor, x_tensor);
+                                        ope.Execute(y_tensor, w_tensor, x_tensor);
 
-                                            float[] x_expect = x.ToArray();
-                                            float[] x_actual = x_tensor.State;
+                                        float[] x_expect = x.ToArray();
+                                        float[] x_actual = x_tensor.State;
 
-                                            CollectionAssert.AreEqual(yval, y_tensor.State);
-                                            CollectionAssert.AreEqual(wval, w_tensor.State);
+                                        CollectionAssert.AreEqual(yval, y_tensor.State);
+                                        CollectionAssert.AreEqual(wval, w_tensor.State);
 
-                                            AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{stride},{inwidth},{inheight},{batch}");
+                                        AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
 
-                                            Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{stride},{inwidth},{inheight},{batch}");
-                                        }
+                                        Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
                                     }
                                 }
                             }
@@ -63,15 +61,15 @@ namespace TensorShaderTest.Operators.Connection2D {
 
         [TestMethod]
         public void SpeedTest() {
-            int inwidth = 512, inheight = 512, inchannels = 31, outchannels = 31, ksize = 3, stride = 1;
-            int outwidth = (inwidth - ksize) / stride + 1, outheight = (inheight - ksize) / stride + 1;
+            int inwidth = 512, inheight = 512, inchannels = 31, outchannels = 31, ksize = 3;
+            int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1;
 
             OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight));
             OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels, outchannels, ksize, ksize));
 
             OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight));
 
-            Deconvolution ope = new Deconvolution(inwidth, inheight, outchannels, inchannels, ksize, ksize, stride);
+            Deconvolution ope = new Deconvolution(inwidth, inheight, outchannels, inchannels, ksize, ksize);
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 
@@ -83,7 +81,7 @@ namespace TensorShaderTest.Operators.Connection2D {
             Cuda.Profiler.Stop();
         }
 
-        public static Map2D Reference(Map2D y, Filter2D w, int inw, int inh, int kwidth, int kheight, int stride) {
+        public static Map2D Reference(Map2D y, Filter2D w, int inw, int inh, int kwidth, int kheight) {
             int inchannels = w.InChannels, outchannels = w.OutChannels, batch = y.Batch;
             int outw = inw - kwidth + 1, outh = inh - kheight + 1;
 
@@ -102,7 +100,7 @@ namespace TensorShaderTest.Operators.Connection2D {
                                     double v = y[outch, ox, oy, th];
 
                                     for (int inch = 0; inch < inchannels; inch++) {
-                                        x[inch, kx + ox * stride, ky + oy * stride, th] += v * w[inch, outch, kx, ky];
+                                        x[inch, kx + ox, ky + oy, th] += v * w[inch, outch, kx, ky];
                                     }
                                 }
                             }
@@ -114,7 +112,7 @@ namespace TensorShaderTest.Operators.Connection2D {
             return x;
         }
 
-        public static Map2D Reference2(Map2D y, Filter2D w, int inw, int inh, int kwidth, int kheight, int stride) {
+        public static Map2D Reference2(Map2D y, Filter2D w, int inw, int inh, int kwidth, int kheight) {
             int inchannels = w.InChannels, outchannels = w.OutChannels, batch = y.Batch;
             int outw = inw - kwidth + 1, outh = inh - kheight + 1;
 
@@ -134,7 +132,7 @@ namespace TensorShaderTest.Operators.Connection2D {
 
                                 for (inch = 0; inch < inchannels - inchannels % 4; inch += 4) {
                                     for (int i = 0; i < 4; i++) {
-                                        temp[i] = x[inch + i, kx + ox * stride, ky + oy * stride, th];
+                                        temp[i] = x[inch + i, kx + ox, ky + oy, th];
                                     }
 
                                     for (int outch = 0; outch < outchannels; outch++) {
@@ -146,7 +144,7 @@ namespace TensorShaderTest.Operators.Connection2D {
                                     }
 
                                     for (int i = 0; i < 4; i++) {
-                                        x[inch + i, kx + ox * stride, ky + oy * stride, th] = temp[i];
+                                        x[inch + i, kx + ox, ky + oy, th] = temp[i];
                                     }
                                 }
 
@@ -154,7 +152,7 @@ namespace TensorShaderTest.Operators.Connection2D {
                                     int sets = inchannels % 4;
 
                                     for (int i = 0; i < sets; i++) {
-                                        temp[i] = x[inch + i, kx + ox * stride, ky + oy * stride, th];
+                                        temp[i] = x[inch + i, kx + ox, ky + oy, th];
                                     }
 
                                     for (int outch = 0; outch < outchannels; outch++) {
@@ -166,7 +164,7 @@ namespace TensorShaderTest.Operators.Connection2D {
                                     }
 
                                     for (int i = 0; i < sets; i++) {
-                                        x[inch + i, kx + ox * stride, ky + oy * stride, th] = temp[i];
+                                        x[inch + i, kx + ox, ky + oy, th] = temp[i];
                                     }
                                 }
                             }
@@ -178,7 +176,7 @@ namespace TensorShaderTest.Operators.Connection2D {
             return x;
         }
 
-        public static Map2D OptimizedReference(Map2D y, Filter2D w, int inw, int inh, int kwidth, int kheight, int stride) {
+        public static Map2D OptimizedReference(Map2D y, Filter2D w, int inw, int inh, int kwidth, int kheight) {
             int inchannels = w.InChannels, outchannels = w.OutChannels, batch = y.Batch;
             int outw = inw - kwidth + 1, outh = inh - kheight + 1;
 
@@ -197,7 +195,7 @@ namespace TensorShaderTest.Operators.Connection2D {
                         for (int ox, oy = 0; oy < outh; oy++) {
                             for (ox = 0; ox < outw; ox++) {
                                 int inmap_org = (ox + oy * outw) * outchannels + th * outw * outh * outchannels;
-                                int outmap_idx = outmap_offset + (ox + oy * inw) * inchannels * stride + th * inw * inh * inchannels;
+                                int outmap_idx = outmap_offset + (ox + oy * inw) * inchannels + th * inw * inh * inchannels;
                                 int kernel_org = kernel_offset;
                                 double[] temp = new double[4];
 
@@ -269,7 +267,7 @@ namespace TensorShaderTest.Operators.Connection2D {
 
         [TestMethod]
         public void ReferenceTest() {
-            int inchannels = 7, outchannels = 11, kwidth = 3, kheight = 5, stride = 2, inwidth = 13, inheight = 17, batch = 2;
+            int inchannels = 7, outchannels = 11, kwidth = 3, kheight = 5, inwidth = 13, inheight = 17, batch = 2;
             int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
 
             float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -278,7 +276,7 @@ namespace TensorShaderTest.Operators.Connection2D {
             Map2D y = new Map2D(outchannels, outwidth, outheight, batch, yval);
             Filter2D w = new Filter2D(inchannels, outchannels, kwidth, kheight, wval);
 
-            Map2D x = Reference(y, w, inwidth, inheight, kwidth, kheight, stride);
+            Map2D x = Reference(y, w, inwidth, inheight, kwidth, kheight);
 
             float[] x_expect = {
                 6.077500000e-02f, 6.072000000e-02f, 6.066500000e-02f, 6.061000000e-02f, 6.055500000e-02f,
@@ -904,7 +902,7 @@ namespace TensorShaderTest.Operators.Connection2D {
 
             float[] x_actual = x.ToArray();
 
-            AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{stride},{inwidth},{inheight},{batch}");
+            AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
         }
 
         [TestMethod]
@@ -916,27 +914,25 @@ namespace TensorShaderTest.Operators.Connection2D {
                     foreach (int outchannels in new int[] { 7, 13 }) {
                         foreach (int kheight in new int[] { 1, 3, 5 }) {
                             foreach (int kwidth in new int[] { 1, 3, 5 }) {
-                                foreach (int stride in new int[] { 1, 2, 3 }) {
-                                    foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                                        foreach (int inheight in new int[] { 8, 9, 19, 23 }) {
-                                            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
+                                foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
+                                    foreach (int inheight in new int[] { 8, 9, 19, 23 }) {
+                                        int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
 
-                                            float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-4f).ToArray();
-                                            float[] wval = (new float[kwidth * kheight * inchannels * outchannels]).Select((_, idx) => idx * 1e-4f).Reverse().ToArray();
+                                        float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-4f).ToArray();
+                                        float[] wval = (new float[kwidth * kheight * inchannels * outchannels]).Select((_, idx) => idx * 1e-4f).Reverse().ToArray();
 
-                                            Map2D y = new Map2D(outchannels, outwidth, outheight, batch, yval);
-                                            Filter2D w = new Filter2D(inchannels, outchannels, kwidth, kheight, wval);
+                                        Map2D y = new Map2D(outchannels, outwidth, outheight, batch, yval);
+                                        Filter2D w = new Filter2D(inchannels, outchannels, kwidth, kheight, wval);
 
-                                            Map2D x = Reference(y, w, inwidth, inheight, kwidth, kheight, stride);
-                                            Map2D x_optimized = OptimizedReference(y, w, inwidth, inheight, kwidth, kheight, stride);
+                                        Map2D x = Reference(y, w, inwidth, inheight, kwidth, kheight);
+                                        Map2D x_optimized = OptimizedReference(y, w, inwidth, inheight, kwidth, kheight);
 
-                                            float[] x_expect = x.ToArray();
-                                            float[] x_actual = x_optimized.ToArray();
+                                        float[] x_expect = x.ToArray();
+                                        float[] x_actual = x_optimized.ToArray();
 
-                                            AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{stride},{inwidth},{inheight},{batch}");
+                                        AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
 
-                                            Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{stride},{inwidth},{inheight},{batch}");
-                                        }
+                                        Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
                                     }
                                 }
                             }

@@ -44,8 +44,9 @@ namespace TensorShader.Functions.QuaternionConvolution {
         public bool GradMode { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public QuaternionDeconvolution1D(Shape inshape, Shape kernelshape, bool gradmode) :
-            base(inputs: 2, outputs: 1, allow_resubstitution: false) {
+        public QuaternionDeconvolution1D(Shape inshape, Shape kernelshape, bool gradmode)
+            : base(inputs: 2, outputs: 1, allow_resubstitution: false) {
+            
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 3) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 3), ("Type", ShapeType.Map)));
             }

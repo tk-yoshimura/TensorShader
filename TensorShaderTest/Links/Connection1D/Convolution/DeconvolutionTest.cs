@@ -8,7 +8,7 @@ namespace TensorShaderTest.Links.Connection1D {
     public class DeconvolutionTest {
         [TestMethod]
         public void ReferenceTest() {
-            int inchannels = 7, outchannels = 11, kwidth = 3, stride = 2, inwidth = 13;
+            int inchannels = 7, outchannels = 11, kwidth = 3, inwidth = 13;
             int outwidth = inwidth - kwidth + 1, batch = 2;
 
             float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -23,7 +23,7 @@ namespace TensorShaderTest.Links.Connection1D {
             ParameterField w = wtensor;
             ParameterField y = ytensor;
 
-            Field x_expect = Deconvolution1D(y, w, stride, Shape.Map1D(inchannels, inwidth, batch));
+            Field x_expect = Deconvolution1D(y, w);
             Field err = Abs(x_expect - x_actual);
             OutputNode err_node = err.Value.Save();
 

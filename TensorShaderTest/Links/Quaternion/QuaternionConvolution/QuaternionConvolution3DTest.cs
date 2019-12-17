@@ -8,7 +8,7 @@ namespace TensorShaderTest.Links.QuaternionConvolution {
     public class QuaternionConvolution3DTest {
         [TestMethod]
         public void ReferenceTest() {
-            int inchannels = 8, outchannels = 12, kwidth = 3, kheight = 5, kdepth = 7, stride = 2, inwidth = 7, inheight = 8, indepth = 9;
+            int inchannels = 8, outchannels = 12, kwidth = 3, kheight = 5, kdepth = 7, inwidth = 7, inheight = 8, indepth = 9;
             int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1, batch = 3;
 
             float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -23,7 +23,7 @@ namespace TensorShaderTest.Links.QuaternionConvolution {
             ParameterField w = wtensor;
             VariableField y_actual = ytensor;
 
-            Field y_expect = QuaternionConvolution3D(x, w, stride);
+            Field y_expect = QuaternionConvolution3D(x, w);
             Field err = y_expect - y_actual;
 
             (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -40,7 +40,7 @@ namespace TensorShaderTest.Links.QuaternionConvolution {
 
         [TestMethod]
         public void TheoreticalTest() {
-            int inchannels = 8, outchannels = 12, kwidth = 3, kheight = 5, kdepth = 7, stride = 2, inwidth = 7, inheight = 8, indepth = 9;
+            int inchannels = 8, outchannels = 12, kwidth = 3, kheight = 5, kdepth = 7, inwidth = 7, inheight = 8, indepth = 9;
             int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1, batch = 3;
 
             float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -58,10 +58,10 @@ namespace TensorShaderTest.Links.QuaternionConvolution {
             Field xr = QuaternionR(x), xi = QuaternionI(x), xj = QuaternionJ(x), xk = QuaternionK(x);
             Field wr = QuaternionR(w), wi = QuaternionI(w), wj = QuaternionJ(w), wk = QuaternionK(w);
 
-            Field yr = Convolution3D(xr, wr, stride) - Convolution3D(xi, wi, stride) - Convolution3D(xj, wj, stride) - Convolution3D(xk, wk, stride);
-            Field yi = Convolution3D(xr, wi, stride) + Convolution3D(xi, wr, stride) + Convolution3D(xj, wk, stride) - Convolution3D(xk, wj, stride);
-            Field yj = Convolution3D(xr, wj, stride) - Convolution3D(xi, wk, stride) + Convolution3D(xj, wr, stride) + Convolution3D(xk, wi, stride);
-            Field yk = Convolution3D(xr, wk, stride) + Convolution3D(xi, wj, stride) - Convolution3D(xj, wi, stride) + Convolution3D(xk, wr, stride);
+            Field yr = Convolution3D(xr, wr) - Convolution3D(xi, wi) - Convolution3D(xj, wj) - Convolution3D(xk, wk);
+            Field yi = Convolution3D(xr, wi) + Convolution3D(xi, wr) + Convolution3D(xj, wk) - Convolution3D(xk, wj);
+            Field yj = Convolution3D(xr, wj) - Convolution3D(xi, wk) + Convolution3D(xj, wr) + Convolution3D(xk, wi);
+            Field yk = Convolution3D(xr, wk) + Convolution3D(xi, wj) - Convolution3D(xj, wi) + Convolution3D(xk, wr);
 
             Field y_expect = QuaternionCast(yr, yi, yj, yk);
 

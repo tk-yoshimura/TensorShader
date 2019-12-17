@@ -16,44 +16,42 @@ namespace TensorShaderTest.Operators.Quaternion {
                 foreach (int inchannels in new int[] { 4, 8, 12 }) {
                     foreach (int outchannels in new int[] { 4, 8, 12 }) {
                         foreach (int kwidth in new int[] { 1, 3, 5 }) {
-                            foreach (int stride in new int[] { 1, 2, 3 }) {
-                                foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                                    int outwidth = inwidth - kwidth + 1;
+                            foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
+                                int outwidth = inwidth - kwidth + 1;
 
-                                    float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                                    float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+                                float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+                                float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-                                    Quaternion[] xcval = (new Quaternion[xval.Length / 4])
-                                        .Select((_, idx) => new Quaternion(xval[idx * 4], xval[idx * 4 + 1], xval[idx * 4 + 2], xval[idx * 4 + 3])).ToArray();
+                                Quaternion[] xcval = (new Quaternion[xval.Length / 4])
+                                    .Select((_, idx) => new Quaternion(xval[idx * 4], xval[idx * 4 + 1], xval[idx * 4 + 2], xval[idx * 4 + 3])).ToArray();
 
-                                    Quaternion[] ycval = (new Quaternion[yval.Length / 4])
-                                        .Select((_, idx) => new Quaternion(yval[idx * 4], yval[idx * 4 + 1], yval[idx * 4 + 2], yval[idx * 4 + 3])).ToArray();
+                                Quaternion[] ycval = (new Quaternion[yval.Length / 4])
+                                    .Select((_, idx) => new Quaternion(yval[idx * 4], yval[idx * 4 + 1], yval[idx * 4 + 2], yval[idx * 4 + 3])).ToArray();
 
-                                    QuaternionMap1D x = new QuaternionMap1D(inchannels / 4, inwidth, batch, xcval);
-                                    QuaternionMap1D y = new QuaternionMap1D(outchannels / 4, outwidth, batch, ycval);
+                                QuaternionMap1D x = new QuaternionMap1D(inchannels / 4, inwidth, batch, xcval);
+                                QuaternionMap1D y = new QuaternionMap1D(outchannels / 4, outwidth, batch, ycval);
 
-                                    QuaternionFilter1D gw = Reference(x, y, kwidth, stride);
+                                QuaternionFilter1D gw = Reference(x, y, kwidth);
 
-                                    OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth, batch), xval);
-                                    OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth, batch), yval);
+                                OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth, batch), xval);
+                                OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth, batch), yval);
 
-                                    OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels, outchannels / 4, kwidth));
+                                OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels, outchannels / 4, kwidth));
 
-                                    QuaternionKernelProduct1D ope = new QuaternionKernelProduct1D(inwidth, inchannels, outchannels, kwidth, stride, transpose: false, batch);
+                                QuaternionKernelProduct1D ope = new QuaternionKernelProduct1D(inwidth, inchannels, outchannels, kwidth, transpose: false, batch);
 
-                                    ope.Execute(x_tensor, y_tensor, gw_tensor);
+                                ope.Execute(x_tensor, y_tensor, gw_tensor);
 
-                                    float[] gw_expect = gw.ToArray();
-                                    float[] gw_actual = gw_tensor.State;
+                                float[] gw_expect = gw.ToArray();
+                                float[] gw_actual = gw_tensor.State;
 
-                                    CollectionAssert.AreEqual(xval, x_tensor.State);
-                                    CollectionAssert.AreEqual(yval, y_tensor.State);
+                                CollectionAssert.AreEqual(xval, x_tensor.State);
+                                CollectionAssert.AreEqual(yval, y_tensor.State);
 
-                                    AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{stride},{inwidth},{batch}");
+                                AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{inwidth},{batch}");
 
-                                    Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{stride},{inwidth},{batch}");
+                                Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{inwidth},{batch}");
 
-                                }
                             }
                         }
                     }
@@ -70,30 +68,28 @@ namespace TensorShaderTest.Operators.Quaternion {
                     foreach (int inchannels in new int[] { 4, 8, 12 }) {
                         foreach (int outchannels in new int[] { 4, 8, 12 }) {
                             foreach (int kwidth in new int[] { 1, 3, 5 }) {
-                                foreach (int stride in new int[] { 1, 2, 3 }) {
-                                    foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                                        int outwidth = inwidth - kwidth + 1;
+                                foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
+                                    int outwidth = inwidth - kwidth + 1;
 
-                                        float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                                        float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+                                    float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+                                    float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-                                        OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth, batch), xval);
-                                        OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth, batch), yval);
+                                    OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth, batch), xval);
+                                    OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth, batch), yval);
 
-                                        OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels, outchannels / 4, kwidth));
+                                    OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels, outchannels / 4, kwidth));
 
-                                        QuaternionKernelProduct1D ope = new QuaternionKernelProduct1D(inwidth, inchannels, outchannels, kwidth, stride, transpose, batch);
+                                    QuaternionKernelProduct1D ope = new QuaternionKernelProduct1D(inwidth, inchannels, outchannels, kwidth, transpose, batch);
 
-                                        ope.Execute(x_tensor, y_tensor, gw_tensor);
+                                    ope.Execute(x_tensor, y_tensor, gw_tensor);
 
-                                        CollectionAssert.AreEqual(xval, x_tensor.State);
-                                        CollectionAssert.AreEqual(yval, y_tensor.State);
+                                    CollectionAssert.AreEqual(xval, x_tensor.State);
+                                    CollectionAssert.AreEqual(yval, y_tensor.State);
 
-                                        gw_tensor.CheckOverflow();
+                                    gw_tensor.CheckOverflow();
 
-                                        Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{stride},{inwidth},{batch},{transpose}");
+                                    Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{inwidth},{batch},{transpose}");
 
-                                    }
                                 }
                             }
                         }
@@ -104,15 +100,15 @@ namespace TensorShaderTest.Operators.Quaternion {
 
         [TestMethod]
         public void SpeedTest() {
-            int inwidth = 512, inchannels = 32, outchannels = 32, ksize = 3, stride = 2;
-            int outwidth = (inwidth - ksize) / stride + 1;
+            int inwidth = 512, inchannels = 32, outchannels = 32, ksize = 3;
+            int outwidth = inwidth - ksize + 1;
 
             OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth));
             OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth));
 
             OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels, outchannels / 4, ksize));
 
-            QuaternionKernelProduct1D ope = new QuaternionKernelProduct1D(inwidth, inchannels, outchannels, ksize, stride);
+            QuaternionKernelProduct1D ope = new QuaternionKernelProduct1D(inwidth, inchannels, outchannels, ksize);
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -127,7 +123,7 @@ namespace TensorShaderTest.Operators.Quaternion {
             Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
         }
 
-        public static QuaternionFilter1D Reference(QuaternionMap1D x, QuaternionMap1D gy, int kwidth, int stride) {
+        public static QuaternionFilter1D Reference(QuaternionMap1D x, QuaternionMap1D gy, int kwidth) {
             int inchannels = x.Channels, outchannels = gy.Channels, batch = x.Batch;
             int inw = x.Width, outw = gy.Width;
 
@@ -143,7 +139,7 @@ namespace TensorShaderTest.Operators.Quaternion {
                         for (inch = 0; inch < inchannels; inch++) {
                             Quaternion sum = 0;
 
-                            for (int ix = kx, ox = 0; ox < outw; ix += stride, ox++) {
+                            for (int ix = kx, ox = 0; ox < outw; ix++, ox++) {
                                 sum += Quaternion.MulGrad(gy[outch, ox, th], x[inch, ix, th]);
                             }
 
@@ -159,7 +155,7 @@ namespace TensorShaderTest.Operators.Quaternion {
 
         [TestMethod]
         public void ReferenceTest() {
-            int inchannels = 8, outchannels = 12, kwidth = 3, stride = 2, inwidth = 13;
+            int inchannels = 8, outchannels = 12, kwidth = 3, inwidth = 13;
             int outwidth = inwidth - kwidth + 1, batch = 1;
 
             float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -174,7 +170,7 @@ namespace TensorShaderTest.Operators.Quaternion {
             QuaternionMap1D x = new QuaternionMap1D(inchannels / 4, inwidth, batch, xcval);
             QuaternionMap1D y = new QuaternionMap1D(outchannels / 4, outwidth, batch, ycval);
 
-            QuaternionFilter1D gw = Reference(x, y, kwidth, stride);
+            QuaternionFilter1D gw = Reference(x, y, kwidth);
 
             float[] gw_expect = {
                 2.587200000e-02f,  -0.000000000e+00f,  -1.944000000e-03f,  -9.720000000e-04f,  2.966400000e-02f,  -0.000000000e+00f,
@@ -193,7 +189,7 @@ namespace TensorShaderTest.Operators.Quaternion {
 
             float[] gw_actual = gw.ToArray();
 
-            AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{kwidth},{stride},{inwidth},{batch}");
+            AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{kwidth},{inwidth},{batch}");
         }
     }
 }

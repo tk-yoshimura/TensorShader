@@ -23,6 +23,7 @@ namespace TensorShader.Links.UnaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public LeakyRelu(Field infield, Field outfield, float slope)
             : base(infield, outfield) {
+
             this.Slope = slope;
         }
 

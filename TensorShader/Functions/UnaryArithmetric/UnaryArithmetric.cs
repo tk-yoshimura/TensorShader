@@ -32,6 +32,7 @@ namespace TensorShader.Functions.UnaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public UnaryArithmetric(Operators.UnaryArithmetric.UnaryArithmetric unary_operator)
              : base(inputs: 1, outputs: 1, allow_resubstitution: true) {
+
             this.unary_operator = unary_operator;
         }
 

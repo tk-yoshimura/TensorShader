@@ -24,6 +24,7 @@ namespace TensorShader.Functions.ArrayManipulation {
         /// <summary>コンストラクタ</summary>
         public BatchIndexer(int index)
             : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.Index = index;
         }
 

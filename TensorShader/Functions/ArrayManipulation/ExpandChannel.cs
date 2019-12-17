@@ -36,6 +36,7 @@ namespace TensorShader.Functions.ArrayManipulation {
         /// <summary>コンストラクタ</summary>
         public ExpandChannel(Shape shape, int expands)
             : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.Shape = shape;
             this.Expands = expands;
         }

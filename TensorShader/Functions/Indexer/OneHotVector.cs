@@ -36,6 +36,7 @@ namespace TensorShader.Functions.Indexer {
         /// <summary>コンストラクタ</summary>
         public OneHotVector(int channels)
             : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.Channels = channels;
         }
 

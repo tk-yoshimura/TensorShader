@@ -7,11 +7,11 @@ namespace TensorShaderTest.Layers {
     public class Deconvolution1DTest {
         [TestMethod]
         public void ExecuteTest() {
-            int inchannels = 4, outchannels = 6, inwidth = 13, kwidth = 3, stride = 2, batch = 7;
+            int inchannels = 4, outchannels = 6, inwidth = 13, kwidth = 3, batch = 7;
 
             VariableField x = new Tensor(Shape.Map1D(inchannels, inwidth, batch));
 
-            Layer layer = new Deconvolution1D(inchannels, outchannels, kwidth, stride, use_bias: true, pad_mode: PaddingMode.Edge, "conv");
+            Layer layer = new Deconvolution1D(inchannels, outchannels, kwidth, use_bias: true, pad_mode: PaddingMode.Edge, "conv");
 
             Field y = layer.Forward(x);
 

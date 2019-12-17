@@ -8,7 +8,7 @@ namespace TensorShaderTest.Links.ComplexConvolution {
     public class ComplexDeconvolution3DTest {
         [TestMethod]
         public void ReferenceTest() {
-            int inchannels = 2, outchannels = 4, kwidth = 3, kheight = 5, kdepth = 7, stride = 2, inwidth = 13, inheight = 12, indepth = 11;
+            int inchannels = 2, outchannels = 4, kwidth = 3, kheight = 5, kdepth = 7, inwidth = 13, inheight = 12, indepth = 11;
             int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1, batch = 3;
 
             float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -23,7 +23,7 @@ namespace TensorShaderTest.Links.ComplexConvolution {
             ParameterField w = wtensor;
             ParameterField y = ytensor;
 
-            Field x_expect = ComplexDeconvolution3D(y, w, stride, Shape.Map3D(inchannels, inwidth, inheight, indepth, batch));
+            Field x_expect = ComplexDeconvolution3D(y, w);
             Field err = x_expect - x_actual;
 
             (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -40,7 +40,7 @@ namespace TensorShaderTest.Links.ComplexConvolution {
 
         [TestMethod]
         public void TheoreticalTest() {
-            int inchannels = 2, outchannels = 4, kwidth = 3, kheight = 5, kdepth = 7, stride = 2, inwidth = 13, inheight = 12, indepth = 11;
+            int inchannels = 2, outchannels = 4, kwidth = 3, kheight = 5, kdepth = 7, inwidth = 13, inheight = 12, indepth = 11;
             int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1, batch = 3;
 
             float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -58,11 +58,11 @@ namespace TensorShaderTest.Links.ComplexConvolution {
             Field y_real = ComplexReal(y), y_imag = ComplexImag(y);
             Field w_real = ComplexReal(w), w_imag = ComplexImag(w);
 
-            Field x_real = Deconvolution3D(y_real, w_real, stride, Shape.Map3D(inchannels / 2, inwidth, inheight, indepth, batch))
-                         - Deconvolution3D(y_imag, w_imag, stride, Shape.Map3D(inchannels / 2, inwidth, inheight, indepth, batch));
+            Field x_real = Deconvolution3D(y_real, w_real)
+                         - Deconvolution3D(y_imag, w_imag);
 
-            Field x_imag = Deconvolution3D(y_imag, w_real, stride, Shape.Map3D(inchannels / 2, inwidth, inheight, indepth, batch))
-                         + Deconvolution3D(y_real, w_imag, stride, Shape.Map3D(inchannels / 2, inwidth, inheight, indepth, batch));
+            Field x_imag = Deconvolution3D(y_imag, w_real)
+                         + Deconvolution3D(y_real, w_imag);
 
             Field x_expect = ComplexCast(x_real, x_imag);
 

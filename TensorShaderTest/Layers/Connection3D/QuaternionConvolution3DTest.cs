@@ -7,11 +7,11 @@ namespace TensorShaderTest.Layers {
     public class QuaternionConvolution3DTest {
         [TestMethod]
         public void ExecuteTest() {
-            int inchannels = 8, outchannels = 12, inwidth = 13, inheight = 17, indepth = 19, kwidth = 3, kheight = 5, kdepth = 7, stride = 2, batch = 7;
+            int inchannels = 8, outchannels = 12, inwidth = 13, inheight = 17, indepth = 19, kwidth = 3, kheight = 5, kdepth = 7, batch = 7;
 
             VariableField x = new Tensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch));
 
-            Layer layer = new QuaternionConvolution3D(inchannels, outchannels, kwidth, kheight, kdepth, stride, use_bias: true, pad_mode: PaddingMode.Edge, "conv");
+            Layer layer = new QuaternionConvolution3D(inchannels, outchannels, kwidth, kheight, kdepth, use_bias: true, pad_mode: PaddingMode.Edge, "conv");
 
             Field y = layer.Forward(x);
 

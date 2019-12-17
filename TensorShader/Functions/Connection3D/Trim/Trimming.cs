@@ -78,6 +78,7 @@ namespace TensorShader.Functions.Connection3D {
         /// <summary>コンストラクタ</summary>
         public Trimming(int trim_left, int trim_right, int trim_top, int trim_bottom, int trim_front, int trim_rear)
             : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.TrimLeft = trim_left;
             this.TrimRight = trim_right;
             this.TrimTop = trim_top;

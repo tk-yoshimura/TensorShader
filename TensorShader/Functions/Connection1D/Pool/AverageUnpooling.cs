@@ -55,6 +55,7 @@ namespace TensorShader.Functions.Connection1D {
         /// <summary>コンストラクタ</summary>
         public AverageUnpooling(Shape outshape, int stride)
             : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             if (outshape.Type != ShapeType.Map || outshape.Ndim != 3) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(outshape, ("Ndim", 3), ("Type", ShapeType.Map)));
             }

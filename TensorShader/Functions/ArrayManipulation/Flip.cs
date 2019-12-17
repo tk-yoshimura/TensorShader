@@ -33,6 +33,7 @@ namespace TensorShader.Functions.ArrayManipulation {
         /// <summary>コンストラクタ</summary>
         public Flip(int axis)
             : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.Axis = axis;
         }
 

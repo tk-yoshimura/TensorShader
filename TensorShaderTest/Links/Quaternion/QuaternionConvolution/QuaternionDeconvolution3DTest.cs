@@ -8,7 +8,7 @@ namespace TensorShaderTest.Links.QuaternionConvolution {
     public class QuaternionDeconvolution3DTest {
         [TestMethod]
         public void ReferenceTest() {
-            int inchannels = 8, outchannels = 12, kwidth = 3, kheight = 5, kdepth = 7, stride = 2, inwidth = 7, inheight = 8, indepth = 9;
+            int inchannels = 8, outchannels = 12, kwidth = 3, kheight = 5, kdepth = 7, inwidth = 7, inheight = 8, indepth = 9;
             int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1, batch = 3;
 
             float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -23,7 +23,7 @@ namespace TensorShaderTest.Links.QuaternionConvolution {
             ParameterField w = wtensor;
             ParameterField y = ytensor;
 
-            Field x_expect = QuaternionDeconvolution3D(y, w, stride, Shape.Map3D(inchannels, inwidth, inheight, indepth, batch));
+            Field x_expect = QuaternionDeconvolution3D(y, w);
             Field err = x_expect - x_actual;
 
             (Flow flow, Parameters Parameters) = Flow.Optimize(err);
@@ -40,7 +40,7 @@ namespace TensorShaderTest.Links.QuaternionConvolution {
 
         [TestMethod]
         public void TheoreticalTest() {
-            int inchannels = 8, outchannels = 12, kwidth = 3, kheight = 5, kdepth = 7, stride = 2, inwidth = 7, inheight = 8, indepth = 9;
+            int inchannels = 8, outchannels = 12, kwidth = 3, kheight = 5, kdepth = 7, inwidth = 7, inheight = 8, indepth = 9;
             int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1, batch = 3;
 
             float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -60,10 +60,10 @@ namespace TensorShaderTest.Links.QuaternionConvolution {
 
             Shape outshape = Shape.Map3D(inchannels / 4, inwidth, inheight, indepth, batch);
 
-            Field xr = Deconvolution3D(yr, wr, stride, outshape) - Deconvolution3D(yi, wi, stride, outshape) - Deconvolution3D(yj, wj, stride, outshape) - Deconvolution3D(yk, wk, stride, outshape);
-            Field xi = Deconvolution3D(yr, wi, stride, outshape) + Deconvolution3D(yi, wr, stride, outshape) + Deconvolution3D(yj, wk, stride, outshape) - Deconvolution3D(yk, wj, stride, outshape);
-            Field xj = Deconvolution3D(yr, wj, stride, outshape) - Deconvolution3D(yi, wk, stride, outshape) + Deconvolution3D(yj, wr, stride, outshape) + Deconvolution3D(yk, wi, stride, outshape);
-            Field xk = Deconvolution3D(yr, wk, stride, outshape) + Deconvolution3D(yi, wj, stride, outshape) - Deconvolution3D(yj, wi, stride, outshape) + Deconvolution3D(yk, wr, stride, outshape);
+            Field xr = Deconvolution3D(yr, wr) - Deconvolution3D(yi, wi) - Deconvolution3D(yj, wj) - Deconvolution3D(yk, wk);
+            Field xi = Deconvolution3D(yr, wi) + Deconvolution3D(yi, wr) + Deconvolution3D(yj, wk) - Deconvolution3D(yk, wj);
+            Field xj = Deconvolution3D(yr, wj) - Deconvolution3D(yi, wk) + Deconvolution3D(yj, wr) + Deconvolution3D(yk, wi);
+            Field xk = Deconvolution3D(yr, wk) + Deconvolution3D(yi, wj) - Deconvolution3D(yj, wi) + Deconvolution3D(yk, wr);
 
             Field x_expect = QuaternionCast(xr, xi, xj, xk);
 

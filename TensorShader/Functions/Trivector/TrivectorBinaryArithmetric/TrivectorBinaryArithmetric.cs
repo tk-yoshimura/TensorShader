@@ -34,6 +34,7 @@ namespace TensorShader.Functions.TrivectorArithmetric {
         /// <summary>コンストラクタ</summary>
         public TrivectorBinaryArithmetric(Operators.TrivectorBinaryArithmetric.TrivectorBinaryArithmetric arithmetric)
             : base(inputs: 2, outputs: 1, allow_resubstitution: true) {
+
             this.arithmetric = arithmetric;
         }
 

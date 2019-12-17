@@ -3,9 +3,9 @@ using System;
 namespace TensorShader {
     public abstract partial class VariableNode {
         /// <summary>1次元逆畳み込み</summary>
-        public static VariableNode Deconvolution1D(VariableNode x, VariableNode w, Shape outshape = null) {
+        public static VariableNode Deconvolution1D(VariableNode x, VariableNode w) {
             Function function =
-                new Functions.Connection1D.Deconvolution(outshape, w.Shape);
+                new Functions.Connection1D.Deconvolution(x.Shape, w.Shape);
 
             VariableNode y = Apply(function, x, w)[0];
 
@@ -15,9 +15,9 @@ namespace TensorShader {
 
     public partial class Tensor {
         /// <summary>1次元逆畳み込み</summary>
-        public static Tensor Deconvolution1D(Tensor x, Tensor w, Shape outshape = null) {
+        public static Tensor Deconvolution1D(Tensor x, Tensor w) {
             Functions.Connection1D.Deconvolution function =
-                new Functions.Connection1D.Deconvolution(outshape, w.Shape);
+                new Functions.Connection1D.Deconvolution(x.Shape, w.Shape);
 
             Tensor y = new Tensor(function.OutShape);
 
@@ -41,8 +41,9 @@ namespace TensorShader.Functions.Connection1D {
         public Shape KernelShape { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public Deconvolution(Shape inshape, Shape kernelshape) :
-            base(inputs: 2, outputs: 1, allow_resubstitution: false) {
+        public Deconvolution(Shape inshape, Shape kernelshape)
+            : base(inputs: 2, outputs: 1, allow_resubstitution: false) {
+            
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 3) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 3), ("Type", ShapeType.Map)));
             }

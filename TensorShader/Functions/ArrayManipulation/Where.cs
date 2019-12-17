@@ -33,6 +33,7 @@ namespace TensorShader.Functions.ArrayManipulation {
         /// <summary>コンストラクタ</summary>
         public Where(Shape shape)
             : base(inputs: 3, outputs: 1, allow_resubstitution: false) {
+
             this.Shape = shape;
         }
 

@@ -37,6 +37,7 @@ namespace TensorShader.Functions.Connection2D {
         /// <summary>コンストラクタ</summary>
         public MaxUnpooling(int stride)
             : base(inputs: 3, outputs: 1, allow_resubstitution: false) {
+
             if (stride < 2) {
                 throw new ArgumentException(nameof(stride));
             }

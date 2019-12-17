@@ -36,6 +36,7 @@ namespace TensorShader.Functions.ArrayManipulation {
         /// <summary>コンストラクタ</summary>
         public SortWithKey(int axis)
             : base(inputs: 2, outputs: 2, allow_resubstitution: false) {
+
             this.Axis = axis;
         }
 

@@ -44,8 +44,8 @@ namespace TensorShader.Functions.ComplexConvolution {
         public bool Transpose { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public ComplexKernelProduct1D(Shape inshape, Shape outshape, int kwidth, bool transpose) :
-            base(inputs: 2, outputs: 1, allow_resubstitution: false) {
+        public ComplexKernelProduct1D(Shape inshape, Shape outshape, int kwidth, bool transpose)
+            : base(inputs: 2, outputs: 1, allow_resubstitution: false) {
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 3) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 3), ("Type", ShapeType.Map)));
             }

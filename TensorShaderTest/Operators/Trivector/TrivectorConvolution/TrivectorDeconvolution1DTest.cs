@@ -16,43 +16,41 @@ namespace TensorShaderTest.Operators.Trivector {
                 foreach (int inchannels in new int[] { 3, 6, 9, 12 }) {
                     foreach (int outchannels in new int[] { 3, 6, 9, 12 }) {
                         foreach (int kwidth in new int[] { 1, 3, 5 }) {
-                            foreach (int stride in new int[] { 1, 2, 3 }) {
-                                foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                                    int outwidth = inwidth - kwidth + 1;
+                            foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
+                                int outwidth = inwidth - kwidth + 1;
 
-                                    float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                                    float[] wval = (new float[kwidth * inchannels * outchannels / 9 * 4]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+                                float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+                                float[] wval = (new float[kwidth * inchannels * outchannels / 9 * 4]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-                                    Trivector[] ycval = (new Trivector[yval.Length / 3])
-                                        .Select((_, idx) => new Trivector(yval[idx * 3], yval[idx * 3 + 1], yval[idx * 3 + 2])).ToArray();
+                                Trivector[] ycval = (new Trivector[yval.Length / 3])
+                                    .Select((_, idx) => new Trivector(yval[idx * 3], yval[idx * 3 + 1], yval[idx * 3 + 2])).ToArray();
 
-                                    Quaternion.Quaternion[] wcval = (new Quaternion.Quaternion[wval.Length / 4])
-                                        .Select((_, idx) => new Quaternion.Quaternion(wval[idx * 4], wval[idx * 4 + 1], wval[idx * 4 + 2], wval[idx * 4 + 3])).ToArray();
+                                Quaternion.Quaternion[] wcval = (new Quaternion.Quaternion[wval.Length / 4])
+                                    .Select((_, idx) => new Quaternion.Quaternion(wval[idx * 4], wval[idx * 4 + 1], wval[idx * 4 + 2], wval[idx * 4 + 3])).ToArray();
 
-                                    TrivectorMap1D y = new TrivectorMap1D(outchannels / 3, outwidth, batch, ycval);
-                                    Quaternion.QuaternionFilter1D w = new Quaternion.QuaternionFilter1D(inchannels / 3, outchannels / 3, kwidth, wcval);
+                                TrivectorMap1D y = new TrivectorMap1D(outchannels / 3, outwidth, batch, ycval);
+                                Quaternion.QuaternionFilter1D w = new Quaternion.QuaternionFilter1D(inchannels / 3, outchannels / 3, kwidth, wcval);
 
-                                    TrivectorMap1D x = Reference(y, w, inwidth, kwidth, stride);
+                                TrivectorMap1D x = Reference(y, w, inwidth, kwidth);
 
-                                    OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth, batch), yval);
-                                    OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels / 3 * 4, outchannels / 3, kwidth), wval);
+                                OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth, batch), yval);
+                                OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels / 3 * 4, outchannels / 3, kwidth), wval);
 
-                                    OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth, batch));
+                                OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth, batch));
 
-                                    TrivectorDeconvolution1D ope = new TrivectorDeconvolution1D(inwidth, outchannels, inchannels, kwidth, stride, gradmode: false, batch);
+                                TrivectorDeconvolution1D ope = new TrivectorDeconvolution1D(inwidth, outchannels, inchannels, kwidth, gradmode: false, batch);
 
-                                    ope.Execute(y_tensor, w_tensor, x_tensor);
+                                ope.Execute(y_tensor, w_tensor, x_tensor);
 
-                                    float[] x_expect = x.ToArray();
-                                    float[] x_actual = x_tensor.State;
+                                float[] x_expect = x.ToArray();
+                                float[] x_actual = x_tensor.State;
 
-                                    CollectionAssert.AreEqual(yval, y_tensor.State);
-                                    CollectionAssert.AreEqual(wval, w_tensor.State);
+                                CollectionAssert.AreEqual(yval, y_tensor.State);
+                                CollectionAssert.AreEqual(wval, w_tensor.State);
 
-                                    AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{stride},{inwidth},{batch}");
+                                AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{inwidth},{batch}");
 
-                                    Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{stride},{inwidth},{batch}");
-                                }
+                                Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{inwidth},{batch}");
                             }
                         }
                     }
@@ -69,29 +67,27 @@ namespace TensorShaderTest.Operators.Trivector {
                     foreach (int inchannels in new int[] { 3, 6, 9, 12 }) {
                         foreach (int outchannels in new int[] { 3, 6, 9, 12 }) {
                             foreach (int kwidth in new int[] { 1, 3, 5 }) {
-                                foreach (int stride in new int[] { 1, 2, 3 }) {
-                                    foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                                        int outwidth = inwidth - kwidth + 1;
+                                foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
+                                    int outwidth = inwidth - kwidth + 1;
 
-                                        float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                                        float[] wval = (new float[kwidth * inchannels * outchannels / 9 * 4]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+                                    float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+                                    float[] wval = (new float[kwidth * inchannels * outchannels / 9 * 4]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-                                        OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth, batch), yval);
-                                        OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels / 3 * 4, outchannels / 3, kwidth), wval);
+                                    OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth, batch), yval);
+                                    OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels / 3 * 4, outchannels / 3, kwidth), wval);
 
-                                        OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth, batch));
+                                    OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth, batch));
 
-                                        TrivectorDeconvolution1D ope = new TrivectorDeconvolution1D(inwidth, outchannels, inchannels, kwidth, stride, gradmode, batch);
+                                    TrivectorDeconvolution1D ope = new TrivectorDeconvolution1D(inwidth, outchannels, inchannels, kwidth, gradmode, batch);
 
-                                        ope.Execute(y_tensor, w_tensor, x_tensor);
+                                    ope.Execute(y_tensor, w_tensor, x_tensor);
 
-                                        CollectionAssert.AreEqual(yval, y_tensor.State);
-                                        CollectionAssert.AreEqual(wval, w_tensor.State);
+                                    CollectionAssert.AreEqual(yval, y_tensor.State);
+                                    CollectionAssert.AreEqual(wval, w_tensor.State);
 
-                                        x_tensor.CheckOverflow();
+                                    x_tensor.CheckOverflow();
 
-                                        Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{stride},{inwidth},{batch},{gradmode}");
-                                    }
+                                    Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{inwidth},{batch},{gradmode}");
                                 }
                             }
                         }
@@ -102,15 +98,15 @@ namespace TensorShaderTest.Operators.Trivector {
 
         [TestMethod]
         public void SpeedTest() {
-            int inwidth = 32, inchannels = 33, outchannels = 33, ksize = 3, stride = 2;
-            int outwidth = (inwidth - ksize) / stride + 1;
+            int inwidth = 32, inchannels = 33, outchannels = 33, ksize = 3;
+            int outwidth = inwidth - ksize + 1;
 
             OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth));
             OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels / 3 * 4, outchannels / 3, ksize));
 
             OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth));
 
-            TrivectorDeconvolution1D ope = new TrivectorDeconvolution1D(inwidth, outchannels, inchannels, ksize, stride);
+            TrivectorDeconvolution1D ope = new TrivectorDeconvolution1D(inwidth, outchannels, inchannels, ksize);
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 
@@ -127,7 +123,7 @@ namespace TensorShaderTest.Operators.Trivector {
             Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
         }
 
-        public static TrivectorMap1D Reference(TrivectorMap1D y, Quaternion.QuaternionFilter1D w, int inw, int kwidth, int stride) {
+        public static TrivectorMap1D Reference(TrivectorMap1D y, Quaternion.QuaternionFilter1D w, int inw, int kwidth) {
             int inchannels = w.InChannels, outchannels = w.OutChannels, batch = y.Batch;
             int outw = inw - kwidth + 1;
 
@@ -144,7 +140,7 @@ namespace TensorShaderTest.Operators.Trivector {
                             Trivector v = y[outch, ox, th];
 
                             for (int inch = 0; inch < inchannels; inch++) {
-                                x[inch, kx + ox * stride, th] += v * w[inch, outch, kx];
+                                x[inch, kx + ox, th] += v * w[inch, outch, kx];
                             }
                         }
                     }
@@ -156,7 +152,7 @@ namespace TensorShaderTest.Operators.Trivector {
 
         [TestMethod]
         public void ReferenceTest() {
-            int inchannels = 9, outchannels = 12, kwidth = 3, stride = 2, inwidth = 7, batch = 3;
+            int inchannels = 9, outchannels = 12, kwidth = 3, inwidth = 7, batch = 3;
             int outwidth = inwidth - kwidth + 1;
 
             float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -171,7 +167,7 @@ namespace TensorShaderTest.Operators.Trivector {
             TrivectorMap1D y = new TrivectorMap1D(outchannels / 3, outwidth, batch, ycval);
             Quaternion.QuaternionFilter1D w = new Quaternion.QuaternionFilter1D(inchannels / 3, outchannels / 3, kwidth, wcval);
 
-            TrivectorMap1D x = Reference(y, w, inwidth, kwidth, stride);
+            TrivectorMap1D x = Reference(y, w, inwidth, kwidth);
 
             float[] x_expect = {
                 1.443468000e-03f,  9.190920000e-04f,  1.172196000e-03f,  1.347564000e-03f,  8.553480000e-04f,  1.092708000e-03f,
@@ -210,7 +206,7 @@ namespace TensorShaderTest.Operators.Trivector {
 
             float[] x_actual = x.ToArray();
 
-            AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{kwidth},{stride},{inwidth},{batch}");
+            AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{kwidth},{inwidth},{batch}");
         }
     }
 }

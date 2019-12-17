@@ -34,6 +34,7 @@ namespace TensorShader.Functions.TrinaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public TrinaryArithmetric(Operators.TrinaryArithmetric.TrinaryArithmetric trinary_operator)
             : base(inputs: 3, outputs: 1, allow_resubstitution: true) {
+
             this.trinary_operator = trinary_operator;
         }
 

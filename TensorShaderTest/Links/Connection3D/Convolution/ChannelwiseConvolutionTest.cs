@@ -8,7 +8,7 @@ namespace TensorShaderTest.Links.Connection3D {
     public class ChannelwiseConvolutionTest {
         [TestMethod]
         public void ReferenceTest() {
-            int channels = 2, kwidth = 3, kheight = 5, kdepth = 7, stride = 2, inwidth = 13, inheight = 12, indepth = 11;
+            int channels = 2, kwidth = 3, kheight = 5, kdepth = 7, inwidth = 13, inheight = 12, indepth = 11;
             int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1, batch = 2;
 
             float[] xval = (new float[inwidth * inheight * indepth * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -23,7 +23,7 @@ namespace TensorShaderTest.Links.Connection3D {
             ParameterField w = wtensor;
             VariableField y_actual = ytensor;
 
-            Field y_expect = ChannelwiseConvolution3D(x, w, stride);
+            Field y_expect = ChannelwiseConvolution3D(x, w);
             Field err = Abs(y_expect - y_actual);
 
             (Flow flow, Parameters Parameters) = Flow.Optimize(err);

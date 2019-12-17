@@ -23,6 +23,7 @@ namespace TensorShader.Links.UnaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public Elu(Field infield, Field outfield, float alpha)
             : base(infield, outfield) {
+
             this.Alpha = alpha;
         }
 

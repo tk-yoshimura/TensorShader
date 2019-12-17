@@ -48,6 +48,7 @@ namespace TensorShader.Functions.ArrayManipulation {
         /// <summary>コンストラクタ</summary>
         public Broadcast(Shape inshape, Shape targetshape)
             : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             if (inshape.Ndim > targetshape.Ndim) {
                 throw new ArgumentException(ExceptionMessage.Broadcast(inshape, targetshape));
             }

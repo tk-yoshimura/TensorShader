@@ -16,6 +16,7 @@ namespace TensorShader.Functions.Connection1D {
         /// <summary>コンストラクタ</summary>
         public Padding(int pad_left, int pad_right)
             : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.PadLeft = pad_left;
             this.PadRight = pad_right;
         }

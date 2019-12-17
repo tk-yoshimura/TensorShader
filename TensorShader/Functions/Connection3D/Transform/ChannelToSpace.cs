@@ -37,6 +37,7 @@ namespace TensorShader.Functions.Connection3D {
         /// <summary>コンストラクタ</summary>
         public ChannelToSpace(int scale)
             : base(inputs: 1, outputs: 1, allow_resubstitution: false) {
+
             this.Scale = scale;
         }
 

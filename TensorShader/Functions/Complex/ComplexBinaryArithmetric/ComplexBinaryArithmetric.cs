@@ -34,6 +34,7 @@ namespace TensorShader.Functions.ComplexArithmetric {
         /// <summary>コンストラクタ</summary>
         public ComplexBinaryArithmetric(Operators.ComplexBinaryArithmetric.ComplexBinaryArithmetric arithmetric)
             : base(inputs: 2, outputs: 1, allow_resubstitution: true) {
+
             this.arithmetric = arithmetric;
         }
 

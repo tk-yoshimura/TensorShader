@@ -30,7 +30,6 @@ namespace TensorShaderTest.Operators.Connection3D {
                 int batch = testcase[0], inchannels = testcase[1], outchannels = testcase[2];
                 int kwidth = testcase[3], kheight = testcase[4], kdepth = testcase[5];
                 int inwidth = testcase[6], inheight = testcase[7], indepth = testcase[8];
-                int stride = 1;
 
                 int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;
 
@@ -40,14 +39,14 @@ namespace TensorShaderTest.Operators.Connection3D {
                 Map3D x = new Map3D(inchannels, inwidth, inheight, indepth, batch, xval);
                 Map3D gy = new Map3D(outchannels, outwidth, outheight, outdepth, batch, gyval);
 
-                Filter3D gw = Reference(x, gy, kwidth, kheight, kdepth, stride);
+                Filter3D gw = Reference(x, gy, kwidth, kheight, kdepth);
 
                 OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
                 OverflowCheckedTensor gy_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), gyval);
 
                 OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels, outchannels, kwidth, kheight, kdepth));
 
-                KernelProduct ope = new KernelProduct(inwidth, inheight, indepth, inchannels, outchannels, kwidth, kheight, kdepth, stride, batch);
+                KernelProduct ope = new KernelProduct(inwidth, inheight, indepth, inchannels, outchannels, kwidth, kheight, kdepth, batch);
 
                 ope.Execute(x_tensor, gy_tensor, gw_tensor);
 
@@ -57,9 +56,9 @@ namespace TensorShaderTest.Operators.Connection3D {
                 CollectionAssert.AreEqual(xval, x_tensor.State);
                 CollectionAssert.AreEqual(gyval, gy_tensor.State);
 
-                AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{stride},{inwidth},{inheight},{indepth},{batch}");
+                AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
 
-                Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{stride},{inwidth},{inheight},{indepth},{batch}");
+                Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
             }
 
             Console.WriteLine($"maxerr:{max_err}");
@@ -67,15 +66,15 @@ namespace TensorShaderTest.Operators.Connection3D {
 
         [TestMethod]
         public void SpeedTest() {
-            int inwidth = 64, inheight = 64, indepth = 64, inchannels = 32, outchannels = 32, ksize = 3, stride = 1;
-            int outwidth = (inwidth - ksize) / stride + 1, outheight = (inheight - ksize) / stride + 1, outdepth = (indepth - ksize) / stride + 1;
+            int inwidth = 64, inheight = 64, indepth = 64, inchannels = 32, outchannels = 32, ksize = 3;
+            int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1, outdepth = indepth - ksize + 1;
 
             OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, inwidth, inheight, indepth));
             OverflowCheckedTensor gy_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth));
 
             OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels, outchannels, ksize, ksize, ksize));
 
-            KernelProduct ope = new KernelProduct(inwidth, inheight, indepth, inchannels, outchannels, ksize, ksize, ksize, stride);
+            KernelProduct ope = new KernelProduct(inwidth, inheight, indepth, inchannels, outchannels, ksize, ksize, ksize);
 
             Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/kernelproduct_3d.nvvp");
             Cuda.Profiler.Start();
@@ -85,11 +84,11 @@ namespace TensorShaderTest.Operators.Connection3D {
             Cuda.Profiler.Stop();
         }
 
-        public static Filter3D Reference(Map3D x, Map3D gy, int kwidth, int kheight, int kdepth, int stride) {
+        public static Filter3D Reference(Map3D x, Map3D gy, int kwidth, int kheight, int kdepth) {
             int inchannels = x.Channels, outchannels = gy.Channels, batch = x.Batch;
             int inw = x.Width, inh = x.Height, ind = x.Depth, outw = gy.Width, outh = gy.Height, outd = gy.Depth;
 
-            if (outw != inw - kwidth + 1 || outh != inh - kheight + 1 || outd != (ind - kdepth) / stride + 1) {
+            if (outw != inw - kwidth + 1 || outh != inh - kheight + 1 || outd != ind - kdepth + 1) {
                 throw new ArgumentException("mismatch shape");
             }
 
@@ -103,9 +102,9 @@ namespace TensorShaderTest.Operators.Connection3D {
                                 for (inch = 0; inch < inchannels; inch++) {
                                     double sum = 0;
 
-                                    for (int ix, iy, iz = kz, ox, oy, oz = 0; oz < outd; iz += stride, oz++) {
-                                        for (iy = ky, oy = 0; oy < outh; iy += stride, oy++) {
-                                            for (ix = kx, ox = 0; ox < outw; ix += stride, ox++) {
+                                    for (int ix, iy, iz = kz, ox, oy, oz = 0; oz < outd; iz++, oz++) {
+                                        for (iy = ky, oy = 0; oy < outh; iy++, oy++) {
+                                            for (ix = kx, ox = 0; ox < outw; ix++, ox++) {
                                                 sum += x[inch, ix, iy, iz, th] * gy[outch, ox, oy, oz, th];
                                             }
                                         }
@@ -122,11 +121,11 @@ namespace TensorShaderTest.Operators.Connection3D {
             return w;
         }
 
-        public static Filter3D OptimizedReference(Map3D x, Map3D gy, int kwidth, int kheight, int kdepth, int stride) {
+        public static Filter3D OptimizedReference(Map3D x, Map3D gy, int kwidth, int kheight, int kdepth) {
             int inchannels = x.Channels, outchannels = gy.Channels, batch = x.Batch;
             int inw = x.Width, inh = x.Height, ind = x.Depth, outw = gy.Width, outh = gy.Height, outd = gy.Depth;
 
-            if (outw != inw - kwidth + 1 || outh != inh - kheight + 1 || outd != (ind - kdepth) / stride + 1) {
+            if (outw != inw - kwidth + 1 || outh != inh - kheight + 1 || outd != ind - kdepth + 1) {
                 throw new ArgumentException("mismatch shape");
             }
 
@@ -153,14 +152,14 @@ namespace TensorShaderTest.Operators.Connection3D {
                                             for (ox = 0; ox < outw; ox++) {
                                                 sum += x[inmap_idx] * gy[outmap_idx];
 
-                                                inmap_idx += inchannels * stride;
+                                                inmap_idx += inchannels;
                                                 outmap_idx += outchannels;
                                             }
 
-                                            inmap_car += inchannels * inw * stride;
+                                            inmap_car += inchannels * inw;
                                         }
 
-                                        inmap_org += inchannels * inw * inh * stride;
+                                        inmap_org += inchannels * inw * inh;
                                     }
 
                                     w[filter_idx] += sum;
@@ -176,7 +175,7 @@ namespace TensorShaderTest.Operators.Connection3D {
 
         [TestMethod]
         public void ReferenceTest() {
-            int inchannels = 2, outchannels = 3, kwidth = 3, kheight = 5, kdepth = 7, stride = 2, inwidth = 13, inheight = 12, indepth = 11;
+            int inchannels = 2, outchannels = 3, kwidth = 3, kheight = 5, kdepth = 7, inwidth = 13, inheight = 12, indepth = 11;
             int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;
 
             float[] xval = (new float[inwidth * inheight * indepth * inchannels]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -185,7 +184,7 @@ namespace TensorShaderTest.Operators.Connection3D {
             Map3D x = new Map3D(inchannels, inwidth, inheight, indepth, 1, xval);
             Map3D gy = new Map3D(outchannels, outwidth, outheight, outdepth, 1, gyval);
 
-            Filter3D gw = Reference(x, gy, kwidth, kheight, kdepth, stride);
+            Filter3D gw = Reference(x, gy, kwidth, kheight, kdepth);
 
             float[] gw_expect = {
                 3.318840504e+00f,  3.326652765e+00f,  3.267576694e+00f,  3.275316000e+00f,  3.216312170e+00f,  3.223979712e+00f,
@@ -297,7 +296,7 @@ namespace TensorShaderTest.Operators.Connection3D {
 
             float[] gw_actual = gw.ToArray();
 
-            AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{stride},{inwidth},{inheight},{indepth}");
+            AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth}");
         }
 
         [TestMethod]
@@ -308,7 +307,7 @@ namespace TensorShaderTest.Operators.Connection3D {
                 foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20 }) {
                     foreach (int outchannels in new int[] { 7, 13 }) {
                         foreach ((int kwidth, int kheight, int kdepth) in new (int, int, int)[] { (1, 1, 1), (3, 3, 3), (5, 5, 5), (1, 3, 5), (3, 5, 1), (5, 1, 3) }) {
-                            foreach ((int stride, int inwidth, int inheight, int indepth) in new (int, int, int, int)[] { (1, 13, 13, 13), (2, 17, 17, 17), (3, 19, 19, 19), (1, 17, 19, 13), (2, 13, 17, 19), (3, 19, 13, 17) }) {
+                            foreach ((int inwidth, int inheight, int indepth) in new (int, int, int)[] { (13, 13, 13), (17, 17, 17), (19, 19, 19), (17, 19, 13), (13, 17, 19), (19, 13, 17) }) {
                                 int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;
 
                                 float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -317,15 +316,15 @@ namespace TensorShaderTest.Operators.Connection3D {
                                 Map3D x = new Map3D(inchannels, inwidth, inheight, indepth, batch, xval);
                                 Map3D gy = new Map3D(outchannels, outwidth, outheight, outdepth, batch, gyval);
 
-                                Filter3D gw = Reference(x, gy, kwidth, kheight, kdepth, stride);
-                                Filter3D gw_optimized = OptimizedReference(x, gy, kwidth, kheight, kdepth, stride);
+                                Filter3D gw = Reference(x, gy, kwidth, kheight, kdepth);
+                                Filter3D gw_optimized = OptimizedReference(x, gy, kwidth, kheight, kdepth);
 
                                 float[] gw_expect = gw.ToArray();
                                 float[] gw_actual = gw_optimized.ToArray();
 
-                                AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{stride},{inwidth},{inheight},{indepth},{batch}");
+                                AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
 
-                                Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{stride},{inwidth},{inheight},{indepth},{batch}");
+                                Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
                             }
                         }
                     }

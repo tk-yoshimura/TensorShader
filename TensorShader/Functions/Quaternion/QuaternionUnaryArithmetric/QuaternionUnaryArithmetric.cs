@@ -34,6 +34,7 @@ namespace TensorShader.Functions.QuaternionArithmetric {
         /// <summary>コンストラクタ</summary>
         public QuaternionUnaryArithmetric(Operators.QuaternionUnaryArithmetric.QuaternionUnaryArithmetric arithmetric)
             : base(inputs: 1, outputs: 1, allow_resubstitution: true) {
+
             this.arithmetric = arithmetric;
         }
 

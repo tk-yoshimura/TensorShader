@@ -34,6 +34,7 @@ namespace TensorShader.Functions.BinaryRightVectorArithmetric {
         /// <summary>コンストラクタ</summary>
         public BinaryRightVectorArithmetric(Operators.BinaryArithmetric.BinaryRightVectorArithmetric binary_operator)
             : base(inputs: 2, outputs: 1, allow_resubstitution: false) {
+
             this.binary_operator = binary_operator;
         }
 

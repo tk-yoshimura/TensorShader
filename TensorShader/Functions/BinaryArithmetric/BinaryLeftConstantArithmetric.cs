@@ -32,6 +32,7 @@ namespace TensorShader.Functions.BinaryLeftConstantArithmetric {
         /// <summary>コンストラクタ</summary>
         public BinaryLeftConstantArithmetric(Operators.BinaryArithmetric.BinaryLeftConstantArithmetric binary_operator)
             : base(inputs: 1, outputs: 1, allow_resubstitution: true) {
+
             this.binary_operator = binary_operator;
         }
 
