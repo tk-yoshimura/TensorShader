@@ -104,102 +104,6 @@ namespace TensorShaderTest.Operators.Connection1D {
             return x;
         }
 
-        public static Map1D Reference2(Map1D y, Filter1D w, int inw, int kwidth) {
-            int inchannels = w.InChannels, outchannels = w.OutChannels, batch = y.Batch;
-            int outw = inw - kwidth + 1;
-
-            if (y.Width != outw) {
-                throw new ArgumentException("mismatch shape");
-            }
-
-            Map1D x = new Map1D(inchannels, inw, batch);
-
-            for (int kx = 0; kx < kwidth; kx++) {
-                for (int th = 0; th < batch; th++) {
-                    for (int ox = 0; ox < outw; ox++) {
-                        int inch;
-                        double[] temp = new double[4];
-
-                        for (inch = 0; inch < inchannels - inchannels % 4; inch += 4) {
-                            for (int i = 0; i < 4; i++) {
-                                temp[i] = x[inch + i, kx + ox, th];
-                            }
-
-                            for (int outch = 0; outch < outchannels; outch++) {
-                                double yv = y[outch, ox, th];
-
-                                for (int i = 0; i < 4; i++) {
-                                    temp[i] += yv * w[inch + i, outch, kx];
-                                }
-                            }
-
-                            for (int i = 0; i < 4; i++) {
-                                x[inch + i, kx + ox, th] = temp[i];
-                            }
-                        }
-
-                        if (inchannels % 4 != 0) {
-                            int sets = inchannels % 4;
-
-                            for (int i = 0; i < sets; i++) {
-                                temp[i] = x[inch + i, kx + ox, th];
-                            }
-
-                            for (int outch = 0; outch < outchannels; outch++) {
-                                double yv = y[outch, ox, th];
-
-                                for (int i = 0; i < sets; i++) {
-                                    temp[i] += yv * w[inch + i, outch, kx];
-                                }
-                            }
-
-                            for (int i = 0; i < sets; i++) {
-                                x[inch + i, kx + ox, th] = temp[i];
-                            }
-                        }
-                    }
-                }
-            }
-
-            return x;
-        }
-
-        public static Map1D OptimizedReference(Map1D y, Filter1D w, int inw, int kwidth) {
-            int inchannels = w.InChannels, outchannels = w.OutChannels, batch = y.Batch;
-            int outw = inw - kwidth + 1;
-
-            if (y.Width != outw) {
-                throw new ArgumentException("mismatch shape");
-            }
-
-            Map1D x = new Map1D(inchannels, inw, batch);
-
-            for (int th = 0; th < batch; th++) {
-                for (int ox = 0; ox < inw; ox++) {
-                     for (int inch = 0; inch < inchannels; inch++) {
-                    
-                        double v = 0;
-
-                        for (int kx = 0; kx < kwidth; kx++) {
-                            int ix = ox + kx - (kwidth - 1);
-
-                            if(ix < 0 || ix >= outw) { 
-                                continue;
-                            }
-
-                            for (int outch = 0; outch < outchannels; outch++) {
-                                v += y[outch, ix, th] * w[inch, outch, (kwidth - 1) - kx];
-                            }
-
-                        }
-
-                        x[inch, ox, th] = v;
-                    }
-                }
-            }
-
-            return x;
-        }
 
         [TestMethod]
         public void ReferenceTest() {
@@ -215,83 +119,37 @@ namespace TensorShaderTest.Operators.Connection1D {
             Map1D x = Reference(y, w, inwidth, kwidth);
 
             float[] x_expect = {
-                9.955000e-03f, 9.900000e-03f, 9.845000e-03f, 9.790000e-03f, 9.735000e-03f,
-                9.680000e-03f, 9.625000e-03f, 5.720000e-03f, 5.665000e-03f, 5.610000e-03f,
-                5.555000e-03f, 5.500000e-03f, 5.445000e-03f, 5.390000e-03f, 3.503500e-02f,
-                3.480400e-02f, 3.457300e-02f, 3.434200e-02f, 3.411100e-02f, 3.388000e-02f,
-                3.364900e-02f, 1.999800e-02f, 1.982200e-02f, 1.964600e-02f, 1.947000e-02f,
-                1.929400e-02f, 1.911800e-02f, 1.894200e-02f, 6.359100e-02f, 6.311800e-02f,
-                6.264500e-02f, 6.217200e-02f, 6.169900e-02f, 6.122600e-02f, 6.075300e-02f,
-                3.427600e-02f, 3.397900e-02f, 3.368200e-02f, 3.338500e-02f, 3.308800e-02f,
-                3.279100e-02f, 3.249400e-02f, 9.214700e-02f, 9.143200e-02f, 9.071700e-02f,
-                9.000200e-02f, 8.928700e-02f, 8.857200e-02f, 8.785700e-02f, 4.855400e-02f,
-                4.813600e-02f, 4.771800e-02f, 4.730000e-02f, 4.688200e-02f, 4.646400e-02f,
-                4.604600e-02f, 1.207030e-01f, 1.197460e-01f, 1.187890e-01f, 1.178320e-01f,
-                1.168750e-01f, 1.159180e-01f, 1.149610e-01f, 6.283200e-02f, 6.229300e-02f,
-                6.175400e-02f, 6.121500e-02f, 6.067600e-02f, 6.013700e-02f, 5.959800e-02f,
-                1.492590e-01f, 1.480600e-01f, 1.468610e-01f, 1.456620e-01f, 1.444630e-01f,
-                1.432640e-01f, 1.420650e-01f, 7.711000e-02f, 7.645000e-02f, 7.579000e-02f,
-                7.513000e-02f, 7.447000e-02f, 7.381000e-02f, 7.315000e-02f, 2.629000e-02f,
-                2.563000e-02f, 2.497000e-02f, 2.431000e-02f, 2.365000e-02f, 2.299000e-02f,
-                2.233000e-02f, 1.515250e-01f, 1.507440e-01f, 1.499630e-01f, 1.491820e-01f,
-                1.484010e-01f, 1.476200e-01f, 1.468390e-01f, 9.138800e-02f, 9.060700e-02f,
-                8.982600e-02f, 8.904500e-02f, 8.826400e-02f, 8.748300e-02f, 8.670200e-02f,
-                2.063710e-01f, 2.046880e-01f, 2.030050e-01f, 2.013220e-01f, 1.996390e-01f,
-                1.979560e-01f, 1.962730e-01f, 1.056660e-01f, 1.047640e-01f, 1.038620e-01f,
-                1.029600e-01f, 1.020580e-01f, 1.011560e-01f, 1.002540e-01f, 2.349270e-01f,
-                2.330020e-01f, 2.310770e-01f, 2.291520e-01f, 2.272270e-01f, 2.253020e-01f,
-                2.233770e-01f, 1.199440e-01f, 1.189210e-01f, 1.178980e-01f, 1.168750e-01f,
-                1.158520e-01f, 1.148290e-01f, 1.138060e-01f, 2.634830e-01f, 2.613160e-01f,
-                2.591490e-01f, 2.569820e-01f, 2.548150e-01f, 2.526480e-01f, 2.504810e-01f,
-                1.342220e-01f, 1.330780e-01f, 1.319340e-01f, 1.307900e-01f, 1.296460e-01f,
-                1.285020e-01f, 1.273580e-01f, 2.920390e-01f, 2.896300e-01f, 2.872210e-01f,
-                2.848120e-01f, 2.824030e-01f, 2.799940e-01f, 2.775850e-01f, 1.485000e-01f,
-                1.472350e-01f, 1.459700e-01f, 1.447050e-01f, 1.434400e-01f, 1.421750e-01f,
-                1.409100e-01f, 3.205950e-01f, 3.179440e-01f, 3.152930e-01f, 3.126420e-01f,
-                3.099910e-01f, 3.073400e-01f, 3.046890e-01f, 1.627780e-01f, 1.613920e-01f,
-                1.600060e-01f, 1.586200e-01f, 1.572340e-01f, 1.558480e-01f, 1.544620e-01f,
-                5.605600e-02f, 5.467000e-02f, 5.328400e-02f, 5.189800e-02f, 5.051200e-02f,
-                4.912600e-02f, 4.774000e-02f,
+                9.955000000e-03f, 9.900000000e-03f, 9.845000000e-03f, 9.790000000e-03f, 9.735000000e-03f, 9.680000000e-03f, 9.625000000e-03f,
+                3.927000000e-02f, 3.903900000e-02f, 3.880800000e-02f, 3.857700000e-02f, 3.834600000e-02f, 3.811500000e-02f, 3.788400000e-02f,
+                7.862800000e-02f, 7.810000000e-02f, 7.757200000e-02f, 7.704400000e-02f, 7.651600000e-02f, 7.598800000e-02f, 7.546000000e-02f,
+                1.214620000e-01f, 1.205710000e-01f, 1.196800000e-01f, 1.187890000e-01f, 1.178980000e-01f, 1.170070000e-01f, 1.161160000e-01f,
+                1.642960000e-01f, 1.630420000e-01f, 1.617880000e-01f, 1.605340000e-01f, 1.592800000e-01f, 1.580260000e-01f, 1.567720000e-01f,
+                2.071300000e-01f, 2.055130000e-01f, 2.038960000e-01f, 2.022790000e-01f, 2.006620000e-01f, 1.990450000e-01f, 1.974280000e-01f,
+                2.499640000e-01f, 2.479840000e-01f, 2.460040000e-01f, 2.440240000e-01f, 2.420440000e-01f, 2.400640000e-01f, 2.380840000e-01f,
+                2.927980000e-01f, 2.904550000e-01f, 2.881120000e-01f, 2.857690000e-01f, 2.834260000e-01f, 2.810830000e-01f, 2.787400000e-01f,
+                3.356320000e-01f, 3.329260000e-01f, 3.302200000e-01f, 3.275140000e-01f, 3.248080000e-01f, 3.221020000e-01f, 3.193960000e-01f,
+                3.784660000e-01f, 3.753970000e-01f, 3.723280000e-01f, 3.692590000e-01f, 3.661900000e-01f, 3.631210000e-01f, 3.600520000e-01f,
+                4.213000000e-01f, 4.178680000e-01f, 4.144360000e-01f, 4.110040000e-01f, 4.075720000e-01f, 4.041400000e-01f, 4.007080000e-01f,
+                1.946340000e-01f, 1.922250000e-01f, 1.898160000e-01f, 1.874070000e-01f, 1.849980000e-01f, 1.825890000e-01f, 1.801800000e-01f,
+                5.109500000e-02f, 4.983000000e-02f, 4.856500000e-02f, 4.730000000e-02f, 4.603500000e-02f, 4.477000000e-02f, 4.350500000e-02f,
+                2.695000000e-01f, 2.681140000e-01f, 2.667280000e-01f, 2.653420000e-01f, 2.639560000e-01f, 2.625700000e-01f, 2.611840000e-01f,
+                4.558730000e-01f, 4.529800000e-01f, 4.500870000e-01f, 4.471940000e-01f, 4.443010000e-01f, 4.414080000e-01f, 4.385150000e-01f,
+                5.498020000e-01f, 5.452810000e-01f, 5.407600000e-01f, 5.362390000e-01f, 5.317180000e-01f, 5.271970000e-01f, 5.226760000e-01f,
+                5.926360000e-01f, 5.877520000e-01f, 5.828680000e-01f, 5.779840000e-01f, 5.731000000e-01f, 5.682160000e-01f, 5.633320000e-01f,
+                6.354700000e-01f, 6.302230000e-01f, 6.249760000e-01f, 6.197290000e-01f, 6.144820000e-01f, 6.092350000e-01f, 6.039880000e-01f,
+                6.783040000e-01f, 6.726940000e-01f, 6.670840000e-01f, 6.614740000e-01f, 6.558640000e-01f, 6.502540000e-01f, 6.446440000e-01f,
+                7.211380000e-01f, 7.151650000e-01f, 7.091920000e-01f, 7.032190000e-01f, 6.972460000e-01f, 6.912730000e-01f, 6.853000000e-01f,
+                7.639720000e-01f, 7.576360000e-01f, 7.513000000e-01f, 7.449640000e-01f, 7.386280000e-01f, 7.322920000e-01f, 7.259560000e-01f,
+                8.068060000e-01f, 8.001070000e-01f, 7.934080000e-01f, 7.867090000e-01f, 7.800100000e-01f, 7.733110000e-01f, 7.666120000e-01f,
+                8.496400000e-01f, 8.425780000e-01f, 8.355160000e-01f, 8.284540000e-01f, 8.213920000e-01f, 8.143300000e-01f, 8.072680000e-01f,
+                8.924740000e-01f, 8.850490000e-01f, 8.776240000e-01f, 8.701990000e-01f, 8.627740000e-01f, 8.553490000e-01f, 8.479240000e-01f,
+                4.062630000e-01f, 4.011920000e-01f, 3.961210000e-01f, 3.910500000e-01f, 3.859790000e-01f, 3.809080000e-01f, 3.758370000e-01f,
+                1.056660000e-01f, 1.030700000e-01f, 1.004740000e-01f, 9.787800000e-02f, 9.528200000e-02f, 9.268600000e-02f, 9.009000000e-02f,
             };
 
             float[] x_actual = x.ToArray();
 
             AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{kwidth},{inwidth},{batch}");
-        }
-
-        [TestMethod]
-        public void OptimizeTest() {
-            float max_err = 0;
-
-            foreach (int batch in new int[] { 1, 2 }) {
-                foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20 }) {
-                    foreach (int outchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20 }) {
-                        foreach (int kwidth in new int[] { 1, 3, 5 }) {
-                            foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                                int outwidth = inwidth - kwidth + 1;
-
-                                float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-4f).ToArray();
-                                float[] wval = (new float[kwidth * inchannels * outchannels]).Select((_, idx) => idx * 1e-4f).Reverse().ToArray();
-
-                                Map1D y = new Map1D(outchannels, outwidth, batch, yval);
-                                Filter1D w = new Filter1D(inchannels, outchannels, kwidth, wval);
-
-                                Map1D x = Reference(y, w, inwidth, kwidth);
-                                Map1D x_optimized = OptimizedReference(y, w, inwidth, kwidth);
-
-                                float[] x_expect = x.ToArray();
-                                float[] x_actual = x_optimized.ToArray();
-
-                                AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{inwidth},{batch}");
-
-                                Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{inwidth},{batch}");
-                            }
-                        }
-                    }
-                }
-            }
-
-            Console.WriteLine($"maxerr:{max_err}");
         }
     }
 }
