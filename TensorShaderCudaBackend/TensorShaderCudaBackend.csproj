@@ -110,6 +110,9 @@
     <Compile Include="Shaders\ArrayManipulation\Clear.cs" />
     <Compile Include="Shaders\Channelwise\ChannelwiseBinaryArithmetric.cs" />
     <Compile Include="Shaders\Channelwise\Channelwise.cs" />
+    <Compile Include="Shaders\Complex\Elementwise\UnaryArithmetric.cs" />
+    <Compile Include="Shaders\Complex\Elementwise\BinaryArithmetric.cs" />
+    <Compile Include="Shaders\Complex\Elementwise\Elementwise.cs" />
     <Compile Include="Shaders\Convolution\Deconvolution3D.cs" />
     <Compile Include="Shaders\Convolution\Deconvolution2D.cs" />
     <Compile Include="Shaders\Convolution\Deconvolution1D.cs" />

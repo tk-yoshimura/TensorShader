@@ -580,7 +580,7 @@ namespace TensorShaderCudaBackend {
 
         /// <summary>Relu勾配</summary>
         public static void ReluGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {
-            Shader shader = BinaryArithmetric("relugrad_ew", "#y = #x1 * (#x2 >= 0.0 ? 1.0 : 0.0);");
+            Shader shader = BinaryArithmetric("relugrad_ew", "#y = #x2 >= 0.0 ? #x1 : 0.0;");
             shader.Execute(Shader.DefaultStream, src1, src2, dst, length);
         }
 
@@ -592,7 +592,7 @@ namespace TensorShaderCudaBackend {
 
         /// <summary>LeakyRelu勾配</summary>
         public static void LeakyReluGrad(uint length, float slope, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {
-            Shader shader = TrinaryUniConstantArithmetric("leakyrelugrad_ew", "#y = #x1 * (#x2 >= 0.0 ? 1.0 : c);");
+            Shader shader = TrinaryUniConstantArithmetric("leakyrelugrad_ew", "#y = #x2 >= 0.0 ? #x1 : (c * #x1);");
             shader.Execute(Shader.DefaultStream, slope, src1, src2, dst, length);
         }
 
@@ -604,7 +604,7 @@ namespace TensorShaderCudaBackend {
 
         /// <summary>Elu勾配</summary>
         public static void EluGrad(uint length, float slope, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {
-            Shader shader = TrinaryUniConstantArithmetric("elugrad_ew", "#y = #x1 * (#x2 >= 0.0 ? 1.0 : (c * expf(#x2)));");
+            Shader shader = TrinaryUniConstantArithmetric("elugrad_ew", "#y = #x2 >= 0.0 ? #x1 : (c * #x1 * expf(#x2));");
             shader.Execute(Shader.DefaultStream, slope, src1, src2, dst, length);
         }
 
