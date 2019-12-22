@@ -48,7 +48,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             string code = $@"
 
-            __global__ void convolution_3d(const float* __restrict__ inmap, float *outmap, float *filter, 
+            __global__ void convolution_3d(float *inmap, float *outmap, float *filter, 
                                            unsigned int oy_offset, unsigned int oz,
                                            unsigned int inwidth, unsigned int outwidth, 
                                            unsigned int inheight, unsigned int outheight) {{

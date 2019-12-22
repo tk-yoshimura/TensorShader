@@ -32,7 +32,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             string code = $@"
 
-            __global__ void dense(const float* __restrict__ inmap, float *outmap, const float* __restrict__ filter) {{
+            __global__ void dense(float *inmap, float *outmap, float *filter) {{
 
                 unsigned int outch = {Defines.IndexX}, th = {Defines.BlockIndexY};
                 unsigned int tid = {Defines.ThreadIdX}, threads = {Defines.ThreadsX};

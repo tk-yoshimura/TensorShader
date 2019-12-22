@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace TensorShaderCudaBackend.Shaders.Complex.Elementwise {
+namespace TensorShaderCudaBackend.Shaders.Complex.Arithmetric {
 
     /// <summary>要素独立複素演算</summary>
     public abstract class Elementwise : Shader {
@@ -55,5 +55,13 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Elementwise {
                 }
             }
         }
+
+        /// <summary>インライン展開関数</summary>
+        protected static string InlineFunctions =>
+            @"
+            static __inline__ __device__ float2 ctor_float2(float x, float y){
+                float2 t; t.x = x; t.y = y; return t;
+            }
+            ";
     }
 }

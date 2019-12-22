@@ -1,4 +1,4 @@
-﻿namespace TensorShaderCudaBackend.Shaders.Complex.Elementwise {
+﻿namespace TensorShaderCudaBackend.Shaders.Complex.Arithmetric {
 
     /// <summary>複素1項演算</summary>
     public sealed class UnaryArithmetric : Elementwise {
@@ -10,6 +10,7 @@
         public UnaryArithmetric(string name, string func)
             : base(arrays: 2, name) {
             string code = $@"
+            {InlineFunctions}
             __global__ void {name}(float2 *inmap, float2 *outmap, unsigned int n) {{
                 unsigned int i = {Defines.IndexX};
                 if (i >= n) {{

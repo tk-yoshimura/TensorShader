@@ -51,33 +51,95 @@ namespace TensorShaderCudaBackend {
             throw new NotImplementedException();
         }
 
-
+        /// <summary>実数から3次元ベクトルへキャスト</summary>
         public static void Cast(uint length, CudaArray<float> src_x, CudaArray<float> src_y, CudaArray<float> src_z, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            string key = "trivector_cast";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.ArrayManipulation.Gather(arrays: 3));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src_x, src_y, src_z, dst, length);
         }
 
+        /// <summary>X成分</summary>
         public static void X(uint length, CudaArray<float> src, CudaArray<float> dst_x) {
-            throw new NotImplementedException();
+            string key = "trivector_x";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.ArrayManipulation.Scatter(arrays: 3, index: 0));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src, dst_x, length);
         }
 
+        /// <summary>Y成分</summary>
         public static void Y(uint length, CudaArray<float> src, CudaArray<float> dst_y) {
-            throw new NotImplementedException();
+            string key = "trivector_y";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.ArrayManipulation.Scatter(arrays: 3, index: 1));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src, dst_y, length);
         }
 
+        /// <summary>Z成分</summary>
         public static void Z(uint length, CudaArray<float> src, CudaArray<float> dst_z) {
-            throw new NotImplementedException();
+            string key = "trivector_z";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.ArrayManipulation.Scatter(arrays: 3, index: 2));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src, dst_z, length);
         }
 
+        /// <summary>純X成分</summary>
         public static void PureX(uint length, CudaArray<float> src_x, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            string key = "trivector_purex";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.ArrayManipulation.StrideCopy(stride: 3, index: 0));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src_x, dst, length);
         }
 
+        /// <summary>純Y成分</summary>
         public static void PureY(uint length, CudaArray<float> src_y, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            string key = "trivector_purey";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.ArrayManipulation.StrideCopy(stride: 3, index: 1));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src_y, dst, length);
         }
 
+        /// <summary>純Z成分</summary>
         public static void PureZ(uint length, CudaArray<float> src_z, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            string key = "trivector_purez";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.ArrayManipulation.StrideCopy(stride: 3, index: 2));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src_z, dst, length);
         }
 
 

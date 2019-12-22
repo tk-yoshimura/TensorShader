@@ -9,7 +9,7 @@ namespace TensorShaderCudaBackend {
         
         private static Shader UnaryArithmetric(string name, string func) {
             if (!shaders.ContainsKey(name)) {
-                shaders.Add(name, new Shaders.Complex.Elementwise.UnaryArithmetric(name, func));
+                shaders.Add(name, new Shaders.Complex.Arithmetric.UnaryArithmetric(name, func));
             }
 
             return shaders[name];
@@ -17,7 +17,7 @@ namespace TensorShaderCudaBackend {
 
         private static Shader BinaryArithmetric(string name, string func) {
             if (!shaders.ContainsKey(name)) {
-                shaders.Add(name, new Shaders.Complex.Elementwise.BinaryArithmetric(name, func));
+                shaders.Add(name, new Shaders.Complex.Arithmetric.BinaryArithmetric(name, func));
             }
 
             return shaders[name];
@@ -46,7 +46,7 @@ namespace TensorShaderCudaBackend {
         /// <summary>RRelu</summary>
         public static void RRelu(uint length, CudaArray<float> src, CudaArray<float> dst) {
             Shader shader = UnaryArithmetric(
-                "complex_relu_ew", 
+                "complex_rrelu_ew", 
                 "#y.x = fmaxf(0.0, #x.x);" +
                 "#y.y = #x.y;"
             );
@@ -56,76 +56,202 @@ namespace TensorShaderCudaBackend {
         /// <summary>RRelu勾配</summary>
         public static void RReluGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {
             Shader shader = BinaryArithmetric(
-                "complex_relugrad_ew", 
-                "#y.x = #x2.x >= 0 ? #x1.x : 0.0;" +
+                "complex_rrelugrad_ew", 
+                "#y.x = #x2.x >= 0.0 ? #x1.x : 0.0;" +
                 "#y.y = #x1.y;"
             );
             shader.Execute(Shader.DefaultStream, src1, src2, dst, length);
         }
         
+        /// <summary>ZRelu</summary>
         public static void ZRelu(uint length, CudaArray<float> src, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            Shader shader = UnaryArithmetric(
+                "complex_zrelu_ew", 
+                "#y = #x.x >= 0.0 && #x.y >= 0.0 ? #x : ctor_float2(0.0, 0.0);"
+            );
+            shader.Execute(Shader.DefaultStream, src, dst, length);
         }
 
+        /// <summary>ZRelu勾配</summary>
         public static void ZReluGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            Shader shader = BinaryArithmetric(
+                "complex_zrelugrad_ew", 
+                "#y = #x2.x >= 0.0 && #x2.y >= 0.0 ? #x1 : ctor_float2(0.0, 0.0);"
+            );
+            shader.Execute(Shader.DefaultStream, src1, src2, dst, length);
         }
         
+        /// <summary>複素共役</summary>
         public static void Conjugate(uint length, CudaArray<float> src, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            Shader shader = UnaryArithmetric(
+                "complex_conj_ew", 
+                "#y.x = #x.x;" +
+                "#y.y = -#x.y;"
+            );
+            shader.Execute(Shader.DefaultStream, src, dst, length);
         }
         
+        /// <summary>2乗</summary>
         public static void Square(uint length, CudaArray<float> src, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            Shader shader = UnaryArithmetric(
+                "complex_squa_ew", 
+                "#y.x = #x.x * #x.x - #x.y * #x.y;" +
+                "#y.y = 2.0 * #x.x * #x.y;"
+            );
+            shader.Execute(Shader.DefaultStream, src, dst, length);
         }
 
+        /// <summary>2乗勾配</summary>
         public static void SquareGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            Shader shader = BinaryArithmetric(
+                "complex_squagrad_ew", 
+                "#y.x = 2.0 * (#x1.x * #x2.x + #x1.y * #x2.y);" +
+                "#y.y = 2.0 * (#x1.y * #x2.x - #x1.x * #x2.y);"
+            );
+            shader.Execute(Shader.DefaultStream, src1, src2, dst, length);
         }
         
+        /// <summary>複素数減衰</summary>
         public static void Decay(uint length, CudaArray<float> src, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            Shader shader = UnaryArithmetric(
+                "complex_decay_ew", 
+                "float norm = #x.x * #x.x + #x.y * #x.y;" +
+                "float s = norm / (norm + 1.0);" + 
+                "#y.x = #x.x * s;" +
+                "#y.y = #x.y * s;"
+            );
+            shader.Execute(Shader.DefaultStream, src, dst, length);
         }
 
+        /// <summary>複素数減衰勾配</summary>
         public static void DecayGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            Shader shader = BinaryArithmetric(
+                "complex_decaygrad_ew", 
+                "float x12x = #x1.x * #x2.x, x12y = #x1.y * #x2.y;" +
+                "float sx2x = #x2.x * #x2.x, sx2y = #x2.y * #x2.y;" +
+                "float norm = sx2x + sx2y, norm_p1 = norm + 1;" +
+                "float norm_norm_p1 = norm_p1 * norm, inv_squa_norm_p1 = 1.0 / (norm_p1 * norm_p1);" +
+                "#y.x = (#x1.x * (2.0 * sx2x + norm_norm_p1) + 2.0 * #x2.x * x12y) * inv_squa_norm_p1;" + 
+                "#y.y = (#x1.y * (2.0 * sx2y + norm_norm_p1) + 2.0 * #x2.y * x12x) * inv_squa_norm_p1;"
+            );
+            shader.Execute(Shader.DefaultStream, src1, src2, dst, length);
         }
         
+        /// <summary>複素数Squash</summary>
         public static void Squash(uint length, CudaArray<float> src, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            Shader shader = UnaryArithmetric(
+                "complex_squash_ew", 
+                "float norm = #x.x * #x.x + #x.y * #x.y;" +
+                "float s = 1.0 / (sqrtf(norm) + 1.0);" + 
+                "#y.x = #x.x * s;" +
+                "#y.y = #x.y * s;"
+            );
+            shader.Execute(Shader.DefaultStream, src, dst, length);
         }
 
-        public static void SquashGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {
-            throw new NotImplementedException();
+        /// <summary>複素数Squash勾配</summary>
+        public static void SquashGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {  
+            Shader shader = BinaryArithmetric(
+                "complex_squashgrad_ew", 
+                "float x12x = #x1.x * #x2.x, x12y = #x1.y * #x2.y;" +
+                "float sx2x = #x2.x * #x2.x, sx2y = #x2.y * #x2.y;" +
+                "float length = sqrtf(sx2x + sx2y), length_p1 = length + 1;" +
+                "float length_length_p1 = length_p1 * length, inv_length_squa_length_p1 = 1.0 / (length * length_p1 * length_p1);" +
+                "#y.x = -(#x1.x * (sx2x - length_length_p1) + #x2.x * x12y) * inv_length_squa_length_p1;" + 
+                "#y.y = -(#x1.y * (sx2y - length_length_p1) + #x2.y * x12x) * inv_length_squa_length_p1;"
+            );
+            shader.Execute(Shader.DefaultStream, src1, src2, dst, length);
         }
         
+        /// <summary>複素数正規化</summary>
         public static void Normalize(uint length, CudaArray<float> src, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            Shader shader = UnaryArithmetric(
+                "complex_normalize_ew", 
+                "float norm = #x.x * #x.x + #x.y * #x.y;" +
+                "float s = 1.0 / fmaxf(sqrtf(norm), 1e-5);" + 
+                "#y.x = #x.x * s;" +
+                "#y.y = #x.y * s;"
+            );
+            shader.Execute(Shader.DefaultStream, src, dst, length);
         }
 
+        /// <summary>複素数正規化勾配</summary>
         public static void NormalizeGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            Shader shader = BinaryArithmetric(
+                "complex_normalizegrad_ew", 
+                "float x12x = #x1.x * #x2.x, x12y = #x1.y * #x2.y;" +
+                "float sx2x = #x2.x * #x2.x, sx2y = #x2.y * #x2.y;" +
+                "float length = fmaxf(sqrtf(sx2x + sx2y), 1e-5);" +
+                "float inv_cube_length = 1.0 / (length * length * length);" +
+                "#y.x = (#x1.x * sx2y - #x2.x * x12y) * inv_cube_length;" + 
+                "#y.y = (#x1.y * sx2x - #x2.y * x12x) * inv_cube_length;"
+            );
+            shader.Execute(Shader.DefaultStream, src1, src2, dst, length);
         }
 
-
+        /// <summary>実数から複素数へキャスト</summary>
         public static void Cast(uint length, CudaArray<float> src_real, CudaArray<float> src_imag, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            string key = "complex_cast";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.ArrayManipulation.Gather(arrays: 2));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src_real, src_imag, dst, length);
         }
 
+        /// <summary>複素実部</summary>
         public static void Real(uint length, CudaArray<float> src, CudaArray<float> dst_real) {
-            throw new NotImplementedException();
+            string key = "complex_real";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.ArrayManipulation.Scatter(arrays: 2, index: 0));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src, dst_real, length);
         }
 
+        /// <summary>複素虚部</summary>
         public static void Imag(uint length, CudaArray<float> src, CudaArray<float> dst_imag) {
-            throw new NotImplementedException();
+            string key = "complex_imag";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.ArrayManipulation.Scatter(arrays: 2, index: 1));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src, dst_imag, length);
         }
 
+        /// <summary>純実部</summary>
         public static void PureReal(uint length, CudaArray<float> src_real, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            string key = "complex_purereal";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.ArrayManipulation.StrideCopy(stride: 2, index: 0));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src_real, dst, length);
         }
 
+        /// <summary>純虚部</summary>
         public static void PureImag(uint length, CudaArray<float> src_imag, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            string key = "complex_pureimag";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.ArrayManipulation.StrideCopy(stride: 2, index: 1));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src_imag, dst, length);
         }
 
 

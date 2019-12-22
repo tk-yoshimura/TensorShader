@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.ComplexCast;
+using TensorShaderCudaBackend.API;
 
 namespace TensorShaderTest.Operators.Complex {
     [TestClass]
@@ -56,18 +57,12 @@ namespace TensorShaderTest.Operators.Complex {
 
             ComplexCast ope = new ComplexCast(inshape);
 
-            Stopwatch sw = new Stopwatch();
-
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/complex_cast.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(v1, v2, v3);
-            ope.Execute(v1, v2, v3);
-            ope.Execute(v1, v2, v3);
-            ope.Execute(v1, v2, v3);
-
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            
+            Cuda.Profiler.Stop();
         }
     }
 }

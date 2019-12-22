@@ -58,7 +58,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             string code = $@"
 
-            __global__ void kernelproduct_3d(const float* __restrict__ inmap, const float* __restrict__ outmap, float *filter, 
+            __global__ void kernelproduct_3d(float *inmap, float *outmap, float *filter, 
                                              unsigned int oy_offset,
                                              unsigned int oz,
                                              unsigned int xsets,

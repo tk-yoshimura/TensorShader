@@ -37,7 +37,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             string code = $@"
 
-            __global__ void convolution_1d(const float* __restrict__ inmap, float *outmap, float *filter) {{
+            __global__ void convolution_1d(float *inmap, float *outmap, float *filter) {{
 
                 unsigned int outch = {Defines.IndexX}, tid = {Defines.ThreadIdX}, threads = {Defines.ThreadsX};
                 unsigned int ox = {Defines.BlockIndexY};

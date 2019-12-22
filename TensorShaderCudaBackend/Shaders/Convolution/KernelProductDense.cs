@@ -32,7 +32,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             this.BlockSize = Kernel.MinimizeGridsBlockSize((InChannels, OutChannels));
 
             string code = $@"
-            __global__ void kernelproduct_dense(const float* __restrict__ inmap, const float* __restrict__ outmap, float *filter) {{
+            __global__ void kernelproduct_dense(float *inmap, float *outmap, float *filter) {{
 
                 unsigned int inch = {Defines.IndexX}, outch = {Defines.IndexY}, th = {Defines.BlockIndexZ};
                 unsigned int tidx = {Defines.ThreadIdX}, tidy = {Defines.ThreadIdY};

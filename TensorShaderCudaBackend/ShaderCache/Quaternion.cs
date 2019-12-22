@@ -65,41 +65,121 @@ namespace TensorShaderCudaBackend {
             throw new NotImplementedException();
         }
 
-
+        /// <summary>実数から四元数へキャスト</summary>
         public static void Cast(uint length, CudaArray<float> src_r, CudaArray<float> src_i, CudaArray<float> src_j, CudaArray<float> src_k, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            string key = "quaternion_cast";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.ArrayManipulation.Gather(arrays: 4));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src_r, src_i, src_j, src_k, dst, length);
         }
 
+        /// <summary>R成分</summary>
         public static void R(uint length, CudaArray<float> src, CudaArray<float> dst_r) {
-            throw new NotImplementedException();
+            string key = "quaternion_r";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.ArrayManipulation.Scatter(arrays: 4, index: 0));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src, dst_r, length);
         }
 
+        /// <summary>I成分</summary>
         public static void I(uint length, CudaArray<float> src, CudaArray<float> dst_i) {
-            throw new NotImplementedException();
+            string key = "quaternion_i";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.ArrayManipulation.Scatter(arrays: 4, index: 1));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src, dst_i, length);
         }
 
+        /// <summary>J成分</summary>
         public static void J(uint length, CudaArray<float> src, CudaArray<float> dst_j) {
-            throw new NotImplementedException();
+            string key = "quaternion_j";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.ArrayManipulation.Scatter(arrays: 4, index: 2));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src, dst_j, length);
         }
 
+        /// <summary>K成分</summary>
         public static void K(uint length, CudaArray<float> src, CudaArray<float> dst_k) {
-            throw new NotImplementedException();
+            string key = "quaternion_k";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.ArrayManipulation.Scatter(arrays: 4, index: 3));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src, dst_k, length);
         }
 
+        /// <summary>純R成分</summary>
         public static void PureR(uint length, CudaArray<float> src_r, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            string key = "quaternion_purer";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.ArrayManipulation.StrideCopy(stride: 4, index: 0));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src_r, dst, length);
         }
 
+        /// <summary>純I成分</summary>
         public static void PureI(uint length, CudaArray<float> src_i, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            string key = "quaternion_purei";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.ArrayManipulation.StrideCopy(stride: 4, index: 1));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src_i, dst, length);
         }
 
+        /// <summary>純J成分</summary>
         public static void PureJ(uint length, CudaArray<float> src_j, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            string key = "quaternion_purej";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.ArrayManipulation.StrideCopy(stride: 4, index: 2));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src_j, dst, length);
         }
 
+        /// <summary>純K成分</summary>
         public static void PureK(uint length, CudaArray<float> src_k, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            string key = "quaternion_purek";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.ArrayManipulation.StrideCopy(stride: 4, index: 3));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src_k, dst, length);
         }
 
 
