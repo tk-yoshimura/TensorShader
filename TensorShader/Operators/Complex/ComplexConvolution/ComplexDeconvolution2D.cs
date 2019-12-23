@@ -25,7 +25,7 @@ namespace TensorShader.Operators.ComplexConvolution {
         public int Batch { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public ComplexDeconvolution2D(int outwidth, int outheight, int inchannels, int outchannels, int kwidth, int kheight, bool gradmode = false, int batch = 1) {
+        public ComplexDeconvolution2D(int inwidth, int inheight, int inchannels, int outchannels, int kwidth, int kheight, bool gradmode = false, int batch = 1) {
             if (inchannels % 2 != 0) {
                 throw new ArgumentException(ExceptionMessage.ArgumentMultiple(nameof(inchannels), inchannels, 2));
             }
@@ -33,8 +33,8 @@ namespace TensorShader.Operators.ComplexConvolution {
                 throw new ArgumentException(ExceptionMessage.ArgumentMultiple(nameof(outchannels), outchannels, 2));
             }
 
-            int inwidth = outwidth - kwidth + 1;
-            int inheight = outheight - kheight + 1;
+            int outwidth = inwidth + kwidth - 1;
+            int outheight = inheight + kheight - 1;
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map2D(inchannels, inwidth, inheight, batch)),
@@ -57,7 +57,7 @@ namespace TensorShader.Operators.ComplexConvolution {
             Tensor inmap = tensors[0], infilter = tensors[1], outmap = tensors[2];
 
             TensorShaderCudaBackend.Complex.Deconvolution2D((uint)InChannels, (uint)OutChannels,
-                                                            (uint)outmap.Width, (uint)outmap.Height,
+                                                            (uint)inmap.Width, (uint)inmap.Height,
                                                             (uint)Batch,
                                                             (uint)KernelWidth, (uint)KernelHeight,
                                                             GradMode,

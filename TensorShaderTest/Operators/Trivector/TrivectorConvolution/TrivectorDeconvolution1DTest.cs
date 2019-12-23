@@ -38,7 +38,7 @@ namespace TensorShaderTest.Operators.Trivector {
 
                                 OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth, batch));
 
-                                TrivectorDeconvolution1D ope = new TrivectorDeconvolution1D(inwidth, outchannels, inchannels, kwidth, gradmode: false, batch);
+                                TrivectorDeconvolution1D ope = new TrivectorDeconvolution1D(outwidth, outchannels, inchannels, kwidth, gradmode: false, batch);
 
                                 ope.Execute(y_tensor, w_tensor, x_tensor);
 
@@ -78,7 +78,7 @@ namespace TensorShaderTest.Operators.Trivector {
 
                                     OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth, batch));
 
-                                    TrivectorDeconvolution1D ope = new TrivectorDeconvolution1D(inwidth, outchannels, inchannels, kwidth, gradmode, batch);
+                                    TrivectorDeconvolution1D ope = new TrivectorDeconvolution1D(outwidth, outchannels, inchannels, kwidth, gradmode, batch);
 
                                     ope.Execute(y_tensor, w_tensor, x_tensor);
 
@@ -106,7 +106,7 @@ namespace TensorShaderTest.Operators.Trivector {
 
             OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth));
 
-            TrivectorDeconvolution1D ope = new TrivectorDeconvolution1D(inwidth, outchannels, inchannels, ksize);
+            TrivectorDeconvolution1D ope = new TrivectorDeconvolution1D(outwidth, outchannels, inchannels, ksize);
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 

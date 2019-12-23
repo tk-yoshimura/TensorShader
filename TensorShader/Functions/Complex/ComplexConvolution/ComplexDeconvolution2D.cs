@@ -101,7 +101,7 @@ namespace TensorShader.Functions.ComplexConvolution {
 
             return (new Tensor[] { intensors[0], intensors[1], outtensors[0] },
                     new Operators.ComplexConvolution.ComplexDeconvolution2D(
-                        OutShape.Width, OutShape.Height,
+                        InShape.Width, InShape.Height,
                         InShape.Channels, OutShape.Channels,
                         KernelShape.Width, KernelShape.Height,
                         GradMode, InShape.Batch));

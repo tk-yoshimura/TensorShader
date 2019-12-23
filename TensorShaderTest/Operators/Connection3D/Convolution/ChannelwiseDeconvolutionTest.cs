@@ -31,7 +31,7 @@ namespace TensorShaderTest.Operators.Connection3D {
 
                             OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, inwidth, inheight, indepth, batch));
 
-                            ChannelwiseDeconvolution ope = new ChannelwiseDeconvolution(inwidth, inheight, indepth, channels, kwidth, kheight, kdepth, batch);
+                            ChannelwiseDeconvolution ope = new ChannelwiseDeconvolution(outwidth, outheight, outdepth, channels, kwidth, kheight, kdepth, batch);
 
                             ope.Execute(y_tensor, w_tensor, x_tensor);
 
@@ -62,7 +62,7 @@ namespace TensorShaderTest.Operators.Connection3D {
 
             OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, inwidth, inheight, indepth));
 
-            ChannelwiseDeconvolution ope = new ChannelwiseDeconvolution(inwidth, inheight, indepth, channels, ksize, ksize, ksize);
+            ChannelwiseDeconvolution ope = new ChannelwiseDeconvolution(outwidth, outheight, outdepth, channels, ksize, ksize, ksize);
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 

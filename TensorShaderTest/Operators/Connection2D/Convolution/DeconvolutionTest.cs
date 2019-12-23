@@ -35,7 +35,7 @@ namespace TensorShaderTest.Operators.Connection2D {
 
                                         OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch));
 
-                                        Deconvolution ope = new Deconvolution(inwidth, inheight, outchannels, inchannels, kwidth, kheight, batch);
+                                        Deconvolution ope = new Deconvolution(outwidth, outheight, outchannels, inchannels, kwidth, kheight, batch);
 
                                         ope.Execute(y_tensor, w_tensor, x_tensor);
 
@@ -69,7 +69,7 @@ namespace TensorShaderTest.Operators.Connection2D {
 
             OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight));
 
-            Deconvolution ope = new Deconvolution(inwidth, inheight, outchannels, inchannels, ksize, ksize);
+            Deconvolution ope = new Deconvolution(outwidth, outheight, outchannels, inchannels, ksize, ksize);
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 

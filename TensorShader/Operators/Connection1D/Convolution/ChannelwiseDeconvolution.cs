@@ -14,8 +14,9 @@ namespace TensorShader.Operators.Connection1D {
         public int Batch { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public ChannelwiseDeconvolution(int outwidth, int channels, int kwidth, int batch = 1) {
-            int inwidth = outwidth - kwidth + 1;
+        public ChannelwiseDeconvolution(int inwidth, int channels, int kwidth, int batch = 1) {
+
+            int outwidth = inwidth + kwidth - 1;
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map1D(channels, inwidth, batch)),
@@ -35,7 +36,7 @@ namespace TensorShader.Operators.Connection1D {
             Tensor inmap = tensors[0], infilter = tensors[1], outmap = tensors[2];
 
             TensorShaderCudaBackend.Convolution.ChannelwiseDeconvolution1D((uint)Channels,
-                                                                           (uint)outmap.Width, (uint)Batch,
+                                                                           (uint)inmap.Width, (uint)Batch,
                                                                            (uint)KernelWidth,
                                                                            inmap.Buffer, infilter.Buffer, outmap.Buffer);
         }

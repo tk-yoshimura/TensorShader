@@ -92,10 +92,10 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
            
-            uint outwidth = (args[3] as uint?).Value;
+            uint inwidth = (args[3] as uint?).Value;
             uint batches = (args[4] as uint?).Value;
 
-            uint inwidth = outwidth + 1 - KernelWidth;
+            uint outwidth = inwidth + KernelWidth - 1;
 
             for (uint th = 0; th < batches; th++) {
                 Kernel.Execute(
@@ -117,15 +117,15 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 throw new ArgumentException(nameof(args));
             }
 
-            if (!(args[3] is uint outwidth) || !Limits.CheckWidth(outwidth, KernelWidth)) {
-                throw new ArgumentException(nameof(outwidth));
+            if (!(args[3] is uint inwidth) || !Limits.CheckWidth(inwidth)) {
+                throw new ArgumentException(nameof(inwidth));
             }
 
             if (!(args[4] is uint batches) || !Limits.CheckBatches(batches)) {
                 throw new ArgumentException(nameof(batches));
             }
 
-            uint inwidth = outwidth + 1 - KernelWidth;
+            uint outwidth = inwidth + KernelWidth - 1;
 
             if (!(args[0] is CudaArray<float> inmap) || inmap.Length < InChannels * inwidth * batches) {
                 throw new ArgumentException(nameof(inmap));

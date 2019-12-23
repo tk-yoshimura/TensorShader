@@ -92,7 +92,7 @@ namespace TensorShader.Functions.Connection1D {
 
             return (new Tensor[] { intensors[0], intensors[1], outtensors[0] },
                     new Operators.Connection1D.ChannelwiseDeconvolution(
-                        OutShape.Width,
+                        InShape.Width,
                         InShape.Channels,
                         KernelShape.Width,
                         InShape.Batch));

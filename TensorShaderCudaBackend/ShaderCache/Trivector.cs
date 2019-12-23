@@ -251,7 +251,7 @@ namespace TensorShaderCudaBackend {
         }
 
 
-        public static void Deconvolution1D(uint inchannels, uint outchannels, uint outwidth,
+        public static void Deconvolution1D(uint inchannels, uint outchannels, uint inwidth,
                                     uint batch, uint kwidth, bool gradmode,
                                     CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
             throw new NotImplementedException();
@@ -272,7 +272,7 @@ namespace TensorShaderCudaBackend {
         }
 
 
-        public static void Deconvolution2D(uint inchannels, uint outchannels, uint outwidth, uint outheight,
+        public static void Deconvolution2D(uint inchannels, uint outchannels, uint inwidth, uint inheight,
                                     uint batch, uint kwidth, uint kheight, bool gradmode,
                                     CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
             throw new NotImplementedException();
@@ -293,7 +293,7 @@ namespace TensorShaderCudaBackend {
         }
 
 
-        public static void Deconvolution3D(uint inchannels, uint outchannels, uint outwidth, uint outheight, uint outdepth,
+        public static void Deconvolution3D(uint inchannels, uint outchannels, uint inwidth, uint inheight, uint indepth,
                                     uint batch, uint kwidth, uint kheight, uint kdepth, bool gradmode,
                                     CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
             throw new NotImplementedException();

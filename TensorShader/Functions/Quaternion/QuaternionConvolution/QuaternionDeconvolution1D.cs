@@ -100,7 +100,7 @@ namespace TensorShader.Functions.QuaternionConvolution {
 
             return (new Tensor[] { intensors[0], intensors[1], outtensors[0] },
                     new Operators.QuaternionConvolution.QuaternionDeconvolution1D(
-                        OutShape.Width,
+                        InShape.Width,
                         InShape.Channels, OutShape.Channels,
                         KernelShape.Width,
                         GradMode, InShape.Batch));

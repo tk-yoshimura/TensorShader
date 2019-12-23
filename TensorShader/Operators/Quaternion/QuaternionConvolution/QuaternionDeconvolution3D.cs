@@ -29,7 +29,7 @@ namespace TensorShader.Operators.QuaternionConvolution {
         public int Batch { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public QuaternionDeconvolution3D(int outwidth, int outheight, int outdepth, int inchannels, int outchannels, int kwidth, int kheight, int kdepth, bool gradmode = false, int batch = 1) {
+        public QuaternionDeconvolution3D(int inwidth, int inheight, int indepth, int inchannels, int outchannels, int kwidth, int kheight, int kdepth, bool gradmode = false, int batch = 1) {
             if (inchannels % 4 != 0) {
                 throw new ArgumentException(ExceptionMessage.ArgumentMultiple(nameof(inchannels), inchannels, 4));
             }
@@ -37,9 +37,9 @@ namespace TensorShader.Operators.QuaternionConvolution {
                 throw new ArgumentException(ExceptionMessage.ArgumentMultiple(nameof(outchannels), outchannels, 4));
             }
 
-            int inwidth = outwidth - kwidth + 1;
-            int inheight = outheight - kheight + 1;
-            int indepth = outdepth - kdepth + 1;
+            int outwidth = inwidth + kwidth - 1;
+            int outheight = inheight + kheight - 1;
+            int outdepth = indepth + kdepth - 1;
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map3D(inchannels, inwidth, inheight, indepth, batch)),
@@ -63,7 +63,7 @@ namespace TensorShader.Operators.QuaternionConvolution {
             Tensor inmap = tensors[0], infilter = tensors[1], outmap = tensors[2];
 
             TensorShaderCudaBackend.Quaternion.Deconvolution3D((uint)InChannels, (uint)OutChannels,
-                                                               (uint)outmap.Width, (uint)outmap.Height, (uint)outmap.Depth,
+                                                               (uint)inmap.Width, (uint)inmap.Height, (uint)inmap.Depth,
                                                                (uint)Batch, 
                                                                (uint)KernelWidth, (uint)KernelHeight, (uint)KernelDepth,
                                                                GradMode,

@@ -40,7 +40,7 @@ namespace TensorShaderTest.Operators.Complex {
 
                                         OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch));
 
-                                        ComplexDeconvolution2D ope = new ComplexDeconvolution2D(inwidth, inheight, outchannels, inchannels, kwidth, kheight, gradmode: false, batch);
+                                        ComplexDeconvolution2D ope = new ComplexDeconvolution2D(outwidth, outheight, outchannels, inchannels, kwidth, kheight, gradmode: false, batch);
 
                                         ope.Execute(y_tensor, w_tensor, x_tensor);
 
@@ -84,7 +84,7 @@ namespace TensorShaderTest.Operators.Complex {
 
                                                 OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch));
 
-                                                ComplexDeconvolution2D ope = new ComplexDeconvolution2D(inwidth, inheight, outchannels, inchannels, kwidth, kheight, gradmode, batch);
+                                                ComplexDeconvolution2D ope = new ComplexDeconvolution2D(outwidth, outheight, outchannels, inchannels, kwidth, kheight, gradmode, batch);
 
                                                 ope.Execute(y_tensor, w_tensor, x_tensor);
 
@@ -114,7 +114,7 @@ namespace TensorShaderTest.Operators.Complex {
 
             OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight));
 
-            ComplexDeconvolution2D ope = new ComplexDeconvolution2D(inwidth, inheight, outchannels, inchannels, ksize, ksize);
+            ComplexDeconvolution2D ope = new ComplexDeconvolution2D(outwidth, outheight, outchannels, inchannels, ksize, ksize);
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 

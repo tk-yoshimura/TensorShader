@@ -108,12 +108,12 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
            
-            uint outwidth = (args[3] as uint?).Value;
-            uint outheight = (args[4] as uint?).Value;
+            uint inwidth = (args[3] as uint?).Value;
+            uint inheight = (args[4] as uint?).Value;
             uint batches = (args[5] as uint?).Value;
 
-            uint inwidth = outwidth + 1 - KernelWidth;
-            uint inheight = outheight + 1 - KernelHeight;
+            uint outwidth = inwidth + KernelWidth - 1;
+            uint outheight = inheight + KernelHeight - 1;
 
             uint mul_per_line = InChannels * OutChannels * KernelWidth * KernelHeight * outwidth;
 
@@ -144,20 +144,20 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 throw new ArgumentException(nameof(args));
             }
 
-            if (!(args[3] is uint outwidth) || !Limits.CheckWidth(outwidth, KernelWidth)) {
-                throw new ArgumentException(nameof(outwidth));
+            if (!(args[3] is uint inwidth) || !Limits.CheckWidth(inwidth)) {
+                throw new ArgumentException(nameof(inwidth));
             }
 
-            if (!(args[4] is uint outheight) || !Limits.CheckHeight(outheight, KernelHeight)) {
-                throw new ArgumentException(nameof(outheight));
+            if (!(args[4] is uint inheight) || !Limits.CheckHeight(inheight)) {
+                throw new ArgumentException(nameof(inheight));
             }
 
             if (!(args[5] is uint batches) || !Limits.CheckBatches(batches)) {
                 throw new ArgumentException(nameof(batches));
             }
 
-            uint inwidth = outwidth + 1 - KernelWidth;
-            uint inheight = outheight + 1 - KernelHeight;
+            uint outwidth = inwidth + KernelWidth - 1;
+            uint outheight = inheight + KernelHeight - 1;
 
             if (!(args[0] is CudaArray<float> inmap) || inmap.Length < InChannels * inwidth * inheight * batches) {
                 throw new ArgumentException(nameof(inmap));

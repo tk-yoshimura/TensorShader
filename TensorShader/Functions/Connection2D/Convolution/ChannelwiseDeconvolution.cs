@@ -93,7 +93,7 @@ namespace TensorShader.Functions.Connection2D {
 
             return (new Tensor[] { intensors[0], intensors[1], outtensors[0] },
                     new Operators.Connection2D.ChannelwiseDeconvolution(
-                        OutShape.Width, OutShape.Height,
+                        InShape.Width, InShape.Height,
                         InShape.Channels,
                         KernelShape.Width, KernelShape.Height,
                         InShape.Batch));

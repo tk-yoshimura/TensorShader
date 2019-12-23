@@ -21,7 +21,7 @@ namespace TensorShader.Operators.QuaternionConvolution {
         public int Batch { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public QuaternionDeconvolution1D(int outwidth, int inchannels, int outchannels, int kwidth, bool gradmode = false, int batch = 1) {
+        public QuaternionDeconvolution1D(int inwidth, int inchannels, int outchannels, int kwidth, bool gradmode = false, int batch = 1) {
             if (inchannels % 4 != 0) {
                 throw new ArgumentException(ExceptionMessage.ArgumentMultiple(nameof(inchannels), inchannels, 4));
             }
@@ -29,7 +29,7 @@ namespace TensorShader.Operators.QuaternionConvolution {
                 throw new ArgumentException(ExceptionMessage.ArgumentMultiple(nameof(outchannels), outchannels, 4));
             }
 
-            int inwidth = outwidth - kwidth + 1;
+            int outwidth = inwidth + kwidth - 1;
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, Shape.Map1D(inchannels, inwidth, batch)),
@@ -51,7 +51,7 @@ namespace TensorShader.Operators.QuaternionConvolution {
             Tensor inmap = tensors[0], infilter = tensors[1], outmap = tensors[2];
 
             TensorShaderCudaBackend.Quaternion.Deconvolution1D((uint)InChannels, (uint)OutChannels,
-                                                               (uint)outmap.Width,
+                                                               (uint)inmap.Width,
                                                                (uint)Batch, 
                                                                (uint)KernelWidth,
                                                                GradMode,
