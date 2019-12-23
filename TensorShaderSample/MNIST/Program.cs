@@ -7,6 +7,7 @@ using TensorShader;
 using TensorShader.Initializers;
 using TensorShader.Updaters.OptimizeMethod;
 using TensorShader.Updaters.WeightDecay;
+using TensorShaderCudaBackend.API;
 using TensorShaderUtil.Iterator;
 using TensorShaderUtil.SnapshotSaver;
 using static TensorShader.Field;
@@ -87,10 +88,10 @@ namespace MNIST {
                 x.ValueTensor.State = images;
                 t.ValueTensor.State = labels;
 
-                trainflow.Execute(enable_processing_time:true);
+                trainflow.Execute();
                 parameters.Update();
 
-                if (train_iterator.Iteration % 100 != 0) {
+                if (train_iterator.Iteration % 60 != 0) {
                     continue;
                 }
 

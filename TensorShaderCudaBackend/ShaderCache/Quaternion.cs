@@ -3,66 +3,198 @@ using System.Collections.Generic;
 
 namespace TensorShaderCudaBackend {
 
-    /// <summary>4元数</summary>
+    /// <summary>四元数</summary>
     public static class Quaternion {
         private readonly static Dictionary<string, Shader> shaders = new Dictionary<string, Shader>();
         
+        private static Shader UnaryArithmetric(string name, string func) {
+            if (!shaders.ContainsKey(name)) {
+                shaders.Add(name, new Shaders.Quaternion.Arithmetric.UnaryArithmetric(name, func));
+            }
+
+            return shaders[name];
+        }
+
+        private static Shader BinaryArithmetric(string name, string func) {
+            if (!shaders.ContainsKey(name)) {
+                shaders.Add(name, new Shaders.Quaternion.Arithmetric.BinaryArithmetric(name, func));
+            }
+
+            return shaders[name];
+        }
+
+        /// <summary>四元数積</summary>
         public static void Mul(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            Shader shader = BinaryArithmetric(
+                "quaternion_mul_ew", 
+                "#y.x = #x1.x * #x2.x - #x1.y * #x2.y - #x1.z * #x2.z - #x1.w * #x2.w;" +
+				"#y.y = #x1.x * #x2.y + #x1.y * #x2.x + #x1.z * #x2.w - #x1.w * #x2.z;" +
+				"#y.z = #x1.x * #x2.z - #x1.y * #x2.w + #x1.z * #x2.x + #x1.w * #x2.y;" +
+				"#y.w = #x1.x * #x2.w + #x1.y * #x2.z - #x1.z * #x2.y + #x1.w * #x2.x;"
+            );
+            shader.Execute(Shader.DefaultStream, src1, src2, dst, length);
         }
 
+        /// <summary>四元数積勾配</summary>
         public static void MulGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            Shader shader = BinaryArithmetric(
+                "quaternion_mulgrad_ew", 
+                "#y.x = #x1.x * #x2.x + #x1.y * #x2.y + #x1.z * #x2.z + #x1.w * #x2.w;" +
+				"#y.y = #x1.x * #x2.y - #x1.y * #x2.x + #x1.z * #x2.w - #x1.w * #x2.z;" +
+				"#y.z = #x1.x * #x2.z - #x1.y * #x2.w - #x1.z * #x2.x + #x1.w * #x2.y;" +
+				"#y.w = #x1.x * #x2.w + #x1.y * #x2.z - #x1.z * #x2.y - #x1.w * #x2.x;"
+            );
+            shader.Execute(Shader.DefaultStream, src1, src2, dst, length);
         }
 
+        /// <summary>四元数積転置勾配</summary>
         public static void MulTransposeGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            Shader shader = BinaryArithmetric(
+                "quaternion_multransposegrad_ew", 
+                "#y.x = #x1.x * #x2.x + #x1.y * #x2.y + #x1.z * #x2.z + #x1.w * #x2.w;" +
+				"#y.y = #x1.x * #x2.y - #x1.y * #x2.x - #x1.z * #x2.w + #x1.w * #x2.z;" +
+				"#y.z = #x1.x * #x2.z + #x1.y * #x2.w - #x1.z * #x2.x - #x1.w * #x2.y;" +
+				"#y.w = #x1.x * #x2.w - #x1.y * #x2.z + #x1.z * #x2.y - #x1.w * #x2.x;"
+            );
+            shader.Execute(Shader.DefaultStream, src1, src2, dst, length);
         }
 
-
+        /// <summary>RRelu</summary>
         public static void RRelu(uint length, CudaArray<float> src, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            Shader shader = UnaryArithmetric(
+                "quaternion_rrelu_ew", 
+                "#y.x = fmaxf(0.0, #x.x);" +
+                "#y.y = #x.y;" +
+                "#y.z = #x.z;" +
+                "#y.w = #x.w;"
+            );
+            shader.Execute(Shader.DefaultStream, src, dst, length);
         }
 
+        /// <summary>RRelu勾配</summary>
         public static void RReluGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            Shader shader = BinaryArithmetric(
+                "quaternion_rrelugrad_ew", 
+                "#y.x = #x2.x >= 0.0 ? #x1.x : 0.0;" +
+                "#y.y = #x1.y;" + 
+                "#y.z = #x1.z;" +
+                "#y.w = #x1.w;"
+            );
+            shader.Execute(Shader.DefaultStream, src1, src2, dst, length);
         }
 
-
+        /// <summary>四元数共役</summary>
         public static void Conjugate(uint length, CudaArray<float> src, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            Shader shader = UnaryArithmetric(
+                "quaternion_conj_ew", 
+                "#y.x = #x.x;" +
+                "#y.y = -#x.y;" +
+                "#y.z = -#x.z;" +
+                "#y.w = -#x.w;"
+            );
+            shader.Execute(Shader.DefaultStream, src, dst, length);
         }
 
-
+        /// <summary>四元数2乗</summary>
         public static void Square(uint length, CudaArray<float> src, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            Shader shader = UnaryArithmetric(
+                "quaternion_square_ew", 
+                "#y.x = #x.x * #x.x - #x.y * #x.y - #x.z * #x.z - #x.w * #x.w;" +
+				"#y.y = 2.0 * #x.x * #x.y;" +
+				"#y.z = 2.0 * #x.x * #x.z;" +
+				"#y.w = 2.0 * #x.x * #x.w;"
+            );
+            shader.Execute(Shader.DefaultStream, src, dst, length);
         }
 
-
+        /// <summary>四元数減衰</summary>
         public static void Decay(uint length, CudaArray<float> src, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            Shader shader = UnaryArithmetric(
+                "quaternion_decay_ew", 
+                "float norm = #x.x * #x.x + #x.y * #x.y + #x.z * #x.z + #x.w * #x.w;" +
+                "float s = norm / (norm + 1.0);" + 
+                "#y.x = #x.x * s;" +
+                "#y.y = #x.y * s;" + 
+                "#y.z = #x.z * s;" +
+                "#y.w = #x.w * s;"
+            );
+            shader.Execute(Shader.DefaultStream, src, dst, length);
         }
 
+        /// <summary>四元数減衰勾配</summary>
         public static void DecayGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            Shader shader = BinaryArithmetric(
+                "quaternion_decaygrad_ew", 
+                "float x12x = #x1.x * #x2.x, x12y = #x1.y * #x2.y, x12z = #x1.z * #x2.z, x12w = #x1.w * #x2.w;" +
+                "float sx2x = #x2.x * #x2.x, sx2y = #x2.y * #x2.y, sx2z = #x2.z * #x2.z, sx2w = #x2.w * #x2.w;" +
+                "float norm = sx2x + sx2y + sx2z + sx2w, norm_p1 = norm + 1;" +
+                "float norm_norm_p1 = norm_p1 * norm, inv_squa_norm_p1 = 1.0 / (norm_p1 * norm_p1);" +
+                "#y.x = (#x1.x * (2.0 * sx2x + norm_norm_p1) + 2.0 * #x2.x * (x12y + x12z + x12w)) * inv_squa_norm_p1;" + 
+                "#y.y = (#x1.y * (2.0 * sx2y + norm_norm_p1) + 2.0 * #x2.y * (x12z + x12w + x12x)) * inv_squa_norm_p1;" +
+                "#y.z = (#x1.z * (2.0 * sx2z + norm_norm_p1) + 2.0 * #x2.z * (x12w + x12x + x12y)) * inv_squa_norm_p1;" + 
+                "#y.w = (#x1.w * (2.0 * sx2w + norm_norm_p1) + 2.0 * #x2.w * (x12x + x12y + x12z)) * inv_squa_norm_p1;"
+            );
+            shader.Execute(Shader.DefaultStream, src1, src2, dst, length);
         }
 
-
+        /// <summary>四元数Squash</summary>
         public static void Squash(uint length, CudaArray<float> src, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            Shader shader = UnaryArithmetric(
+                "quaternion_squash_ew", 
+                "float norm = #x.x * #x.x + #x.y * #x.y + #x.z * #x.z + #x.w * #x.w;" +
+                "float s = 1.0 / (sqrtf(norm) + 1.0);" + 
+                "#y.x = #x.x * s;" +
+                "#y.y = #x.y * s;" +
+                "#y.z = #x.z * s;" +
+                "#y.w = #x.w * s;"
+            );
+            shader.Execute(Shader.DefaultStream, src, dst, length);
         }
 
+        /// <summary>四元数Squash勾配</summary>
         public static void SquashGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            Shader shader = BinaryArithmetric(
+                "quaternion_squashgrad_ew", 
+                "float x12x = #x1.x * #x2.x, x12y = #x1.y * #x2.y, x12z = #x1.z * #x2.z, x12w = #x1.w * #x2.w;" +
+                "float sx2x = #x2.x * #x2.x, sx2y = #x2.y * #x2.y, sx2z = #x2.z * #x2.z, sx2w = #x2.w * #x2.w;" +
+                "float length = sqrtf(sx2x + sx2y + sx2z + sx2w), length_p1 = length + 1;" +
+                "float length_length_p1 = length_p1 * length, inv_length_squa_length_p1 = 1.0 / (length * length_p1 * length_p1);" +
+                "#y.x = (#x1.x * (length_length_p1 - sx2x) - #x2.x * (x12y + x12z + x12w)) * inv_length_squa_length_p1;" + 
+                "#y.y = (#x1.y * (length_length_p1 - sx2y) - #x2.y * (x12z + x12w + x12x)) * inv_length_squa_length_p1;" +
+                "#y.z = (#x1.z * (length_length_p1 - sx2z) - #x2.z * (x12w + x12x + x12y)) * inv_length_squa_length_p1;" +
+                "#y.w = (#x1.w * (length_length_p1 - sx2w) - #x2.w * (x12x + x12y + x12z)) * inv_length_squa_length_p1;"
+            );
+            shader.Execute(Shader.DefaultStream, src1, src2, dst, length);
         }
 
-
+        /// <summary>四元数正規化</summary>
         public static void Normalize(uint length, CudaArray<float> src, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            Shader shader = UnaryArithmetric(
+                "quaternion_normalize_ew", 
+                "float norm = #x.x * #x.x + #x.y * #x.y + #x.z * #x.z + #x.w * #x.w;" +
+                "float s = 1.0 / fmaxf(sqrtf(norm), 1e-5);" + 
+                "#y.x = #x.x * s;" +
+                "#y.y = #x.y * s;" +
+                "#y.z = #x.z * s;" +
+                "#y.w = #x.w * s;"
+            );
+            shader.Execute(Shader.DefaultStream, src, dst, length);
         }
 
+        /// <summary>四元数正規化勾配</summary>
         public static void NormalizeGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {
-            throw new NotImplementedException();
+            Shader shader = BinaryArithmetric(
+                "quaternion_normalizegrad_ew", 
+                "float x12x = #x1.x * #x2.x, x12y = #x1.y * #x2.y, x12z = #x1.z * #x2.z, x12w = #x1.w * #x2.w;" +
+                "float sx2x = #x2.x * #x2.x, sx2y = #x2.y * #x2.y, sx2z = #x2.z * #x2.z, sx2w = #x2.w * #x2.w;" +
+                "float length = fmaxf(sqrtf(sx2x + sx2y + sx2z + sx2w), 1e-5);" +
+                "float inv_cube_length = 1.0 / (length * length * length);" +
+                "#y.x = (#x1.x * (sx2y + sx2z + sx2w) - #x2.x * (x12y + x12z + x12w)) * inv_cube_length;" + 
+                "#y.y = (#x1.y * (sx2z + sx2w + sx2x) - #x2.y * (x12z + x12w + x12x)) * inv_cube_length;" + 
+                "#y.z = (#x1.z * (sx2w + sx2x + sx2y) - #x2.z * (x12w + x12x + x12y)) * inv_cube_length;" +
+                "#y.w = (#x1.w * (sx2x + sx2y + sx2z) - #x2.w * (x12x + x12y + x12z)) * inv_cube_length;"
+            );
+            shader.Execute(Shader.DefaultStream, src1, src2, dst, length);
         }
 
         /// <summary>実数から四元数へキャスト</summary>

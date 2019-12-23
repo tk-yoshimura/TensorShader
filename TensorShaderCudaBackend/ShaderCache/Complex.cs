@@ -157,8 +157,8 @@ namespace TensorShaderCudaBackend {
                 "float sx2x = #x2.x * #x2.x, sx2y = #x2.y * #x2.y;" +
                 "float length = sqrtf(sx2x + sx2y), length_p1 = length + 1;" +
                 "float length_length_p1 = length_p1 * length, inv_length_squa_length_p1 = 1.0 / (length * length_p1 * length_p1);" +
-                "#y.x = -(#x1.x * (sx2x - length_length_p1) + #x2.x * x12y) * inv_length_squa_length_p1;" + 
-                "#y.y = -(#x1.y * (sx2y - length_length_p1) + #x2.y * x12x) * inv_length_squa_length_p1;"
+                "#y.x = (#x1.x * (length_length_p1 - sx2x) - #x2.x * x12y) * inv_length_squa_length_p1;" + 
+                "#y.y = (#x1.y * (length_length_p1 - sx2y) - #x2.y * x12x) * inv_length_squa_length_p1;"
             );
             shader.Execute(Shader.DefaultStream, src1, src2, dst, length);
         }

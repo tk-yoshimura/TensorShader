@@ -340,10 +340,7 @@ namespace TensorShader {
         }
 
         /// <summary>計算フローを実行</summary>
-        /// <param name="enable_processing_time">各関数ノードの処理時間を計測出力する</param>
-        public void Execute(bool enable_processing_time = false) {
-            Stopwatch sw = enable_processing_time ? new Stopwatch() : null;
-
+        public void Execute() {
             foreach (var node in nodes) {
                 if (node is InputNode inputnode) {
                     if (inputnode.Initializer != null) {
@@ -354,21 +351,7 @@ namespace TensorShader {
                     Tensor[] intensors = funcnode.InNodes.Select((innode) => tensors[innode]).ToArray();
                     Tensor[] outtensors = funcnode.OutNodes.Select((innode) => tensors[innode]).ToArray();
 
-                    if (enable_processing_time) {
-                        Trace.WriteLine(funcnode.Function.Name);
-                        Trace.WriteLine(" " + string.Join(", ", intensors.Select((tensor) => tensor.Shape.ToString())));
-                        Trace.WriteLine(" " + string.Join(", ", outtensors.Select((tensor) => tensor.Shape.ToString())));
-
-                        sw.Restart();
-                    }
-
                     funcnode.Execute(intensors, outtensors);
-
-                    if (enable_processing_time) {
-                        sw.Stop();
-
-                        Trace.WriteLine($" {sw.ElapsedMilliseconds} msec");
-                    }
                 }
                 else if (node is OutputNode outputnode) {
                     VariableNode innode = outputnode.InNode;

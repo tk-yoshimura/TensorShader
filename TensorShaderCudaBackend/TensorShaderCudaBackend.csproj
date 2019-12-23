@@ -178,6 +178,9 @@
     <Compile Include="Shaders\Pool\Pool3D.cs" />
     <Compile Include="Shaders\Pool\Pool2D.cs" />
     <Compile Include="Shaders\Pool\Pool1D.cs" />
+    <Compile Include="Shaders\Quaternion\Arithmetric\BinaryArithmetric.cs" />
+    <Compile Include="Shaders\Quaternion\Arithmetric\Elementwise.cs" />
+    <Compile Include="Shaders\Quaternion\Arithmetric\UnaryArithmetric.cs" />
     <Compile Include="Shaders\Randomize\Randomize.cs" />
     <Compile Include="Shaders\Randomize\Normal.cs" />
     <Compile Include="Shaders\Randomize\Binary.cs" />
@@ -190,6 +193,9 @@
     <Compile Include="Shaders\Trimming\Trimming1D.cs" />
     <Compile Include="Shaders\Trimming\Trimming2D.cs" />
     <Compile Include="Shaders\Trimming\Trimming3D.cs" />
+    <Compile Include="Shaders\Trivector\Arithmetric\BinaryArithmetric.cs" />
+    <Compile Include="Shaders\Trivector\Arithmetric\Elementwise.cs" />
+    <Compile Include="Shaders\Trivector\Arithmetric\UnaryArithmetric.cs" />
     <Compile Include="Shaders\Zoom\LinearZoom1D.cs" />
     <Compile Include="Shaders\Zoom\LinearZoom2D.cs" />
     <Compile Include="Shaders\Zoom\LinearZoom3D.cs" />
@@ -201,8 +207,6 @@
     <Compile Include="Shaders\Zoom\Zoom1D.cs" />
     <Compile Include="Stream.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Shaders\Complex\Cast\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
