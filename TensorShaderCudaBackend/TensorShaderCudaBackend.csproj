@@ -116,6 +116,9 @@
     <Compile Include="Shaders\Complex\Arithmetric\UnaryArithmetric.cs" />
     <Compile Include="Shaders\Complex\Arithmetric\BinaryArithmetric.cs" />
     <Compile Include="Shaders\Complex\Arithmetric\Elementwise.cs" />
+    <Compile Include="Shaders\Complex\Convolution\Convolution2D.cs" />
+    <Compile Include="Shaders\Complex\Convolution\Deconvolution2D.cs" />
+    <Compile Include="Shaders\Complex\Convolution\KernelProduct2D.cs" />
     <Compile Include="Shaders\Convolution\Deconvolution3D.cs" />
     <Compile Include="Shaders\Convolution\Deconvolution2D.cs" />
     <Compile Include="Shaders\Convolution\Deconvolution1D.cs" />
@@ -189,6 +192,7 @@
     <Compile Include="Shaders\Transform\ChannelToSpace3D.cs" />
     <Compile Include="Shaders\Transform\SpaceToChannel2D.cs" />
     <Compile Include="Shaders\Transform\ChannelToSpace2D.cs" />
+    <Compile Include="Shaders\Transpose\TransposeComplexKernelChannel.cs" />
     <Compile Include="Shaders\Transpose\TransposeKernelChannel.cs" />
     <Compile Include="Shaders\Trimming\Trimming1D.cs" />
     <Compile Include="Shaders\Trimming\Trimming2D.cs" />

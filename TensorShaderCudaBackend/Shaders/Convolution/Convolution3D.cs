@@ -57,7 +57,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 unsigned int ox = {Defines.BlockIndexY}, oy = oy_offset + {Defines.BlockIndexZ};
 
                 __shared__ float us[{InChannels}];
-                float uv_hi = 0, uv_lo = 0;
+                float uv_hi = 0.0, uv_lo = 0.0;
 
                 for(unsigned int kz = 0, iz = oz; kz < {KernelDepth}; kz++, iz++){{
                     for(unsigned int ky = 0, iy = oy; ky < {KernelHeight}; ky++, iy++){{

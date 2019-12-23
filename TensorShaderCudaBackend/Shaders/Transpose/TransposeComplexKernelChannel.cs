@@ -4,7 +4,7 @@ using System.Linq;
 namespace TensorShaderCudaBackend.Shaders.Transpose {
 
     /// <summary>フィルタ行列入出力チャネル軸入れ替え</summary>
-    public class TransposeKernelChannel : Shader {
+    public class TransposeComplexKernelChannel : Shader {
 
         /// <summary>入力チャネル数</summary>
         public uint InChannels { private set; get; }
@@ -20,18 +20,18 @@ namespace TensorShaderCudaBackend.Shaders.Transpose {
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels}";
 
         /// <summary>コンストラクタ</summary>
-        public TransposeKernelChannel(uint inchannels, uint outchannels) {
-            if (!Limits.CheckChannels(inchannels, outchannels)) {
+        public TransposeComplexKernelChannel(uint inchannels, uint outchannels) {
+            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple:2, inchannels, outchannels)) {
                 throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
 
-            this.InChannels = inchannels;
-            this.OutChannels = outchannels;
+            this.InChannels = inchannels / 2;
+            this.OutChannels = outchannels / 2;
 
             string code = $@"
 
-            __global__ void transpose_kernel_channels(float *inmap, float *outmap, 
-                                                      unsigned int pts) {{
+            __global__ void transpose_complex_kernel_channels(float2 *inmap, float2 *outmap, 
+                                                              unsigned int pts) {{
 
                 unsigned int inch = {Defines.IndexX}, outch = {Defines.IndexY}, i = {Defines.IndexZ};
 
@@ -45,7 +45,7 @@ namespace TensorShaderCudaBackend.Shaders.Transpose {
                 outmap[outmap_idx] = inmap[inmap_idx];
             }}";
 
-            this.Kernel = new Kernel(code, "transpose_kernel_channels");
+            this.Kernel = new Kernel(code, "transpose_complex_kernel_channels");
         }
 
         /// <summary>実行</summary>
@@ -63,8 +63,8 @@ namespace TensorShaderCudaBackend.Shaders.Transpose {
                     indexes:(InChannels, OutChannels, pl),
                     dynamic_shared_memory_bytes: 0, 
                     stream,
-                    inmap.ElementPtr(p * InChannels * OutChannels), 
-                    outmap.ElementPtr(p * InChannels * OutChannels), 
+                    inmap.ElementPtr(p * InChannels * OutChannels * 2), 
+                    outmap.ElementPtr(p * InChannels * OutChannels * 2), 
                     pl
                 );
             }
@@ -80,7 +80,7 @@ namespace TensorShaderCudaBackend.Shaders.Transpose {
                 throw new ArgumentException(nameof(pts));
             }
 
-            uint length = InChannels * OutChannels * pts;
+            uint length = InChannels * OutChannels * pts * 2;
 
             if (!(args[0] is CudaArray<float> inmap) || inmap.Length < length) {
                 throw new ArgumentException(nameof(inmap));

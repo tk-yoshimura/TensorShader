@@ -298,9 +298,18 @@ namespace TensorShaderCudaBackend {
 
 
         public static void Convolution2D(uint inchannels, uint outchannels, uint inwidth, uint inheight,
-                                  uint batch, uint kwidth, uint kheight, bool gradmode,
-                                  CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
-            throw new NotImplementedException();
+                                         uint batch, uint kwidth, uint kheight, bool gradmode,
+                                         CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+
+            string key = $"complex_convolution_2d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} gradmode={gradmode}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Complex.Convolution.Convolution2D(inchannels, outchannels, kwidth, kheight, gradmode));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, inmap, outmap, kernel, inwidth, inheight, batch);
         }
 
 

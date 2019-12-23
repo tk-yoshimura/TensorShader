@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace TensorShaderCudaBackend.Shaders.Convolution {
+namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
 
     /// <summary>カーネル積</summary>
     public sealed class KernelProduct2D : Shader {
@@ -54,10 +54,10 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             string code = $@"
 
-            __global__ void kernelproduct_2d(float *inmap, float *outmap, float *filter, 
-                                             unsigned int oy_offset, 
-                                             unsigned int xsets,
-                                             unsigned int inwidth, unsigned int outwidth) {{
+            __global__ void complex_kernelproduct_2d(float *inmap, float *outmap, float *filter, 
+                                                     unsigned int oy_offset, 
+                                                     unsigned int xsets,
+                                                     unsigned int inwidth, unsigned int outwidth) {{
 
                 unsigned int inch = {Defines.IndexX}, outch = {Defines.IndexY};
                 unsigned int ox_offset = ({Defines.BlockIndexZ} % xsets) * {BatchPixels};
@@ -70,7 +70,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                     for(unsigned int kx = 0; kx < {KernelWidth}; kx++){{
                         unsigned int filter_index = (inch + {InChannels} * (outch + {OutChannels} * (kx + {KernelWidth} * ky))) * 2;
                     
-                        float uv_hi = 0.0, uv_lo = 0.0;
+                        float uv_hi = 0, uv_lo = 0;
                     
                         for(unsigned int ox = ox_offset, ix = ox + kx; ox < ox_offset + {BatchPixels} && ox < outwidth; ox++, ix++){{
                             if(tidx == 0 && outch < {OutChannels}){{
@@ -103,7 +103,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 }}
             }}";
 
-            this.Kernel = new Kernel(code, "kernelproduct_2d");
+            this.Kernel = new Kernel(code, "complex_kernelproduct_2d");
         }
 
         /// <summary>実行</summary>

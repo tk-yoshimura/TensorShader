@@ -56,7 +56,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 for(unsigned int kx = 0; kx < {KernelWidth}; kx++){{
                     unsigned int filter_index = (inch + {InChannels} * (outch + {OutChannels} * kx)) * 2;
                     
-                    float uv_hi = 0, uv_lo = 0;
+                    float uv_hi = 0.0, uv_lo = 0.0;
                     
                     for(unsigned int ox = ox_offset, ix = ox + kx; ox < ox_offset + {BatchPixels} && ox < outwidth; ox++, ix++){{
                         if(tidx == 0 && outch < {OutChannels}){{

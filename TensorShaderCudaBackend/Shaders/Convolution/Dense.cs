@@ -44,7 +44,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 outmap += outmap_offset;
 
                 __shared__ float us[{InChannels}];
-                float uv_hi = 0, uv_lo = 0;
+                float uv_hi = 0.0, uv_lo = 0.0;
 
                 unsigned int filter_idx = outch;
 

@@ -79,5 +79,17 @@ namespace TensorShaderCudaBackend {
 
             return true;
         }
+
+        
+        /// <summary>倍数チェック</summary>
+        public static bool CheckMultipleNum(uint multiple, params uint[] nums) {
+            foreach(uint num in nums) {
+                if ((num % multiple) != 0) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }

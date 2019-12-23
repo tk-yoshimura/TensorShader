@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace TensorShaderCudaBackend.Shaders.Convolution {
+namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
 
     /// <summary>2次元逆畳み込み</summary>
     public sealed class Deconvolution2D : Shader {
@@ -42,16 +42,16 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             string code = $@"
 
-            __global__ void deconvolution_2d(float *inmap, float *outmap, float *filter,
-                                             unsigned int oy_offset,
-                                             unsigned int inwidth, unsigned int outwidth, 
-                                             unsigned int inheight) {{
+            __global__ void complex_deconvolution_2d(float *inmap, float *outmap, float *filter,
+                                                     unsigned int oy_offset,
+                                                     unsigned int inwidth, unsigned int outwidth, 
+                                                     unsigned int inheight) {{
 
                 unsigned int outch = {Defines.IndexX}, tid = {Defines.ThreadIdX}, threads = {Defines.ThreadsX};
                 unsigned int ox = {Defines.BlockIndexY}, oy = oy_offset + {Defines.BlockIndexZ};
 
                 __shared__ float us[{InChannels}];
-                float uv_hi = 0.0, uv_lo = 0.0;
+                float uv_hi = 0, uv_lo = 0;
 
                 for(unsigned int ky = 0, iy = oy - {KernelHeight - 1}; ky < {KernelHeight}; ky++, iy++){{ 
                     if(iy >= inheight){{
@@ -97,7 +97,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 }}
             }}";
 
-            this.Kernel = new Kernel(code, "deconvolution_2d");
+            this.Kernel = new Kernel(code, "complex_deconvolution_2d");
         }
 
         /// <summary>実行</summary>
