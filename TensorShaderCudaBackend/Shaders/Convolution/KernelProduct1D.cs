@@ -20,7 +20,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
         public (uint x, uint y) BlockSize { private set; get; }
 
         /// <summary>1スレッドで処理する対象ピクセル数</summary>
-        private uint BatchPixels => 16;
+        private static uint BatchPixels => 16;
                 
         /// <summary>識別子</summary>
         public override sealed string Signature => 

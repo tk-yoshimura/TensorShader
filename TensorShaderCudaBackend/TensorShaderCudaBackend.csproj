@@ -195,6 +195,9 @@
     <Compile Include="Shaders\Trimming\Trimming3D.cs" />
     <Compile Include="Shaders\Trivector\Arithmetric\BinaryArithmetric.cs" />
     <Compile Include="Shaders\Trivector\Arithmetric\Elementwise.cs" />
+    <Compile Include="Shaders\Trivector\Arithmetric\QuaternionMulQGrad.cs" />
+    <Compile Include="Shaders\Trivector\Arithmetric\QuaternionMulVGrad.cs" />
+    <Compile Include="Shaders\Trivector\Arithmetric\QuaternionMul.cs" />
     <Compile Include="Shaders\Trivector\Arithmetric\UnaryArithmetric.cs" />
     <Compile Include="Shaders\Zoom\LinearZoom1D.cs" />
     <Compile Include="Shaders\Zoom\LinearZoom2D.cs" />

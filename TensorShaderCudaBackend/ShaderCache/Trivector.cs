@@ -23,16 +23,43 @@ namespace TensorShaderCudaBackend {
             return shaders[name];
         }
         
+        /// <summary>回転積</summary>
         public static void Mul(uint vectorlength, CudaArray<float> src_vector, CudaArray<float> src_quaternion, CudaArray<float> dst_vector) {
-            throw new NotImplementedException();
+            string key = "trivector_quaternion_mul";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Trivector.Arithmetric.QuaternionMul());
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src_vector, src_quaternion, dst_vector, vectorlength);
         }
 
+        /// <summary>回転積四元数勾配</summary>
         public static void MulQGrad(uint vectorlength, CudaArray<float> src_vector_value, CudaArray<float> src_vector_grad, CudaArray<float> src_quaternion, CudaArray<float> dst_quaternion) {
-            throw new NotImplementedException();
+            string key = "trivector_quaternion_mulqgrad";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Trivector.Arithmetric.QuaternionMulQGrad());
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src_vector_value, src_vector_grad, src_quaternion, dst_quaternion, vectorlength);
         }
 
+        /// <summary>回転積ベクトル勾配</summary>
         public static void MulVGrad(uint vectorlength, CudaArray<float> src_vector, CudaArray<float> src_quaternion, CudaArray<float> dst_vector) {
-            throw new NotImplementedException();
+            string key = "trivector_quaternion_mulvgrad";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Trivector.Arithmetric.QuaternionMulVGrad());
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, src_vector, src_quaternion, dst_vector, vectorlength);
         }
 
         /// <summary>外積</summary>
