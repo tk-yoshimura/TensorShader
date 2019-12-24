@@ -18,31 +18,65 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
         /// <summary>フィルタサイズ</summary>
         public uint KernelHeight { private set; get; }
 
+        /// <summary>勾配</summary>
+        public bool GradMode { private set; get; }
+
         /// <summary>実行あたりの積数(2^25=33554432‬)</summary>
         public static uint MulPerExecute => 0x2000000;
                 
         /// <summary>識別子</summary>
         public override sealed string Signature => 
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " +
-            $"{nameof(KernelWidth)} = {KernelWidth} {nameof(KernelHeight)} = {KernelHeight}";
+            $"{nameof(KernelWidth)} = {KernelWidth} {nameof(KernelHeight)} = {KernelHeight} {nameof(GradMode)} = {GradMode}";
         
         /// <summary>コンストラクタ</summary>
-        public Deconvolution2D(uint inchannels, uint outchannels, uint kwidth, uint kheight) { 
-            if (!Limits.CheckChannels(inchannels, outchannels)) {
+        public Deconvolution2D(uint inchannels, uint outchannels, uint kwidth, uint kheight, bool gradmode) { 
+            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple:2, inchannels, outchannels)) {
                 throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
             if (!Limits.CheckKernelSize(kwidth, kheight)) { 
                 throw new ArgumentException($"{nameof(kwidth)}, {nameof(kheight)}");
             }
 
-            this.InChannels = inchannels;
-            this.OutChannels = outchannels;
+            this.InChannels = inchannels / 2;
+            this.OutChannels = outchannels / 2;
             this.KernelWidth = kwidth;
             this.KernelHeight = kheight;
+            this.GradMode = gradmode;
 
             string code = $@"
 
-            __global__ void complex_deconvolution_2d(float *inmap, float *outmap, float *filter,
+            static __inline__ __device__ float2 ctor_float2(float x, float y){{
+                float2 t; t.x = x; t.y = y; return t;
+            }}
+
+            static __inline__ __device__ void floatfloat_add(float &hi, float &lo, float val){{
+                float tmp = hi;
+                hi += val;
+                lo -= (hi - tmp) - val;
+            }}
+
+            static __inline__ __device__ void floatfloat_sub(float &hi, float &lo, float val){{
+                float tmp = hi;
+                hi -= val;
+                lo -= (hi - tmp) + val;
+            }}
+
+            static __inline__ __device__ void complex_mul(float2 &hi, float2 &lo, float2 x1, float2 x2){{
+                floatfloat_add(hi.x, lo.x, x1.x * x2.x);
+                floatfloat_sub(hi.x, lo.x, x1.y * x2.y);
+                floatfloat_add(hi.y, lo.y, x1.x * x2.y);
+                floatfloat_add(hi.y, lo.y, x1.y * x2.x);
+            }}
+
+            static __inline__ __device__ void complex_mulgrad(float2 &hi, float2 &lo, float2 x1, float2 x2){{
+                floatfloat_add(hi.x, lo.x, x1.x * x2.x);
+                floatfloat_add(hi.x, lo.x, x1.y * x2.y);
+                floatfloat_sub(hi.y, lo.y, x1.y * x2.x);
+                floatfloat_add(hi.y, lo.y, x1.x * x2.y);
+            }}
+
+            __global__ void complex_deconvolution_2d(float2 *inmap, float2 *outmap, float2 *filter,
                                                      unsigned int oy_offset,
                                                      unsigned int inwidth, unsigned int outwidth, 
                                                      unsigned int inheight) {{
@@ -50,8 +84,8 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                 unsigned int outch = {Defines.IndexX}, tid = {Defines.ThreadIdX}, threads = {Defines.ThreadsX};
                 unsigned int ox = {Defines.BlockIndexY}, oy = oy_offset + {Defines.BlockIndexZ};
 
-                __shared__ float us[{InChannels}];
-                float uv_hi = 0, uv_lo = 0;
+                __shared__ float2 us[{InChannels}];
+                float2 vu_hi = ctor_float2(0.0, 0.0), vu_lo = ctor_float2(0.0, 0.0);
 
                 for(unsigned int ky = 0, iy = oy - {KernelHeight - 1}; ky < {KernelHeight}; ky++, iy++){{ 
                     if(iy >= inheight){{
@@ -74,13 +108,10 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
 
                         if(outch < {OutChannels}){{                        
                             for(unsigned int inch = 0; inch < {InChannels}; inch++){{                            
-                                float u = us[inch];
-                                float v = filter[filter_idx];
+                                float2 u = us[inch];
+                                float2 v = filter[filter_idx];
 
-                                float uv = u * v;
-                                float tmp = uv_hi;
-                                uv_hi += uv;
-                                uv_lo -= (uv_hi - tmp) - uv;
+                                {(GradMode ? "complex_mulgrad" : "complex_mul")}(vu_hi, vu_lo, v, u);
 
                                 filter_idx += {OutChannels};
                             }}
@@ -93,7 +124,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                 if(outch < {OutChannels}){{
                     unsigned int outmap_idx = outch + {OutChannels} * (ox + outwidth * oy);
 
-                    outmap[outmap_idx] = uv_hi + uv_lo;
+                    outmap[outmap_idx] = ctor_float2(vu_hi.x + vu_lo.x, vu_hi.y + vu_lo.y);
                 }}
             }}";
 
@@ -115,7 +146,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             uint outwidth = inwidth + KernelWidth - 1;
             uint outheight = inheight + KernelHeight - 1;
 
-            uint mul_per_line = InChannels * OutChannels * KernelWidth * KernelHeight * outwidth;
+            uint mul_per_line = InChannels * OutChannels * KernelWidth * KernelHeight * outwidth * 4;
 
             uint lines_per_execute = MulPerExecute / mul_per_line + 1;
 
@@ -128,8 +159,8 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                         block:(Kernel.DefaultBlockSize(OutChannels), 1, 1),
                         dynamic_shared_memory_bytes: 0, 
                         stream,
-                        inmap.ElementPtr(th * InChannels * inwidth * inheight), 
-                        outmap.ElementPtr(th * OutChannels * outwidth * outheight),
+                        inmap.ElementPtr(th * InChannels * inwidth * inheight * 2), 
+                        outmap.ElementPtr(th * OutChannels * outwidth * outheight * 2),
                         filter,
                         oy_offset,
                         inwidth, outwidth, inheight
@@ -159,15 +190,15 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             uint outwidth = inwidth + KernelWidth - 1;
             uint outheight = inheight + KernelHeight - 1;
 
-            if (!(args[0] is CudaArray<float> inmap) || inmap.Length < InChannels * inwidth * inheight * batches) {
+            if (!(args[0] is CudaArray<float> inmap) || inmap.Length < InChannels * inwidth * inheight * batches * 2) {
                 throw new ArgumentException(nameof(inmap));
             }
 
-            if (!(args[1] is CudaArray<float> outmap) || outmap.Length < OutChannels * outwidth * outheight * batches) {
+            if (!(args[1] is CudaArray<float> outmap) || outmap.Length < OutChannels * outwidth * outheight * batches * 2) {
                 throw new ArgumentException(nameof(outmap));
             }
 
-            if (!(args[2] is CudaArray<float> filter) || filter.Length < InChannels * OutChannels * KernelWidth * KernelHeight) {
+            if (!(args[2] is CudaArray<float> filter) || filter.Length < InChannels * OutChannels * KernelWidth * KernelHeight * 2) {
                 throw new ArgumentException(nameof(filter));
             }
         }

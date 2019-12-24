@@ -28,7 +28,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
         /// <summary>識別子</summary>
         public override sealed string Signature => 
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " +
-            $"{nameof(KernelWidth)} = {KernelWidth} {nameof(KernelHeight)} = {KernelHeight}";
+            $"{nameof(KernelWidth)} = {KernelWidth} {nameof(KernelHeight)} = {KernelHeight} {nameof(GradMode)} = {GradMode}";
         
         /// <summary>コンストラクタ</summary>
         public Convolution2D(uint inchannels, uint outchannels, uint kwidth, uint kheight, bool gradmode) { 
@@ -52,22 +52,30 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                 float2 t; t.x = x; t.y = y; return t;
             }}
 
-            static __inline__ __device__ float2 complex_mul(float2 x1, float2 x2){{
-                float2 y; 
-
-                y.x = x1.x * x2.x - x1.y * x2.y;
-                y.y = x1.x * x2.y + x1.y * x2.x;
-
-                return y;
+            static __inline__ __device__ void floatfloat_add(float &hi, float &lo, float val){{
+                float tmp = hi;
+                hi += val;
+                lo -= (hi - tmp) - val;
             }}
 
-            static __inline__ __device__ float2 complex_mulgrad(float2 x1, float2 x2){{
-                float2 y; 
+            static __inline__ __device__ void floatfloat_sub(float &hi, float &lo, float val){{
+                float tmp = hi;
+                hi -= val;
+                lo -= (hi - tmp) + val;
+            }}
 
-                y.x = x1.x * x2.x + x1.y * x2.y;
-                y.y = x1.y * x2.x - x1.x * x2.y;
+            static __inline__ __device__ void complex_mul(float2 &hi, float2 &lo, float2 x1, float2 x2){{
+                floatfloat_add(hi.x, lo.x, x1.x * x2.x);
+                floatfloat_sub(hi.x, lo.x, x1.y * x2.y);
+                floatfloat_add(hi.y, lo.y, x1.x * x2.y);
+                floatfloat_add(hi.y, lo.y, x1.y * x2.x);
+            }}
 
-                return y;
+            static __inline__ __device__ void complex_mulgrad(float2 &hi, float2 &lo, float2 x1, float2 x2){{
+                floatfloat_add(hi.x, lo.x, x1.x * x2.x);
+                floatfloat_add(hi.x, lo.x, x1.y * x2.y);
+                floatfloat_add(hi.y, lo.y, x1.y * x2.x);
+                floatfloat_sub(hi.y, lo.y, x1.x * x2.y);
             }}
 
             __global__ void complex_convolution_2d(float2 *inmap, float2 *outmap, float2 *filter, 
@@ -96,14 +104,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                                 float2 u = us[inch];
                                 float2 v = filter[filter_idx];
 
-                                float2 uv = {(GradMode ? "complex_mulgrad" : "complex_mul")}(u, v);
-                                float2 tmp = uv_hi;
-                                
-                                uv_hi.x += uv.x;
-                                uv_lo.x -= (uv_hi.x - tmp.x) - uv.x;
-                                
-                                uv_hi.y += uv.y;
-                                uv_lo.y -= (uv_hi.y - tmp.y) - uv.y;
+                                {(GradMode ? "complex_mulgrad" : "complex_mul")}(uv_hi, uv_lo, u, v);
 
                                 filter_idx += {OutChannels};
                             }}

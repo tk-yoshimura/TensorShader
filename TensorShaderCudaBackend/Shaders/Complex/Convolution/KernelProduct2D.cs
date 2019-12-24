@@ -19,6 +19,9 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
         /// <summary>フィルタサイズ</summary>
         public uint KernelHeight { private set; get; }
 
+        /// <summary>転置</summary>
+        public bool Transpose { private set; get; }
+
         /// <summary>実行あたりの積数(2^24=16777216‬)</summary>
         public static uint MulPerExecute => 0x1000000;
 
@@ -34,27 +37,60 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
         /// <summary>識別子</summary>
         public override sealed string Signature => 
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " + 
-            $"{nameof(KernelWidth)} = {KernelWidth} {nameof(KernelHeight)} = {KernelHeight}";
+            $"{nameof(KernelWidth)} = {KernelWidth} {nameof(KernelHeight)} = {KernelHeight} {nameof(Transpose)} = {Transpose}";
         
         /// <summary>コンストラクタ</summary>
-        public KernelProduct2D(uint inchannels, uint outchannels, uint kwidth, uint kheight) { 
-            if (!Limits.CheckChannels(inchannels, outchannels)) {
+        public KernelProduct2D(uint inchannels, uint outchannels, uint kwidth, uint kheight, bool transpose) { 
+            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple:2, inchannels, outchannels)) {
                 throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
             if (!Limits.CheckKernelSize(kwidth, kheight)) { 
                 throw new ArgumentException($"{nameof(kwidth)}, {nameof(kheight)}");
             }
 
-            this.InChannels = inchannels;
-            this.OutChannels = outchannels;
+            this.InChannels = inchannels / 2;
+            this.OutChannels = outchannels / 2;
             this.KernelWidth = kwidth;
             this.KernelHeight = kheight;
+            this.Transpose = transpose;
 
             this.BlockSize = Kernel.MinimizeGridsBlockSize((InChannels, OutChannels));
 
             string code = $@"
 
-            __global__ void complex_kernelproduct_2d(float *inmap, float *outmap, float *filter, 
+            static __inline__ __device__ float2 ctor_float2(float x, float y){{
+                float2 t; t.x = x; t.y = y; return t;
+            }}
+
+            static __inline__ __device__ void floatfloat_add(float &hi, float &lo, float val){{
+                float tmp = hi;
+                hi += val;
+                lo -= (hi - tmp) - val;
+            }}
+
+            static __inline__ __device__ void floatfloat_sub(float &hi, float &lo, float val){{
+                float tmp = hi;
+                hi -= val;
+                lo -= (hi - tmp) + val;
+            }}
+
+            static __inline__ __device__ void complex_kernelprod(float2 &hi, float2 &lo, float2 x1, float2 x2){{
+                floatfloat_add(hi.x, lo.x, x1.x * x2.x);
+                floatfloat_add(hi.x, lo.x, x1.y * x2.y);
+                floatfloat_sub(hi.y, lo.y, x1.y * x2.x);
+                floatfloat_add(hi.y, lo.y, x1.x * x2.y);
+            }}
+
+            static __inline__ __device__ void floatfloat_atomicadd(float2 *ptr, float2 hi, float2 lo){{
+                float *ptr_float = (float*)(void*)ptr;
+
+                float tmpx = atomicAdd(ptr_float, hi.x);
+                atomicAdd(ptr_float + 1, lo.x - (((tmpx + hi.x) - tmpx) - hi.x));
+                float tmpy = atomicAdd(ptr_float + 2, hi.y);
+                atomicAdd(ptr_float + 3, lo.y - (((tmpy + hi.y) - tmpy) - hi.y));
+            }}
+
+            __global__ void complex_kernelproduct_2d(float2 *inmap, float2 *outmap, float2 *filter, 
                                                      unsigned int oy_offset, 
                                                      unsigned int xsets,
                                                      unsigned int inwidth, unsigned int outwidth) {{
@@ -64,13 +100,13 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                 unsigned int oy = oy_offset + {Defines.BlockIndexZ} / xsets;
                 unsigned int tidx = {Defines.ThreadIdX}, tidy = {Defines.ThreadIdY};
 
-                __shared__ float us[{BlockSize.x}], vs[{BlockSize.y}];
+                __shared__ float2 us[{BlockSize.x}], vs[{BlockSize.y}];
 
                 for(unsigned int ky = 0, iy = oy; ky < {KernelHeight}; ky++, iy++){{
                     for(unsigned int kx = 0; kx < {KernelWidth}; kx++){{
                         unsigned int filter_index = (inch + {InChannels} * (outch + {OutChannels} * (kx + {KernelWidth} * ky))) * 2;
                     
-                        float uv_hi = 0, uv_lo = 0;
+                        float2 uv_hi = ctor_float2(0.0, 0.0), uv_lo = ctor_float2(0.0, 0.0);
                     
                         for(unsigned int ox = ox_offset, ix = ox + kx; ox < ox_offset + {BatchPixels} && ox < outwidth; ox++, ix++){{
                             if(tidx == 0 && outch < {OutChannels}){{
@@ -82,22 +118,16 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                             __syncthreads();
 
                             if(inch < {InChannels} && outch < {OutChannels}){{
-                                float u = us[tidx];
-                                float v = vs[tidy];
+                                float2 u = us[tidx];
+                                float2 v = vs[tidy];
 
-                                float uv = u * v;
-
-                                float tmp = uv_hi;
-
-                                uv_hi += uv;
-                                uv_lo -= (uv_hi - tmp) - uv;    
+                                complex_kernelprod(uv_hi, uv_lo, {(Transpose ? "v, u" : "u, v")});
                             }}
                             __syncthreads();
                         }}
 
                         if(inch < {InChannels} && outch < {OutChannels}){{
-                            float tmp = atomicAdd(filter + filter_index, uv_hi);
-                            atomicAdd(filter + filter_index + 1, uv_lo - (((tmp + uv_hi) - tmp) - uv_hi));
+                            floatfloat_atomicadd(filter + filter_index, uv_hi, uv_lo);
                         }}
                     }}
                 }}
@@ -126,10 +156,10 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             uint outheight = inheight + 1 - KernelHeight;
 
             CudaArray<float> dfloat_filter = 
-                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index:0, InChannels * OutChannels * KernelWidth * KernelHeight * 2);
-            dfloat_filter.ZerosetAsync(stream, InChannels * OutChannels * KernelWidth * KernelHeight * 2);
+                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index:0, InChannels * OutChannels * KernelWidth * KernelHeight * 4);
+            dfloat_filter.ZerosetAsync(stream, InChannels * OutChannels * KernelWidth * KernelHeight * 4);
 
-            uint mul_per_line = InChannels * OutChannels * KernelWidth * KernelHeight * outwidth;
+            uint mul_per_line = InChannels * OutChannels * KernelWidth * KernelHeight * outwidth * 4;
 
             uint lines_per_execute_mul = MulPerExecute / mul_per_line + 1;
             uint lines_per_execute_pixels = (PixelsPerExecute + outwidth - 1) / outwidth;
@@ -147,8 +177,8 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                         block:(BlockSize.x, BlockSize.y, 1),
                         dynamic_shared_memory_bytes: 0, 
                         stream,
-                        inmap.ElementPtr(th * InChannels * inwidth * inheight), 
-                        outmap.ElementPtr(th * OutChannels * outwidth * outheight),
+                        inmap.ElementPtr(th * InChannels * inwidth * inheight * 2), 
+                        outmap.ElementPtr(th * OutChannels * outwidth * outheight * 2),
                         dfloat_filter,
                         oy_offset,
                         xsets,
@@ -158,7 +188,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                 }
             }
             
-            hadd.Execute(stream, dfloat_filter, filter, InChannels * OutChannels * KernelWidth * KernelHeight);
+            hadd.Execute(stream, dfloat_filter, filter, InChannels * OutChannels * KernelWidth * KernelHeight * 2);
         }
 
         /// <summary>引数チェック</summary>
@@ -182,15 +212,15 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             uint outwidth = inwidth + 1 - KernelWidth;
             uint outheight = inheight + 1 - KernelHeight;
 
-            if (!(args[0] is CudaArray<float> inmap) || inmap.Length < InChannels * inwidth * inheight * batches) {
+            if (!(args[0] is CudaArray<float> inmap) || inmap.Length < InChannels * inwidth * inheight * batches * 2) {
                 throw new ArgumentException(nameof(inmap));
             }
 
-            if (!(args[1] is CudaArray<float> outmap) || outmap.Length < OutChannels * outwidth * outheight * batches) {
+            if (!(args[1] is CudaArray<float> outmap) || outmap.Length < OutChannels * outwidth * outheight * batches * 2) {
                 throw new ArgumentException(nameof(outmap));
             }
 
-            if (!(args[2] is CudaArray<float> filter) || filter.Length < InChannels * OutChannels * KernelWidth * KernelHeight) {
+            if (!(args[2] is CudaArray<float> filter) || filter.Length < InChannels * OutChannels * KernelWidth * KernelHeight * 2) {
                 throw new ArgumentException(nameof(filter));
             }
         }

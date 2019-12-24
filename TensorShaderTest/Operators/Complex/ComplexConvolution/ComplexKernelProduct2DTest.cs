@@ -4,25 +4,28 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.ComplexConvolution;
+using TensorShaderCudaBackend.API;
 
 namespace TensorShaderTest.Operators.Complex {
     [TestClass]
     public class ComplexKernelProduct2DTest {
         [TestMethod]
         public void ExecuteTest() {
+            Random random = new Random(1234);
+
             float max_err = 0;
 
-            foreach (int batch in new int[] { 1, 2, 3 }) {
-                foreach (int inchannels in new int[] { 2, 4, 10, 20 }) {
-                    foreach (int outchannels in new int[] { 6, 14 }) {
+            foreach (int batch in new int[] { 1, 2 }) {
+                foreach (int inchannels in new int[] { 2, 4, 10, 20, 32, 34 }) {
+                    foreach (int outchannels in new int[] { 2, 4, 10, 20, 32, 34 }) {
                         foreach (int kheight in new int[] { 1, 3, 5 }) {
                             foreach (int kwidth in new int[] { 1, 3, 5 }) {
-                                foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                                    foreach (int inheight in new int[] { 8, 9, 19, 23 }) {
+                                foreach (int inwidth in new int[] { kwidth, kwidth * 2, 8, 9, 13, 17, 25 }) {
+                                    foreach (int inheight in new int[] { kheight, kheight * 2, 8, 9, 13, 17, 25 }) {
                                         int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
 
-                                        float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                                        float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+                                        float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+                                        float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).Reverse().ToArray();
 
                                         System.Numerics.Complex[] xcval = (new System.Numerics.Complex[xval.Length / 2])
                                             .Select((_, idx) => new System.Numerics.Complex(xval[idx * 2], xval[idx * 2 + 1])).ToArray();
@@ -66,47 +69,6 @@ namespace TensorShaderTest.Operators.Complex {
         }
 
         [TestMethod]
-        public void OverflowTest() {
-            foreach (bool transpose in new bool[] { false, true }) {
-                foreach (int batch in new int[] { 1, 2, 3 }) {
-                    foreach (int inchannels in new int[] { 2, 4, 10, 20 }) {
-                        foreach (int outchannels in new int[] { 6, 14 }) {
-                            foreach (int kheight in new int[] { 1, 3, 5 }) {
-                                foreach (int kwidth in new int[] { 1, 3, 5 }) {
-                                    foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                                        foreach (int inheight in new int[] { 8, 9, 19, 23 }) {
-                                            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
-
-                                            float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                                            float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
-
-                                            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
-                                            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
-
-                                            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels, outchannels / 2, kwidth, kheight));
-
-                                            ComplexKernelProduct2D ope = new ComplexKernelProduct2D(inwidth, inheight, inchannels, outchannels, kwidth, kheight, transpose, batch);
-
-                                            ope.Execute(x_tensor, y_tensor, gw_tensor);
-
-                                            CollectionAssert.AreEqual(xval, x_tensor.State);
-                                            CollectionAssert.AreEqual(yval, y_tensor.State);
-
-                                            gw_tensor.CheckOverflow();
-
-                                            Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{inwidth},{inheight},{batch},{transpose}");
-
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        [TestMethod]
         public void SpeedTest() {
             int inwidth = 512, inheight = 512, inchannels = 32, outchannels = 32, ksize = 3;
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1;
@@ -118,17 +80,12 @@ namespace TensorShaderTest.Operators.Complex {
 
             ComplexKernelProduct2D ope = new ComplexKernelProduct2D(inwidth, inheight, inchannels, outchannels, ksize, ksize);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/complex_kernelproduct_2d.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor, gw_tensor);
-            ope.Execute(x_tensor, y_tensor, gw_tensor);
-            ope.Execute(x_tensor, y_tensor, gw_tensor);
-            ope.Execute(x_tensor, y_tensor, gw_tensor);
 
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            Cuda.Profiler.Stop();
         }
 
         public static ComplexFilter2D Reference(ComplexMap2D x, ComplexMap2D gy, int kwidth, int kheight) {

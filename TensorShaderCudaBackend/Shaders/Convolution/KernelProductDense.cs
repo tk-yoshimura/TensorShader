@@ -32,6 +32,12 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             this.BlockSize = Kernel.MinimizeGridsBlockSize((InChannels, OutChannels));
 
             string code = $@"
+
+            static __inline__ __device__ void floatfloat_atomicadd(float *ptr, float val){{
+                float tmp = atomicAdd(ptr, val);
+                atomicAdd(ptr + 1, -(((tmp + val) - tmp) - val));
+            }}
+
             __global__ void kernelproduct_dense(float *inmap, float *outmap, float *filter) {{
 
                 unsigned int inch = {Defines.IndexX}, outch = {Defines.IndexY}, th = {Defines.BlockIndexZ};
@@ -60,10 +66,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                     float u = us[tidx];
                     float v = vs[tidy];
 
-                    float uv = u * v;
-
-                    float tmp = atomicAdd(filter, uv);
-                    atomicAdd(filter + 1, -(((tmp + uv) - tmp) - uv));
+                    floatfloat_atomicadd(filter, u * v);
                 }}
             }}";
 

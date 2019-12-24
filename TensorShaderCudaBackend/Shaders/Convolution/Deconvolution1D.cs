@@ -35,6 +35,12 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             string code = $@"
 
+            static __inline__ __device__ void floatfloat_add(float &hi, float &lo, float val){{
+                float tmp = hi;
+                hi += val;
+                lo -= (hi - tmp) - val;
+            }}
+
             __global__ void deconvolution_1d(float *inmap, float *outmap, float *filter,
                                              unsigned int inwidth) {{
 
@@ -62,10 +68,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                             float u = us[inch];
                             float v = filter[filter_idx];
 
-                            float uv = u * v;
-                            float tmp = uv_hi;
-                            uv_hi += uv;
-                            uv_lo -= (uv_hi - tmp) - uv;
+                            floatfloat_add(uv_hi, uv_lo, u * v);
 
                             filter_idx += {OutChannels};
                         }}

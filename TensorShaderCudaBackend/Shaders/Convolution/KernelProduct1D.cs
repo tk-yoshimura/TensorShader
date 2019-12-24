@@ -44,6 +44,17 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             string code = $@"
 
+            static __inline__ __device__ void floatfloat_add(float &hi, float &lo, float val){{
+                float tmp = hi;
+                hi += val;
+                lo -= (hi - tmp) - val;
+            }}
+
+            static __inline__ __device__ void floatfloat_atomicadd(float *ptr, float hi, float lo){{
+                float tmp = atomicAdd(ptr, hi);
+                atomicAdd(ptr + 1, lo - (((tmp + hi) - tmp) - hi));
+            }}
+
             __global__ void kernelproduct_1d(float *inmap, float *outmap, float *filter, 
                                              unsigned int outwidth) {{
 
@@ -71,19 +82,13 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                             float u = us[tidx];
                             float v = vs[tidy];
 
-                            float uv = u * v;
-
-                            float tmp = uv_hi;
-
-                            uv_hi += uv;
-                            uv_lo -= (uv_hi - tmp) - uv;    
+                            floatfloat_add(uv_hi, uv_lo, u * v);
                         }}
                         __syncthreads();
                     }}
 
                     if(inch < {InChannels} && outch < {OutChannels}){{
-                        float tmp = atomicAdd(filter + filter_index, uv_hi);
-                        atomicAdd(filter + filter_index + 1, uv_lo - (((tmp + uv_hi) - tmp) - uv_hi));
+                        floatfloat_atomicadd(filter + filter_index, uv_hi, uv_lo);
                     }}
                 }}
             }}";

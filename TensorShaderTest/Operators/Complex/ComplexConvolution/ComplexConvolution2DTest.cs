@@ -11,9 +11,11 @@ namespace TensorShaderTest.Operators.Complex {
     public class ComplexConvolution2DTest {
         [TestMethod]
         public void ExecuteTest() {
+            Random random = new Random(1234);
+
             float max_err = 0;
 
-            foreach (int batch in new int[] { 1, 2, 3 }) {
+            foreach (int batch in new int[] { 1, 2 }) {
                 foreach (int inchannels in new int[] { 2, 4, 10, 20, 32, 34 }) {
                     foreach (int outchannels in new int[] { 2, 4, 10, 20, 32, 34 }) {
                         foreach (int kheight in new int[] { 1, 3, 5 }) {
@@ -22,8 +24,8 @@ namespace TensorShaderTest.Operators.Complex {
                                     foreach (int inheight in new int[] { kheight, kheight * 2, 8, 9, 13, 17, 25 }) {
                                         int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
 
-                                        float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => (idx & 1 + idx) * 1e-3f).ToArray();
-                                        float[] wval = (new float[kwidth * kheight * inchannels * outchannels / 2]).Select((_, idx) => (idx & 1 + idx) * 1e-3f).Reverse().ToArray();
+                                        float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+                                        float[] wval = (new float[kwidth * kheight * inchannels * outchannels / 2]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
 
                                         System.Numerics.Complex[] xcval = (new System.Numerics.Complex[xval.Length / 2])
                                             .Select((_, idx) => new System.Numerics.Complex(xval[idx * 2], xval[idx * 2 + 1])).ToArray();
@@ -51,7 +53,7 @@ namespace TensorShaderTest.Operators.Complex {
                                         CollectionAssert.AreEqual(xval, x_tensor.State);
                                         CollectionAssert.AreEqual(wval, w_tensor.State);
 
-                                        AssertError.Tolerance(y_expect, y_actual, 1e-4f, 1e-4f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
+                                        AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
 
                                         Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
                                     }
