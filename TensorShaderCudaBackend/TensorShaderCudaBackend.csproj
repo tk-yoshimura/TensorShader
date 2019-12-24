@@ -207,6 +207,9 @@
     <Compile Include="Shaders\Trivector\Arithmetric\QuaternionMulVGrad.cs" />
     <Compile Include="Shaders\Trivector\Arithmetric\QuaternionMul.cs" />
     <Compile Include="Shaders\Trivector\Arithmetric\UnaryArithmetric.cs" />
+    <Compile Include="Shaders\Trivector\Convolution\Convolution2D.cs" />
+    <Compile Include="Shaders\Trivector\Convolution\Deconvolution2D.cs" />
+    <Compile Include="Shaders\Trivector\Convolution\KernelProduct2D.cs" />
     <Compile Include="Shaders\Zoom\LinearZoom1D.cs" />
     <Compile Include="Shaders\Zoom\LinearZoom2D.cs" />
     <Compile Include="Shaders\Zoom\LinearZoom3D.cs" />
