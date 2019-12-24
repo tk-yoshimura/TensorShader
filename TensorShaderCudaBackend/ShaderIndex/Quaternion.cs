@@ -356,25 +356,52 @@ namespace TensorShaderCudaBackend {
             throw new NotImplementedException();
         }
 
-
+        /// <summary>2次元畳み込み</summary>
         public static void Convolution2D(uint inchannels, uint outchannels, uint inwidth, uint inheight,
-                                  uint batch, uint kwidth, uint kheight, bool gradmode,
-                                  CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
-            throw new NotImplementedException();
+                                         uint batch, uint kwidth, uint kheight, bool gradmode,
+                                         CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+
+            string key = $"quaternion_convolution_2d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} gradmode={gradmode}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Quaternion.Convolution.Convolution2D(inchannels, outchannels, kwidth, kheight, gradmode));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, inmap, outmap, kernel, inwidth, inheight, batch);
         }
 
-
+        /// <summary>2次元逆畳み込み</summary>
         public static void Deconvolution2D(uint inchannels, uint outchannels, uint inwidth, uint inheight,
-                                    uint batch, uint kwidth, uint kheight, bool gradmode,
-                                    CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
-            throw new NotImplementedException();
+                                           uint batch, uint kwidth, uint kheight, bool gradmode,
+                                           CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+
+            string key = $"quaternion_deconvolution_2d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} gradmode={gradmode}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Quaternion.Convolution.Deconvolution2D(inchannels, outchannels, kwidth, kheight, gradmode));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, inmap, outmap, kernel, inwidth, inheight, batch);
         }
 
-
+        /// <summary>カーネル積</summary>
         public static void KernelProduct2D(uint inchannels, uint outchannels, uint inwidth, uint inheight,
-                                    uint batch, uint kwidth, uint kheight, bool transpose,
-                                    CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
-            throw new NotImplementedException();
+                                           uint batch, uint kwidth, uint kheight, bool transpose,
+                                           CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
+
+            string key = $"quaternion_kernelproduct_2d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} transpose={transpose}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Quaternion.Convolution.KernelProduct2D(inchannels, outchannels, kwidth, kheight, transpose));
+            }
+
+            Shader shader = shaders[key];
+
+            shader.Execute(Shader.DefaultStream, inmap, outmap, kernel, inwidth, inheight, batch);
         }
 
 

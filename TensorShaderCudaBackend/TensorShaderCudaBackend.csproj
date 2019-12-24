@@ -184,6 +184,9 @@
     <Compile Include="Shaders\Quaternion\Arithmetric\BinaryArithmetric.cs" />
     <Compile Include="Shaders\Quaternion\Arithmetric\Elementwise.cs" />
     <Compile Include="Shaders\Quaternion\Arithmetric\UnaryArithmetric.cs" />
+    <Compile Include="Shaders\Quaternion\Convolution\Convolution2D.cs" />
+    <Compile Include="Shaders\Quaternion\Convolution\Deconvolution2D.cs" />
+    <Compile Include="Shaders\Quaternion\Convolution\KernelProduct2D.cs" />
     <Compile Include="Shaders\Randomize\Randomize.cs" />
     <Compile Include="Shaders\Randomize\Normal.cs" />
     <Compile Include="Shaders\Randomize\Binary.cs" />
@@ -192,6 +195,7 @@
     <Compile Include="Shaders\Transform\ChannelToSpace3D.cs" />
     <Compile Include="Shaders\Transform\SpaceToChannel2D.cs" />
     <Compile Include="Shaders\Transform\ChannelToSpace2D.cs" />
+    <Compile Include="Shaders\Transpose\TransposeQuaternionKernelChannel.cs" />
     <Compile Include="Shaders\Transpose\TransposeComplexKernelChannel.cs" />
     <Compile Include="Shaders\Transpose\TransposeKernelChannel.cs" />
     <Compile Include="Shaders\Trimming\Trimming1D.cs" />
