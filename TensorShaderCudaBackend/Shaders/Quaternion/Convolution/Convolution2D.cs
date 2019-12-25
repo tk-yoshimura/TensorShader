@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Linq;
 
+using static TensorShaderCudaBackend.Transpose;
+
 namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
 
     /// <summary>2次元畳み込み</summary>
     public sealed class Convolution2D : Shader {
-        private readonly Transpose.TransposeQuaternionKernelChannel transpose;
 
         /// <summary>入力チャネル数</summary>
         public uint InChannels { private set; get; }
@@ -44,7 +45,6 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             this.KernelWidth = kwidth;
             this.KernelHeight = kheight;
             this.GradMode = gradmode;
-            this.transpose = new Transpose.TransposeQuaternionKernelChannel(inchannels, outchannels);
 
             string code = $@"
 
@@ -175,7 +175,8 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
 
             CudaArray<float> transpose_filter = 
                 CudaArrayReserver<float>.Request(stream, filter.DeviceID, index:0, InChannels * OutChannels * KernelWidth * KernelHeight * 4);
-            transpose.Execute(stream, filter, transpose_filter, KernelWidth * KernelHeight);
+
+            TransposeQuaternionKernelChannel(InChannels * 4, OutChannels * 4, KernelWidth * KernelHeight, filter, transpose_filter, stream);
             
             for (uint th = 0; th < batches; th++) {
                 for (uint oy_offset = 0; oy_offset < outheight; oy_offset += lines_per_execute) {

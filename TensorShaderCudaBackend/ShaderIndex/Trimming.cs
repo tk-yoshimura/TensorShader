@@ -10,7 +10,8 @@ namespace TensorShaderCudaBackend {
         public static void Trimming1D(uint channels, uint outwidth,
                                       uint batch, 
                                       uint trim_left, uint trim_right,
-                                      CudaArray<float> inmap, CudaArray<float> outmap) {
+                                      CudaArray<float> inmap, CudaArray<float> outmap,
+                                      Stream stream = null) {
 
             string key = $"trimming_1d channels={channels} trim_left={trim_left} trim_right={trim_right}";
             
@@ -20,7 +21,11 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, outwidth, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, outwidth, batch);
         }
 
         /// <summary>2次元トリミング</summary>
@@ -28,7 +33,8 @@ namespace TensorShaderCudaBackend {
                                       uint batch,
                                       uint trim_left, uint trim_right,
                                       uint trim_top, uint trim_bottom,
-                                      CudaArray<float> inmap, CudaArray<float> outmap) {
+                                      CudaArray<float> inmap, CudaArray<float> outmap,
+                                      Stream stream = null) {
 
             string key = 
                 $"trimming_2d channels={channels} " +
@@ -41,7 +47,11 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, outwidth, outheight, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, outwidth, outheight, batch);
         }
 
         /// <summary>3次元トリミング</summary>
@@ -50,7 +60,8 @@ namespace TensorShaderCudaBackend {
                                       uint trim_left, uint trim_right,
                                       uint trim_top, uint trim_bottom,
                                       uint trim_front, uint trim_rear,
-                                      CudaArray<float> inmap, CudaArray<float> outmap) {
+                                      CudaArray<float> inmap, CudaArray<float> outmap,
+                                      Stream stream = null) {
 
             string key = 
                 $"trimming_3d channels={channels} " +
@@ -65,7 +76,11 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, outwidth, outheight, outdepth, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, outwidth, outheight, outdepth, batch);
         }
 
     } 

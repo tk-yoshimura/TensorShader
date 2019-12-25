@@ -7,7 +7,7 @@ namespace TensorShaderCudaBackend {
         private readonly static Dictionary<string, Shader> shaders = new Dictionary<string, Shader>();
         
         /// <summary>総和</summary>
-        public static void Sum(uint src_stride, CudaArray<float> src, uint dst_stride, CudaArray<float> dst, uint slides) {
+        public static void Sum(uint src_stride, CudaArray<float> src, uint dst_stride, CudaArray<float> dst, uint slides, Stream stream = null) {
             string key = "sum";
             
             if (!shaders.ContainsKey(key)) {
@@ -16,11 +16,15 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, src, dst, src_stride, dst_stride, slides);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src, dst, src_stride, dst_stride, slides);
         }
 
         /// <summary>平均</summary>
-        public static void Average(uint src_stride, CudaArray<float> src, uint dst_stride, CudaArray<float> dst, uint slides) {
+        public static void Average(uint src_stride, CudaArray<float> src, uint dst_stride, CudaArray<float> dst, uint slides, Stream stream = null) {
             string key = "average";
             
             if (!shaders.ContainsKey(key)) {
@@ -29,11 +33,15 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, src, dst, src_stride, dst_stride, slides);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src, dst, src_stride, dst_stride, slides);
         }
 
         /// <summary>最小値</summary>
-        public static void Min(uint src_stride, CudaArray<float> src, uint dst_stride, CudaArray<float> dst, uint slides) {
+        public static void Min(uint src_stride, CudaArray<float> src, uint dst_stride, CudaArray<float> dst, uint slides, Stream stream = null) {
             string key = "min";
             
             if (!shaders.ContainsKey(key)) {
@@ -42,11 +50,15 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, src, dst, src_stride, dst_stride, slides);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src, dst, src_stride, dst_stride, slides);
         }
 
         /// <summary>最大値</summary>
-        public static void Max(uint src_stride, CudaArray<float> src, uint dst_stride, CudaArray<float> dst, uint slides) {
+        public static void Max(uint src_stride, CudaArray<float> src, uint dst_stride, CudaArray<float> dst, uint slides, Stream stream = null) {
             string key = "max";
             
             if (!shaders.ContainsKey(key)) {
@@ -55,7 +67,11 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, src, dst, src_stride, dst_stride, slides);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src, dst, src_stride, dst_stride, slides);
         }
     } 
 }

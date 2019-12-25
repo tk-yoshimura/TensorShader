@@ -10,7 +10,8 @@ namespace TensorShaderCudaBackend {
         /// <summary>全結合</summary>
         public static void Dense(uint inchannels, uint outchannels,
                                  uint batch,
-                                 CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                 CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
+                                 Stream stream = null) {
 
             string key = $"dense inchannels={inchannels} outchannels={outchannels}";
             
@@ -20,13 +21,18 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, kernel, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, batch);
         }
 
         /// <summary>転置全結合</summary>
         public static void TransposeDense(uint inchannels, uint outchannels,
                                           uint batch, 
-                                          CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                          CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
+                                          Stream stream = null) {
 
             string key = $"transpose_dense inchannels={inchannels} outchannels={outchannels}";
             
@@ -36,13 +42,18 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, kernel, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, batch);
         }
 
         /// <summary>カーネル積</summary>
         public static void KernelProductDense(uint inchannels, uint outchannels,
                                               uint batch,
-                                              CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
+                                              CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel, 
+                                              Stream stream = null) {
 
             string key = $"kernelproduct_dense inchannels={inchannels} outchannels={outchannels}";
             
@@ -52,13 +63,18 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, kernel, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, batch);
         }
 
         /// <summary>1次元畳み込み</summary>
         public static void Convolution1D(uint inchannels, uint outchannels, uint inwidth,
-                                  uint batch, uint kwidth, 
-                                  CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                         uint batch, uint kwidth, 
+                                         CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
+                                         Stream stream = null) {
 
             string key = $"convolution_1d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth}";
             
@@ -68,13 +84,18 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, kernel, inwidth, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, batch);
         }
 
         /// <summary>1次元逆畳み込み</summary>
         public static void Deconvolution1D(uint inchannels, uint outchannels, uint inwidth,
-                                    uint batch, uint kwidth, 
-                                    CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                           uint batch, uint kwidth, 
+                                           CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
+                                           Stream stream = null) {
 
             string key = $"deconvolution_1d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth}";
             
@@ -84,13 +105,18 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, kernel, inwidth, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, batch);
         }
 
         /// <summary>カーネル積</summary>
         public static void KernelProduct1D(uint inchannels, uint outchannels, uint inwidth,
-                                    uint batch, uint kwidth, 
-                                    CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
+                                           uint batch, uint kwidth, 
+                                           CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel, 
+                                           Stream stream = null) {
 
             string key = $"kernelproduct_1d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth}";
             
@@ -100,13 +126,18 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, kernel, inwidth, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, batch);
         }
 
         /// <summary>2次元畳み込み</summary>
         public static void Convolution2D(uint inchannels, uint outchannels, uint inwidth, uint inheight,
                                          uint batch, uint kwidth, uint kheight, 
-                                         CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                         CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
+                                         Stream stream = null) {
 
             string key = $"convolution_2d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight}";
             
@@ -116,13 +147,18 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, kernel, inwidth, inheight, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, inheight, batch);
         }
 
         /// <summary>2次元逆畳み込み</summary>
         public static void Deconvolution2D(uint inchannels, uint outchannels, uint inwidth, uint inheight,
-                                    uint batch, uint kwidth, uint kheight, 
-                                    CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                           uint batch, uint kwidth, uint kheight, 
+                                           CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
+                                           Stream stream = null) {
 
             string key = $"deconvolution_2d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight}";
             
@@ -132,13 +168,18 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, kernel, inwidth, inheight, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, inheight, batch);
         }
 
         /// <summary>カーネル積</summary>
         public static void KernelProduct2D(uint inchannels, uint outchannels, uint inwidth, uint inheight,
                                            uint batch, uint kwidth, uint kheight, 
-                                           CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
+                                           CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel, 
+                                           Stream stream = null) {
 
             string key = $"kernelproduct_2d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight}";
             
@@ -148,13 +189,18 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, kernel, inwidth, inheight, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, inheight, batch);
         }
 
         /// <summary>3次元畳み込み</summary>
         public static void Convolution3D(uint inchannels, uint outchannels, uint inwidth, uint inheight, uint indepth,
                                          uint batch, uint kwidth, uint kheight, uint kdepth, 
-                                         CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                         CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
+                                         Stream stream = null) {
 
             string key = $"convolution_3d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} kdepth={kdepth}";
             
@@ -164,13 +210,18 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, kernel, inwidth, inheight, indepth, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, inheight, indepth, batch);
         }
 
         /// <summary>3次元逆畳み込み</summary>
         public static void Deconvolution3D(uint inchannels, uint outchannels, uint inwidth, uint inheight, uint indepth,
                                            uint batch, uint kwidth, uint kheight, uint kdepth, 
-                                           CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                           CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
+                                           Stream stream = null) {
 
             string key = $"deconvolution_3d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} kdepth={kdepth}";
             
@@ -180,13 +231,18 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, kernel, inwidth, inheight, indepth, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, inheight, indepth, batch);
         }
 
         /// <summary>カーネル積</summary>
         public static void KernelProduct3D(uint inchannels, uint outchannels, uint inwidth, uint inheight, uint indepth,
                                            uint batch, uint kwidth, uint kheight, uint kdepth, 
-                                           CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
+                                           CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel, 
+                                           Stream stream = null) {
 
             string key = $"kernelproduct_3d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} kdepth={kdepth}";
             
@@ -196,90 +252,106 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, kernel, inwidth, inheight, indepth, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, inheight, indepth, batch);
         }
 
-
+        /// <summary>チャネルごとの1次元畳み込み</summary>
         public static void ChannelwiseConvolution1D(uint channels, uint inwidth,
                                                     uint batch, uint kwidth, 
-                                                    CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                                    CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
+                                                    Stream stream = null) {
             throw new NotImplementedException();
         }
 
-
+        /// <summary>チャネルごとの1次元逆畳み込み</summary>
         public static void ChannelwiseDeconvolution1D(uint channels, uint inwidth,
                                                       uint batch, uint kwidth, 
-                                                      CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                                      CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
+                                                      Stream stream = null) {
             throw new NotImplementedException();
         }
 
-
+        /// <summary>カーネル積</summary>
         public static void ChannelwiseKernelProduct1D(uint channels, uint inwidth,
                                                       uint batch, uint kwidth, 
-                                                      CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
+                                                      CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel, 
+                                                      Stream stream = null) {
             throw new NotImplementedException();
         }
 
-
+        /// <summary>チャネルごとの2次元畳み込み</summary>
         public static void ChannelwiseConvolution2D(uint channels, uint inwidth, uint inheight,
                                                     uint batch, uint kwidth, uint kheight, 
-                                                    CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                                    CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
+                                                    Stream stream = null) {
             throw new NotImplementedException();
         }
 
-
+        /// <summary>チャネルごとの2次元逆畳み込み</summary>
         public static void ChannelwiseDeconvolution2D(uint channels, uint inwidth, uint inheight,
                                                       uint batch, uint kwidth, uint kheight, 
-                                                      CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                                      CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
+                                                      Stream stream = null) {
             throw new NotImplementedException();
         }
 
-
+        /// <summary>カーネル積</summary>
         public static void ChannelwiseKernelProduct2D(uint channels, uint inwidth, uint inheight,
                                                       uint batch, uint kwidth, uint kheight, 
-                                                      CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
+                                                      CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel, 
+                                                      Stream stream = null) {
             throw new NotImplementedException();
         }
 
-
+        /// <summary>チャネルごとの3次元畳み込み</summary>
         public static void ChannelwiseConvolution3D(uint channels, uint inwidth, uint inheight, uint indepth,
                                                     uint batch, uint kwidth, uint kheight, uint kdepth, 
-                                                    CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                                    CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
+                                                    Stream stream = null) {
             throw new NotImplementedException();
         }
 
-
+        /// <summary>チャネルごとの3次元逆畳み込み</summary>
         public static void ChannelwiseDeconvolution3D(uint channels, uint inwidth, uint inheight, uint indepth,
                                                       uint batch, uint kwidth, uint kheight, uint kdepth, 
-                                                      CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                                      CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
+                                                      Stream stream = null) {
             throw new NotImplementedException();
         }
 
-
+        /// <summary>カーネル積</summary>
         public static void ChannelwiseKernelProduct3D(uint channels, uint inwidth, uint inheight, uint indepth,
                                                       uint batch, uint kwidth, uint kheight, uint kdepth, 
-                                                      CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
+                                                      CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel, 
+                                                      Stream stream = null) {
             throw new NotImplementedException();
         }
 
-
+        /// <summary>ポイントごとの畳み込み</summary>
         public static void PointwiseConvolution(uint inchannels, uint outchannels, uint points,
                                                 uint batch, 
-                                                CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                                CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
+                                                Stream stream = null) {
             throw new NotImplementedException();
         }
 
-
+        /// <summary>ポイントごとの逆畳み込み</summary>
         public static void PointwiseDeconvolution(uint inchannels, uint outchannels, uint points,
                                                   uint batch, 
-                                                  CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                                  CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
+                                                  Stream stream = null) {
             throw new NotImplementedException();
         }
 
-
+        /// <summary>カーネル積</summary>
         public static void PointwiseKernelProduct(uint inchannels, uint outchannels, uint points,
                                                   uint batch, 
-                                                  CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
+                                                  CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel, 
+                                                  Stream stream = null) {
             throw new NotImplementedException();
         }
     } 

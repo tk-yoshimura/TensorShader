@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 
+using static TensorShaderCudaBackend.ArrayManipulation;
+
 namespace TensorShaderCudaBackend.Shaders.Convolution {
 
     /// <summary>カーネル積</summary>
     public sealed class KernelProduct1D : Shader {
-        private static ArrayManipulation.HorizontalAdd hadd;
-
         /// <summary>入力チャネル数</summary>
         public uint InChannels { private set; get; }
 
@@ -99,10 +99,6 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
         /// <summary>実行</summary>
         public override void Execute(Stream stream, params object[] args) {
             CheckArgument(args);
-            
-            if(hadd == null) { 
-                hadd = new ArrayManipulation.HorizontalAdd();
-            }
 
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
@@ -131,7 +127,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 );
             }
 
-            hadd.Execute(stream, dfloat_filter, filter, InChannels * OutChannels * KernelWidth);
+            HorizontalAdd(InChannels * OutChannels * KernelWidth, dfloat_filter, filter, stream);
         }
 
         /// <summary>引数チェック</summary>

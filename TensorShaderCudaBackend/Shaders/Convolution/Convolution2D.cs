@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Linq;
 
+using static TensorShaderCudaBackend.Transpose;
+
 namespace TensorShaderCudaBackend.Shaders.Convolution {
 
     /// <summary>2次元畳み込み</summary>
     public sealed class Convolution2D : Shader {
-        private readonly Transpose.TransposeKernelChannel transpose;
 
         /// <summary>入力チャネル数</summary>
         public uint InChannels { private set; get; }
@@ -40,7 +41,6 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             this.OutChannels = outchannels;
             this.KernelWidth = kwidth;
             this.KernelHeight = kheight;
-            this.transpose = new Transpose.TransposeKernelChannel(inchannels, outchannels);
 
             string code = $@"
 
@@ -117,7 +117,8 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             CudaArray<float> transpose_filter = 
                 CudaArrayReserver<float>.Request(stream, filter.DeviceID, index:0, InChannels * OutChannels * KernelWidth * KernelHeight);
-            transpose.Execute(stream, filter, transpose_filter, KernelWidth * KernelHeight);
+            
+            TransposeKernelChannel(InChannels, OutChannels, KernelWidth * KernelHeight, filter, transpose_filter, stream);
             
             for (uint th = 0; th < batches; th++) {
                 for (uint oy_offset = 0; oy_offset < outheight; oy_offset += lines_per_execute) {

@@ -7,7 +7,12 @@ namespace TensorShaderCudaBackend {
         private readonly static Dictionary<string, Shader> shaders = new Dictionary<string, Shader>();
         
         /// <summary>チャネル次元を空間方向に展開</summary>
-        public static void ChannelToSpace2D(uint outchannels, uint inwidth, uint inheight, uint batch, uint scale, CudaArray<float> inmap, CudaArray<float> outmap) {
+        public static void ChannelToSpace2D(uint outchannels, 
+                                            uint inwidth, uint inheight, 
+                                            uint batch, uint scale, 
+                                            CudaArray<float> inmap, CudaArray<float> outmap,
+                                            Stream stream = null) {
+
             string key = $"channel_to_space_2d outchannels={outchannels} scale={scale}";
             
             if (!shaders.ContainsKey(key)) {
@@ -16,11 +21,19 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, inwidth, inheight, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, inwidth, inheight, batch);
         }
 
         /// <summary>空間方向をチャネル次元に展開</summary>
-        public static void SpaceToChannel2D(uint inchannels, uint outwidth, uint outheight, uint batch, uint scale, CudaArray<float> inmap, CudaArray<float> outmap) {
+        public static void SpaceToChannel2D(uint inchannels, uint outwidth, uint outheight, 
+                                            uint batch, uint scale, 
+                                            CudaArray<float> inmap, CudaArray<float> outmap,
+                                            Stream stream = null) {
+
             string key = $"space_to_channel_2d inchannels={inchannels} scale={scale}";
             
             if (!shaders.ContainsKey(key)) {
@@ -29,11 +42,19 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, outwidth, outheight, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, outwidth, outheight, batch);
         }
 
         /// <summary>チャネル次元を空間方向に展開</summary>
-        public static void ChannelToSpace3D(uint outchannels, uint inwidth, uint inheight, uint indepth, uint batch, uint scale, CudaArray<float> inmap, CudaArray<float> outmap) {
+        public static void ChannelToSpace3D(uint outchannels, uint inwidth, uint inheight, uint indepth, 
+                                            uint batch, uint scale, 
+                                            CudaArray<float> inmap, CudaArray<float> outmap,
+                                            Stream stream = null) {
+
             string key = $"channel_to_space_3d outchannels={outchannels} scale={scale}";
             
             if (!shaders.ContainsKey(key)) {
@@ -42,11 +63,19 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, inwidth, inheight, indepth, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, inwidth, inheight, indepth, batch);
         }
 
         /// <summary>空間方向をチャネル次元に展開</summary>
-        public static void SpaceToChannel3D(uint inchannels, uint outwidth, uint outheight, uint outdepth, uint batch, uint scale, CudaArray<float> inmap, CudaArray<float> outmap) {
+        public static void SpaceToChannel3D(uint inchannels, uint outwidth, uint outheight, uint outdepth, 
+                                            uint batch, uint scale, 
+                                            CudaArray<float> inmap, CudaArray<float> outmap,
+                                            Stream stream = null) {
+
             string key = $"space_to_channel_3d inchannels={inchannels} scale={scale}";
             
             if (!shaders.ContainsKey(key)) {
@@ -55,7 +84,11 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, outwidth, outheight, outdepth, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, outwidth, outheight, outdepth, batch);
         }
     } 
 }

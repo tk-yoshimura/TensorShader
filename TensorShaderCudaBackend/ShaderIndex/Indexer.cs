@@ -7,7 +7,7 @@ namespace TensorShaderCudaBackend {
         private readonly static Dictionary<string, Shader> shaders = new Dictionary<string, Shader>();
         
         /// <summary>OneHotVector</summary>
-        public static void OneHotVector(uint length, uint channels, CudaArray<float> src, CudaArray<float> dst){
+        public static void OneHotVector(uint length, uint channels, CudaArray<float> src, CudaArray<float> dst, Stream stream = null){
             string key = $"onehotvector channels={channels}";
             
             if (!shaders.ContainsKey(key)) {
@@ -16,11 +16,15 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, src, dst, length * channels, length);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src, dst, length * channels, length);
         }
 
         /// <summary>ArgMin</summary>
-        public static void ArgMin(uint length, uint channels, CudaArray<float> src, CudaArray<float> dst){
+        public static void ArgMin(uint length, uint channels, CudaArray<float> src, CudaArray<float> dst, Stream stream = null){
             string key = $"argmin channels={channels}";
             
             if (!shaders.ContainsKey(key)) {
@@ -29,11 +33,15 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, src, dst, length * channels, length);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src, dst, length * channels, length);
         }
 
         /// <summary>ArgMax</summary>
-        public static void ArgMax(uint length, uint channels, CudaArray<float> src, CudaArray<float> dst){
+        public static void ArgMax(uint length, uint channels, CudaArray<float> src, CudaArray<float> dst, Stream stream = null){
             string key = $"argmax channels={channels}";
             
             if (!shaders.ContainsKey(key)) {
@@ -42,11 +50,15 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, src, dst, length * channels, length);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src, dst, length * channels, length);
         }
 
         /// <summary>Index</summary>
-        public static void Index(uint stride, uint axislength, uint clones, CudaArray<float> dst){
+        public static void Index(uint stride, uint axislength, uint clones, CudaArray<float> dst, Stream stream = null){
             string key = "index";
             
             if (!shaders.ContainsKey(key)) {
@@ -55,7 +67,11 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, dst, stride * axislength * clones, stride, axislength);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, dst, stride * axislength * clones, stride, axislength);
         }
     }
 }

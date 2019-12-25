@@ -24,7 +24,7 @@ namespace TensorShaderCudaBackend {
         }
 
         /// <summary>四元数積</summary>
-        public static void Mul(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {
+        public static void Mul(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst, Stream stream = null) {
             Shader shader = BinaryArithmetric(
                 "quaternion_mul_ew", 
                 "#y.x = #x1.x * #x2.x - #x1.y * #x2.y - #x1.z * #x2.z - #x1.w * #x2.w;" +
@@ -32,11 +32,16 @@ namespace TensorShaderCudaBackend {
 				"#y.z = #x1.x * #x2.z - #x1.y * #x2.w + #x1.z * #x2.x + #x1.w * #x2.y;" +
 				"#y.w = #x1.x * #x2.w + #x1.y * #x2.z - #x1.z * #x2.y + #x1.w * #x2.x;"
             );
-            shader.Execute(Shader.DefaultStream, src1, src2, dst, length);
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src1, src2, dst, length);
         }
 
         /// <summary>四元数積勾配</summary>
-        public static void MulGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {
+        public static void MulGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst, Stream stream = null) {
             Shader shader = BinaryArithmetric(
                 "quaternion_mulgrad_ew", 
                 "#y.x = #x1.x * #x2.x + #x1.y * #x2.y + #x1.z * #x2.z + #x1.w * #x2.w;" +
@@ -44,11 +49,16 @@ namespace TensorShaderCudaBackend {
 				"#y.z = #x1.x * #x2.z - #x1.y * #x2.w - #x1.z * #x2.x + #x1.w * #x2.y;" +
 				"#y.w = #x1.x * #x2.w + #x1.y * #x2.z - #x1.z * #x2.y - #x1.w * #x2.x;"
             );
-            shader.Execute(Shader.DefaultStream, src1, src2, dst, length);
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src1, src2, dst, length);
         }
 
         /// <summary>四元数積転置勾配</summary>
-        public static void MulTransposeGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {
+        public static void MulTransposeGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst, Stream stream = null) {
             Shader shader = BinaryArithmetric(
                 "quaternion_multransposegrad_ew", 
                 "#y.x = #x1.x * #x2.x + #x1.y * #x2.y + #x1.z * #x2.z + #x1.w * #x2.w;" +
@@ -56,11 +66,16 @@ namespace TensorShaderCudaBackend {
 				"#y.z = #x1.x * #x2.z + #x1.y * #x2.w - #x1.z * #x2.x - #x1.w * #x2.y;" +
 				"#y.w = #x1.x * #x2.w - #x1.y * #x2.z + #x1.z * #x2.y - #x1.w * #x2.x;"
             );
-            shader.Execute(Shader.DefaultStream, src1, src2, dst, length);
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src1, src2, dst, length);
         }
 
         /// <summary>RRelu</summary>
-        public static void RRelu(uint length, CudaArray<float> src, CudaArray<float> dst) {
+        public static void RRelu(uint length, CudaArray<float> src, CudaArray<float> dst, Stream stream = null) {
             Shader shader = UnaryArithmetric(
                 "quaternion_rrelu_ew", 
                 "#y.x = fmaxf(0.0, #x.x);" +
@@ -68,11 +83,16 @@ namespace TensorShaderCudaBackend {
                 "#y.z = #x.z;" +
                 "#y.w = #x.w;"
             );
-            shader.Execute(Shader.DefaultStream, src, dst, length);
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src, dst, length);
         }
 
         /// <summary>RRelu勾配</summary>
-        public static void RReluGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {
+        public static void RReluGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst, Stream stream = null) {
             Shader shader = BinaryArithmetric(
                 "quaternion_rrelugrad_ew", 
                 "#y.x = #x2.x >= 0.0 ? #x1.x : 0.0;" +
@@ -80,11 +100,16 @@ namespace TensorShaderCudaBackend {
                 "#y.z = #x1.z;" +
                 "#y.w = #x1.w;"
             );
-            shader.Execute(Shader.DefaultStream, src1, src2, dst, length);
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src1, src2, dst, length);
         }
 
         /// <summary>四元数共役</summary>
-        public static void Conjugate(uint length, CudaArray<float> src, CudaArray<float> dst) {
+        public static void Conjugate(uint length, CudaArray<float> src, CudaArray<float> dst, Stream stream = null) {
             Shader shader = UnaryArithmetric(
                 "quaternion_conj_ew", 
                 "#y.x = #x.x;" +
@@ -92,11 +117,16 @@ namespace TensorShaderCudaBackend {
                 "#y.z = -#x.z;" +
                 "#y.w = -#x.w;"
             );
-            shader.Execute(Shader.DefaultStream, src, dst, length);
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src, dst, length);
         }
 
         /// <summary>四元数2乗</summary>
-        public static void Square(uint length, CudaArray<float> src, CudaArray<float> dst) {
+        public static void Square(uint length, CudaArray<float> src, CudaArray<float> dst, Stream stream = null) {
             Shader shader = UnaryArithmetric(
                 "quaternion_square_ew", 
                 "#y.x = #x.x * #x.x - #x.y * #x.y - #x.z * #x.z - #x.w * #x.w;" +
@@ -104,11 +134,16 @@ namespace TensorShaderCudaBackend {
 				"#y.z = 2.0 * #x.x * #x.z;" +
 				"#y.w = 2.0 * #x.x * #x.w;"
             );
-            shader.Execute(Shader.DefaultStream, src, dst, length);
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src, dst, length);
         }
 
         /// <summary>四元数減衰</summary>
-        public static void Decay(uint length, CudaArray<float> src, CudaArray<float> dst) {
+        public static void Decay(uint length, CudaArray<float> src, CudaArray<float> dst, Stream stream = null) {
             Shader shader = UnaryArithmetric(
                 "quaternion_decay_ew", 
                 "float norm = #x.x * #x.x + #x.y * #x.y + #x.z * #x.z + #x.w * #x.w;" +
@@ -118,11 +153,16 @@ namespace TensorShaderCudaBackend {
                 "#y.z = #x.z * s;" +
                 "#y.w = #x.w * s;"
             );
-            shader.Execute(Shader.DefaultStream, src, dst, length);
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src, dst, length);
         }
 
         /// <summary>四元数減衰勾配</summary>
-        public static void DecayGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {
+        public static void DecayGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst, Stream stream = null) {
             Shader shader = BinaryArithmetric(
                 "quaternion_decaygrad_ew", 
                 "float x12x = #x1.x * #x2.x, x12y = #x1.y * #x2.y, x12z = #x1.z * #x2.z, x12w = #x1.w * #x2.w;" +
@@ -134,11 +174,16 @@ namespace TensorShaderCudaBackend {
                 "#y.z = (#x1.z * (2.0 * sx2z + norm_norm_p1) + 2.0 * #x2.z * (x12w + x12x + x12y)) * inv_squa_norm_p1;" + 
                 "#y.w = (#x1.w * (2.0 * sx2w + norm_norm_p1) + 2.0 * #x2.w * (x12x + x12y + x12z)) * inv_squa_norm_p1;"
             );
-            shader.Execute(Shader.DefaultStream, src1, src2, dst, length);
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src1, src2, dst, length);
         }
 
         /// <summary>四元数Squash</summary>
-        public static void Squash(uint length, CudaArray<float> src, CudaArray<float> dst) {
+        public static void Squash(uint length, CudaArray<float> src, CudaArray<float> dst, Stream stream = null) {
             Shader shader = UnaryArithmetric(
                 "quaternion_squash_ew", 
                 "float norm = #x.x * #x.x + #x.y * #x.y + #x.z * #x.z + #x.w * #x.w;" +
@@ -148,11 +193,16 @@ namespace TensorShaderCudaBackend {
                 "#y.z = #x.z * s;" +
                 "#y.w = #x.w * s;"
             );
-            shader.Execute(Shader.DefaultStream, src, dst, length);
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src, dst, length);
         }
 
         /// <summary>四元数Squash勾配</summary>
-        public static void SquashGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {
+        public static void SquashGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst, Stream stream = null) {
             Shader shader = BinaryArithmetric(
                 "quaternion_squashgrad_ew", 
                 "float x12x = #x1.x * #x2.x, x12y = #x1.y * #x2.y, x12z = #x1.z * #x2.z, x12w = #x1.w * #x2.w;" +
@@ -164,11 +214,16 @@ namespace TensorShaderCudaBackend {
                 "#y.z = (#x1.z * (length_length_p1 - sx2z) - #x2.z * (x12w + x12x + x12y)) * inv_length_squa_length_p1;" +
                 "#y.w = (#x1.w * (length_length_p1 - sx2w) - #x2.w * (x12x + x12y + x12z)) * inv_length_squa_length_p1;"
             );
-            shader.Execute(Shader.DefaultStream, src1, src2, dst, length);
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src1, src2, dst, length);
         }
 
         /// <summary>四元数正規化</summary>
-        public static void Normalize(uint length, CudaArray<float> src, CudaArray<float> dst) {
+        public static void Normalize(uint length, CudaArray<float> src, CudaArray<float> dst, Stream stream = null) {
             Shader shader = UnaryArithmetric(
                 "quaternion_normalize_ew", 
                 "float norm = #x.x * #x.x + #x.y * #x.y + #x.z * #x.z + #x.w * #x.w;" +
@@ -178,11 +233,16 @@ namespace TensorShaderCudaBackend {
                 "#y.z = #x.z * s;" +
                 "#y.w = #x.w * s;"
             );
-            shader.Execute(Shader.DefaultStream, src, dst, length);
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src, dst, length);
         }
 
         /// <summary>四元数正規化勾配</summary>
-        public static void NormalizeGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst) {
+        public static void NormalizeGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst, Stream stream = null) {
             Shader shader = BinaryArithmetric(
                 "quaternion_normalizegrad_ew", 
                 "float x12x = #x1.x * #x2.x, x12y = #x1.y * #x2.y, x12z = #x1.z * #x2.z, x12w = #x1.w * #x2.w;" +
@@ -194,11 +254,16 @@ namespace TensorShaderCudaBackend {
                 "#y.z = (#x1.z * (sx2w + sx2x + sx2y) - #x2.z * (x12w + x12x + x12y)) * inv_cube_length;" +
                 "#y.w = (#x1.w * (sx2x + sx2y + sx2z) - #x2.w * (x12x + x12y + x12z)) * inv_cube_length;"
             );
-            shader.Execute(Shader.DefaultStream, src1, src2, dst, length);
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src1, src2, dst, length);
         }
 
         /// <summary>実数から四元数へキャスト</summary>
-        public static void Cast(uint length, CudaArray<float> src_r, CudaArray<float> src_i, CudaArray<float> src_j, CudaArray<float> src_k, CudaArray<float> dst) {
+        public static void Cast(uint length, CudaArray<float> src_r, CudaArray<float> src_i, CudaArray<float> src_j, CudaArray<float> src_k, CudaArray<float> dst, Stream stream = null) {
             string key = "quaternion_cast";
             
             if (!shaders.ContainsKey(key)) {
@@ -207,11 +272,15 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, src_r, src_i, src_j, src_k, dst, length);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src_r, src_i, src_j, src_k, dst, length);
         }
 
         /// <summary>R成分</summary>
-        public static void R(uint length, CudaArray<float> src, CudaArray<float> dst_r) {
+        public static void R(uint length, CudaArray<float> src, CudaArray<float> dst_r, Stream stream = null) {
             string key = "quaternion_r";
             
             if (!shaders.ContainsKey(key)) {
@@ -220,11 +289,15 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, src, dst_r, length);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src, dst_r, length);
         }
 
         /// <summary>I成分</summary>
-        public static void I(uint length, CudaArray<float> src, CudaArray<float> dst_i) {
+        public static void I(uint length, CudaArray<float> src, CudaArray<float> dst_i, Stream stream = null) {
             string key = "quaternion_i";
             
             if (!shaders.ContainsKey(key)) {
@@ -233,11 +306,15 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, src, dst_i, length);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src, dst_i, length);
         }
 
         /// <summary>J成分</summary>
-        public static void J(uint length, CudaArray<float> src, CudaArray<float> dst_j) {
+        public static void J(uint length, CudaArray<float> src, CudaArray<float> dst_j, Stream stream = null) {
             string key = "quaternion_j";
             
             if (!shaders.ContainsKey(key)) {
@@ -246,11 +323,15 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, src, dst_j, length);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src, dst_j, length);
         }
 
         /// <summary>K成分</summary>
-        public static void K(uint length, CudaArray<float> src, CudaArray<float> dst_k) {
+        public static void K(uint length, CudaArray<float> src, CudaArray<float> dst_k, Stream stream = null) {
             string key = "quaternion_k";
             
             if (!shaders.ContainsKey(key)) {
@@ -259,11 +340,15 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, src, dst_k, length);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src, dst_k, length);
         }
 
         /// <summary>純R成分</summary>
-        public static void PureR(uint length, CudaArray<float> src_r, CudaArray<float> dst) {
+        public static void PureR(uint length, CudaArray<float> src_r, CudaArray<float> dst, Stream stream = null) {
             string key = "quaternion_purer";
             
             if (!shaders.ContainsKey(key)) {
@@ -272,11 +357,15 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, src_r, dst, length);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src_r, dst, length);
         }
 
         /// <summary>純I成分</summary>
-        public static void PureI(uint length, CudaArray<float> src_i, CudaArray<float> dst) {
+        public static void PureI(uint length, CudaArray<float> src_i, CudaArray<float> dst, Stream stream = null) {
             string key = "quaternion_purei";
             
             if (!shaders.ContainsKey(key)) {
@@ -285,11 +374,15 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, src_i, dst, length);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src_i, dst, length);
         }
 
         /// <summary>純J成分</summary>
-        public static void PureJ(uint length, CudaArray<float> src_j, CudaArray<float> dst) {
+        public static void PureJ(uint length, CudaArray<float> src_j, CudaArray<float> dst, Stream stream = null) {
             string key = "quaternion_purej";
             
             if (!shaders.ContainsKey(key)) {
@@ -298,11 +391,15 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, src_j, dst, length);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src_j, dst, length);
         }
 
         /// <summary>純K成分</summary>
-        public static void PureK(uint length, CudaArray<float> src_k, CudaArray<float> dst) {
+        public static void PureK(uint length, CudaArray<float> src_k, CudaArray<float> dst, Stream stream = null) {
             string key = "quaternion_purek";
             
             if (!shaders.ContainsKey(key)) {
@@ -311,55 +408,66 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, src_k, dst, length);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src_k, dst, length);
         }
 
-
+        /// <summary>全結合</summary>
         public static void Dense(uint inchannels, uint outchannels,
-                                  uint batch, bool gradmode,
-                                  CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                 uint batch, bool gradmode,
+                                 CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
+                                 Stream stream = null) {
             throw new NotImplementedException();
         }
 
-
+        /// <summary>転置全結合</summary>
         public static void TransposeDense(uint inchannels, uint outchannels,
-                                   uint batch, bool gradmode,
-                                   CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                          uint batch, bool gradmode,
+                                          CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
+                                          Stream stream = null) {
             throw new NotImplementedException();
         }
 
-
+        /// <summary>カーネル積</summary>
         public static void KernelProductDense(uint inchannels, uint outchannels,
-                                       uint batch, bool transpose,
-                                       CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
+                                              uint batch, bool transpose,
+                                              CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel,
+                                              Stream stream = null) {
             throw new NotImplementedException();
         }
 
-
+        /// <summary>1次元畳み込み</summary>
         public static void Convolution1D(uint inchannels, uint outchannels, uint inwidth,
-                                  uint batch, uint kwidth, bool gradmode,
-                                  CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                         uint batch, uint kwidth, bool gradmode,
+                                         CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
+                                         Stream stream = null) {
             throw new NotImplementedException();
         }
 
-
+        /// <summary>1次元逆畳み込み</summary>
         public static void Deconvolution1D(uint inchannels, uint outchannels, uint inwidth,
-                                    uint batch, uint kwidth, bool gradmode,
-                                    CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                           uint batch, uint kwidth, bool gradmode,
+                                           CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
+                                           Stream stream = null) {
             throw new NotImplementedException();
         }
 
-
+        /// <summary>カーネル積</summary>
         public static void KernelProduct1D(uint inchannels, uint outchannels, uint inwidth,
-                                    uint batch, uint kwidth, bool transpose,
-                                    CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
+                                           uint batch, uint kwidth, bool transpose,
+                                           CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel,
+                                           Stream stream = null) {
             throw new NotImplementedException();
         }
 
         /// <summary>2次元畳み込み</summary>
         public static void Convolution2D(uint inchannels, uint outchannels, uint inwidth, uint inheight,
                                          uint batch, uint kwidth, uint kheight, bool gradmode,
-                                         CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                         CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
+                                         Stream stream = null) {
 
             string key = $"quaternion_convolution_2d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} gradmode={gradmode}";
             
@@ -369,13 +477,18 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, kernel, inwidth, inheight, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, inheight, batch);
         }
 
         /// <summary>2次元逆畳み込み</summary>
         public static void Deconvolution2D(uint inchannels, uint outchannels, uint inwidth, uint inheight,
                                            uint batch, uint kwidth, uint kheight, bool gradmode,
-                                           CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                           CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
+                                           Stream stream = null) {
 
             string key = $"quaternion_deconvolution_2d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} gradmode={gradmode}";
             
@@ -385,13 +498,18 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, kernel, inwidth, inheight, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, inheight, batch);
         }
 
         /// <summary>カーネル積</summary>
         public static void KernelProduct2D(uint inchannels, uint outchannels, uint inwidth, uint inheight,
                                            uint batch, uint kwidth, uint kheight, bool transpose,
-                                           CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
+                                           CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel,
+                                           Stream stream = null) {
 
             string key = $"quaternion_kernelproduct_2d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} transpose={transpose}";
             
@@ -401,27 +519,34 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, kernel, inwidth, inheight, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, inheight, batch);
         }
 
-
+        /// <summary>3次元畳み込み</summary>
         public static void Convolution3D(uint inchannels, uint outchannels, uint inwidth, uint inheight, uint indepth,
-                                  uint batch, uint kwidth, uint kheight, uint kdepth, bool gradmode,
-                                  CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                         uint batch, uint kwidth, uint kheight, uint kdepth, bool gradmode,
+                                         CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
+                                         Stream stream = null) {
             throw new NotImplementedException();
         }
 
-
+        /// <summary>3次元逆畳み込み</summary>
         public static void Deconvolution3D(uint inchannels, uint outchannels, uint inwidth, uint inheight, uint indepth,
-                                    uint batch, uint kwidth, uint kheight, uint kdepth, bool gradmode,
-                                    CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap) {
+                                           uint batch, uint kwidth, uint kheight, uint kdepth, bool gradmode,
+                                           CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
+                                           Stream stream = null) {
             throw new NotImplementedException();
         }
 
-
+        /// <summary>カーネル積</summary>
         public static void KernelProduct3D(uint inchannels, uint outchannels, uint inwidth, uint inheight, uint indepth,
-                                    uint batch, uint kwidth, uint kheight, uint kdepth, bool transpose,
-                                    CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel) {
+                                           uint batch, uint kwidth, uint kheight, uint kdepth, bool transpose,
+                                           CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel,
+                                           Stream stream = null) {
             throw new NotImplementedException();
         }
     } 

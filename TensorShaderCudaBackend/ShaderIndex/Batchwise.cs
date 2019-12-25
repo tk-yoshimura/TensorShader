@@ -7,7 +7,10 @@ namespace TensorShaderCudaBackend {
         private readonly static Dictionary<string, Shader> shaders = new Dictionary<string, Shader>();
         
         /// <summary>乗算</summary>
-        public static void Mul(uint vector_length, uint map_length, CudaArray<float> srcvector, CudaArray<float> srcmap, CudaArray<float> dstmap) {
+        public static void Mul(uint vector_length, uint map_length, 
+                               CudaArray<float> srcvector, CudaArray<float> srcmap, CudaArray<float> dstmap, 
+                               Stream stream = null) {
+
             string key = $"mul_bw batches={vector_length}";
             
             if (!shaders.ContainsKey(key)) {
@@ -16,7 +19,11 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, srcvector, srcmap, dstmap, map_length / vector_length);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, srcvector, srcmap, dstmap, map_length / vector_length);
         }
     }
 }

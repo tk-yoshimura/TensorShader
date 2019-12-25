@@ -78,6 +78,7 @@
     <Compile Include="Kernel.cs" />
     <Compile Include="KernelArguments.cs" />
     <Compile Include="ShaderIndex\Quaternion.cs" />
+    <Compile Include="ShaderIndex\Transpose.cs" />
     <Compile Include="ShaderIndex\Trivector.cs" />
     <Compile Include="ShaderIndex\Complex.cs" />
     <Compile Include="ShaderIndex\Convolution.cs" />

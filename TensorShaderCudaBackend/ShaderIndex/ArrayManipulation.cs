@@ -7,7 +7,7 @@ namespace TensorShaderCudaBackend {
         private readonly static Dictionary<string, Shader> shaders = new Dictionary<string, Shader>();
         
         /// <summary>初期化</summary>
-        public static void Clear(uint length, float c, CudaArray<float> dst){
+        public static void Clear(uint length, float c, CudaArray<float> dst, Stream stream = null){
             string key = "clear";
             
             if (!shaders.ContainsKey(key)) {
@@ -16,16 +16,30 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, dst, c, length);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, dst, c, length);
         }
         
         /// <summary>パターンコピー</summary>
-        public static void PatternCopy(uint src_stride, uint src_index, uint dst_stride, uint dst_index, uint copy_length, uint slides, CudaArray<float> src, CudaArray<float> dst){
-            PatternCopy(src_offset:0, src_stride, src_index, dst_offset:0, dst_stride, dst_index, copy_length, slides, src, dst);
+        public static void PatternCopy(uint src_stride, uint src_index, 
+                                       uint dst_stride, uint dst_index, 
+                                       uint copy_length, uint slides, 
+                                       CudaArray<float> src, CudaArray<float> dst, 
+                                       Stream stream = null){
+
+            PatternCopy(src_offset:0, src_stride, src_index, dst_offset:0, dst_stride, dst_index, copy_length, slides, src, dst, stream);
         }
 
         /// <summary>パターンコピー</summary>
-        public static void PatternCopy(uint src_offset, uint src_stride, uint src_index, uint dst_offset, uint dst_stride, uint dst_index, uint copy_length, uint slides, CudaArray<float> src, CudaArray<float> dst){
+        public static void PatternCopy(uint src_offset, uint src_stride, uint src_index, 
+                                       uint dst_offset, uint dst_stride, uint dst_index, 
+                                       uint copy_length, uint slides, 
+                                       CudaArray<float> src, CudaArray<float> dst, 
+                                       Stream stream = null){
+
             string key = "pattern_copy";
             
             if (!shaders.ContainsKey(key)) {
@@ -34,12 +48,16 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, src, dst, src_offset, src_index, dst_offset, dst_index, src_stride, dst_stride, copy_length, slides);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src, dst, src_offset, src_index, dst_offset, dst_index, src_stride, dst_stride, copy_length, slides);
             
         }
                 
         /// <summary>ブロードキャスト</summary>
-        public static void Broadcast(uint src_stride, CudaArray<float> src, uint dst_stride, CudaArray<float> dst, uint slides){
+        public static void Broadcast(uint src_stride, CudaArray<float> src, uint dst_stride, CudaArray<float> dst, uint slides, Stream stream = null){
             string key = "broadcast";
             
             if (!shaders.ContainsKey(key)) {
@@ -48,11 +66,15 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, src, dst, src_stride, dst_stride, slides);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src, dst, src_stride, dst_stride, slides);
         }
         
         /// <summary>軸反転</summary>
-        public static void Flip(uint stride, uint axislength, uint slides, CudaArray<float> src, CudaArray<float> dst){
+        public static void Flip(uint stride, uint axislength, uint slides, CudaArray<float> src, CudaArray<float> dst, Stream stream = null){
             string key = "flip";
             
             if (!shaders.ContainsKey(key)) {
@@ -61,11 +83,15 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, src, dst, stride, axislength, slides);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src, dst, stride, axislength, slides);
         }
 
         /// <summary>ソート</summary>
-        public static void Sort(uint stride, uint axislength, uint slides, CudaArray<float> src, CudaArray<float> dst){
+        public static void Sort(uint stride, uint axislength, uint slides, CudaArray<float> src, CudaArray<float> dst, Stream stream = null){
             Shader shader;
 
             if(axislength <= Shaders.ArrayManipulation.SortUseSharedMemory.MaxAxisLength) { 
@@ -87,11 +113,19 @@ namespace TensorShaderCudaBackend {
                 shader = shaders[key];
             }
             
-            shader.Execute(Shader.DefaultStream, src, dst, stride, axislength, slides);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src, dst, stride, axislength, slides);
         }
 
         /// <summary>ソート(キーつき)</summary>
-        public static void SortWithKey(uint stride, uint axislength, uint slides, CudaArray<float> src_key, CudaArray<float> src_value, CudaArray<float> dst_key, CudaArray<float> dst_value){
+        public static void SortWithKey(uint stride, uint axislength, uint slides, 
+                                       CudaArray<float> src_key, CudaArray<float> src_value, 
+                                       CudaArray<float> dst_key, CudaArray<float> dst_value, 
+                                       Stream stream = null){
+
             Shader shader;
 
             if(axislength <= Shaders.ArrayManipulation.SortWithKeyUseSharedMemory.MaxAxisLength) { 
@@ -113,7 +147,28 @@ namespace TensorShaderCudaBackend {
                 shader = shaders[key];
             }
             
-            shader.Execute(Shader.DefaultStream, src_value, dst_value, src_key, dst_key, stride, axislength, slides);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src_value, dst_value, src_key, dst_key, stride, axislength, slides);
+        }
+
+        /// <summary>水平加算</summary>
+        public static void HorizontalAdd(uint n, CudaArray<float> src, CudaArray<float> dst, Stream stream = null){
+            string key = "horizontal_add";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.ArrayManipulation.HorizontalAdd());
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, src, dst, n);
         }
     }
 }

@@ -10,7 +10,8 @@ namespace TensorShaderCudaBackend {
         public static void ZeroPadding1D(uint channels, uint inwidth, 
                                          uint batch, 
                                          uint pad_left, uint pad_right,
-                                         CudaArray<float> inmap, CudaArray<float> outmap) {
+                                         CudaArray<float> inmap, CudaArray<float> outmap,
+                                         Stream stream = null) {
             
             string key = $"zeropadding_1d channels={channels} pad_left={pad_left} pad_right={pad_right}";
             
@@ -20,14 +21,19 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, inwidth, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, inwidth, batch);
         }
 
         /// <summary>1次元エッジパディング</summary>
         public static void EdgePadding1D(uint channels, uint inwidth,
                                          uint batch, 
                                          uint pad_left, uint pad_right,
-                                         CudaArray<float> inmap, CudaArray<float> outmap) {
+                                         CudaArray<float> inmap, CudaArray<float> outmap,
+                                         Stream stream = null) {
             
             string key = $"edgepadding_1d channels={channels} pad_left={pad_left} pad_right={pad_right}";
             
@@ -37,7 +43,11 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, inwidth, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, inwidth, batch);
         }
 
         /// <summary>2次元ゼロパディング</summary>
@@ -45,7 +55,8 @@ namespace TensorShaderCudaBackend {
                                          uint batch, 
                                          uint pad_left, uint pad_right,
                                          uint pad_top, uint pad_bottom,
-                                         CudaArray<float> inmap, CudaArray<float> outmap) {
+                                         CudaArray<float> inmap, CudaArray<float> outmap,
+                                         Stream stream = null) {
 
             string key = 
                 $"zeropadding_2d channels={channels} " +
@@ -58,7 +69,11 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, inwidth, inheight, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, inwidth, inheight, batch);
         }
 
         /// <summary>2次元エッジパディング</summary>
@@ -66,7 +81,8 @@ namespace TensorShaderCudaBackend {
                                          uint batch, 
                                          uint pad_left, uint pad_right,
                                          uint pad_top, uint pad_bottom,
-                                         CudaArray<float> inmap, CudaArray<float> outmap) {
+                                         CudaArray<float> inmap, CudaArray<float> outmap, 
+                                         Stream stream = null) {
 
             string key = 
                 $"edgepadding_2d channels={channels} " +
@@ -79,7 +95,11 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, inwidth, inheight, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, inwidth, inheight, batch);
         }
 
         /// <summary>3次元ゼロパディング</summary>
@@ -88,7 +108,8 @@ namespace TensorShaderCudaBackend {
                                          uint pad_left, uint pad_right,
                                          uint pad_top, uint pad_bottom,
                                          uint pad_front, uint pad_rear,
-                                         CudaArray<float> inmap, CudaArray<float> outmap) {
+                                         CudaArray<float> inmap, CudaArray<float> outmap, 
+                                         Stream stream = null) {
 
             string key = 
                 $"zeropadding_3d channels={channels} " +
@@ -103,7 +124,11 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, inwidth, inheight, indepth, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, inwidth, inheight, indepth, batch);
         }
 
         /// <summary>3次元エッジパディング</summary>
@@ -112,7 +137,8 @@ namespace TensorShaderCudaBackend {
                                          uint pad_left, uint pad_right,
                                          uint pad_top, uint pad_bottom,
                                          uint pad_front, uint pad_rear,
-                                         CudaArray<float> inmap, CudaArray<float> outmap) {
+                                         CudaArray<float> inmap, CudaArray<float> outmap, 
+                                         Stream stream = null) {
 
             string key = 
                 $"edgepadding_3d channels={channels} " +
@@ -127,7 +153,11 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            shader.Execute(Shader.DefaultStream, inmap, outmap, inwidth, inheight, indepth, batch);
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, inwidth, inheight, indepth, batch);
         }
     } 
 }
