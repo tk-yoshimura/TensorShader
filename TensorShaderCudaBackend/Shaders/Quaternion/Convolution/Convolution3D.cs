@@ -3,7 +3,7 @@ using System.Linq;
 
 using static TensorShaderCudaBackend.Transpose;
 
-namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
+namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
 
     /// <summary>3次元畳み込み</summary>
     public sealed class Convolution3D : Shader {
@@ -37,15 +37,15 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
         
         /// <summary>コンストラクタ</summary>
         public Convolution3D(uint inchannels, uint outchannels, uint kwidth, uint kheight, uint kdepth, bool gradmode) { 
-            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple:2, inchannels, outchannels)) {
+            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple:4, inchannels, outchannels)) {
                 throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
             if (!Limits.CheckKernelSize(kwidth, kheight, kdepth)) { 
                 throw new ArgumentException($"{nameof(kwidth)}, {nameof(kheight)}, {nameof(kdepth)}");
             }
 
-            this.InChannels = inchannels / 2;
-            this.OutChannels = outchannels / 2;
+            this.InChannels = inchannels / 4;
+            this.OutChannels = outchannels / 4;
             this.KernelWidth = kwidth;
             this.KernelHeight = kheight;
             this.KernelDepth = kdepth;
@@ -53,8 +53,8 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
 
             string code = $@"
 
-            static __inline__ __device__ float2 ctor_float2(float x, float y){{
-                float2 t; t.x = x; t.y = y; return t;
+            static __inline__ __device__ float4 ctor_float4(float x, float y, float z, float w){{
+                float4 t; t.x = x; t.y = y; t.z = z; t.w = w; return t;
             }}
 
             static __inline__ __device__ void floatfloat_add(float &hi, float &lo, float val){{
@@ -69,30 +69,60 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                 lo -= (hi - tmp) + val;
             }}
 
-            static __inline__ __device__ void complex_mul(float2 &hi, float2 &lo, float2 x1, float2 x2){{
+            static __inline__ __device__ void quaternion_mul(float4 &hi, float4 &lo, float4 x1, float4 x2){{
                 floatfloat_add(hi.x, lo.x, x1.x * x2.x);
                 floatfloat_sub(hi.x, lo.x, x1.y * x2.y);
+                floatfloat_sub(hi.x, lo.x, x1.z * x2.z);
+                floatfloat_sub(hi.x, lo.x, x1.w * x2.w);
+
                 floatfloat_add(hi.y, lo.y, x1.x * x2.y);
                 floatfloat_add(hi.y, lo.y, x1.y * x2.x);
+                floatfloat_add(hi.y, lo.y, x1.z * x2.w);
+                floatfloat_sub(hi.y, lo.y, x1.w * x2.z);
+
+                floatfloat_add(hi.z, lo.z, x1.x * x2.z);
+                floatfloat_sub(hi.z, lo.z, x1.y * x2.w);
+                floatfloat_add(hi.z, lo.z, x1.z * x2.x);
+                floatfloat_add(hi.z, lo.z, x1.w * x2.y);
+
+                floatfloat_add(hi.w, lo.w, x1.x * x2.w);
+                floatfloat_add(hi.w, lo.w, x1.y * x2.z);
+                floatfloat_sub(hi.w, lo.w, x1.z * x2.y);
+                floatfloat_add(hi.w, lo.w, x1.w * x2.x);
             }}
 
-            static __inline__ __device__ void complex_mulgrad(float2 &hi, float2 &lo, float2 x1, float2 x2){{
+            static __inline__ __device__ void quaternion_mulgrad(float4 &hi, float4 &lo, float4 x1, float4 x2){{
                 floatfloat_add(hi.x, lo.x, x1.x * x2.x);
                 floatfloat_add(hi.x, lo.x, x1.y * x2.y);
-                floatfloat_add(hi.y, lo.y, x1.y * x2.x);
+                floatfloat_add(hi.x, lo.x, x1.z * x2.z);
+                floatfloat_add(hi.x, lo.x, x1.w * x2.w);
+
                 floatfloat_sub(hi.y, lo.y, x1.x * x2.y);
+                floatfloat_add(hi.y, lo.y, x1.y * x2.x);
+                floatfloat_sub(hi.y, lo.y, x1.z * x2.w);
+                floatfloat_add(hi.y, lo.y, x1.w * x2.z);
+
+                floatfloat_sub(hi.z, lo.z, x1.x * x2.z);
+                floatfloat_add(hi.z, lo.z, x1.y * x2.w);
+                floatfloat_add(hi.z, lo.z, x1.z * x2.x);
+                floatfloat_sub(hi.z, lo.z, x1.w * x2.y);
+
+                floatfloat_sub(hi.w, lo.w, x1.x * x2.w);
+                floatfloat_sub(hi.w, lo.w, x1.y * x2.z);
+                floatfloat_add(hi.w, lo.w, x1.z * x2.y);
+                floatfloat_add(hi.w, lo.w, x1.w * x2.x);
             }}
 
-            __global__ void complex_convolution_3d(float2 *inmap, float2 *outmap, float2 *filter, 
-                                                   unsigned int oy_offset, unsigned int oz,
-                                                   unsigned int inwidth, unsigned int outwidth, 
-                                                   unsigned int inheight, unsigned int outheight) {{
+            __global__ void quaternion_convolution_3d(float4 *inmap, float4 *outmap, float4 *filter, 
+                                                      unsigned int oy_offset, unsigned int oz,
+                                                      unsigned int inwidth, unsigned int outwidth, 
+                                                      unsigned int inheight, unsigned int outheight) {{
 
                 unsigned int outch = {Defines.IndexX}, tid = {Defines.ThreadIdX}, threads = {Defines.ThreadsX};
                 unsigned int ox = {Defines.BlockIndexY}, oy = oy_offset + {Defines.BlockIndexZ};
 
-                __shared__ float2 us[{InChannels}];
-                float2 uv_hi = ctor_float2(0.0, 0.0), uv_lo = ctor_float2(0.0, 0.0);
+                __shared__ float4 us[{InChannels}];
+                float4 uv_hi = ctor_float4(0.0, 0.0, 0.0, 0.0), uv_lo = ctor_float4(0.0, 0.0, 0.0, 0.0);
 
                 for(unsigned int kz = 0, iz = oz; kz < {KernelDepth}; kz++, iz++){{
                     for(unsigned int ky = 0, iy = oy; ky < {KernelHeight}; ky++, iy++){{
@@ -108,10 +138,10 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
 
                             if(outch < {OutChannels}){{                        
                                 for(unsigned int inch = 0; inch < {InChannels}; inch++){{                            
-                                    float2 u = us[inch];
-                                    float2 v = filter[filter_idx];
+                                    float4 u = us[inch];
+                                    float4 v = filter[filter_idx];
 
-                                    {(GradMode ? "complex_mulgrad" : "complex_mul")}(uv_hi, uv_lo, u, v);
+                                    {(GradMode ? "quaternion_mulgrad" : "quaternion_mul")}(uv_hi, uv_lo, u, v);
 
                                     filter_idx += {OutChannels};
                                 }}
@@ -125,11 +155,11 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                 if(outch < {OutChannels}){{
                     unsigned int outmap_idx = outch + {OutChannels} * (ox + outwidth * (oy + outheight * oz));
 
-                    outmap[outmap_idx] = ctor_float2(uv_hi.x + uv_lo.x, uv_hi.y + uv_lo.y);
+                    outmap[outmap_idx] = ctor_float4(uv_hi.x + uv_lo.x, uv_hi.y + uv_lo.y, uv_hi.z + uv_lo.z, uv_hi.w + uv_lo.w);
                 }}
             }}";
 
-            this.Kernel = new Kernel(code, "complex_convolution_3d");
+            this.Kernel = new Kernel(code, "quaternion_convolution_3d");
         }
 
         /// <summary>実行</summary>
@@ -149,26 +179,26 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             uint outheight = inheight + 1 - KernelHeight;
             uint outdepth = indepth + 1 - KernelDepth;
 
-            uint mul_per_line = InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * outwidth * 4;
+            uint mul_per_line = InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * outwidth * 16;
 
             uint lines_per_execute = MulPerExecute / mul_per_line + 1;
 
             CudaArray<float> transpose_filter = 
-                CudaArrayReserver<float>.Request(stream, filter.DeviceID, index:0, InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * 2);
+                CudaArrayReserver<float>.Request(stream, filter.DeviceID, index:0, InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * 4);
 
-            TransposeComplexKernelChannel(InChannels * 2, OutChannels * 2, KernelWidth * KernelHeight * KernelDepth, filter, transpose_filter, stream);
+            TransposeQuaternionKernelChannel(InChannels * 4, OutChannels * 4, KernelWidth * KernelHeight * KernelDepth, filter, transpose_filter, stream);
             
             for (uint th = 0; th < batches; th++) {
-                for(uint oz = 0; oz < outdepth; oz++) { 
+                for (uint oz = 0; oz < outdepth; oz++) {
                     for (uint oy_offset = 0; oy_offset < outheight; oy_offset += lines_per_execute) {
                         uint lines = Math.Min(lines_per_execute, outheight - oy_offset);
 
                         Kernel.Execute(
-                            indexes:(OutChannels, outwidth, lines), 
-                            block:(Kernel.DefaultBlockSize(OutChannels), 1, 1),
+                            indexes: (OutChannels, outwidth, lines),
+                            block: (Kernel.DefaultBlockSize(OutChannels), 1, 1),
                             dynamic_shared_memory_bytes: 0, stream,
-                            inmap.ElementPtr(th * InChannels * inwidth * inheight * indepth * 2), 
-                            outmap.ElementPtr(th * OutChannels * outwidth * outheight * outdepth * 2),
+                            inmap.ElementPtr(th * InChannels * inwidth * inheight * indepth * 4),
+                            outmap.ElementPtr(th * OutChannels * outwidth * outheight * outdepth * 4),
                             transpose_filter,
                             oy_offset, oz,
                             inwidth, outwidth, inheight, outheight
@@ -204,15 +234,15 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             uint outheight = inheight + 1 - KernelHeight;
             uint outdepth = indepth + 1 - KernelDepth;
 
-            if (!(args[0] is CudaArray<float> inmap) || inmap.Length < InChannels * inwidth * inheight * indepth * batches * 2) {
+            if (!(args[0] is CudaArray<float> inmap) || inmap.Length < InChannels * inwidth * inheight * indepth * batches * 4) {
                 throw new ArgumentException(nameof(inmap));
             }
 
-            if (!(args[1] is CudaArray<float> outmap) || outmap.Length < OutChannels * outwidth * outheight * outdepth * batches * 2) {
+            if (!(args[1] is CudaArray<float> outmap) || outmap.Length < OutChannels * outwidth * outheight * outdepth * batches * 4) {
                 throw new ArgumentException(nameof(outmap));
             }
 
-            if (!(args[2] is CudaArray<float> filter) || filter.Length < InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * 2) {
+            if (!(args[2] is CudaArray<float> filter) || filter.Length < InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * 4) {
                 throw new ArgumentException(nameof(filter));
             }
         }

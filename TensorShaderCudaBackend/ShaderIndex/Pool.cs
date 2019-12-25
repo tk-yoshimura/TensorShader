@@ -12,7 +12,7 @@ namespace TensorShaderCudaBackend {
                                      CudaArray<float> inmap, CudaArray<float> outmap, 
                                      Stream stream = null) {
 
-            string key = $"maxpool_1d channels={channels} stride={stride}";
+            string key = $"maxpool_1d {nameof(channels)}={channels} {nameof(stride)}={stride}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Pool.MaxPool1D(channels, stride));
@@ -33,7 +33,7 @@ namespace TensorShaderCudaBackend {
                                      CudaArray<float> inmap, CudaArray<float> outmap, 
                                      Stream stream = null) {
 
-            string key = $"maxpool_2d channels={channels} stride={stride}";
+            string key = $"maxpool_2d {nameof(channels)}={channels} {nameof(stride)}={stride}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Pool.MaxPool2D(channels, stride));
@@ -54,7 +54,7 @@ namespace TensorShaderCudaBackend {
                                      CudaArray<float> inmap, CudaArray<float> outmap, 
                                      Stream stream = null) {
 
-            string key = $"maxpool_3d channels={channels} stride={stride}";
+            string key = $"maxpool_3d {nameof(channels)}={channels} {nameof(stride)}={stride}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Pool.MaxPool3D(channels, stride));
@@ -75,7 +75,7 @@ namespace TensorShaderCudaBackend {
                                          CudaArray<float> inmap, CudaArray<float> outmap, 
                                          Stream stream = null) {
 
-            string key = $"averagepool_1d channels={channels} stride={stride}";
+            string key = $"averagepool_1d {nameof(channels)}={channels} {nameof(stride)}={stride}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Pool.AveragePool1D(channels, stride));
@@ -96,7 +96,7 @@ namespace TensorShaderCudaBackend {
                                          CudaArray<float> inmap, CudaArray<float> outmap, 
                                          Stream stream = null) {
 
-            string key = $"averagepool_2d channels={channels} stride={stride}";
+            string key = $"averagepool_2d {nameof(channels)}={channels} {nameof(stride)}={stride}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Pool.AveragePool2D(channels, stride));
@@ -117,7 +117,7 @@ namespace TensorShaderCudaBackend {
                                          CudaArray<float> inmap, CudaArray<float> outmap, 
                                          Stream stream = null) {
 
-            string key = $"averagepool_3d channels={channels} stride={stride}";
+            string key = $"averagepool_3d {nameof(channels)}={channels} {nameof(stride)}={stride}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Pool.AveragePool3D(channels, stride));
@@ -138,7 +138,7 @@ namespace TensorShaderCudaBackend {
                                         CudaArray<float> inmap, CudaArray<float> outmap, 
                                         Stream stream = null) {
 
-            string key = $"stridepool_1d channels={channels} stride={stride}";
+            string key = $"stridepool_1d {nameof(channels)}={channels} {nameof(stride)}={stride}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Pool.StridePool1D(channels, stride));
@@ -159,7 +159,7 @@ namespace TensorShaderCudaBackend {
                                         CudaArray<float> inmap, CudaArray<float> outmap, 
                                         Stream stream = null) {
 
-            string key = $"stridepool_2d channels={channels} stride={stride}";
+            string key = $"stridepool_2d {nameof(channels)}={channels} {nameof(stride)}={stride}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Pool.StridePool2D(channels, stride));
@@ -180,7 +180,7 @@ namespace TensorShaderCudaBackend {
                                         CudaArray<float> inmap, CudaArray<float> outmap, 
                                         Stream stream = null) {
 
-            string key = $"stridepool_3d channels={channels} stride={stride}";
+            string key = $"stridepool_3d {nameof(channels)}={channels} {nameof(stride)}={stride}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Pool.StridePool3D(channels, stride));
@@ -201,7 +201,7 @@ namespace TensorShaderCudaBackend {
                                        CudaArray<float> ingrad, CudaArray<float> inpool, CudaArray<float> inmap, CudaArray<float> outmap, 
                                        Stream stream = null) {
 
-            string key = $"maxunpool_1d channels={channels} stride={stride}";
+            string key = $"maxunpool_1d {nameof(channels)}={channels} {nameof(stride)}={stride}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Pool.MaxUnpool1D(channels, stride));
@@ -222,7 +222,7 @@ namespace TensorShaderCudaBackend {
                                        CudaArray<float> ingrad, CudaArray<float> inpool, CudaArray<float> inmap, CudaArray<float> outmap, 
                                        Stream stream = null) {
 
-            string key = $"maxunpool_2d channels={channels} stride={stride}";
+            string key = $"maxunpool_2d {nameof(channels)}={channels} {nameof(stride)}={stride}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Pool.MaxUnpool2D(channels, stride));
@@ -243,7 +243,7 @@ namespace TensorShaderCudaBackend {
                                        CudaArray<float> ingrad, CudaArray<float> inpool, CudaArray<float> inmap, CudaArray<float> outmap, 
                                        Stream stream = null) {
 
-            string key = $"maxunpool_3d channels={channels} stride={stride}";
+            string key = $"maxunpool_3d {nameof(channels)}={channels} {nameof(stride)}={stride}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Pool.MaxUnpool3D(channels, stride));
@@ -264,7 +264,7 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> outmap, 
                                            Stream stream = null) {
 
-            string key = $"averageunpool_1d channels={channels} stride={stride}";
+            string key = $"averageunpool_1d {nameof(channels)}={channels} {nameof(stride)}={stride}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Pool.AverageUnpool1D(channels, stride));
@@ -285,7 +285,7 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> outmap, 
                                            Stream stream = null) {
 
-            string key = $"averageunpool_2d channels={channels} stride={stride}";
+            string key = $"averageunpool_2d {nameof(channels)}={channels} {nameof(stride)}={stride}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Pool.AverageUnpool2D(channels, stride));
@@ -306,7 +306,7 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> outmap, 
                                            Stream stream = null) {
 
-            string key = $"averageunpool_3d channels={channels} stride={stride}";
+            string key = $"averageunpool_3d {nameof(channels)}={channels} {nameof(stride)}={stride}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Pool.AverageUnpool3D(channels, stride));
@@ -327,7 +327,7 @@ namespace TensorShaderCudaBackend {
                                           CudaArray<float> inmap, CudaArray<float> outmap, 
                                           Stream stream = null) {
 
-            string key = $"strideunpool_1d channels={channels} stride={stride}";
+            string key = $"strideunpool_1d {nameof(channels)}={channels} {nameof(stride)}={stride}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Pool.StrideUnpool1D(channels, stride));
@@ -348,7 +348,7 @@ namespace TensorShaderCudaBackend {
                                           CudaArray<float> inmap, CudaArray<float> outmap, 
                                           Stream stream = null) {
 
-            string key = $"strideunpool_2d channels={channels} stride={stride}";
+            string key = $"strideunpool_2d {nameof(channels)}={channels} {nameof(stride)}={stride}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Pool.StrideUnpool2D(channels, stride));
@@ -369,7 +369,7 @@ namespace TensorShaderCudaBackend {
                                           CudaArray<float> inmap, CudaArray<float> outmap, 
                                           Stream stream = null) {
 
-            string key = $"strideunpool_3d channels={channels} stride={stride}";
+            string key = $"strideunpool_3d {nameof(channels)}={channels} {nameof(stride)}={stride}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Pool.StrideUnpool3D(channels, stride));

@@ -8,7 +8,7 @@ namespace TensorShaderCudaBackend {
         
         /// <summary>OneHotVector</summary>
         public static void OneHotVector(uint length, uint channels, CudaArray<float> src, CudaArray<float> dst, Stream stream = null){
-            string key = $"onehotvector channels={channels}";
+            string key = $"onehotvector {nameof(channels)}={channels}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Indexer.OneHotVector(channels));
@@ -25,7 +25,7 @@ namespace TensorShaderCudaBackend {
 
         /// <summary>ArgMin</summary>
         public static void ArgMin(uint length, uint channels, CudaArray<float> src, CudaArray<float> dst, Stream stream = null){
-            string key = $"argmin channels={channels}";
+            string key = $"argmin {nameof(channels)}={channels}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Indexer.ArgMin(channels));
@@ -42,7 +42,7 @@ namespace TensorShaderCudaBackend {
 
         /// <summary>ArgMax</summary>
         public static void ArgMax(uint length, uint channels, CudaArray<float> src, CudaArray<float> dst, Stream stream = null){
-            string key = $"argmax channels={channels}";
+            string key = $"argmax {nameof(channels)}={channels}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Indexer.ArgMax(channels));

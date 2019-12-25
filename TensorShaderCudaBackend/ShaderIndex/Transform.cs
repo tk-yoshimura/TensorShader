@@ -13,7 +13,7 @@ namespace TensorShaderCudaBackend {
                                             CudaArray<float> inmap, CudaArray<float> outmap,
                                             Stream stream = null) {
 
-            string key = $"channel_to_space_2d outchannels={outchannels} scale={scale}";
+            string key = $"channel_to_space_2d {nameof(outchannels)}={outchannels} {nameof(scale)}={scale}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Transform.ChannelToSpace2D(scale, outchannels));
@@ -34,7 +34,7 @@ namespace TensorShaderCudaBackend {
                                             CudaArray<float> inmap, CudaArray<float> outmap,
                                             Stream stream = null) {
 
-            string key = $"space_to_channel_2d inchannels={inchannels} scale={scale}";
+            string key = $"space_to_channel_2d {nameof(inchannels)}={inchannels} {nameof(scale)}={scale}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Transform.SpaceToChannel2D(scale, inchannels));
@@ -55,7 +55,7 @@ namespace TensorShaderCudaBackend {
                                             CudaArray<float> inmap, CudaArray<float> outmap,
                                             Stream stream = null) {
 
-            string key = $"channel_to_space_3d outchannels={outchannels} scale={scale}";
+            string key = $"channel_to_space_3d {nameof(outchannels)}={outchannels} {nameof(scale)}={scale}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Transform.ChannelToSpace3D(scale, outchannels));
@@ -76,7 +76,7 @@ namespace TensorShaderCudaBackend {
                                             CudaArray<float> inmap, CudaArray<float> outmap,
                                             Stream stream = null) {
 
-            string key = $"space_to_channel_3d inchannels={inchannels} scale={scale}";
+            string key = $"space_to_channel_3d {nameof(inchannels)}={inchannels} {nameof(scale)}={scale}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Transform.SpaceToChannel3D(scale, inchannels));

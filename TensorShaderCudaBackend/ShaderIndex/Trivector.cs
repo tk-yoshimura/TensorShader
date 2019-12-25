@@ -334,7 +334,10 @@ namespace TensorShaderCudaBackend {
                                  CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                  Stream stream = null) {
 
-            string key = $"trivector_convolution_dense inchannels={inchannels} outchannels={outchannels} gradmode={gradmode}";
+            string key = 
+                $"trivector_convolution_dense " +
+                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(gradmode)}={gradmode}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Trivector.Convolution.Dense(inchannels, outchannels, gradmode));
@@ -355,7 +358,10 @@ namespace TensorShaderCudaBackend {
                                           CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                           Stream stream = null) {
 
-            string key = $"trivector_transpose_dense inchannels={inchannels} outchannels={outchannels} gradmode={gradmode}";
+            string key = 
+                $"trivector_transpose_dense " +
+                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(gradmode)}={gradmode}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Trivector.Convolution.TransposeDense(inchannels, outchannels, gradmode));
@@ -376,7 +382,10 @@ namespace TensorShaderCudaBackend {
                                               CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel_value, CudaArray<float> kernel_grad, 
                                               Stream stream = null) {
 
-            string key = $"trivector_kernelproduct_dense inchannels={inchannels} outchannels={outchannels} transpose={transpose}";
+            string key = 
+                $"trivector_kernelproduct_dense " +
+                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(transpose)}={transpose}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Trivector.Convolution.KernelProductDense(inchannels, outchannels, transpose));
@@ -397,7 +406,11 @@ namespace TensorShaderCudaBackend {
                                          CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                          Stream stream = null) {
 
-            string key = $"trivector_convolution_1d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} gradmode={gradmode}";
+            string key = 
+                $"trivector_convolution_1d " +
+                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(kwidth)}={kwidth} " +
+                $"{nameof(gradmode)}={gradmode}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Trivector.Convolution.Convolution1D(inchannels, outchannels, kwidth, gradmode));
@@ -418,7 +431,11 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                            Stream stream = null) {
 
-            string key = $"trivector_deconvolution_1d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} gradmode={gradmode}";
+            string key = 
+                $"trivector_deconvolution_1d " +
+                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(kwidth)}={kwidth} " +
+                $"{nameof(gradmode)}={gradmode}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Trivector.Convolution.Deconvolution1D(inchannels, outchannels, kwidth, gradmode));
@@ -439,7 +456,11 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel_value, CudaArray<float> kernel_grad, 
                                            Stream stream = null) {
 
-            string key = $"trivector_kernelproduct_1d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} transpose={transpose}";
+            string key = 
+                $"trivector_kernelproduct_1d " +
+                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(kwidth)}={kwidth} " +
+                $"{nameof(transpose)}={transpose}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Trivector.Convolution.KernelProduct1D(inchannels, outchannels, kwidth, transpose));
@@ -460,7 +481,10 @@ namespace TensorShaderCudaBackend {
                                          CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                          Stream stream = null) {
 
-            string key = $"trivector_convolution_2d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} gradmode={gradmode}";
+            string key = 
+                $"trivector_convolution_2d {nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
+                $"{nameof(gradmode)}={gradmode}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Trivector.Convolution.Convolution2D(inchannels, outchannels, kwidth, kheight, gradmode));
@@ -481,7 +505,11 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                            Stream stream = null) {
 
-            string key = $"trivector_deconvolution_2d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} gradmode={gradmode}";
+            string key = 
+                $"trivector_deconvolution_2d " +
+                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
+                $"{nameof(gradmode)}={gradmode}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Trivector.Convolution.Deconvolution2D(inchannels, outchannels, kwidth, kheight, gradmode));
@@ -502,7 +530,11 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel_value, CudaArray<float> kernel_grad, 
                                            Stream stream = null) {
             
-            string key = $"trivector_kernelproduct_2d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} transpose={transpose}";
+            string key = 
+                $"trivector_kernelproduct_2d " +
+                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
+                $"{nameof(transpose)}={transpose}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Trivector.Convolution.KernelProduct2D(inchannels, outchannels, kwidth, kheight, transpose));
@@ -522,7 +554,23 @@ namespace TensorShaderCudaBackend {
                                          uint batch, uint kwidth, uint kheight, uint kdepth, bool gradmode,
                                          CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                          Stream stream = null) {
-            throw new NotImplementedException();
+
+            string key = 
+                $"trivector_convolution_3d {nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
+                $"{nameof(gradmode)}={gradmode}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Trivector.Convolution.Convolution3D(inchannels, outchannels, kwidth, kheight, kdepth, gradmode));
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, inheight, indepth, batch);
         }
 
         /// <summary>3次元逆畳み込み</summary>
@@ -530,7 +578,24 @@ namespace TensorShaderCudaBackend {
                                            uint batch, uint kwidth, uint kheight, uint kdepth, bool gradmode,
                                            CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                            Stream stream = null) {
-            throw new NotImplementedException();
+
+            string key = 
+                $"trivector_deconvolution_3d " +
+                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
+                $"{nameof(gradmode)}={gradmode}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Trivector.Convolution.Deconvolution3D(inchannels, outchannels, kwidth, kheight, kdepth, gradmode));
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, inheight, indepth, batch);
         }
 
         /// <summary>カーネル積</summary>
@@ -538,7 +603,24 @@ namespace TensorShaderCudaBackend {
                                            uint batch, uint kwidth, uint kheight, uint kdepth, bool transpose,
                                            CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel_value, CudaArray<float> kernel_grad, 
                                            Stream stream = null) {
-            throw new NotImplementedException();
+
+            string key = 
+                $"trivector_kernelproduct_3d " +
+                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
+                $"{nameof(transpose)}={transpose}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Trivector.Convolution.KernelProduct3D(inchannels, outchannels, kwidth, kheight, kdepth, transpose));
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel_value, kernel_grad, inwidth, inheight, indepth, batch);
         }
     } 
 }

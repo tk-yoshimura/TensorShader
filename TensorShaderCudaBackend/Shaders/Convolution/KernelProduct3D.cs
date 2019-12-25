@@ -165,8 +165,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                             dfloat_filter,
                             oy_offset, oz,
                             xsets,
-                            inwidth, outwidth,
-                            inheight, outheight
+                            inwidth, outwidth, inheight, outheight
                         );
                     }
                 }

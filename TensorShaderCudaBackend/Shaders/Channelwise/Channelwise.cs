@@ -35,7 +35,7 @@ namespace TensorShaderCudaBackend.Shaders.Channelwise {
 
             this.Channels = channels;
             this.MapArrays = map_arrays;
-            this.FuncName = $"{name} channels={channels}";
+            this.FuncName = $"{name} {nameof(channels)}={channels}";
             this.UseConstMemory = channels <= 4;
         }
 

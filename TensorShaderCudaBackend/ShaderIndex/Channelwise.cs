@@ -7,7 +7,7 @@ namespace TensorShaderCudaBackend {
         private readonly static Dictionary<string, Shader> shaders = new Dictionary<string, Shader>();
 
         private static Shader BinaryArithmetric(string name, string func, uint channels) {
-            string key = $"{name} channels={channels}";
+            string key = $"{name} {nameof(channels)}={channels}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Channelwise.ChannelwiseBinaryArithmetric(name, func, channels));

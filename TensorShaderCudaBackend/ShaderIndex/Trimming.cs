@@ -13,7 +13,9 @@ namespace TensorShaderCudaBackend {
                                       CudaArray<float> inmap, CudaArray<float> outmap,
                                       Stream stream = null) {
 
-            string key = $"trimming_1d channels={channels} trim_left={trim_left} trim_right={trim_right}";
+            string key = 
+                $"trimming_1d {nameof(channels)}={channels} " +
+                $"{nameof(trim_left)}={trim_left} {nameof(trim_right)}={trim_right}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Trimming.Trimming1D(channels, trim_left, trim_right));
@@ -37,9 +39,9 @@ namespace TensorShaderCudaBackend {
                                       Stream stream = null) {
 
             string key = 
-                $"trimming_2d channels={channels} " +
-                $"trim_left={trim_left} trim_right={trim_right} " +
-                $"trim_top={trim_top} trim_bottom={trim_bottom}";
+                $"trimming_2d {nameof(channels)}={channels} " +
+                $"{nameof(trim_left)}={trim_left} {nameof(trim_right)}={trim_right} " +
+                $"{nameof(trim_top)}={trim_top} {nameof(trim_bottom)}={trim_bottom}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Trimming.Trimming2D(channels, trim_left, trim_right, trim_top, trim_bottom));
@@ -64,10 +66,10 @@ namespace TensorShaderCudaBackend {
                                       Stream stream = null) {
 
             string key = 
-                $"trimming_3d channels={channels} " +
-                $"trim_left={trim_left} trim_right={trim_right} " +
-                $"trim_top={trim_top} trim_bottom={trim_bottom} " +
-                $"trim_front={trim_front} trim_rear={trim_rear}";
+                $"trimming_3d {nameof(channels)}={channels} " +
+                $"{nameof(trim_left)}={trim_left} {nameof(trim_right)}={trim_right} " +
+                $"{nameof(trim_top)}={trim_top} {nameof(trim_bottom)}={trim_bottom} " +
+                $"{nameof(trim_front)}={trim_front} {nameof(trim_rear)}={trim_rear}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Trimming.Trimming3D(channels, 

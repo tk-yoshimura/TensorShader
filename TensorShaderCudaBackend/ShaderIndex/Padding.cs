@@ -13,7 +13,7 @@ namespace TensorShaderCudaBackend {
                                          CudaArray<float> inmap, CudaArray<float> outmap,
                                          Stream stream = null) {
             
-            string key = $"zeropadding_1d channels={channels} pad_left={pad_left} pad_right={pad_right}";
+            string key = $"zeropadding_1d {nameof(channels)}={channels} {nameof(pad_left)}={pad_left} {nameof(pad_right)}={pad_right}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Padding.ZeroPadding1D(channels, pad_left, pad_right));
@@ -35,7 +35,7 @@ namespace TensorShaderCudaBackend {
                                          CudaArray<float> inmap, CudaArray<float> outmap,
                                          Stream stream = null) {
             
-            string key = $"edgepadding_1d channels={channels} pad_left={pad_left} pad_right={pad_right}";
+            string key = $"edgepadding_1d {nameof(channels)}={channels} {nameof(pad_left)}={pad_left} {nameof(pad_right)}={pad_right}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Padding.EdgePadding1D(channels, pad_left, pad_right));
@@ -59,9 +59,9 @@ namespace TensorShaderCudaBackend {
                                          Stream stream = null) {
 
             string key = 
-                $"zeropadding_2d channels={channels} " +
-                $"pad_left={pad_left} pad_right={pad_right} " +
-                $"pad_top={pad_top} pad_bottom={pad_bottom}";
+                $"zeropadding_2d {nameof(channels)}={channels} " +
+                $"{nameof(pad_left)}={pad_left} {nameof(pad_right)}={pad_right} " +
+                $"{nameof(pad_top)}={pad_top} {nameof(pad_bottom)}={pad_bottom}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Padding.ZeroPadding2D(channels, pad_left, pad_right, pad_top, pad_bottom));
@@ -85,9 +85,9 @@ namespace TensorShaderCudaBackend {
                                          Stream stream = null) {
 
             string key = 
-                $"edgepadding_2d channels={channels} " +
-                $"pad_left={pad_left} pad_right={pad_right} " +
-                $"pad_top={pad_top} pad_bottom={pad_bottom}";
+                $"edgepadding_2d {nameof(channels)}={channels} " +
+                $"{nameof(pad_left)}={pad_left} {nameof(pad_right)}={pad_right} " +
+                $"{nameof(pad_top)}={pad_top} {nameof(pad_bottom)}={pad_bottom}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Padding.EdgePadding2D(channels, pad_left, pad_right, pad_top, pad_bottom));
@@ -112,10 +112,10 @@ namespace TensorShaderCudaBackend {
                                          Stream stream = null) {
 
             string key = 
-                $"zeropadding_3d channels={channels} " +
-                $"pad_left={pad_left} pad_right={pad_right} " +
-                $"pad_top={pad_top} pad_bottom={pad_bottom} " +
-                $"pad_front={pad_front} pad_rear={pad_rear}";
+                $"zeropadding_3d {nameof(channels)}={channels} " +
+                $"{nameof(pad_left)}={pad_left} {nameof(pad_right)}={pad_right} " +
+                $"{nameof(pad_top)}={pad_top} {nameof(pad_bottom)}={pad_bottom} " +
+                $"{nameof(pad_front)}={pad_front} {nameof(pad_rear)}={pad_rear}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Padding.ZeroPadding3D(channels, 
@@ -141,10 +141,10 @@ namespace TensorShaderCudaBackend {
                                          Stream stream = null) {
 
             string key = 
-                $"edgepadding_3d channels={channels} " +
-                $"pad_left={pad_left} pad_right={pad_right} " +
-                $"pad_top={pad_top} pad_bottom={pad_bottom} " +
-                $"pad_front={pad_front} pad_rear={pad_rear}";
+                $"edgepadding_3d {nameof(channels)}={channels} " +
+                $"{nameof(pad_left)}={pad_left} {nameof(pad_right)}={pad_right} " +
+                $"{nameof(pad_top)}={pad_top} {nameof(pad_bottom)}={pad_bottom} " +
+                $"{nameof(pad_front)}={pad_front} {nameof(pad_rear)}={pad_rear}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Padding.EdgePadding3D(channels, 

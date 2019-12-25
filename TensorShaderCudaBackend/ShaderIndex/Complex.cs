@@ -355,7 +355,10 @@ namespace TensorShaderCudaBackend {
                                  CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                  Stream stream = null) {
 
-            string key = $"complex_dense inchannels={inchannels} outchannels={outchannels} gradmode={gradmode}";
+            string key = 
+                $"complex_dense " +
+                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(gradmode)}={gradmode}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Complex.Convolution.Dense(inchannels, outchannels, gradmode));
@@ -376,7 +379,10 @@ namespace TensorShaderCudaBackend {
                                           CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                           Stream stream = null) {
 
-            string key = $"complex_transpose_dense inchannels={inchannels} outchannels={outchannels} gradmode={gradmode}";
+            string key = 
+                $"complex_transpose_dense " +
+                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(gradmode)}={gradmode}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Complex.Convolution.TransposeDense(inchannels, outchannels, gradmode));
@@ -397,7 +403,10 @@ namespace TensorShaderCudaBackend {
                                               CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel,
                                               Stream stream = null) {
 
-            string key = $"complex_kernelproduct_dense inchannels={inchannels} outchannels={outchannels} transpose={transpose}";
+            string key = 
+                $"complex_kernelproduct_dense " +
+                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(transpose)}={transpose}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Complex.Convolution.KernelProductDense(inchannels, outchannels, transpose));
@@ -418,7 +427,11 @@ namespace TensorShaderCudaBackend {
                                          CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                          Stream stream = null) {
 
-            string key = $"complex_convolution_1d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} gradmode={gradmode}";
+            string key = 
+                $"complex_convolution_1d " +
+                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(kwidth)}={kwidth} " +
+                $"{nameof(gradmode)}={gradmode}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Complex.Convolution.Convolution1D(inchannels, outchannels, kwidth, gradmode));
@@ -439,7 +452,11 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                            Stream stream = null) {
 
-            string key = $"complex_deconvolution_1d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} gradmode={gradmode}";
+            string key = 
+                $"complex_deconvolution_1d " +
+                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(kwidth)}={kwidth} " +
+                $"{nameof(gradmode)}={gradmode}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Complex.Convolution.Deconvolution1D(inchannels, outchannels, kwidth, gradmode));
@@ -460,7 +477,11 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel, 
                                            Stream stream = null) {
 
-            string key = $"complex_kernelproduct_1d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} transpose={transpose}";
+            string key = 
+                $"complex_kernelproduct_1d " +
+                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(kwidth)}={kwidth} " +
+                $"{nameof(transpose)}={transpose}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Complex.Convolution.KernelProduct1D(inchannels, outchannels, kwidth, transpose));
@@ -481,7 +502,11 @@ namespace TensorShaderCudaBackend {
                                          CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                          Stream stream = null) {
 
-            string key = $"complex_convolution_2d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} gradmode={gradmode}";
+            string key = 
+                $"complex_convolution_2d " +
+                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
+                $"{nameof(gradmode)}={gradmode}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Complex.Convolution.Convolution2D(inchannels, outchannels, kwidth, kheight, gradmode));
@@ -502,7 +527,11 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                            Stream stream = null) {
 
-            string key = $"complex_deconvolution_2d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} gradmode={gradmode}";
+            string key = 
+                $"complex_deconvolution_2d " +
+                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
+                $"{nameof(gradmode)}={gradmode}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Complex.Convolution.Deconvolution2D(inchannels, outchannels, kwidth, kheight, gradmode));
@@ -523,7 +552,11 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel, 
                                            Stream stream = null) {
 
-            string key = $"complex_kernelproduct_2d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} transpose={transpose}";
+            string key = 
+                $"complex_kernelproduct_2d " +
+                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
+                $"{nameof(transpose)}={transpose}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Complex.Convolution.KernelProduct2D(inchannels, outchannels, kwidth, kheight, transpose));
@@ -544,7 +577,11 @@ namespace TensorShaderCudaBackend {
                                          CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                          Stream stream = null) {
 
-            string key = $"complex_convolution_3d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} kdepth={kdepth} gradmode={gradmode}";
+            string key = 
+                $"complex_convolution_3d " +
+                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
+                $"{nameof(gradmode)}={gradmode}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Complex.Convolution.Convolution3D(inchannels, outchannels, kwidth, kheight, kdepth, gradmode));
@@ -565,7 +602,11 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                            Stream stream = null) {
 
-            string key = $"complex_deconvolution_3d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} kdepth={kdepth} gradmode={gradmode}";
+            string key = 
+                $"complex_deconvolution_3d " +
+                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
+                $"{nameof(gradmode)}={gradmode}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Complex.Convolution.Deconvolution3D(inchannels, outchannels, kwidth, kheight, kdepth, gradmode));
@@ -586,7 +627,11 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel, 
                                            Stream stream = null) {
 
-            string key = $"complex_kernelproduct_3d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} kheight={kheight} kdepth={kdepth} transpose={transpose}";
+            string key = 
+                $"complex_kernelproduct_3d " +
+                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
+                $"{nameof(transpose)}={transpose}";
             
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Complex.Convolution.KernelProduct3D(inchannels, outchannels, kwidth, kheight, kdepth, transpose));

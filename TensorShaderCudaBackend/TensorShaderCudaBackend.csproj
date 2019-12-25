@@ -194,9 +194,12 @@
     <Compile Include="Shaders\Quaternion\Arithmetric\BinaryArithmetric.cs" />
     <Compile Include="Shaders\Quaternion\Arithmetric\Elementwise.cs" />
     <Compile Include="Shaders\Quaternion\Arithmetric\UnaryArithmetric.cs" />
+    <Compile Include="Shaders\Quaternion\Convolution\Convolution3D.cs" />
+    <Compile Include="Shaders\Quaternion\Convolution\Deconvolution3D.cs" />
     <Compile Include="Shaders\Quaternion\Convolution\Dense.cs" />
     <Compile Include="Shaders\Quaternion\Convolution\Convolution1D.cs" />
     <Compile Include="Shaders\Quaternion\Convolution\Convolution2D.cs" />
+    <Compile Include="Shaders\Quaternion\Convolution\KernelProduct3D.cs" />
     <Compile Include="Shaders\Quaternion\Convolution\TransposeDense.cs" />
     <Compile Include="Shaders\Quaternion\Convolution\Deconvolution1D.cs" />
     <Compile Include="Shaders\Quaternion\Convolution\Deconvolution2D.cs" />
@@ -223,9 +226,12 @@
     <Compile Include="Shaders\Trivector\Arithmetric\QuaternionMulVGrad.cs" />
     <Compile Include="Shaders\Trivector\Arithmetric\QuaternionMul.cs" />
     <Compile Include="Shaders\Trivector\Arithmetric\UnaryArithmetric.cs" />
+    <Compile Include="Shaders\Trivector\Convolution\Convolution3D.cs" />
+    <Compile Include="Shaders\Trivector\Convolution\Deconvolution3D.cs" />
     <Compile Include="Shaders\Trivector\Convolution\Dense.cs" />
     <Compile Include="Shaders\Trivector\Convolution\Convolution1D.cs" />
     <Compile Include="Shaders\Trivector\Convolution\Convolution2D.cs" />
+    <Compile Include="Shaders\Trivector\Convolution\KernelProduct3D.cs" />
     <Compile Include="Shaders\Trivector\Convolution\TransposeDense.cs" />
     <Compile Include="Shaders\Trivector\Convolution\Deconvolution1D.cs" />
     <Compile Include="Shaders\Trivector\Convolution\Deconvolution2D.cs" />
