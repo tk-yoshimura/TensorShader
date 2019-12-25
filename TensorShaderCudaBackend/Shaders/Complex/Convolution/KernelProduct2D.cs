@@ -29,11 +29,11 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
         /// <summary>実行あたりのピクセル数(2^14=16384‬)</summary>
         public static uint PixelsPerExecute => 0x4000;
 
-        /// <summary>1スレッドで処理する対象ピクセル数</summary>
-        private static uint BatchPixels => 16;
-
         /// <summary>ブロックサイズ</summary>
         public (uint x, uint y) BlockSize { private set; get; }
+
+        /// <summary>1スレッドで処理する対象ピクセル数</summary>
+        private static uint BatchPixels => 16;
                 
         /// <summary>識別子</summary>
         public override sealed string Signature => 

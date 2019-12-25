@@ -4,19 +4,23 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.ComplexConvolution;
+using TensorShaderCudaBackend.API;
 
 namespace TensorShaderTest.Operators.Complex {
     [TestClass]
     public class ComplexDenseTest {
         [TestMethod]
         public void ExecuteTest() {
+            Random random = new Random(1234);
+
             float max_err = 0;
 
-            foreach (int batch in new int[] { 1, 2, 3 }) {
-                foreach (int inchannels in new int[] { 2, 4, 10, 20 }) {
-                    foreach (int outchannels in new int[] { 6, 14 }) {
-                        float[] xval = (new float[inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                        float[] wval = (new float[inchannels * outchannels / 2]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+            foreach (int batch in new int[] { 1, 2 }) {
+                foreach (int inchannels in new int[] { 2, 4, 10, 20, 32, 34 }) {
+                    foreach (int outchannels in new int[] { 2, 4, 10, 20, 32, 34 }) {
+
+                        float[] xval = (new float[inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+                        float[] wval = (new float[inchannels * outchannels / 2]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
 
                         System.Numerics.Complex[] xcval = (new System.Numerics.Complex[xval.Length / 2])
                             .Select((_, idx) => new System.Numerics.Complex(xval[idx * 2], xval[idx * 2 + 1])).ToArray();
@@ -55,36 +59,6 @@ namespace TensorShaderTest.Operators.Complex {
         }
 
         [TestMethod]
-        public void OverflowTest() {
-            foreach (bool gradmode in new bool[] { false, true }) {
-                foreach (int batch in new int[] { 1, 2, 3 }) {
-                    foreach (int inchannels in new int[] { 2, 4, 10, 20 }) {
-                        foreach (int outchannels in new int[] { 6, 14 }) {
-                            float[] xval = (new float[inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                            float[] wval = (new float[inchannels * outchannels / 2]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
-
-                            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map0D(inchannels, batch), xval);
-                            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels / 2), wval);
-
-                            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map0D(outchannels, batch));
-
-                            ComplexDense ope = new ComplexDense(inchannels, outchannels, gradmode, batch);
-
-                            ope.Execute(x_tensor, w_tensor, y_tensor);
-
-                            CollectionAssert.AreEqual(xval, x_tensor.State);
-                            CollectionAssert.AreEqual(wval, w_tensor.State);
-
-                            y_tensor.CheckOverflow();
-
-                            Console.WriteLine($"pass: {inchannels},{outchannels},{batch},{gradmode}");
-                        }
-                    }
-                }
-            }
-        }
-
-        [TestMethod]
         public void SpeedTest() {
             int inchannels = 32, outchannels = 32;
 
@@ -95,17 +69,12 @@ namespace TensorShaderTest.Operators.Complex {
 
             ComplexDense ope = new ComplexDense(inchannels, outchannels);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/complex_dense.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, w_tensor, y_tensor);
-            ope.Execute(x_tensor, w_tensor, y_tensor);
-            ope.Execute(x_tensor, w_tensor, y_tensor);
-            ope.Execute(x_tensor, w_tensor, y_tensor);
-
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            
+            Cuda.Profiler.Stop();
         }
 
         public static ComplexMap0D Reference(ComplexMap0D x, ComplexFilter0D w) {

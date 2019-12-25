@@ -334,7 +334,19 @@ namespace TensorShaderCudaBackend {
                                  CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                  Stream stream = null) {
 
-            throw new NotImplementedException();
+            string key = $"trivector_convolution_dense inchannels={inchannels} outchannels={outchannels} gradmode={gradmode}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Trivector.Convolution.Dense(inchannels, outchannels, gradmode));
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, batch);
         }
 
         /// <summary>転置全結合</summary>
@@ -342,7 +354,20 @@ namespace TensorShaderCudaBackend {
                                           uint batch, bool gradmode,
                                           CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                           Stream stream = null) {
-            throw new NotImplementedException();
+
+            string key = $"trivector_transpose_dense inchannels={inchannels} outchannels={outchannels} gradmode={gradmode}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Trivector.Convolution.TransposeDense(inchannels, outchannels, gradmode));
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, batch);
         }
 
         /// <summary>カーネル積</summary>
@@ -350,7 +375,20 @@ namespace TensorShaderCudaBackend {
                                               uint batch, bool transpose,
                                               CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel_value, CudaArray<float> kernel_grad, 
                                               Stream stream = null) {
-            throw new NotImplementedException();
+
+            string key = $"trivector_kernelproduct_dense inchannels={inchannels} outchannels={outchannels} transpose={transpose}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Trivector.Convolution.KernelProductDense(inchannels, outchannels, transpose));
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel_value, kernel_grad, batch);
         }
         
         /// <summary>1次元畳み込み</summary>
@@ -359,7 +397,19 @@ namespace TensorShaderCudaBackend {
                                          CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                          Stream stream = null) {
 
-            throw new NotImplementedException();
+            string key = $"trivector_convolution_1d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} gradmode={gradmode}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Trivector.Convolution.Convolution1D(inchannels, outchannels, kwidth, gradmode));
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, batch);
         }
 
         /// <summary>1次元逆畳み込み</summary>
@@ -368,7 +418,19 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                            Stream stream = null) {
 
-            throw new NotImplementedException();
+            string key = $"trivector_deconvolution_1d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} gradmode={gradmode}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Trivector.Convolution.Deconvolution1D(inchannels, outchannels, kwidth, gradmode));
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, batch);
         }
 
         /// <summary>カーネル積</summary>
@@ -376,7 +438,20 @@ namespace TensorShaderCudaBackend {
                                            uint batch, uint kwidth, bool transpose,
                                            CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel_value, CudaArray<float> kernel_grad, 
                                            Stream stream = null) {
-            throw new NotImplementedException();
+
+            string key = $"trivector_kernelproduct_1d inchannels={inchannels} outchannels={outchannels} kwidth={kwidth} transpose={transpose}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Trivector.Convolution.KernelProduct1D(inchannels, outchannels, kwidth, transpose));
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel_value, kernel_grad, inwidth, batch);
         }
 
         /// <summary>2次元畳み込み</summary>

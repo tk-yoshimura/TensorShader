@@ -4,19 +4,23 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.TrivectorConvolution;
+using TensorShaderCudaBackend.API;
 
 namespace TensorShaderTest.Operators.Trivector {
     [TestClass]
     public class TrivectorTransposeDenseTest {
         [TestMethod]
         public void ExecuteTest() {
+            Random random = new Random(1234);
+
             float max_err = 0;
 
-            foreach (int batch in new int[] { 1, 2, 3 }) {
-                foreach (int inchannels in new int[] { 3, 6, 9, 12 }) {
-                    foreach (int outchannels in new int[] { 3, 6, 9, 12 }) {
-                        float[] yval = (new float[outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                        float[] wval = (new float[inchannels * outchannels / 9 * 4]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+            foreach (int batch in new int[] { 1, 2 }) {
+                foreach (int inchannels in new int[] { 3, 6, 9, 15, 21, 33 }) {
+                    foreach (int outchannels in new int[] { 3, 6, 9, 15, 21, 33 }) {
+
+                        float[] yval = (new float[outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+                        float[] wval = (new float[inchannels * outchannels / 9 * 4]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
 
                         Trivector[] ycval = (new Trivector[yval.Length / 3])
                             .Select((_, idx) => new Trivector(yval[idx * 3], yval[idx * 3 + 1], yval[idx * 3 + 2])).ToArray();
@@ -55,36 +59,6 @@ namespace TensorShaderTest.Operators.Trivector {
         }
 
         [TestMethod]
-        public void OverflowTest() {
-            foreach (bool gradmode in new bool[] { false, true }) {
-                foreach (int batch in new int[] { 1, 2, 3 }) {
-                    foreach (int inchannels in new int[] { 3, 6, 9, 12 }) {
-                        foreach (int outchannels in new int[] { 3, 6, 9, 12 }) {
-                            float[] yval = (new float[outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                            float[] wval = (new float[inchannels * outchannels / 9 * 4]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
-
-                            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map0D(outchannels, batch), yval);
-                            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels / 3 * 4, outchannels / 3), wval);
-
-                            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map0D(inchannels, batch));
-
-                            TrivectorTransposeDense ope = new TrivectorTransposeDense(outchannels, inchannels, gradmode, batch);
-
-                            ope.Execute(y_tensor, w_tensor, x_tensor);
-
-                            CollectionAssert.AreEqual(yval, y_tensor.State);
-                            CollectionAssert.AreEqual(wval, w_tensor.State);
-
-                            x_tensor.CheckOverflow();
-
-                            Console.WriteLine($"pass: {inchannels},{outchannels},{batch},{gradmode}");
-                        }
-                    }
-                }
-            }
-        }
-
-        [TestMethod]
         public void SpeedTest() {
             int inchannels = 33, outchannels = 33;
 
@@ -97,17 +71,12 @@ namespace TensorShaderTest.Operators.Trivector {
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/trivector_transpose_dense.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
-            ope.Execute(y_tensor, w_tensor, x_tensor);
-            ope.Execute(y_tensor, w_tensor, x_tensor);
-            ope.Execute(y_tensor, w_tensor, x_tensor);
-
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            
+            Cuda.Profiler.Stop();
         }
 
         public static TrivectorMap0D Reference(TrivectorMap0D y, Quaternion.QuaternionFilter0D w) {
