@@ -63,8 +63,8 @@ namespace TensorShader.Functions.QuaternionConvolution {
                 throw new AggregateException(ExceptionMessage.TensorLengthMultiple("InChannels", kernelshape, kernelshape.Channels, 4));
             }
 
-            if (inshape.Channels != kernelshape.OutChannels) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(kernelshape, ("OutChannels", inshape.Channels)));
+            if (inshape.Channels / 4 != kernelshape.OutChannels) {
+                throw new ArgumentException(ExceptionMessage.TensorElements(kernelshape, ("OutChannels", inshape.Channels / 4)));
             }
 
             int outwidth = inshape.Width + kernelshape.Width - 1;

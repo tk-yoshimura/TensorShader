@@ -63,8 +63,8 @@ namespace TensorShader.Functions.ComplexConvolution {
                 throw new AggregateException(ExceptionMessage.TensorLengthMultiple("InChannels", kernelshape, kernelshape.Channels, 2));
             }
 
-            if (inshape.Channels != kernelshape.OutChannels * 2) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(kernelshape, ("OutChannels", inshape.Channels)));
+            if (inshape.Channels / 2 != kernelshape.OutChannels) {
+                throw new ArgumentException(ExceptionMessage.TensorElements(kernelshape, ("OutChannels", inshape.Channels / 2)));
             }
             
             int outwidth = inshape.Width + kernelshape.Width - 1;

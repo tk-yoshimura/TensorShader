@@ -4,95 +4,60 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.ComplexConvolution;
+using TensorShaderCudaBackend.API;
 
 namespace TensorShaderTest.Operators.Complex {
     [TestClass]
     public class ComplexConvolution3DTest {
         [TestMethod]
         public void ExecuteTest() {
+            Random random = new Random(1234);
+
             float max_err = 0;
 
-            foreach (int batch in new int[] { 1, 2, 3 }) {
-                foreach (int inchannels in new int[] { 2, 4, 10, 20 }) {
-                    foreach (int outchannels in new int[] { 6, 14 }) {
-                        foreach ((int kwidth, int kheight, int kdepth) in new (int, int, int)[] { (1, 1, 1), (3, 3, 3), (5, 5, 5), (1, 3, 5), (3, 5, 1), (5, 1, 3) }) {
-                            foreach ((int inwidth, int inheight, int indepth) in new (int, int, int)[] { (13, 13, 13), (17, 17, 17), (19, 19, 19), (17, 19, 13), (13, 17, 19), (19, 13, 17) }) {
-                                int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;
+            foreach (int batch in new int[] { 1, 2 }) {
+                foreach ((int inchannels, int outchannels) in new (int, int)[] { (2, 2), (2, 4), (4, 2), (4, 10), (10, 4), (10, 20), (20, 10), (20, 32), (32, 20), (32, 34), (34, 32), (34, 34) }) {
+                    foreach ((int kwidth, int kheight, int kdepth) in new (int, int, int)[] { (1, 1, 1), (3, 3, 3), (5, 5, 5), (1, 3, 5), (3, 5, 1), (5, 1, 3) }) {
+                        foreach ((int inwidth, int inheight, int indepth) in new (int, int, int)[] { (kwidth, kheight, kdepth), (kwidth * 2, kheight * 2, kdepth * 2), (13, 13, 13), (17, 17, 17), (19, 19, 19), (17, 19, 13), (13, 17, 19), (19, 13, 17) }) {
+                            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;
 
-                                float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                                float[] wval = (new float[kwidth * kheight * kdepth * inchannels * outchannels / 2]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+                            float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+                            float[] wval = (new float[kwidth * kheight * kdepth * inchannels * outchannels / 2]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
 
-                                System.Numerics.Complex[] xcval = (new System.Numerics.Complex[xval.Length / 2])
-                                    .Select((_, idx) => new System.Numerics.Complex(xval[idx * 2], xval[idx * 2 + 1])).ToArray();
+                            System.Numerics.Complex[] xcval = (new System.Numerics.Complex[xval.Length / 2])
+                                .Select((_, idx) => new System.Numerics.Complex(xval[idx * 2], xval[idx * 2 + 1])).ToArray();
 
-                                System.Numerics.Complex[] wcval = (new System.Numerics.Complex[wval.Length / 2])
-                                    .Select((_, idx) => new System.Numerics.Complex(wval[idx * 2], wval[idx * 2 + 1])).ToArray();
+                            System.Numerics.Complex[] wcval = (new System.Numerics.Complex[wval.Length / 2])
+                                .Select((_, idx) => new System.Numerics.Complex(wval[idx * 2], wval[idx * 2 + 1])).ToArray();
 
-                                ComplexMap3D x = new ComplexMap3D(inchannels / 2, inwidth, inheight, indepth, batch, xcval);
-                                ComplexFilter3D w = new ComplexFilter3D(inchannels / 2, outchannels / 2, kwidth, kheight, kdepth, wcval);
+                            ComplexMap3D x = new ComplexMap3D(inchannels / 2, inwidth, inheight, indepth, batch, xcval);
+                            ComplexFilter3D w = new ComplexFilter3D(inchannels / 2, outchannels / 2, kwidth, kheight, kdepth, wcval);
 
-                                ComplexMap3D y = Reference(x, w, kwidth, kheight, kdepth);
+                            ComplexMap3D y = Reference(x, w, kwidth, kheight, kdepth);
 
-                                OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
-                                OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels, outchannels / 2, kwidth, kheight, kdepth), wval);
+                            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
+                            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels, outchannels / 2, kwidth, kheight, kdepth), wval);
 
-                                OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch));
+                            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch));
 
-                                ComplexConvolution3D ope = new ComplexConvolution3D(inwidth, inheight, indepth, inchannels, outchannels, kwidth, kheight, kdepth, gradmode: false, batch);
+                            ComplexConvolution3D ope = new ComplexConvolution3D(inwidth, inheight, indepth, inchannels, outchannels, kwidth, kheight, kdepth, gradmode: false, batch);
 
-                                ope.Execute(x_tensor, w_tensor, y_tensor);
+                            ope.Execute(x_tensor, w_tensor, y_tensor);
 
-                                float[] y_expect = y.ToArray();
-                                float[] y_actual = y_tensor.State;
+                            float[] y_expect = y.ToArray();
+                            float[] y_actual = y_tensor.State;
 
-                                CollectionAssert.AreEqual(xval, x_tensor.State);
-                                CollectionAssert.AreEqual(wval, w_tensor.State);
+                            CollectionAssert.AreEqual(xval, x_tensor.State);
+                            CollectionAssert.AreEqual(wval, w_tensor.State);
 
-                                AssertError.Tolerance(y_expect, y_actual, 1e-5f, 1e-4f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}"); /*many fma tolerance*/
-                                Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
-                            }
+                            AssertError.Tolerance(y_expect, y_actual, 1e-5f, 1e-4f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}"); /*many fma tolerance*/
+                            Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
                         }
                     }
                 }
             }
 
             Console.WriteLine($"maxerr:{max_err}");
-        }
-
-        [TestMethod]
-        public void OverflowTest() {
-            foreach (bool gradmode in new bool[] { false, true }) {
-                foreach (int batch in new int[] { 1, 2, 3 }) {
-                    foreach (int inchannels in new int[] { 2, 4, 10, 20 }) {
-                        foreach (int outchannels in new int[] { 6, 14 }) {
-                            foreach ((int kwidth, int kheight, int kdepth) in new (int, int, int)[] { (1, 1, 1), (3, 3, 3), (5, 5, 5), (1, 3, 5), (3, 5, 1), (5, 1, 3) }) {
-                                foreach ((int inwidth, int inheight, int indepth) in new (int, int, int)[] { (13, 13, 13), (17, 17, 17), (19, 19, 19), (17, 19, 13), (13, 17, 19), (19, 13, 17) }) {
-                                    int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;
-
-                                    float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                                    float[] wval = (new float[kwidth * kheight * kdepth * inchannels * outchannels / 2]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
-
-                                    OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
-                                    OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels, outchannels / 2, kwidth, kheight, kdepth), wval);
-
-                                    OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch));
-
-                                    ComplexConvolution3D ope = new ComplexConvolution3D(inwidth, inheight, indepth, inchannels, outchannels, kwidth, kheight, kdepth, gradmode, batch);
-
-                                    ope.Execute(x_tensor, w_tensor, y_tensor);
-
-                                    CollectionAssert.AreEqual(xval, x_tensor.State);
-                                    CollectionAssert.AreEqual(wval, w_tensor.State);
-
-                                    y_tensor.CheckOverflow();
-
-                                    Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch},{gradmode}");
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
 
         [TestMethod]
@@ -107,17 +72,12 @@ namespace TensorShaderTest.Operators.Complex {
 
             ComplexConvolution3D ope = new ComplexConvolution3D(inwidth, inheight, indepth, inchannels, outchannels, ksize, ksize, ksize);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/complex_convolution3d.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, w_tensor, y_tensor);
-            ope.Execute(x_tensor, w_tensor, y_tensor);
-            ope.Execute(x_tensor, w_tensor, y_tensor);
-            ope.Execute(x_tensor, w_tensor, y_tensor);
-
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            
+            Cuda.Profiler.Stop();
         }
 
         public static ComplexMap3D Reference(ComplexMap3D x, ComplexFilter3D w, int kwidth, int kheight, int kdepth) {
