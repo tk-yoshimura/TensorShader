@@ -497,7 +497,21 @@ namespace TensorShaderCudaBackend {
                                                 uint batch, 
                                                 CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                                 Stream stream = null) {
-            throw new NotImplementedException();
+
+            string key = 
+                $"ptwise_convolution_1d {nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Convolution.PointwiseConvolution(inchannels, outchannels));
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, points * batch);
         }
 
         /// <summary>ポイントごとの逆畳み込み</summary>
@@ -505,7 +519,21 @@ namespace TensorShaderCudaBackend {
                                                   uint batch, 
                                                   CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                                   Stream stream = null) {
-            throw new NotImplementedException();
+            
+            string key = 
+                $"ptwise_deconvolution_1d {nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Convolution.PointwiseDeconvolution(inchannels, outchannels));
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, points * batch);
         }
 
         /// <summary>カーネル積</summary>
@@ -513,7 +541,21 @@ namespace TensorShaderCudaBackend {
                                                   uint batch, 
                                                   CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel, 
                                                   Stream stream = null) {
-            throw new NotImplementedException();
+
+            string key = 
+                $"ptwise_kernelproduct_1d {nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Convolution.PointwiseKernelProduct(inchannels, outchannels));
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, points * batch);
         }
     } 
 }

@@ -137,6 +137,8 @@
     <Compile Include="Shaders\Convolution\ChannelwiseDeconvolution2D.cs" />
     <Compile Include="Shaders\Convolution\ChannelwiseKernelProduct1D.cs" />
     <Compile Include="Shaders\Convolution\ChannelwiseKernelProduct3D.cs" />
+    <Compile Include="Shaders\Convolution\PointwiseConvolution.cs" />
+    <Compile Include="Shaders\Convolution\PointwiseDeconvolution.cs" />
     <Compile Include="Shaders\Convolution\Deconvolution3D.cs" />
     <Compile Include="Shaders\Convolution\Deconvolution2D.cs" />
     <Compile Include="Shaders\Convolution\Deconvolution1D.cs" />
@@ -144,6 +146,7 @@
     <Compile Include="Shaders\Convolution\Convolution2D.cs" />
     <Compile Include="Shaders\Convolution\Convolution1D.cs" />
     <Compile Include="Shaders\Convolution\ChannelwiseKernelProduct2D.cs" />
+    <Compile Include="Shaders\Convolution\PointwiseKernelProduct.cs" />
     <Compile Include="Shaders\Convolution\KernelProduct3D.cs" />
     <Compile Include="Shaders\Convolution\KernelProduct2D.cs" />
     <Compile Include="Shaders\Convolution\KernelProduct1D.cs" />

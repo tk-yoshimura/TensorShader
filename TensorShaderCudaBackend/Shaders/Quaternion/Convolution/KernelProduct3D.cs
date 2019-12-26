@@ -29,8 +29,8 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
         /// <summary>実行あたりの積数(2^24=16777216‬)</summary>
         public static uint MulPerExecute => 0x1000000;
 
-        /// <summary>実行あたりのピクセル数(2^14=16384‬)</summary>
-        public static uint PixelsPerExecute => 0x4000;
+        /// <summary>実行あたりのポイント数(2^14=16384‬)</summary>
+        public static uint PointsPerExecute => 0x4000;
         
         /// <summary>ブロックサイズ</summary>
         public (uint x, uint y) BlockSize { private set; get; }
@@ -189,7 +189,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             uint mul_per_line = InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * outwidth * 16;
 
             uint lines_per_execute_mul = MulPerExecute / mul_per_line + 1;
-            uint lines_per_execute_pixels = (PixelsPerExecute + outwidth - 1) / outwidth;
+            uint lines_per_execute_pixels = (PointsPerExecute + outwidth - 1) / outwidth;
 
             uint lines_per_execute = Math.Min(lines_per_execute_mul, lines_per_execute_pixels);
 

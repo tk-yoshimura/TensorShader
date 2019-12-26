@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.Connection3D;
+using TensorShaderCudaBackend.API;
 
 namespace TensorShaderTest.Operators.Connection3D {
     [TestClass]
@@ -61,17 +62,12 @@ namespace TensorShaderTest.Operators.Connection3D {
 
             PointwiseKernelProduct ope = new PointwiseKernelProduct(width, height, depth, inchannels, outchannels);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/ptwise_convolution_3d_xsets16.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, gy_tensor, gw_tensor);
-            ope.Execute(x_tensor, gy_tensor, gw_tensor);
-            ope.Execute(x_tensor, gy_tensor, gw_tensor);
-            ope.Execute(x_tensor, gy_tensor, gw_tensor);
-
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            
+            Cuda.Profiler.Stop();
         }
 
         public static Filter3D Reference(Map3D x, Map3D gy) {
