@@ -112,7 +112,7 @@ namespace TensorShader {
                 }
 
                 if ((uint)length > CudaArray<float>.MaxLength) {
-                    throw new OutOfMemoryException();
+                    throw new OverflowException();
                 }
             }
             catch (OverflowException) {
