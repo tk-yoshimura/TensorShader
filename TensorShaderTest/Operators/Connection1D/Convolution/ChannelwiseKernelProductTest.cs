@@ -106,40 +106,6 @@ namespace TensorShaderTest.Operators.Connection1D {
             return w;
         }
 
-        public static Filter1D OptimizedReference(Map1D x, Map1D gy, int kwidth) {
-            int channels = x.Channels, batch = x.Batch;
-            int inw = x.Width, outw = gy.Width;
-
-            if (outw < inw - kwidth + 1) {
-                throw new ArgumentException("mismatch shape");
-            }
-
-            Filter1D w = new Filter1D(channels, 1, kwidth);
-
-            for (int kx = 0; kx < kwidth; kx++) {
-                for (int th = 0; th < batch; th++) {
-                    for (int ch = 0; ch < channels; ch++) {
-                        int filter_idx = ch + kx * channels;
-                        int inmap_idx = ch + kx * channels + th * inw * channels;
-                        int outmap_idx = ch + th * outw * channels;
-
-                        double sum = 0;
-
-                        for (int ox = 0; ox < outw; ox++) {
-                            sum += x[inmap_idx] * gy[outmap_idx];
-
-                            inmap_idx += channels;
-                            outmap_idx += channels;
-                        }
-
-                        w[filter_idx] += sum;
-                    }
-                }
-            }
-
-            return w;
-        }
-
         [TestMethod]
         public void ReferenceTest() {
             int channels = 7, kwidth = 3, inwidth = 13;
@@ -162,39 +128,6 @@ namespace TensorShaderTest.Operators.Connection1D {
             float[] gw_actual = gw.ToArray();
 
             AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"mismatch value {channels},{kwidth},{inwidth}");
-        }
-
-        [TestMethod]
-        public void OptimizeTest() {
-            float max_err = 0;
-
-            foreach (int batch in new int[] { 1, 2 }) {
-                foreach (int channels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20 }) {
-                    foreach (int kwidth in new int[] { 1, 3, 5 }) {
-                        foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                            int outwidth = inwidth - kwidth + 1;
-
-                            float[] xval = (new float[inwidth * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                            float[] gyval = (new float[outwidth * channels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
-
-                            Map1D x = new Map1D(channels, inwidth, batch, xval);
-                            Map1D gy = new Map1D(channels, outwidth, batch, gyval);
-
-                            Filter1D gw = Reference(x, gy, kwidth);
-                            Filter1D gw_optimized = OptimizedReference(x, gy, kwidth);
-
-                            float[] gw_expect = gw.ToArray();
-                            float[] gw_actual = gw_optimized.ToArray();
-
-                            AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {channels},{kwidth},{inwidth},{batch}");
-
-                            Console.WriteLine($"pass: {channels},{kwidth},{inwidth},{batch}");
-                        }
-                    }
-                }
-            }
-
-            Console.WriteLine($"maxerr:{max_err}");
         }
     }
 }

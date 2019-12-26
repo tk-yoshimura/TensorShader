@@ -13,8 +13,10 @@ namespace TensorShaderCudaBackend {
             public List<GCHandle> HandleList { get; set; } = null;
 
             public Arguments(params object[] args) {
-                if(args.OfType<CudaArrayBase>().Select((arr) => arr.DeviceID).Distinct().Count() > 1) { 
-                    throw new ArgumentException("Several CUDA arrays with different device IDs were specified in the kernel execution request.");
+                int current_device_id = API.Cuda.CurrectDeviceID;
+
+                if(args.OfType<CudaArrayBase>().Any((arr) => arr.DeviceID != current_device_id)) { 
+                    throw new ArgumentException("Currently selected device ID and CUDA Array device ID do not match.");
                 }
 
                 int length = args.Length;

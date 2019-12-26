@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.Connection2D;
+using TensorShaderCudaBackend.API;
 
 namespace TensorShaderTest.Operators.Connection2D {
     [TestClass]
@@ -69,17 +70,12 @@ namespace TensorShaderTest.Operators.Connection2D {
 
             ChannelwiseKernelProduct ope = new ChannelwiseKernelProduct(inwidth, inheight, channels, ksize, ksize);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/chwise_kernelproduct_2d.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, gy_tensor, gw_tensor);
-            ope.Execute(x_tensor, gy_tensor, gw_tensor);
-            ope.Execute(x_tensor, gy_tensor, gw_tensor);
-            ope.Execute(x_tensor, gy_tensor, gw_tensor);
-
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            
+            Cuda.Profiler.Stop();
         }
 
         public static Filter2D Reference(Map2D x, Map2D gy, int kwidth, int kheight) {
@@ -107,48 +103,6 @@ namespace TensorShaderTest.Operators.Connection2D {
                             w[ch, 0, kx, ky] += sum;
                         }
 
-                    }
-                }
-            }
-
-            return w;
-        }
-
-        public static Filter2D OptimizedReference(Map2D x, Map2D gy, int kwidth, int kheight) {
-            int channels = x.Channels, batch = x.Batch;
-            int inw = x.Width, inh = x.Height, outw = gy.Width, outh = gy.Height;
-
-            if (outw < inw - kwidth + 1 || outh < inh - kheight + 1) {
-                throw new ArgumentException("mismatch shape");
-            }
-
-            Filter2D w = new Filter2D(channels, 1, kwidth, kheight);
-
-            for (int kx, ky = 0; ky < kheight; ky++) {
-                for (kx = 0; kx < kwidth; kx++) {
-                    for (int th = 0; th < batch; th++) {
-                        for (int ch = 0; ch < channels; ch++) {
-                            int filter_idx = ch + (kx + ky * kwidth) * channels;
-                            int inmap_org = ch + (kx + ky * inw) * channels + th * inw * inh * channels;
-                            int outmap_idx = ch + th * outw * outh * channels;
-
-                            double sum = 0;
-
-                            for (int ox, oy = 0; oy < outh; oy++) {
-                                int inmap_idx = inmap_org;
-
-                                for (ox = 0; ox < outw; ox++) {
-                                    sum += x[inmap_idx] * gy[outmap_idx];
-
-                                    inmap_idx += channels;
-                                    outmap_idx += channels;
-                                }
-
-                                inmap_org += channels * inw;
-                            }
-
-                            w[filter_idx] += sum;
-                        }
                     }
                 }
             }
@@ -190,43 +144,6 @@ namespace TensorShaderTest.Operators.Connection2D {
             float[] gw_actual = gw.ToArray();
 
             AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"mismatch value {channels},{kwidth},{kheight},{inwidth},{inheight}");
-        }
-
-        [TestMethod]
-        public void OptimizeTest() {
-            float max_err = 0;
-
-            foreach (int batch in new int[] { 1, 2 }) {
-                foreach (int channels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20 }) {
-                    foreach (int kheight in new int[] { 1, 3, 5 }) {
-                        foreach (int kwidth in new int[] { 1, 3, 5 }) {
-                            foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                                foreach (int inheight in new int[] { 8, 9, 19, 23 }) {
-                                    int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
-
-                                    float[] xval = (new float[inwidth * inheight * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                                    float[] gyval = (new float[outwidth * outheight * channels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
-
-                                    Map2D x = new Map2D(channels, inwidth, inheight, batch, xval);
-                                    Map2D gy = new Map2D(channels, outwidth, outheight, batch, gyval);
-
-                                    Filter2D gw = Reference(x, gy, kwidth, kheight);
-                                    Filter2D gw_optimized = OptimizedReference(x, gy, kwidth, kheight);
-
-                                    float[] gw_expect = gw.ToArray();
-                                    float[] gw_actual = gw_optimized.ToArray();
-
-                                    AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {channels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
-
-                                    Console.WriteLine($"pass: {channels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            Console.WriteLine($"maxerr:{max_err}");
         }
     }
 }

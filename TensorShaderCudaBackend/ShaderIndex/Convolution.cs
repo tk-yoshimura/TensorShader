@@ -290,7 +290,22 @@ namespace TensorShaderCudaBackend {
                                                     uint batch, uint kwidth, 
                                                     CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                                     Stream stream = null) {
-            throw new NotImplementedException();
+
+            string key = 
+                $"chwise_convolution_1d {nameof(channels)}={channels} " +
+                $"{nameof(kwidth)}={kwidth}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Convolution.ChannelwiseConvolution1D(channels, kwidth));
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, batch);
         }
 
         /// <summary>チャネルごとの1次元逆畳み込み</summary>
@@ -298,7 +313,22 @@ namespace TensorShaderCudaBackend {
                                                       uint batch, uint kwidth, 
                                                       CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                                       Stream stream = null) {
-            throw new NotImplementedException();
+
+            string key = 
+                $"chwise_deconvolution_1d {nameof(channels)}={channels} " +
+                $"{nameof(kwidth)}={kwidth}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Convolution.ChannelwiseDeconvolution1D(channels, kwidth));
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, batch);
         }
 
         /// <summary>カーネル積</summary>
@@ -306,7 +336,22 @@ namespace TensorShaderCudaBackend {
                                                       uint batch, uint kwidth, 
                                                       CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel, 
                                                       Stream stream = null) {
-            throw new NotImplementedException();
+
+            string key = 
+                $"chwise_kernelproduct_1d {nameof(channels)}={channels} " +
+                $"{nameof(kwidth)}={kwidth}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Convolution.ChannelwiseKernelProduct1D(channels, kwidth));
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, batch);
         }
 
         /// <summary>チャネルごとの2次元畳み込み</summary>
@@ -314,7 +359,22 @@ namespace TensorShaderCudaBackend {
                                                     uint batch, uint kwidth, uint kheight, 
                                                     CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                                     Stream stream = null) {
-            throw new NotImplementedException();
+
+            string key = 
+                $"chwise_convolution_2d {nameof(channels)}={channels} " +
+                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Convolution.ChannelwiseConvolution2D(channels, kwidth, kheight));
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, inheight, batch);
         }
 
         /// <summary>チャネルごとの2次元逆畳み込み</summary>
@@ -322,7 +382,22 @@ namespace TensorShaderCudaBackend {
                                                       uint batch, uint kwidth, uint kheight, 
                                                       CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                                       Stream stream = null) {
-            throw new NotImplementedException();
+            
+            string key = 
+                $"chwise_deconvolution_2d {nameof(channels)}={channels} " +
+                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Convolution.ChannelwiseDeconvolution2D(channels, kwidth, kheight));
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, inheight, batch);
         }
 
         /// <summary>カーネル積</summary>
@@ -330,7 +405,22 @@ namespace TensorShaderCudaBackend {
                                                       uint batch, uint kwidth, uint kheight, 
                                                       CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel, 
                                                       Stream stream = null) {
-            throw new NotImplementedException();
+            
+            string key = 
+                $"chwise_kernelproduct_2d {nameof(channels)}={channels} " +
+                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Convolution.ChannelwiseKernelProduct2D(channels, kwidth, kheight));
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, inheight, batch);
         }
 
         /// <summary>チャネルごとの3次元畳み込み</summary>
@@ -338,7 +428,22 @@ namespace TensorShaderCudaBackend {
                                                     uint batch, uint kwidth, uint kheight, uint kdepth, 
                                                     CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                                     Stream stream = null) {
-            throw new NotImplementedException();
+
+            string key = 
+                $"chwise_convolution_3d {nameof(channels)}={channels} " +
+                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Convolution.ChannelwiseConvolution3D(channels, kwidth, kheight, kdepth));
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, inheight, indepth, batch);
         }
 
         /// <summary>チャネルごとの3次元逆畳み込み</summary>
@@ -346,7 +451,22 @@ namespace TensorShaderCudaBackend {
                                                       uint batch, uint kwidth, uint kheight, uint kdepth, 
                                                       CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap, 
                                                       Stream stream = null) {
-            throw new NotImplementedException();
+
+            string key = 
+                $"chwise_deconvolution_3d {nameof(channels)}={channels} " +
+                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Convolution.ChannelwiseDeconvolution3D(channels, kwidth, kheight, kdepth));
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, inheight, indepth, batch);
         }
 
         /// <summary>カーネル積</summary>
@@ -354,7 +474,22 @@ namespace TensorShaderCudaBackend {
                                                       uint batch, uint kwidth, uint kheight, uint kdepth, 
                                                       CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel, 
                                                       Stream stream = null) {
-            throw new NotImplementedException();
+
+            string key = 
+                $"chwise_kernelproduct_3d {nameof(channels)}={channels} " +
+                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Convolution.ChannelwiseKernelProduct3D(channels, kwidth, kheight, kdepth));
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, kernel, inwidth, inheight, indepth, batch);
         }
 
         /// <summary>ポイントごとの畳み込み</summary>

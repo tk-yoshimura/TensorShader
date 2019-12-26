@@ -6,9 +6,20 @@ namespace TensorShaderCudaBackend.API {
 
     /// <summary>CUDA API</summary>
     public static partial class Cuda {
+                
+        /// <summary>カレントデバイスID</summary>
+        private static int device_id = -1;
+
+        /// <summary>カレントデバイスプロパティ</summary>
+        public static DeviceProp CurrectDeviceProperty { private set; get; } = DeviceProperty(CurrectDeviceID);
+
         /// <summary>デバイスID</summary>
         public static int CurrectDeviceID {
             get {
+                if(Cuda.device_id >= 0) { 
+                    return Cuda.device_id;
+                }
+
                 int device_id = 0;
 
                 ErrorCode result = NativeMethods.cudaGetDevice(ref device_id);
@@ -16,7 +27,7 @@ namespace TensorShaderCudaBackend.API {
                     throw new CudaException(result);
                 }
 
-                return device_id;
+                return Cuda.device_id = device_id;
             }
 
             set {
@@ -29,7 +40,8 @@ namespace TensorShaderCudaBackend.API {
                     throw new CudaException(result);
                 }
 
-                CurrectDeviceProperty = DeviceProperty(CurrectDeviceID);
+                Cuda.device_id = value;
+                Cuda.CurrectDeviceProperty = DeviceProperty(CurrectDeviceID);
             }
         }
 
@@ -79,9 +91,6 @@ namespace TensorShaderCudaBackend.API {
 
             return prop;
         }
-
-        /// <summary>カレントデバイスプロパティ</summary>
-        public static DeviceProp CurrectDeviceProperty { private set; get; } = DeviceProperty(CurrectDeviceID);
 
         /// <summary>ドライババージョン</summary>
         public static int DriverVersion {

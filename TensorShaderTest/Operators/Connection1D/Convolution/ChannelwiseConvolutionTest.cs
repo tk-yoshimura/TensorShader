@@ -96,36 +96,6 @@ namespace TensorShaderTest.Operators.Connection1D {
             return y;
         }
 
-        public static Map1D OptimizedReference(Map1D x, Filter1D w, int kwidth) {
-            int channels = x.Channels, batch = x.Batch;
-            int inw = x.Width, outw = inw - kwidth + 1;
-
-            Map1D y = new Map1D(channels, outw, batch);
-
-            for (int kx = 0; kx < kwidth; kx++) {
-                int inmap_offset = kx * channels;
-                int kernel_offset = kx * channels;
-
-                for (int th = 0; th < batch; th++) {
-                    for (int ox = 0; ox < outw; ox++) {
-                        int inmap_idx = inmap_offset + ox * channels + th * inw * channels;
-                        int outmap_idx = ox * channels + th * outw * channels;
-                        int kernel_idx = kernel_offset;
-
-                        for (int ch = 0; ch < channels; ch++) {
-                            y[outmap_idx] += x[inmap_idx] * w[kernel_idx];
-
-                            inmap_idx++;
-                            outmap_idx++;
-                            kernel_idx++;
-                        }
-                    }
-                }
-            }
-
-            return y;
-        }
-
         [TestMethod]
         public void ReferenceTest() {
             int channels = 7, kwidth = 3, inwidth = 13, batch = 2;
@@ -157,39 +127,6 @@ namespace TensorShaderTest.Operators.Connection1D {
             float[] y_actual = y.ToArray();
 
             AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, $"mismatch value {channels},{kwidth},{inwidth},{batch}");
-        }
-
-        [TestMethod]
-        public void OptimizeTest() {
-            float max_err = 0;
-
-            foreach (int batch in new int[] { 1, 2 }) {
-                foreach (int channels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20 }) {
-                    foreach (int kwidth in new int[] { 1, 3, 5 }) {
-                        foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                            int outwidth = inwidth - kwidth + 1;
-
-                            float[] xval = (new float[inwidth * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                            float[] wval = (new float[kwidth * channels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
-
-                            Map1D x = new Map1D(channels, inwidth, batch, xval);
-                            Filter1D w = new Filter1D(channels, 1, kwidth, wval);
-
-                            Map1D y = Reference(x, w, kwidth);
-                            Map1D y_optimized = OptimizedReference(x, w, kwidth);
-
-                            float[] y_expect = y.ToArray();
-                            float[] y_actual = y_optimized.ToArray();
-
-                            AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {channels},{kwidth},{inwidth},{batch}");
-
-                            Console.WriteLine($"pass: {channels},{kwidth},{inwidth},{batch}");
-                        }
-                    }
-                }
-            }
-
-            Console.WriteLine($"maxerr:{max_err}");
         }
     }
 }

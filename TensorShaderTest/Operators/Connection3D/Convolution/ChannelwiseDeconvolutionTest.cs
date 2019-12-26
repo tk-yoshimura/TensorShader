@@ -109,49 +109,7 @@ namespace TensorShaderTest.Operators.Connection3D {
 
             return x;
         }
-
-        public static Map3D OptimizedReference(Map3D y, Filter3D w, int inw, int inh, int ind, int kwidth, int kheight, int kdepth) {
-            int channels = w.InChannels, batch = y.Batch;
-            int outw = inw - kwidth + 1, outh = inh - kheight + 1, outd = ind - kdepth + 1;
-
-            if (y.Width != outw || y.Height != outh || y.Depth != outd) {
-                throw new ArgumentException("mismatch shape");
-            }
-
-            Map3D x = new Map3D(channels, inw, inh, ind, batch);
-
-            for (int kx, ky, kz = 0; kz < kdepth; kz++) {
-                for (ky = 0; ky < kheight; ky++) {
-                    for (kx = 0; kx < kwidth; kx++) {
-                        int outmap_offset = (kx + ky * inw + kz * inw * inh) * channels;
-                        int kernel_offset = (kx + ky * kwidth + kz * kwidth * kheight) * channels;
-
-                        for (int th = 0; th < batch; th++) {
-                            for (int ox, oy, oz = 0; oz < outd; oz++) {
-                                for (oy = 0; oy < outh; oy++) {
-                                    for (ox = 0; ox < outw; ox++) {
-                                        int inmap_idx = (ox + oy * outw + oz * outw * outh) * channels + th * outw * outh * outd * channels;
-                                        int outmap_idx = outmap_offset + (ox + oy * inw + oz * inw * inh) * channels + th * inw * inh * ind * channels;
-                                        int kernel_idx = kernel_offset;
-
-                                        for (int ch = 0; ch < channels; ch++) {
-                                            x[outmap_idx] += y[inmap_idx] * w[kernel_idx];
-
-                                            inmap_idx++;
-                                            outmap_idx++;
-                                            kernel_idx++;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            return x;
-        }
-
+        
         [TestMethod]
         public void ReferenceTest() {
             int channels = 2, kwidth = 3, kheight = 5, kdepth = 7, inwidth = 13, inheight = 12, indepth = 11, batch = 2;
@@ -1315,39 +1273,6 @@ namespace TensorShaderTest.Operators.Connection3D {
             float[] x_actual = x.ToArray();
 
             AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, $"mismatch value {channels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
-        }
-
-        [TestMethod]
-        public void OptimizeTest() {
-            float max_err = 0;
-
-            foreach (int batch in new int[] { 1, 2 }) {
-                foreach (int channels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20 }) {
-                    foreach ((int kwidth, int kheight, int kdepth) in new (int, int, int)[] { (1, 1, 1), (3, 3, 3), (5, 5, 5), (1, 3, 5), (3, 5, 1), (5, 1, 3) }) {
-                        foreach ((int inwidth, int inheight, int indepth) in new (int, int, int)[] { (13, 13, 13), (17, 17, 17), (19, 19, 19), (17, 19, 13), (13, 17, 19), (19, 13, 17) }) {
-                            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;
-
-                            float[] yval = (new float[outwidth * outheight * outdepth * channels * batch]).Select((_, idx) => idx * 1e-4f).ToArray();
-                            float[] wval = (new float[kwidth * kheight * kdepth * channels]).Select((_, idx) => idx * 1e-4f).Reverse().ToArray();
-
-                            Map3D y = new Map3D(channels, outwidth, outheight, outdepth, batch, yval);
-                            Filter3D w = new Filter3D(channels, 1, kwidth, kheight, kdepth, wval);
-
-                            Map3D x = Reference(y, w, inwidth, inheight, indepth, kwidth, kheight, kdepth);
-                            Map3D x_optimized = OptimizedReference(y, w, inwidth, inheight, indepth, kwidth, kheight, kdepth);
-
-                            float[] x_expect = x.ToArray();
-                            float[] x_actual = x_optimized.ToArray();
-
-                            AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {channels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
-
-                            Console.WriteLine($"pass: {channels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
-                        }
-                    }
-                }
-            }
-
-            Console.WriteLine($"maxerr:{max_err}");
         }
     }
 }
