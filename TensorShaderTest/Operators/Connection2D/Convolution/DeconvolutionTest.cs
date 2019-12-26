@@ -20,8 +20,8 @@ namespace TensorShaderTest.Operators.Connection2D {
                                 foreach (int inheight in new int[] { kheight, kheight * 2, 8, 9, 13, 17, 25 }) {
                                     int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
 
-                                    float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-4f).ToArray();
-                                    float[] wval = (new float[kwidth * kheight * inchannels * outchannels]).Select((_, idx) => idx * 1e-4f).Reverse().ToArray();
+                                    float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+                                    float[] wval = (new float[kwidth * kheight * inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
                                     Map2D y = new Map2D(outchannels, outwidth, outheight, batch, yval);
                                     Filter2D w = new Filter2D(inchannels, outchannels, kwidth, kheight, wval);

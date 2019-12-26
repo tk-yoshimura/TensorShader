@@ -16,8 +16,8 @@ namespace TensorShaderTest.Operators.Connection3D {
                 foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20 }) {
                     foreach (int outchannels in new int[] { 7, 13 }) {
                         foreach ((int width, int height, int depth) in new (int, int, int)[] { (13, 13, 13), (17, 17, 17), (19, 19, 19), (17, 19, 13), (13, 17, 19), (19, 13, 17) }) {
-                            float[] yval = (new float[width * height * depth * outchannels * batch]).Select((_, idx) => idx * 1e-4f).ToArray();
-                            float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => idx * 1e-4f).Reverse().ToArray();
+                            float[] yval = (new float[width * height * depth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+                            float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
                             Map3D y = new Map3D(outchannels, width, height, depth, batch, yval);
                             Filter3D w = new Filter3D(inchannels, outchannels, 1, 1, 1, wval);

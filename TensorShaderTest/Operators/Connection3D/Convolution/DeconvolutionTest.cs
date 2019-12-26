@@ -19,8 +19,8 @@ namespace TensorShaderTest.Operators.Connection3D {
 
                             int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;
 
-                            float[] yval = (new float[outwidth * outheight * outdepth * outchannels * batch]).Select((_, idx) => idx * 1e-4f).ToArray();
-                            float[] wval = (new float[kwidth * kheight * kdepth * inchannels * outchannels]).Select((_, idx) => idx * 1e-4f).Reverse().ToArray();
+                            float[] yval = (new float[outwidth * outheight * outdepth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+                            float[] wval = (new float[kwidth * kheight * kdepth * inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
                             Map3D y = new Map3D(outchannels, outwidth, outheight, outdepth, batch, yval);
                             Filter3D w = new Filter3D(inchannels, outchannels, kwidth, kheight, kdepth, wval);

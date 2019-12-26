@@ -16,8 +16,8 @@ namespace TensorShaderTest.Operators.Connection1D {
                 foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20 }) {
                     foreach (int outchannels in new int[] { 7, 13 }) {
                         foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                            float[] yval = (new float[inwidth * outchannels * batch]).Select((_, idx) => idx * 1e-4f).ToArray();
-                            float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => idx * 1e-4f).Reverse().ToArray();
+                            float[] yval = (new float[inwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+                            float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
                             Map1D y = new Map1D(outchannels, inwidth, batch, yval);
                             Filter1D w = new Filter1D(inchannels, outchannels, 1, wval);
