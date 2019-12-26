@@ -86,7 +86,7 @@ namespace TensorShaderTest.Operators.Connection2D {
 
             AveragePooling ope = new AveragePooling(inwidth, inheight, channels, stride, batch);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/averagepool2d.nvvp");
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/averagepool_2d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor);

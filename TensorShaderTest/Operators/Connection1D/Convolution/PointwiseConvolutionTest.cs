@@ -1,9 +1,9 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.Connection1D;
+using TensorShaderCudaBackend.API;
 
 namespace TensorShaderTest.Operators.Connection1D {
     [TestClass]
@@ -61,17 +61,12 @@ namespace TensorShaderTest.Operators.Connection1D {
 
             PointwiseConvolution ope = new PointwiseConvolution(inwidth, inchannels, outchannels);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/ptwise_convolution_1d.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, w_tensor, y_tensor);
-            ope.Execute(x_tensor, w_tensor, y_tensor);
-            ope.Execute(x_tensor, w_tensor, y_tensor);
-            ope.Execute(x_tensor, w_tensor, y_tensor);
-
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            
+            Cuda.Profiler.Stop();
         }
 
         public static Map1D Reference(Map1D x, Filter1D w) {
@@ -90,41 +85,6 @@ namespace TensorShaderTest.Operators.Connection1D {
                         }
 
                         y[outch, ix, th] = sum;
-                    }
-                }
-            }
-
-            return y;
-        }
-
-        public static Map1D OptimizedReference(Map1D x, Filter1D w) {
-            int inchannels = x.Channels, outchannels = w.OutChannels, batch = x.Batch;
-            int inw = x.Width;
-
-            Map1D y = new Map1D(outchannels, inw, batch);
-
-            for (int th = 0; th < batch; th++) {
-                for (int ix = 0; ix < inw; ix++) {
-                    int inmap_org = ix * inchannels + th * inw * inchannels;
-                    int outmap_idx = ix * outchannels + th * inw * outchannels;
-
-                    int kernel_idx = 0;
-
-                    for (int outch = 0; outch < outchannels; outch++) {
-                        int inmap_idx = inmap_org;
-
-                        double sum = 0;
-
-                        for (int inch = 0; inch < inchannels; inch++) {
-                            sum += x[inmap_idx] * w[kernel_idx];
-
-                            inmap_idx++;
-                            kernel_idx++;
-                        }
-
-                        y[outmap_idx] = sum;
-
-                        outmap_idx++;
                     }
                 }
             }
@@ -176,37 +136,6 @@ namespace TensorShaderTest.Operators.Connection1D {
             float[] y_actual = y.ToArray();
 
             AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{inwidth},{batch}");
-        }
-
-        [TestMethod]
-        public void OptimizeTest() {
-            float max_err = 0;
-
-            foreach (int batch in new int[] { 1, 2 }) {
-                foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20 }) {
-                    foreach (int outchannels in new int[] { 7, 13 }) {
-                        foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                            float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                            float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
-
-                            Map1D x = new Map1D(inchannels, inwidth, batch, xval);
-                            Filter1D w = new Filter1D(inchannels, outchannels, 1, wval);
-
-                            Map1D y = Reference(x, w);
-                            Map1D y_optimized = OptimizedReference(x, w);
-
-                            float[] y_expect = y.ToArray();
-                            float[] y_actual = y_optimized.ToArray();
-
-                            AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{inwidth},{batch}");
-
-                            Console.WriteLine($"pass: {inchannels},{outchannels},{inwidth},{batch}");
-                        }
-                    }
-                }
-            }
-
-            Console.WriteLine($"maxerr:{max_err}");
         }
     }
 }

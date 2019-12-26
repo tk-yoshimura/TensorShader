@@ -66,7 +66,7 @@ namespace TensorShaderTest.Operators.Connection1D {
 
             Convolution ope = new Convolution(inwidth, inchannels, outchannels, ksize);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/convolution1d_trans_v2.nvvp");
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/convolution_1d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, w_tensor, y_tensor);

@@ -90,7 +90,7 @@ namespace TensorShaderTest.Operators.Connection3D {
 
             StridePooling ope = new StridePooling(inwidth, inheight, indepth, channels, stride, batch);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/stridepool3d.nvvp");
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/stridepool_3d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor);

@@ -81,7 +81,7 @@ namespace TensorShaderTest.Operators.Connection1D {
 
             MaxPooling ope = new MaxPooling(inwidth, channels, stride, batch);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/maxpool1d.nvvp");
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/maxpool_1d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor);

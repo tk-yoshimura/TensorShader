@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
@@ -98,42 +97,6 @@ namespace TensorShaderTest.Operators.Connection2D {
             return w;
         }
 
-        public static Filter2D OptimizedReference(Map2D x, Map2D gy) {
-            int inchannels = x.Channels, outchannels = gy.Channels, batch = x.Batch;
-            int inw = x.Width, inh = x.Height;
-
-            Filter2D w = new Filter2D(outchannels, inchannels, 1, 1);
-
-            for (int th = 0; th < batch; th++) {
-                for (int outch, inch = 0; inch < inchannels; inch++) {
-                    for (outch = 0; outch < outchannels; outch++) {
-                        int filter_idx = inch + inchannels * outch;
-                        int inmap_org = inch + th * inw * inh * inchannels;
-                        int outmap_idx = outch + th * inw * inh * outchannels;
-
-                        double sum = 0;
-
-                        for (int ix, iy = 0; iy < inh; iy++) {
-                            int inmap_idx = inmap_org;
-
-                            for (ix = 0; ix < inw; ix++) {
-                                sum += x[inmap_idx] * gy[outmap_idx];
-
-                                inmap_idx += inchannels;
-                                outmap_idx += outchannels;
-                            }
-
-                            inmap_org += inchannels * inw;
-                        }
-
-                        w[filter_idx] += sum;
-                    }
-                }
-            }
-
-            return w;
-        }
-
         [TestMethod]
         public void ReferenceTest() {
             int inchannels = 7, outchannels = 11, inwidth = 13, inheight = 17;
@@ -163,39 +126,6 @@ namespace TensorShaderTest.Operators.Connection2D {
             float[] gw_actual = gw.ToArray();
 
             AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{inwidth},{inheight}");
-        }
-
-        [TestMethod]
-        public void OptimizeTest() {
-            float max_err = 0;
-
-            foreach (int batch in new int[] { 1, 2 }) {
-                foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20 }) {
-                    foreach (int outchannels in new int[] { 7, 13 }) {
-                        foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                            foreach (int inheight in new int[] { 8, 9, 19, 23 }) {
-                                float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                                float[] gyval = (new float[inwidth * inheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
-
-                                Map2D x = new Map2D(inchannels, inwidth, inheight, batch, xval);
-                                Map2D gy = new Map2D(outchannels, inwidth, inheight, batch, gyval);
-
-                                Filter2D gw = Reference(x, gy);
-                                Filter2D gw_optimized = OptimizedReference(x, gy);
-
-                                float[] gw_expect = gw.ToArray();
-                                float[] gw_actual = gw_optimized.ToArray();
-
-                                AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{inwidth},{inheight},{batch}");
-
-                                Console.WriteLine($"pass: {inchannels},{outchannels},{inwidth},{inheight},{batch}");
-                            }
-                        }
-                    }
-                }
-            }
-
-            Console.WriteLine($"maxerr:{max_err}");
         }
     }
 }

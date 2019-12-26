@@ -1,26 +1,28 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.QuaternionConvolution;
+using TensorShaderCudaBackend.API;
 
 namespace TensorShaderTest.Operators.Quaternion {
     [TestClass]
     public class QuaternionKernelProduct3DTest {
         [TestMethod]
         public void ExecuteTest() {
+            Random random = new Random(1234);
+
             float max_err = 0;
 
             foreach (int batch in new int[] { 1, 2 }) {
-                foreach (int inchannels in new int[] { 4, 8, 12 }) {
-                    foreach (int outchannels in new int[] { 4, 8, 12 }) {
-                        foreach ((int kwidth, int kheight, int kdepth) in new (int, int, int)[] { (1, 1, 1), (3, 3, 3), (5, 5, 5), (1, 3, 5), (3, 5, 1), (5, 1, 3) }) {
-                            foreach ((int inwidth, int inheight, int indepth) in new (int, int, int)[] { (13, 13, 13), (17, 17, 17), (19, 19, 19), (17, 19, 13), (13, 17, 19), (19, 13, 17) }) {
+                foreach ((int inchannels, int outchannels) in new (int, int)[] { (4, 4), (4, 8), (8, 4), (8, 20), (20, 32), (32, 8), (32, 36), (36, 36) }) {
+                    foreach ((int kwidth, int kheight, int kdepth) in new (int, int, int)[] { (1, 1, 1), (3, 3, 3), (5, 5, 5), (1, 3, 5), (3, 5, 1), (5, 1, 3) }) {
+                        foreach ((int inwidth, int inheight, int indepth) in new (int, int, int)[] { (kwidth, kheight, kdepth), (kwidth * 2, kheight * 2, kdepth * 2), (13, 13, 13), (17, 17, 17), (19, 19, 19), (17, 19, 13), (13, 17, 19), (19, 13, 17) }) {
+
                                 int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;
 
-                                float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                                float[] yval = (new float[outwidth * outheight * outdepth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+                                float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+                                float[] yval = (new float[outwidth * outheight * outdepth * outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
 
                                 Quaternion[] xcval = (new Quaternion[xval.Length / 4])
                                     .Select((_, idx) => new Quaternion(xval[idx * 4], xval[idx * 4 + 1], xval[idx * 4 + 2], xval[idx * 4 + 3])).ToArray();
@@ -53,49 +55,11 @@ namespace TensorShaderTest.Operators.Quaternion {
                                 Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
 
                             }
-                        }
                     }
                 }
             }
 
             Console.WriteLine($"maxerr:{max_err}");
-        }
-
-        [TestMethod]
-        public void OverflowTest() {
-            foreach (bool transpose in new bool[] { false, true }) {
-                foreach (int batch in new int[] { 1, 2 }) {
-                    foreach (int inchannels in new int[] { 4, 8, 12 }) {
-                        foreach (int outchannels in new int[] { 4, 8, 12 }) {
-                            foreach ((int kwidth, int kheight, int kdepth) in new (int, int, int)[] { (1, 1, 1), (3, 3, 3), (5, 5, 5), (1, 3, 5), (3, 5, 1), (5, 1, 3) }) {
-                                foreach ((int inwidth, int inheight, int indepth) in new (int, int, int)[] { (13, 13, 13), (17, 17, 17), (19, 19, 19), (17, 19, 13), (13, 17, 19), (19, 13, 17) }) {
-                                    int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;
-
-                                    float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                                    float[] yval = (new float[outwidth * outheight * outdepth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
-
-                                    OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
-                                    OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), yval);
-
-                                    OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels, outchannels / 4, kwidth, kheight, kdepth));
-
-                                    QuaternionKernelProduct3D ope = new QuaternionKernelProduct3D(inwidth, inheight, indepth, inchannels, outchannels, kwidth, kheight, kdepth, transpose, batch);
-
-                                    ope.Execute(x_tensor, y_tensor, gw_tensor);
-
-                                    CollectionAssert.AreEqual(xval, x_tensor.State);
-                                    CollectionAssert.AreEqual(yval, y_tensor.State);
-
-                                    gw_tensor.CheckOverflow();
-
-                                    Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch},{transpose}");
-
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
 
         [TestMethod]
@@ -110,17 +74,12 @@ namespace TensorShaderTest.Operators.Quaternion {
 
             QuaternionKernelProduct3D ope = new QuaternionKernelProduct3D(inwidth, inheight, indepth, inchannels, outchannels, ksize, ksize, ksize);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/quaternion_kernelproduct_3d.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor, gw_tensor);
-            ope.Execute(x_tensor, y_tensor, gw_tensor);
-            ope.Execute(x_tensor, y_tensor, gw_tensor);
-            ope.Execute(x_tensor, y_tensor, gw_tensor);
-
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            
+            Cuda.Profiler.Stop();
         }
 
         public static QuaternionFilter3D Reference(QuaternionMap3D x, QuaternionMap3D gy, int kwidth, int kheight, int kdepth) {

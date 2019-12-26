@@ -1,9 +1,9 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.Connection2D;
+using TensorShaderCudaBackend.API;
 
 namespace TensorShaderTest.Operators.Connection2D {
     [TestClass]
@@ -65,17 +65,12 @@ namespace TensorShaderTest.Operators.Connection2D {
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/ptwise_deconvolution_2d.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
-            ope.Execute(y_tensor, w_tensor, x_tensor);
-            ope.Execute(y_tensor, w_tensor, x_tensor);
-            ope.Execute(y_tensor, w_tensor, x_tensor);
-
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            
+            Cuda.Profiler.Stop();
         }
 
         public static Map2D Reference(Map2D y, Filter2D w) {
@@ -148,84 +143,6 @@ namespace TensorShaderTest.Operators.Connection2D {
 
                             for (int i = 0; i < sets; i++) {
                                 x[inch + i, ix, iy, th] = temp[i];
-                            }
-                        }
-                    }
-                }
-            }
-
-            return x;
-        }
-
-        public static Map2D OptimizedReference(Map2D y, Filter2D w) {
-            int inchannels = w.InChannels, outchannels = w.OutChannels, batch = y.Batch;
-            int inw = y.Width, inh = y.Height;
-
-            Map2D x = new Map2D(inchannels, inw, inh, batch);
-
-            for (int th = 0; th < batch; th++) {
-                for (int ix, iy = 0; iy < inh; iy++) {
-                    for (ix = 0; ix < inw; ix++) {
-                        int inmap_org = (ix + iy * inw) * outchannels + th * inw * inh * outchannels;
-                        int outmap_idx = (ix + iy * inw) * inchannels + th * inw * inh * inchannels;
-                        int kernel_org = 0;
-                        double[] temp = new double[4];
-
-                        int inch;
-
-                        for (inch = 0; inch < inchannels - inchannels % 4; inch += 4) {
-                            temp[0] = x[outmap_idx];
-                            temp[1] = x[outmap_idx + 1];
-                            temp[2] = x[outmap_idx + 2];
-                            temp[3] = x[outmap_idx + 3];
-
-                            int inmap_idx = inmap_org;
-                            int kernel_idx = kernel_org;
-
-                            for (int outch = 0; outch < outchannels; outch++) {
-                                double v = y[inmap_idx];
-
-                                temp[0] += v * w[kernel_idx];
-                                temp[1] += v * w[kernel_idx + 1];
-                                temp[2] += v * w[kernel_idx + 2];
-                                temp[3] += v * w[kernel_idx + 3];
-
-                                inmap_idx++;
-                                kernel_idx += inchannels;
-                            }
-
-                            x[outmap_idx] = temp[0];
-                            x[outmap_idx + 1] = temp[1];
-                            x[outmap_idx + 2] = temp[2];
-                            x[outmap_idx + 3] = temp[3];
-
-                            outmap_idx += 4;
-                            kernel_org += 4;
-                        }
-
-                        if (inchannels % 4 != 0) {
-                            int sets = inchannels % 4;
-
-                            for (int i = 0; i < sets; i++) {
-                                temp[i] = x[outmap_idx + i];
-                            }
-
-                            int inmap_idx = inmap_org;
-                            int kernel_idx = kernel_org;
-
-                            for (int outch = 0; outch < outchannels; outch++) {
-                                double v = y[inmap_idx];
-
-                                for (int i = 0; i < sets; i++) {
-                                    temp[i] += v * w[kernel_idx + i];
-                                }
-
-                                inmap_idx++;
-                                kernel_idx += inchannels;
-                            }
-
-                            for (int i = 0; i < sets; i++) {
-                                x[outmap_idx + i] = temp[i];
                             }
                         }
                     }
@@ -695,40 +612,6 @@ namespace TensorShaderTest.Operators.Connection2D {
             float[] x_actual = x.ToArray();
 
             AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{inwidth},{inheight},{batch}");
-        }
-
-        [TestMethod]
-        public void OptimizeTest() {
-            float max_err = 0;
-
-            foreach (int batch in new int[] { 1, 2 }) {
-                foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20 }) {
-                    foreach (int outchannels in new int[] { 7, 13 }) {
-                        foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                            foreach (int inheight in new int[] { 8, 9, 19, 23 }) {
-                                float[] yval = (new float[inwidth * inheight * outchannels * batch]).Select((_, idx) => idx * 1e-4f).ToArray();
-                                float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => idx * 1e-4f).Reverse().ToArray();
-
-                                Map2D y = new Map2D(outchannels, inwidth, inheight, batch, yval);
-                                Filter2D w = new Filter2D(inchannels, outchannels, 1, 1, wval);
-
-                                Map2D x = Reference(y, w);
-                                Map2D x_optimized = OptimizedReference(y, w);
-
-                                float[] x_expect = x.ToArray();
-                                float[] x_actual = x_optimized.ToArray();
-
-                                AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{inwidth},{inheight},{batch}");
-
-                                Console.WriteLine($"pass: {inchannels},{outchannels},{inwidth},{inheight},{batch}");
-                            }
-                        }
-                    }
-
-                }
-            }
-
-            Console.WriteLine($"maxerr:{max_err}");
         }
     }
 }

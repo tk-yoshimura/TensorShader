@@ -1,9 +1,9 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.Connection3D;
+using TensorShaderCudaBackend.API;
 
 namespace TensorShaderTest.Operators.Connection3D {
     [TestClass]
@@ -64,17 +64,12 @@ namespace TensorShaderTest.Operators.Connection3D {
 
             ChannelwiseKernelProduct ope = new ChannelwiseKernelProduct(inwidth, inheight, indepth, channels, ksize, ksize, ksize);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/chwise_kernelproduct_3d.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, gy_tensor, gw_tensor);
-            ope.Execute(x_tensor, gy_tensor, gw_tensor);
-            ope.Execute(x_tensor, gy_tensor, gw_tensor);
-            ope.Execute(x_tensor, gy_tensor, gw_tensor);
-
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            
+            Cuda.Profiler.Stop();
         }
 
         public static Filter3D Reference(Map3D x, Map3D gy, int kwidth, int kheight, int kdepth) {

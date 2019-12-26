@@ -76,7 +76,7 @@ namespace TensorShaderTest.Operators.Complex {
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/complex_deconvolution1d.nvvp");
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/complex_deconvolution_1d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(y_tensor, w_tensor, x_tensor);

@@ -107,51 +107,6 @@ namespace TensorShaderTest.Operators.Connection3D {
             return y;
         }
 
-        public static Map3D OptimizedReference(Map3D x, int scale) {
-            int inchannels = x.Channels, batch = x.Batch;
-            if (inchannels % (scale * scale * scale) != 0) {
-                throw new ArgumentException(nameof(scale));
-            }
-
-            int inw = x.Width, inh = x.Height, ind = x.Depth, outw = inw * scale, outh = inh * scale, outd = ind * scale;
-            int outchannels = inchannels / (scale * scale * scale);
-
-            Map3D y = new Map3D(outchannels, outw, outh, outd, batch);
-
-            for (int th = 0; th < batch; th++) {
-                for (int ix, iy, iz = 0; iz < ind; iz++) {
-                    for (iy = 0; iy < inh; iy++) {
-                        for (ix = 0; ix < inw; ix++) {
-                            int inmap_idx = (ix + iy * inw + iz * inw * inh) * inchannels + th * inw * inh * ind * inchannels;
-                            int outmap_org = (ix * scale + iy * inw * scale * scale + iz * inw * inh * scale * scale * scale) * outchannels + th * outw * outh * outd * outchannels;
-
-                            for (int kz = 0; kz < scale; kz++) {
-                                int outmap_car = outmap_org;
-
-                                for (int ky = 0; ky < scale; ky++) {
-                                    int outmap_idx = outmap_car;
-
-                                    for (int i = 0; i < scale * outchannels; i++) {
-                                        y[outmap_idx] = x[inmap_idx];
-
-                                        inmap_idx++;
-                                        outmap_idx++;
-                                    }
-
-                                    outmap_car += inw * scale * outchannels;
-                                }
-
-                                outmap_org += inw * inh * scale * scale * outchannels;
-                            }
-                        }
-
-                    }
-                }
-            }
-
-            return y;
-        }
-
         [TestMethod]
         public void ReferenceTest() {
             int inchannels = 32, scale = 2, inwidth = 7, inheight = 5, indepth = 3;
@@ -304,42 +259,6 @@ namespace TensorShaderTest.Operators.Connection3D {
             float[] y_actual = y.ToArray();
 
             AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{scale},{inwidth},{inheight},{indepth}");
-        }
-
-        [TestMethod]
-        public void OptimizeTest() {
-            float max_err = 0;
-
-            foreach (int batch in new int[] { 1, 2 }) {
-                foreach (int outchannels in new int[] { 3, 5 }) {
-                    foreach (int scale in new int[] { 2, 3, 4 }) {
-                        foreach (int inwidth in new int[] { 5, 7, 11 }) {
-                            foreach (int inheight in new int[] { 5, 7, 11 }) {
-                                foreach (int indepth in new int[] { 5, 7, 11 }) {
-                                    int outwidth = inwidth * scale, outheight = inheight * scale, outdepth = indepth * scale, inchannels = outchannels * scale * scale * scale;
-
-                                    float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-
-                                    Map3D x = new Map3D(inchannels, inwidth, inheight, indepth, batch, xval);
-
-                                    Map3D y = Reference(x, scale);
-                                    Map3D y_optimized = OptimizedReference(x, scale);
-
-                                    float[] y_expect = y.ToArray();
-                                    float[] y_actual = y_optimized.ToArray();
-
-                                    AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{scale},{inwidth},{inheight},{indepth},{batch}");
-
-                                    Console.WriteLine($"pass: {inchannels},{outchannels},{scale},{inwidth},{inheight},{indepth},{batch}");
-
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            Console.WriteLine($"maxerr:{max_err}");
         }
     }
 }

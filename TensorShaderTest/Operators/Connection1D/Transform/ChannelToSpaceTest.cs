@@ -1,9 +1,9 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.Connection1D;
+using TensorShaderCudaBackend.API;
 
 namespace TensorShaderTest.Operators.Connection1D {
     [TestClass]
@@ -58,17 +58,12 @@ namespace TensorShaderTest.Operators.Connection1D {
 
             ChannelToSpace ope = new ChannelToSpace(inwidth, inchannels, scale);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/channel_to_space_1d.nvvp");
+            Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
-            ope.Execute(x_tensor, y_tensor);
-
-            sw.Stop();
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds / 4} msec");
+            
+            Cuda.Profiler.Stop();
         }
 
         public static Map1D Reference(Map1D x, int scale) {
@@ -91,35 +86,6 @@ namespace TensorShaderTest.Operators.Connection1D {
                             y[outch, ix * scale + kx, th] = x[inch, ix, th];
 
                         }
-                    }
-                }
-
-            }
-
-            return y;
-        }
-
-        public static Map1D OptimizedReference(Map1D x, int scale) {
-            int inchannels = x.Channels, batch = x.Batch;
-            if (inchannels % scale != 0) {
-                throw new ArgumentException(nameof(scale));
-            }
-
-            int inw = x.Width, outw = inw * scale;
-            int outchannels = inchannels / scale;
-
-            Map1D y = new Map1D(outchannels, outw, batch);
-
-            for (int th = 0; th < batch; th++) {
-                for (int ix = 0; ix < inw; ix++) {
-                    int inmap_idx = ix * inchannels + th * inw * inchannels;
-                    int outmap_idx = ix * scale * outchannels + th * outw * outchannels;
-
-                    for (int i = 0; i < scale * outchannels; i++) {
-                        y[outmap_idx] = x[inmap_idx];
-
-                        inmap_idx++;
-                        outmap_idx++;
                     }
                 }
 
@@ -159,38 +125,6 @@ namespace TensorShaderTest.Operators.Connection1D {
             float[] y_actual = y.ToArray();
 
             AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{scale},{inwidth}");
-        }
-
-        [TestMethod]
-        public void OptimizeTest() {
-            float max_err = 0;
-
-            foreach (int batch in new int[] { 1, 2 }) {
-                foreach (int outchannels in new int[] { 3, 5 }) {
-                    foreach (int scale in new int[] { 2, 3, 4 }) {
-                        foreach (int inwidth in new int[] { 5, 7, 11 }) {
-                            int outwidth = inwidth * scale, inchannels = outchannels * scale;
-
-                            float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-
-                            Map1D x = new Map1D(inchannels, inwidth, batch, xval);
-
-                            Map1D y = Reference(x, scale);
-                            Map1D y_optimized = OptimizedReference(x, scale);
-
-                            float[] y_expect = y.ToArray();
-                            float[] y_actual = y_optimized.ToArray();
-
-                            AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{scale},{inwidth},{batch}");
-
-                            Console.WriteLine($"pass: {inchannels},{outchannels},{scale},{inwidth},{batch}");
-
-                        }
-                    }
-                }
-            }
-
-            Console.WriteLine($"maxerr:{max_err}");
         }
     }
 }

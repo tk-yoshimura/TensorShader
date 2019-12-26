@@ -86,7 +86,7 @@ namespace TensorShaderTest.Operators.Connection2D {
 
             Trimming ope = new Trimming(inwidth, inheight, channels, lefttrim, righttrim, toptrim, bottomtrim, batch);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/trimming2d.nvvp");
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/trimming_2d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor);

@@ -87,37 +87,6 @@ namespace TensorShaderTest.Operators.ConnectionDense {
             return y;
         }
 
-        public static Map0D OptimizedReference(Map0D x, Filter0D w) {
-            int inchannels = x.Channels, outchannels = w.OutChannels, batch = x.Batch;
-
-            Map0D y = new Map0D(outchannels, batch);
-
-            for (int th = 0; th < batch; th++) {
-                int inmap_org = th * inchannels;
-                int outmap_idx = th * outchannels;
-                int kernel_idx = 0;
-
-                for (int outch = 0; outch < outchannels; outch++) {
-                    double sum = 0;
-
-                    int inmap_idx = inmap_org;
-
-                    for (int inch = 0; inch < inchannels; inch++) {
-                        sum += x[inmap_idx] * w[kernel_idx];
-
-                        inmap_idx++;
-                        kernel_idx++;
-                    }
-
-                    y[outmap_idx] = sum;
-
-                    outmap_idx++;
-                }
-            }
-
-            return y;
-        }
-
         [TestMethod]
         public void ReferenceTest() {
             int inchannels = 7, outchannels = 11, batch = 2;
@@ -141,35 +110,6 @@ namespace TensorShaderTest.Operators.ConnectionDense {
             float[] y_actual = y.ToArray();
 
             AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, $"mismatch value {inchannels},{outchannels},{batch}");
-        }
-
-        [TestMethod]
-        public void OptimizeTest() {
-            float max_err = 0;
-
-            foreach (int batch in new int[] { 1, 2 }) {
-                foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20 }) {
-                    foreach (int outchannels in new int[] { 7, 13 }) {
-                        float[] xval = (new float[inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                        float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
-
-                        Map0D x = new Map0D(inchannels, batch, xval);
-                        Filter0D w = new Filter0D(inchannels, outchannels, 1, wval);
-
-                        Map0D y = Reference(x, w);
-                        Map0D y_optimized = OptimizedReference(x, w);
-
-                        float[] y_expect = y.ToArray();
-                        float[] y_actual = y_optimized.ToArray();
-
-                        AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{batch}");
-
-                        Console.WriteLine($"pass: {inchannels},{outchannels},{batch}");
-                    }
-                }
-            }
-
-            Console.WriteLine($"maxerr:{max_err}");
         }
     }
 }

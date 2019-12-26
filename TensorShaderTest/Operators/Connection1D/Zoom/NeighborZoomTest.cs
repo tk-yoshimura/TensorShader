@@ -58,7 +58,7 @@ namespace TensorShaderTest.Operators.Connection1D {
 
             NeighborZoom ope = new NeighborZoom(inwidth, channels);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/neighborzoom1d.nvvp");
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/neighborzoom_1d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor);

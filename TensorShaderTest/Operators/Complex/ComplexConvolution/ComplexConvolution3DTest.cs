@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
@@ -16,7 +15,7 @@ namespace TensorShaderTest.Operators.Complex {
             float max_err = 0;
 
             foreach (int batch in new int[] { 1, 2 }) {
-                foreach ((int inchannels, int outchannels) in new (int, int)[] { (2, 2), (2, 4), (4, 2), (4, 10), (10, 4), (10, 20), (20, 10), (20, 32), (32, 20), (32, 34), (34, 32), (34, 34) }) {
+                foreach ((int inchannels, int outchannels) in new (int, int)[] { (2, 2), (4, 2), (2, 4), (4, 10), (10, 4), (10, 20), (20, 32), (32, 10), (32, 34), (34, 34) }) {
                     foreach ((int kwidth, int kheight, int kdepth) in new (int, int, int)[] { (1, 1, 1), (3, 3, 3), (5, 5, 5), (1, 3, 5), (3, 5, 1), (5, 1, 3) }) {
                         foreach ((int inwidth, int inheight, int indepth) in new (int, int, int)[] { (kwidth, kheight, kdepth), (kwidth * 2, kheight * 2, kdepth * 2), (13, 13, 13), (17, 17, 17), (19, 19, 19), (17, 19, 13), (13, 17, 19), (19, 13, 17) }) {
                             int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;
@@ -72,7 +71,7 @@ namespace TensorShaderTest.Operators.Complex {
 
             ComplexConvolution3D ope = new ComplexConvolution3D(inwidth, inheight, indepth, inchannels, outchannels, ksize, ksize, ksize);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/complex_convolution3d.nvvp");
+            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/complex_convolution_3d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, w_tensor, y_tensor);

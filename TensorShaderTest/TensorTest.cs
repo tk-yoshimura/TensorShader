@@ -366,21 +366,6 @@ namespace TensorShaderTest {
             }
         }
 
-        [TestMethod]
-        public void OverflowTest() {
-            int channels = 2, width = 6, batch = 4;
-
-            Tensor tensor = new OverflowCheckedTensor(Shape.Map1D(channels, width, batch));
-
-            Operator ope = new OverflowOperator(tensor.Shape);
-
-            ope.Execute(tensor);
-
-            Assert.ThrowsException<IndexOutOfRangeException>(
-                () => { float[] state = tensor.State; }
-            );
-        }
-
         internal class OverflowOperator : Operator {
             /// <summary>形状</summary>
             public Shape Shape { private set; get; }
