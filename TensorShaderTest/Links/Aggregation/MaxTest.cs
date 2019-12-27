@@ -22,13 +22,13 @@ namespace TensorShaderTest.Links.Aggregation {
             Field y_expect = Max(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Height }, keepdims: false);
             Field err = y_expect - y_actual;
 
-            OutputNode errnode = err.Value.Save();
+            StoreField errnode = err.Value.Save();
 
             (Flow flow, Parameters Parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] err_actual = errnode.Tensor.State;
+            float[] err_actual = errnode.State;
 
             AssertError.Tolerance(err_expect, err_actual, 1e-7f, 1e-5f, $"not equal err");
         }
