@@ -15,22 +15,22 @@ namespace TensorShaderTest.Operators.Connection2D {
             foreach (int batch in new int[] { 1, 2 }) {
                 foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20 }) {
                     foreach (int outchannels in new int[] { 7, 13 }) {
-                        foreach (int inwidth in new int[] { 8, 9, 13, 17 }) {
-                            foreach (int inheight in new int[] { 8, 9, 19, 23 }) {
-                                float[] yval = (new float[inwidth * inheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+                        foreach (int width in new int[] { 8, 9, 13, 17 }) {
+                            foreach (int height in new int[] { 8, 9, 19, 23 }) {
+                                float[] yval = (new float[width * height * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                                 float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-                                Map2D y = new Map2D(outchannels, inwidth, inheight, batch, yval);
+                                Map2D y = new Map2D(outchannels, width, height, batch, yval);
                                 Filter2D w = new Filter2D(inchannels, outchannels, 1, 1, wval);
 
                                 Map2D x = Reference(y, w);
 
-                                OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, inwidth, inheight, batch), yval);
+                                OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, width, height, batch), yval);
                                 OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels), wval);
 
-                                OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch));
+                                OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, width, height, batch));
 
-                                PointwiseDeconvolution ope = new PointwiseDeconvolution(inwidth, inheight, outchannels, inchannels, batch);
+                                PointwiseDeconvolution ope = new PointwiseDeconvolution(width, height, outchannels, inchannels, batch);
 
                                 ope.Execute(y_tensor, w_tensor, x_tensor);
 
@@ -40,14 +40,54 @@ namespace TensorShaderTest.Operators.Connection2D {
                                 CollectionAssert.AreEqual(yval, y_tensor.State);
                                 CollectionAssert.AreEqual(wval, w_tensor.State);
 
-                                AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value{inchannels},{outchannels},{inwidth},{inheight},{batch}");
+                                AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value{inchannels},{outchannels},{width},{height},{batch}");
 
-                                Console.WriteLine($"pass: {inchannels},{outchannels},{inwidth},{inheight},{batch}");
+                                Console.WriteLine($"pass: {inchannels},{outchannels},{width},{height},{batch}");
                             }
                         }
                     }
                 }
             }
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
+        public void LargeMapTest() {
+            float max_err = 0;
+
+            Random random = new Random(1234);
+
+            int batch = 3;
+            int inchannels = 49, outchannels = 50;
+            int width = 128, height = 196;
+
+            float[] yval = (new float[width * height * outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+            float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+            Map2D y = new Map2D(outchannels, width, height, batch, yval);
+            Filter2D w = new Filter2D(inchannels, outchannels, 1, 1, wval);
+
+            Map2D x = Reference(y, w);
+
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, width, height, batch), yval);
+            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels), wval);
+
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, width, height, batch));
+
+            PointwiseDeconvolution ope = new PointwiseDeconvolution(width, height, outchannels, inchannels, batch);
+
+            ope.Execute(y_tensor, w_tensor, x_tensor);
+
+            float[] x_expect = x.ToArray();
+            float[] x_actual = x_tensor.State;
+
+            CollectionAssert.AreEqual(yval, y_tensor.State);
+            CollectionAssert.AreEqual(wval, w_tensor.State);
+
+            AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value{inchannels},{outchannels},{width},{height},{batch}");
+
+            Console.WriteLine($"pass: {inchannels},{outchannels},{width},{height},{batch}");
 
             Console.WriteLine($"maxerr:{max_err}");
         }

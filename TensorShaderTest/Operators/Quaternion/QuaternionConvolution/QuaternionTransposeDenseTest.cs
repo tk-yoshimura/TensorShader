@@ -56,6 +56,51 @@ namespace TensorShaderTest.Operators.Quaternion {
 
             Console.WriteLine($"maxerr:{max_err}");
         }
+
+        [TestMethod]
+        public void LargeMapTest() {
+            Random random = new Random(1234);
+
+            float max_err = 0;
+
+            int batch = 3;
+            int inchannels = 196, outchannels = 200;
+
+            float[] yval = (new float[outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+            float[] wval = (new float[inchannels * outchannels / 4]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+            Quaternion[] ycval = (new Quaternion[yval.Length / 4])
+                .Select((_, idx) => new Quaternion(yval[idx * 4], yval[idx * 4 + 1], yval[idx * 4 + 2], yval[idx * 4 + 3])).ToArray();
+
+            Quaternion[] wcval = (new Quaternion[wval.Length / 4])
+                .Select((_, idx) => new Quaternion(wval[idx * 4], wval[idx * 4 + 1], wval[idx * 4 + 2], wval[idx * 4 + 3])).ToArray();
+
+            QuaternionMap0D y = new QuaternionMap0D(outchannels / 4, batch, ycval);
+            QuaternionFilter0D w = new QuaternionFilter0D(inchannels / 4, outchannels / 4, wcval);
+
+            QuaternionMap0D x = Reference(y, w);
+
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map0D(outchannels, batch), yval);
+            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels / 4), wval);
+
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map0D(inchannels, batch));
+
+            QuaternionTransposeDense ope = new QuaternionTransposeDense(outchannels, inchannels, gradmode: false, batch);
+
+            ope.Execute(y_tensor, w_tensor, x_tensor);
+
+            float[] x_expect = x.ToArray();
+            float[] x_actual = x_tensor.State;
+
+            CollectionAssert.AreEqual(yval, y_tensor.State);
+            CollectionAssert.AreEqual(wval, w_tensor.State);
+
+            AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{batch}");
+
+            Console.WriteLine($"pass: {inchannels},{outchannels},{batch}");
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
         
         [TestMethod]
         public void SpeedTest() {

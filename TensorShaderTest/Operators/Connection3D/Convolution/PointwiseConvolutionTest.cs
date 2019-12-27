@@ -51,6 +51,46 @@ namespace TensorShaderTest.Operators.Connection3D {
         }
 
         [TestMethod]
+        public void LargeMapTest() {
+            float max_err = 0;
+
+            Random random = new Random(1234);
+
+            int batch = 3;
+            int inchannels = 49, outchannels = 50;
+            int width = 128, height = 196, depth = 4;
+
+            float[] xval = (new float[width * height * depth * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+            float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+            Map3D x = new Map3D(inchannels, width, height, depth, batch, xval);
+            Filter3D w = new Filter3D(inchannels, outchannels, 1, 1, 1, wval);
+
+            Map3D y = Reference(x, w);
+
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, width, height, depth, batch), xval);
+            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels), wval);
+
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, width, height, depth, batch));
+
+            PointwiseConvolution ope = new PointwiseConvolution(width, height, depth, inchannels, outchannels, batch);
+
+            ope.Execute(x_tensor, w_tensor, y_tensor);
+
+            float[] y_expect = y.ToArray();
+            float[] y_actual = y_tensor.State;
+
+            CollectionAssert.AreEqual(xval, x_tensor.State);
+            CollectionAssert.AreEqual(wval, w_tensor.State);
+
+            AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{width},{height},{depth},{batch}");
+
+            Console.WriteLine($"pass: {inchannels},{outchannels},{width},{height},{depth},{batch}");
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
         public void SpeedTest() {
             int width = 64, height = 64, depth = 64, inchannels = 31, outchannels = 31;
 

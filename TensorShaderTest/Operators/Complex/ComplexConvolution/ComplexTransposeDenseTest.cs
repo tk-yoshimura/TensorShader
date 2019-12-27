@@ -58,6 +58,51 @@ namespace TensorShaderTest.Operators.Complex {
         }
 
         [TestMethod]
+        public void LargeMapTest() {
+            Random random = new Random(1234);
+
+            float max_err = 0;
+
+            int batch = 3;
+            int inchannels = 98, outchannels = 100; 
+
+            float[] yval = (new float[outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+            float[] wval = (new float[inchannels * outchannels / 2]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+            System.Numerics.Complex[] ycval = (new System.Numerics.Complex[yval.Length / 2])
+                .Select((_, idx) => new System.Numerics.Complex(yval[idx * 2], yval[idx * 2 + 1])).ToArray();
+
+            System.Numerics.Complex[] wcval = (new System.Numerics.Complex[wval.Length / 2])
+                .Select((_, idx) => new System.Numerics.Complex(wval[idx * 2], wval[idx * 2 + 1])).ToArray();
+
+            ComplexMap0D y = new ComplexMap0D(outchannels / 2, batch, ycval);
+            ComplexFilter0D w = new ComplexFilter0D(inchannels / 2, outchannels / 2, wcval);
+
+            ComplexMap0D x = Reference(y, w);
+
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map0D(outchannels, batch), yval);
+            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels / 2), wval);
+
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map0D(inchannels, batch));
+
+            ComplexTransposeDense ope = new ComplexTransposeDense(outchannels, inchannels, gradmode: false, batch);
+
+            ope.Execute(y_tensor, w_tensor, x_tensor);
+
+            float[] x_expect = x.ToArray();
+            float[] x_actual = x_tensor.State;
+
+            CollectionAssert.AreEqual(yval, y_tensor.State);
+            CollectionAssert.AreEqual(wval, w_tensor.State);
+
+            AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{batch}");
+
+            Console.WriteLine($"pass: {inchannels},{outchannels},{batch}");
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
         public void SpeedTest() {
             int inchannels = 32, outchannels = 32;
 

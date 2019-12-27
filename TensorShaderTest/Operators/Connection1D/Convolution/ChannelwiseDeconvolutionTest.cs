@@ -53,6 +53,48 @@ namespace TensorShaderTest.Operators.Connection1D {
         }
 
         [TestMethod]
+        public void LargeMapTest() {
+            float max_err = 0;
+
+            Random random = new Random(1234);
+
+            int batch = 3;
+            int channels = 49;
+            int kwidth = 5; 
+            int inwidth = 125; 
+            int outwidth = inwidth - kwidth + 1;
+
+            float[] yval = (new float[outwidth * channels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+            float[] wval = (new float[kwidth * channels]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+            Map1D y = new Map1D(channels, outwidth, batch, yval);
+            Filter1D w = new Filter1D(channels, 1, kwidth, wval);
+
+            Map1D x = Reference(y, w, inwidth, kwidth);
+
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, outwidth, batch), yval);
+            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel1D(channels, 1, kwidth), wval);
+
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, inwidth, batch));
+
+            ChannelwiseDeconvolution ope = new ChannelwiseDeconvolution(outwidth, channels, kwidth, batch);
+
+            ope.Execute(y_tensor, w_tensor, x_tensor);
+
+            float[] x_expect = x.ToArray();
+            float[] x_actual = x_tensor.State;
+
+            CollectionAssert.AreEqual(yval, y_tensor.State);
+            CollectionAssert.AreEqual(wval, w_tensor.State);
+
+            AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {channels},{kwidth},{inwidth},{batch}");
+
+            Console.WriteLine($"pass: {channels},{kwidth},{inwidth},{batch}");
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
         public void SpeedTest() {
             int inwidth = 512, channels = 31, ksize = 3;
             int outwidth = inwidth - ksize + 1;

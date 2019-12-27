@@ -57,6 +57,48 @@ namespace TensorShaderTest.Operators.Connection2D {
         }
 
         [TestMethod]
+        public void LargeMapTest() {
+            float max_err = 0;
+
+            Random random = new Random(1234);
+
+            int batch = 3;
+            int channels = 49;
+            int kwidth = 5, kheight = 3;
+            int inwidth = 125, inheight = 196;
+            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
+
+            float[] xval = (new float[inwidth * inheight * channels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+            float[] wval = (new float[kwidth * kheight * channels]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+            Map2D x = new Map2D(channels, inwidth, inheight, batch, xval);
+            Filter2D w = new Filter2D(channels, 1, kwidth, kheight, wval);
+
+            Map2D y = Reference(x, w, kwidth, kheight);
+
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, inwidth, inheight, batch), xval);
+            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel2D(channels, 1, kwidth, kheight), wval);
+
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, outwidth, outheight, batch));
+
+            ChannelwiseConvolution ope = new ChannelwiseConvolution(inwidth, inheight, channels, kwidth, kheight, batch);
+
+            ope.Execute(x_tensor, w_tensor, y_tensor);
+
+            float[] y_expect = y.ToArray();
+            float[] y_actual = y_tensor.State;
+
+            CollectionAssert.AreEqual(xval, x_tensor.State);
+            CollectionAssert.AreEqual(wval, w_tensor.State);
+
+            AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {channels},{kwidth},{inwidth},{inheight},{batch}");
+
+            Console.WriteLine($"pass: {channels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
         public void SpeedTest() {
             int inwidth = 512, inheight = 512, channels = 31, ksize = 3;
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1;

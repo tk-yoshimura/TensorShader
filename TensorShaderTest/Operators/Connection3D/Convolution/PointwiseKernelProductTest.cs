@@ -51,6 +51,46 @@ namespace TensorShaderTest.Operators.Connection3D {
         }
 
         [TestMethod]
+        public void LargeMapTest() {
+            float max_err = 0;
+
+            Random random = new Random(1234);
+
+            int batch = 3;
+            int inchannels = 49, outchannels = 50;
+            int width = 128, height = 196, depth = 4;
+
+            float[] xval = (new float[width * height * depth * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+            float[] gyval = (new float[width * height * depth * outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+            Map3D x = new Map3D(inchannels, width, height, depth, batch, xval);
+            Map3D gy = new Map3D(outchannels, width, height, depth, batch, gyval);
+
+            Filter3D gw = Reference(x, gy);
+
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, width, height, depth, batch), xval);
+            OverflowCheckedTensor gy_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, width, height, depth, batch), gyval);
+
+            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels));
+
+            PointwiseKernelProduct ope = new PointwiseKernelProduct(width, height, depth, inchannels, outchannels, batch);
+
+            ope.Execute(x_tensor, gy_tensor, gw_tensor);
+
+            float[] gw_expect = gw.ToArray();
+            float[] gw_actual = gw_tensor.State;
+
+            CollectionAssert.AreEqual(xval, x_tensor.State);
+            CollectionAssert.AreEqual(gyval, gy_tensor.State);
+
+            AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{width},{height},{depth},{batch}");
+
+            Console.WriteLine($"pass: {inchannels},{outchannels},{width},{height},{depth},{batch}");
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
         public void SpeedTest() {
             int width = 64, height = 64, depth = 64, inchannels = 32, outchannels = 32;
 

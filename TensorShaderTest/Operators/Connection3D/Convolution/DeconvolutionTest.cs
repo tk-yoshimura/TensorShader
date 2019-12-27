@@ -46,11 +46,51 @@ namespace TensorShaderTest.Operators.Connection3D {
 
                             Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
                         }
-
-                        Console.WriteLine($"maxerr:{max_err}");
                     }
                 }
             }
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
+        public void LargeMapTest() {
+            float max_err = 0;
+
+            Random random = new Random(1234);
+
+            int batch = 3;
+            int inchannels = 49, outchannels = 50;
+            int kwidth = 7, kheight = 5, kdepth = 3;
+            int inwidth = 125, inheight = 196, indepth = 4;
+            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;
+
+            float[] yval = (new float[outwidth * outheight * outdepth * outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+            float[] wval = (new float[kwidth * kheight * kdepth * inchannels * outchannels]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+            Map3D y = new Map3D(outchannels, outwidth, outheight, outdepth, batch, yval);
+            Filter3D w = new Filter3D(inchannels, outchannels, kwidth, kheight, kdepth, wval);
+
+            Map3D x = Reference(y, w, inwidth, inheight, indepth, kwidth, kheight, kdepth);
+
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), yval);
+            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels, outchannels, kwidth, kheight, kdepth), wval);
+
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch));
+
+            Deconvolution ope = new Deconvolution(outwidth, outheight, outdepth, outchannels, inchannels, kwidth, kheight, kdepth, batch);
+
+            ope.Execute(y_tensor, w_tensor, x_tensor);
+
+            float[] x_expect = x.ToArray();
+            float[] x_actual = x_tensor.State;
+
+            CollectionAssert.AreEqual(yval, y_tensor.State);
+            CollectionAssert.AreEqual(wval, w_tensor.State);
+
+            AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
+
+            Console.WriteLine($"maxerr:{max_err}");
         }
 
         [TestMethod]

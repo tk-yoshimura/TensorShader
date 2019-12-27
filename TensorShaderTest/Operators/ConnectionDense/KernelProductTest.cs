@@ -50,6 +50,45 @@ namespace TensorShaderTest.Operators.ConnectionDense {
         }
 
         [TestMethod]
+        public void LargeMapTest() {
+            float max_err = 0;
+
+            Random random = new Random(1234);
+
+            int batch = 3;
+            int inchannels = 49, outchannels = 50;
+
+            float[] xval = (new float[inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+            float[] yval = (new float[outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+            Map0D x = new Map0D(inchannels, batch, xval);
+            Map0D y = new Map0D(outchannels, batch, yval);
+
+            Filter0D gw = Reference(x, y);
+
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map0D(inchannels, batch), xval);
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map0D(outchannels, batch), yval);
+
+            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels));
+
+            KernelProduct ope = new KernelProduct(inchannels, outchannels, batch);
+
+            ope.Execute(x_tensor, y_tensor, gw_tensor);
+
+            float[] gw_expect = gw.ToArray();
+            float[] gw_actual = gw_tensor.State;
+
+            CollectionAssert.AreEqual(xval, x_tensor.State);
+            CollectionAssert.AreEqual(yval, y_tensor.State);
+
+            AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{batch}");
+
+            Console.WriteLine($"pass: {inchannels},{outchannels},{batch}");
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
         public void SpeedTest() {
             int inchannels = 1024, outchannels = 1024, batch = 4;
 

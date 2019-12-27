@@ -67,6 +67,54 @@ namespace TensorShaderTest.Operators.Trivector {
         }
 
         [TestMethod]
+        public void LargeMapTest() {
+            Random random = new Random(1234);
+
+            float max_err = 0;
+
+            int batch = 3;
+            int inchannels = 147, outchannels = 150;
+            int kwidth = 5, kheight = 3;
+            int inwidth = 125, inheight = 196;
+            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
+
+            float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+            float[] wval = (new float[kwidth * kheight * inchannels * outchannels / 9 * 4]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+            Trivector[] ycval = (new Trivector[yval.Length / 3])
+                .Select((_, idx) => new Trivector(yval[idx * 3], yval[idx * 3 + 1], yval[idx * 3 + 2])).ToArray();
+
+            Quaternion.Quaternion[] wcval = (new Quaternion.Quaternion[wval.Length / 4])
+                .Select((_, idx) => new Quaternion.Quaternion(wval[idx * 4], wval[idx * 4 + 1], wval[idx * 4 + 2], wval[idx * 4 + 3])).ToArray();
+
+            TrivectorMap2D y = new TrivectorMap2D(outchannels / 3, outwidth, outheight, batch, ycval);
+            Quaternion.QuaternionFilter2D w = new Quaternion.QuaternionFilter2D(inchannels / 3, outchannels / 3, kwidth, kheight, wcval);
+
+            TrivectorMap2D x = Reference(y, w, inwidth, inheight, kwidth, kheight);
+
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
+            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels / 3 * 4, outchannels / 3, kwidth, kheight), wval);
+
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch));
+
+            TrivectorDeconvolution2D ope = new TrivectorDeconvolution2D(outwidth, outheight, outchannels, inchannels, kwidth, kheight, gradmode: false, batch);
+
+            ope.Execute(y_tensor, w_tensor, x_tensor);
+
+            float[] x_expect = x.ToArray();
+            float[] x_actual = x_tensor.State;
+
+            CollectionAssert.AreEqual(yval, y_tensor.State);
+            CollectionAssert.AreEqual(wval, w_tensor.State);
+
+            AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
+
+            Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
         public void SpeedTest() {
             int inwidth = 32, inheight = 32, inchannels = 33, outchannels = 33, ksize = 3;
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1;

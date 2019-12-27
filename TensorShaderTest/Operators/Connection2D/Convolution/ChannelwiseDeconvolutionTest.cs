@@ -57,6 +57,48 @@ namespace TensorShaderTest.Operators.Connection2D {
         }
 
         [TestMethod]
+        public void LargeMapTest() {
+            float max_err = 0;
+
+            Random random = new Random(1234);
+
+            int batch = 3;
+            int channels = 49;
+            int kwidth = 5, kheight = 3;
+            int inwidth = 125, inheight = 196;
+            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
+
+            float[] yval = (new float[outwidth * outheight * channels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+            float[] wval = (new float[kwidth * kheight * channels]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+            Map2D y = new Map2D(channels, outwidth, outheight, batch, yval);
+            Filter2D w = new Filter2D(channels, 1, kwidth, kheight, wval);
+
+            Map2D x = Reference(y, w, inwidth, inheight, kwidth, kheight);
+
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, outwidth, outheight, batch), yval);
+            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel2D(channels, 1, kwidth, kheight), wval);
+
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, inwidth, inheight, batch));
+
+            ChannelwiseDeconvolution ope = new ChannelwiseDeconvolution(outwidth, outheight, channels, kwidth, kheight, batch);
+
+            ope.Execute(y_tensor, w_tensor, x_tensor);
+
+            float[] x_expect = x.ToArray();
+            float[] x_actual = x_tensor.State;
+
+            CollectionAssert.AreEqual(yval, y_tensor.State);
+            CollectionAssert.AreEqual(wval, w_tensor.State);
+
+            AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {channels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
+
+            Console.WriteLine($"pass: {channels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
         public void SpeedTest() {
             int inwidth = 512, inheight = 512, channels = 31, ksize = 3;
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1;

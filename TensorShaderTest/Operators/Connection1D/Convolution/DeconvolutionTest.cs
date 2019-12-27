@@ -55,6 +55,48 @@ namespace TensorShaderTest.Operators.Connection1D {
         }
 
         [TestMethod]
+        public void LargeMapTest() {
+            float max_err = 0;
+
+            Random random = new Random(1234);
+
+            int batch = 3;
+            int inchannels = 49, outchannels = 50;
+            int kwidth = 5; 
+            int inwidth = 125; 
+            int outwidth = inwidth - kwidth + 1;
+
+            float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+            float[] wval = (new float[kwidth * inchannels * outchannels]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+            Map1D y = new Map1D(outchannels, outwidth, batch, yval);
+            Filter1D w = new Filter1D(inchannels, outchannels, kwidth, wval);
+
+            Map1D x = Reference(y, w, inwidth, kwidth);
+
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth, batch), yval);
+            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels, outchannels, kwidth), wval);
+
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth, batch));
+
+            Deconvolution ope = new Deconvolution(outwidth, outchannels, inchannels, kwidth, batch);
+
+            ope.Execute(y_tensor, w_tensor, x_tensor);
+
+            float[] x_expect = x.ToArray();
+            float[] x_actual = x_tensor.State;
+
+            CollectionAssert.AreEqual(yval, y_tensor.State);
+            CollectionAssert.AreEqual(wval, w_tensor.State);
+
+            AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{kwidth},{inwidth},{batch}");
+
+            Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{inwidth},{batch}");
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
         public void SpeedTest() {
             int inwidth = 512, inchannels = 31, outchannels = 31, ksize = 3;
             int outwidth = inwidth - ksize + 1;

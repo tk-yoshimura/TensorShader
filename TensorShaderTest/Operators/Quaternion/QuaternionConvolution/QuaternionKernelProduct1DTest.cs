@@ -65,6 +65,54 @@ namespace TensorShaderTest.Operators.Quaternion {
         }
 
         [TestMethod]
+        public void LargeMapTest() {
+            Random random = new Random(1234);
+
+            float max_err = 0;
+
+            int batch = 3;
+            int inchannels = 196, outchannels = 200;
+            int kwidth = 5; 
+            int inwidth = 125; 
+            int outwidth = inwidth - kwidth + 1;
+
+            float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+            float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+            Quaternion[] xcval = (new Quaternion[xval.Length / 4])
+                .Select((_, idx) => new Quaternion(xval[idx * 4], xval[idx * 4 + 1], xval[idx * 4 + 2], xval[idx * 4 + 3])).ToArray();
+
+            Quaternion[] ycval = (new Quaternion[yval.Length / 4])
+                .Select((_, idx) => new Quaternion(yval[idx * 4], yval[idx * 4 + 1], yval[idx * 4 + 2], yval[idx * 4 + 3])).ToArray();
+
+            QuaternionMap1D x = new QuaternionMap1D(inchannels / 4, inwidth, batch, xcval);
+            QuaternionMap1D y = new QuaternionMap1D(outchannels / 4, outwidth, batch, ycval);
+
+            QuaternionFilter1D gw = Reference(x, y, kwidth);
+
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth, batch), xval);
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth, batch), yval);
+
+            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels, outchannels / 4, kwidth));
+
+            QuaternionKernelProduct1D ope = new QuaternionKernelProduct1D(inwidth, inchannels, outchannels, kwidth, transpose: false, batch);
+
+            ope.Execute(x_tensor, y_tensor, gw_tensor);
+
+            float[] gw_expect = gw.ToArray();
+            float[] gw_actual = gw_tensor.State;
+
+            CollectionAssert.AreEqual(xval, x_tensor.State);
+            CollectionAssert.AreEqual(yval, y_tensor.State);
+
+            AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{inwidth},{batch}");
+
+            Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{inwidth},{batch}");
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
         public void SpeedTest() {
             int inwidth = 512, inchannels = 32, outchannels = 32, ksize = 3;
             int outwidth = inwidth - ksize + 1;

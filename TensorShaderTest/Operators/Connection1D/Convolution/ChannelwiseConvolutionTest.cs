@@ -53,6 +53,48 @@ namespace TensorShaderTest.Operators.Connection1D {
         }
 
         [TestMethod]
+        public void LargeMapTest() {
+            float max_err = 0;
+
+            Random random = new Random(1234);
+
+            int batch = 3;
+            int channels = 49;
+            int kwidth = 5; 
+            int inwidth = 125; 
+            int outwidth = inwidth - kwidth + 1;
+
+            float[] xval = (new float[inwidth * channels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+            float[] wval = (new float[kwidth * channels]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+            Map1D x = new Map1D(channels, inwidth, batch, xval);
+            Filter1D w = new Filter1D(channels, 1, kwidth, wval);
+
+            Map1D y = Reference(x, w, kwidth);
+
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, inwidth, batch), xval);
+            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel1D(channels, 1, kwidth), wval);
+
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, outwidth, batch));
+
+            ChannelwiseConvolution ope = new ChannelwiseConvolution(inwidth, channels, kwidth, batch);
+
+            ope.Execute(x_tensor, w_tensor, y_tensor);
+
+            float[] y_expect = y.ToArray();
+            float[] y_actual = y_tensor.State;
+
+            CollectionAssert.AreEqual(xval, x_tensor.State);
+            CollectionAssert.AreEqual(wval, w_tensor.State);
+
+            AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {channels},{kwidth},{inwidth},{batch}");
+
+            Console.WriteLine($"pass: {channels},{kwidth},{inwidth},{batch}");
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
         public void SpeedTest() {
             int inwidth = 512, channels = 31, ksize = 3;
             int outwidth = inwidth - ksize + 1;

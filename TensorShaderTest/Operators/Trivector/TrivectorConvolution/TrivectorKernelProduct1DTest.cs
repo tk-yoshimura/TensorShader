@@ -69,6 +69,61 @@ namespace TensorShaderTest.Operators.Trivector {
 
             Console.WriteLine($"maxerr:{max_err}");
         }
+
+        [TestMethod]
+        public void LargeMapTest() {
+            Random random = new Random(1234);
+
+            float max_err = 0;
+
+            int batch = 3;
+            int inchannels = 147, outchannels = 150;
+            int kwidth = 5; 
+            int inwidth = 125; 
+            int outwidth = inwidth - kwidth + 1;
+
+            float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+            float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+            float[] wval = (new float[kwidth * inchannels * outchannels / 9 * 4]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+            Trivector[] xcval = (new Trivector[xval.Length / 3])
+                .Select((_, idx) => new Trivector(xval[idx * 3], xval[idx * 3 + 1], xval[idx * 3 + 2])).ToArray();
+
+            Trivector[] ycval = (new Trivector[yval.Length / 3])
+                .Select((_, idx) => new Trivector(yval[idx * 3], yval[idx * 3 + 1], yval[idx * 3 + 2])).ToArray();
+
+            Quaternion.Quaternion[] wcval = (new Quaternion.Quaternion[wval.Length / 4])
+                .Select((_, idx) => new Quaternion.Quaternion(wval[idx * 4], wval[idx * 4 + 1], wval[idx * 4 + 2], wval[idx * 4 + 3])).ToArray();
+
+            TrivectorMap1D x = new TrivectorMap1D(inchannels / 3, inwidth, batch, xcval);
+            TrivectorMap1D y = new TrivectorMap1D(outchannels / 3, outwidth, batch, ycval);
+            Quaternion.QuaternionFilter1D w = new Quaternion.QuaternionFilter1D(inchannels / 3, outchannels / 3, kwidth, wcval);
+
+            Quaternion.QuaternionFilter1D gw = Reference(x, y, w, kwidth);
+
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth, batch), xval);
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth, batch), yval);
+            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels / 3 * 4, outchannels / 3, kwidth), wval);
+
+            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels / 3 * 4, outchannels / 3, kwidth));
+
+            TrivectorKernelProduct1D ope = new TrivectorKernelProduct1D(inwidth, inchannels, outchannels, kwidth, transpose: false, batch);
+
+            ope.Execute(x_tensor, y_tensor, w_tensor, gw_tensor);
+
+            float[] gw_expect = gw.ToArray();
+            float[] gw_actual = gw_tensor.State;
+
+            CollectionAssert.AreEqual(xval, x_tensor.State);
+            CollectionAssert.AreEqual(yval, y_tensor.State);
+            CollectionAssert.AreEqual(wval, w_tensor.State);
+
+            AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{inwidth},{batch}");
+
+            Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{inwidth},{batch}");
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
         
         [TestMethod]
         public void SpeedTest() {

@@ -53,6 +53,46 @@ namespace TensorShaderTest.Operators.Connection3D {
         }
 
         [TestMethod]
+        public void LargeMapTest() {
+            float max_err = 0;
+
+            Random random = new Random(1234);
+
+            int batch = 3;
+            int channels = 49;
+            int kwidth = 7, kheight = 5, kdepth = 3;
+            int inwidth = 125, inheight = 196, indepth = 4;
+            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;
+
+            float[] xval = (new float[inwidth * inheight * indepth * channels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+            float[] gyval = (new float[outwidth * outheight * outdepth * channels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+            Map3D x = new Map3D(channels, inwidth, inheight, indepth, batch, xval);
+            Map3D gy = new Map3D(channels, outwidth, outheight, outdepth, batch, gyval);
+
+            Filter3D gw = Reference(x, gy, kwidth, kheight, kdepth);
+
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, inwidth, inheight, indepth, batch), xval);
+            OverflowCheckedTensor gy_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, outwidth, outheight, outdepth, batch), gyval);
+
+            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel3D(channels, 1, kwidth, kheight, kdepth));
+
+            ChannelwiseKernelProduct ope = new ChannelwiseKernelProduct(inwidth, inheight, indepth, channels, kwidth, kheight, kdepth, batch);
+
+            ope.Execute(x_tensor, gy_tensor, gw_tensor);
+
+            float[] gw_expect = gw.ToArray();
+            float[] gw_actual = gw_tensor.State;
+
+            CollectionAssert.AreEqual(xval, x_tensor.State);
+            CollectionAssert.AreEqual(gyval, gy_tensor.State);
+
+            AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {channels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
         public void SpeedTest() {
             int inwidth = 64, inheight = 64, indepth = 64, channels = 32, ksize = 3;
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1, outdepth = indepth - ksize + 1;

@@ -10,6 +10,8 @@ namespace TensorShaderTest.Operators.Complex {
     public class ComplexKernelProduct1DTest {
         [TestMethod]
         public void ExecuteTest() {
+            Random random = new Random(1234);
+
             float max_err = 0;
 
             foreach (int batch in new int[] { 1, 2 }) {
@@ -19,8 +21,8 @@ namespace TensorShaderTest.Operators.Complex {
                             foreach (int inwidth in new int[] { kwidth, kwidth * 2, 8, 9, 13, 17, 25 }) {
                                 int outwidth = inwidth - kwidth + 1;
 
-                                float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                                float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+                                float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+                                float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
 
                                 System.Numerics.Complex[] xcval = (new System.Numerics.Complex[xval.Length / 2])
                                     .Select((_, idx) => new System.Numerics.Complex(xval[idx * 2], xval[idx * 2 + 1])).ToArray();
@@ -58,6 +60,55 @@ namespace TensorShaderTest.Operators.Complex {
                 }
             }
 
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
+        public void LargeMapTest() {
+            Random random = new Random(1234);
+
+            float max_err = 0;
+
+            int batch = 3;
+            int inchannels = 96;
+            int outchannels = 98;
+            int kwidth = 5; 
+            int inwidth = 125; 
+            int outwidth = inwidth - kwidth + 1;
+
+            float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+            float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+            System.Numerics.Complex[] xcval = (new System.Numerics.Complex[xval.Length / 2])
+                .Select((_, idx) => new System.Numerics.Complex(xval[idx * 2], xval[idx * 2 + 1])).ToArray();
+
+            System.Numerics.Complex[] ycval = (new System.Numerics.Complex[yval.Length / 2])
+                .Select((_, idx) => new System.Numerics.Complex(yval[idx * 2], yval[idx * 2 + 1])).ToArray();
+
+            ComplexMap1D x = new ComplexMap1D(inchannels / 2, inwidth, batch, xcval);
+            ComplexMap1D y = new ComplexMap1D(outchannels / 2, outwidth, batch, ycval);
+
+            ComplexFilter1D gw = Reference(x, y, kwidth);
+
+            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth, batch), xval);
+            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth, batch), yval);
+
+            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels, outchannels / 2, kwidth));
+
+            ComplexKernelProduct1D ope = new ComplexKernelProduct1D(inwidth, inchannels, outchannels, kwidth, transpose: false, batch);
+
+            ope.Execute(x_tensor, y_tensor, gw_tensor);
+
+            float[] gw_expect = gw.ToArray();
+            float[] gw_actual = gw_tensor.State;
+
+            CollectionAssert.AreEqual(xval, x_tensor.State);
+            CollectionAssert.AreEqual(yval, y_tensor.State);
+
+            AssertError.Tolerance(gw_expect, gw_actual, 1e-6f, 1e-4f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{inwidth},{batch}");
+
+            Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{inwidth},{batch}");
+            
             Console.WriteLine($"maxerr:{max_err}");
         }
 
