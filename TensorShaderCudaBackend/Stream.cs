@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-
+using System.Reflection;
 using TensorShaderCudaBackend.API;
 
 namespace TensorShaderCudaBackend {
@@ -44,9 +44,9 @@ namespace TensorShaderCudaBackend {
 
             GC.SuppressFinalize(this);
 
-#if DEBUG
-            Trace.WriteLine("Disposed Stream");
-#endif
+            #if DEBUG
+            Trace.WriteLine($"[{MethodBase.GetCurrentMethod().Name}] Disposed stream");
+            #endif
         }
 
         /// <summary>ファイナライザ</summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 using TensorShaderCudaBackend.API;
@@ -8,6 +9,7 @@ namespace TensorShaderCudaBackend {
 
     /// <summary>Cuda配列基底クラス</summary>
     public abstract class CudaArrayBase {
+
         internal virtual IntPtr Ptr { get; }
 
         /// <summary>配列長</summary>
@@ -79,11 +81,6 @@ namespace TensorShaderCudaBackend {
 
             if (zeroset) {
                 Zeroset();
-            }
-
-            if(DateTime.Now.Millisecond % 100 == 0) { 
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
             }
         }
 
@@ -259,9 +256,9 @@ namespace TensorShaderCudaBackend {
 
             GC.SuppressFinalize(this);
 
-#if DEBUG
-            Trace.WriteLine("Disposed Gpu Array");
-#endif
+            #if DEBUG
+            Trace.WriteLine($"[{MethodBase.GetCurrentMethod().Name}] Disposed gpu array");
+            #endif
         }
 
         /// <summary>ファイナライザ</summary>

@@ -121,6 +121,34 @@ namespace TensorShaderCudaBackend.API {
             }
         }
 
+        /// <summary>デバイスメモリ容量</summary>
+        public static (long total, long free) MemoryInfo {
+            get { 
+                long total = 0, free = 0;
+
+                ErrorCode result = NativeMethods.cudaMemGetInfo(ref free, ref total);
+                if (result != ErrorCode.Success) {
+                    throw new CudaException(result);
+                }
+
+                return (total, free);
+            }
+        }
+
+        /// <summary>デバイスメモリ使用量</summary>
+        public static double MemoryUsage {
+            get { 
+                long total = 0, free = 0;
+
+                ErrorCode result = NativeMethods.cudaMemGetInfo(ref free, ref total);
+                if (result != ErrorCode.Success) {
+                    throw new CudaException(result);
+                }
+
+                return (double)(total - free) / total;
+            }
+        }
+
         /// <summary>実行中のカーネル終了まで待機</summary>
         public static void Synchronize() {
             ErrorCode result = NativeMethods.cudaDeviceSynchronize();

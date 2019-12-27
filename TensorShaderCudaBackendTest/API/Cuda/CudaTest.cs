@@ -63,6 +63,9 @@ namespace TensorShaderCudaBackendTest.APITest {
             Cuda.Memory.Free(ref ptr);
 
             Assert.AreEqual(IntPtr.Zero, ptr);
+
+            Console.WriteLine($"meminfo: {Cuda.MemoryInfo}");
+            Console.WriteLine($"memusage: {Cuda.MemoryUsage}");
         }
 
         [TestMethod]

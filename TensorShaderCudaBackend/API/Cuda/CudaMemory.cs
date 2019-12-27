@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace TensorShaderCudaBackend.API {
@@ -16,6 +18,16 @@ namespace TensorShaderCudaBackend.API {
                 long bytesize = (long)((ulong)Marshal.SizeOf(typeof(T)) * count);
 
                 ErrorCode result = NativeMethods.cudaMalloc(ref ptr, bytesize);
+                if (result == ErrorCode.ErrorMemoryAllocation) { 
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    
+                    #if DEBUG
+                    Trace.WriteLine($"[{MethodBase.GetCurrentMethod().Name}] Called finalizers");
+                    #endif
+
+                    result = NativeMethods.cudaMalloc(ref ptr, bytesize);
+                }
                 if (result != ErrorCode.Success) {
                     throw new CudaException(result);
                 }

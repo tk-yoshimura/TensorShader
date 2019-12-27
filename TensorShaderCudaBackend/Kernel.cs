@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 using TensorShaderCudaBackend.API;
@@ -43,11 +44,6 @@ namespace TensorShaderCudaBackend {
             Marshal.FreeHGlobal(ptx_ansi);
 
             this.Overview = entrypoint;
-
-            if(DateTime.Now.Millisecond % 100 == 0) { 
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-            }
         }
 
         /// <summary>定数メモリへストア</summary>
@@ -258,9 +254,9 @@ namespace TensorShaderCudaBackend {
 
             GC.SuppressFinalize(this);
 
-#if DEBUG
-            Trace.WriteLine("Disposed Shader");
-#endif
+            #if DEBUG
+            Trace.WriteLine($"[{MethodBase.GetCurrentMethod().Name}] Disposed shader");
+            #endif
         }
 
         /// <summary>ファイナライザ</summary>

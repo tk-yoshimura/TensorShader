@@ -69,6 +69,9 @@ namespace TensorShaderCudaBackend.API {
             [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
             public static extern cudaError_t cudaStreamSynchronize(IntPtr stream);
 
+            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+            public static extern cudaError_t cudaMemGetInfo(ref size_t free, ref size_t total);
+
             [DllImport(DllName, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
             public static extern cudaError_t cudaProfilerInitialize(string configFile, string outputFile, cudaOutputMode outputMode);
 
