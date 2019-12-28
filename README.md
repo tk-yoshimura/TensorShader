@@ -1,6 +1,6 @@
-![TensorShaderCUDA](https://github.com/tk-yoshimura/TensorShader/blob/master/logo.svg)
+![TensorShader](https://github.com/tk-yoshimura/TensorShader/blob/master/logo.svg)
 
-# TensorShaderCUDA
+# TensorShader
 **Deep Learning .NET library, CUDA accelerated.**
 
 ## Description
