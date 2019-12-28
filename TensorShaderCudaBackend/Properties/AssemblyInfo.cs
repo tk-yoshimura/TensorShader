@@ -7,10 +7,16 @@ using System.Runtime.InteropServices;
 // これらの属性値を変更してください。
 [assembly: AssemblyTitle("TensorShaderCudaBackend")]
 [assembly: AssemblyDescription("Cuda Kernel Implementations")]
-[assembly: AssemblyConfiguration("")]
+
+#if DEBUG
+[assembly: AssemblyConfiguration("Debug")]
+#else
+[assembly: AssemblyConfiguration("Release")]
+#endif
+
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("TensorShaderCudaBackend")]
-[assembly: AssemblyCopyright("Copyright © T.Yoshimura 2019")]
+[assembly: AssemblyCopyright("Copyright © T.Yoshimura 2019-2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,6 +38,6 @@ using System.Runtime.InteropServices;
 // すべての値を指定するか、次を使用してビルド番号とリビジョン番号を既定に設定できます
 // 既定値にすることができます:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyVersion("4.1.*")]
 
 [assembly: InternalsVisibleTo("TensorShaderCudaBackendTest")]

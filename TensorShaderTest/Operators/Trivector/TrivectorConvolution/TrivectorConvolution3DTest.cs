@@ -68,7 +68,7 @@ namespace TensorShaderTest.Operators.Trivector {
             float max_err = 0;
 
             int batch = 3;
-            int inchannels = 196, outchannels = 200;
+            int inchannels = 147, outchannels = 150;
             int kwidth = 7, kheight = 5, kdepth = 3;
             int inwidth = 125, inheight = 196, indepth = 4;
             int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;

@@ -45,7 +45,7 @@ namespace TensorShaderCudaBackend {
             GC.SuppressFinalize(this);
 
             #if DEBUG
-            Trace.WriteLine($"[{MethodBase.GetCurrentMethod().Name}] Disposed stream");
+            Trace.WriteLine($"[{typeof(Stream).Name}.{MethodBase.GetCurrentMethod().Name}] Disposed stream");
             #endif
         }
 

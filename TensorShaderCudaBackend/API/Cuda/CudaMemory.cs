@@ -23,7 +23,7 @@ namespace TensorShaderCudaBackend.API {
                     GC.WaitForPendingFinalizers();
                     
                     #if DEBUG
-                    Trace.WriteLine($"[{MethodBase.GetCurrentMethod().Name}] Called finalizers");
+                    Trace.WriteLine($"[{typeof(Memory).Name}.{MethodBase.GetCurrentMethod().Name}] Called finalizers");
                     #endif
 
                     result = NativeMethods.cudaMalloc(ref ptr, bytesize);

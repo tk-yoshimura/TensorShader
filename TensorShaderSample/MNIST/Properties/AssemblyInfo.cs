@@ -6,10 +6,16 @@ using System.Runtime.InteropServices;
 // これらの属性値を変更します。
 [assembly: AssemblyTitle("MNIST")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
+
+#if DEBUG
+[assembly: AssemblyConfiguration("Debug")]
+#else
+[assembly: AssemblyConfiguration("Release")]
+#endif
+
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("MNIST")]
-[assembly: AssemblyCopyright("Copyright © T.Yoshimura 2019")]
+[assembly: AssemblyCopyright("Copyright © T.Yoshimura 2019-2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 // ComVisible を false に設定すると、このアセンブリ内の型は COM コンポーネントから

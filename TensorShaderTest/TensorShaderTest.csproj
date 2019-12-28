@@ -380,6 +380,8 @@
     <Compile Include="Operators\ArrayManipulation\SortTest.cs" />
     <Compile Include="Operators\ArrayManipulation\SortWithKeyTest.cs" />
     <Compile Include="Operators\ArrayManipulation\WhereTest.cs" />
+    <Compile Include="Operators\Complex\ComplexArithmetric\ComplexBinaryArithmetric\ComplexBinaryArithmetricTest.cs" />
+    <Compile Include="Operators\Complex\ComplexArithmetric\ComplexUnaryArithmetric\ComplexUnaryArithmetricTest.cs" />
     <Compile Include="Operators\Complex\ComplexConvolution\ComplexKernelProductDenseTest.cs" />
     <Compile Include="Operators\Complex\ComplexConvolution\ComplexTransposeDenseTest.cs" />
     <Compile Include="Operators\Complex\ComplexConvolution\ComplexDenseTest.cs" />
@@ -468,6 +470,8 @@
     <Compile Include="Operators\Indexer\OneHotVectorTest.cs" />
     <Compile Include="Operators\Indexer\ArgMinTest.cs" />
     <Compile Include="Operators\Indexer\ArgMaxTest.cs" />
+    <Compile Include="Operators\Quaternion\QuaternionArithmetric\QuaternionBinaryArithmetric\QuaternionBinaryArithmetricTest.cs" />
+    <Compile Include="Operators\Quaternion\QuaternionArithmetric\QuaternionUnaryArithmetric\QuaternionUnaryArithmetricTest.cs" />
     <Compile Include="Operators\Quaternion\QuaternionConvolution\Quaternion.cs" />
     <Compile Include="Operators\Quaternion\QuaternionConvolution\QuaternionDenseTest.cs" />
     <Compile Include="Operators\Quaternion\QuaternionConvolution\QuaternionConvolution1DTest.cs" />
@@ -491,6 +495,11 @@
     <Compile Include="Operators\Quaternion\QuaternionConvolution\QuaternionMap2D.cs" />
     <Compile Include="Operators\Quaternion\QuaternionCast\QuaternionCastTest.cs" />
     <Compile Include="Operators\RandomGeneration\BinaryRandomTest.cs" />
+    <Compile Include="Operators\Trivector\TrivectorArithmetric\TrivectorBinaryArithmetric\TrivectorBinaryArithmetricTest.cs" />
+    <Compile Include="Operators\Trivector\TrivectorArithmetric\TrivectorQuaternionArithmetric\TrivectorQuaternionQGradMulTest.cs" />
+    <Compile Include="Operators\Trivector\TrivectorArithmetric\TrivectorQuaternionArithmetric\TrivectorQuaternionVGradMulTest.cs" />
+    <Compile Include="Operators\Trivector\TrivectorArithmetric\TrivectorQuaternionArithmetric\TrivectorQuaternionMulTest.cs" />
+    <Compile Include="Operators\Trivector\TrivectorArithmetric\TrivectorUnaryArithmetric\TrivectorUnaryArithmetricTest.cs" />
     <Compile Include="Operators\Trivector\TrivectorConvolution\Trivector.cs" />
     <Compile Include="Operators\Trivector\TrivectorConvolution\TrivectorDenseTest.cs" />
     <Compile Include="Operators\Trivector\TrivectorConvolution\TrivectorConvolution1DTest.cs" />
@@ -589,15 +598,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Operators\Complex\ComplexArithmetric\ComplexBinaryArithmetric\" />
-    <Folder Include="Operators\Complex\ComplexArithmetric\ComplexUnaryArithmetric\" />
-    <Folder Include="Operators\Quaternion\QuaternionArithmetric\QuaternionBinaryArithmetric\" />
-    <Folder Include="Operators\Quaternion\QuaternionArithmetric\QuaternionUnaryArithmetric\" />
-    <Folder Include="Operators\Trivector\TrivectorArithmetric\TrivectorBinaryArithmetric\" />
-    <Folder Include="Operators\Trivector\TrivectorArithmetric\TrivectorQuaternionArithmetric\" />
-    <Folder Include="Operators\Trivector\TrivectorArithmetric\TrivectorUnaryArithmetric\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -50,7 +50,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="TensorShaderCudaBackend, Version=1.0.7254.1760, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="TensorShaderCudaBackend, Version=1.0.7301.2806, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\TensorShaderCudaBackend\bin\x64\Debug\TensorShaderCudaBackend.dll</HintPath>
     </Reference>

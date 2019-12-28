@@ -255,7 +255,7 @@ namespace TensorShaderCudaBackend {
             GC.SuppressFinalize(this);
 
             #if DEBUG
-            Trace.WriteLine($"[{MethodBase.GetCurrentMethod().Name}] Disposed shader");
+            Trace.WriteLine($"[{typeof(Kernel).Name}.{MethodBase.GetCurrentMethod().Name}] Disposed shader");
             #endif
         }
 
