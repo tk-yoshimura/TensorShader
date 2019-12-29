@@ -9,7 +9,19 @@ namespace TensorShaderCudaBackend.API {
 
         #pragma warning disable IDE1006 // 命名スタイル
         private static class NativeMethods {
+            #if CUDA_10_0
+            const string DllName = "nvrtc64_100_0.dll";
+            #elif CUDA_10_1
             const string DllName = "nvrtc64_101_0.dll";
+            #elif CUDA_10_2
+            const string DllName = "nvrtc64_102_0.dll";
+            #elif CUDA_10_3
+            const string DllName = "nvrtc64_103_0.dll";
+            #elif CUDA_10_4
+            const string DllName = "nvrtc64_104_0.dll";
+            #else
+            const string DllName = "nvrtc64_101_0.dll";
+            #endif
 
             [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
             public static extern nvrtcResult nvrtcVersion(ref int major, ref int minor);

@@ -10,7 +10,20 @@ namespace TensorShaderCudaBackend.API {
 
         #pragma warning disable IDE1006 // 命名スタイル
         private static class NativeMethods {
+
+            #if CUDA_10_0
+            const string DllName = "cudart64_100.dll";
+            #elif CUDA_10_1
             const string DllName = "cudart64_101.dll";
+            #elif CUDA_10_2
+            const string DllName = "cudart64_102.dll";
+            #elif CUDA_10_3
+            const string DllName = "cudart64_103.dll";
+            #elif CUDA_10_4
+            const string DllName = "cudart64_104.dll";
+            #else
+            const string DllName = "cudart64_101.dll";
+            #endif
 
             [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
             public static extern cudaError_t cudaDeviceReset();
