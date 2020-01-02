@@ -13,7 +13,7 @@ namespace TensorShaderUtil.Iterator {
 
         /// <summary>次のインデクサ</summary>
         public override int[] Next() {
-            if (pos + NumBatches > Counts) {
+            if (pos + NumBatches >= Counts) {
                 Epoch++;
             }
 
