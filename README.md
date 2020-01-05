@@ -11,7 +11,7 @@ I tried to create a deep learning library of **Define and Run** / **NHWC format*
 ## Requirement
 .NET Framework 4.7.2
 
-CUDA 10.1, Compute Capability 5.0+
+CUDA 10.*, Compute Capability 5.0+
 
 ## Usage
 [Sample](https://github.com/tk-yoshimura/TensorShader/tree/master/TensorShaderSample)
