@@ -129,5 +129,14 @@ namespace TensorShader {
             /// <summary>正解</summary>
             public static int Expect => 1;
         }
+
+        /// <summary>Column変換後行列</summary>
+        public static class Column {
+            /// <summary>フィルタ展開軸</summary>
+            public static int Filter => 0;
+
+            /// <summary>チャネル</summary>
+            public static int Channels => 1;
+        }
     }
 }

@@ -1,5 +1,6 @@
 using TensorShader;
 using TensorShader.Layers;
+
 using static TensorShader.Field;
 
 namespace MNIST {

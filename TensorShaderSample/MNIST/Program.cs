@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+
 using TensorShader;
 using TensorShader.Initializers;
 using TensorShader.Updaters.OptimizeMethod;
 using TensorShader.Updaters.WeightDecay;
-using TensorShaderCudaBackend.API;
+using TensorShaderUtil;
 using TensorShaderUtil.Iterator;
 using TensorShaderUtil.SnapshotSaver;
 using static TensorShader.Field;
-using static TensorShader.VariableNode;
 
 namespace MNIST {
     class Program {

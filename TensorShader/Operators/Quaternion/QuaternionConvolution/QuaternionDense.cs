@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TensorShader.Operators.QuaternionConvolution {
     /// <summary>四元数全結合</summary>

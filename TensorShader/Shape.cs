@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+
 using TensorShaderCudaBackend;
 
 namespace TensorShader {
@@ -17,6 +18,8 @@ namespace TensorShader {
         Map,
         /// <summary>行列</summary>
         Matrix,
+        /// <summary>Column変換後行列</summary>
+        Column,
     }
 
     /// <summary>形状クラス</summary>
@@ -33,7 +36,7 @@ namespace TensorShader {
         public int Width {
             get {
                 if (shape.Length > 2 && Type == ShapeType.Map) return shape[1];
-                if (shape.Length > 2 && Type == ShapeType.Kernel) return shape[2];
+                if (shape.Length > 2 && (Type == ShapeType.Kernel || Type == ShapeType.Column)) return shape[2];
                 return 0;
             }
         }
@@ -42,7 +45,7 @@ namespace TensorShader {
         public int Height {
             get {
                 if (shape.Length > 3 && Type == ShapeType.Map) return shape[2];
-                if (shape.Length > 3 && Type == ShapeType.Kernel) return shape[3];
+                if (shape.Length > 3 && (Type == ShapeType.Kernel || Type == ShapeType.Column)) return shape[3];
                 return 0;
             }
         }
@@ -51,7 +54,7 @@ namespace TensorShader {
         public int Depth {
             get {
                 if (shape.Length > 4 && Type == ShapeType.Map) return shape[3];
-                if (shape.Length > 4 && Type == ShapeType.Kernel) return shape[4];
+                if (shape.Length > 4 && (Type == ShapeType.Kernel || Type == ShapeType.Column)) return shape[4];
                 return 0;
             }
         }
@@ -61,6 +64,7 @@ namespace TensorShader {
             get {
                 if (shape.Length > 0 && (Type == ShapeType.Map || Type == ShapeType.Vector)) return shape[0];
                 if (shape.Length > 1 && (Type == ShapeType.Kernel)) return shape[0] * shape[1];
+                if (shape.Length > 1 && (Type == ShapeType.Column)) return shape[1];
                 return 0;
             }
         }
@@ -137,7 +141,7 @@ namespace TensorShader {
             this.Type = type;
             this.Length = length;
 
-            this.Batch = (type == ShapeType.Map) ? shape.Last() : 1;
+            this.Batch = (type == ShapeType.Map || type == ShapeType.Column) ? shape.Last() : 1;
             this.MapSize = (type == ShapeType.Map) ? length / (shape[0] * this.Batch)
                          : (type == ShapeType.Kernel) ? length / (shape[0] * shape[1])
                          : 1;

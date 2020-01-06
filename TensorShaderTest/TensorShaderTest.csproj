@@ -233,6 +233,8 @@
     <Compile Include="Links\Connection1D\Zoom\LinearZoomTest.cs" />
     <Compile Include="Links\Connection1D\Zoom\NeighborZoomTest.cs" />
     <Compile Include="Links\Connection2D\Pool\StridePoolingTest.cs" />
+    <Compile Include="Links\Connection2D\Transform\ColumnToImageTest.cs" />
+    <Compile Include="Links\Connection2D\Transform\ImageToColumnTest.cs" />
     <Compile Include="Links\Connection3D\Convolution\ChannelwiseConvolutionTest.cs" />
     <Compile Include="Links\Connection3D\Convolution\ChannelwiseDeconvolutionTest.cs" />
     <Compile Include="Links\Connection3D\Convolution\ConvolutionTest.cs" />
@@ -435,6 +437,8 @@
     <Compile Include="Operators\Connection2D\Convolution\PointwiseKernelProductTest.cs" />
     <Compile Include="Operators\Connection2D\Pooling\StridePoolingTest.cs" />
     <Compile Include="Operators\Connection2D\Pooling\StrideUnpoolingTest.cs" />
+    <Compile Include="Operators\Connection2D\Transform\ColumnToImageTest.cs" />
+    <Compile Include="Operators\Connection2D\Transform\ImageToColumnTest.cs" />
     <Compile Include="Operators\Connection3D\Convolution\ChannelwiseConvolutionTest.cs" />
     <Compile Include="Operators\Connection3D\Convolution\ChannelwiseDeconvolutionTest.cs" />
     <Compile Include="Operators\Connection3D\Convolution\ChannelwiseKernelProductTest.cs" />

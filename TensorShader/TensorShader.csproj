@@ -134,6 +134,8 @@
     <Compile Include="Functions\Connection1D\Pool\StrideUnpooling.cs" />
     <Compile Include="Functions\Connection2D\Pool\StridePooling.cs" />
     <Compile Include="Functions\Connection2D\Pool\StrideUnpooling.cs" />
+    <Compile Include="Functions\Connection2D\Transform\ColumnToImage.cs" />
+    <Compile Include="Functions\Connection2D\Transform\ImageToColumn.cs" />
     <Compile Include="Functions\Connection3D\Convolution\ChannelwiseConvolution.cs" />
     <Compile Include="Functions\Connection3D\Convolution\ChannelwiseDeconvolution.cs" />
     <Compile Include="Functions\Connection3D\Convolution\ChannelwiseKernelProduct.cs" />
@@ -451,6 +453,8 @@
     <Compile Include="Links\Connection1D\Convolution\PointwiseDeconvolution.cs" />
     <Compile Include="Links\Connection1D\Pool\StridePooling.cs" />
     <Compile Include="Links\Connection2D\Pool\StridePooling.cs" />
+    <Compile Include="Links\Connection2D\Transform\ColumnToImage.cs" />
+    <Compile Include="Links\Connection2D\Transform\ImageToColumn.cs" />
     <Compile Include="Links\Connection3D\Convolution\ChannelwiseConvolution.cs" />
     <Compile Include="Links\Connection3D\Convolution\ChannelwiseDeconvolution.cs" />
     <Compile Include="Links\Connection3D\Convolution\Convolution.cs" />
@@ -710,6 +714,8 @@
     <Compile Include="Operators\Connection2D\Convolution\PointwiseKernelProduct.cs" />
     <Compile Include="Operators\Connection2D\Pool\StridePooling.cs" />
     <Compile Include="Operators\Connection2D\Pool\StrideUnpooling.cs" />
+    <Compile Include="Operators\Connection2D\Transform\ColumnToImage.cs" />
+    <Compile Include="Operators\Connection2D\Transform\ImageToColumn.cs" />
     <Compile Include="Operators\Connection3D\Convolution\ChannelwiseConvolution.cs" />
     <Compile Include="Operators\Connection3D\Convolution\ChannelwiseDeconvolution.cs" />
     <Compile Include="Operators\Connection3D\Convolution\ChannelwiseKernelProduct.cs" />

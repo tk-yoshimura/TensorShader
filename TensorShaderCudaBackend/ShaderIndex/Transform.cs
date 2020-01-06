@@ -90,5 +90,49 @@ namespace TensorShaderCudaBackend {
             
             shader.Execute(stream, inmap, outmap, outwidth, outheight, outdepth, batch);
         }
+
+        /// <summary>ColumnToImage変換</summary>
+        public static void ColumnToImage2D(uint channels, uint inwidth, uint inheight, 
+                                           uint batch, uint kwidth, uint kheight, 
+                                           CudaArray<float> inmap, CudaArray<float> outmap,
+                                           Stream stream = null) {
+
+            string key = $"column_to_image_2d {nameof(channels)}={channels} " +
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Transform.ColumnToImage2D(channels, kwidth, kheight));
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, inwidth, inheight, batch);
+        }
+
+        /// <summary>ImageToColumn変換</summary>
+        public static void ImageToColumn2D(uint channels, uint inwidth, uint inheight, 
+                                           uint batch, uint kwidth, uint kheight, 
+                                           CudaArray<float> inmap, CudaArray<float> outmap,
+                                           Stream stream = null) {
+
+            string key = $"image_to_column_2d {nameof(channels)}={channels} " +
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight}";
+            
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Transform.ImageToColumn2D(channels, kwidth, kheight));
+            }
+
+            Shader shader = shaders[key];
+
+            if(stream == null) { 
+                stream = Shader.DefaultStream;
+            }
+            
+            shader.Execute(stream, inmap, outmap, inwidth, inheight, batch);
+        }
     } 
 }
