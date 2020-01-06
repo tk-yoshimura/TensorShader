@@ -13,14 +13,15 @@ namespace TensorShaderUtil.Iterator {
 
         /// <summary>次のインデクサ</summary>
         public override int[] Next() {
+            IncreaseIteration();
+
             if (pos + NumBatches >= Counts) {
-                Epoch++;
+                IncreaseEpoch();
             }
 
             int[] batch_indexes = (new int[NumBatches]).Select((_, idx) => (pos + idx) % Counts).ToArray();
 
             pos = (pos + NumBatches) % Counts;
-            Iteration++;
 
             return batch_indexes;
         }

@@ -19,17 +19,24 @@ namespace TensorShaderUtil.Iterator {
 
         /// <summary>次のインデクサ</summary>
         public override int[] Next() {
+            IncreaseIteration();
+
             if (pos + NumBatches > Counts) {
-                Shuffle(indexes, random);
+                if(pos != Counts) { 
+                    IncreaseEpoch();
+                }
                 pos = 0;
-                Epoch++;
+                Shuffle(indexes, random);
             }
 
             int[] batch_indexes = new int[NumBatches];
             Array.Copy(indexes, pos, batch_indexes, 0, NumBatches);
 
             pos += NumBatches;
-            Iteration++;
+
+            if(pos == Counts) { 
+                IncreaseEpoch();
+            }
 
             return batch_indexes;
         }
