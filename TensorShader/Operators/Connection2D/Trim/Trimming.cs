@@ -56,7 +56,7 @@ namespace TensorShader.Operators.Connection2D {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            TensorShaderCudaBackend.Trimming.Trimming2D((uint)Channels, (uint)outmap.Width, (uint)outmap.Height, (uint)Batch, 
+            TensorShaderCudaBackend.Trimming.Trimming2D((uint)Channels, (uint)outmap.Width, (uint)outmap.Height, (uint)Batch,
                                                         (uint)TrimLeft, (uint)TrimRight, (uint)TrimTop, (uint)TrimBottom,
                                                         inmap.Buffer, outmap.Buffer);
         }

@@ -33,7 +33,7 @@ namespace TensorShader.Operators.Connection3D {
 
             TensorShaderCudaBackend.Convolution.PointwiseKernelProduct((uint)InChannels, (uint)OutChannels,
                                                                         (uint)(inmap1.Width * inmap1.Height * inmap1.Depth),
-                                                                        (uint)Batch, 
+                                                                        (uint)Batch,
                                                                         inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);
         }
 

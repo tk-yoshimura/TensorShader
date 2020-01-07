@@ -61,8 +61,8 @@ namespace TensorShaderTest.Operators.Connection1D {
 
             int batch = 3;
             int channels = 49;
-            int kwidth = 5; 
-            int inwidth = 125; 
+            int kwidth = 5;
+            int inwidth = 125;
             int outwidth = inwidth - kwidth + 1;
 
             float[] xval = (new float[inwidth * channels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
@@ -111,7 +111,7 @@ namespace TensorShaderTest.Operators.Connection1D {
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, gy_tensor, gw_tensor);
-            
+
             Cuda.Profiler.Stop();
         }
 
@@ -157,9 +157,9 @@ namespace TensorShaderTest.Operators.Connection1D {
             Filter1D gw = Reference(x, gy, kwidth);
 
             float[] gw_expect = {
-                1.03949998e-02f,  1.04499999e-02f,  1.04830004e-02f,  1.04940003e-02f,  1.04830004e-02f,  1.04499999e-02f,  1.03949998e-02f, 
-                1.35519998e-02f,  1.35300001e-02f,  1.34859998e-02f,  1.34199997e-02f,  1.33320000e-02f,  1.32219996e-02f,  1.30899996e-02f, 
-                1.67089999e-02f,  1.66100003e-02f,  1.64889991e-02f,  1.63460001e-02f,  1.61809996e-02f,  1.59939993e-02f,  1.57849994e-02f, 
+                1.03949998e-02f,  1.04499999e-02f,  1.04830004e-02f,  1.04940003e-02f,  1.04830004e-02f,  1.04499999e-02f,  1.03949998e-02f,
+                1.35519998e-02f,  1.35300001e-02f,  1.34859998e-02f,  1.34199997e-02f,  1.33320000e-02f,  1.32219996e-02f,  1.30899996e-02f,
+                1.67089999e-02f,  1.66100003e-02f,  1.64889991e-02f,  1.63460001e-02f,  1.61809996e-02f,  1.59939993e-02f,  1.57849994e-02f,
             };
 
             float[] gw_actual = gw.ToArray();

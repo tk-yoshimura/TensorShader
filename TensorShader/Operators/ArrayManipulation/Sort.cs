@@ -53,8 +53,8 @@ namespace TensorShader.Operators.ArrayManipulation {
                 Parallel.For(0, threads, (tidx) => {
                     for (int j = tidx; ; j += threads) {
                         int i = j % h + (j / h) * 2 * h;
-                        if(i + h >= length) break;
-                        
+                        if (i + h >= length) break;
+
                         if (x[i] > x[i + h]) {
                             int temp = x[i]; x[i] = x[i + h]; x[i + h] = temp;
                         }
@@ -64,8 +64,8 @@ namespace TensorShader.Operators.ArrayManipulation {
                 Parallel.For(0, threads, (tidx) => {
                     for (int j = tidx; ; j += threads) {
                         int i = j % h + (j / h) * 2 * h + h;
-                        if(i + h >= length) break;
-                        
+                        if (i + h >= length) break;
+
                         if (x[i] > x[i + h]) {
                             int temp = x[i]; x[i] = x[i + h]; x[i + h] = temp;
                         }
@@ -74,14 +74,14 @@ namespace TensorShader.Operators.ArrayManipulation {
             }
 
             bool is_swaped = true;
-            while (is_swaped) { 
+            while (is_swaped) {
                 is_swaped = false;
 
                 Parallel.For(0, threads, (tidx) => {
                     for (int j = tidx; ; j += threads) {
                         int i = j * 2;
-                        if(i + 1 >= length) break;
-                        
+                        if (i + 1 >= length) break;
+
                         if (x[i] > x[i + 1]) {
                             int temp = x[i]; x[i] = x[i + 1]; x[i + 1] = temp;
                             is_swaped = true;
@@ -92,8 +92,8 @@ namespace TensorShader.Operators.ArrayManipulation {
                 Parallel.For(0, threads, (tidx) => {
                     for (int j = tidx; ; j += threads) {
                         int i = j * 2 + 1;
-                        if(i + 1 >= length) break;
-                        
+                        if (i + 1 >= length) break;
+
                         if (x[i] > x[i + 1]) {
                             int temp = x[i]; x[i] = x[i + 1]; x[i + 1] = temp;
                             is_swaped = true;

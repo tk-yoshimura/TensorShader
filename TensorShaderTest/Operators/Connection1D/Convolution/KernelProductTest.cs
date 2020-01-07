@@ -63,8 +63,8 @@ namespace TensorShaderTest.Operators.Connection1D {
 
             int batch = 3;
             int inchannels = 49, outchannels = 50;
-            int kwidth = 5; 
-            int inwidth = 125; 
+            int kwidth = 5;
+            int inwidth = 125;
             int outwidth = inwidth - kwidth + 1;
 
             float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
@@ -113,7 +113,7 @@ namespace TensorShaderTest.Operators.Connection1D {
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, gy_tensor, gw_tensor);
-            
+
             Cuda.Profiler.Stop();
         }
 
@@ -145,7 +145,7 @@ namespace TensorShaderTest.Operators.Connection1D {
 
             return w;
         }
-        
+
         [TestMethod]
         public void ReferenceTest() {
             int inchannels = 7, outchannels = 11, kwidth = 3, inwidth = 13;

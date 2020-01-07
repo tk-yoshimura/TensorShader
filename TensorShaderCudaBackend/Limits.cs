@@ -26,7 +26,7 @@
 
         /// <summary>チャネル数チェック</summary>
         public static bool CheckChannels(params uint[] channels) {
-            foreach(uint ch in channels) {
+            foreach (uint ch in channels) {
                 if (ch < 1 || ch > Channels) {
                     return false;
                 }
@@ -58,7 +58,7 @@
         /// <summary>カーネルサイズチェック</summary>
         public static bool CheckKernelSize(params uint[] ksizes) {
             uint prod = 1;
-            
+
             foreach (uint ksize in ksizes) {
                 if ((ksize & 1) != 1) {
                     return false;
@@ -74,10 +74,10 @@
             return true;
         }
 
-        
+
         /// <summary>倍数チェック</summary>
         public static bool CheckMultipleNum(uint multiple, params uint[] nums) {
-            foreach(uint num in nums) {
+            foreach (uint num in nums) {
                 if ((num % multiple) != 0) {
                     return false;
                 }

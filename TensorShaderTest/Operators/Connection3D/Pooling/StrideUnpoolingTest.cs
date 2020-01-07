@@ -17,9 +17,9 @@ namespace TensorShaderTest.Operators.Connection3D {
             foreach (int batch in new int[] { 1, 2, 3 }) {
                 foreach (int channels in new int[] { 1, 2, 3, 5 }) {
                     foreach (int stride in new int[] { 2, 3, 4 }) {
-                        foreach (int inwidth in new int[] { stride, 5, 7, 8, 11 }) {
+                        foreach (int indepth in new int[] { stride, 5, 7, 8, 11 }) {
                             foreach (int inheight in new int[] { stride, 5, 7, 8, 11 }) {
-                                foreach (int indepth in new int[] { stride, 5, 7, 8, 11 }) {
+                                foreach (int inwidth in new int[] { stride, 5, 7, 8, 11 }) {
                                     int outwidth = inwidth / stride, outheight = inheight / stride, outdepth = indepth / stride;
 
                                     float[] yval = (new float[outwidth * outheight * outdepth * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();

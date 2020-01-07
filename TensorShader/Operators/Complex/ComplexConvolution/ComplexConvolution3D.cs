@@ -29,7 +29,7 @@ namespace TensorShader.Operators.ComplexConvolution {
         public int Batch { private set; get; }
 
         /// <summary>コンストラクタ</summary>
-        public ComplexConvolution3D(int inwidth, int inheight, int indepth, int inchannels, int outchannels, int kwidth, int kheight, int kdepth,  bool gradmode = false, int batch = 1) {
+        public ComplexConvolution3D(int inwidth, int inheight, int indepth, int inchannels, int outchannels, int kwidth, int kheight, int kdepth, bool gradmode = false, int batch = 1) {
             if (inchannels % 2 != 0) {
                 throw new ArgumentException(ExceptionMessage.ArgumentMultiple(nameof(inchannels), inchannels, 2));
             }
@@ -64,7 +64,7 @@ namespace TensorShader.Operators.ComplexConvolution {
 
             TensorShaderCudaBackend.Complex.Convolution3D((uint)InChannels, (uint)OutChannels,
                                                           (uint)inmap.Width, (uint)inmap.Height, (uint)inmap.Depth,
-                                                          (uint)Batch, 
+                                                          (uint)Batch,
                                                           (uint)KernelWidth, (uint)KernelHeight, (uint)KernelDepth,
                                                           GradMode,
                                                           inmap.Buffer, infilter.Buffer, outmap.Buffer);

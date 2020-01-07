@@ -46,7 +46,7 @@ namespace TensorShader.Functions.ComplexConvolution {
         /// <summary>コンストラクタ</summary>
         public ComplexConvolution3D(Shape inshape, Shape kernelshape, bool gradmode)
             : base(inputs: 2, outputs: 1, allow_resubstitution: false) {
-            
+
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 5) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 5), ("Type", ShapeType.Map)));
             }
@@ -66,7 +66,7 @@ namespace TensorShader.Functions.ComplexConvolution {
             if (inshape.Channels != kernelshape.InChannels) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(kernelshape, ("InChannels", inshape.Channels)));
             }
-            
+
             int outwidth = inshape.Width - kernelshape.Width + 1;
             int outheight = inshape.Height - kernelshape.Height + 1;
             int outdepth = inshape.Depth - kernelshape.Depth + 1;

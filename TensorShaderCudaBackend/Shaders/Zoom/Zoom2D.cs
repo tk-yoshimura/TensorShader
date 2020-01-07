@@ -34,15 +34,15 @@ namespace TensorShaderCudaBackend.Shaders.Zoom {
             uint inwidth = (args[2] as uint?).Value;
             uint inheight = (args[3] as uint?).Value;
             uint batches = (args[4] as uint?).Value;
-            
+
             uint outwidth = inwidth * Scale, outheight = inheight * Scale;
 
             for (uint th = 0; th < batches; th++) {
                 Kernel.Execute(
-                    indexes:(Channels, inwidth, inheight),
-                    dynamic_shared_memory_bytes: 0, 
+                    indexes: (Channels, inwidth, inheight),
+                    dynamic_shared_memory_bytes: 0,
                     stream,
-                    inmap.ElementPtr(th * Channels * inwidth * inheight), 
+                    inmap.ElementPtr(th * Channels * inwidth * inheight),
                     outmap.ElementPtr(th * Channels * outwidth * outheight),
                     inwidth, outwidth, inheight
                 );

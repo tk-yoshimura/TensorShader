@@ -44,12 +44,12 @@ namespace TensorShaderCudaBackend.Shaders.Pool {
             uint outwidth = inwidth / Stride, outheight = inheight / Stride, outdepth = indepth / Stride;
 
             for (uint th = 0; th < batches; th++) {
-                for(uint oz = 0; oz < outdepth; oz++) { 
+                for (uint oz = 0; oz < outdepth; oz++) {
                     Kernel.Execute(
-                        indexes:(Channels, outwidth, outheight),
-                        dynamic_shared_memory_bytes: 0, 
+                        indexes: (Channels, outwidth, outheight),
+                        dynamic_shared_memory_bytes: 0,
                         stream,
-                        inmap.ElementPtr(th * Channels * inwidth * inheight * indepth), 
+                        inmap.ElementPtr(th * Channels * inwidth * inheight * indepth),
                         outmap.ElementPtr(th * Channels * outwidth * outheight * outdepth),
                         oz,
                         inwidth, outwidth, inheight, outheight

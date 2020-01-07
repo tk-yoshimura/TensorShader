@@ -15,8 +15,8 @@ namespace TensorShaderTest.Operators.Connection2D {
             foreach (int batch in new int[] { 1, 2 }) {
                 foreach (int inchannels in new int[] { 3, 5 }) {
                     foreach (int scale in new int[] { 2, 3, 4 }) {
-                        foreach (int outwidth in new int[] { 5, 7, 11 }) {
-                            foreach (int outheight in new int[] { 5, 7, 11 }) {
+                        foreach (int outheight in new int[] { 5, 7, 11 }) {
+                            foreach (int outwidth in new int[] { 5, 7, 11 }) {
                                 int inwidth = outwidth * scale, inheight = outheight * scale, outchannels = inchannels * scale * scale;
 
                                 float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -59,7 +59,7 @@ namespace TensorShaderTest.Operators.Connection2D {
             OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight));
 
             SpaceToChannel ope = new SpaceToChannel(inwidth, inheight, inchannels, scale);
-                        
+
             Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/space_to_channel_2d.nvvp");
             Cuda.Profiler.Start();
 

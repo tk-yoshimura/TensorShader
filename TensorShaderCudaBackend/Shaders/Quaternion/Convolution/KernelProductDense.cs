@@ -16,18 +16,18 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
 
         /// <summary>転置</summary>
         public bool Transpose { private set; get; }
-        
+
         /// <summary>ブロックサイズ</summary>
         public (uint x, uint y) BlockSize { private set; get; }
 
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
-            $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " + 
+        public override sealed string Signature =>
+            $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " +
             $"{nameof(Transpose)} = {Transpose}";
-        
+
         /// <summary>コンストラクタ</summary>
-        public KernelProductDense(uint inchannels, uint outchannels, bool transpose) { 
-            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple:4, inchannels, outchannels)) {
+        public KernelProductDense(uint inchannels, uint outchannels, bool transpose) {
+            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple: 4, inchannels, outchannels)) {
                 throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
 
@@ -136,23 +136,23 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
-           
+
             uint batches = (args[3] as uint?).Value;
 
-            CudaArray<float> dfloat_filter = 
-                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index:0, InChannels * OutChannels * 8);
+            CudaArray<float> dfloat_filter =
+                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index: 0, InChannels * OutChannels * 8);
             dfloat_filter.ZerosetAsync(stream, InChannels * OutChannels * 8);
 
             Kernel.Execute(
-                indexes:(InChannels, OutChannels, batches), 
-                block:(BlockSize.x, BlockSize.y, 1),
-                dynamic_shared_memory_bytes: 0, 
+                indexes: (InChannels, OutChannels, batches),
+                block: (BlockSize.x, BlockSize.y, 1),
+                dynamic_shared_memory_bytes: 0,
                 stream,
-                inmap, 
+                inmap,
                 outmap,
                 dfloat_filter
             );
-            
+
             HorizontalAdd(InChannels * OutChannels * 4, dfloat_filter, filter, stream);
         }
 

@@ -16,7 +16,7 @@ namespace TensorShaderCudaBackend.Shaders.Padding {
         public uint PadRight { private set; get; }
 
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
+        public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(Channels)} = {Channels} " +
             $"{nameof(PadLeft)} = {PadLeft} {nameof(PadRight)} = {PadRight}";
 
@@ -41,13 +41,13 @@ namespace TensorShaderCudaBackend.Shaders.Padding {
             uint batches = (args[3] as uint?).Value;
 
             uint outwidth = inwidth + PadLeft + PadRight;
-            
+
             for (uint th = 0; th < batches; th++) {
                 Kernel.Execute(
-                    indexes:(Channels, outwidth),
-                    dynamic_shared_memory_bytes: 0, 
+                    indexes: (Channels, outwidth),
+                    dynamic_shared_memory_bytes: 0,
                     stream,
-                    inmap.ElementPtr(th * Channels * inwidth), 
+                    inmap.ElementPtr(th * Channels * inwidth),
                     outmap.ElementPtr(th * Channels * outwidth),
                     inwidth, outwidth
                 );
@@ -73,7 +73,7 @@ namespace TensorShaderCudaBackend.Shaders.Padding {
             if (!(args[0] is CudaArray<float> inmap) || inmap.Length < Channels * inwidth * batches) {
                 throw new ArgumentException(nameof(inmap));
             }
-            
+
             if (!(args[1] is CudaArray<float> outmap) || outmap.Length < Channels * outwidth * batches) {
                 throw new ArgumentException(nameof(outmap));
             }

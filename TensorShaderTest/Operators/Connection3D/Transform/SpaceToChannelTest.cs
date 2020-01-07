@@ -15,9 +15,9 @@ namespace TensorShaderTest.Operators.Connection3D {
             foreach (int batch in new int[] { 1, 2 }) {
                 foreach (int inchannels in new int[] { 3, 5 }) {
                     foreach (int scale in new int[] { 2, 3, 4 }) {
-                        foreach (int outwidth in new int[] { 5, 7, 11 }) {
+                        foreach (int outdepth in new int[] { 5, 7, 11 }) {
                             foreach (int outheight in new int[] { 5, 7, 11 }) {
-                                foreach (int outdepth in new int[] { 5, 7, 11 }) {
+                                foreach (int outwidth in new int[] { 5, 7, 11 }) {
                                     int inwidth = outwidth * scale, inheight = outheight * scale, indepth = outdepth * scale, outchannels = inchannels * scale * scale * scale;
 
                                     float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
@@ -40,7 +40,7 @@ namespace TensorShaderTest.Operators.Connection3D {
 
                                     AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{scale},{inwidth},{inheight},{indepth},{batch}");
 
-                                    Console.WriteLine($"pass: {inchannels},{scale},{inwidth},{inheight},{indepth},{batch}");
+                                    Console.WriteLine($"pass: {inchannels},{outchannels},{scale},{inwidth},{inheight},{indepth},{batch}");
 
                                 }
                             }

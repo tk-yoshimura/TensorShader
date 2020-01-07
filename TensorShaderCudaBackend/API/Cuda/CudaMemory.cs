@@ -18,13 +18,13 @@ namespace TensorShaderCudaBackend.API {
                 long bytesize = (long)((ulong)Marshal.SizeOf(typeof(T)) * count);
 
                 ErrorCode result = NativeMethods.cudaMalloc(ref ptr, bytesize);
-                if (result == ErrorCode.ErrorMemoryAllocation) { 
+                if (result == ErrorCode.ErrorMemoryAllocation) {
                     GC.Collect();
                     GC.WaitForPendingFinalizers();
-                    
-                    #if DEBUG
+
+#if DEBUG
                     Trace.WriteLine($"[{typeof(Memory).Name}.{MethodBase.GetCurrentMethod().Name}] Called finalizers");
-                    #endif
+#endif
 
                     result = NativeMethods.cudaMalloc(ref ptr, bytesize);
                 }

@@ -37,7 +37,7 @@ namespace TensorShader.Operators.Connection1D {
             TensorShaderCudaBackend.Convolution.ChannelwiseKernelProduct1D((uint)Channels,
                                                                            (uint)inmap1.Width,
                                                                            (uint)Batch,
-                                                                           (uint)KernelWidth, 
+                                                                           (uint)KernelWidth,
                                                                            inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);
         }
 

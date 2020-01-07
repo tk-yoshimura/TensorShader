@@ -18,13 +18,13 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
         public bool GradMode { private set; get; }
 
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
+        public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " +
             $"{nameof(GradMode)} = {GradMode}";
-        
+
         /// <summary>コンストラクタ</summary>
-        public Dense(uint inchannels, uint outchannels, bool gradmode) { 
-            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple:4, inchannels, outchannels)) {
+        public Dense(uint inchannels, uint outchannels, bool gradmode) {
+            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple: 4, inchannels, outchannels)) {
                 throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
 
@@ -139,17 +139,17 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
-           
+
             uint batches = (args[3] as uint?).Value;
 
-            CudaArray<float> transpose_filter = 
-                CudaArrayReserver<float>.Request(stream, filter.DeviceID, index:0, InChannels * OutChannels * 4);
+            CudaArray<float> transpose_filter =
+                CudaArrayReserver<float>.Request(stream, filter.DeviceID, index: 0, InChannels * OutChannels * 4);
 
             TransposeQuaternionKernelChannel(InChannels * 4, OutChannels * 4, 1u, filter, transpose_filter, stream);
-            
+
             Kernel.Execute(
-                indexes:(OutChannels, batches), 
-                block:(Kernel.DefaultBlockSize(OutChannels), 1),
+                indexes: (OutChannels, batches),
+                block: (Kernel.DefaultBlockSize(OutChannels), 1),
                 dynamic_shared_memory_bytes: 0, stream,
                 inmap,
                 outmap,

@@ -13,7 +13,7 @@ namespace TensorShader.Operators.QuaternionConvolution {
         /// <summary>フィルタサイズ</summary>
         /// <remarks>奇数を指定すること</remarks>
         public int KernelWidth { private set; get; }
-        
+
         /// <summary>転置</summary>
         public bool Transpose { private set; get; }
 
@@ -52,7 +52,7 @@ namespace TensorShader.Operators.QuaternionConvolution {
 
             TensorShaderCudaBackend.Quaternion.KernelProduct1D((uint)InChannels, (uint)OutChannels,
                                                                (uint)inmap1.Width,
-                                                               (uint)Batch, 
+                                                               (uint)Batch,
                                                                (uint)KernelWidth,
                                                                Transpose,
                                                                inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);

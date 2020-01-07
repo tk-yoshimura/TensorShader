@@ -16,7 +16,7 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
         public uint Scale { private set; get; }
 
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
+        public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(Scale)} = {Scale}";
 
         /// <summary>コンストラクタ</summary>
@@ -69,12 +69,12 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
             uint batches = (args[5] as uint?).Value;
 
             for (uint th = 0; th < batches; th++) {
-                for(uint oz = 0; oz < outdepth; oz++) { 
+                for (uint oz = 0; oz < outdepth; oz++) {
                     Kernel.Execute(
-                        indexes:(OutChannels, outwidth, outheight),
-                        dynamic_shared_memory_bytes: 0, 
+                        indexes: (OutChannels, outwidth, outheight),
+                        dynamic_shared_memory_bytes: 0,
                         stream,
-                        inmap.ElementPtr(th * OutChannels * outwidth * outheight * outdepth), 
+                        inmap.ElementPtr(th * OutChannels * outwidth * outheight * outdepth),
                         outmap.ElementPtr(th * OutChannels * outwidth * outheight * outdepth),
                         oz,
                         outwidth, outheight

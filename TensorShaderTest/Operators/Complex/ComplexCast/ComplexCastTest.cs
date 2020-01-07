@@ -60,7 +60,7 @@ namespace TensorShaderTest.Operators.Complex {
             Cuda.Profiler.Start();
 
             ope.Execute(v1, v2, v3);
-            
+
             Cuda.Profiler.Stop();
         }
     }

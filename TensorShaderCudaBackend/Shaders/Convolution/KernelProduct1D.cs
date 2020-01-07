@@ -21,18 +21,18 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
         /// <summary>1スレッドで処理する対象ピクセル数</summary>
         private static uint BatchPixels => 16;
-                
+
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
-            $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " + 
+        public override sealed string Signature =>
+            $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " +
             $"{nameof(KernelWidth)} = {KernelWidth}";
-        
+
         /// <summary>コンストラクタ</summary>
-        public KernelProduct1D(uint inchannels, uint outchannels, uint kwidth) { 
+        public KernelProduct1D(uint inchannels, uint outchannels, uint kwidth) {
             if (!Limits.CheckChannels(inchannels, outchannels)) {
                 throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
-            if (!Limits.CheckKernelSize(kwidth)) { 
+            if (!Limits.CheckKernelSize(kwidth)) {
                 throw new ArgumentException(nameof(kwidth));
             }
 
@@ -103,24 +103,24 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
-           
+
             uint inwidth = (args[3] as uint?).Value;
             uint batches = (args[4] as uint?).Value;
 
             uint outwidth = inwidth + 1 - KernelWidth;
 
-            CudaArray<float> dfloat_filter = 
-                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index:0, InChannels * OutChannels * KernelWidth * 2);
+            CudaArray<float> dfloat_filter =
+                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index: 0, InChannels * OutChannels * KernelWidth * 2);
             dfloat_filter.ZerosetAsync(stream, InChannels * OutChannels * KernelWidth * 2);
 
             uint xsets = (outwidth + BatchPixels - 1) / BatchPixels;
 
             for (uint th = 0; th < batches; th++) {
                 Kernel.Execute(
-                    indexes:(InChannels, OutChannels, xsets), 
-                    block:(BlockSize.x, BlockSize.y, 1),
+                    indexes: (InChannels, OutChannels, xsets),
+                    block: (BlockSize.x, BlockSize.y, 1),
                     dynamic_shared_memory_bytes: 0, stream,
-                    inmap.ElementPtr(th * InChannels * inwidth), 
+                    inmap.ElementPtr(th * InChannels * inwidth),
                     outmap.ElementPtr(th * OutChannels * outwidth),
                     dfloat_filter,
                     outwidth

@@ -25,7 +25,7 @@ namespace MNIST {
                     string filepath = $"{dirpath_dataset}/{filename}";
                     string filepath_temp = $"{dirpath_dataset}/{filename}.download";
 
-                    if (File.Exists(filepath_temp)){
+                    if (File.Exists(filepath_temp)) {
                         File.Delete(filepath_temp);
                     }
 

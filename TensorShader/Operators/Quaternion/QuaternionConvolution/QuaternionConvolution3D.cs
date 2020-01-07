@@ -21,7 +21,7 @@ namespace TensorShader.Operators.QuaternionConvolution {
         /// <summary>フィルタサイズ</summary>
         /// <remarks>奇数を指定すること</remarks>
         public int KernelDepth { private set; get; }
-        
+
         /// <summary>勾配</summary>
         public bool GradMode { private set; get; }
 
@@ -64,7 +64,7 @@ namespace TensorShader.Operators.QuaternionConvolution {
 
             TensorShaderCudaBackend.Quaternion.Convolution3D((uint)InChannels, (uint)OutChannels,
                                                              (uint)inmap.Width, (uint)inmap.Height, (uint)inmap.Depth,
-                                                             (uint)Batch, 
+                                                             (uint)Batch,
                                                              (uint)KernelWidth, (uint)KernelHeight, (uint)KernelDepth,
                                                              GradMode,
                                                              inmap.Buffer, infilter.Buffer, outmap.Buffer);

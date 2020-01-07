@@ -15,7 +15,7 @@ namespace TensorShader.Operators.Connection2D {
 
             Tensor inmap = tensors[0], outmap = tensors[1];
 
-            TensorShaderCudaBackend.Padding.ZeroPadding2D((uint)Channels, (uint)inmap.Width, (uint)inmap.Height, (uint)Batch, 
+            TensorShaderCudaBackend.Padding.ZeroPadding2D((uint)Channels, (uint)inmap.Width, (uint)inmap.Height, (uint)Batch,
                                                           (uint)PadLeft, (uint)PadRight, (uint)PadTop, (uint)PadBottom, inmap.Buffer, outmap.Buffer);
         }
     }

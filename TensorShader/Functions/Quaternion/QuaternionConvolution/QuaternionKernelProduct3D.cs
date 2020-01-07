@@ -46,7 +46,7 @@ namespace TensorShader.Functions.QuaternionConvolution {
         /// <summary>コンストラクタ</summary>
         public QuaternionKernelProduct3D(Shape inshape, Shape outshape, int kwidth, int kheight, int kdepth, bool transpose)
             : base(inputs: 2, outputs: 1, allow_resubstitution: false) {
-            
+
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 5) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 5), ("Type", ShapeType.Map)));
             }
@@ -62,7 +62,7 @@ namespace TensorShader.Functions.QuaternionConvolution {
             if (outshape.InChannels % 4 != 0) {
                 throw new AggregateException(ExceptionMessage.TensorLengthMultiple("Channels", outshape, outshape.Channels, 4));
             }
-            
+
             this.InShape = inshape;
             this.OutShape = outshape;
             this.KernelShape = Shape.Kernel3D(inshape.Channels, outshape.Channels / 4, kwidth, kheight, kdepth);

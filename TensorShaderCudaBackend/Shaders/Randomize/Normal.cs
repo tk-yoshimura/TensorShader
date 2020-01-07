@@ -4,7 +4,7 @@
     public sealed class Normal : Randomize {
 
         /// <summary>コンストラクタ</summary>
-        public Normal(){
+        public Normal() {
             string code = $@"
             __global__ void normal_random(float *y, unsigned int length, unsigned int warps,
                                           unsigned int seed1, unsigned int seed2, unsigned int seed3) {{

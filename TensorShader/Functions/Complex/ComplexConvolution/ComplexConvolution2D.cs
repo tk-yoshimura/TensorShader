@@ -39,7 +39,7 @@ namespace TensorShader.Functions.ComplexConvolution {
 
         /// <summary>カーネル形状</summary>
         public Shape KernelShape { private set; get; }
-        
+
         /// <summary>勾配</summary>
         public bool GradMode { private set; get; }
 

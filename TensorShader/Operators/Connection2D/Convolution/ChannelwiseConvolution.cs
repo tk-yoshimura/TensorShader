@@ -41,8 +41,8 @@ namespace TensorShader.Operators.Connection2D {
             Tensor inmap = tensors[0], infilter = tensors[1], outmap = tensors[2];
 
             TensorShaderCudaBackend.Convolution.ChannelwiseConvolution2D((uint)Channels,
-                                                                         (uint)inmap.Width, (uint)inmap.Height, (uint)Batch, 
-                                                                         (uint)KernelWidth, (uint)KernelHeight, 
+                                                                         (uint)inmap.Width, (uint)inmap.Height, (uint)Batch,
+                                                                         (uint)KernelWidth, (uint)KernelHeight,
                                                                          inmap.Buffer, infilter.Buffer, outmap.Buffer);
         }
 

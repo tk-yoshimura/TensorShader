@@ -7,7 +7,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
     /// <summary>1次元畳み込み</summary>
     public sealed class Convolution1D : Shader {
-        
+
         /// <summary>入力チャネル数</summary>
         public uint InChannels { private set; get; }
 
@@ -16,18 +16,18 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
         /// <summary>フィルタサイズ</summary>
         public uint KernelWidth { private set; get; }
-                        
+
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
+        public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " +
             $"{nameof(KernelWidth)} = {KernelWidth}";
-        
+
         /// <summary>コンストラクタ</summary>
         public Convolution1D(uint inchannels, uint outchannels, uint kwidth) {
             if (!Limits.CheckChannels(inchannels, outchannels)) {
                 throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
-            if (!Limits.CheckKernelSize(kwidth)) { 
+            if (!Limits.CheckKernelSize(kwidth)) {
                 throw new ArgumentException(nameof(kwidth));
             }
 
@@ -92,24 +92,24 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
-           
+
             uint inwidth = (args[3] as uint?).Value;
             uint batches = (args[4] as uint?).Value;
 
             uint outwidth = inwidth + 1 - KernelWidth;
 
-            CudaArray<float> transpose_filter = 
-                CudaArrayReserver<float>.Request(stream, filter.DeviceID, index:0, InChannels * OutChannels * KernelWidth);
+            CudaArray<float> transpose_filter =
+                CudaArrayReserver<float>.Request(stream, filter.DeviceID, index: 0, InChannels * OutChannels * KernelWidth);
 
             TransposeKernelChannel(InChannels, OutChannels, KernelWidth, filter, transpose_filter, stream);
 
             for (uint th = 0; th < batches; th++) {
                 Kernel.Execute(
-                    indexes:(OutChannels, outwidth), 
-                    block:(Kernel.DefaultBlockSize(OutChannels), 1),
-                    dynamic_shared_memory_bytes: 0, 
+                    indexes: (OutChannels, outwidth),
+                    block: (Kernel.DefaultBlockSize(OutChannels), 1),
+                    dynamic_shared_memory_bytes: 0,
                     stream,
-                    inmap.ElementPtr(th * InChannels * inwidth), 
+                    inmap.ElementPtr(th * InChannels * inwidth),
                     outmap.ElementPtr(th * OutChannels * outwidth),
                     transpose_filter
                 );

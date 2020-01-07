@@ -58,7 +58,7 @@ namespace TensorShader.Operators.TrivectorConvolution {
 
             TensorShaderCudaBackend.Trivector.Convolution2D((uint)InChannels, (uint)OutChannels,
                                                             (uint)inmap.Width, (uint)inmap.Height,
-                                                            (uint)Batch, 
+                                                            (uint)Batch,
                                                             (uint)KernelWidth, (uint)KernelHeight,
                                                             GradMode,
                                                             inmap.Buffer, infilter.Buffer, outmap.Buffer);

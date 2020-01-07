@@ -21,13 +21,13 @@ namespace TensorShaderTest.Operators.Connection2D {
                                     int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
 
                                     float[] xval = (new float[inwidth * inheight * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                                    
+
                                     Map2D x = new Map2D(channels, inwidth, inheight, batch, xval);
 
                                     Map2D y = Reference(x, kwidth, kheight);
 
                                     OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, inwidth, inheight, batch), xval);
-                                    
+
                                     OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(new Shape(ShapeType.Column, kwidth * kheight, channels, outwidth, outheight, batch));
 
                                     ImageToColumn ope = new ImageToColumn(inwidth, inheight, channels, kwidth, kheight, batch);
@@ -58,7 +58,7 @@ namespace TensorShaderTest.Operators.Connection2D {
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1;
 
             OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, inwidth, inheight));
-            
+
             OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(new Shape(ShapeType.Column, ksize * ksize, channels, outwidth, outheight, 1));
 
             ImageToColumn ope = new ImageToColumn(inwidth, inheight, channels, ksize, ksize);
@@ -67,7 +67,7 @@ namespace TensorShaderTest.Operators.Connection2D {
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor);
-            
+
             Cuda.Profiler.Stop();
         }
 

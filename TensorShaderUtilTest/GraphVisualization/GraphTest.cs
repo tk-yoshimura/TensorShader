@@ -13,7 +13,7 @@ namespace TensorShaderUtilTest.GraphVisualization {
 
             VariableField x = new Tensor(Shape.Map2D(inchannels, inwidth, inheight, batch));
 
-            Layer layer = new Convolution2D(inchannels, outchannels, kwidth, kheight, use_bias:true, pad_mode:PaddingMode.Edge, "conv");
+            Layer layer = new Convolution2D(inchannels, outchannels, kwidth, kheight, use_bias: true, pad_mode: PaddingMode.Edge, "conv");
 
             Field y = layer.Forward(x);
 
@@ -22,10 +22,10 @@ namespace TensorShaderUtilTest.GraphVisualization {
             Assert.AreEqual(9, nodes.Length);
             Assert.AreEqual(8, edges.Length);
 
-            foreach(var node in nodes) {
+            foreach (var node in nodes) {
                 Console.WriteLine(node.Name);
             }
-            foreach(var edge in edges) {
+            foreach (var edge in edges) {
                 Console.WriteLine($"{edge.InNode.Name} -> {edge.OutNode.Name}");
             }
 

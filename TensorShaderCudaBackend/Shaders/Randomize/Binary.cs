@@ -6,8 +6,8 @@ namespace TensorShaderCudaBackend.Shaders.Randomize {
     public sealed class Binary : Randomize {
 
         /// <summary>コンストラクタ</summary>
-        public Binary() : 
-            base(exparams : 1){
+        public Binary() :
+            base(exparams: 1) {
             string code = $@"
             __global__ void binary_random(float *y, unsigned int length, unsigned int warps,
                                            unsigned int seed1, unsigned int seed2, unsigned int seed3, float thr) {{
@@ -40,7 +40,7 @@ namespace TensorShaderCudaBackend.Shaders.Randomize {
 
         /// <summary>実行</summary>
         public override void Execute(Stream stream, params object[] args) {
-            if(args.Length != 4){
+            if (args.Length != 4) {
                 throw new ArgumentException(nameof(args));
             }
 

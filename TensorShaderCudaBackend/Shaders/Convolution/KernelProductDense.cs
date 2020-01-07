@@ -16,13 +16,13 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
         /// <summary>ブロックサイズ</summary>
         public (uint x, uint y) BlockSize { private set; get; }
-                
+
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
+        public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels}";
-        
+
         /// <summary>コンストラクタ</summary>
-        public KernelProductDense(uint inchannels, uint outchannels) { 
+        public KernelProductDense(uint inchannels, uint outchannels) {
             if (!Limits.CheckChannels(inchannels, outchannels)) {
                 throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
@@ -77,20 +77,20 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
         /// <summary>実行</summary>
         public override void Execute(Stream stream, params object[] args) {
             CheckArgument(args);
-            
+
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
-           
+
             uint batches = (args[3] as uint?).Value;
 
-            CudaArray<float> dfloat_filter = 
-                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index:0, InChannels * OutChannels * 2);
+            CudaArray<float> dfloat_filter =
+                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index: 0, InChannels * OutChannels * 2);
             dfloat_filter.ZerosetAsync(stream, InChannels * OutChannels * 2);
 
             Kernel.Execute(
-                indexes:(InChannels, OutChannels, batches), 
-                block:(BlockSize.x, BlockSize.y, 1),
+                indexes: (InChannels, OutChannels, batches),
+                block: (BlockSize.x, BlockSize.y, 1),
                 dynamic_shared_memory_bytes: 0, stream,
                 inmap,
                 outmap,

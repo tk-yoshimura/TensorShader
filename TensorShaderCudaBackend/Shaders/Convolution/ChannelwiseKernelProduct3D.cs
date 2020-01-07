@@ -28,18 +28,18 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
         /// <summary>1スレッドで処理する対象ピクセル数</summary>
         private static uint BatchPixels => 16;
-                
+
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
-            $"{GetType().Name.Split(',').Last()} {nameof(Channels)} = {Channels} " + 
+        public override sealed string Signature =>
+            $"{GetType().Name.Split(',').Last()} {nameof(Channels)} = {Channels} " +
             $"{nameof(KernelWidth)} = {KernelWidth} {nameof(KernelHeight)} = {KernelHeight} {nameof(KernelDepth)} = {KernelDepth}";
-        
+
         /// <summary>コンストラクタ</summary>
-        public ChannelwiseKernelProduct3D(uint channels, uint kwidth, uint kheight, uint kdepth) { 
+        public ChannelwiseKernelProduct3D(uint channels, uint kwidth, uint kheight, uint kdepth) {
             if (!Limits.CheckChannels(channels)) {
                 throw new ArgumentException(nameof(channels));
             }
-            if (!Limits.CheckKernelSize(kwidth, kheight, kdepth)) { 
+            if (!Limits.CheckKernelSize(kwidth, kheight, kdepth)) {
                 throw new ArgumentException($"{nameof(kwidth)}, {nameof(kheight)}, {nameof(kdepth)}");
             }
 
@@ -107,7 +107,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
-           
+
             uint inwidth = (args[3] as uint?).Value;
             uint inheight = (args[4] as uint?).Value;
             uint indepth = (args[5] as uint?).Value;
@@ -117,8 +117,8 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             uint outheight = inheight + 1 - KernelHeight;
             uint outdepth = indepth + 1 - KernelDepth;
 
-            CudaArray<float> dfloat_filter = 
-                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index:0, Channels * KernelWidth * KernelHeight * KernelDepth * 2);
+            CudaArray<float> dfloat_filter =
+                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index: 0, Channels * KernelWidth * KernelHeight * KernelDepth * 2);
             dfloat_filter.ZerosetAsync(stream, Channels * KernelWidth * KernelHeight * KernelDepth * 2);
 
             uint mul_per_line = Channels * KernelWidth * KernelHeight * KernelDepth * outwidth;
@@ -131,16 +131,16 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             uint xsets = (outwidth + BatchPixels - 1) / BatchPixels;
 
             for (uint th = 0; th < batches; th++) {
-                for (uint oz = 0; oz < outdepth; oz++) { 
+                for (uint oz = 0; oz < outdepth; oz++) {
                     for (uint oy_offset = 0; oy_offset < outheight; oy_offset += lines_per_execute) {
                         uint lines = Math.Min(lines_per_execute, outheight - oy_offset);
 
                         Kernel.Execute(
-                            indexes:(Channels, xsets, lines), 
-                            block:(Kernel.DefaultBlockSize(Channels), 1, 1),
-                            dynamic_shared_memory_bytes: 0, 
+                            indexes: (Channels, xsets, lines),
+                            block: (Kernel.DefaultBlockSize(Channels), 1, 1),
+                            dynamic_shared_memory_bytes: 0,
                             stream,
-                            inmap.ElementPtr(th * Channels * inwidth * inheight * indepth), 
+                            inmap.ElementPtr(th * Channels * inwidth * inheight * indepth),
                             outmap.ElementPtr(th * Channels * outwidth * outheight * outdepth),
                             dfloat_filter,
                             oy_offset, oz,
@@ -149,7 +149,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                     }
                 }
             }
-            
+
             HorizontalAdd(Channels * KernelWidth * KernelHeight * KernelDepth, dfloat_filter, filter, stream);
         }
 

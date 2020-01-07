@@ -16,7 +16,7 @@ namespace TensorShaderCudaBackend.Shaders.Trimming {
         public uint TrimRight { private set; get; }
 
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
+        public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(Channels)} = {Channels} " +
             $"{nameof(TrimLeft)} = {TrimLeft} {nameof(TrimRight)} = {TrimRight}";
 
@@ -64,10 +64,10 @@ namespace TensorShaderCudaBackend.Shaders.Trimming {
 
             for (uint th = 0; th < batches; th++) {
                 Kernel.Execute(
-                    indexes:(Channels, outwidth),
-                    dynamic_shared_memory_bytes: 0, 
+                    indexes: (Channels, outwidth),
+                    dynamic_shared_memory_bytes: 0,
                     stream,
-                    inmap.ElementPtr(th * Channels * inwidth), 
+                    inmap.ElementPtr(th * Channels * inwidth),
                     outmap.ElementPtr(th * Channels * outwidth),
                     outwidth
                 );

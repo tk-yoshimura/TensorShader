@@ -26,19 +26,19 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
 
         /// <summary>実行あたりの積数(2^25=33554432‬)</summary>
         public static uint MulPerExecute => 0x2000000;
-                
+
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
+        public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " +
             $"{nameof(KernelWidth)} = {KernelWidth} {nameof(KernelHeight)} = {KernelHeight} {nameof(KernelDepth)} = {KernelDepth} " +
             $"{nameof(GradMode)} = {GradMode}";
-        
+
         /// <summary>コンストラクタ</summary>
-        public Deconvolution3D(uint inchannels, uint outchannels, uint kwidth, uint kheight, uint kdepth, bool gradmode) { 
-            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple:4, inchannels, outchannels)) {
+        public Deconvolution3D(uint inchannels, uint outchannels, uint kwidth, uint kheight, uint kdepth, bool gradmode) {
+            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple: 4, inchannels, outchannels)) {
                 throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
-            if (!Limits.CheckKernelSize(kwidth, kheight, kdepth)) { 
+            if (!Limits.CheckKernelSize(kwidth, kheight, kdepth)) {
                 throw new ArgumentException($"{nameof(kwidth)}, {nameof(kheight)}, {nameof(kdepth)}");
             }
 
@@ -180,7 +180,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
-           
+
             uint inwidth = (args[3] as uint?).Value;
             uint inheight = (args[4] as uint?).Value;
             uint indepth = (args[5] as uint?).Value;

@@ -27,16 +27,16 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
         public static uint MulPerExecute => 0x2000000;
 
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
+        public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " +
             $"{nameof(KernelWidth)} = {KernelWidth} {nameof(KernelHeight)} = {KernelHeight} {nameof(GradMode)} = {GradMode}";
-        
+
         /// <summary>コンストラクタ</summary>
-        public Convolution2D(uint inchannels, uint outchannels, uint kwidth, uint kheight, bool gradmode) { 
-            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple:2, inchannels, outchannels)) {
+        public Convolution2D(uint inchannels, uint outchannels, uint kwidth, uint kheight, bool gradmode) {
+            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple: 2, inchannels, outchannels)) {
                 throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
-            if (!Limits.CheckKernelSize(kwidth, kheight)) { 
+            if (!Limits.CheckKernelSize(kwidth, kheight)) {
                 throw new ArgumentException($"{nameof(kwidth)}, {nameof(kheight)}");
             }
 
@@ -131,7 +131,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
-           
+
             uint inwidth = (args[3] as uint?).Value;
             uint inheight = (args[4] as uint?).Value;
             uint batches = (args[5] as uint?).Value;
@@ -143,20 +143,20 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
 
             uint lines_per_execute = MulPerExecute / mul_per_line + 1;
 
-            CudaArray<float> transpose_filter = 
-                CudaArrayReserver<float>.Request(stream, filter.DeviceID, index:0, InChannels * OutChannels * KernelWidth * KernelHeight * 2);
+            CudaArray<float> transpose_filter =
+                CudaArrayReserver<float>.Request(stream, filter.DeviceID, index: 0, InChannels * OutChannels * KernelWidth * KernelHeight * 2);
 
             TransposeComplexKernelChannel(InChannels * 2, OutChannels * 2, KernelWidth * KernelHeight, filter, transpose_filter, stream);
-            
+
             for (uint th = 0; th < batches; th++) {
                 for (uint oy_offset = 0; oy_offset < outheight; oy_offset += lines_per_execute) {
                     uint lines = Math.Min(lines_per_execute, outheight - oy_offset);
 
                     Kernel.Execute(
-                        indexes:(OutChannels, outwidth, lines), 
-                        block:(Kernel.DefaultBlockSize(OutChannels), 1, 1),
+                        indexes: (OutChannels, outwidth, lines),
+                        block: (Kernel.DefaultBlockSize(OutChannels), 1, 1),
                         dynamic_shared_memory_bytes: 0, stream,
-                        inmap.ElementPtr(th * InChannels * inwidth * inheight * 2), 
+                        inmap.ElementPtr(th * InChannels * inwidth * inheight * 2),
                         outmap.ElementPtr(th * OutChannels * outwidth * outheight * 2),
                         transpose_filter,
                         oy_offset,

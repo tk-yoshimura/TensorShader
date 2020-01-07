@@ -141,7 +141,7 @@ namespace TensorShaderTest.Operators.Trivector {
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor, w_tensor, gw_tensor);
-            
+
             Cuda.Profiler.Stop();
         }
 

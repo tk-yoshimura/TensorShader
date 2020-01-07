@@ -64,7 +64,7 @@ namespace TensorShader.Operators.QuaternionConvolution {
 
             TensorShaderCudaBackend.Quaternion.Deconvolution3D((uint)InChannels, (uint)OutChannels,
                                                                (uint)inmap.Width, (uint)inmap.Height, (uint)inmap.Depth,
-                                                               (uint)Batch, 
+                                                               (uint)Batch,
                                                                (uint)KernelWidth, (uint)KernelHeight, (uint)KernelDepth,
                                                                GradMode,
                                                                inmap.Buffer, infilter.Buffer, outmap.Buffer);

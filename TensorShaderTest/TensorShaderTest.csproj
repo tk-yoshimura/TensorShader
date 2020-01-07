@@ -228,6 +228,8 @@
     <Compile Include="Links\Connection1D\Pool\AveragePoolingTest.cs" />
     <Compile Include="Links\Connection1D\Pool\MaxPoolingTest.cs" />
     <Compile Include="Links\Connection1D\Transform\ChannelToSpaceTest.cs" />
+    <Compile Include="Links\Connection1D\Transform\ColumnToImageTest.cs" />
+    <Compile Include="Links\Connection1D\Transform\ImageToColumnTest.cs" />
     <Compile Include="Links\Connection1D\Transform\SpaceToChannelTest.cs" />
     <Compile Include="Links\Connection1D\Trim\TrimmingTest.cs" />
     <Compile Include="Links\Connection1D\Zoom\LinearZoomTest.cs" />
@@ -247,6 +249,8 @@
     <Compile Include="Links\Connection3D\Pool\AveragePoolingTest.cs" />
     <Compile Include="Links\Connection3D\Pool\MaxPoolingTest.cs" />
     <Compile Include="Links\Connection3D\Transform\ChannelToSpaceTest.cs" />
+    <Compile Include="Links\Connection3D\Transform\ColumnToImageTest.cs" />
+    <Compile Include="Links\Connection3D\Transform\ImageToColumnTest.cs" />
     <Compile Include="Links\Connection3D\Transform\SpaceToChannelTest.cs" />
     <Compile Include="Links\Connection3D\Trim\TrimmingTest.cs" />
     <Compile Include="Links\Connection3D\Zoom\LinearZoomTest.cs" />
@@ -425,6 +429,8 @@
     <Compile Include="Operators\Connection1D\Pooling\MaxPoolingTest.cs" />
     <Compile Include="Operators\Connection1D\Pooling\MaxUnpoolingTest.cs" />
     <Compile Include="Operators\Connection1D\Transform\ChannelToSpaceTest.cs" />
+    <Compile Include="Operators\Connection1D\Transform\ColumnToImageTest.cs" />
+    <Compile Include="Operators\Connection1D\Transform\ImageToColumnTest.cs" />
     <Compile Include="Operators\Connection1D\Transform\SpaceToChannelTest.cs" />
     <Compile Include="Operators\Connection1D\Trim\TrimmingTest.cs" />
     <Compile Include="Operators\Connection1D\Zoom\LinearZoomTest.cs" />
@@ -459,6 +465,8 @@
     <Compile Include="Operators\Connection3D\Pooling\MaxPoolingTest.cs" />
     <Compile Include="Operators\Connection3D\Pooling\MaxUnpoolingTest.cs" />
     <Compile Include="Operators\Connection3D\Transform\ChannelToSpaceTest.cs" />
+    <Compile Include="Operators\Connection3D\Transform\ColumnToImageTest.cs" />
+    <Compile Include="Operators\Connection3D\Transform\ImageToColumnTest.cs" />
     <Compile Include="Operators\Connection3D\Transform\SpaceToChannelTest.cs" />
     <Compile Include="Operators\Connection3D\Trim\TrimmingTest.cs" />
     <Compile Include="Operators\Connection3D\Zoom\LinearZoomTest.cs" />

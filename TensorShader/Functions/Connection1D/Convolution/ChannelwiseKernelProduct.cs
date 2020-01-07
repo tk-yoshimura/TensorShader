@@ -43,7 +43,7 @@ namespace TensorShader.Functions.Connection1D {
         /// <summary>コンストラクタ</summary>
         public ChannelwiseKernelProduct(Shape inshape, Shape outshape, int kwidth)
             : base(inputs: 2, outputs: 1, allow_resubstitution: false) {
-            
+
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 3) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 3), ("Type", ShapeType.Map)));
             }

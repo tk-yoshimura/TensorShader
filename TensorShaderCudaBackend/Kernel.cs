@@ -32,7 +32,7 @@ namespace TensorShaderCudaBackend {
         public Kernel(string code, string entrypoint, bool debug = false) {
 
             string[] options = debug
-                               ? new string[] { Nvrtc.CompileOptions.ArchitectureTarget,  Nvrtc.CompileOptions.Debug }
+                               ? new string[] { Nvrtc.CompileOptions.ArchitectureTarget, Nvrtc.CompileOptions.Debug }
                                : new string[] { Nvrtc.CompileOptions.ArchitectureTarget };
 
             string ptx = Nvrtc.CompileProgram(code, entrypoint + ".cu", options);
@@ -173,7 +173,7 @@ namespace TensorShaderCudaBackend {
         /// <summary>既定ブロック数</summary>
         /// <remarks>常に2の冪数</remarks>
         public static uint DefaultBlockSize(uint indexes) {
-            if(indexes < 1) {
+            if (indexes < 1) {
                 throw new ArgumentException(nameof(indexes));
             }
 
@@ -206,7 +206,7 @@ namespace TensorShaderCudaBackend {
             uint block_x = DefaultBlockSize(indexes.x);
             uint block_y = Math.Min(Math.Min(MaxBlockSize / block_x, DefaultBlockSize(indexes.y)),
                                     (uint)Cuda.CurrectDeviceProperty.MaxThreadsDim[1]);
-            uint block_z = Math.Min(Math.Min(MaxBlockSize / (block_x * block_y), DefaultBlockSize(indexes.z)), 
+            uint block_z = Math.Min(Math.Min(MaxBlockSize / (block_x * block_y), DefaultBlockSize(indexes.z)),
                                     (uint)Cuda.CurrectDeviceProperty.MaxThreadsDim[2]);
 
             return (block_x, block_y, block_z);
@@ -214,24 +214,24 @@ namespace TensorShaderCudaBackend {
 
         /// <summary>グリッド数が最小化となるブロック数</summary>
         /// <remarks>常に2の冪数</remarks>
-        public static (uint x, uint y) MinimizeGridsBlockSize((uint x, uint y) indexes) { 
-            if(indexes.x < 1 || indexes.y < 1) {
+        public static (uint x, uint y) MinimizeGridsBlockSize((uint x, uint y) indexes) {
+            if (indexes.x < 1 || indexes.y < 1) {
                 throw new ArgumentException(nameof(indexes));
             }
 
             uint block_x = 1, block_y = 1;
 
-            while(block_x < indexes.x && block_x < MaxBlockSize) { 
+            while (block_x < indexes.x && block_x < MaxBlockSize) {
                 block_x *= 2;
             }
 
-            while(block_y < indexes.y && block_y < MaxBlockSize) { 
+            while (block_y < indexes.y && block_y < MaxBlockSize) {
                 block_y *= 2;
             }
 
-            while(block_x * block_y > MaxBlockSize) { 
-                if(block_x * indexes.y > block_y * indexes.x){ 
-                    block_x /= 2; 
+            while (block_x * block_y > MaxBlockSize) {
+                if (block_x * indexes.y > block_y * indexes.x) {
+                    block_x /= 2;
                 }
                 else {
                     block_y /= 2;
@@ -254,9 +254,9 @@ namespace TensorShaderCudaBackend {
 
             GC.SuppressFinalize(this);
 
-            #if DEBUG
+#if DEBUG
             Trace.WriteLine($"[{typeof(Kernel).Name}.{MethodBase.GetCurrentMethod().Name}] Disposed shader");
-            #endif
+#endif
         }
 
         /// <summary>ファイナライザ</summary>

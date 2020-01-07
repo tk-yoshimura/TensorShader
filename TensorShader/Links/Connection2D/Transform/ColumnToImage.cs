@@ -16,7 +16,7 @@ namespace TensorShader {
 
 namespace TensorShader.Links.Connection2D {
     /// <summary>ColumnToImage変換</summary>
-    public class ColumnToImage : Link {        
+    public class ColumnToImage : Link {
 
         /// <summary>フィルタサイズ</summary>
         public int KernelWidth { private set; get; }

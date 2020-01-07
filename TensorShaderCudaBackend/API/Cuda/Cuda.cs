@@ -6,7 +6,7 @@ namespace TensorShaderCudaBackend.API {
 
     /// <summary>CUDA API</summary>
     public static partial class Cuda {
-                
+
         /// <summary>カレントデバイスID</summary>
         private static int device_id = -1;
 
@@ -16,7 +16,7 @@ namespace TensorShaderCudaBackend.API {
         /// <summary>デバイスID</summary>
         public static int CurrectDeviceID {
             get {
-                if(Cuda.device_id >= 0) { 
+                if (Cuda.device_id >= 0) {
                     return Cuda.device_id;
                 }
 
@@ -123,7 +123,7 @@ namespace TensorShaderCudaBackend.API {
 
         /// <summary>デバイスメモリ容量</summary>
         public static (long total, long free) MemoryInfo {
-            get { 
+            get {
                 long total = 0, free = 0;
 
                 ErrorCode result = NativeMethods.cudaMemGetInfo(ref free, ref total);
@@ -137,7 +137,7 @@ namespace TensorShaderCudaBackend.API {
 
         /// <summary>デバイスメモリ使用量</summary>
         public static double MemoryUsage {
-            get { 
+            get {
                 long total = 0, free = 0;
 
                 ErrorCode result = NativeMethods.cudaMemGetInfo(ref free, ref total);

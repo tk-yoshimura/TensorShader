@@ -10,10 +10,10 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         public override sealed string Signature => $"{GetType().Name.Split(',').Last()}";
 
         /// <summary>実行あたりのスライド数</summary>
-        public static uint SlidesPerExecute => 0x8000; 
+        public static uint SlidesPerExecute => 0x8000;
 
         /// <summary>コンストラクタ</summary>
-        public Broadcast() { 
+        public Broadcast() {
             string code = $@"
 
             __global__ void broadcast(float *inmap, float *outmap, 
@@ -45,13 +45,13 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
             uint outmap_stride = (args[3] as uint?).Value;
             uint slides = (args[4] as uint?).Value;
 
-            for(uint s = 0; s < slides; s += SlidesPerExecute) { 
+            for (uint s = 0; s < slides; s += SlidesPerExecute) {
                 uint sl = Math.Min(SlidesPerExecute, slides - s);
 
                 Kernel.Execute(
-                    indexes:(outmap_stride, sl), 
-                    dynamic_shared_memory_bytes: 0, 
-                    stream, 
+                    indexes: (outmap_stride, sl),
+                    dynamic_shared_memory_bytes: 0,
+                    stream,
                     inmap.ElementPtr(s * inmap_stride),
                     outmap.ElementPtr(s * outmap_stride),
                     inmap_stride, outmap_stride, sl

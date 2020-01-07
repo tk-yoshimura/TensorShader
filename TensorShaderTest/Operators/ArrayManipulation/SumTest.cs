@@ -27,7 +27,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
                             vs[j] = new OverflowCheckedTensor(shape, xs[j]);
                         }
 
-                       
+
 
                         Sum ope = new Sum(shape, n);
 

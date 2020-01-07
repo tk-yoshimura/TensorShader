@@ -24,13 +24,13 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
         /// <summary>実行あたりのポイント数(2^14=16384‬)</summary>
         public static uint PointsPerExecute => 0x4000;
-                
+
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
+        public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels}";
-        
+
         /// <summary>コンストラクタ</summary>
-        public PointwiseKernelProduct(uint inchannels, uint outchannels) { 
+        public PointwiseKernelProduct(uint inchannels, uint outchannels) {
             if (!Limits.CheckChannels(inchannels, outchannels)) {
                 throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
@@ -98,26 +98,26 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
-           
+
             uint pts = (args[3] as uint?).Value;
 
-            CudaArray<float> dfloat_filter = 
-                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index:0, InChannels * OutChannels * 2);
+            CudaArray<float> dfloat_filter =
+                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index: 0, InChannels * OutChannels * 2);
             dfloat_filter.ZerosetAsync(stream, InChannels * OutChannels * 2);
 
             uint mul_per_point = InChannels * OutChannels;
             uint points_per_execute_mul = MulPerExecute / mul_per_point + 1;
             uint points_per_execute = Math.Min(PointsPerExecute, points_per_execute_mul);
-            
+
             for (uint p = 0; p < pts; p += points_per_execute) {
                 uint pl = Math.Min(points_per_execute, pts - p);
                 uint xsets = (pl + BatchPixels - 1) / BatchPixels;
 
                 Kernel.Execute(
-                    indexes:(InChannels, OutChannels, xsets), 
-                    block:(BlockSize.x, BlockSize.y, 1),
+                    indexes: (InChannels, OutChannels, xsets),
+                    block: (BlockSize.x, BlockSize.y, 1),
                     dynamic_shared_memory_bytes: 0, stream,
-                    inmap.ElementPtr(p * InChannels), 
+                    inmap.ElementPtr(p * InChannels),
                     outmap.ElementPtr(p * OutChannels),
                     dfloat_filter,
                     pl

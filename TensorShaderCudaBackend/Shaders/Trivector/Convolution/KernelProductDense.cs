@@ -22,13 +22,13 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
         public (uint x, uint y) BlockSize { private set; get; }
 
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
-            $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " + 
+        public override sealed string Signature =>
+            $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " +
             $"{nameof(Transpose)} = {Transpose}";
-        
+
         /// <summary>コンストラクタ</summary>
-        public KernelProductDense(uint inchannels, uint outchannels, bool transpose) { 
-            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple:3, inchannels, outchannels)) {
+        public KernelProductDense(uint inchannels, uint outchannels, bool transpose) {
+            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple: 3, inchannels, outchannels)) {
                 throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
 
@@ -134,24 +134,24 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter_value = args[2] as CudaArray<float>;
             CudaArray<float> filter_grad = args[3] as CudaArray<float>;
-           
+
             uint batches = (args[4] as uint?).Value;
 
-            CudaArray<float> dfloat_filter = 
-                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index:0, InChannels * OutChannels * 8);
+            CudaArray<float> dfloat_filter =
+                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index: 0, InChannels * OutChannels * 8);
             dfloat_filter.ZerosetAsync(stream, InChannels * OutChannels * 8);
 
             Kernel.Execute(
-                indexes:(InChannels, OutChannels, batches), 
-                block:(BlockSize.x, BlockSize.y, 1),
-                dynamic_shared_memory_bytes: 0, 
+                indexes: (InChannels, OutChannels, batches),
+                block: (BlockSize.x, BlockSize.y, 1),
+                dynamic_shared_memory_bytes: 0,
                 stream,
-                inmap, 
+                inmap,
                 outmap,
                 filter_value,
                 dfloat_filter
             );
-            
+
             HorizontalAdd(InChannels * OutChannels * 4, dfloat_filter, filter_grad, stream);
             MulConstant(InChannels * OutChannels * 4, 2, filter_grad, filter_grad, stream);
         }
@@ -161,7 +161,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
             if (args == null || args.Length != 5) {
                 throw new ArgumentException(nameof(args));
             }
-            
+
             if (!(args[4] is uint batches) || !Limits.CheckBatches(batches)) {
                 throw new ArgumentException(nameof(batches));
             }

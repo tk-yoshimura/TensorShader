@@ -15,7 +15,7 @@ namespace TensorShaderCudaBackend {
             public Arguments(params object[] args) {
                 int current_device_id = API.Cuda.CurrectDeviceID;
 
-                if(args.OfType<CudaArrayBase>().Any((arr) => arr.DeviceID != current_device_id)) { 
+                if (args.OfType<CudaArrayBase>().Any((arr) => arr.DeviceID != current_device_id)) {
                     throw new ArgumentException("Currently selected device ID and CUDA Array device ID do not match.");
                 }
 

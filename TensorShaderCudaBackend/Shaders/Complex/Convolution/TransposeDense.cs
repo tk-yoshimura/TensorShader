@@ -11,18 +11,18 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
 
         /// <summary>出力チャネル数</summary>
         public uint OutChannels { private set; get; }
-        
+
         /// <summary>勾配</summary>
         public bool GradMode { private set; get; }
-                
+
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
+        public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " +
             $"{nameof(GradMode)} = {GradMode}";
-        
+
         /// <summary>コンストラクタ</summary>
-        public TransposeDense(uint inchannels, uint outchannels, bool gradmode) { 
-            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple:2, inchannels, outchannels)) {
+        public TransposeDense(uint inchannels, uint outchannels, bool gradmode) {
+            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple: 2, inchannels, outchannels)) {
                 throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
 
@@ -106,14 +106,14 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
-           
+
             uint batches = (args[3] as uint?).Value;
 
             Kernel.Execute(
-                indexes:(OutChannels, batches), 
-                block:(Kernel.DefaultBlockSize(OutChannels), 1),
+                indexes: (OutChannels, batches),
+                block: (Kernel.DefaultBlockSize(OutChannels), 1),
                 dynamic_shared_memory_bytes: 0, stream,
-                inmap, 
+                inmap,
                 outmap,
                 filter
             );
@@ -124,7 +124,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             if (args == null || args.Length != 4) {
                 throw new ArgumentException(nameof(args));
             }
-            
+
             if (!(args[3] is uint batches) || !Limits.CheckBatches(batches)) {
                 throw new ArgumentException(nameof(batches));
             }

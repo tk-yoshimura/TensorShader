@@ -37,7 +37,7 @@
         }
 
         /// <summary>定義済み変数</summary>
-        protected static class Defines { 
+        protected static class Defines {
             /// <summary>Xインデクス</summary>
             public static string IndexX => "(blockDim.x * blockIdx.x + threadIdx.x)";
 

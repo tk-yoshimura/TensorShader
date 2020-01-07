@@ -28,9 +28,9 @@ namespace TensorShaderCudaBackend.Shaders.Trimming {
         public uint TrimRear { private set; get; }
 
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
+        public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(Channels)} = {Channels} " +
-            $"{nameof(TrimLeft)} = {TrimLeft} {nameof(TrimRight)} = {TrimRight} " + 
+            $"{nameof(TrimLeft)} = {TrimLeft} {nameof(TrimRight)} = {TrimRight} " +
             $"{nameof(TrimTop)} = {TrimTop} {nameof(TrimBottom)} = {TrimBottom} " +
             $"{nameof(TrimFront)} = {TrimFront} {nameof(TrimRear)} = {TrimRear}";
 
@@ -84,18 +84,18 @@ namespace TensorShaderCudaBackend.Shaders.Trimming {
             uint outheight = (args[3] as uint?).Value;
             uint outdepth = (args[4] as uint?).Value;
             uint batches = (args[5] as uint?).Value;
-            
+
             uint inwidth = outwidth + TrimLeft + TrimRight;
             uint inheight = outheight + TrimTop + TrimBottom;
             uint indepth = outdepth + TrimFront + TrimRear;
 
             for (uint th = 0; th < batches; th++) {
-                for (uint oz = 0; oz < outdepth; oz++) { 
+                for (uint oz = 0; oz < outdepth; oz++) {
                     Kernel.Execute(
-                        indexes:(Channels, outwidth, outheight),
-                        dynamic_shared_memory_bytes: 0, 
+                        indexes: (Channels, outwidth, outheight),
+                        dynamic_shared_memory_bytes: 0,
                         stream,
-                        inmap.ElementPtr(th * Channels * inwidth * inheight * indepth), 
+                        inmap.ElementPtr(th * Channels * inwidth * inheight * indepth),
                         outmap.ElementPtr(th * Channels * outwidth * outheight * outdepth),
                         oz,
                         inwidth, outwidth, inheight, outheight

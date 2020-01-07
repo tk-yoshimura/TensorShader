@@ -33,7 +33,7 @@ namespace TensorShaderTest.Operators.Connection1D {
                                 OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth, batch));
 
                                 Convolution ope = new Convolution(inwidth, inchannels, outchannels, kwidth, batch);
-                                    
+
                                 ope.Execute(x_tensor, w_tensor, y_tensor);
 
                                 float[] y_expect = y.ToArray();
@@ -62,8 +62,8 @@ namespace TensorShaderTest.Operators.Connection1D {
 
             int batch = 3;
             int inchannels = 49, outchannels = 50;
-            int kwidth = 5; 
-            int inwidth = 125; 
+            int kwidth = 5;
+            int inwidth = 125;
             int outwidth = inwidth - kwidth + 1;
 
             float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
@@ -80,7 +80,7 @@ namespace TensorShaderTest.Operators.Connection1D {
             OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth, batch));
 
             Convolution ope = new Convolution(inwidth, inchannels, outchannels, kwidth, batch);
-                                    
+
             ope.Execute(x_tensor, w_tensor, y_tensor);
 
             float[] y_expect = y.ToArray();
@@ -140,7 +140,7 @@ namespace TensorShaderTest.Operators.Connection1D {
 
             return y;
         }
-        
+
         [TestMethod]
         public void ReferenceTest() {
             int inchannels = 7, outchannels = 11, kwidth = 3, inwidth = 13, batch = 2;

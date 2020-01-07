@@ -20,18 +20,18 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
         /// <summary>実行あたりの積数(2^25=33554432‬)</summary>
         public static uint MulPerExecute => 0x2000000;
-                
+
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
+        public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(Channels)} = {Channels} " +
             $"{nameof(KernelWidth)} = {KernelWidth} {nameof(KernelHeight)} = {KernelHeight} {nameof(KernelDepth)} = {KernelDepth}";
-        
+
         /// <summary>コンストラクタ</summary>
-        public ChannelwiseDeconvolution3D(uint channels, uint kwidth, uint kheight, uint kdepth) { 
+        public ChannelwiseDeconvolution3D(uint channels, uint kwidth, uint kheight, uint kdepth) {
             if (!Limits.CheckChannels(channels)) {
                 throw new ArgumentException(nameof(channels));
             }
-            if (!Limits.CheckKernelSize(kwidth, kheight, kdepth)) { 
+            if (!Limits.CheckKernelSize(kwidth, kheight, kdepth)) {
                 throw new ArgumentException($"{nameof(kwidth)}, {nameof(kheight)}, {nameof(kdepth)}");
             }
 
@@ -105,7 +105,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
-           
+
             uint inwidth = (args[3] as uint?).Value;
             uint inheight = (args[4] as uint?).Value;
             uint indepth = (args[5] as uint?).Value;
@@ -120,16 +120,16 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             uint lines_per_execute = MulPerExecute / mul_per_line + 1;
 
             for (uint th = 0; th < batches; th++) {
-                for (uint oz = 0; oz < outdepth; oz++) { 
+                for (uint oz = 0; oz < outdepth; oz++) {
                     for (uint oy_offset = 0; oy_offset < outheight; oy_offset += lines_per_execute) {
                         uint lines = Math.Min(lines_per_execute, outheight - oy_offset);
 
                         Kernel.Execute(
-                            indexes:(Channels, outwidth, lines), 
-                            block:(Kernel.DefaultBlockSize(Channels), 1, 1),
-                            dynamic_shared_memory_bytes: 0, 
+                            indexes: (Channels, outwidth, lines),
+                            block: (Kernel.DefaultBlockSize(Channels), 1, 1),
+                            dynamic_shared_memory_bytes: 0,
                             stream,
-                            inmap.ElementPtr(th * Channels * inwidth * inheight * indepth), 
+                            inmap.ElementPtr(th * Channels * inwidth * inheight * indepth),
                             outmap.ElementPtr(th * Channels * outwidth * outheight * outdepth),
                             filter,
                             oy_offset, oz,

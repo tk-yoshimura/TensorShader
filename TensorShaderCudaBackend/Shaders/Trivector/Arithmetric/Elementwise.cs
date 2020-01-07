@@ -34,8 +34,8 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Arithmetric {
             uint length = (args.Last() as uint?).Value;
             uint n = length / 3;
 
-            args = args.Take(args.Length - 1).Concat( new object[]{ n }).ToArray();
- 
+            args = args.Take(args.Length - 1).Concat(new object[] { n }).ToArray();
+
             Kernel.Execute(n, dynamic_shared_memory_bytes: 0, stream, args);
         }
 

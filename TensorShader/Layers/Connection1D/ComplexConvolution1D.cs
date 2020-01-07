@@ -9,7 +9,7 @@ namespace TensorShader.Layers {
 
         /// <summary>バイアス</summary>
         public ParameterField Bias { private set; get; }
-        
+
         /// <summary>パディングモード</summary>
         public PaddingMode PaddingMode { private set; get; }
 

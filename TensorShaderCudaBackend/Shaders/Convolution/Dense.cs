@@ -13,13 +13,13 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
         /// <summary>出力チャネル数</summary>
         public uint OutChannels { private set; get; }
-        
+
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
+        public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels}";
-        
+
         /// <summary>コンストラクタ</summary>
-        public Dense(uint inchannels, uint outchannels) { 
+        public Dense(uint inchannels, uint outchannels) {
             if (inchannels < 1 || inchannels > Limits.Channels) {
                 throw new ArgumentException(nameof(inchannels));
             }
@@ -84,19 +84,19 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
-           
+
             uint batches = (args[3] as uint?).Value;
 
-            CudaArray<float> transpose_filter = 
-                CudaArrayReserver<float>.Request(stream, filter.DeviceID, index:0, InChannels * OutChannels);
+            CudaArray<float> transpose_filter =
+                CudaArrayReserver<float>.Request(stream, filter.DeviceID, index: 0, InChannels * OutChannels);
 
             TransposeKernelChannel(InChannels, OutChannels, 1u, filter, transpose_filter, stream);
 
             Kernel.Execute(
-                indexes:(OutChannels, batches), 
-                block:(Kernel.DefaultBlockSize(OutChannels), 1),
+                indexes: (OutChannels, batches),
+                block: (Kernel.DefaultBlockSize(OutChannels), 1),
                 dynamic_shared_memory_bytes: 0, stream,
-                inmap, 
+                inmap,
                 outmap,
                 transpose_filter
             );

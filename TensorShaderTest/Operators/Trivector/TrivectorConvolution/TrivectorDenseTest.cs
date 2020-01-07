@@ -17,7 +17,7 @@ namespace TensorShaderTest.Operators.Trivector {
             foreach (int batch in new int[] { 1, 2 }) {
                 foreach (int inchannels in new int[] { 3, 6, 9, 15, 21, 33 }) {
                     foreach (int outchannels in new int[] { 3, 6, 9, 15, 21, 33 }) {
-                        
+
                         float[] xval = (new float[inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
                         float[] wval = (new float[inchannels * outchannels / 9 * 4]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
 

@@ -22,9 +22,9 @@ namespace TensorShaderCudaBackend.Shaders.Padding {
         public uint PadBottom { private set; get; }
 
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
+        public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(Channels)} = {Channels} " +
-            $"{nameof(PadLeft)} = {PadLeft} {nameof(PadRight)} = {PadRight} " + 
+            $"{nameof(PadLeft)} = {PadLeft} {nameof(PadRight)} = {PadRight} " +
             $"{nameof(PadTop)} = {PadTop} {nameof(PadBottom)} = {PadBottom}";
 
         /// <summary>コンストラクタ</summary>
@@ -55,10 +55,10 @@ namespace TensorShaderCudaBackend.Shaders.Padding {
 
             for (uint th = 0; th < batches; th++) {
                 Kernel.Execute(
-                    indexes:(Channels, outwidth, outheight),
-                    dynamic_shared_memory_bytes: 0, 
+                    indexes: (Channels, outwidth, outheight),
+                    dynamic_shared_memory_bytes: 0,
                     stream,
-                    inmap.ElementPtr(th * Channels * inwidth * inheight), 
+                    inmap.ElementPtr(th * Channels * inwidth * inheight),
                     outmap.ElementPtr(th * Channels * outwidth * outheight),
                     inwidth, outwidth, inheight, outheight
                 );

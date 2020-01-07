@@ -10,7 +10,7 @@ namespace TensorShaderTest.Operators.Connection3D {
     public class ConvolutionTest {
         [TestMethod]
         public void ExecuteTest() {
-            float max_err = 0; 
+            float max_err = 0;
 
             foreach (int batch in new int[] { 1, 2 }) {
                 foreach ((int inchannels, int outchannels) in new (int, int)[] { (1, 1), (2, 1), (1, 2), (2, 3), (3, 1), (3, 4), (4, 5), (5, 3), (5, 10), (10, 15), (15, 5), (15, 20), (20, 32), (32, 15), (32, 33), (33, 33) }) {
@@ -42,9 +42,9 @@ namespace TensorShaderTest.Operators.Connection3D {
                             CollectionAssert.AreEqual(xval, x_tensor.State);
                             CollectionAssert.AreEqual(wval, w_tensor.State);
 
-                            AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{batch}");
+                            AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
 
-                            Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{batch}");
+                            Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
                         }
                     }
                 }
@@ -88,9 +88,9 @@ namespace TensorShaderTest.Operators.Connection3D {
             CollectionAssert.AreEqual(xval, x_tensor.State);
             CollectionAssert.AreEqual(wval, w_tensor.State);
 
-            AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{batch}");
+            AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{kdepth},{batch}");
 
-            Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{batch}");
+            Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{kdepth},{batch}");
 
             Console.WriteLine($"maxerr:{max_err}");
         }

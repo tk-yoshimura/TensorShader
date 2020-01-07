@@ -23,10 +23,10 @@ namespace MNIST {
         public Shape BatchShape => train_images.BatchShape;
 
         public MnistLoader(string dirpath, int num_batches) {
-            this.train_images = new MnistImagesLoader(dirpath + "/train-images-idx3-ubyte.gz", num_batches, count:60000);
-            this.train_labels = new MnistLabelsLoader(dirpath + "/train-labels-idx1-ubyte.gz", num_batches, count:60000);
-            this.test_images  = new MnistImagesLoader(dirpath + "/t10k-images-idx3-ubyte.gz",  num_batches, count:10000);
-            this.test_labels  = new MnistLabelsLoader(dirpath + "/t10k-labels-idx1-ubyte.gz",  num_batches, count:10000);
+            this.train_images = new MnistImagesLoader(dirpath + "/train-images-idx3-ubyte.gz", num_batches, count: 60000);
+            this.train_labels = new MnistLabelsLoader(dirpath + "/train-labels-idx1-ubyte.gz", num_batches, count: 60000);
+            this.test_images = new MnistImagesLoader(dirpath + "/t10k-images-idx3-ubyte.gz", num_batches, count: 10000);
+            this.test_labels = new MnistLabelsLoader(dirpath + "/t10k-labels-idx1-ubyte.gz", num_batches, count: 10000);
         }
 
         public (float[] images, float[] labels) GetTrain(int[] indexes) {

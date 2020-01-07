@@ -104,7 +104,7 @@ namespace TensorShaderTest.Operators.Quaternion {
             AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
 
             Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
-           
+
             Console.WriteLine($"maxerr:{max_err}");
         }
 

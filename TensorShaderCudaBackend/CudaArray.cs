@@ -87,7 +87,7 @@ namespace TensorShaderCudaBackend {
         /// <summary>コンストラクタ</summary>
         public CudaArray(T[] array)
             : this((ulong)array.LongLength, zeroset: false) {
-            
+
             Write(array);
         }
 
@@ -256,9 +256,9 @@ namespace TensorShaderCudaBackend {
 
             GC.SuppressFinalize(this);
 
-            #if DEBUG
+#if DEBUG
             Trace.WriteLine($"[{typeof(CudaArray<T>).Name}.{MethodBase.GetCurrentMethod().Name}] Disposed gpu array");
-            #endif
+#endif
         }
 
         /// <summary>ファイナライザ</summary>

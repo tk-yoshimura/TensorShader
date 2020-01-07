@@ -58,9 +58,9 @@ namespace TensorShaderCudaBackend.Shaders.Indexer {
             uint indexes = (args.Last() as uint?).Value;
 
             Kernel.Execute(
-                indexes, 
-                dynamic_shared_memory_bytes: 0, 
-                stream, 
+                indexes,
+                dynamic_shared_memory_bytes: 0,
+                stream,
                 x, y, indexes
             );
         }

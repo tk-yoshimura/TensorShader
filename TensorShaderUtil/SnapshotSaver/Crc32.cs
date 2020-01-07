@@ -25,7 +25,7 @@ namespace TensorShaderUtil {
             UInt32 c = 0xFFFFFFFF;
 
             unchecked {
-                for(long i = offset, i_end = offset + length; i < i_end; i++) {
+                for (long i = offset, i_end = offset + length; i < i_end; i++) {
                     c = table[(c ^ data[i]) & 0xFF] ^ (c >> 8);
                 }
             }

@@ -43,7 +43,7 @@ namespace TensorShader.Functions.ConnectionDense {
         /// <summary>コンストラクタ</summary>
         public KernelProduct(Shape inshape, Shape outshape)
             : base(inputs: 2, outputs: 1, allow_resubstitution: false) {
-            
+
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 2) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 2), ("Type", ShapeType.Map)));
             }

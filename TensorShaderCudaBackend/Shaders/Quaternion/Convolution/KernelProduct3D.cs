@@ -31,25 +31,25 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
 
         /// <summary>実行あたりのポイント数(2^14=16384‬)</summary>
         public static uint PointsPerExecute => 0x4000;
-        
+
         /// <summary>ブロックサイズ</summary>
         public (uint x, uint y) BlockSize { private set; get; }
-                
+
         /// <summary>1スレッドで処理する対象ピクセル数</summary>
         private static uint BatchPixels => 16;
 
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
-            $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " + 
+        public override sealed string Signature =>
+            $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " +
             $"{nameof(KernelWidth)} = {KernelWidth} {nameof(KernelHeight)} = {KernelHeight} {nameof(KernelDepth)} = {KernelDepth} " +
             $"{nameof(Transpose)} = {Transpose}";
-        
+
         /// <summary>コンストラクタ</summary>
-        public KernelProduct3D(uint inchannels, uint outchannels, uint kwidth, uint kheight, uint kdepth, bool transpose) { 
-            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple:4, inchannels, outchannels)) {
+        public KernelProduct3D(uint inchannels, uint outchannels, uint kwidth, uint kheight, uint kdepth, bool transpose) {
+            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple: 4, inchannels, outchannels)) {
                 throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
-            if (!Limits.CheckKernelSize(kwidth, kheight, kdepth)) { 
+            if (!Limits.CheckKernelSize(kwidth, kheight, kdepth)) {
                 throw new ArgumentException($"{nameof(kwidth)}, {nameof(kheight)}, {nameof(kdepth)}");
             }
 
@@ -172,7 +172,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
-           
+
             uint inwidth = (args[3] as uint?).Value;
             uint inheight = (args[4] as uint?).Value;
             uint indepth = (args[5] as uint?).Value;
@@ -182,8 +182,8 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             uint outheight = inheight + 1 - KernelHeight;
             uint outdepth = indepth + 1 - KernelDepth;
 
-            CudaArray<float> dfloat_filter = 
-                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index:0, InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * 8);
+            CudaArray<float> dfloat_filter =
+                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index: 0, InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * 8);
             dfloat_filter.ZerosetAsync(stream, InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * 8);
 
             uint mul_per_line = InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * outwidth * 16;
@@ -215,7 +215,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
                     }
                 }
             }
-            
+
             HorizontalAdd(InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * 4, dfloat_filter, filter, stream);
         }
 

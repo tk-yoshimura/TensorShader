@@ -10,7 +10,7 @@ namespace TensorShaderUtil.Iterator {
 
         /// <summary>コンストラクタ</summary>
         public ShuffleIterator(int num_batches, int counts, Random random)
-            : base(num_batches, counts){
+            : base(num_batches, counts) {
             this.pos = 0;
             this.indexes = (new int[counts]).Select((_, idx) => idx).ToArray();
             this.random = random;
@@ -22,7 +22,7 @@ namespace TensorShaderUtil.Iterator {
             IncreaseIteration();
 
             if (pos + NumBatches > Counts) {
-                if(pos != Counts) { 
+                if (pos != Counts) {
                     IncreaseEpoch();
                 }
                 pos = 0;
@@ -34,7 +34,7 @@ namespace TensorShaderUtil.Iterator {
 
             pos += NumBatches;
 
-            if(pos == Counts) { 
+            if (pos == Counts) {
                 IncreaseEpoch();
             }
 

@@ -17,18 +17,18 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
         /// <summary>実行あたりの積数(2^25=33554432‬)</summary>
         public static uint MulPerExecute => 0x2000000;
-                
+
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
+        public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(Channels)} = {Channels} " +
             $"{nameof(KernelWidth)} = {KernelWidth} {nameof(KernelHeight)} = {KernelHeight}";
-        
+
         /// <summary>コンストラクタ</summary>
-        public ChannelwiseDeconvolution2D(uint channels, uint kwidth, uint kheight) { 
+        public ChannelwiseDeconvolution2D(uint channels, uint kwidth, uint kheight) {
             if (!Limits.CheckChannels(channels)) {
                 throw new ArgumentException(nameof(channels));
             }
-            if (!Limits.CheckKernelSize(kwidth, kheight)) { 
+            if (!Limits.CheckKernelSize(kwidth, kheight)) {
                 throw new ArgumentException($"{nameof(kwidth)}, {nameof(kheight)}");
             }
 
@@ -94,7 +94,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
-           
+
             uint inwidth = (args[3] as uint?).Value;
             uint inheight = (args[4] as uint?).Value;
             uint batches = (args[5] as uint?).Value;
@@ -111,11 +111,11 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                     uint lines = Math.Min(lines_per_execute, outheight - oy_offset);
 
                     Kernel.Execute(
-                        indexes:(Channels, outwidth, lines), 
-                        block:(Kernel.DefaultBlockSize(Channels), 1, 1),
-                        dynamic_shared_memory_bytes: 0, 
+                        indexes: (Channels, outwidth, lines),
+                        block: (Kernel.DefaultBlockSize(Channels), 1, 1),
+                        dynamic_shared_memory_bytes: 0,
                         stream,
-                        inmap.ElementPtr(th * Channels * inwidth * inheight), 
+                        inmap.ElementPtr(th * Channels * inwidth * inheight),
                         outmap.ElementPtr(th * Channels * outwidth * outheight),
                         filter,
                         oy_offset,

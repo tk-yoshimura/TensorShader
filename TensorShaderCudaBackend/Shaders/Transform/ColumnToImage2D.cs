@@ -16,16 +16,16 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
         public uint KernelHeight { private set; get; }
 
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
+        public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(Channels)} = {Channels} " +
             $"{nameof(KernelWidth)} = {KernelWidth} {nameof(KernelHeight)} = {KernelHeight}";
-        
+
         /// <summary>コンストラクタ</summary>
-        public ColumnToImage2D(uint channels, uint kwidth, uint kheight) { 
+        public ColumnToImage2D(uint channels, uint kwidth, uint kheight) {
             if (!Limits.CheckChannels(channels)) {
                 throw new ArgumentException($"{nameof(channels)}");
             }
-            if (!Limits.CheckKernelSize(kwidth, kheight)) { 
+            if (!Limits.CheckKernelSize(kwidth, kheight)) {
                 throw new ArgumentException($"{nameof(kwidth)}, {nameof(kheight)}");
             }
 
@@ -43,11 +43,11 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
 
             __global__ void column_to_image_2d(float *inmap, float *outmap, 
                                                unsigned int inwidth, unsigned int outwidth, 
-                                               unsigned int inheight) {{
+                                               unsigned int inheight, unsigned int outheight) {{
 
-                unsigned int ch = {Defines.IndexX}, ox = {Defines.BlockIndexY}, oy = {Defines.BlockIndexZ};
+                unsigned int ch = {Defines.IndexX}, ox = {Defines.IndexY}, oy = {Defines.IndexZ};
 
-                if(ch >= {Channels}){{
+                if(ch >= {Channels} || ox >= outwidth || oy >= outheight){{
                     return;
                 }}
 
@@ -85,22 +85,21 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
 
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
-           
+
             uint inwidth = (args[2] as uint?).Value;
             uint inheight = (args[3] as uint?).Value;
             uint batches = (args[4] as uint?).Value;
 
             uint outwidth = inwidth + KernelWidth - 1;
             uint outheight = inheight + KernelHeight - 1;
-            
+
             for (uint th = 0; th < batches; th++) {
                 Kernel.Execute(
-                    indexes:(Channels, outwidth, outheight), 
-                    block:(Kernel.DefaultBlockSize(Channels), 1, 1),
+                    indexes: (Channels, outwidth, outheight),
                     dynamic_shared_memory_bytes: 0, stream,
-                    inmap.ElementPtr(th * KernelWidth * KernelHeight * Channels * inwidth * inheight), 
+                    inmap.ElementPtr(th * KernelWidth * KernelHeight * Channels * inwidth * inheight),
                     outmap.ElementPtr(th * Channels * outwidth * outheight),
-                    inwidth, outwidth, inheight
+                    inwidth, outwidth, inheight, outheight
                 );
             }
         }

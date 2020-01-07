@@ -32,7 +32,7 @@ namespace TensorShaderTest.Links.Connection2D {
 
             float[] gy_actual = y.GradTensor.State;
             float[] gw_actual = w.GradTensor.State;
-            
+
             AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"not equal gw");
 
             AssertError.Tolerance(gy_expect, gy_actual, 1e-7f, 1e-5f, $"not equal gy");

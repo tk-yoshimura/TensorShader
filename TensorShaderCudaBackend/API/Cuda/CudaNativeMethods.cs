@@ -8,22 +8,22 @@ namespace TensorShaderCudaBackend.API {
 
     public static partial class Cuda {
 
-        #pragma warning disable IDE1006 // 命名スタイル
+#pragma warning disable IDE1006 // 命名スタイル
         private static class NativeMethods {
 
-            #if CUDA_10_0
+#if CUDA_10_0
             const string DllName = "cudart64_100.dll";
-            #elif CUDA_10_1
+#elif CUDA_10_1
             const string DllName = "cudart64_101.dll";
-            #elif CUDA_10_2
+#elif CUDA_10_2
             const string DllName = "cudart64_102.dll";
-            #elif CUDA_10_3
+#elif CUDA_10_3
             const string DllName = "cudart64_103.dll";
-            #elif CUDA_10_4
+#elif CUDA_10_4
             const string DllName = "cudart64_104.dll";
-            #else
+#else
             const string DllName = "cudart64_101.dll";
-            #endif
+#endif
 
             [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
             public static extern cudaError_t cudaDeviceReset();
@@ -97,6 +97,6 @@ namespace TensorShaderCudaBackend.API {
             [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr cudaGetErrorString(cudaError_t error);
         }
-        #pragma warning restore IDE1006 // 命名スタイル
+#pragma warning restore IDE1006 // 命名スタイル
     }
 }

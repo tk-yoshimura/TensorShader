@@ -5,7 +5,7 @@
     public sealed class Uniform : Randomize {
 
         /// <summary>コンストラクタ</summary>
-        public Uniform(){
+        public Uniform() {
             string code = $@"
             __global__ void uniform_random(float *y, unsigned int length, unsigned int warps,
                                            unsigned int seed1, unsigned int seed2, unsigned int seed3) {{

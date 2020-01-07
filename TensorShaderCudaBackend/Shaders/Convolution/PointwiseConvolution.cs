@@ -7,7 +7,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
     /// <summary>ポイントごとの畳み込み</summary>
     public sealed class PointwiseConvolution : Shader {
-        
+
         /// <summary>入力チャネル数</summary>
         public uint InChannels { private set; get; }
 
@@ -19,11 +19,11 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
         /// <summary>実行あたりのポイント数(2^14=16384‬)</summary>
         public static uint PointsPerExecute => 0x4000;
-                        
+
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
+        public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels}";
-        
+
         /// <summary>コンストラクタ</summary>
         public PointwiseConvolution(uint inchannels, uint outchannels) {
             if (!Limits.CheckChannels(inchannels, outchannels)) {
@@ -83,11 +83,11 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
-           
+
             uint pts = (args[3] as uint?).Value;
 
-            CudaArray<float> transpose_filter = 
-                CudaArrayReserver<float>.Request(stream, filter.DeviceID, index:0, InChannels * OutChannels);
+            CudaArray<float> transpose_filter =
+                CudaArrayReserver<float>.Request(stream, filter.DeviceID, index: 0, InChannels * OutChannels);
 
             TransposeKernelChannel(InChannels, OutChannels, 1u, filter, transpose_filter, stream);
 
@@ -99,11 +99,11 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 uint pl = Math.Min(points_per_execute, pts - p);
 
                 Kernel.Execute(
-                    indexes:(OutChannels, pl), 
-                    block:(Kernel.DefaultBlockSize(OutChannels), 1),
-                    dynamic_shared_memory_bytes: 0, 
+                    indexes: (OutChannels, pl),
+                    block: (Kernel.DefaultBlockSize(OutChannels), 1),
+                    dynamic_shared_memory_bytes: 0,
                     stream,
-                    inmap.ElementPtr(p * InChannels), 
+                    inmap.ElementPtr(p * InChannels),
                     outmap.ElementPtr(p * OutChannels),
                     transpose_filter
                 );

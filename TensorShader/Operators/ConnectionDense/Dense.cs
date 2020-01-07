@@ -32,7 +32,7 @@ namespace TensorShader.Operators.ConnectionDense {
             Tensor inmap = tensors[0], infilter = tensors[1], outmap = tensors[2];
 
             TensorShaderCudaBackend.Convolution.Dense((uint)InChannels, (uint)OutChannels, (uint)Batch, inmap.Buffer, infilter.Buffer, outmap.Buffer);
-       }
+        }
 
         /// <summary>操作を実行</summary>
         public void Execute(Tensor inmap, Tensor infilter, Tensor outmap) {

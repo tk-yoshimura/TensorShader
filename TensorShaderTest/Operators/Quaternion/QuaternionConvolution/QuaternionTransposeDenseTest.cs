@@ -101,7 +101,7 @@ namespace TensorShaderTest.Operators.Quaternion {
 
             Console.WriteLine($"maxerr:{max_err}");
         }
-        
+
         [TestMethod]
         public void SpeedTest() {
             int inchannels = 32, outchannels = 32;

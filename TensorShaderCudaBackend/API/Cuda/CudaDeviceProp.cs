@@ -6,7 +6,7 @@ namespace TensorShaderCudaBackend.API {
 
     public static partial class Cuda {
 
-        #pragma warning disable CS1591 // 公開されている型またはメンバーの XML コメントがありません
+#pragma warning disable CS1591 // 公開されている型またはメンバーの XML コメントがありません
 
         /// <summary>デバイスプロパティ</summary>
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -88,9 +88,9 @@ namespace TensorShaderCudaBackend.API {
 
             /// <summary>計算モード</summary>
             public int ComputeMode;
-            
+
             public int MaxTexture1D;
-            
+
             public int MaxTexture1DMipmap;
 
             public int MaxTexture1DLinear;
@@ -217,6 +217,6 @@ namespace TensorShaderCudaBackend.API {
 
             public int DirectManagedMemoryAccessFromHost;
         }
-        #pragma warning restore CS1591 // 公開されている型またはメンバーの XML コメントがありません
+#pragma warning restore CS1591 // 公開されている型またはメンバーの XML コメントがありません
     }
 }

@@ -15,8 +15,8 @@ namespace TensorShaderTest.Operators.Connection2D {
             foreach (int batch in new int[] { 1, 2 }) {
                 foreach (int outchannels in new int[] { 3, 5 }) {
                     foreach (int scale in new int[] { 2, 3, 4 }) {
-                        foreach (int inwidth in new int[] { 5, 7, 11 }) {
-                            foreach (int inheight in new int[] { 5, 7, 11 }) {
+                        foreach (int inheight in new int[] { 5, 7, 11 }) {
+                            foreach (int inwidth in new int[] { 5, 7, 11 }) {
                                 int outwidth = inwidth * scale, outheight = inheight * scale, inchannels = outchannels * scale * scale;
 
                                 float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();

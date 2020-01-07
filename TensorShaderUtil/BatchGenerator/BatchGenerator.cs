@@ -84,6 +84,6 @@ namespace TensorShaderUtil.BatchGenerator {
                 }
 
                 Buffer.BlockCopy(data, 0, generator.Value, i * data.Length * sizeof(float), data.Length * sizeof(float));
-        };
+            };
     }
 }

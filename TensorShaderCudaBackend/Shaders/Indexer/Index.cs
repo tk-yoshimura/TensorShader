@@ -35,23 +35,23 @@ namespace TensorShaderCudaBackend.Shaders.Indexer {
             uint axislength = (args[3] as uint?).Value;
 
             uint round = stride * axislength;
-            while(round <= 1024 && round * 2 <= length) {
+            while (round <= 1024 && round * 2 <= length) {
                 round *= 2;
             }
 
             Kernel.Execute(
-                round, 
-                dynamic_shared_memory_bytes: 0, 
-                stream, 
-                y, 
-                round, stride, axislength 
+                round,
+                dynamic_shared_memory_bytes: 0,
+                stream,
+                y,
+                round, stride, axislength
             );
 
-            while(round * 2 <= length) { 
+            while (round * 2 <= length) {
                 y.CopyToAsync(stream, 0, y, round, round);
                 round *= 2;
             }
-            if(round < length) { 
+            if (round < length) {
                 y.CopyToAsync(stream, 0, y, round, length - round);
             }
         }

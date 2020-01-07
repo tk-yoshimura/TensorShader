@@ -16,18 +16,18 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
         /// <summary>1スレッドで処理する対象ピクセル数</summary>
         private static uint BatchPixels => 16;
-                
+
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
-            $"{GetType().Name.Split(',').Last()} {nameof(Channels)} = {Channels} " + 
+        public override sealed string Signature =>
+            $"{GetType().Name.Split(',').Last()} {nameof(Channels)} = {Channels} " +
             $"{nameof(KernelWidth)} = {KernelWidth}";
-        
+
         /// <summary>コンストラクタ</summary>
-        public ChannelwiseKernelProduct1D(uint channels, uint kwidth) { 
+        public ChannelwiseKernelProduct1D(uint channels, uint kwidth) {
             if (!Limits.CheckChannels(channels)) {
                 throw new ArgumentException(nameof(channels));
             }
-            if (!Limits.CheckKernelSize(kwidth)) { 
+            if (!Limits.CheckKernelSize(kwidth)) {
                 throw new ArgumentException(nameof(kwidth));
             }
 
@@ -87,31 +87,31 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
-           
+
             uint inwidth = (args[3] as uint?).Value;
             uint batches = (args[4] as uint?).Value;
 
             uint outwidth = inwidth + 1 - KernelWidth;
 
-            CudaArray<float> dfloat_filter = 
-                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index:0, Channels * KernelWidth * 2);
+            CudaArray<float> dfloat_filter =
+                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index: 0, Channels * KernelWidth * 2);
             dfloat_filter.ZerosetAsync(stream, Channels * KernelWidth * 2);
-                        
+
             uint xsets = (outwidth + BatchPixels - 1) / BatchPixels;
 
             for (uint th = 0; th < batches; th++) {
                 Kernel.Execute(
-                    indexes:(Channels, xsets), 
-                    block:(Kernel.DefaultBlockSize(Channels), 1),
-                    dynamic_shared_memory_bytes: 0, 
+                    indexes: (Channels, xsets),
+                    block: (Kernel.DefaultBlockSize(Channels), 1),
+                    dynamic_shared_memory_bytes: 0,
                     stream,
-                    inmap.ElementPtr(th * Channels * inwidth), 
+                    inmap.ElementPtr(th * Channels * inwidth),
                     outmap.ElementPtr(th * Channels * outwidth),
                     dfloat_filter,
                     outwidth
                 );
             }
-            
+
             HorizontalAdd(Channels * KernelWidth, dfloat_filter, filter, stream);
         }
 

@@ -2,7 +2,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("TensorShaderUtilTest")]
-[assembly: AssemblyDescription("Deep Learning .NET libraryy, CUDA accelerated. Utility Test")]
+[assembly: AssemblyDescription("Deep Learning .NET library, CUDA accelerated. Utility Test")]
 
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
@@ -18,4 +18,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 [assembly: Guid("cfdcbb3a-d8a8-47d6-a099-e834e881502c")]
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("4.1.*")]
+[assembly: AssemblyVersion("4.2.*")]

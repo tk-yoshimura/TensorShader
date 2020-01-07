@@ -35,18 +35,18 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
 
         /// <summary>1スレッドで処理する対象ピクセル数</summary>
         private static uint BatchPixels => 16;
-        
+
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
-            $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " + 
+        public override sealed string Signature =>
+            $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " +
             $"{nameof(KernelWidth)} = {KernelWidth} {nameof(KernelHeight)} = {KernelHeight} {nameof(Transpose)} = {Transpose}";
-        
+
         /// <summary>コンストラクタ</summary>
-        public KernelProduct2D(uint inchannels, uint outchannels, uint kwidth, uint kheight, bool transpose) { 
-            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple:3, inchannels, outchannels)) {
+        public KernelProduct2D(uint inchannels, uint outchannels, uint kwidth, uint kheight, bool transpose) {
+            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple: 3, inchannels, outchannels)) {
                 throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
-            if (!Limits.CheckKernelSize(kwidth, kheight)) { 
+            if (!Limits.CheckKernelSize(kwidth, kheight)) {
                 throw new ArgumentException($"{nameof(kwidth)}, {nameof(kheight)}");
             }
 
@@ -161,7 +161,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter_value = args[2] as CudaArray<float>;
             CudaArray<float> filter_grad = args[3] as CudaArray<float>;
-           
+
             uint inwidth = (args[4] as uint?).Value;
             uint inheight = (args[5] as uint?).Value;
             uint batches = (args[6] as uint?).Value;
@@ -169,8 +169,8 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
             uint outwidth = inwidth + 1 - KernelWidth;
             uint outheight = inheight + 1 - KernelHeight;
 
-            CudaArray<float> dfloat_filter = 
-                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index:0, InChannels * OutChannels * KernelWidth * KernelHeight * 8);
+            CudaArray<float> dfloat_filter =
+                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index: 0, InChannels * OutChannels * KernelWidth * KernelHeight * 8);
             dfloat_filter.ZerosetAsync(stream, InChannels * OutChannels * KernelWidth * KernelHeight * 8);
 
             uint mul_per_line = InChannels * OutChannels * KernelWidth * KernelHeight * outwidth * 16;
@@ -187,11 +187,11 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
                     uint lines = Math.Min(lines_per_execute, outheight - oy_offset);
 
                     Kernel.Execute(
-                        indexes:(InChannels, OutChannels, xsets * lines), 
-                        block:(BlockSize.x, BlockSize.y, 1),
-                        dynamic_shared_memory_bytes: 0, 
+                        indexes: (InChannels, OutChannels, xsets * lines),
+                        block: (BlockSize.x, BlockSize.y, 1),
+                        dynamic_shared_memory_bytes: 0,
                         stream,
-                        inmap.ElementPtr(th * InChannels * inwidth * inheight * 3), 
+                        inmap.ElementPtr(th * InChannels * inwidth * inheight * 3),
                         outmap.ElementPtr(th * OutChannels * outwidth * outheight * 3),
                         filter_value,
                         dfloat_filter,
@@ -202,7 +202,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
 
                 }
             }
-            
+
             HorizontalAdd(InChannels * OutChannels * KernelWidth * KernelHeight * 4, dfloat_filter, filter_grad, stream);
             MulConstant(InChannels * OutChannels * KernelWidth * KernelHeight * 4, 2, filter_grad, filter_grad, stream);
         }

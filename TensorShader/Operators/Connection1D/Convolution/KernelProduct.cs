@@ -18,7 +18,7 @@ namespace TensorShader.Operators.Connection1D {
 
         /// <summary>コンストラクタ</summary>
         public KernelProduct(int inwidth, int inchannels, int outchannels, int kwidth, int batch = 1) {
-            
+
             int outwidth = inwidth - kwidth + 1;
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
@@ -41,8 +41,8 @@ namespace TensorShader.Operators.Connection1D {
 
             TensorShaderCudaBackend.Convolution.KernelProduct1D((uint)InChannels, (uint)OutChannels,
                                                                 (uint)inmap1.Width,
-                                                                (uint)Batch, 
-                                                                (uint)KernelWidth, 
+                                                                (uint)Batch,
+                                                                (uint)KernelWidth,
                                                                 inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);
         }
 

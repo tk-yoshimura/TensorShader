@@ -22,7 +22,7 @@ namespace TensorShader.Operators.Connection2D {
 
         /// <summary>コンストラクタ</summary>
         public Deconvolution(int inwidth, int inheight, int inchannels, int outchannels, int kwidth, int kheight, int batch = 1) {
-            
+
             int outwidth = inwidth + kwidth - 1;
             int outheight = inheight + kheight - 1;
 
@@ -46,8 +46,8 @@ namespace TensorShader.Operators.Connection2D {
             Tensor inmap = tensors[0], infilter = tensors[1], outmap = tensors[2];
 
             TensorShaderCudaBackend.Convolution.Deconvolution2D((uint)InChannels, (uint)OutChannels,
-                                                                (uint)inmap.Width, (uint)inmap.Height, (uint)Batch, 
-                                                                (uint)KernelWidth, (uint)KernelHeight, 
+                                                                (uint)inmap.Width, (uint)inmap.Height, (uint)Batch,
+                                                                (uint)KernelWidth, (uint)KernelHeight,
                                                                 inmap.Buffer, infilter.Buffer, outmap.Buffer);
         }
 

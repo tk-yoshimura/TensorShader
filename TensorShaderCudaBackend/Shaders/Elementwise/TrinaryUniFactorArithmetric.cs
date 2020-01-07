@@ -8,7 +8,7 @@
         /// <param name="func">関数</param>
         /// <remarks>func e.g. #y = f(c, #x1, #x2);</remarks>
         public TrinaryUniFactorArithmetric(string name, string func)
-            : base(factors : 1, arrays : 3, name) {
+            : base(factors: 1, arrays: 3, name) {
             string code = $@"
 
             __constant__ float c;

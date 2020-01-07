@@ -32,7 +32,7 @@ namespace TensorShader.Operators.Connection1D {
             Tensor inmap = tensors[0], infilter = tensors[1], outmap = tensors[2];
 
             TensorShaderCudaBackend.Convolution.PointwiseDeconvolution((uint)InChannels, (uint)OutChannels,
-                                                                       (uint)inmap.Width, (uint)Batch, 
+                                                                       (uint)inmap.Width, (uint)Batch,
                                                                        inmap.Buffer, infilter.Buffer, outmap.Buffer);
         }
 

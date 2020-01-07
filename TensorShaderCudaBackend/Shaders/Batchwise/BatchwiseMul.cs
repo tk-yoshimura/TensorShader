@@ -74,7 +74,7 @@ namespace TensorShaderCudaBackend.Shaders.Batchwise {
                 args = args.Skip(1).ToArray();
             }
 
-            Kernel.Execute(indexes:(map_stride, Batches), dynamic_shared_memory_bytes: 0, stream, args);
+            Kernel.Execute(indexes: (map_stride, Batches), dynamic_shared_memory_bytes: 0, stream, args);
         }
 
         /// <summary>引数チェック</summary>
@@ -82,7 +82,7 @@ namespace TensorShaderCudaBackend.Shaders.Batchwise {
             if (args == null || args.Length != 4) {
                 throw new ArgumentException(nameof(args));
             }
-                        
+
             if (!(args[3] is uint map_stride)) {
                 throw new ArgumentException(nameof(map_stride));
             }

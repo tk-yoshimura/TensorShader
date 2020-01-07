@@ -9,7 +9,7 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         public override sealed string Signature => $"{GetType().Name.Split(',').Last()}";
 
         /// <summary>コンストラクタ</summary>
-        public HorizontalAdd() { 
+        public HorizontalAdd() {
             string code = $@"
 
             __global__ void horizontal_add(float *inmap, float *outmap, unsigned int n) {{

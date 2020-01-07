@@ -14,7 +14,7 @@ namespace TensorShaderCudaBackendTest.ShadersTest.ElementwiseTest {
 
             Random random = new Random(1234);
 
-            float[] h_c = new float[]{ 2 };
+            float[] h_c = new float[] { 2 };
             float[] h_x = (new float[length]).Select((_) => (float)random.NextDouble()).ToArray();
             float[] h_y = new float[length];
 

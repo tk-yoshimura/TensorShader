@@ -19,24 +19,24 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
 
         /// <summary>転置</summary>
         public bool Transpose { private set; get; }
-        
+
         /// <summary>ブロックサイズ</summary>
         public (uint x, uint y) BlockSize { private set; get; }
-                
+
         /// <summary>1スレッドで処理する対象ピクセル数</summary>
         private static uint BatchPixels => 16;
 
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
-            $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " + 
+        public override sealed string Signature =>
+            $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " +
             $"{nameof(KernelWidth)} = {KernelWidth} {nameof(Transpose)} = {Transpose}";
-        
+
         /// <summary>コンストラクタ</summary>
-        public KernelProduct1D(uint inchannels, uint outchannels, uint kwidth, bool transpose) { 
-            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple:4, inchannels, outchannels)) {
+        public KernelProduct1D(uint inchannels, uint outchannels, uint kwidth, bool transpose) {
+            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple: 4, inchannels, outchannels)) {
                 throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
-            if (!Limits.CheckKernelSize(kwidth)) { 
+            if (!Limits.CheckKernelSize(kwidth)) {
                 throw new ArgumentException(nameof(kwidth));
             }
 
@@ -148,31 +148,31 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
-           
+
             uint inwidth = (args[3] as uint?).Value;
             uint batches = (args[4] as uint?).Value;
 
             uint outwidth = inwidth + 1 - KernelWidth;
 
-            CudaArray<float> dfloat_filter = 
-                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index:0, InChannels * OutChannels * KernelWidth * 8);
+            CudaArray<float> dfloat_filter =
+                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index: 0, InChannels * OutChannels * KernelWidth * 8);
             dfloat_filter.ZerosetAsync(stream, InChannels * OutChannels * KernelWidth * 8);
 
             uint xsets = (outwidth + BatchPixels - 1) / BatchPixels;
 
             for (uint th = 0; th < batches; th++) {
                 Kernel.Execute(
-                    indexes:(InChannels, OutChannels, xsets), 
-                    block:(BlockSize.x, BlockSize.y, 1),
-                    dynamic_shared_memory_bytes: 0, 
+                    indexes: (InChannels, OutChannels, xsets),
+                    block: (BlockSize.x, BlockSize.y, 1),
+                    dynamic_shared_memory_bytes: 0,
                     stream,
-                    inmap.ElementPtr(th * InChannels * inwidth * 4), 
+                    inmap.ElementPtr(th * InChannels * inwidth * 4),
                     outmap.ElementPtr(th * OutChannels * outwidth * 4),
                     dfloat_filter,
                     outwidth
                 );
             }
-            
+
             HorizontalAdd(InChannels * OutChannels * KernelWidth * 4, dfloat_filter, filter, stream);
         }
 

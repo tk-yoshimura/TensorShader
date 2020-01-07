@@ -39,14 +39,14 @@ namespace TensorShader.Functions.TrivectorConvolution {
 
         /// <summary>カーネル形状</summary>
         public Shape KernelShape { private set; get; }
-        
+
         /// <summary>勾配</summary>
         public bool GradMode { private set; get; }
 
         /// <summary>コンストラクタ</summary>
         public TrivectorConvolution3D(Shape inshape, Shape kernelshape, bool gradmode)
             : base(inputs: 2, outputs: 1, allow_resubstitution: false) {
-            
+
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 5) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 5), ("Type", ShapeType.Map)));
             }

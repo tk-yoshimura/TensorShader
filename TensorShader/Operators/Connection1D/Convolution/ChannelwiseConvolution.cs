@@ -9,7 +9,7 @@ namespace TensorShader.Operators.Connection1D {
         /// <summary>フィルタサイズ</summary>
         /// <remarks>奇数を指定すること</remarks>
         public int KernelWidth { private set; get; }
-        
+
         /// <summary>バッチサイズ</summary>
         public int Batch { private set; get; }
 
@@ -36,7 +36,7 @@ namespace TensorShader.Operators.Connection1D {
 
             TensorShaderCudaBackend.Convolution.ChannelwiseConvolution1D((uint)Channels,
                                                                          (uint)inmap.Width, (uint)Batch,
-                                                                         (uint)KernelWidth, 
+                                                                         (uint)KernelWidth,
                                                                          inmap.Buffer, infilter.Buffer, outmap.Buffer);
         }
 

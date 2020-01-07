@@ -44,10 +44,10 @@ namespace TensorShaderCudaBackend.Shaders.Pool {
 
             for (uint th = 0; th < batches; th++) {
                 Kernel.Execute(
-                    indexes:(Channels, outwidth, outheight),
-                    dynamic_shared_memory_bytes: 0, 
+                    indexes: (Channels, outwidth, outheight),
+                    dynamic_shared_memory_bytes: 0,
                     stream,
-                    inmap.ElementPtr(th * Channels * inwidth * inheight), 
+                    inmap.ElementPtr(th * Channels * inwidth * inheight),
                     outmap.ElementPtr(th * Channels * outwidth * outheight),
                     inwidth, outwidth, outheight
                 );

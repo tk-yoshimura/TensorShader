@@ -44,7 +44,7 @@ namespace TensorShaderCudaBackend {
         }
 
         /// <summary>初期化</summary>
-        public static void Clear(){
+        public static void Clear() {
             API.Cuda.Synchronize();
 
             lock (array_table) {

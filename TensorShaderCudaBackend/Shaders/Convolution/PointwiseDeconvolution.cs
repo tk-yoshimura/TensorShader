@@ -17,13 +17,13 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
         /// <summary>実行あたりのポイント数(2^14=16384‬)</summary>
         public static uint PointsPerExecute => 0x4000;
-                
+
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
+        public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels}";
-        
+
         /// <summary>コンストラクタ</summary>
-        public PointwiseDeconvolution(uint inchannels, uint outchannels) { 
+        public PointwiseDeconvolution(uint inchannels, uint outchannels) {
             if (!Limits.CheckChannels(inchannels, outchannels)) {
                 throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
@@ -81,7 +81,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
-           
+
             uint pts = (args[3] as uint?).Value;
 
             uint mul_per_point = InChannels * OutChannels;
@@ -92,11 +92,11 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 uint pl = Math.Min(points_per_execute, pts - p);
 
                 Kernel.Execute(
-                    indexes:(OutChannels, pl), 
-                    block:(Kernel.DefaultBlockSize(OutChannels), 1),
-                    dynamic_shared_memory_bytes: 0, 
+                    indexes: (OutChannels, pl),
+                    block: (Kernel.DefaultBlockSize(OutChannels), 1),
+                    dynamic_shared_memory_bytes: 0,
                     stream,
-                    inmap.ElementPtr(p * InChannels), 
+                    inmap.ElementPtr(p * InChannels),
                     outmap.ElementPtr(p * OutChannels),
                     filter
                 );

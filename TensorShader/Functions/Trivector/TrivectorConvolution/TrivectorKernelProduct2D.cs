@@ -46,7 +46,7 @@ namespace TensorShader.Functions.TrivectorConvolution {
         /// <summary>コンストラクタ</summary>
         public TrivectorKernelProduct2D(Shape inshape, Shape outshape, int kwidth, int kheight, bool transpose)
             : base(inputs: 3, outputs: 1, allow_resubstitution: false) {
-            
+
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 4) {
                 throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 4), ("Type", ShapeType.Map)));
             }
@@ -62,7 +62,7 @@ namespace TensorShader.Functions.TrivectorConvolution {
             if (outshape.Channels % 3 != 0) {
                 throw new AggregateException(ExceptionMessage.TensorLengthMultiple("Channels", outshape, outshape.Channels, 3));
             }
-            
+
             this.InShape = inshape;
             this.OutShape = outshape;
             this.KernelShape = Shape.Kernel2D(inshape.Channels / 3 * 4, outshape.Channels / 3, kwidth, kheight);

@@ -17,7 +17,7 @@ namespace TensorShader.Operators.QuaternionConvolution {
         /// <summary>フィルタサイズ</summary>
         /// <remarks>奇数を指定すること</remarks>
         public int KernelHeight { private set; get; }
-        
+
         /// <summary>勾配</summary>
         public bool GradMode { private set; get; }
 
@@ -58,7 +58,7 @@ namespace TensorShader.Operators.QuaternionConvolution {
 
             TensorShaderCudaBackend.Quaternion.Deconvolution2D((uint)InChannels, (uint)OutChannels,
                                                                (uint)inmap.Width, (uint)inmap.Height,
-                                                               (uint)Batch, 
+                                                               (uint)Batch,
                                                                (uint)KernelWidth, (uint)KernelHeight,
                                                                GradMode,
                                                                inmap.Buffer, infilter.Buffer, outmap.Buffer);

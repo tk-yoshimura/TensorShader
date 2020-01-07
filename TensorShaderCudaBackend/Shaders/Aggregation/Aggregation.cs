@@ -13,15 +13,15 @@ namespace TensorShaderCudaBackend.Shaders.Aggregation {
         private uint SharedMemoryLines { set; get; }
 
         /// <summary>実行あたりのスライド数</summary>
-        public static uint SlidesPerExecute => 0x8000; 
+        public static uint SlidesPerExecute => 0x8000;
 
         /// <summary>コンストラクタ</summary>
-        protected Aggregation(uint shared_memory_lines) { 
-            if(shared_memory_lines < 1){
+        protected Aggregation(uint shared_memory_lines) {
+            if (shared_memory_lines < 1) {
                 throw new ArgumentException(nameof(shared_memory_lines));
             }
 
-            if(Kernel.MaxBlockSize > API.Cuda.CurrectDeviceProperty.SharedMemoryBytesPerBlock / shared_memory_lines / sizeof(float)){ 
+            if (Kernel.MaxBlockSize > API.Cuda.CurrectDeviceProperty.SharedMemoryBytesPerBlock / shared_memory_lines / sizeof(float)) {
                 throw new ArgumentException(nameof(shared_memory_lines));
             }
 
@@ -44,24 +44,24 @@ namespace TensorShaderCudaBackend.Shaders.Aggregation {
             uint max_shared_memory_length = Kernel.MaxBlockSize;
             uint shared_memory_length = 1;
 
-            while(shared_memory_length * 2 < axislength) {
-                    
+            while (shared_memory_length * 2 < axislength) {
+
                 shared_memory_length *= 2;
 
-                if(shared_memory_length > max_shared_memory_length) { 
+                if (shared_memory_length > max_shared_memory_length) {
                     shared_memory_length = max_shared_memory_length;
                     break;
                 }
             }
 
-            for(uint s = 0; s < slides; s += SlidesPerExecute) { 
+            for (uint s = 0; s < slides; s += SlidesPerExecute) {
                 uint sl = Math.Min(SlidesPerExecute, slides - s);
 
                 Kernel.Execute(
-                    indexes:(shared_memory_length * outmap_stride, sl), 
-                    block:(shared_memory_length, 1),
-                    dynamic_shared_memory_bytes: shared_memory_length * SharedMemoryLines * sizeof(float), 
-                    stream, 
+                    indexes: (shared_memory_length * outmap_stride, sl),
+                    block: (shared_memory_length, 1),
+                    dynamic_shared_memory_bytes: shared_memory_length * SharedMemoryLines * sizeof(float),
+                    stream,
                     inmap.ElementPtr(s * inmap_stride),
                     outmap.ElementPtr(s * outmap_stride),
                     axislength, shared_memory_length, outmap_stride, sl

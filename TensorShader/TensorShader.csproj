@@ -132,6 +132,8 @@
     <Compile Include="Functions\Connection1D\Convolution\PointwiseKernelProduct.cs" />
     <Compile Include="Functions\Connection1D\Pool\StridePooling.cs" />
     <Compile Include="Functions\Connection1D\Pool\StrideUnpooling.cs" />
+    <Compile Include="Functions\Connection1D\Transform\ColumnToImage.cs" />
+    <Compile Include="Functions\Connection1D\Transform\ImageToColumn.cs" />
     <Compile Include="Functions\Connection2D\Pool\StridePooling.cs" />
     <Compile Include="Functions\Connection2D\Pool\StrideUnpooling.cs" />
     <Compile Include="Functions\Connection2D\Transform\ColumnToImage.cs" />
@@ -155,6 +157,8 @@
     <Compile Include="Functions\Connection3D\Pool\MaxPooling.cs" />
     <Compile Include="Functions\Connection3D\Pool\MaxUnpooling.cs" />
     <Compile Include="Functions\Connection3D\Transform\ChannelToSpace.cs" />
+    <Compile Include="Functions\Connection3D\Transform\ColumnToImage.cs" />
+    <Compile Include="Functions\Connection3D\Transform\ImageToColumn.cs" />
     <Compile Include="Functions\Connection3D\Transform\SpaceToChannel.cs" />
     <Compile Include="Functions\Connection3D\Trim\Trimming.cs" />
     <Compile Include="Functions\Connection3D\Zoom\LinearZoom.cs" />
@@ -452,6 +456,8 @@
     <Compile Include="Links\Connection1D\Convolution\PointwiseConvolution.cs" />
     <Compile Include="Links\Connection1D\Convolution\PointwiseDeconvolution.cs" />
     <Compile Include="Links\Connection1D\Pool\StridePooling.cs" />
+    <Compile Include="Links\Connection1D\Transform\ColumnToImage.cs" />
+    <Compile Include="Links\Connection1D\Transform\ImageToColumn.cs" />
     <Compile Include="Links\Connection2D\Pool\StridePooling.cs" />
     <Compile Include="Links\Connection2D\Transform\ColumnToImage.cs" />
     <Compile Include="Links\Connection2D\Transform\ImageToColumn.cs" />
@@ -467,6 +473,8 @@
     <Compile Include="Links\Connection3D\Pool\AveragePooling.cs" />
     <Compile Include="Links\Connection3D\Pool\MaxPooling.cs" />
     <Compile Include="Links\Connection3D\Transform\ChannelToSpace.cs" />
+    <Compile Include="Links\Connection3D\Transform\ColumnToImage.cs" />
+    <Compile Include="Links\Connection3D\Transform\ImageToColumn.cs" />
     <Compile Include="Links\Connection3D\Transform\SpaceToChannel.cs" />
     <Compile Include="Links\Connection3D\Trim\Trimming.cs" />
     <Compile Include="Links\Connection3D\Zoom\LinearZoom.cs" />
@@ -701,6 +709,8 @@
     <Compile Include="Operators\Connection1D\Pool\MaxPooling.cs" />
     <Compile Include="Operators\Connection1D\Pool\MaxUnpooling.cs" />
     <Compile Include="Operators\Connection1D\Transform\ChannelToSpace.cs" />
+    <Compile Include="Operators\Connection1D\Transform\ColumnToImage.cs" />
+    <Compile Include="Operators\Connection1D\Transform\ImageToColumn.cs" />
     <Compile Include="Operators\Connection1D\Transform\SpaceToChannel.cs" />
     <Compile Include="Operators\Connection1D\Trim\Trimming.cs" />
     <Compile Include="Operators\Connection1D\Zoom\LinearZoom.cs" />
@@ -735,6 +745,8 @@
     <Compile Include="Operators\Connection3D\Pool\MaxPooling.cs" />
     <Compile Include="Operators\Connection3D\Pool\MaxUnpooling.cs" />
     <Compile Include="Operators\Connection3D\Transform\ChannelToSpace.cs" />
+    <Compile Include="Operators\Connection3D\Transform\ColumnToImage.cs" />
+    <Compile Include="Operators\Connection3D\Transform\ImageToColumn.cs" />
     <Compile Include="Operators\Connection3D\Transform\SpaceToChannel.cs" />
     <Compile Include="Operators\Connection3D\Trim\Trimming.cs" />
     <Compile Include="Operators\Connection3D\Zoom\LinearZoom.cs" />

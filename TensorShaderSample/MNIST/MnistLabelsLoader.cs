@@ -36,7 +36,7 @@ namespace MNIST {
 
             float label = filedata[index + 8];
 
-            return  new float[] { label };
+            return new float[] { label };
         }
     }
 }

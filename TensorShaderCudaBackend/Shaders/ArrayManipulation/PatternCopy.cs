@@ -10,10 +10,10 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         public override sealed string Signature => $"{GetType().Name.Split(',').Last()}";
 
         /// <summary>実行あたりのスライド数</summary>
-        public static uint SlidesPerExecute => 0x8000; 
+        public static uint SlidesPerExecute => 0x8000;
 
         /// <summary>コンストラクタ</summary>
-        public PatternCopy() { 
+        public PatternCopy() {
             string code = $@"
 
             __global__ void pattern_copy(float *inmap, float *outmap, 
@@ -48,15 +48,15 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
             uint outmap_stride = (args[7] as uint?).Value;
             uint copylength = (args[8] as uint?).Value;
             uint slides = (args[9] as uint?).Value;
-            
-            for(uint s = 0; s < slides; s += SlidesPerExecute) { 
+
+            for (uint s = 0; s < slides; s += SlidesPerExecute) {
                 uint sl = Math.Min(SlidesPerExecute, slides - s);
 
                 Kernel.Execute(
-                    indexes:(copylength, sl), 
-                    dynamic_shared_memory_bytes: 0, 
+                    indexes: (copylength, sl),
+                    dynamic_shared_memory_bytes: 0,
                     stream,
-                    inmap.ElementPtr(inmap_offset + inmap_index + s * inmap_stride), 
+                    inmap.ElementPtr(inmap_offset + inmap_index + s * inmap_stride),
                     outmap.ElementPtr(outmap_offset + outmap_index + s * outmap_stride),
                     inmap_stride, outmap_stride, copylength, sl
                 );
@@ -76,7 +76,7 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
             if (!(args[4] is uint outmap_offset)) {
                 throw new ArgumentException(nameof(outmap_offset));
             }
-            
+
             if (!(args[8] is uint copy_length) || copy_length < 1) {
                 throw new ArgumentException(nameof(copy_length));
             }

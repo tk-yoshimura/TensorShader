@@ -13,7 +13,7 @@ namespace TensorShader.Operators.TrivectorConvolution {
         /// <summary>フィルタサイズ</summary>
         /// <remarks>奇数を指定すること</remarks>
         public int KernelWidth { private set; get; }
-        
+
         /// <summary>勾配</summary>
         public bool GradMode { private set; get; }
 
@@ -52,7 +52,7 @@ namespace TensorShader.Operators.TrivectorConvolution {
 
             TensorShaderCudaBackend.Trivector.Deconvolution1D((uint)InChannels, (uint)OutChannels,
                                                               (uint)inmap.Width,
-                                                              (uint)Batch, 
+                                                              (uint)Batch,
                                                               (uint)KernelWidth,
                                                               GradMode,
                                                               inmap.Buffer, infilter.Buffer, outmap.Buffer);

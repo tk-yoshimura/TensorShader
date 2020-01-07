@@ -36,7 +36,8 @@ namespace TensorShader {
         public int Width {
             get {
                 if (shape.Length > 2 && Type == ShapeType.Map) return shape[1];
-                if (shape.Length > 2 && (Type == ShapeType.Kernel || Type == ShapeType.Column)) return shape[2];
+                if (shape.Length > 2 && Type == ShapeType.Kernel) return shape[2];
+                if (shape.Length > 3 && Type == ShapeType.Column) return shape[2];
                 return 0;
             }
         }
@@ -45,7 +46,8 @@ namespace TensorShader {
         public int Height {
             get {
                 if (shape.Length > 3 && Type == ShapeType.Map) return shape[2];
-                if (shape.Length > 3 && (Type == ShapeType.Kernel || Type == ShapeType.Column)) return shape[3];
+                if (shape.Length > 3 && Type == ShapeType.Kernel) return shape[3];
+                if (shape.Length > 4 && Type == ShapeType.Column) return shape[3];
                 return 0;
             }
         }
@@ -54,7 +56,8 @@ namespace TensorShader {
         public int Depth {
             get {
                 if (shape.Length > 4 && Type == ShapeType.Map) return shape[3];
-                if (shape.Length > 4 && (Type == ShapeType.Kernel || Type == ShapeType.Column)) return shape[4];
+                if (shape.Length > 4 && Type == ShapeType.Kernel) return shape[4];
+                if (shape.Length > 5 && Type == ShapeType.Column) return shape[4];
                 return 0;
             }
         }

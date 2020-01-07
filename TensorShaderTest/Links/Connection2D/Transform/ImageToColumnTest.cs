@@ -26,12 +26,12 @@ namespace TensorShaderTest.Links.Connection2D {
 
             Field y1_expect = ImageToColumn2D(x1, kwidth, kheight);
 
-            List<Field> x2s = new List<Field>(); 
-            for(int ky = 0; ky < kheight; ky++) { 
-                for(int kx = 0; kx < kwidth; kx++) { 
+            List<Field> x2s = new List<Field>();
+            for (int ky = 0; ky < kheight; ky++) {
+                for (int kx = 0; kx < kwidth; kx++) {
                     x2s.Add(
                         Reshape(
-                            Trimming2D(x2, kx, kwidth - kx - 1, ky, kheight - ky - 1), 
+                            Trimming2D(x2, kx, kwidth - kx - 1, ky, kheight - ky - 1),
                             new Shape(ShapeType.Column, 1, channels, outwidth, outheight, batch)
                             )
                         );

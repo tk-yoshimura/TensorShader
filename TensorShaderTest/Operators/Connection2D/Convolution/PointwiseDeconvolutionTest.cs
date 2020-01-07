@@ -15,8 +15,8 @@ namespace TensorShaderTest.Operators.Connection2D {
             foreach (int batch in new int[] { 1, 2 }) {
                 foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20 }) {
                     foreach (int outchannels in new int[] { 7, 13 }) {
-                        foreach (int width in new int[] { 8, 9, 13, 17 }) {
-                            foreach (int height in new int[] { 8, 9, 19, 23 }) {
+                        foreach (int height in new int[] { 8, 9, 19, 23 }) {
+                            foreach (int width in new int[] { 8, 9, 13, 17 }) {
                                 float[] yval = (new float[width * height * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                                 float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
@@ -109,7 +109,7 @@ namespace TensorShaderTest.Operators.Connection2D {
             Cuda.Profiler.Start();
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
-            
+
             Cuda.Profiler.Stop();
         }
 

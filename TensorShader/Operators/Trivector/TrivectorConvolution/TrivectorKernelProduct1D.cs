@@ -53,7 +53,7 @@ namespace TensorShader.Operators.TrivectorConvolution {
 
             TensorShaderCudaBackend.Trivector.KernelProduct1D((uint)InChannels, (uint)OutChannels,
                                                               (uint)inmap1.Width,
-                                                              (uint)Batch, 
+                                                              (uint)Batch,
                                                               (uint)KernelWidth,
                                                               Transpose,
                                                               inmap1.Buffer, inmap2.Buffer, inmap3.Buffer, outfilter.Buffer);

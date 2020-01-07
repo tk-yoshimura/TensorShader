@@ -7,7 +7,7 @@ namespace TensorShaderUtil.Iterator {
 
         /// <summary>コンストラクタ</summary>
         public RepeatIterator(int num_batches, int counts)
-            : base(num_batches, counts){
+            : base(num_batches, counts) {
             this.pos = 0;
         }
 

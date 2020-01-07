@@ -22,7 +22,7 @@ namespace TensorShader.Operators.Connection2D {
 
         /// <summary>コンストラクタ</summary>
         public KernelProduct(int inwidth, int inheight, int inchannels, int outchannels, int kwidth, int kheight, int batch = 1) {
-            
+
             int outwidth = inwidth - kwidth + 1;
             int outheight = inheight - kheight + 1;
 
@@ -47,8 +47,8 @@ namespace TensorShader.Operators.Connection2D {
 
             TensorShaderCudaBackend.Convolution.KernelProduct2D((uint)InChannels, (uint)OutChannels,
                                                                 (uint)inmap1.Width, (uint)inmap1.Height,
-                                                                (uint)Batch, 
-                                                                (uint)KernelWidth, (uint)KernelHeight, 
+                                                                (uint)Batch,
+                                                                (uint)KernelWidth, (uint)KernelHeight,
                                                                 inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);
         }
 

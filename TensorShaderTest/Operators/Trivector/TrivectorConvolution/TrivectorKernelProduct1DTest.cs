@@ -78,8 +78,8 @@ namespace TensorShaderTest.Operators.Trivector {
 
             int batch = 3;
             int inchannels = 147, outchannels = 150;
-            int kwidth = 5; 
-            int inwidth = 125; 
+            int kwidth = 5;
+            int inwidth = 125;
             int outwidth = inwidth - kwidth + 1;
 
             float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
@@ -124,7 +124,7 @@ namespace TensorShaderTest.Operators.Trivector {
 
             Console.WriteLine($"maxerr:{max_err}");
         }
-        
+
         [TestMethod]
         public void SpeedTest() {
             int inwidth = 32, inchannels = 33, outchannels = 33, ksize = 3;

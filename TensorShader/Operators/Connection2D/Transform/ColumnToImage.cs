@@ -20,10 +20,10 @@ namespace TensorShader.Operators.Connection2D {
 
         /// <summary>コンストラクタ</summary>
         public ColumnToImage(int inwidth, int inheight, int channels, int kwidth, int kheight, int batch = 1) {
-            if(kwidth < 1 || kwidth % 2 != 1) { 
+            if (kwidth < 1 || kwidth % 2 != 1) {
                 throw new ArgumentException(nameof(kwidth));
             }
-            if(kheight < 1 || kheight % 2 != 1) { 
+            if (kheight < 1 || kheight % 2 != 1) {
                 throw new ArgumentException(nameof(kheight));
             }
 
@@ -49,7 +49,7 @@ namespace TensorShader.Operators.Connection2D {
             Tensor inmap = tensors[0], outmap = tensors[1];
 
             TensorShaderCudaBackend.Transform.ColumnToImage2D(
-                (uint)Channels, (uint)inmap.Width, (uint)inmap.Height, 
+                (uint)Channels, (uint)inmap.Width, (uint)inmap.Height,
                 (uint)Batch, (uint)KernelWidth, (uint)KernelHeight, inmap.Buffer, outmap.Buffer
             );
         }

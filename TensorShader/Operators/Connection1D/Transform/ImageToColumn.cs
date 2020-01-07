@@ -1,0 +1,53 @@
+using System;
+using System.Collections.Generic;
+
+namespace TensorShader.Operators.Connection1D {
+    /// <summary>ImageToColumn変換</summary>
+    internal class ImageToColumn : Operator {
+        /// <summary>チャネル数</summary>
+        public int Channels { private set; get; }
+
+        /// <summary>フィルタサイズ</summary>
+        /// <remarks>奇数を指定すること</remarks>
+        public int KernelWidth { private set; get; }
+
+        /// <summary>バッチサイズ</summary>
+        public int Batch { private set; get; }
+
+        /// <summary>コンストラクタ</summary>
+        public ImageToColumn(int inwidth, int channels, int kwidth, int batch = 1) {
+            if (kwidth < 1 || kwidth % 2 != 1) {
+                throw new ArgumentException(nameof(kwidth));
+            }
+
+            int outwidth = inwidth - kwidth + 1;
+
+            this.arguments = new List<(ArgumentType type, Shape shape)>{
+                (ArgumentType.In, Shape.Map1D(channels, inwidth, batch)),
+                (ArgumentType.Out, new Shape(ShapeType.Column, kwidth, channels, outwidth, batch)),
+            };
+
+            this.Channels = channels;
+            this.KernelWidth = kwidth;
+
+            this.Batch = batch;
+        }
+
+        /// <summary>操作を実行</summary>
+        public override void Execute(params Tensor[] tensors) {
+            CheckArgumentShapes(tensors);
+
+            Tensor inmap = tensors[0], outmap = tensors[1];
+
+            TensorShaderCudaBackend.Transform.ImageToColumn1D(
+                (uint)Channels, (uint)inmap.Width,
+                (uint)Batch, (uint)KernelWidth, inmap.Buffer, outmap.Buffer
+            );
+        }
+
+        /// <summary>操作を実行</summary>
+        public void Execute(Tensor inmap, Tensor outmap) {
+            Execute(new Tensor[] { inmap, outmap });
+        }
+    }
+}

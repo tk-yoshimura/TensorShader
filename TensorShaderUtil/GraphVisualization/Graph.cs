@@ -8,7 +8,7 @@ namespace TensorShaderUtil.GraphVisualization {
         /// <summary>ノード</summary>
         public class Node {
             /// <summary>ID</summary>
-            public int ID{ set; get; }
+            public int ID { set; get; }
 
             /// <summary>ノード名</summary>
             public string Name { set; get; }
@@ -33,11 +33,11 @@ namespace TensorShaderUtil.GraphVisualization {
             int id = 0;
 
             Stack<Field> stack = new Stack<Field>(outputs);
-            foreach(Field field in outputs) {
-                visited_field.Add(field, new Node(){ ID = id++, Name = field.Name });
+            foreach (Field field in outputs) {
+                visited_field.Add(field, new Node() { ID = id++, Name = field.Name });
             }
 
-            while(stack.Count > 0) {
+            while (stack.Count > 0) {
                 Field field_current = stack.Pop();
 
                 Link link = field_current.OutLink;
@@ -47,15 +47,15 @@ namespace TensorShaderUtil.GraphVisualization {
                 }
 
                 if (!visited_link.ContainsKey(link)) {
-                    visited_link.Add(link, new Node(){ ID = id++, Name = link.Name });
+                    visited_link.Add(link, new Node() { ID = id++, Name = link.Name });
                 }
 
                 edges.Add(new Edge() { InNode = visited_link[link], OutNode = visited_field[field_current] });
 
-                foreach(Field field in link.InFields) {
+                foreach (Field field in link.InFields) {
                     if (!visited_field.ContainsKey(field)) {
                         stack.Push(field);
-                        visited_field.Add(field, new Node(){ ID = id++, Name = field.Name });
+                        visited_field.Add(field, new Node() { ID = id++, Name = field.Name });
                     }
 
                     edges.Add(new Edge() { InNode = visited_field[field], OutNode = visited_link[link] });

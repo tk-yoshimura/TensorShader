@@ -16,9 +16,9 @@ namespace TensorShaderTest.Operators.Connection3D {
 
             foreach (int batch in new int[] { 1, 2 }) {
                 foreach (int channels in new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }) {
-                    foreach (int inwidth in new int[] { 1, 2, 5, 7, 11 }) {
+                    foreach (int indepth in new int[] { 1, 2, 5, 7, 11 }) {
                         foreach (int inheight in new int[] { 1, 2, 5, 7, 11 }) {
-                            foreach (int indepth in new int[] { 1, 2, 5, 7, 11 }) {
+                            foreach (int inwidth in new int[] { 1, 2, 5, 7, 11 }) {
                                 int outwidth = inwidth * scale, outheight = inheight * scale, outdepth = indepth * scale;
 
                                 float[] xval = (new float[inwidth * inheight * indepth * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();

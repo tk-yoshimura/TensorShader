@@ -17,18 +17,18 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
 
         /// <summary>勾配</summary>
         public bool GradMode { private set; get; }
-                
+
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
+        public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " +
             $"{nameof(KernelWidth)} = {KernelWidth} {nameof(GradMode)} = {GradMode}";
-        
+
         /// <summary>コンストラクタ</summary>
-        public Deconvolution1D(uint inchannels, uint outchannels, uint kwidth, bool gradmode) { 
-            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple:3, inchannels, outchannels)) {
+        public Deconvolution1D(uint inchannels, uint outchannels, uint kwidth, bool gradmode) {
+            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple: 3, inchannels, outchannels)) {
                 throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
-            if (!Limits.CheckKernelSize(kwidth)) { 
+            if (!Limits.CheckKernelSize(kwidth)) {
                 throw new ArgumentException(nameof(kwidth));
             }
 
@@ -138,7 +138,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
-           
+
             uint inwidth = (args[3] as uint?).Value;
             uint batches = (args[4] as uint?).Value;
 
@@ -146,11 +146,11 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
 
             for (uint th = 0; th < batches; th++) {
                 Kernel.Execute(
-                    indexes:(OutChannels, outwidth), 
-                    block:(Kernel.DefaultBlockSize(OutChannels), 1),
-                    dynamic_shared_memory_bytes: 0, 
+                    indexes: (OutChannels, outwidth),
+                    block: (Kernel.DefaultBlockSize(OutChannels), 1),
+                    dynamic_shared_memory_bytes: 0,
                     stream,
-                    inmap.ElementPtr(th * InChannels * inwidth * 3), 
+                    inmap.ElementPtr(th * InChannels * inwidth * 3),
                     outmap.ElementPtr(th * OutChannels * outwidth * 3),
                     filter,
                     inwidth

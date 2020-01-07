@@ -58,18 +58,18 @@ namespace TensorShaderCudaBackend.Shaders.Pool {
 
             uint inwidth = outwidth / Stride, inheight = outheight / Stride;
 
-            if(outwidth % Stride != 0 || outheight % Stride != 0) { 
+            if (outwidth % Stride != 0 || outheight % Stride != 0) {
                 outmap.ZerosetAsync(stream, Channels * outwidth * outheight * batches);
             }
 
             for (uint th = 0; th < batches; th++) {
                 Kernel.Execute(
-                    indexes:(Channels, inwidth, inheight),
+                    indexes: (Channels, inwidth, inheight),
                     dynamic_shared_memory_bytes: 0,
                     stream,
-                    ingrad.ElementPtr(th * Channels * inwidth * inheight), 
-                    inpool.ElementPtr(th * Channels * inwidth * inheight), 
-                    inmap.ElementPtr(th * Channels * outwidth * outheight), 
+                    ingrad.ElementPtr(th * Channels * inwidth * inheight),
+                    inpool.ElementPtr(th * Channels * inwidth * inheight),
+                    inmap.ElementPtr(th * Channels * outwidth * outheight),
                     outmap.ElementPtr(th * Channels * outwidth * outheight),
                     inwidth, outwidth, inheight
                 );

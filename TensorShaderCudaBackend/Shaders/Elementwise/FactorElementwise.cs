@@ -41,7 +41,7 @@ namespace TensorShaderCudaBackend.Shaders.Elementwise {
 
             uint length = (args.Last() as uint?).Value;
 
-            if(Factors == 1) { 
+            if (Factors == 1) {
                 CudaArray<float> c = args[0] as CudaArray<float>;
 
                 if (stream != null) {
@@ -51,8 +51,8 @@ namespace TensorShaderCudaBackend.Shaders.Elementwise {
                     Kernel.StoreConstMemory("c", c, 1);
                 }
             }
-            else { 
-                for(int i = 0; i < Factors; i++) { 
+            else {
+                for (int i = 0; i < Factors; i++) {
                     CudaArray<float> c = args[i] as CudaArray<float>;
 
                     if (stream != null) {

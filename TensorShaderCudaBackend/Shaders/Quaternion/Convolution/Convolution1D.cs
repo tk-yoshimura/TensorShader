@@ -21,16 +21,16 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
         public bool GradMode { private set; get; }
 
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
+        public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " +
             $"{nameof(KernelWidth)} = {KernelWidth} {nameof(GradMode)} = {GradMode}";
-        
+
         /// <summary>コンストラクタ</summary>
-        public Convolution1D(uint inchannels, uint outchannels, uint kwidth, bool gradmode) { 
-            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple:4, inchannels, outchannels)) {
+        public Convolution1D(uint inchannels, uint outchannels, uint kwidth, bool gradmode) {
+            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple: 4, inchannels, outchannels)) {
                 throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
-            if (!Limits.CheckKernelSize(kwidth)) { 
+            if (!Limits.CheckKernelSize(kwidth)) {
                 throw new ArgumentException(nameof(kwidth));
             }
 
@@ -150,23 +150,23 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
-           
+
             uint inwidth = (args[3] as uint?).Value;
             uint batches = (args[4] as uint?).Value;
 
             uint outwidth = inwidth + 1 - KernelWidth;
 
-            CudaArray<float> transpose_filter = 
-                CudaArrayReserver<float>.Request(stream, filter.DeviceID, index:0, InChannels * OutChannels * KernelWidth * 4);
+            CudaArray<float> transpose_filter =
+                CudaArrayReserver<float>.Request(stream, filter.DeviceID, index: 0, InChannels * OutChannels * KernelWidth * 4);
 
             TransposeQuaternionKernelChannel(InChannels * 4, OutChannels * 4, KernelWidth, filter, transpose_filter, stream);
-            
+
             for (uint th = 0; th < batches; th++) {
                 Kernel.Execute(
-                    indexes:(OutChannels, outwidth), 
-                    block:(Kernel.DefaultBlockSize(OutChannels), 1),
+                    indexes: (OutChannels, outwidth),
+                    block: (Kernel.DefaultBlockSize(OutChannels), 1),
                     dynamic_shared_memory_bytes: 0, stream,
-                    inmap.ElementPtr(th * InChannels * inwidth * 4), 
+                    inmap.ElementPtr(th * InChannels * inwidth * 4),
                     outmap.ElementPtr(th * OutChannels * outwidth * 4),
                     transpose_filter
                 );

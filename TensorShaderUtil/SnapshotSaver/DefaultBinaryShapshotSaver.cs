@@ -99,7 +99,7 @@ namespace TensorShaderUtil.SnapshotSaver {
             }
 
             ShapeType type = (ShapeType)Enum.ToObject(typeof(ShapeType), reader.ReadInt16());
-            if (!Enum.IsDefined(typeof(ShapeType), type)){
+            if (!Enum.IsDefined(typeof(ShapeType), type)) {
                 throw new InvalidDataException("Invalid shape type.");
             }
 

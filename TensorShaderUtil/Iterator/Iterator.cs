@@ -42,13 +42,13 @@ namespace TensorShaderUtil.Iterator {
         public abstract int[] Next();
 
         /// <summary>Epochを増加させる</summary>
-        protected void IncreaseEpoch() { 
+        protected void IncreaseEpoch() {
             Epoch++;
             IncreasedEpoch?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>Iterationを増加させる</summary>
-        protected void IncreaseIteration() { 
+        protected void IncreaseIteration() {
             Iteration++;
             IncreasedIteration?.Invoke(this, EventArgs.Empty);
         }

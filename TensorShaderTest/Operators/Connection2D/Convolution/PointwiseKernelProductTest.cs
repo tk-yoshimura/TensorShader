@@ -15,8 +15,8 @@ namespace TensorShaderTest.Operators.Connection2D {
             foreach (int batch in new int[] { 1, 2 }) {
                 foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20 }) {
                     foreach (int outchannels in new int[] { 7, 13 }) {
-                        foreach (int width in new int[] { 8, 9, 13, 17 }) {
-                            foreach (int height in new int[] { 8, 9, 19, 23 }) {
+                        foreach (int height in new int[] { 8, 9, 19, 23 }) {
+                            foreach (int width in new int[] { 8, 9, 13, 17 }) {
                                 float[] xval = (new float[width * height * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                                 float[] gyval = (new float[width * height * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
@@ -53,7 +53,7 @@ namespace TensorShaderTest.Operators.Connection2D {
             Console.WriteLine($"maxerr:{max_err}");
         }
 
-         [TestMethod]
+        [TestMethod]
         public void LargeMapTest() {
             float max_err = 0;
 
@@ -108,7 +108,7 @@ namespace TensorShaderTest.Operators.Connection2D {
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, gy_tensor, gw_tensor);
-            
+
             Cuda.Profiler.Stop();
         }
 

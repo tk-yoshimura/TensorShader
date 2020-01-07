@@ -7,7 +7,7 @@ namespace TensorShaderCudaBackend.API {
 
     public static partial class Nvcuda {
 
-        #pragma warning disable IDE1006 // 命名スタイル
+#pragma warning disable IDE1006 // 命名スタイル
         private static class NativeMethods {
             const string DllName = "nvcuda.dll";
 
@@ -39,6 +39,6 @@ namespace TensorShaderCudaBackend.API {
             [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
             public static extern CUresult cuGetErrorString(CUresult error, ref IntPtr pStr);
         }
-        #pragma warning restore IDE1006 // 命名スタイル
+#pragma warning restore IDE1006 // 命名スタイル
     }
 }

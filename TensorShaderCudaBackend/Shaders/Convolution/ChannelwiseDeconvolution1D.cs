@@ -11,18 +11,18 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
         /// <summary>フィルタサイズ</summary>
         public uint KernelWidth { private set; get; }
-                
+
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
+        public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(Channels)} = {Channels} " +
             $"{nameof(KernelWidth)} = {KernelWidth}";
-        
+
         /// <summary>コンストラクタ</summary>
-        public ChannelwiseDeconvolution1D(uint channels, uint kwidth) { 
+        public ChannelwiseDeconvolution1D(uint channels, uint kwidth) {
             if (!Limits.CheckChannels(channels)) {
                 throw new ArgumentException(nameof(channels));
             }
-            if (!Limits.CheckKernelSize(kwidth)) { 
+            if (!Limits.CheckKernelSize(kwidth)) {
                 throw new ArgumentException(nameof(kwidth));
             }
 
@@ -78,7 +78,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
-           
+
             uint inwidth = (args[3] as uint?).Value;
             uint batches = (args[4] as uint?).Value;
 
@@ -86,11 +86,11 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             for (uint th = 0; th < batches; th++) {
                 Kernel.Execute(
-                    indexes:(Channels, outwidth), 
-                    block:(Kernel.DefaultBlockSize(Channels), 1),
-                    dynamic_shared_memory_bytes: 0, 
+                    indexes: (Channels, outwidth),
+                    block: (Kernel.DefaultBlockSize(Channels), 1),
+                    dynamic_shared_memory_bytes: 0,
                     stream,
-                    inmap.ElementPtr(th * Channels * inwidth), 
+                    inmap.ElementPtr(th * Channels * inwidth),
                     outmap.ElementPtr(th * Channels * outwidth),
                     filter,
                     inwidth
@@ -107,7 +107,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             if (!(args[3] is uint inwidth) || !Limits.CheckWidth(inwidth)) {
                 throw new ArgumentException(nameof(inwidth));
             }
-            
+
             if (!(args[4] is uint batches) || !Limits.CheckBatches(batches)) {
                 throw new ArgumentException(nameof(batches));
             }

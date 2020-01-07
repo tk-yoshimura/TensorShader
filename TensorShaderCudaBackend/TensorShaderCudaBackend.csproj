@@ -287,7 +287,11 @@
     <Compile Include="Shaders\Randomize\Normal.cs" />
     <Compile Include="Shaders\Randomize\Binary.cs" />
     <Compile Include="Shaders\Randomize\Uniform.cs" />
+    <Compile Include="Shaders\Transform\ColumnToImage1D.cs" />
+    <Compile Include="Shaders\Transform\ColumnToImage3D.cs" />
     <Compile Include="Shaders\Transform\ColumnToImage2D.cs" />
+    <Compile Include="Shaders\Transform\ImageToColumn1D.cs" />
+    <Compile Include="Shaders\Transform\ImageToColumn3D.cs" />
     <Compile Include="Shaders\Transform\ImageToColumn2D.cs" />
     <Compile Include="Shaders\Transform\SpaceToChannel3D.cs" />
     <Compile Include="Shaders\Transform\ChannelToSpace3D.cs" />

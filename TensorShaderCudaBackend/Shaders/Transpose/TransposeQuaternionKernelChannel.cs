@@ -13,15 +13,15 @@ namespace TensorShaderCudaBackend.Shaders.Transpose {
         public uint OutChannels { private set; get; }
 
         /// <summary>実行あたりのポイント数(2^15=32768‬)</summary>
-        public static uint PointsPerExecute => 0x8000; 
+        public static uint PointsPerExecute => 0x8000;
 
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
+        public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels}";
 
         /// <summary>コンストラクタ</summary>
         public TransposeQuaternionKernelChannel(uint inchannels, uint outchannels) {
-            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple:4, inchannels, outchannels)) {
+            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple: 4, inchannels, outchannels)) {
                 throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
 
@@ -55,16 +55,16 @@ namespace TensorShaderCudaBackend.Shaders.Transpose {
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             uint pts = (args[2] as uint?).Value;
-            
-            for(uint p = 0; p < pts; p += PointsPerExecute) { 
+
+            for (uint p = 0; p < pts; p += PointsPerExecute) {
                 uint pl = Math.Min(PointsPerExecute, pts - p);
 
                 Kernel.Execute(
-                    indexes:(InChannels, OutChannels, pl),
-                    dynamic_shared_memory_bytes: 0, 
+                    indexes: (InChannels, OutChannels, pl),
+                    dynamic_shared_memory_bytes: 0,
                     stream,
-                    inmap.ElementPtr(p * InChannels * OutChannels * 4), 
-                    outmap.ElementPtr(p * InChannels * OutChannels * 4), 
+                    inmap.ElementPtr(p * InChannels * OutChannels * 4),
+                    outmap.ElementPtr(p * InChannels * OutChannels * 4),
                     pl
                 );
             }

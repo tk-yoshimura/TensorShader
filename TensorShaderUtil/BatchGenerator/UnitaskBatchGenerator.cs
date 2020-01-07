@@ -18,7 +18,7 @@ namespace TensorShaderUtil.BatchGenerator {
                 throw new ArgumentException(nameof(indexes));
             }
 
-            for(int i = 0; i < NumBatches; i++) {
+            for (int i = 0; i < NumBatches; i++) {
                 int index = indexes != null ? indexes[i] : 0;
 
                 GenerateToInsert(this, i, index);

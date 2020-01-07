@@ -10,7 +10,7 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         public override sealed string Signature => $"{GetType().Name.Split(',').Last()}";
 
         /// <summary>コンストラクタ</summary>
-        public Clear() { 
+        public Clear() {
             string code = $@"
 
             __global__ void clear(float *y, float c, unsigned int length) {{

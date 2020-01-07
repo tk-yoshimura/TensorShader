@@ -117,7 +117,7 @@ namespace TensorShaderTest.Operators.Quaternion {
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, w_tensor, y_tensor);
-            
+
             Cuda.Profiler.Stop();
         }
 

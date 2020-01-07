@@ -41,16 +41,16 @@ namespace TensorShaderCudaBackend.Shaders.Pool {
 
             uint inwidth = outwidth / Stride;
 
-            if(outwidth % Stride != 0) { 
+            if (outwidth % Stride != 0) {
                 outmap.ZerosetAsync(stream, Channels * outwidth * batches);
             }
 
             for (uint th = 0; th < batches; th++) {
                 Kernel.Execute(
-                    indexes:(Channels, inwidth),
-                    dynamic_shared_memory_bytes: 0, 
+                    indexes: (Channels, inwidth),
+                    dynamic_shared_memory_bytes: 0,
                     stream,
-                    inmap.ElementPtr(th * Channels * inwidth), 
+                    inmap.ElementPtr(th * Channels * inwidth),
                     outmap.ElementPtr(th * Channels * outwidth),
                     inwidth
                 );

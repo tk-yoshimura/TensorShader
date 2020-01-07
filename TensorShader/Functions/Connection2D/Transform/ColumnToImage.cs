@@ -81,7 +81,7 @@ namespace TensorShader.Functions.Connection2D {
 
             return (new Tensor[] { intensors[0], outtensors[0] },
                     new Operators.Connection2D.ColumnToImage(
-                        shape.Width, shape.Height, shape.Channels, 
+                        shape.Width, shape.Height, shape.Channels,
                         KernelWidth, KernelHeight, shape.Batch));
         }
     }

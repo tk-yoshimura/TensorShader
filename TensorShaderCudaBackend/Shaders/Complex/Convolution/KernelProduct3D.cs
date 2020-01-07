@@ -37,18 +37,18 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
 
         /// <summary>1スレッドで処理する対象ピクセル数</summary>
         private static uint BatchPixels => 16;
-                
+
         /// <summary>識別子</summary>
-        public override sealed string Signature => 
-            $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " + 
+        public override sealed string Signature =>
+            $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " +
             $"{nameof(KernelWidth)} = {KernelWidth} {nameof(KernelHeight)} = {KernelHeight} {nameof(KernelDepth)} = {KernelDepth} {nameof(Transpose)} = {Transpose}";
-        
+
         /// <summary>コンストラクタ</summary>
-        public KernelProduct3D(uint inchannels, uint outchannels, uint kwidth, uint kheight, uint kdepth, bool transpose) { 
-            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple:2, inchannels, outchannels)) {
+        public KernelProduct3D(uint inchannels, uint outchannels, uint kwidth, uint kheight, uint kdepth, bool transpose) {
+            if (!Limits.CheckChannels(inchannels, outchannels) || !Limits.CheckMultipleNum(multiple: 2, inchannels, outchannels)) {
                 throw new ArgumentException($"{nameof(inchannels)}, {nameof(outchannels)}");
             }
-            if (!Limits.CheckKernelSize(kwidth, kheight, kdepth)) { 
+            if (!Limits.CheckKernelSize(kwidth, kheight, kdepth)) {
                 throw new ArgumentException($"{nameof(kwidth)}, {nameof(kheight)}, {nameof(kdepth)}");
             }
 
@@ -152,7 +152,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             CudaArray<float> inmap = args[0] as CudaArray<float>;
             CudaArray<float> outmap = args[1] as CudaArray<float>;
             CudaArray<float> filter = args[2] as CudaArray<float>;
-           
+
             uint inwidth = (args[3] as uint?).Value;
             uint inheight = (args[4] as uint?).Value;
             uint indepth = (args[5] as uint?).Value;
@@ -162,8 +162,8 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             uint outheight = inheight + 1 - KernelHeight;
             uint outdepth = indepth + 1 - KernelDepth;
 
-            CudaArray<float> dfloat_filter = 
-                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index:0, InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * 4);
+            CudaArray<float> dfloat_filter =
+                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index: 0, InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * 4);
             dfloat_filter.ZerosetAsync(stream, InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * 4);
 
             uint mul_per_line = InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * outwidth * 4;
@@ -176,16 +176,16 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             uint xsets = (outwidth + BatchPixels - 1) / BatchPixels;
 
             for (uint th = 0; th < batches; th++) {
-                for(uint oz = 0; oz < outdepth; oz++) { 
+                for (uint oz = 0; oz < outdepth; oz++) {
                     for (uint oy_offset = 0; oy_offset < outheight; oy_offset += lines_per_execute) {
                         uint lines = Math.Min(lines_per_execute, outheight - oy_offset);
 
                         Kernel.Execute(
-                            indexes:(InChannels, OutChannels, xsets * lines), 
-                            block:(BlockSize.x, BlockSize.y, 1),
-                            dynamic_shared_memory_bytes: 0, 
+                            indexes: (InChannels, OutChannels, xsets * lines),
+                            block: (BlockSize.x, BlockSize.y, 1),
+                            dynamic_shared_memory_bytes: 0,
                             stream,
-                            inmap.ElementPtr(th * InChannels * inwidth * inheight * indepth * 2), 
+                            inmap.ElementPtr(th * InChannels * inwidth * inheight * indepth * 2),
                             outmap.ElementPtr(th * OutChannels * outwidth * outheight * outdepth * 2),
                             dfloat_filter,
                             oy_offset, oz,
@@ -195,7 +195,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                     }
                 }
             }
-            
+
             HorizontalAdd(InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * 2, dfloat_filter, filter, stream);
         }
 

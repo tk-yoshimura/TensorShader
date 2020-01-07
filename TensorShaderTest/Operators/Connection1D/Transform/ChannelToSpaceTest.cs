@@ -62,7 +62,7 @@ namespace TensorShaderTest.Operators.Connection1D {
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor);
-            
+
             Cuda.Profiler.Stop();
         }
 

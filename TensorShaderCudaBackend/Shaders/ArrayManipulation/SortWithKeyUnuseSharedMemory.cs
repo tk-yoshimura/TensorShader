@@ -5,7 +5,7 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
 
     /// <summary>ソート(共有メモリ不使用版)</summary>
     public sealed class SortWithKeyUnuseSharedMemory : Shader {
-                
+
         /// <summary>識別子</summary>
         public override sealed string Signature => $"{GetType().Name.Split(',').Last()}";
 
@@ -16,7 +16,7 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         public static uint SlidesPerExecute => 0x4000;
 
         /// <summary>コンストラクタ</summary>
-        public SortWithKeyUnuseSharedMemory() { 
+        public SortWithKeyUnuseSharedMemory() {
             string code = $@"
 
             __global__ void sortwithkey(float *map, float *key, 
@@ -155,31 +155,31 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
             inkey.CopyToAsync(stream, outkey, stride * axislength * slides);
 
             uint blocksize = 1;
-            while(blocksize < axislength / 4) {
+            while (blocksize < axislength / 4) {
                 blocksize *= 2;
             }
 
             blocksize = Math.Min(blocksize, Kernel.MaxBlockSize);
 
             uint batch_slides = 1;
-            while(batch_slides * 2 <= SlidesPerExecute) { 
-                if(stride * batch_slides * axislength >= ElementsPerExecute) { 
+            while (batch_slides * 2 <= SlidesPerExecute) {
+                if (stride * batch_slides * axislength >= ElementsPerExecute) {
                     break;
                 }
                 batch_slides *= 2;
             }
 
-            for(uint s = 0; s < slides; s += batch_slides) { 
+            for (uint s = 0; s < slides; s += batch_slides) {
                 uint sl = Math.Min(batch_slides, slides - s);
 
                 Kernel.Execute(
-                    indexes:(stride * blocksize, sl), 
-                    block:(blocksize, 1), 
-                    dynamic_shared_memory_bytes: 0, 
+                    indexes: (stride * blocksize, sl),
+                    block: (blocksize, 1),
+                    dynamic_shared_memory_bytes: 0,
                     stream,
-                    outmap.ElementPtr(s * stride * axislength),  
-                    outkey.ElementPtr(s * stride * axislength),  
-                    stride, axislength, sl 
+                    outmap.ElementPtr(s * stride * axislength),
+                    outkey.ElementPtr(s * stride * axislength),
+                    stride, axislength, sl
                 );
             }
         }

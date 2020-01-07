@@ -26,7 +26,7 @@ namespace TensorShaderCudaBackend.Shaders.Randomize {
 
         /// <summary>コンストラクタ</summary>
         public Randomize(int exparams = 0) {
-            if(exparams < 0) { 
+            if (exparams < 0) {
                 throw new ArgumentException(nameof(exparams));
             }
 
@@ -52,12 +52,12 @@ namespace TensorShaderCudaBackend.Shaders.Randomize {
 
             uint warps = (length + RandomPerWarp - 1) / RandomPerWarp;
 
-            object[] kernel_args = (new object[]{ y, length, warps, seed1, seed2, seed3 }).Concat(args.Skip(3)).ToArray();
+            object[] kernel_args = (new object[] { y, length, warps, seed1, seed2, seed3 }).Concat(args.Skip(3)).ToArray();
 
             Kernel.Execute(
-                indexes:(WarpSize, warps), 
-                dynamic_shared_memory_bytes: 0, 
-                stream, 
+                indexes: (WarpSize, warps),
+                dynamic_shared_memory_bytes: 0,
+                stream,
                 kernel_args
             );
         }
@@ -72,7 +72,7 @@ namespace TensorShaderCudaBackend.Shaders.Randomize {
                 throw new ArgumentException(nameof(length));
             }
 
-            if(!(args[2] is Random random) || random == null) { 
+            if (!(args[2] is Random random) || random == null) {
                 throw new ArgumentException(nameof(random));
             }
 

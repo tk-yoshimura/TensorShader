@@ -64,7 +64,7 @@ namespace TensorShaderTest.Operators.Complex {
             float max_err = 0;
 
             int batch = 3;
-            int inchannels = 98, outchannels = 100; 
+            int inchannels = 98, outchannels = 100;
 
             float[] yval = (new float[outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
             float[] wval = (new float[inchannels * outchannels / 2]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
@@ -119,7 +119,7 @@ namespace TensorShaderTest.Operators.Complex {
             Cuda.Profiler.Start();
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
-            
+
             Cuda.Profiler.Stop();
         }
 

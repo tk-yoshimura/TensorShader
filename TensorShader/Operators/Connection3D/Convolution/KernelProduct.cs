@@ -26,7 +26,7 @@ namespace TensorShader.Operators.Connection3D {
 
         /// <summary>コンストラクタ</summary>
         public KernelProduct(int inwidth, int inheight, int indepth, int inchannels, int outchannels, int kwidth, int kheight, int kdepth, int batch = 1) {
-            
+
             int outwidth = inwidth - kwidth + 1;
             int outheight = inheight - kheight + 1;
             int outdepth = indepth - kdepth + 1;
@@ -53,8 +53,8 @@ namespace TensorShader.Operators.Connection3D {
 
             TensorShaderCudaBackend.Convolution.KernelProduct3D((uint)InChannels, (uint)OutChannels,
                                                                 (uint)inmap1.Width, (uint)inmap1.Height, (uint)inmap1.Depth,
-                                                                (uint)Batch, 
-                                                                (uint)KernelWidth, (uint)KernelHeight, (uint)KernelDepth, 
+                                                                (uint)Batch,
+                                                                (uint)KernelWidth, (uint)KernelHeight, (uint)KernelDepth,
                                                                 inmap1.Buffer, inmap2.Buffer, outfilter.Buffer);
         }
 

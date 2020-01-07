@@ -37,7 +37,7 @@ namespace MNIST {
             Console.WriteLine("Build model...");
             Field y = CNN.Forward(x, classes);
             Field acc = Accuracy(y, t);
-            Field err = Sum(SoftmaxCrossEntropy(y, OneHotVector(t, classes)), axes:new int[] { Axis.Map0D.Channels });
+            Field err = Sum(SoftmaxCrossEntropy(y, OneHotVector(t, classes)), axes: new int[] { Axis.Map0D.Channels });
             StoreField accnode = acc.Save(), lossnode = Average(err).Save();
 
             Console.WriteLine("Build optimize flow...");
@@ -52,8 +52,8 @@ namespace MNIST {
                 .InitializeTensor((tensor) => new Zero(tensor));
 
             Console.WriteLine("Set params updater...");
-            parameters.AddUpdater((parameter) => new Nadam(parameter, alpha:0.01f));
-            parameters.AddUpdater((parameter) => new Ridge(parameter, decay:1e-4f));
+            parameters.AddUpdater((parameter) => new Nadam(parameter, alpha: 0.01f));
+            parameters.AddUpdater((parameter) => new Ridge(parameter, decay: 1e-4f));
 
             Console.WriteLine("Training...");
             Train(train_iterator, loader, x, t, accnode, lossnode, trainflow, parameters);

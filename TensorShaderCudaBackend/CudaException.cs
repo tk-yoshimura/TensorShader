@@ -10,7 +10,7 @@ namespace TensorShaderCudaBackend {
 
         internal CudaException(string str)
             : base(str) { }
-    
+
         internal CudaException(Cuda.ErrorCode code)
             : base(Cuda.GetErrorString(code)) { }
 

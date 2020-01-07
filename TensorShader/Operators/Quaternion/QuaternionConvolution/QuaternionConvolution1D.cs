@@ -13,7 +13,7 @@ namespace TensorShader.Operators.QuaternionConvolution {
         /// <summary>フィルタサイズ</summary>
         /// <remarks>奇数を指定すること</remarks>
         public int KernelWidth { private set; get; }
-        
+
         /// <summary>勾配</summary>
         public bool GradMode { private set; get; }
 

@@ -29,7 +29,7 @@ namespace TensorShaderTest.Operators.Complex {
                     ope.Execute(v1, v2);
 
                     CollectionAssert.AreEqual(x, v1.State);
-                    
+
                     v2.CheckOverflow();
                 };
             }

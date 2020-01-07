@@ -7,9 +7,9 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
     public sealed class SortUseSharedMemory : Shader {
 
         /// <summary>最大軸長さ</summary>
-        public static uint MaxAxisLength => 
+        public static uint MaxAxisLength =>
             (uint)(API.Cuda.CurrectDeviceProperty.SharedMemoryBytesPerBlock - 256) / sizeof(float);
-        
+
         /// <summary>識別子</summary>
         public override sealed string Signature => $"{GetType().Name.Split(',').Last()}";
 
@@ -20,7 +20,7 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         public static uint SlidesPerExecute => 0x4000;
 
         /// <summary>コンストラクタ</summary>
-        public SortUseSharedMemory() { 
+        public SortUseSharedMemory() {
             string code = $@"
 
             __global__ void sort(float *inmap, float *outmap, 
@@ -150,31 +150,31 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
             uint slides = (args[4] as uint?).Value;
 
             uint blocksize = 1;
-            while(blocksize < axislength / 4) {
+            while (blocksize < axislength / 4) {
                 blocksize *= 2;
             }
 
             blocksize = Math.Min(blocksize, Kernel.MaxBlockSize);
 
             uint batch_slides = 1;
-            while(batch_slides * 2 <= SlidesPerExecute) { 
-                if(stride * batch_slides * axislength >= ElementsPerExecute) { 
+            while (batch_slides * 2 <= SlidesPerExecute) {
+                if (stride * batch_slides * axislength >= ElementsPerExecute) {
                     break;
                 }
                 batch_slides *= 2;
             }
 
-            for(uint s = 0; s < slides; s += batch_slides) { 
+            for (uint s = 0; s < slides; s += batch_slides) {
                 uint sl = Math.Min(batch_slides, slides - s);
 
                 Kernel.Execute(
-                    indexes:(stride * blocksize, sl), 
-                    block:(blocksize, 1), 
-                    dynamic_shared_memory_bytes: sizeof(float) * axislength, 
-                    stream, 
-                    inmap.ElementPtr(s * stride * axislength), 
-                    outmap.ElementPtr(s * stride * axislength), 
-                    stride, axislength, sl 
+                    indexes: (stride * blocksize, sl),
+                    block: (blocksize, 1),
+                    dynamic_shared_memory_bytes: sizeof(float) * axislength,
+                    stream,
+                    inmap.ElementPtr(s * stride * axislength),
+                    outmap.ElementPtr(s * stride * axislength),
+                    stride, axislength, sl
                 );
             }
 
