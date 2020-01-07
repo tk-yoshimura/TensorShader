@@ -38,6 +38,7 @@ CUDA 10.*, Compute Capability 5.0+
 - **Array Manipulation**
   - Sort ArgSort Flip Reshape Concat Separate
   - ChannelToSpace SpaceToChannel 1D,2D,3D
+  - ImageToColumn 1D,2D,3D
   - ExtractChannel Sum
 - **Real Functions**
   - Add Sub Mul Div Abs Sign Pow Sqrt Square Cbrt Cube Rsqrt Neg Rcp
