@@ -12,9 +12,8 @@ namespace TensorShaderCudaBackend {
                                  CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                  Stream stream = null) {
 
-            string key =
-                $"dense " +
-                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels}";
+            string key = $"dense " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.Dense(inchannels, outchannels));
@@ -35,9 +34,8 @@ namespace TensorShaderCudaBackend {
                                           CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                           Stream stream = null) {
 
-            string key =
-                $"transpose_dense " +
-                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels}";
+            string key = $"transpose_dense " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.TransposeDense(inchannels, outchannels));
@@ -58,9 +56,8 @@ namespace TensorShaderCudaBackend {
                                               CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel,
                                               Stream stream = null) {
 
-            string key =
-                $"kernelproduct_dense " +
-                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels}";
+            string key = $"kernelproduct_dense " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.KernelProductDense(inchannels, outchannels));
@@ -81,10 +78,9 @@ namespace TensorShaderCudaBackend {
                                          CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                          Stream stream = null) {
 
-            string key =
-                $"convolution_1d " +
-                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                $"{nameof(kwidth)}={kwidth}";
+            string key = $"convolution_1d " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                         $"{nameof(kwidth)}={kwidth}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.Convolution1D(inchannels, outchannels, kwidth));
@@ -105,10 +101,9 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                            Stream stream = null) {
 
-            string key =
-                $"deconvolution_1d " +
-                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                $"{nameof(kwidth)}={kwidth}";
+            string key = $"deconvolution_1d " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                         $"{nameof(kwidth)}={kwidth}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.Deconvolution1D(inchannels, outchannels, kwidth));
@@ -129,9 +124,9 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel,
                                            Stream stream = null) {
 
-            string key =
-                $"kernelproduct_1d {nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                $"{nameof(kwidth)}={kwidth}";
+            string key = $"kernelproduct_1d " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                         $"{nameof(kwidth)}={kwidth}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.KernelProduct1D(inchannels, outchannels, kwidth));
@@ -152,9 +147,9 @@ namespace TensorShaderCudaBackend {
                                          CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                          Stream stream = null) {
 
-            string key =
-                $"convolution_2d {nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight}";
+            string key = $"convolution_2d " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.Convolution2D(inchannels, outchannels, kwidth, kheight));
@@ -175,9 +170,9 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                            Stream stream = null) {
 
-            string key =
-                $"deconvolution_2d {nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight}";
+            string key = $"deconvolution_2d " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.Deconvolution2D(inchannels, outchannels, kwidth, kheight));
@@ -198,9 +193,9 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel,
                                            Stream stream = null) {
 
-            string key =
-                $"kernelproduct_2d {nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight}";
+            string key = $"kernelproduct_2d " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.KernelProduct2D(inchannels, outchannels, kwidth, kheight));
@@ -221,9 +216,9 @@ namespace TensorShaderCudaBackend {
                                          CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                          Stream stream = null) {
 
-            string key =
-                $"convolution_3d {nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth}";
+            string key = $"convolution_3d " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.Convolution3D(inchannels, outchannels, kwidth, kheight, kdepth));
@@ -244,9 +239,9 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                            Stream stream = null) {
 
-            string key =
-                $"deconvolution_3d {nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth}";
+            string key = $"deconvolution_3d " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.Deconvolution3D(inchannels, outchannels, kwidth, kheight, kdepth));
@@ -267,9 +262,9 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel,
                                            Stream stream = null) {
 
-            string key =
-                $"kernelproduct_3d {nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth}";
+            string key = $"kernelproduct_3d " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.KernelProduct3D(inchannels, outchannels, kwidth, kheight, kdepth));
@@ -290,9 +285,9 @@ namespace TensorShaderCudaBackend {
                                                     CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                                     Stream stream = null) {
 
-            string key =
-                $"chwise_convolution_1d {nameof(channels)}={channels} " +
-                $"{nameof(kwidth)}={kwidth}";
+            string key = $"chwise_convolution_1d " +
+                         $"{nameof(channels)}={channels} " +
+                         $"{nameof(kwidth)}={kwidth}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.ChannelwiseConvolution1D(channels, kwidth));
@@ -313,9 +308,9 @@ namespace TensorShaderCudaBackend {
                                                       CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                                       Stream stream = null) {
 
-            string key =
-                $"chwise_deconvolution_1d {nameof(channels)}={channels} " +
-                $"{nameof(kwidth)}={kwidth}";
+            string key = $"chwise_deconvolution_1d " +
+                         $"{nameof(channels)}={channels} " +
+                         $"{nameof(kwidth)}={kwidth}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.ChannelwiseDeconvolution1D(channels, kwidth));
@@ -336,9 +331,9 @@ namespace TensorShaderCudaBackend {
                                                       CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel,
                                                       Stream stream = null) {
 
-            string key =
-                $"chwise_kernelproduct_1d {nameof(channels)}={channels} " +
-                $"{nameof(kwidth)}={kwidth}";
+            string key = $"chwise_kernelproduct_1d " +
+                         $"{nameof(channels)}={channels} " +
+                         $"{nameof(kwidth)}={kwidth}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.ChannelwiseKernelProduct1D(channels, kwidth));
@@ -359,9 +354,9 @@ namespace TensorShaderCudaBackend {
                                                     CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                                     Stream stream = null) {
 
-            string key =
-                $"chwise_convolution_2d {nameof(channels)}={channels} " +
-                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight}";
+            string key = $"chwise_convolution_2d " +
+                         $"{nameof(channels)}={channels} " +
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.ChannelwiseConvolution2D(channels, kwidth, kheight));
@@ -382,9 +377,9 @@ namespace TensorShaderCudaBackend {
                                                       CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                                       Stream stream = null) {
 
-            string key =
-                $"chwise_deconvolution_2d {nameof(channels)}={channels} " +
-                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight}";
+            string key = $"chwise_deconvolution_2d " +
+                         $"{nameof(channels)}={channels} " +
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.ChannelwiseDeconvolution2D(channels, kwidth, kheight));
@@ -405,9 +400,9 @@ namespace TensorShaderCudaBackend {
                                                       CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel,
                                                       Stream stream = null) {
 
-            string key =
-                $"chwise_kernelproduct_2d {nameof(channels)}={channels} " +
-                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight}";
+            string key = $"chwise_kernelproduct_2d " +
+                         $"{nameof(channels)}={channels} " +
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.ChannelwiseKernelProduct2D(channels, kwidth, kheight));
@@ -428,9 +423,9 @@ namespace TensorShaderCudaBackend {
                                                     CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                                     Stream stream = null) {
 
-            string key =
-                $"chwise_convolution_3d {nameof(channels)}={channels} " +
-                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth}";
+            string key = $"chwise_convolution_3d " +
+                         $"{nameof(channels)}={channels} " +
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.ChannelwiseConvolution3D(channels, kwidth, kheight, kdepth));
@@ -451,9 +446,9 @@ namespace TensorShaderCudaBackend {
                                                       CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                                       Stream stream = null) {
 
-            string key =
-                $"chwise_deconvolution_3d {nameof(channels)}={channels} " +
-                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth}";
+            string key = $"chwise_deconvolution_3d " +
+                         $"{nameof(channels)}={channels} " +
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.ChannelwiseDeconvolution3D(channels, kwidth, kheight, kdepth));
@@ -474,9 +469,9 @@ namespace TensorShaderCudaBackend {
                                                       CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel,
                                                       Stream stream = null) {
 
-            string key =
-                $"chwise_kernelproduct_3d {nameof(channels)}={channels} " +
-                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth}";
+            string key = $"chwise_kernelproduct_3d " +
+                         $"{nameof(channels)}={channels} " +
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.ChannelwiseKernelProduct3D(channels, kwidth, kheight, kdepth));
@@ -497,8 +492,8 @@ namespace TensorShaderCudaBackend {
                                                 CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                                 Stream stream = null) {
 
-            string key =
-                $"ptwise_convolution_1d {nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels}";
+            string key = $"ptwise_convolution " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.PointwiseConvolution(inchannels, outchannels));
@@ -519,8 +514,8 @@ namespace TensorShaderCudaBackend {
                                                   CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                                   Stream stream = null) {
 
-            string key =
-                $"ptwise_deconvolution_1d {nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels}";
+            string key = $"ptwise_deconvolution " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.PointwiseDeconvolution(inchannels, outchannels));
@@ -541,8 +536,8 @@ namespace TensorShaderCudaBackend {
                                                   CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel,
                                                   Stream stream = null) {
 
-            string key =
-                $"ptwise_kernelproduct_1d {nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels}";
+            string key = $"ptwise_kernelproduct " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Convolution.PointwiseKernelProduct(inchannels, outchannels));

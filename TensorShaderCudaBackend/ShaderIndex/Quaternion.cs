@@ -420,10 +420,9 @@ namespace TensorShaderCudaBackend {
                                  CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                  Stream stream = null) {
 
-            string key =
-                $"quaternion_dense " +
-                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                $"{nameof(gradmode)}={gradmode}";
+            string key = $"quaternion_dense " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                         $"{nameof(gradmode)}={gradmode}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Quaternion.Convolution.Dense(inchannels, outchannels, gradmode));
@@ -444,10 +443,9 @@ namespace TensorShaderCudaBackend {
                                           CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                           Stream stream = null) {
 
-            string key =
-                $"quaternion_transpose_dense " +
-                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                $"{nameof(gradmode)}={gradmode}";
+            string key = $"quaternion_transpose_dense " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                         $"{nameof(gradmode)}={gradmode}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Quaternion.Convolution.TransposeDense(inchannels, outchannels, gradmode));
@@ -468,10 +466,9 @@ namespace TensorShaderCudaBackend {
                                               CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel,
                                               Stream stream = null) {
 
-            string key =
-                $"quaternion_kernelproduct_dense " +
-                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                $"{nameof(transpose)}={transpose}";
+            string key = $"quaternion_kernelproduct_dense " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                         $"{nameof(transpose)}={transpose}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Quaternion.Convolution.KernelProductDense(inchannels, outchannels, transpose));
@@ -492,11 +489,10 @@ namespace TensorShaderCudaBackend {
                                          CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                          Stream stream = null) {
 
-            string key =
-                $"quaternion_convolution_1d " +
-                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                $"{nameof(kwidth)}={kwidth} " +
-                $"{nameof(gradmode)}={gradmode}";
+            string key = $"quaternion_convolution_1d " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                         $"{nameof(kwidth)}={kwidth} " +
+                         $"{nameof(gradmode)}={gradmode}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Quaternion.Convolution.Convolution1D(inchannels, outchannels, kwidth, gradmode));
@@ -517,11 +513,10 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                            Stream stream = null) {
 
-            string key =
-                $"quaternion_deconvolution_1d " +
-                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                $"{nameof(kwidth)}={kwidth} " +
-                $"{nameof(gradmode)}={gradmode}";
+            string key = $"quaternion_deconvolution_1d " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                         $"{nameof(kwidth)}={kwidth} " +
+                         $"{nameof(gradmode)}={gradmode}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Quaternion.Convolution.Deconvolution1D(inchannels, outchannels, kwidth, gradmode));
@@ -542,11 +537,10 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel,
                                            Stream stream = null) {
 
-            string key =
-                $"quaternion_kernelproduct_1d " +
-                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                $"{nameof(kwidth)}={kwidth} " +
-                $"{nameof(transpose)}={transpose}";
+            string key = $"quaternion_kernelproduct_1d " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                         $"{nameof(kwidth)}={kwidth} " +
+                         $"{nameof(transpose)}={transpose}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Quaternion.Convolution.KernelProduct1D(inchannels, outchannels, kwidth, transpose));
@@ -567,11 +561,10 @@ namespace TensorShaderCudaBackend {
                                          CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                          Stream stream = null) {
 
-            string key =
-                $"quaternion_convolution_2d " +
-                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
-                $"{nameof(gradmode)}={gradmode}";
+            string key = $"quaternion_convolution_2d " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
+                         $"{nameof(gradmode)}={gradmode}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Quaternion.Convolution.Convolution2D(inchannels, outchannels, kwidth, kheight, gradmode));
@@ -592,11 +585,10 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                            Stream stream = null) {
 
-            string key =
-                $"quaternion_deconvolution_2d " +
-                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
-                $"{nameof(gradmode)}={gradmode}";
+            string key = $"quaternion_deconvolution_2d " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
+                         $"{nameof(gradmode)}={gradmode}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Quaternion.Convolution.Deconvolution2D(inchannels, outchannels, kwidth, kheight, gradmode));
@@ -617,11 +609,10 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel,
                                            Stream stream = null) {
 
-            string key =
-                $"quaternion_kernelproduct_2d " +
-                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
-                $"{nameof(transpose)}={transpose}";
+            string key = $"quaternion_kernelproduct_2d " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
+                         $"{nameof(transpose)}={transpose}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Quaternion.Convolution.KernelProduct2D(inchannels, outchannels, kwidth, kheight, transpose));
@@ -642,11 +633,10 @@ namespace TensorShaderCudaBackend {
                                          CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                          Stream stream = null) {
 
-            string key =
-                $"quaternion_convolution_3d " +
-                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
-                $"{nameof(gradmode)}={gradmode}";
+            string key = $"quaternion_convolution_3d " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
+                         $"{nameof(gradmode)}={gradmode}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Quaternion.Convolution.Convolution3D(inchannels, outchannels, kwidth, kheight, kdepth, gradmode));
@@ -667,11 +657,10 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                            Stream stream = null) {
 
-            string key =
-                $"quaternion_deconvolution_3d " +
-                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
-                $"{nameof(gradmode)}={gradmode}";
+            string key = $"quaternion_deconvolution_3d " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
+                         $"{nameof(gradmode)}={gradmode}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Quaternion.Convolution.Deconvolution3D(inchannels, outchannels, kwidth, kheight, kdepth, gradmode));
@@ -692,11 +681,10 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel,
                                            Stream stream = null) {
 
-            string key =
-                $"quaternion_kernelproduct_3d " +
-                $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
-                $"{nameof(transpose)}={transpose}";
+            string key = $"quaternion_kernelproduct_3d " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
+                         $"{nameof(transpose)}={transpose}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Quaternion.Convolution.KernelProduct3D(inchannels, outchannels, kwidth, kheight, kdepth, transpose));

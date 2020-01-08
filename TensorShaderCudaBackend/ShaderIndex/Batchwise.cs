@@ -11,7 +11,8 @@ namespace TensorShaderCudaBackend {
                                CudaArray<float> srcvector, CudaArray<float> srcmap, CudaArray<float> dstmap,
                                Stream stream = null) {
 
-            string key = $"mul_bw batches={vector_length}";
+            string key = $"mul_bw " +
+                         $"batches={vector_length}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Batchwise.BatchwiseMul(vector_length));

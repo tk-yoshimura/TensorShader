@@ -11,7 +11,8 @@ namespace TensorShaderCudaBackend {
                                                   CudaArray<float> inmap, CudaArray<float> outmap,
                                                   Stream stream = null) {
 
-            string key = $"transpose_kernel_channel {nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels}";
+            string key = $"transpose_kernel_channel " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Transpose.TransposeKernelChannel(inchannels, outchannels));
@@ -31,7 +32,8 @@ namespace TensorShaderCudaBackend {
                                                          CudaArray<float> inmap, CudaArray<float> outmap,
                                                          Stream stream = null) {
 
-            string key = $"transpose_complex_kernel_channel {nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels}";
+            string key = $"transpose_complex_kernel_channel " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Transpose.TransposeComplexKernelChannel(inchannels, outchannels));
@@ -51,7 +53,8 @@ namespace TensorShaderCudaBackend {
                                                             CudaArray<float> inmap, CudaArray<float> outmap,
                                                             Stream stream = null) {
 
-            string key = $"transpose_quaternion_kernel_channel {nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels}";
+            string key = $"transpose_quaternion_kernel_channel " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Transpose.TransposeQuaternionKernelChannel(inchannels, outchannels));

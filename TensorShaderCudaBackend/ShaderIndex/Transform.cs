@@ -13,7 +13,8 @@ namespace TensorShaderCudaBackend {
                                             CudaArray<float> inmap, CudaArray<float> outmap,
                                             Stream stream = null) {
 
-            string key = $"channel_to_space_2d {nameof(outchannels)}={outchannels} {nameof(scale)}={scale}";
+            string key = $"channel_to_space_2d " +
+                         $"{nameof(outchannels)}={outchannels} {nameof(scale)}={scale}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Transform.ChannelToSpace2D(scale, outchannels));
@@ -34,7 +35,8 @@ namespace TensorShaderCudaBackend {
                                             CudaArray<float> inmap, CudaArray<float> outmap,
                                             Stream stream = null) {
 
-            string key = $"space_to_channel_2d {nameof(inchannels)}={inchannels} {nameof(scale)}={scale}";
+            string key = $"space_to_channel_2d " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(scale)}={scale}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Transform.SpaceToChannel2D(scale, inchannels));
@@ -55,7 +57,8 @@ namespace TensorShaderCudaBackend {
                                             CudaArray<float> inmap, CudaArray<float> outmap,
                                             Stream stream = null) {
 
-            string key = $"channel_to_space_3d {nameof(outchannels)}={outchannels} {nameof(scale)}={scale}";
+            string key = $"channel_to_space_3d " +
+                         $"{nameof(outchannels)}={outchannels} {nameof(scale)}={scale}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Transform.ChannelToSpace3D(scale, outchannels));
@@ -76,7 +79,8 @@ namespace TensorShaderCudaBackend {
                                             CudaArray<float> inmap, CudaArray<float> outmap,
                                             Stream stream = null) {
 
-            string key = $"space_to_channel_3d {nameof(inchannels)}={inchannels} {nameof(scale)}={scale}";
+            string key = $"space_to_channel_3d " +
+                         $"{nameof(inchannels)}={inchannels} {nameof(scale)}={scale}";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Transform.SpaceToChannel3D(scale, inchannels));
@@ -97,7 +101,8 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> outmap,
                                            Stream stream = null) {
 
-            string key = $"column_to_image_1d {nameof(channels)}={channels} " +
+            string key = $"column_to_image_1d " +
+                         $"{nameof(channels)}={channels} " +
                          $"{nameof(kwidth)}={kwidth}";
 
             if (!shaders.ContainsKey(key)) {
@@ -119,7 +124,8 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> outmap,
                                            Stream stream = null) {
 
-            string key = $"image_to_column_1d {nameof(channels)}={channels} " +
+            string key = $"image_to_column_1d " +
+                         $"{nameof(channels)}={channels} " +
                          $"{nameof(kwidth)}={kwidth}";
 
             if (!shaders.ContainsKey(key)) {
@@ -141,7 +147,8 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> outmap,
                                            Stream stream = null) {
 
-            string key = $"column_to_image_2d {nameof(channels)}={channels} " +
+            string key = $"column_to_image_2d " +
+                         $"{nameof(channels)}={channels} " +
                          $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight}";
 
             if (!shaders.ContainsKey(key)) {
@@ -163,7 +170,8 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> outmap,
                                            Stream stream = null) {
 
-            string key = $"image_to_column_2d {nameof(channels)}={channels} " +
+            string key = $"image_to_column_2d " +
+                         $"{nameof(channels)}={channels} " +
                          $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight}";
 
             if (!shaders.ContainsKey(key)) {
@@ -185,7 +193,8 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> outmap,
                                            Stream stream = null) {
 
-            string key = $"column_to_image_3d {nameof(channels)}={channels} " +
+            string key = $"column_to_image_3d " +
+                         $"{nameof(channels)}={channels} " +
                          $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth}";
 
             if (!shaders.ContainsKey(key)) {
@@ -207,7 +216,8 @@ namespace TensorShaderCudaBackend {
                                            CudaArray<float> inmap, CudaArray<float> outmap,
                                            Stream stream = null) {
 
-            string key = $"image_to_column_3d {nameof(channels)}={channels} " +
+            string key = $"image_to_column_3d " +
+                         $"{nameof(channels)}={channels} " +
                          $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth}";
 
             if (!shaders.ContainsKey(key)) {

@@ -12,7 +12,8 @@ namespace TensorShaderCudaBackend {
                                           CudaArray<float> inmap, CudaArray<float> outmap,
                                           Stream stream = null) {
 
-            string key = $"neighborzoom_1d {nameof(channels)}={channels} scale=2";
+            string key = $"neighborzoom_1d " +
+                         $"{nameof(channels)}={channels} scale=2";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Zoom.NeighborZoom1D(channels));
@@ -33,7 +34,8 @@ namespace TensorShaderCudaBackend {
                                           CudaArray<float> inmap, CudaArray<float> outmap,
                                           Stream stream = null) {
 
-            string key = $"neighborzoom_2d {nameof(channels)}={channels} scale=2";
+            string key = $"neighborzoom_2d " +
+                         $"{nameof(channels)}={channels} scale=2";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Zoom.NeighborZoom2D(channels));
@@ -54,7 +56,8 @@ namespace TensorShaderCudaBackend {
                                           CudaArray<float> inmap, CudaArray<float> outmap,
                                           Stream stream = null) {
 
-            string key = $"neighborzoom_3d {nameof(channels)}={channels} scale=2";
+            string key = $"neighborzoom_3d " +
+                         $"{nameof(channels)}={channels} scale=2";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Zoom.NeighborZoom3D(channels));
@@ -75,7 +78,8 @@ namespace TensorShaderCudaBackend {
                                         CudaArray<float> inmap, CudaArray<float> outmap,
                                         Stream stream = null) {
 
-            string key = $"linearzoom_1d {nameof(channels)}={channels} scale=2";
+            string key = $"linearzoom_1d " +
+                         $"{nameof(channels)}={channels} scale=2";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Zoom.LinearZoom1D(channels));
@@ -96,7 +100,8 @@ namespace TensorShaderCudaBackend {
                                         CudaArray<float> inmap, CudaArray<float> outmap,
                                         Stream stream = null) {
 
-            string key = $"linearzoom_2d {nameof(channels)}={channels} scale=2";
+            string key = $"linearzoom_2d " +
+                         $"{nameof(channels)}={channels} scale=2";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Zoom.LinearZoom2D(channels));
@@ -117,7 +122,8 @@ namespace TensorShaderCudaBackend {
                                         CudaArray<float> inmap, CudaArray<float> outmap,
                                         Stream stream = null) {
 
-            string key = $"linearzoom_3d {nameof(channels)}={channels} scale=2";
+            string key = $"linearzoom_3d " +
+                         $"{nameof(channels)}={channels} scale=2";
 
             if (!shaders.ContainsKey(key)) {
                 shaders.Add(key, new Shaders.Zoom.LinearZoom3D(channels));
