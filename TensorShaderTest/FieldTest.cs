@@ -45,7 +45,7 @@ namespace TensorShaderTest {
 
             {
                 ParameterField f1 = new ParameterField(intensor);
-                OutputNode n1 = f1.Value.Save();
+                StoreField n1 = f1.Save();
 
                 Flow flow = Flow.Inference(n1);
 
@@ -60,7 +60,7 @@ namespace TensorShaderTest {
 
             {
                 VariableField f1 = intensor;
-                OutputNode n1 = f1.Value.Save();
+                StoreField n1 = f1.Save();
 
                 Flow flow = Flow.Inference(n1);
 
@@ -81,7 +81,7 @@ namespace TensorShaderTest {
 
                 optimize_flow.Execute();
 
-                OutputNode n1 = f1.Value.Save();
+                StoreField n1 = f1.Save();
 
                 Flow inference_flow = Flow.Inference(n1);
 
@@ -114,7 +114,7 @@ namespace TensorShaderTest {
 
                 optimize_flow.Execute();
 
-                OutputNode n1 = f1.Value.Save();
+                StoreField n1 = f1.Save();
 
                 Flow inference_flow = Flow.Inference(n1);
 
@@ -141,7 +141,7 @@ namespace TensorShaderTest {
 
             {
                 ParameterField f1 = new ParameterField(intensor);
-                OutputNode n1 = f1.Value.Save();
+                StoreField n1 = f1.Save();
 
                 Flow inference_flow = Flow.Inference(n1);
 
@@ -173,7 +173,7 @@ namespace TensorShaderTest {
 
             {
                 VariableField f1 = new VariableField(intensor);
-                OutputNode n1 = f1.Value.Save();
+                StoreField n1 = f1.Save();
 
                 Flow inference_flow = Flow.Inference(n1);
 
@@ -234,7 +234,7 @@ namespace TensorShaderTest {
                 ParameterField f1 = new ParameterField(intensor);
 
                 Field f3 = Abs(f1);
-                OutputNode n3 = f3.Value.Save();
+                StoreField n3 = f3.Save();
 
                 Flow flow = Flow.Inference(n3);
 
@@ -256,7 +256,7 @@ namespace TensorShaderTest {
 
                 Field f2 = Abs(f1);
                 Field ferr = f2 - fo;
-                OutputNode n3 = f2.Value.Save();
+                StoreField n3 = f2.Save();
 
                 (Flow optimize_flow, List<ParameterField> parameters) = Flow.Optimize(ferr);
 
@@ -297,7 +297,7 @@ namespace TensorShaderTest {
 
                 Field f2 = Abs(f1);
                 Field ferr = f2 - fo;
-                OutputNode n3 = f2.Value.Save();
+                StoreField n3 = f2.Save();
 
                 Flow inference_flow = Flow.Inference(n3);
 
@@ -394,7 +394,7 @@ namespace TensorShaderTest {
                 VariableField f2 = new VariableField(in2tensor);
 
                 Field f3 = f1 + f2;
-                OutputNode n3 = f3.Value.Save();
+                StoreField n3 = f3.Save();
 
                 Flow flow = Flow.Inference(n3);
 
@@ -418,7 +418,7 @@ namespace TensorShaderTest {
 
                 Field f3 = f1 + f2;
                 Field ferr = f3 - fo;
-                OutputNode n3 = f3.Value.Save();
+                StoreField n3 = f3.Save();
 
                 (Flow optimize_flow, List<ParameterField> parameters) = Flow.Optimize(ferr);
 
@@ -463,7 +463,54 @@ namespace TensorShaderTest {
 
                 Field f3 = f1 + f2;
                 Field ferr = f3 - fo;
-                OutputNode n3 = f3.Value.Save();
+                StoreField n3 = f3.Save();
+
+                Flow inference_flow = Flow.Inference(n3);
+
+                inference_flow.Execute();
+
+                (Flow optimize_flow, List<ParameterField> parameters) = Flow.Optimize(ferr);
+
+                optimize_flow.Execute();
+
+                Assert.AreEqual(9, optimize_flow.NodeCount);
+                Assert.AreEqual(7, optimize_flow.VariableNodeCount);
+                Assert.AreEqual(2, optimize_flow.FunctionNodeCount);
+                Assert.AreEqual(3, optimize_flow.InTensorCount);
+                Assert.AreEqual(2, optimize_flow.OutTensorCount);
+
+                CollectionAssert.AreEquivalent(new ParameterField[] { f1 }, parameters);
+                Assert.AreEqual(in1tensor, f1.ValueTensor);
+                Assert.AreEqual(in2tensor, f2.ValueTensor);
+                Assert.AreEqual(6, f1.GradTensor.State[0]);
+                Assert.AreEqual(null, f2.Grad);
+
+                Assert.AreEqual(5, inference_flow.NodeCount);
+                Assert.AreEqual(4, inference_flow.VariableNodeCount);
+                Assert.AreEqual(1, inference_flow.FunctionNodeCount);
+                Assert.AreEqual(2, inference_flow.InTensorCount);
+                Assert.AreEqual(1, inference_flow.OutTensorCount);
+
+                Assert.AreEqual(in1tensor, f1.ValueTensor);
+                Assert.AreEqual(in2tensor, f2.ValueTensor);
+                Assert.AreEqual(3, n3.Tensor.State[0]);
+
+                foreach (var item in inference_flow.InTensors) {
+                    Assert.IsTrue(optimize_flow.InTensors.ContainsKey(item.Key));
+                    Assert.AreEqual(item.Value, optimize_flow.InTensors[item.Key]);
+                }
+            }
+
+            {
+                ParameterField f1 = new ParameterField(in1tensor);
+                VariableField f2 = new VariableField(in2tensor);
+                VariableField f4 = new VariableField(in2tensor);
+                VariableField fo = new VariableField(outtensor);
+
+                Field f3 = f1 + f2;
+                Field ferr = f3 - fo;
+                StoreField n3 = f3.Save();
+                StoreField n4 = (f3 + f4).Save();
 
                 Flow inference_flow = Flow.Inference(n3);
 
@@ -563,8 +610,8 @@ namespace TensorShaderTest {
                 Field f2 = Abs(f1);
                 Field f3 = f2 * f2;
 
-                OutputNode n2 = f2.Value.Save();
-                OutputNode n3 = f3.Value.Save();
+                StoreField n2 = f2.Save();
+                StoreField n3 = f3.Save();
 
                 Flow flow = Flow.Inference(n2, n3);
 
@@ -587,8 +634,8 @@ namespace TensorShaderTest {
                 Field f2 = Abs(f1);
                 Field f3 = f2 * f2;
 
-                OutputNode n2 = f2.Value.Save();
-                OutputNode n3 = f3.Value.Save();
+                StoreField n2 = f2.Save();
+                StoreField n3 = f3.Save();
 
                 Flow flow = Flow.Inference(n3, n2);
 
@@ -629,8 +676,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(intensor, f1.ValueTensor);
                 Assert.AreEqual(Math.Sign(-1.5f) * ((1.5f - 2f) + (1.5f * 1.5f - 2f * 2f) * 1.5f * 2), f1.GradTensor.State[0]);
 
-                OutputNode n2 = f2.Value.Save();
-                OutputNode n3 = f3.Value.Save();
+                StoreField n2 = f2.Save();
+                StoreField n3 = f3.Save();
 
                 Flow inference_flow = Flow.Inference(n2, n3);
 
@@ -744,9 +791,9 @@ namespace TensorShaderTest {
                 Field ferr2 = fo2 - Abs(fi2);
                 Field ferr3 = fo3 - Abs(fi3);
 
-                OutputNode n1 = ferr1.Value.Save();
-                OutputNode n2 = ferr2.Value.Save();
-                OutputNode n3 = ferr3.Value.Save();
+                StoreField n1 = ferr1.Save();
+                StoreField n2 = ferr2.Save();
+                StoreField n3 = ferr3.Save();
 
                 Flow flow = Flow.Inference(n1, n2, n3);
 
@@ -792,8 +839,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(1.5f, fi2.GradTensor.State[0]);
                 Assert.AreEqual(3.5f, fi3.GradTensor.State[0]);
 
-                OutputNode n1 = ferr1.Value.Save();
-                OutputNode n2 = ferr2.Value.Save();
+                StoreField n1 = ferr1.Save();
+                StoreField n2 = ferr2.Save();
 
                 Flow inference_flow = Flow.Inference(n1, n2);
 
@@ -849,7 +896,7 @@ namespace TensorShaderTest {
                 (Field f2, Field f3) = (f1, -f1);
                 Field f4 = f2 * f3;
 
-                OutputNode n4 = f4.Value.Save();
+                StoreField n4 = f4.Save();
 
                 Flow flow = Flow.Inference(n4);
 
@@ -887,7 +934,7 @@ namespace TensorShaderTest {
                 Assert.AreEqual(intensor, f1.ValueTensor);
                 Assert.AreEqual((-2.25f + 2) * 1.5f * 2, f1.GradTensor.State[0]);
 
-                OutputNode n4 = f4.Value.Save();
+                StoreField n4 = f4.Save();
 
                 Flow inference_flow = Flow.Inference(n4);
 
@@ -937,8 +984,8 @@ namespace TensorShaderTest {
                 VariableField f1 = intensor;
 
                 (Field f2, Field f3) = (f1, -f1);
-                OutputNode n2 = f2.Value.Save();
-                OutputNode n3 = f3.Value.Save();
+                StoreField n2 = f2.Save();
+                StoreField n3 = f3.Save();
 
                 Flow flow = Flow.Inference(n2, n3);
 
@@ -963,8 +1010,8 @@ namespace TensorShaderTest {
 
                 optimize_flow.Execute();
 
-                OutputNode n2 = f2.Value.Save();
-                OutputNode n3 = f3.Value.Save();
+                StoreField n2 = f2.Save();
+                StoreField n3 = f3.Save();
 
                 Flow inference_flow = Flow.Inference(n2, n3);
 
@@ -999,8 +1046,8 @@ namespace TensorShaderTest {
                 ParameterField f1 = intensor;
 
                 (Field f2, Field f3) = (f1, -f1);
-                OutputNode n2 = f2.Value.Save();
-                OutputNode n3 = f3.Value.Save();
+                StoreField n2 = f2.Save();
+                StoreField n3 = f3.Save();
 
                 Flow inference_flow = Flow.Inference(n2, n3);
 
@@ -1149,7 +1196,7 @@ namespace TensorShaderTest {
 
                 Field f3 = f1 + f2;
                 Field ferr = f3 - fo;
-                OutputNode loss = VariableNode.Average(ferr.Value).Save();
+                StoreField loss = VariableNode.Average(ferr.Value).Save();
 
                 (Flow flow, List<ParameterField> parameters) = Flow.Optimize(ferr);
 

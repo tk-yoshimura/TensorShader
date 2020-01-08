@@ -65,8 +65,7 @@ namespace TensorShaderUtil.ArrayIO {
                         break;
                     }
 
-                    var line_splits = line.Split(new char[]{ delimiter }, StringSplitOptions.RemoveEmptyEntries)
-                                          .Skip(skip_cols);
+                    var line_splits = line.Split(delimiter).Skip(skip_cols);
 
                     if (cols > 0 && cols != line_splits.Count()) {
                         throw new InvalidDataException();
@@ -106,10 +105,13 @@ namespace TensorShaderUtil.ArrayIO {
 
             using (var stream = new StreamWriter(filepath)) {
                 for (int i = 0, k = 0; k < strs.Length; k += cols) {
-                    for (int j = 0; j < cols; i++, j++) {
+                    stream.Write($"{strs[i]}");
+                    i++;
+                    
+                    for (int j = 1; j < cols; i++, j++) {
                         string str = strs[i];
 
-                        stream.Write($"{str}{delimiter}");
+                        stream.Write($"{delimiter}{str}");
                     }
 
                     stream.Write(Environment.NewLine);
