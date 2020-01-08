@@ -58,6 +58,7 @@
     <Compile Include="BatchGenerator\IBatchGenerator.cs" />
     <Compile Include="GraphVisualization\DotWriter.cs" />
     <Compile Include="GraphVisualization\Graph.cs" />
+    <Compile Include="ArrayIO\ArrayIO.cs" />
     <Compile Include="Iterator\Iterator.cs" />
     <Compile Include="Iterator\RepeatIterator.cs" />
     <Compile Include="Iterator\ShuffleIterator.cs" />

@@ -59,6 +59,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayIO\ArrayIOTest.cs" />
     <Compile Include="BatchGenerator\UnitaskBatchGeneratorTest.cs" />
     <Compile Include="BatchGenerator\MultitaskBatchGeneratorTest.cs" />
     <Compile Include="GraphVisualization\GraphTest.cs" />
