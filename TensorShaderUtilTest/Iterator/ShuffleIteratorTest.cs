@@ -55,8 +55,8 @@ namespace TensorShaderUtilTest.Iterator {
         public void ExecuteTest3() {
             ShuffleIterator iterator = new ShuffleIterator(1, 4, new Random());
 
-            iterator.IncreasedEpoch += (ite, e) => { Console.WriteLine($"Epoch {ite.Epoch}"); };
-            iterator.IncreasedIteration += (ite, e) => { Console.WriteLine($"Iteration {ite.Iteration}"); };
+            iterator.IncreasedEpoch += (iter) => { Console.WriteLine($"Epoch {iter.Epoch}"); };
+            iterator.IncreasedIteration += (iter) => { Console.WriteLine($"Iteration {iter.Iteration}"); };
 
             int[] indexes1 = iterator.Next();
             int[] indexes2 = iterator.Next();

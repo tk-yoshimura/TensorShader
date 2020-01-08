@@ -11,6 +11,11 @@ namespace TensorShader {
 
             return y;
         }
+
+        /// <summary>2乗平均</summary>
+        public static Field SquareAverage(Field x, int axis, bool keepdims = false) {
+            return SquareAverage(x, new int[]{ axis }, keepdims);
+        }
     }
 }
 

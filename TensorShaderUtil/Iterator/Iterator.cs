@@ -3,7 +3,7 @@ using System;
 namespace TensorShaderUtil.Iterator {
 
     /// <summary>イテレータイベント</summary>
-    public delegate void IteratorEventHandler(Iterator sender, EventArgs e);
+    public delegate void IteratorEventHandler(Iterator iter);
 
     /// <summary>イテレータ</summary>
     public abstract class Iterator {
@@ -44,13 +44,13 @@ namespace TensorShaderUtil.Iterator {
         /// <summary>Epochを増加させる</summary>
         protected void IncreaseEpoch() {
             Epoch++;
-            IncreasedEpoch?.Invoke(this, EventArgs.Empty);
+            IncreasedEpoch?.Invoke(this);
         }
 
         /// <summary>Iterationを増加させる</summary>
         protected void IncreaseIteration() {
             Iteration++;
-            IncreasedIteration?.Invoke(this, EventArgs.Empty);
+            IncreasedIteration?.Invoke(this);
         }
     }
 }

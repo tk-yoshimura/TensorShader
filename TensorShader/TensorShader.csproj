@@ -406,7 +406,7 @@
     <Compile Include="Layers\PaddingType.cs" />
     <Compile Include="Link.cs" />
     <Compile Include="Links\Aggregation\Aggregation.cs" />
-    <Compile Include="Links\Aggregation\SquareMean.cs" />
+    <Compile Include="Links\Aggregation\SquareAverage.cs" />
     <Compile Include="Links\Aggregation\Min.cs" />
     <Compile Include="Links\Aggregation\Max.cs" />
     <Compile Include="Links\Aggregation\MeanVariance.cs" />

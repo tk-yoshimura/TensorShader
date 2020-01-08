@@ -11,6 +11,11 @@ namespace TensorShader {
 
             return y;
         }
+
+        /// <summary>最小値</summary>
+        public static Field Min(Field x, int axis, bool keepdims = false) {
+            return Min(x, new int[]{ axis }, keepdims);
+        }
     }
 }
 

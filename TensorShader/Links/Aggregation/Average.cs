@@ -11,6 +11,11 @@ namespace TensorShader {
 
             return y;
         }
+
+        /// <summary>平均</summary>
+        public static Field Average(Field x, int axis, bool keepdims = false) {
+            return Average(x, new int[]{ axis }, keepdims);
+        }
     }
 }
 

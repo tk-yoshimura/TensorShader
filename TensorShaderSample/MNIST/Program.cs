@@ -40,6 +40,14 @@ namespace MNIST {
             Field err = Sum(SoftmaxCrossEntropy(y, OneHotVector(t, classes)), axes: new int[] { Axis.Map0D.Channels });
             StoreField accnode = acc.Save(), lossnode = Average(err).Save();
 
+            Console.WriteLine("Set iterator event...");
+            train_iterator.IncreasedEpoch += (iter) => { 
+                float train_acc = accnode.State[0];
+                float train_loss = lossnode.State[0];
+
+                Console.WriteLine($"[{iter.Iteration}] train acc: {train_acc:F3} train loss: {train_loss:E3}");
+            };
+
             Console.WriteLine("Build optimize flow...");
             (Flow trainflow, Parameters parameters) = Flow.Optimize(err);
 
@@ -90,15 +98,6 @@ namespace MNIST {
 
                 trainflow.Execute();
                 parameters.Update();
-
-                if (train_iterator.Iteration % 60 != 0) {
-                    continue;
-                }
-
-                float train_acc = accnode.State[0];
-                float train_loss = lossnode.State[0];
-
-                Console.WriteLine($"[{train_iterator.Iteration}] train acc: {train_acc:F3} train loss: {train_loss:E3}");
             }
 
             sw.Stop();

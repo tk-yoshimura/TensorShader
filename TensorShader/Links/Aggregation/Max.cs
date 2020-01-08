@@ -11,6 +11,11 @@ namespace TensorShader {
 
             return y;
         }
+
+        /// <summary>最大値</summary>
+        public static Field Max(Field x, int axis, bool keepdims = false) {
+            return Max(x, new int[]{ axis }, keepdims);
+        }
     }
 }
 
