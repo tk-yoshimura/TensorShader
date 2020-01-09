@@ -500,53 +500,6 @@ namespace TensorShaderTest {
                     Assert.AreEqual(item.Value, optimize_flow.InTensors[item.Key]);
                 }
             }
-
-            {
-                ParameterField f1 = new ParameterField(in1tensor);
-                VariableField f2 = new VariableField(in2tensor);
-                VariableField f4 = new VariableField(in2tensor);
-                VariableField fo = new VariableField(outtensor);
-
-                Field f3 = f1 + f2;
-                Field ferr = f3 - fo;
-                StoreField n3 = f3.Save();
-                StoreField n4 = (f3 + f4).Save();
-
-                Flow inference_flow = Flow.Inference(n3);
-
-                inference_flow.Execute();
-
-                (Flow optimize_flow, List<ParameterField> parameters) = Flow.Optimize(ferr);
-
-                optimize_flow.Execute();
-
-                Assert.AreEqual(9, optimize_flow.NodeCount);
-                Assert.AreEqual(7, optimize_flow.VariableNodeCount);
-                Assert.AreEqual(2, optimize_flow.FunctionNodeCount);
-                Assert.AreEqual(3, optimize_flow.InTensorCount);
-                Assert.AreEqual(2, optimize_flow.OutTensorCount);
-
-                CollectionAssert.AreEquivalent(new ParameterField[] { f1 }, parameters);
-                Assert.AreEqual(in1tensor, f1.ValueTensor);
-                Assert.AreEqual(in2tensor, f2.ValueTensor);
-                Assert.AreEqual(6, f1.GradTensor.State[0]);
-                Assert.AreEqual(null, f2.Grad);
-
-                Assert.AreEqual(5, inference_flow.NodeCount);
-                Assert.AreEqual(4, inference_flow.VariableNodeCount);
-                Assert.AreEqual(1, inference_flow.FunctionNodeCount);
-                Assert.AreEqual(2, inference_flow.InTensorCount);
-                Assert.AreEqual(1, inference_flow.OutTensorCount);
-
-                Assert.AreEqual(in1tensor, f1.ValueTensor);
-                Assert.AreEqual(in2tensor, f2.ValueTensor);
-                Assert.AreEqual(3, n3.Tensor.State[0]);
-
-                foreach (var item in inference_flow.InTensors) {
-                    Assert.IsTrue(optimize_flow.InTensors.ContainsKey(item.Key));
-                    Assert.AreEqual(item.Value, optimize_flow.InTensors[item.Key]);
-                }
-            }
         }
 
         [TestMethod]
@@ -1494,6 +1447,45 @@ namespace TensorShaderTest {
                 float[] y = fi.GradTensor.State;
 
                 CollectionAssert.AreEqual(new float[] { 2 * 2.5f * (2.5f * 2.5f - 7f) }, y, "x * x * x / x");
+            }
+        }
+
+        [TestMethod]
+        public void StoreTest() {
+            Tensor in1tensor = new Tensor(Shape.Scalar(), new float[] { 1 });
+            Tensor in2tensor = new Tensor(Shape.Scalar(), new float[] { 2 });
+            Tensor outtensor = new Tensor(Shape.Scalar(), new float[] { -3 });
+
+            {
+                ParameterField f1 = new ParameterField(in1tensor);
+                VariableField f2 = new VariableField(in2tensor);
+                VariableField f4 = new VariableField(in2tensor);
+                VariableField fo = new VariableField(outtensor);
+
+                Field f3 = f1 + f2;
+                Field ferr = f3 - fo;
+                StoreField n3 = f3.Save();
+                StoreField n4 = (f3 * f4).Save();
+
+                (Flow optimize_flow, List<ParameterField> parameters) = Flow.Optimize(ferr);
+
+                optimize_flow.Execute();
+                
+                Assert.AreEqual(13, optimize_flow.NodeCount);
+                Assert.AreEqual(10, optimize_flow.VariableNodeCount);
+                Assert.AreEqual(3, optimize_flow.FunctionNodeCount);
+                Assert.AreEqual(4, optimize_flow.InTensorCount);
+                Assert.AreEqual(3, optimize_flow.OutTensorCount);
+
+                CollectionAssert.AreEquivalent(new ParameterField[] { f1 }, parameters);
+                Assert.AreEqual(in1tensor, f1.ValueTensor);
+                Assert.AreEqual(in2tensor, f2.ValueTensor);
+                Assert.AreEqual(in2tensor, f4.ValueTensor);
+                Assert.AreEqual(6, f1.GradTensor.State[0]);
+                Assert.AreEqual(3, n3.State[0]);
+                Assert.AreEqual(6, n4.State[0]);
+                Assert.AreEqual(null, f2.Grad);
+                Assert.AreEqual(null, f4.Grad);
             }
         }
     }

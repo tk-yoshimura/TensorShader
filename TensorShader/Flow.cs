@@ -82,7 +82,7 @@ namespace TensorShader {
         /// <summary>入力ノードからフロー構築</summary>
         /// <param name="innodes">入力ノードリスト</param>
         public static Flow FromInputs(params InputNode[] innodes) {
-            if (innodes.Length < 1) {
+            if (innodes.Length < 1 || innodes.IsDuplicated()) {
                 throw new ArgumentException(nameof(innodes));
             }
 
@@ -94,7 +94,7 @@ namespace TensorShader {
         /// <summary>出力ノードからフロー構築</summary>
         /// <param name="outnodes">出力ノードリスト</param>
         public static Flow FromOutputs(params OutputNode[] outnodes) {
-            if (outnodes.Length < 1) {
+            if (outnodes.Length < 1 || outnodes.IsDuplicated()) {
                 throw new ArgumentException(nameof(outnodes));
             }
 
@@ -115,10 +115,6 @@ namespace TensorShader {
                 .Where((node) => node.Tensor != null)
                 .Select((node) => node.Tensor)
                 .ToList();
-
-            if (input_tensors.Distinct().Count() != input_tensors.Count()) {
-                throw new ArgumentException("Node list including duplicate input tensor.");
-            }
 
             Stack<Node> nodestack = new Stack<Node>(innodes.Reverse().Select((node) => node as Node));
             Dictionary<Node, List<Node>> innodes_table = new Dictionary<Node, List<Node>>();
@@ -195,8 +191,13 @@ namespace TensorShader {
                 .Where((node) => node.Tensor != null)
                 .Select((node) => node.Tensor);
 
-            if (output_tensors.Distinct().Count() != output_tensors.Count()) {
+            if (output_tensors.IsDuplicated()) {
                 throw new ArgumentException("Node list including duplicate output tensor.");
+            }
+
+            // テンソルが重複している入力ノードが出力ノードとテンソルを共有しているなら例外を送出
+            if (input_tensors.Duplicated().Intersect(output_tensors).Count() > 0) {
+                throw new ArgumentException("Input nodes with duplicate tensors share tensors with output nodes.");
             }
 
             return visited_nodes;
@@ -338,6 +339,127 @@ namespace TensorShader {
             }
         }
 
+        /// <summary>到達可能なリンクおよびフィールドを列挙</summary>
+        public static (List<Field> fields, List<Link> links) EnumerateReachableFields(bool forward, bool backward, params Field[] fields) {
+            List<Link> reachable_links = new List<Link>();
+            List<Field> reachable_fields = new List<Field>(fields.Distinct());
+            Stack<Field> stack = new Stack<Field>(fields);
+
+            while(stack.Count > 0) { 
+                Field field = stack.Pop();
+
+                //探索フィールドを入力とするリンクを探索
+                if (forward) { 
+                    foreach(Link link in field.InLinks) {
+                        if (!reachable_links.Contains(link)) { 
+                            reachable_links.Add(link);
+                        }
+
+                        if (link.OutField != null && !reachable_fields.Contains(link.OutField)) { 
+                            stack.Push(link.OutField);
+                            reachable_fields.Add(link.OutField);
+                        }
+                    }
+                }
+                //探索フィールドを出力とするリンクを探索
+                if (backward) { 
+                    if(field.OutLink != null) { 
+                        if (!reachable_links.Contains(field.OutLink)) { 
+                            reachable_links.Add(field.OutLink);
+                        }
+
+                        foreach(Field push_field in field.OutLink.InFields) {
+                            if (!reachable_fields.Contains(push_field)) { 
+                                stack.Push(push_field);
+                                reachable_fields.Add(push_field);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return (reachable_fields, reachable_links);
+        }
+
+        /// <summary>最適化計算グラフを構築</summary>
+        /// <param name="error_fields">誤差フィールドのリスト</param>
+        /// <returns>計算フローと最適化対象のパラメータ</returns>
+        public static (Flow flow, Parameters parameters) Optimize(params Field[] error_fields) {
+            if (error_fields.Length < 1) {
+                throw new ArgumentException(nameof(error_fields));
+            }
+
+            if (error_fields.IsDuplicated()) {
+                throw new ArgumentNullException("Error fields are duplicated.");
+            }
+
+            foreach (Field error_field in error_fields) {
+                error_field.AddGrad(error_field.Value);
+            }
+
+            // 逆伝搬で到達可能なリンク・フィールドを探索、パラメータを列挙
+            (List<Field> backward_reachable_fields, List<Link> backward_reachable_links) = 
+                EnumerateReachableFields(forward: false, backward: true, error_fields);
+            List<ParameterField> parameters = backward_reachable_fields.OfType<ParameterField>().ToList();
+
+            // 逆伝搬実行
+            Stack<Field> backward_stack = new Stack<Field>(error_fields);
+            Dictionary<Field, List<Link>> outlinks_table = new Dictionary<Field, List<Link>>();
+
+            while (backward_stack.Count > 0) {
+                Field field = backward_stack.Pop();
+
+                if (field.OutLink != null) {
+                    field.OutLink.Backward();
+
+                    // 探索フィールドを出力したリンクの順伝搬時の入力フィールドを検索
+                    foreach (Field push_field in field.OutLink.InFields) {
+                        // 入力フィールドのリンクがすべて逆伝搬済みかチェック
+                        if (!outlinks_table.ContainsKey(push_field)) {
+                            outlinks_table.Add(
+                                push_field,
+                                push_field.InLinks.WhiteList(backward_reachable_links).ToList()
+                            );
+                        }
+
+                        outlinks_table[push_field].Remove(field.OutLink);
+
+                        if (outlinks_table[push_field].Count > 0) {
+                            continue;
+                        }
+
+                        // 逆伝搬に必要な誤差変数がすべて準備できたら勾配を確定しスタックに追加
+                        backward_stack.Push(push_field);
+                    }
+                }
+            }
+
+            // パラメータの勾配確定
+            foreach (ParameterField parameter in parameters) {
+                parameter.SaveGrad();
+            }
+
+            // 到達可能なリンク・フィールドを探索、入力ノードを列挙
+            (List<Field> reachable_fields, _) = 
+                EnumerateReachableFields(forward: true, backward: true, error_fields);
+
+            InputNode[] input_nodes = reachable_fields.Select((field) => field.Value)
+                                                      .OfType<InputNode>()
+                                                      .Distinct().ToArray();
+
+            Flow flow = FromInputs(input_nodes);
+
+            return (flow, parameters);
+        }
+
+        /// <summary>推論計算グラフを構築</summary>
+        /// <returns>計算フロー</returns>
+        public static Flow Inference(params StoreField[] fields) {
+            Flow flow = FromOutputs(fields.Select((field) => field.OutputNode).ToArray());
+
+            return flow;
+        }
+
         /// <summary>計算フローを実行</summary>
         public void Execute() {
             foreach (var node in nodes) {
@@ -362,129 +484,30 @@ namespace TensorShader {
                 }
             }
         }
-
-        /// <summary>最適化計算グラフを構築</summary>
-        /// <param name="error_fields">誤差フィールドのリスト</param>
-        /// <returns>計算フローと最適化対象のパラメータ</returns>
-        public static (Flow flow, Parameters parameters) Optimize(params Field[] error_fields) {
-            if (error_fields.Length < 1) {
-                throw new ArgumentException(nameof(error_fields));
-            }
-
-            if (error_fields.Distinct().Count() != error_fields.Length) {
-                throw new ArgumentNullException("Error fields are duplicated.");
-            }
-
-            foreach (Field error_field in error_fields) {
-                error_field.AddGrad(error_field.Value);
-            }
-
-            List<InputNode> input_nodes = new List<InputNode>();
-            List<ParameterField> parameters = new List<ParameterField>();
-
-            List<Link> reachable_links = new List<Link>();
-            List<Field> reachable_fields = new List<Field>(error_fields);
-
-            Stack<Field> reachable_stack = new Stack<Field>(error_fields);
-
-            // 逆伝搬で到達可能なリンク・フィールドを探索、および入力ノード、パラメータを列挙
-            while (reachable_stack.Count > 0) {
-                Field field = reachable_stack.Pop();
-
-                // 入力ノードであるなら入力ノードリストに追加
-                if (field.Value is InputNode) {
-                    if (!input_nodes.Contains(field.Value as InputNode)) {
-                        input_nodes.Add(field.Value as InputNode);
-                    }
-                }
-
-                // パラメータであるならパラメータリストに追加
-                if (field is ParameterField) {
-                    if (!parameters.Contains(field as ParameterField)) {
-                        parameters.Add(field as ParameterField);
-                    }
-                    continue;
-                }
-
-                // 始端フィールドかリンクが探索済みならばスキップ
-                if (field.OutLink == null || reachable_links.Contains(field.OutLink)) {
-                    continue;
-                }
-
-                // 到達可能リンクに追加
-                reachable_links.Add(field.OutLink);
-
-                // 到達可能リンクの入力フィールドを到達可能フィールドに追加
-                foreach (Field push_field in field.OutLink.InFields) {
-                    if (reachable_fields.Contains(push_field)) {
-                        continue;
-                    }
-
-                    reachable_fields.Add(push_field);
-                    reachable_stack.Push(push_field);
-                }
-            }
-
-            Stack<Field> backward_stack = new Stack<Field>(error_fields);
-            Dictionary<Field, List<Link>> outlinks_table = new Dictionary<Field, List<Link>>();
-
-            // 逆伝搬実行
-            while (backward_stack.Count > 0) {
-                Field field = backward_stack.Pop();
-
-                if (field.OutLink != null) {
-                    field.OutLink.Backward();
-
-                    // 探索フィールドを出力したリンクの順伝搬時の入力フィールドを検索
-                    foreach (Field push_field in field.OutLink.InFields) {
-                        // 入力フィールドのリンクがすべて逆伝搬済みかチェック
-                        if (!outlinks_table.ContainsKey(push_field)) {
-                            outlinks_table.Add(
-                                push_field,
-                                push_field.InLinks.WhiteList(reachable_links).ToList()
-                            );
-                        }
-
-                        outlinks_table[push_field].Remove(field.OutLink);
-
-                        if (outlinks_table[push_field].Count > 0) {
-                            continue;
-                        }
-
-                        // 逆伝搬に必要な誤差変数がすべて準備できたら勾配を確定しスタックに追加
-                        backward_stack.Push(push_field);
-                    }
-                }
-            }
-
-            foreach (ParameterField parameter in parameters) {
-                parameter.SaveGrad();
-            }
-
-            Flow flow = FromInputs(input_nodes.ToArray());
-
-            return (flow, parameters);
-        }
-
-        /// <summary>推論計算グラフを構築</summary>
-        /// <returns>計算フロー</returns>
-        public static Flow Inference(params StoreField[] fields) {
-            Flow flow = FromOutputs(fields.Select((field) => field.OutputNode).ToArray());
-
-            return flow;
-        }
     }
 
     /// <summary>列挙型拡張</summary>
     internal static class EnumerableExtend {
-        /// <summary>WhiteList</summary>
-        /// <remarks>積集合を使うと逆伝搬の際に重複したリンク/フィールドが除去されてしまうため必要</remarks>
+        /// <summary>引数に含まれる要素を返す</summary>
+        /// <remarks>
+        /// 積集合を使うと逆伝搬の際に重複したリンク/フィールドが除去されてしまうため必要
+        /// </remarks>
         public static IEnumerable<TSource> WhiteList<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second) {
             foreach (var item in first) {
                 if (second.Contains(item)) {
                     yield return item;
                 }
             }
+        }
+
+        /// <summary>重複した要素を返す</summary>
+        public static IEnumerable<TSource> Duplicated<TSource>(this IEnumerable<TSource> source) {
+            return source.GroupBy((item) => item).Where((group) => group.Count() > 1).Select((group) => group.Key);
+        }
+
+        /// <summary>重複要素があるか判定</summary>
+        public static bool IsDuplicated<TSource>(this IEnumerable<TSource> source) {
+            return source.Distinct().Count() != source.Count();
         }
     }
 }
