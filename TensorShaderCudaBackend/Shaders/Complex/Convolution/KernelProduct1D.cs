@@ -49,37 +49,11 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
 
             string code = $@"
 
-            static __inline__ __device__ float2 ctor_float2(float x, float y){{
-                float2 t; t.x = x; t.y = y; return t;
-            }}
-
-            static __inline__ __device__ void floatfloat_add(float &hi, float &lo, float val){{
-                float tmp = hi;
-                hi += val;
-                lo -= (hi - tmp) - val;
-            }}
-
-            static __inline__ __device__ void floatfloat_sub(float &hi, float &lo, float val){{
-                float tmp = hi;
-                hi -= val;
-                lo -= (hi - tmp) + val;
-            }}
-
-            static __inline__ __device__ void complex_kernelprod(float2 &hi, float2 &lo, float2 x1, float2 x2){{
-                floatfloat_add(hi.x, lo.x, x1.x * x2.x);
-                floatfloat_add(hi.x, lo.x, x1.y * x2.y);
-                floatfloat_sub(hi.y, lo.y, x1.y * x2.x);
-                floatfloat_add(hi.y, lo.y, x1.x * x2.y);
-            }}
-
-            static __inline__ __device__ void floatfloat_atomicadd(float2 *ptr, float2 hi, float2 lo){{
-                float *ptr_float = (float*)(void*)ptr;
-
-                float tmpx = atomicAdd(ptr_float, hi.x);
-                atomicAdd(ptr_float + 1, lo.x - (((tmpx + hi.x) - tmpx) - hi.x));
-                float tmpy = atomicAdd(ptr_float + 2, hi.y);
-                atomicAdd(ptr_float + 3, lo.y - (((tmpy + hi.y) - tmpy) - hi.y));
-            }}
+            {Defines.CtorFloat2}
+            {Defines.FloatFloatAdd}
+            {Defines.FloatFloatSub}
+            {Defines.Complex.KernelProd}
+            {Defines.Complex.AtomicAdd}
 
             __global__ void complex_kernelproduct_1d(float2 *inmap, float2 *outmap, float2 *filter, 
                                                      unsigned int outwidth) {{

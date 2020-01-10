@@ -42,16 +42,8 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             string code = $@"
 
-            static __inline__ __device__ void floatfloat_add(float &hi, float &lo, float val){{
-                float tmp = hi;
-                hi += val;
-                lo -= (hi - tmp) - val;
-            }}
-
-            static __inline__ __device__ void floatfloat_atomicadd(float *ptr, float hi, float lo){{
-                float tmp = atomicAdd(ptr, hi);
-                atomicAdd(ptr + 1, lo - (((tmp + hi) - tmp) - hi));
-            }}
+            {Defines.FloatFloatAdd}
+            {Defines.AtomicAdd}
 
             __global__ void ptwise_kernelproduct(float *inmap, float *outmap, float *filter, unsigned int pl) {{
 

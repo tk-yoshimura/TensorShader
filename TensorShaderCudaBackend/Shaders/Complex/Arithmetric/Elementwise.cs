@@ -55,13 +55,5 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Arithmetric {
                 }
             }
         }
-
-        /// <summary>インライン展開関数</summary>
-        protected static string InlineFunctions =>
-            @"
-            static __inline__ __device__ float2 ctor_float2(float x, float y){
-                float2 t; t.x = x; t.y = y; return t;
-            }
-            ";
     }
 }

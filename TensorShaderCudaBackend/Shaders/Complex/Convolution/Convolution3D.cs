@@ -53,35 +53,11 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
 
             string code = $@"
 
-            static __inline__ __device__ float2 ctor_float2(float x, float y){{
-                float2 t; t.x = x; t.y = y; return t;
-            }}
-
-            static __inline__ __device__ void floatfloat_add(float &hi, float &lo, float val){{
-                float tmp = hi;
-                hi += val;
-                lo -= (hi - tmp) - val;
-            }}
-
-            static __inline__ __device__ void floatfloat_sub(float &hi, float &lo, float val){{
-                float tmp = hi;
-                hi -= val;
-                lo -= (hi - tmp) + val;
-            }}
-
-            static __inline__ __device__ void complex_mul(float2 &hi, float2 &lo, float2 x1, float2 x2){{
-                floatfloat_add(hi.x, lo.x, x1.x * x2.x);
-                floatfloat_sub(hi.x, lo.x, x1.y * x2.y);
-                floatfloat_add(hi.y, lo.y, x1.x * x2.y);
-                floatfloat_add(hi.y, lo.y, x1.y * x2.x);
-            }}
-
-            static __inline__ __device__ void complex_mulgrad(float2 &hi, float2 &lo, float2 x1, float2 x2){{
-                floatfloat_add(hi.x, lo.x, x1.x * x2.x);
-                floatfloat_add(hi.x, lo.x, x1.y * x2.y);
-                floatfloat_add(hi.y, lo.y, x1.y * x2.x);
-                floatfloat_sub(hi.y, lo.y, x1.x * x2.y);
-            }}
+            {Defines.CtorFloat2}
+            {Defines.FloatFloatAdd}
+            {Defines.FloatFloatSub}
+            {Defines.Complex.Mul}
+            {Defines.Complex.MulGrad}
 
             __global__ void complex_convolution_3d(float2 *inmap, float2 *outmap, float2 *filter, 
                                                    unsigned int oy_offset, unsigned int oz,

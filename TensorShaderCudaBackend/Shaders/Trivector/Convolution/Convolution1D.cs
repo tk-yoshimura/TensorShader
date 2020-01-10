@@ -41,51 +41,10 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
 
             string code = $@"
 
-            static __inline__ __device__ float3 ctor_float3(float x, float y, float z){{
-                float3 t; t.x = x; t.y = y; t.z = z; return t;
-            }}
-
-            static __inline__ __device__ void floatfloat_add(float &hi, float &lo, float val){{
-                float tmp = hi;
-                hi += val;
-                lo -= (hi - tmp) - val;
-            }}
-
-            static __inline__ __device__ void trivector_quaternion_mul(float3 &hi, float3 &lo, float3 v, float4 q){{
-                float sx = q.x * q.x, sy = q.y * q.y, sz = q.z * q.z, sw = q.w * q.w; 
-                float mx = q.y * q.z, my = q.z * q.w, mz = q.w * q.y; 
-                float nx = q.x * q.y, ny = q.x * q.z, nz = q.x * q.w;
-
-                floatfloat_add(hi.x, lo.x, v.x * (sx + sy - sz - sw));
-                floatfloat_add(hi.x, lo.x, 2.0 * (v.y * (mx - nz)));
-                floatfloat_add(hi.x, lo.x, 2.0 * (v.z * (mz + ny)));
-
-                floatfloat_add(hi.y, lo.y, v.y * (sx - sy + sz - sw));
-                floatfloat_add(hi.y, lo.y, 2.0 * (v.z * (my - nx)));
-                floatfloat_add(hi.y, lo.y, 2.0 * (v.x * (mx + nz)));
-
-                floatfloat_add(hi.z, lo.z, v.z * (sx - sy - sz + sw));
-                floatfloat_add(hi.z, lo.z, 2.0 * (v.x * (mz - ny)));
-                floatfloat_add(hi.z, lo.z, 2.0 * (v.y * (my + nx)));
-            }}
-
-            static __inline__ __device__ void trivector_quaternion_mulgrad(float3 &hi, float3 &lo, float3 v, float4 q){{
-                float sx = q.x * q.x, sy = q.y * q.y, sz = q.z * q.z, sw = q.w * q.w; 
-                float mx = q.y * q.z, my = q.z * q.w, mz = q.w * q.y; 
-                float nx = q.x * q.y, ny = q.x * q.z, nz = q.x * q.w;
-
-                floatfloat_add(hi.x, lo.x, v.x * (sx + sy - sz - sw));
-                floatfloat_add(hi.x, lo.x, 2.0 * (v.y * (mx + nz)));
-                floatfloat_add(hi.x, lo.x, 2.0 * (v.z * (mz - ny)));
-
-                floatfloat_add(hi.y, lo.y, v.y * (sx - sy + sz - sw));
-                floatfloat_add(hi.y, lo.y, 2.0 * (v.z * (my + nx)));
-                floatfloat_add(hi.y, lo.y, 2.0 * (v.x * (mx - nz)));
-
-                floatfloat_add(hi.z, lo.z, v.z * (sx - sy - sz + sw));
-                floatfloat_add(hi.z, lo.z, 2.0 * (v.x * (mz + ny)));
-                floatfloat_add(hi.z, lo.z, 2.0 * (v.y * (my - nx)));
-            }}
+            {Defines.CtorFloat3}
+            {Defines.FloatFloatAdd}
+            {Defines.Trivector.Mul}
+            {Defines.Trivector.MulGrad}
 
             __global__ void trivector_convolution_1d(float3 *inmap, float3 *outmap, float4 *filter) {{
 

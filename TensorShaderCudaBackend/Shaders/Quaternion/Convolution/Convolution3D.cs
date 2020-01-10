@@ -53,65 +53,11 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
 
             string code = $@"
 
-            static __inline__ __device__ float4 ctor_float4(float x, float y, float z, float w){{
-                float4 t; t.x = x; t.y = y; t.z = z; t.w = w; return t;
-            }}
-
-            static __inline__ __device__ void floatfloat_add(float &hi, float &lo, float val){{
-                float tmp = hi;
-                hi += val;
-                lo -= (hi - tmp) - val;
-            }}
-
-            static __inline__ __device__ void floatfloat_sub(float &hi, float &lo, float val){{
-                float tmp = hi;
-                hi -= val;
-                lo -= (hi - tmp) + val;
-            }}
-
-            static __inline__ __device__ void quaternion_mul(float4 &hi, float4 &lo, float4 x1, float4 x2){{
-                floatfloat_add(hi.x, lo.x, x1.x * x2.x);
-                floatfloat_sub(hi.x, lo.x, x1.y * x2.y);
-                floatfloat_sub(hi.x, lo.x, x1.z * x2.z);
-                floatfloat_sub(hi.x, lo.x, x1.w * x2.w);
-
-                floatfloat_add(hi.y, lo.y, x1.x * x2.y);
-                floatfloat_add(hi.y, lo.y, x1.y * x2.x);
-                floatfloat_add(hi.y, lo.y, x1.z * x2.w);
-                floatfloat_sub(hi.y, lo.y, x1.w * x2.z);
-
-                floatfloat_add(hi.z, lo.z, x1.x * x2.z);
-                floatfloat_sub(hi.z, lo.z, x1.y * x2.w);
-                floatfloat_add(hi.z, lo.z, x1.z * x2.x);
-                floatfloat_add(hi.z, lo.z, x1.w * x2.y);
-
-                floatfloat_add(hi.w, lo.w, x1.x * x2.w);
-                floatfloat_add(hi.w, lo.w, x1.y * x2.z);
-                floatfloat_sub(hi.w, lo.w, x1.z * x2.y);
-                floatfloat_add(hi.w, lo.w, x1.w * x2.x);
-            }}
-
-            static __inline__ __device__ void quaternion_mulgrad(float4 &hi, float4 &lo, float4 x1, float4 x2){{
-                floatfloat_add(hi.x, lo.x, x1.x * x2.x);
-                floatfloat_add(hi.x, lo.x, x1.y * x2.y);
-                floatfloat_add(hi.x, lo.x, x1.z * x2.z);
-                floatfloat_add(hi.x, lo.x, x1.w * x2.w);
-
-                floatfloat_sub(hi.y, lo.y, x1.x * x2.y);
-                floatfloat_add(hi.y, lo.y, x1.y * x2.x);
-                floatfloat_sub(hi.y, lo.y, x1.z * x2.w);
-                floatfloat_add(hi.y, lo.y, x1.w * x2.z);
-
-                floatfloat_sub(hi.z, lo.z, x1.x * x2.z);
-                floatfloat_add(hi.z, lo.z, x1.y * x2.w);
-                floatfloat_add(hi.z, lo.z, x1.z * x2.x);
-                floatfloat_sub(hi.z, lo.z, x1.w * x2.y);
-
-                floatfloat_sub(hi.w, lo.w, x1.x * x2.w);
-                floatfloat_sub(hi.w, lo.w, x1.y * x2.z);
-                floatfloat_add(hi.w, lo.w, x1.z * x2.y);
-                floatfloat_add(hi.w, lo.w, x1.w * x2.x);
-            }}
+            {Defines.CtorFloat4}
+            {Defines.FloatFloatAdd}
+            {Defines.FloatFloatSub}
+            {Defines.Quaternion.Mul}
+            {Defines.Quaternion.MulGrad}
 
             __global__ void quaternion_convolution_3d(float4 *inmap, float4 *outmap, float4 *filter, 
                                                       unsigned int oy_offset, unsigned int oz,

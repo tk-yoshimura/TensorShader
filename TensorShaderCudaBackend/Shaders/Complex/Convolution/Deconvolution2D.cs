@@ -46,35 +46,11 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
 
             string code = $@"
 
-            static __inline__ __device__ float2 ctor_float2(float x, float y){{
-                float2 t; t.x = x; t.y = y; return t;
-            }}
-
-            static __inline__ __device__ void floatfloat_add(float &hi, float &lo, float val){{
-                float tmp = hi;
-                hi += val;
-                lo -= (hi - tmp) - val;
-            }}
-
-            static __inline__ __device__ void floatfloat_sub(float &hi, float &lo, float val){{
-                float tmp = hi;
-                hi -= val;
-                lo -= (hi - tmp) + val;
-            }}
-
-            static __inline__ __device__ void complex_mul(float2 &hi, float2 &lo, float2 x1, float2 x2){{
-                floatfloat_add(hi.x, lo.x, x1.x * x2.x);
-                floatfloat_sub(hi.x, lo.x, x1.y * x2.y);
-                floatfloat_add(hi.y, lo.y, x1.x * x2.y);
-                floatfloat_add(hi.y, lo.y, x1.y * x2.x);
-            }}
-
-            static __inline__ __device__ void complex_mulgrad(float2 &hi, float2 &lo, float2 x1, float2 x2){{
-                floatfloat_add(hi.x, lo.x, x1.x * x2.x);
-                floatfloat_add(hi.x, lo.x, x1.y * x2.y);
-                floatfloat_sub(hi.y, lo.y, x1.y * x2.x);
-                floatfloat_add(hi.y, lo.y, x1.x * x2.y);
-            }}
+            {Defines.CtorFloat2}
+            {Defines.FloatFloatAdd}
+            {Defines.FloatFloatSub}
+            {Defines.Complex.Mul}
+            {Defines.Complex.MulGrad}
 
             __global__ void complex_deconvolution_2d(float2 *inmap, float2 *outmap, float2 *filter,
                                                      unsigned int oy_offset,
@@ -85,7 +61,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                 unsigned int ox = {Defines.BlockIndexY}, oy = oy_offset + {Defines.BlockIndexZ};
 
                 __shared__ float2 us[{InChannels}];
-                float2 vu_hi = ctor_float2(0.0, 0.0), vu_lo = ctor_float2(0.0, 0.0);
+                float2 uv_hi = ctor_float2(0.0, 0.0), uv_lo = ctor_float2(0.0, 0.0);
 
                 for(unsigned int ky = 0, iy = oy - {KernelHeight - 1}; ky < {KernelHeight}; ky++, iy++){{ 
                     if(iy >= inheight){{
@@ -111,7 +87,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                                 float2 u = us[inch];
                                 float2 v = filter[filter_idx];
 
-                                {(GradMode ? "complex_mulgrad" : "complex_mul")}(vu_hi, vu_lo, v, u);
+                                {(GradMode ? "complex_mulgrad" : "complex_mul")}(uv_hi, uv_lo, u, v);
 
                                 filter_idx += {OutChannels};
                             }}
@@ -124,7 +100,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                 if(outch < {OutChannels}){{
                     unsigned int outmap_idx = outch + {OutChannels} * (ox + outwidth * oy);
 
-                    outmap[outmap_idx] = ctor_float2(vu_hi.x + vu_lo.x, vu_hi.y + vu_lo.y);
+                    outmap[outmap_idx] = ctor_float2(uv_hi.x + uv_lo.x, uv_hi.y + uv_lo.y);
                 }}
             }}";
 

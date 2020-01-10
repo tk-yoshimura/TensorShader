@@ -37,11 +37,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             string code = $@"
 
-            static __inline__ __device__ void floatfloat_add(float &hi, float &lo, float val){{
-                float tmp = hi;
-                hi += val;
-                lo -= (hi - tmp) - val;
-            }}
+            {Defines.FloatFloatAdd}
 
             __global__ void convolution_1d(float *inmap, float *outmap, float *filter) {{
 

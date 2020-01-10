@@ -55,13 +55,5 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Arithmetric {
                 }
             }
         }
-
-        /// <summary>インライン展開関数</summary>
-        protected static string InlineFunctions =>
-            @"
-            static __inline__ __device__ float3 ctor_float3(float x, float y, float z){
-                float3 t; t.x = x; t.y = y; t.z = z; return t;
-            }
-            ";
     }
 }

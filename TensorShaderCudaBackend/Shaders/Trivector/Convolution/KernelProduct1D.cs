@@ -50,50 +50,10 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
 
             string code = $@"
 
-            static __inline__ __device__ float4 ctor_float4(float x, float y, float z, float w){{
-                float4 t; t.x = x; t.y = y; t.z = z; t.w = w; return t;
-            }}
-
-            static __inline__ __device__ void floatfloat_add(float &hi, float &lo, float val){{
-                float tmp = hi;
-                hi += val;
-                lo -= (hi - tmp) - val;
-            }}
-
-            static __inline__ __device__ void trivector_quaternion_kernelprod(float4 &hi, float4 &lo, float3 v, float3 u, float4 q){{
-                float vxqx = v.x * q.x, vxqy = v.x * q.y, vxqz = v.x * q.z, vxqw = v.x * q.w;
-                float vyqx = v.y * q.x, vyqy = v.y * q.y, vyqz = v.y * q.z, vyqw = v.y * q.w;
-                float vzqx = v.z * q.x, vzqy = v.z * q.y, vzqz = v.z * q.z, vzqw = v.z * q.w;
-
-                floatfloat_add(hi.x, lo.x, u.x * (vzqz + vxqx - vyqw));
-                floatfloat_add(hi.x, lo.x, u.y * (vxqw + vyqx - vzqy));
-                floatfloat_add(hi.x, lo.x, u.z * (vyqy + vzqx - vxqz));
-
-                floatfloat_add(hi.y, lo.y, u.x * (vzqw + vxqy + vyqz));
-                floatfloat_add(hi.y, lo.y, u.y * (vxqz - vyqy - vzqx));
-                floatfloat_add(hi.y, lo.y, u.z * (vyqx - vzqy + vxqw));
-
-                floatfloat_add(hi.z, lo.z, u.x * (vzqx - vxqz + vyqy));
-                floatfloat_add(hi.z, lo.z, u.y * (vxqy + vyqz + vzqw));
-                floatfloat_add(hi.z, lo.z, u.z * (vyqw - vzqz - vxqx));
-
-                floatfloat_add(hi.w, lo.w, u.x * (vzqy - vxqw - vyqx));
-                floatfloat_add(hi.w, lo.w, u.y * (vxqx - vyqw + vzqz));
-                floatfloat_add(hi.w, lo.w, u.z * (vyqz + vzqw + vxqy));
-            }}
-
-            static __inline__ __device__ void floatfloat_atomicadd(float4 *ptr, float4 hi, float4 lo){{
-                float *ptr_float = (float*)(void*)ptr;
-
-                float tmpx = atomicAdd(ptr_float, hi.x);
-                atomicAdd(ptr_float + 1, lo.x - (((tmpx + hi.x) - tmpx) - hi.x));
-                float tmpy = atomicAdd(ptr_float + 2, hi.y);
-                atomicAdd(ptr_float + 3, lo.y - (((tmpy + hi.y) - tmpy) - hi.y));
-                float tmpz = atomicAdd(ptr_float + 4, hi.z);
-                atomicAdd(ptr_float + 5, lo.z - (((tmpz + hi.z) - tmpz) - hi.z));
-                float tmpw = atomicAdd(ptr_float + 6, hi.w);
-                atomicAdd(ptr_float + 7, lo.w - (((tmpw + hi.w) - tmpw) - hi.w));
-            }}
+            {Defines.CtorFloat4}
+            {Defines.FloatFloatAdd}
+            {Defines.Trivector.KernelProd}
+            {Defines.Quaternion.AtomicAdd}
 
             __global__ void trivector_kernelproduct_1d(float3 *inmap, float3 *outmap, float4 *filter_value, float4 *filter_grad, 
                                                        unsigned int outwidth) {{

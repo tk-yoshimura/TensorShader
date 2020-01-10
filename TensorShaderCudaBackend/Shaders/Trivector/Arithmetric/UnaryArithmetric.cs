@@ -10,7 +10,9 @@
         public UnaryArithmetric(string name, string func)
             : base(arrays: 2, name) {
             string code = $@"
-            {InlineFunctions}
+
+            {Defines.CtorFloat3}
+
             __global__ void {name}(float3 *inmap, float3 *outmap, unsigned int n) {{
                 unsigned int i = {Defines.IndexX};
                 if (i >= n) {{

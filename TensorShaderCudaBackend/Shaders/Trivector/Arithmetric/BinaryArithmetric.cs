@@ -10,7 +10,9 @@
         public BinaryArithmetric(string name, string func)
             : base(arrays: 3, name) {
             string code = $@"
-            {InlineFunctions}
+
+            {Defines.CtorFloat3}
+
             __global__ void {name}(float3 *inmap1, float3 *inmap2, float3 *outmap, unsigned int n) {{
                 unsigned int i = {Defines.IndexX};
                 if (i >= n) {{

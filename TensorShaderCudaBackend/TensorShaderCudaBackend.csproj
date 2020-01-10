@@ -142,6 +142,7 @@
     <Compile Include="API\Cuda\Cuda.cs" />
     <Compile Include="Kernel.cs" />
     <Compile Include="KernelArguments.cs" />
+    <Compile Include="ShaderDefines.cs" />
     <Compile Include="ShaderIndex\Quaternion.cs" />
     <Compile Include="ShaderIndex\Transpose.cs" />
     <Compile Include="ShaderIndex\Trivector.cs" />
