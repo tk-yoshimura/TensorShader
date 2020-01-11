@@ -1487,6 +1487,38 @@ namespace TensorShaderTest {
                 Assert.AreEqual(null, f2.Grad);
                 Assert.AreEqual(null, f4.Grad);
             }
+
+            {
+                ParameterField f1 = new ParameterField(in1tensor);
+                VariableField f2 = new VariableField(in2tensor);
+                VariableField f4 = new VariableField(in2tensor);
+                VariableField fo = new VariableField(outtensor);
+
+                Field f3 = f1 + f2;
+                Field ferr = f3 - fo;
+                StoreField n3 = f3.Save();
+                StoreField n4 = (f3 + f1).Save();
+
+                (Flow optimize_flow, List<ParameterField> parameters) = Flow.Optimize(ferr);
+
+                optimize_flow.Execute();
+                
+                Assert.AreEqual(12, optimize_flow.NodeCount);
+                Assert.AreEqual(9, optimize_flow.VariableNodeCount);
+                Assert.AreEqual(3, optimize_flow.FunctionNodeCount);
+                Assert.AreEqual(3, optimize_flow.InTensorCount);
+                Assert.AreEqual(3, optimize_flow.OutTensorCount);
+
+                CollectionAssert.AreEquivalent(new ParameterField[] { f1 }, parameters);
+                Assert.AreEqual(in1tensor, f1.ValueTensor);
+                Assert.AreEqual(in2tensor, f2.ValueTensor);
+                Assert.AreEqual(in2tensor, f4.ValueTensor);
+                Assert.AreEqual(6, f1.GradTensor.State[0]);
+                Assert.AreEqual(3, n3.State[0]);
+                Assert.AreEqual(4, n4.State[0]);
+                Assert.AreEqual(null, f2.Grad);
+                Assert.AreEqual(null, f4.Grad);
+            }
         }
     }
 }
