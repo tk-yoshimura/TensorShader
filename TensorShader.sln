@@ -52,6 +52,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MNIST", "TensorShaderSample
 		{9291E2D8-E250-4886-8845-AAF42B3C070C} = {9291E2D8-E250-4886-8845-AAF42B3C070C}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TensorShaderPreset", "TensorShaderPreset\TensorShaderPreset.csproj", "{5C4CEDAF-3962-4D5B-B17F-35FA788F2016}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E6D7E72C-EB7A-4697-9B1A-3E87BA76323A} = {E6D7E72C-EB7A-4697-9B1A-3E87BA76323A}
+		{D0343C7A-36A5-4F87-89D9-C0BFF56721F7} = {D0343C7A-36A5-4F87-89D9-C0BFF56721F7}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -161,6 +167,20 @@ Global
 		{604F4999-2508-4A64-89FA-846A67066623}.Release_Cuda_10_4|x64.Build.0 = Release|x64
 		{604F4999-2508-4A64-89FA-846A67066623}.Release|x64.ActiveCfg = Release|x64
 		{604F4999-2508-4A64-89FA-846A67066623}.Release|x64.Build.0 = Release|x64
+		{5C4CEDAF-3962-4D5B-B17F-35FA788F2016}.Debug|x64.ActiveCfg = Debug|x64
+		{5C4CEDAF-3962-4D5B-B17F-35FA788F2016}.Debug|x64.Build.0 = Debug|x64
+		{5C4CEDAF-3962-4D5B-B17F-35FA788F2016}.Release_Cuda_10_0|x64.ActiveCfg = Release|x64
+		{5C4CEDAF-3962-4D5B-B17F-35FA788F2016}.Release_Cuda_10_0|x64.Build.0 = Release|x64
+		{5C4CEDAF-3962-4D5B-B17F-35FA788F2016}.Release_Cuda_10_1|x64.ActiveCfg = Release|x64
+		{5C4CEDAF-3962-4D5B-B17F-35FA788F2016}.Release_Cuda_10_1|x64.Build.0 = Release|x64
+		{5C4CEDAF-3962-4D5B-B17F-35FA788F2016}.Release_Cuda_10_2|x64.ActiveCfg = Release|x64
+		{5C4CEDAF-3962-4D5B-B17F-35FA788F2016}.Release_Cuda_10_2|x64.Build.0 = Release|x64
+		{5C4CEDAF-3962-4D5B-B17F-35FA788F2016}.Release_Cuda_10_3|x64.ActiveCfg = Release|x64
+		{5C4CEDAF-3962-4D5B-B17F-35FA788F2016}.Release_Cuda_10_3|x64.Build.0 = Release|x64
+		{5C4CEDAF-3962-4D5B-B17F-35FA788F2016}.Release_Cuda_10_4|x64.ActiveCfg = Release|x64
+		{5C4CEDAF-3962-4D5B-B17F-35FA788F2016}.Release_Cuda_10_4|x64.Build.0 = Release|x64
+		{5C4CEDAF-3962-4D5B-B17F-35FA788F2016}.Release|x64.ActiveCfg = Release|x64
+		{5C4CEDAF-3962-4D5B-B17F-35FA788F2016}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

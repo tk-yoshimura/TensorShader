@@ -4,35 +4,37 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9291E2D8-E250-4886-8845-AAF42B3C070C}</ProjectGuid>
+    <ProjectGuid>{5C4CEDAF-3962-4D5B-B17F-35FA788F2016}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TensorShaderUtil</RootNamespace>
-    <AssemblyName>TensorShaderUtil</AssemblyName>
+    <RootNamespace>TensorShaderPreset</RootNamespace>
+    <AssemblyName>TensorShaderPreset</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <Deterministic>false</Deterministic>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DocumentationFile>bin\x64\Debug\TensorShaderUtil.xml</DocumentationFile>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\x64\Debug\TensorShaderPreset.xml</DocumentationFile>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>bin\x64\Release\TensorShaderUtil.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\x64\Release\TensorShaderPreset.xml</DocumentationFile>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
@@ -47,28 +49,20 @@
     <Reference Include="TensorShader">
       <HintPath>..\TensorShader\bin\x64\Release\TensorShader.dll</HintPath>
     </Reference>
-    <Reference Include="TensorShaderCudaBackend">
-      <HintPath>..\TensorShaderCudaBackend\bin\x64\Release\TensorShaderCudaBackend.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BatchGenerator\BatchGenerator.cs" />
-    <Compile Include="BatchGenerator\MultitaskBatchGenerator.cs" />
-    <Compile Include="BatchGenerator\UnitaskBatchGenerator.cs" />
-    <Compile Include="BatchGenerator\IBatchGenerator.cs" />
-    <Compile Include="GraphVisualization\DotWriter.cs" />
-    <Compile Include="GraphVisualization\Graph.cs" />
-    <Compile Include="ArrayIO\ArrayIO.cs" />
-    <Compile Include="Iterator\Iterator.cs" />
-    <Compile Include="Iterator\RepeatIterator.cs" />
-    <Compile Include="Iterator\ShuffleIterator.cs" />
+    <Compile Include="Image\Layer\Filter_SpatialFilter.cs" />
+    <Compile Include="Image\Layer\Filter_Sobel.cs" />
+    <Compile Include="Image\Layer\Convert_RGBtoYUV.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SnapshotSaver\Crc32.cs" />
-    <Compile Include="SnapshotSaver\ZippedBinaryShapshotSaver.cs" />
-    <Compile Include="SnapshotSaver\DefaultBinaryShapshotSaver.cs" />
-    <Compile Include="SnapshotSaver\SnapshotSaver.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Image\Block\" />
+    <Folder Include="Image\Model\" />
+    <Folder Include="Wave\Block\" />
+    <Folder Include="Wave\Layer\" />
+    <Folder Include="Wave\Model\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)" == "Debug" (

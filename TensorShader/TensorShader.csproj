@@ -958,4 +958,13 @@
     <Folder Include="Links\Evaluation\Detection\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if "$(ConfigurationName)" == "Debug" (
+  exit
+)
+
+md "$(SolutionDir)dll\$(ConfigurationName)" &gt; NUL 2&gt;&amp;1
+copy  $(TargetPath)  $(SolutionDir)dll\$(ConfigurationName)\$(TargetFileName) /y
+copy  $(TargetDir)$(TargetName).xml $(SolutionDir)dll\$(ConfigurationName)\$(TargetName).xml /y</PostBuildEvent>
+  </PropertyGroup>
 </Project>
