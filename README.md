@@ -94,4 +94,4 @@ Can't load Cuda dll!
 
 System.BadImageFormatException is thrown and DLL cannot be loaded!
 
-→Specify x64 for the platform.
+→Specify x64 as the project platform.
