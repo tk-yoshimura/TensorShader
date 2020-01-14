@@ -89,8 +89,11 @@ See also...
 
 ## Troubleshooting
 Can't load Cuda dll!
+
 →Install GeForce Experience and Cuda.
+
  Check your environment variables.
 
 System.BadImageFormatException is thrown and DLL cannot be loaded!
+
 →Specify x64 for the platform.
