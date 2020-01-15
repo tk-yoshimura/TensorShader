@@ -33,7 +33,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             {Defines.FloatFloatAdd}
 
-            __global__ void chwise_deconvolution_1d(float *inmap, float *outmap, float *filter, 
+            __global__ void chwise_deconvolution_1d(float *inmap, float *outmap, float *filter,
                                                     unsigned int inwidth) {{
 
                 unsigned int ch = {Defines.IndexX};
@@ -45,14 +45,14 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
                 float uv_hi = 0.0, uv_lo = 0.0;
 
-                for(unsigned int kx = 0, ix = ox - {KernelWidth - 1}; kx < {KernelWidth}; kx++, ix++){{ 
+                for(unsigned int kx = 0, ix = ox - {KernelWidth - 1}; kx < {KernelWidth}; kx++, ix++){{
                     if(ix >= inwidth){{
                         continue;
                     }}
 
                     unsigned int inmap_idx = ch + {Channels} * ix;
                     unsigned int filter_idx = ch + {Channels} * ({KernelWidth - 1} - kx);
-                                              
+
                     float u = inmap[inmap_idx];
                     float v = filter[filter_idx];
 

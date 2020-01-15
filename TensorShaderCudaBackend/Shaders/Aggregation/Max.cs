@@ -9,8 +9,8 @@
 
             string code = $@"
 
-            __global__ void aggregate_max(float *inmap, float *outmap, 
-                                          unsigned int axislength, unsigned int shared_memory_length, 
+            __global__ void aggregate_max(float *inmap, float *outmap,
+                                          unsigned int axislength, unsigned int shared_memory_length,
                                           unsigned int stride, unsigned int slide) {{
 
                 unsigned int i = {Defines.ThreadIdX}, m = {Defines.BlockIndexX}, n = {Defines.BlockIndexY};
@@ -25,7 +25,7 @@
                 inmap += inmap_offset;
 
                 s[i] = inmap[i * stride];
-                
+
                 for(unsigned int j = i + shared_memory_length; j < axislength; j += shared_memory_length){{
                     s[i] = fmaxf(s[i], inmap[j * stride]);
                 }}

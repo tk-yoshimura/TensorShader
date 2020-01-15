@@ -31,7 +31,7 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
 
             string code = $@"
 
-            __global__ void image_to_column_1d(float *inmap, float *outmap, 
+            __global__ void image_to_column_1d(float *inmap, float *outmap,
                                                unsigned int outwidth) {{
 
                 unsigned int ch = {Defines.IndexX}, ox = {Defines.IndexY}, oy = {Defines.IndexZ};
@@ -42,7 +42,7 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
 
                 unsigned int outmap_idx = {KernelWidth} * (ch + {Channels} * ox);
 
-                for(unsigned int kx = 0, ix = ox; kx < {KernelWidth}; kx++, ix++){{ 
+                for(unsigned int kx = 0, ix = ox; kx < {KernelWidth}; kx++, ix++){{
 
                     unsigned int inmap_idx = ch + {Channels} * ix;
 

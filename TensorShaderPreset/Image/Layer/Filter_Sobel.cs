@@ -8,7 +8,7 @@ namespace TensorShaderPreset.Image {
         /// <summary>X方向ソーベルフィルタ</summary>
         public static Field SobelX(Field x, float scale) {
             float[] kernel =
-                {  
+                {
                    +0.25f * scale, 0, -0.25f * scale,
                    +0.50f * scale, 0, -0.50f * scale,
                    +0.25f * scale, 0, -0.25f * scale,
@@ -18,9 +18,9 @@ namespace TensorShaderPreset.Image {
         }
 
         /// <summary>Y方向ソーベルフィルタ</summary>
-        public static Field SobelY(Field x, float scale) {            
+        public static Field SobelY(Field x, float scale) {
             float[] kernel =
-                {  
+                {
                    +0.25f * scale, +0.50f * scale, +0.25f * scale,
                     0,              0,              0,
                    -0.25f * scale, -0.50f * scale, -0.25f * scale,

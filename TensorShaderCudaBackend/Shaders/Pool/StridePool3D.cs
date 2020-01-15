@@ -11,9 +11,9 @@
 
             string code = $@"
 
-            __global__ void stridepool_3d(float *inmap, float *outmap, 
+            __global__ void stridepool_3d(float *inmap, float *outmap,
                                           unsigned int oz,
-                                          unsigned int inwidth, unsigned int outwidth, 
+                                          unsigned int inwidth, unsigned int outwidth,
                                           unsigned int inheight, unsigned int outheight) {{
 
                 unsigned int ch = {Defines.IndexX}, ox = {Defines.IndexY}, oy = {Defines.IndexZ};

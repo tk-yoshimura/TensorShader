@@ -9,7 +9,7 @@
 
             string code = $@"
 
-            __global__ void edgepadding_1d(float *inmap, float *outmap, 
+            __global__ void edgepadding_1d(float *inmap, float *outmap,
                                           unsigned int inwidth, unsigned int outwidth) {{
 
                 unsigned int ch = {Defines.IndexX}, ox = {Defines.IndexY};

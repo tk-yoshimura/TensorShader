@@ -12,9 +12,9 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Arithmetric {
         public QuaternionMul() {
             string code = $@"
 
-            __global__ void trivector_quaternion_mul(float3 *inmap_vector, 
-                                                     float4 *inmap_quaternion, 
-                                                     float3 *outmap_vector, 
+            __global__ void trivector_quaternion_mul(float3 *inmap_vector,
+                                                     float4 *inmap_quaternion,
+                                                     float3 *outmap_vector,
                                                      unsigned int n) {{
 
                 unsigned int i = {Defines.IndexX};
@@ -25,10 +25,10 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Arithmetric {
                 float3 u, v = inmap_vector[i];
                 float4 q = inmap_quaternion[i];
 
-                float sx = q.x * q.x, sy = q.y * q.y, sz = q.z * q.z, sw = q.w * q.w; 
-                float mx = q.y * q.z, my = q.z * q.w, mz = q.w * q.y; 
+                float sx = q.x * q.x, sy = q.y * q.y, sz = q.z * q.z, sw = q.w * q.w;
+                float mx = q.y * q.z, my = q.z * q.w, mz = q.w * q.y;
                 float nx = q.x * q.y, ny = q.x * q.z, nz = q.x * q.w;
-                
+
                 u.x = v.x * (sx + sy - sz - sw) + 2.0 * (v.y * (mx - nz) + v.z * (mz + ny));
                 u.y = v.y * (sx - sy + sz - sw) + 2.0 * (v.z * (my - nx) + v.x * (mx + nz));
                 u.z = v.z * (sx - sy - sz + sw) + 2.0 * (v.x * (mz - ny) + v.y * (my + nx));

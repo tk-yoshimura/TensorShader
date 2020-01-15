@@ -37,8 +37,8 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
 
             {Defines.FloatFloatAdd}
 
-            __global__ void column_to_image_2d(float *inmap, float *outmap, 
-                                               unsigned int inwidth, unsigned int outwidth, 
+            __global__ void column_to_image_2d(float *inmap, float *outmap,
+                                               unsigned int inwidth, unsigned int outwidth,
                                                unsigned int inheight, unsigned int outheight) {{
 
                 unsigned int ch = {Defines.IndexX}, ox = {Defines.IndexY}, oy = {Defines.IndexZ};
@@ -49,12 +49,12 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
 
                 float hi = 0.0, lo = 0.0;
 
-                for(unsigned int ky = 0, iy = oy - {KernelHeight - 1}; ky < {KernelHeight}; ky++, iy++){{ 
+                for(unsigned int ky = 0, iy = oy - {KernelHeight - 1}; ky < {KernelHeight}; ky++, iy++){{
                     if(iy >= inheight){{
                         continue;
                     }}
 
-                    for(unsigned int kx = 0, ix = ox - {KernelWidth - 1}; kx < {KernelWidth}; kx++, ix++){{ 
+                    for(unsigned int kx = 0, ix = ox - {KernelWidth - 1}; kx < {KernelWidth}; kx++, ix++){{
                         if(ix >= inwidth){{
                             continue;
                         }}

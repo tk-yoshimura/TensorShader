@@ -55,7 +55,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
 
                 unsigned int outmap_offset = {OutChannels} * th;
                 outmap += outmap_offset;
-                
+
                 unsigned int filter_offset = (inch + {InChannels} * outch) * 2;
                 filter += filter_offset;
 
@@ -63,7 +63,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
 
                 if(tidx == 0 && outch < {OutChannels}){{
                     vs[tidy] = outmap[outch];
-                }}                
+                }}
                 if(tidy == 0 && inch < {InChannels}){{
                     us[tidx] = inmap[inch];
                 }}

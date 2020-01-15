@@ -41,7 +41,7 @@ namespace MNIST {
             StoreField accnode = acc.Save(), lossnode = Average(err).Save();
 
             Console.WriteLine("Set iterator event...");
-            train_iterator.IncreasedEpoch += (iter) => { 
+            train_iterator.IncreasedEpoch += (iter) => {
                 float train_acc = accnode.State[0];
                 float train_loss = lossnode.State[0];
 

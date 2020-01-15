@@ -11,7 +11,7 @@
 
             string code = $@"
 
-            __global__ void averageunpool_1d(float *inmap, float *outmap, 
+            __global__ void averageunpool_1d(float *inmap, float *outmap,
                                              unsigned int inwidth) {{
 
                 unsigned int ch = {Defines.IndexX}, ix = {Defines.IndexY};
@@ -24,7 +24,7 @@
 
                 unsigned int inmap_idx = ch + {Channels} * ix;
                 unsigned int outmap_idx = ch + {Channels} * ox;
-                
+
                 float v = inmap[inmap_idx] / {Stride};
 
                 for(int kx = 0; kx < {Stride}; kx++){{

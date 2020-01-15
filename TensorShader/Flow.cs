@@ -345,31 +345,31 @@ namespace TensorShader {
             List<Field> reachable_fields = new List<Field>(fields.Distinct());
             Stack<Field> stack = new Stack<Field>(fields);
 
-            while(stack.Count > 0) { 
+            while(stack.Count > 0) {
                 Field field = stack.Pop();
 
                 //探索フィールドを入力とするリンクを探索
-                if (forward) { 
+                if (forward) {
                     foreach(Link link in field.InLinks) {
-                        if (!reachable_links.Contains(link)) { 
+                        if (!reachable_links.Contains(link)) {
                             reachable_links.Add(link);
                         }
 
-                        if (link.OutField != null && !reachable_fields.Contains(link.OutField)) { 
+                        if (link.OutField != null && !reachable_fields.Contains(link.OutField)) {
                             stack.Push(link.OutField);
                             reachable_fields.Add(link.OutField);
                         }
                     }
                 }
                 //探索フィールドを出力とするリンクを探索
-                if (backward) { 
-                    if(field.OutLink != null) { 
-                        if (!reachable_links.Contains(field.OutLink)) { 
+                if (backward) {
+                    if(field.OutLink != null) {
+                        if (!reachable_links.Contains(field.OutLink)) {
                             reachable_links.Add(field.OutLink);
                         }
 
                         foreach(Field push_field in field.OutLink.InFields) {
-                            if (!reachable_fields.Contains(push_field)) { 
+                            if (!reachable_fields.Contains(push_field)) {
                                 stack.Push(push_field);
                                 reachable_fields.Add(push_field);
                             }
@@ -398,7 +398,7 @@ namespace TensorShader {
             }
 
             // 逆伝搬で到達可能なリンク・フィールドを探索、パラメータを列挙
-            (List<Field> backward_reachable_fields, List<Link> backward_reachable_links) = 
+            (List<Field> backward_reachable_fields, List<Link> backward_reachable_links) =
                 EnumerateReachableFields(forward: false, backward: true, error_fields);
             List<ParameterField> parameters = backward_reachable_fields.OfType<ParameterField>().ToList();
 
@@ -440,7 +440,7 @@ namespace TensorShader {
             }
 
             // 到達可能なリンク・フィールドを探索、入力ノードを列挙
-            (List<Field> reachable_fields, _) = 
+            (List<Field> reachable_fields, _) =
                 EnumerateReachableFields(forward: true, backward: true, error_fields);
 
             InputNode[] input_nodes = reachable_fields.Select((field) => field.Value)

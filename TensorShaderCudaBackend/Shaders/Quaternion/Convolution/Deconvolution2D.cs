@@ -54,7 +54,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
 
             __global__ void quaternion_deconvolution_2d(float4 *inmap, float4 *outmap, float4 *filter,
                                                         unsigned int oy_offset,
-                                                        unsigned int inwidth, unsigned int outwidth, 
+                                                        unsigned int inwidth, unsigned int outwidth,
                                                         unsigned int inheight) {{
 
                 unsigned int outch = {Defines.IndexX}, tid = {Defines.ThreadIdX}, threads = {Defines.ThreadsX};
@@ -63,18 +63,18 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
                 __shared__ float4 us[{InChannels}];
                 float4 uv_hi = ctor_float4(0.0, 0.0, 0.0, 0.0), uv_lo = ctor_float4(0.0, 0.0, 0.0, 0.0);
 
-                for(unsigned int ky = 0, iy = oy - {KernelHeight - 1}; ky < {KernelHeight}; ky++, iy++){{ 
+                for(unsigned int ky = 0, iy = oy - {KernelHeight - 1}; ky < {KernelHeight}; ky++, iy++){{
                     if(iy >= inheight){{
                         continue;
                     }}
 
-                    for(unsigned int kx = 0, ix = ox - {KernelWidth - 1}; kx < {KernelWidth}; kx++, ix++){{ 
+                    for(unsigned int kx = 0, ix = ox - {KernelWidth - 1}; kx < {KernelWidth}; kx++, ix++){{
                         if(ix >= inwidth){{
                             continue;
                         }}
 
                         unsigned int inmap_idx = {InChannels} * (ix + inwidth * iy);
-                        unsigned int filter_idx = outch + {InChannels * OutChannels} * 
+                        unsigned int filter_idx = outch + {InChannels * OutChannels} *
                                                   (({KernelWidth - 1} - kx) + {KernelWidth} * ({KernelHeight - 1} - ky));
 
                         for(unsigned int inch = tid; inch < {InChannels}; inch += threads){{
@@ -82,8 +82,8 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
                         }}
                         __syncthreads();
 
-                        if(outch < {OutChannels}){{                        
-                            for(unsigned int inch = 0; inch < {InChannels}; inch++){{                            
+                        if(outch < {OutChannels}){{
+                            for(unsigned int inch = 0; inch < {InChannels}; inch++){{
                                 float4 u = us[inch];
                                 float4 v = filter[filter_idx];
 

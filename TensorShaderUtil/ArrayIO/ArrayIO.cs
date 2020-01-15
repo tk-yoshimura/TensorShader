@@ -99,7 +99,7 @@ namespace TensorShaderUtil.ArrayIO {
         /// <param name="cols">列数</param>
         /// <param name="delimiter">区切り文字</param>
         public static void Write2D(string filepath, string[] strs, int rows, int cols, char delimiter = ',') {
-            if(rows < 0 || cols < 0 || strs.Length != rows * cols) { 
+            if(rows < 0 || cols < 0 || strs.Length != rows * cols) {
                 throw new ArgumentException($"{nameof(rows)},{nameof(cols)}");
             }
 
@@ -107,7 +107,7 @@ namespace TensorShaderUtil.ArrayIO {
                 for (int i = 0, k = 0; k < strs.Length; k += cols) {
                     stream.Write($"{strs[i]}");
                     i++;
-                    
+
                     for (int j = 1; j < cols; i++, j++) {
                         string str = strs[i];
 

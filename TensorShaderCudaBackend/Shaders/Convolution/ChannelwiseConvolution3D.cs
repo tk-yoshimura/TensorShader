@@ -44,9 +44,9 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             {Defines.FloatFloatAdd}
 
-            __global__ void chwise_convolution_3d(float *inmap, float *outmap, float *filter, 
-                                                  unsigned int oy_offset, unsigned int oz, 
-                                                  unsigned int inwidth, unsigned int outwidth, 
+            __global__ void chwise_convolution_3d(float *inmap, float *outmap, float *filter,
+                                                  unsigned int oy_offset, unsigned int oz,
+                                                  unsigned int inwidth, unsigned int outwidth,
                                                   unsigned int inheight, unsigned int outheight) {{
 
                 unsigned int ch = {Defines.IndexX};
@@ -60,11 +60,11 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
                 for(unsigned int kz = 0, iz = oz; kz < {KernelDepth}; kz++, iz++){{
                     for(unsigned int ky = 0, iy = oy; ky < {KernelHeight}; ky++, iy++){{
-                        for(unsigned int kx = 0, ix = ox; kx < {KernelWidth}; kx++, ix++){{ 
+                        for(unsigned int kx = 0, ix = ox; kx < {KernelWidth}; kx++, ix++){{
 
                             unsigned int inmap_idx = ch + {Channels} * (ix + inwidth * (iy + inheight * iz));
                             unsigned int filter_idx = ch + {Channels} * (kx + {KernelWidth} * (ky + {KernelHeight} * kz));
-                                             
+
                             float u = inmap[inmap_idx];
                             float v = filter[filter_idx];
 

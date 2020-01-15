@@ -11,8 +11,8 @@
 
             string code = $@"
 
-            __global__ void averagepool_2d(float *inmap, float *outmap, 
-                                           unsigned int inwidth, unsigned int outwidth, 
+            __global__ void averagepool_2d(float *inmap, float *outmap,
+                                           unsigned int inwidth, unsigned int outwidth,
                                            unsigned int outheight) {{
 
                 unsigned int ch = {Defines.IndexX}, ox = {Defines.IndexY}, oy = {Defines.IndexZ};
@@ -27,7 +27,7 @@
 
                 for(int ky = 0; ky < {Stride}; ky++){{
                     unsigned int inmap_idx = ch + {Channels} * (ix + inwidth * (iy + ky));
-                    
+
                     for(int kx = 0; kx < {Stride}; kx++){{
                         vsum += inmap[inmap_idx];
                         inmap_idx += {Channels};

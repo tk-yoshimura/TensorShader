@@ -58,9 +58,9 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             {Defines.Complex.MulGrad}
 
             __global__ void complex_deconvolution_3d(float2 *inmap, float2 *outmap, float2 *filter,
-                                                     unsigned int oy_offset, unsigned int oz, 
-                                                     unsigned int inwidth, unsigned int outwidth, 
-                                                     unsigned int inheight, unsigned int outheight, 
+                                                     unsigned int oy_offset, unsigned int oz,
+                                                     unsigned int inwidth, unsigned int outwidth,
+                                                     unsigned int inheight, unsigned int outheight,
                                                      unsigned int indepth) {{
 
                 unsigned int outch = {Defines.IndexX}, tid = {Defines.ThreadIdX}, threads = {Defines.ThreadsX};
@@ -69,23 +69,23 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                 __shared__ float2 us[{InChannels}];
                 float2 uv_hi = ctor_float2(0.0, 0.0), uv_lo = ctor_float2(0.0, 0.0);
 
-                for(unsigned int kz = 0, iz = oz - {KernelDepth - 1}; kz < {KernelDepth}; kz++, iz++){{ 
+                for(unsigned int kz = 0, iz = oz - {KernelDepth - 1}; kz < {KernelDepth}; kz++, iz++){{
                     if(iz >= indepth){{
                         continue;
                     }}
 
-                    for(unsigned int ky = 0, iy = oy - {KernelHeight - 1}; ky < {KernelHeight}; ky++, iy++){{ 
+                    for(unsigned int ky = 0, iy = oy - {KernelHeight - 1}; ky < {KernelHeight}; ky++, iy++){{
                         if(iy >= inheight){{
                             continue;
                         }}
 
-                        for(unsigned int kx = 0, ix = ox - {KernelWidth - 1}; kx < {KernelWidth}; kx++, ix++){{ 
+                        for(unsigned int kx = 0, ix = ox - {KernelWidth - 1}; kx < {KernelWidth}; kx++, ix++){{
                             if(ix >= inwidth){{
                                 continue;
                             }}
 
                             unsigned int inmap_idx = {InChannels} * (ix + inwidth * (iy + inheight * iz));
-                            unsigned int filter_idx = outch + {InChannels * OutChannels} * 
+                            unsigned int filter_idx = outch + {InChannels * OutChannels} *
                                                       (({KernelWidth - 1} - kx) + {KernelWidth} * (({KernelHeight - 1} - ky) + {KernelHeight} * ({KernelDepth - 1} - kz)));
 
                             for(unsigned int inch = tid; inch < {InChannels}; inch += threads){{
@@ -93,8 +93,8 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                             }}
                             __syncthreads();
 
-                            if(outch < {OutChannels}){{                        
-                                for(unsigned int inch = 0; inch < {InChannels}; inch++){{                            
+                            if(outch < {OutChannels}){{
+                                for(unsigned int inch = 0; inch < {InChannels}; inch++){{
                                     float2 u = us[inch];
                                     float2 v = filter[filter_idx];
 

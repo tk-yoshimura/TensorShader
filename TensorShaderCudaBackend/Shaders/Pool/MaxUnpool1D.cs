@@ -13,7 +13,7 @@ namespace TensorShaderCudaBackend.Shaders.Pool {
 
             string code = $@"
 
-            __global__ void maxunpool_1d(float *ingrad, float *inpool, float *inmap, float *outmap, 
+            __global__ void maxunpool_1d(float *ingrad, float *inpool, float *inmap, float *outmap,
                                          unsigned int inwidth) {{
 
                 unsigned int ch = {Defines.IndexX}, ix = {Defines.IndexY};
@@ -26,13 +26,13 @@ namespace TensorShaderCudaBackend.Shaders.Pool {
 
                 unsigned int inmap_idx = ch + {Channels} * ix;
                 unsigned int outmap_idx = ch + {Channels} * ox;
-                
+
                 float g = ingrad[inmap_idx], v = inpool[inmap_idx];
 
                 for(int kx = 0; kx < {Stride}; kx++){{
                     float x = inmap[outmap_idx];
 
-                    outmap[outmap_idx] = x >= v ? g : 0; 
+                    outmap[outmap_idx] = x >= v ? g : 0;
                     outmap_idx += {Channels};
                 }}
             }}";

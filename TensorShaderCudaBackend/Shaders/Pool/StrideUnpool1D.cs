@@ -11,7 +11,7 @@
 
             string code = $@"
 
-            __global__ void strideunpool_1d(float *inmap, float *outmap, 
+            __global__ void strideunpool_1d(float *inmap, float *outmap,
                                             unsigned int inwidth) {{
 
                 unsigned int ch = {Defines.IndexX}, ix = {Defines.IndexY};
@@ -24,7 +24,7 @@
 
                 unsigned int inmap_idx = ch + {Channels} * ix;
                 unsigned int outmap_idx = ch + {Channels} * ox;
-                
+
                 outmap[outmap_idx] = inmap[inmap_idx];
             }}";
 

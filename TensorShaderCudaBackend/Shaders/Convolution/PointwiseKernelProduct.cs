@@ -54,13 +54,13 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 __shared__ float us[{BlockSize.x}], vs[{BlockSize.y}];
 
                 unsigned int filter_index = (inch + {InChannels} * outch) * 2;
-                    
+
                 float uv_hi = 0.0, uv_lo = 0.0;
-                    
+
                 for(unsigned int i = i_offset; i < i_offset + {BatchPixels} && i < pl; i++){{
                     if(tidx == 0 && outch < {OutChannels}){{
                         vs[tidy] = outmap[outch + {OutChannels} * i];
-                    }}                
+                    }}
                     if(tidy == 0 && inch < {InChannels}){{
                         us[tidx] = inmap[inch + {InChannels} * i];
                     }}

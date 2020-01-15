@@ -24,7 +24,7 @@
                     sw = (sx ^ (sx << 3)) ^ (sy ^ (sy >> 19)) ^ (sz ^ (sz << 6));
                     sx = sy; sy = sz; sz = sw;
                 }}
-                
+
                 for(unsigned int i = 0, idx = j + {RandomPerWarp} * k; i < {RandomPerThread} && idx < length; i++, idx += {WarpSize}){{
                     sw = (sx ^ (sx << 3)) ^ (sy ^ (sy >> 19)) ^ (sz ^ (sz << 6));
                     sx = sy; sy = sz; sz = sw;

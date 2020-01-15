@@ -34,7 +34,7 @@ namespace TensorShaderCudaBackend.Shaders.Indexer {
                 int vmin_i = 0;
 
                 for(int i = 1; i < {Channels}; i++){{
-                    inmap_idx++;                    
+                    inmap_idx++;
 
                     float v = x[inmap_idx];
                     if(v < vmin){{

@@ -16,9 +16,9 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         public Flip() {
             string code = $@"
 
-            __global__ void flip(float *inmap, float *outmap, 
+            __global__ void flip(float *inmap, float *outmap,
                                  unsigned int stride, unsigned int axislength, unsigned int slides) {{
-                
+
                 unsigned int i = {Defines.IndexX}, j = {Defines.IndexY}, k = {Defines.IndexZ};
                 if (i >= stride || j >= axislength || k >= slides) {{
                     return;

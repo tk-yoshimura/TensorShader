@@ -39,23 +39,23 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             {Defines.FloatFloatAdd}
             {Defines.AtomicAdd}
 
-            __global__ void chwise_kernelproduct_1d(float *inmap, float *outmap, float *filter, 
+            __global__ void chwise_kernelproduct_1d(float *inmap, float *outmap, float *filter,
                                                     unsigned int outwidth) {{
 
                 unsigned int ch = {Defines.IndexX};
                 unsigned int ox_offset = {Defines.BlockIndexY} * {BatchPixels};
-                
+
                 if(ch >= {Channels}){{
                     return;
                 }}
-            
+
                 for(unsigned int kx = 0; kx < {KernelWidth}; kx++){{
                     unsigned int filter_index = (ch + {Channels} * kx) * 2;
-                    
+
                     float uv_hi = 0.0, uv_lo = 0.0;
-                    
+
                     for(unsigned int ox = ox_offset, ix = ox + kx; ox < ox_offset + {BatchPixels} && ox < outwidth; ox++, ix++){{
-    
+
                         unsigned int inmap_idx = ch + {Channels} * ix;
                         unsigned int outmap_idx = ch + {Channels} * ox;
 

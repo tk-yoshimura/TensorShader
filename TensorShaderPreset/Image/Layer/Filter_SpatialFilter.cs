@@ -13,7 +13,7 @@ namespace TensorShaderPreset.Image {
             }
 
             int channels = x.Shape.Channels;
-            
+
             float[] wval = new float[channels * kernel.Length];
 
             for (int s = 0; s < kernel.Length; s++) {

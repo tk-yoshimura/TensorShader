@@ -1470,7 +1470,7 @@ namespace TensorShaderTest {
                 (Flow optimize_flow, List<ParameterField> parameters) = Flow.Optimize(ferr);
 
                 optimize_flow.Execute();
-                
+
                 Assert.AreEqual(13, optimize_flow.NodeCount);
                 Assert.AreEqual(10, optimize_flow.VariableNodeCount);
                 Assert.AreEqual(3, optimize_flow.FunctionNodeCount);
@@ -1502,7 +1502,7 @@ namespace TensorShaderTest {
                 (Flow optimize_flow, List<ParameterField> parameters) = Flow.Optimize(ferr);
 
                 optimize_flow.Execute();
-                
+
                 Assert.AreEqual(12, optimize_flow.NodeCount);
                 Assert.AreEqual(9, optimize_flow.VariableNodeCount);
                 Assert.AreEqual(3, optimize_flow.FunctionNodeCount);

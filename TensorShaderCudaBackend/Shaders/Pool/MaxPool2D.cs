@@ -12,8 +12,8 @@
             string code = $@"
             #define NEGATIVE_INF __int_as_float(0xff800000)
 
-            __global__ void maxpool_2d(float *inmap, float *outmap, 
-                                       unsigned int inwidth, unsigned int outwidth, 
+            __global__ void maxpool_2d(float *inmap, float *outmap,
+                                       unsigned int inwidth, unsigned int outwidth,
                                        unsigned int outheight) {{
 
                 unsigned int ch = {Defines.IndexX}, ox = {Defines.IndexY}, oy = {Defines.IndexZ};
@@ -28,7 +28,7 @@
 
                 for(int ky = 0; ky < {Stride}; ky++){{
                     unsigned int inmap_idx = ch + {Channels} * (ix + inwidth * (iy + ky));
-                    
+
                     for(int kx = 0; kx < {Stride}; kx++){{
                         vmax = max(inmap[inmap_idx], vmax);
                         inmap_idx += {Channels};

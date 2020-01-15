@@ -9,8 +9,8 @@
 
             string code = $@"
 
-            __global__ void aggregate_average(float *inmap, float *outmap, 
-                                              unsigned int axislength, unsigned int shared_memory_length, 
+            __global__ void aggregate_average(float *inmap, float *outmap,
+                                              unsigned int axislength, unsigned int shared_memory_length,
                                               unsigned int stride, unsigned int slide) {{
 
                 unsigned int i = {Defines.ThreadIdX}, m = {Defines.BlockIndexX}, n = {Defines.BlockIndexY};

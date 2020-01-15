@@ -19,11 +19,11 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         public SortWithKeyUnuseSharedMemory() {
             string code = $@"
 
-            __global__ void sortwithkey(float *map, float *key, 
+            __global__ void sortwithkey(float *map, float *key,
                                         unsigned int stride, unsigned int axislength, unsigned int slides) {{
 
                 __shared__ int is_swaped_threads;
-                
+
                 unsigned int tid = {Defines.ThreadIdX}, threads = {Defines.ThreadsX};
                 unsigned int m = {Defines.BlockIndexX}, n = {Defines.BlockIndexY};
                 if (m >= stride || n >= slides) {{
@@ -43,7 +43,7 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
                         if(i + h >= axislength) break;
 
                         float ak = key[i * stride], bk = key[(i + h) * stride];
-                        
+
                         if (ak > bk) {{
                             float av = map[i * stride], bv = map[(i + h) * stride];
 
@@ -55,13 +55,13 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
                     }}
 
                     __syncthreads();
-                
+
                     for (int j = tid; ; j += threads) {{
                         int i = j % h + (j / h) * 2 * h + h;
                         if(i + h >= axislength) break;
-                        
+
                         float ak = key[i * stride], bk = key[(i + h) * stride];
-                        
+
                         if (ak > bk) {{
                             float av = map[i * stride], bv = map[(i + h) * stride];
 
@@ -82,7 +82,7 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
 
                 while(is_swaped_threads){{
                     int is_swaped = 0;
-                    
+
                     if(tid == 0){{
                         is_swaped_threads = 0;
                     }}
@@ -90,9 +90,9 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
                     for (int j = tid; ; j += threads) {{
                         int i = j * 2;
                         if(i + 1 >= axislength) break;
-                        
+
                         float ak = key[i * stride], bk = key[(i + 1) * stride];
-                        
+
                         if (ak > bk) {{
                             float av = map[i * stride], bv = map[(i + 1) * stride];
 
@@ -109,9 +109,9 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
                     for (int j = tid; ; j += threads) {{
                         int i = j * 2 + 1;
                         if(i + 1 >= axislength) break;
-                        
+
                         float ak = key[i * stride], bk = key[(i + 1) * stride];
-                        
+
                         if (ak > bk) {{
                             float av = map[i * stride], bv = map[(i + 1) * stride];
 

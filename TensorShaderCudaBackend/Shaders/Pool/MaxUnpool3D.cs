@@ -13,9 +13,9 @@ namespace TensorShaderCudaBackend.Shaders.Pool {
 
             string code = $@"
 
-            __global__ void maxunpool_3d(float *ingrad, float *inpool, float *inmap, float *outmap, 
-                                         unsigned int iz, 
-                                         unsigned int inwidth, unsigned int outwidth, 
+            __global__ void maxunpool_3d(float *ingrad, float *inpool, float *inmap, float *outmap,
+                                         unsigned int iz,
+                                         unsigned int inwidth, unsigned int outwidth,
                                          unsigned int inheight, unsigned int outheight) {{
 
                 unsigned int ch = {Defines.IndexX}, ix = {Defines.IndexY}, iy = {Defines.IndexZ};
@@ -27,17 +27,17 @@ namespace TensorShaderCudaBackend.Shaders.Pool {
                 unsigned int ox = ix * {Stride}, oy = iy * {Stride}, oz = iz * {Stride};
 
                 unsigned int inmap_idx = ch + {Channels} * (ix + inwidth * (iy + inheight * iz));
-                
+
                 float g = ingrad[inmap_idx], v = inpool[inmap_idx];
-                
+
                 for(int kz = 0; kz < {Stride}; kz++){{
                     for(int ky = 0; ky < {Stride}; ky++){{
                         unsigned int outmap_idx = ch + {Channels} * (ox + outwidth * ((oy + ky) + outheight * (oz + kz)));
-                    
+
                         for(int kx = 0; kx < {Stride}; kx++){{
                             float x = inmap[outmap_idx];
 
-                            outmap[outmap_idx] = x >= v ? g : 0; 
+                            outmap[outmap_idx] = x >= v ? g : 0;
                             outmap_idx += {Channels};
                         }}
                     }}

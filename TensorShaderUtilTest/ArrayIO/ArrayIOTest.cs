@@ -12,9 +12,9 @@ namespace TensorShaderUtilTest {
             string filepath = "arrayiotest.txt";
             string[] strs;
             int rows, cols;
-            
+
             ArrayIO.Write1D(filepath, new string[] { "c1", "c2", "c3", "c4" });
-            
+
             strs = ArrayIO.Read1D(filepath);
             CollectionAssert.AreEqual(new string[] { "c1", "c2", "c3", "c4" }, strs);
 
@@ -22,10 +22,10 @@ namespace TensorShaderUtilTest {
             CollectionAssert.AreEqual(new string[] { "c2", "c3", "c4" }, strs);
 
 
-            ArrayIO.Write2D(filepath, new string[] { "c11", "c12", "c13", "c24", "c21", "c22", "c23", "c24", "c31", "c32", "c33", "c34" }, 3, 4);
-            
+            ArrayIO.Write2D(filepath, new string[] { "", "c12", "c13", "c24", "c21", "c22", "c23", "c24", "c31", "c32", "c33", "c34" }, 3, 4);
+
             (strs, rows, cols) = ArrayIO.Read2D(filepath);
-            CollectionAssert.AreEqual(new string[] { "c11", "c12", "c13", "c24", "c21", "c22", "c23", "c24", "c31", "c32", "c33", "c34" }, strs);
+            CollectionAssert.AreEqual(new string[] { "", "c12", "c13", "c24", "c21", "c22", "c23", "c24", "c31", "c32", "c33", "c34" }, strs);
             Assert.AreEqual(3, rows);
             Assert.AreEqual(4, cols);
 

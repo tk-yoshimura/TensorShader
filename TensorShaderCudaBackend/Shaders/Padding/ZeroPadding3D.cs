@@ -9,10 +9,10 @@
 
             string code = $@"
 
-            __global__ void zeropadding_3d(float *inmap, float *outmap, 
+            __global__ void zeropadding_3d(float *inmap, float *outmap,
                                           unsigned int oz,
-                                          unsigned int inwidth, unsigned int outwidth, 
-                                          unsigned int inheight, unsigned int outheight, 
+                                          unsigned int inwidth, unsigned int outwidth,
+                                          unsigned int inheight, unsigned int outheight,
                                           unsigned int indepth, unsigned int outdepth) {{
 
                 unsigned int ch = {Defines.IndexX}, ox = {Defines.IndexY}, oy = {Defines.IndexZ};

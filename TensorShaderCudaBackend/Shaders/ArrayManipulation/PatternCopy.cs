@@ -16,10 +16,10 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         public PatternCopy() {
             string code = $@"
 
-            __global__ void pattern_copy(float *inmap, float *outmap, 
-                                         unsigned int inmap_stride, unsigned int outmap_stride, 
+            __global__ void pattern_copy(float *inmap, float *outmap,
+                                         unsigned int inmap_stride, unsigned int outmap_stride,
                                          unsigned int copy_length, unsigned int slides) {{
-                
+
                 unsigned int i = {Defines.IndexX}, j = {Defines.IndexY};
                 if (i >= copy_length || j >= slides) {{
                     return;

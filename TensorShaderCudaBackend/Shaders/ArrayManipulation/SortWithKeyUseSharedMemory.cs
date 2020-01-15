@@ -23,12 +23,12 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         public SortWithKeyUseSharedMemory() {
             string code = $@"
 
-            __global__ void sortwithkey(float *inmap, float *outmap, float *inkey, float *outkey, 
+            __global__ void sortwithkey(float *inmap, float *outmap, float *inkey, float *outkey,
                                         unsigned int stride, unsigned int axislength, unsigned int slides) {{
 
                 extern __shared__ float s[];
                 __shared__ int is_swaped_threads;
-                
+
                 unsigned int tid = {Defines.ThreadIdX}, threads = {Defines.ThreadsX};
                 unsigned int m = {Defines.BlockIndexX}, n = {Defines.BlockIndexY};
                 if (m >= stride || n >= slides) {{
@@ -41,9 +41,9 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
 
                 unsigned int offset = m + n * stride * axislength;
 
-                for(unsigned int i = 0, j = tid, inmap_idx = offset + j * stride; 
+                for(unsigned int i = 0, j = tid, inmap_idx = offset + j * stride;
                     i < packet && j < axislength; i++, j += threads, inmap_idx += threads * stride) {{
-                
+
                     sv[j] = inmap[inmap_idx];
                     sk[j] = inkey[inmap_idx];
                 }};
@@ -54,9 +54,9 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
                     for (int j = tid; ; j += threads) {{
                         int i = j % h + (j / h) * 2 * h;
                         if(i + h >= axislength) break;
-                        
+
                         float ak = sk[i], bk = sk[i + h];
-                        
+
                         if (ak > bk) {{
                             float av = sv[i], bv = sv[i + h];
 
@@ -68,13 +68,13 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
                     }}
 
                     __syncthreads();
-                
+
                     for (int j = tid; ; j += threads) {{
                         int i = j % h + (j / h) * 2 * h + h;
                         if(i + h >= axislength) break;
-                        
+
                         float ak = sk[i], bk = sk[i + h];
-                        
+
                         if (ak > bk) {{
                             float av = sv[i], bv = sv[i + h];
 
@@ -95,7 +95,7 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
 
                 while(is_swaped_threads){{
                     int is_swaped = 0;
-                    
+
                     if(tid == 0){{
                         is_swaped_threads = 0;
                     }}
@@ -103,9 +103,9 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
                     for (int j = tid; ; j += threads) {{
                         int i = j * 2;
                         if(i + 1 >= axislength) break;
-                        
+
                         float ak = sk[i], bk = sk[i + 1];
-                        
+
                         if (ak > bk) {{
                             float av = sv[i], bv = sv[i + 1];
 
@@ -122,9 +122,9 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
                     for (int j = tid; ; j += threads) {{
                         int i = j * 2 + 1;
                         if(i + 1 >= axislength) break;
-                        
+
                         float ak = sk[i], bk = sk[i + 1];
-                        
+
                         if (ak > bk) {{
                             float av = sv[i], bv = sv[i + 1];
 
@@ -147,9 +147,9 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
                     __syncthreads();
                 }}
 
-                for(unsigned int i = 0, j = tid, outmap_idx = offset + j * stride; 
+                for(unsigned int i = 0, j = tid, outmap_idx = offset + j * stride;
                     i < packet && j < axislength; i++, j += threads, outmap_idx += threads * stride) {{
-                
+
                     outmap[outmap_idx] = sv[j];
                     outkey[outmap_idx] = sk[j];
                 }};

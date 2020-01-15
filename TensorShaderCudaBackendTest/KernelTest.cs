@@ -98,7 +98,7 @@ namespace TensorShaderCudaBackendTest {
 
             kernel.Execute(length, dynamic_shared_memory_bytes: 0, stream, d_a, d_b, d_c, length); // d_a=a, d_b=b, d_c=a+b
             kernel.Execute(length, dynamic_shared_memory_bytes: 0, stream, d_c, d_b, d_a, length); // d_a=a+2b, d_b=b, d_c=a+b
-            kernel.Execute(length, dynamic_shared_memory_bytes: 0, stream, d_a, d_b, d_c, length); // d_a=a+2b, d_b=b, d_c=a+3b 
+            kernel.Execute(length, dynamic_shared_memory_bytes: 0, stream, d_a, d_b, d_c, length); // d_a=a+2b, d_b=b, d_c=a+3b
 
             d_c.Read(h_c);
 

@@ -59,9 +59,9 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             {Defines.Quaternion.Mul}
             {Defines.Quaternion.MulGrad}
 
-            __global__ void quaternion_convolution_3d(float4 *inmap, float4 *outmap, float4 *filter, 
+            __global__ void quaternion_convolution_3d(float4 *inmap, float4 *outmap, float4 *filter,
                                                       unsigned int oy_offset, unsigned int oz,
-                                                      unsigned int inwidth, unsigned int outwidth, 
+                                                      unsigned int inwidth, unsigned int outwidth,
                                                       unsigned int inheight, unsigned int outheight) {{
 
                 unsigned int outch = {Defines.IndexX}, tid = {Defines.ThreadIdX}, threads = {Defines.ThreadsX};
@@ -72,7 +72,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
 
                 for(unsigned int kz = 0, iz = oz; kz < {KernelDepth}; kz++, iz++){{
                     for(unsigned int ky = 0, iy = oy; ky < {KernelHeight}; ky++, iy++){{
-                        for(unsigned int kx = 0, ix = ox; kx < {KernelWidth}; kx++, ix++){{ 
+                        for(unsigned int kx = 0, ix = ox; kx < {KernelWidth}; kx++, ix++){{
 
                             unsigned int inmap_idx = {InChannels} * (ix + inwidth * (iy + inheight * iz));
                             unsigned int filter_idx = outch + {InChannels * OutChannels} * (kx + {KernelWidth} * (ky + {KernelHeight} * kz));
@@ -82,8 +82,8 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
                             }}
                             __syncthreads();
 
-                            if(outch < {OutChannels}){{                        
-                                for(unsigned int inch = 0; inch < {InChannels}; inch++){{                            
+                            if(outch < {OutChannels}){{
+                                for(unsigned int inch = 0; inch < {InChannels}; inch++){{
                                     float4 u = us[inch];
                                     float4 v = filter[filter_idx];
 

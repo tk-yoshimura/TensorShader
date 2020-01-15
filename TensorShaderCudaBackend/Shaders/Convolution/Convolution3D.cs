@@ -50,9 +50,9 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             {Defines.FloatFloatAdd}
 
-            __global__ void convolution_3d(float *inmap, float *outmap, float *filter, 
+            __global__ void convolution_3d(float *inmap, float *outmap, float *filter,
                                            unsigned int oy_offset, unsigned int oz,
-                                           unsigned int inwidth, unsigned int outwidth, 
+                                           unsigned int inwidth, unsigned int outwidth,
                                            unsigned int inheight, unsigned int outheight) {{
 
                 unsigned int outch = {Defines.IndexX}, tid = {Defines.ThreadIdX}, threads = {Defines.ThreadsX};
@@ -63,7 +63,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
                 for(unsigned int kz = 0, iz = oz; kz < {KernelDepth}; kz++, iz++){{
                     for(unsigned int ky = 0, iy = oy; ky < {KernelHeight}; ky++, iy++){{
-                        for(unsigned int kx = 0, ix = ox; kx < {KernelWidth}; kx++, ix++){{ 
+                        for(unsigned int kx = 0, ix = ox; kx < {KernelWidth}; kx++, ix++){{
 
                             unsigned int inmap_idx = {InChannels} * (ix + inwidth * (iy + inheight * iz));
                             unsigned int filter_idx = outch + {InChannels * OutChannels} * (kx + {KernelWidth} * (ky + {KernelHeight} * kz));
@@ -73,8 +73,8 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                             }}
                             __syncthreads();
 
-                            if(outch < {OutChannels}){{                        
-                                for(unsigned int inch = 0; inch < {InChannels}; inch++){{                            
+                            if(outch < {OutChannels}){{
+                                for(unsigned int inch = 0; inch < {InChannels}; inch++){{
                                     float u = us[inch];
                                     float v = filter[filter_idx];
 

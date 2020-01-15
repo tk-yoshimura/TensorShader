@@ -62,11 +62,11 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             {Defines.FloatFloatAdd}
             {Defines.AtomicAdd}
 
-            __global__ void kernelproduct_3d(float *inmap, float *outmap, float *filter, 
+            __global__ void kernelproduct_3d(float *inmap, float *outmap, float *filter,
                                              unsigned int oy_offset,
                                              unsigned int oz,
                                              unsigned int xsets,
-                                             unsigned int inwidth, unsigned int outwidth, 
+                                             unsigned int inwidth, unsigned int outwidth,
                                              unsigned int inheight, unsigned int outheight) {{
 
                 unsigned int inch = {Defines.IndexX}, outch = {Defines.IndexY};
@@ -80,13 +80,13 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                     for(unsigned int ky = 0, iy = oy; ky < {KernelHeight}; ky++, iy++){{
                         for(unsigned int kx = 0; kx < {KernelWidth}; kx++){{
                             unsigned int filter_index = (inch + {InChannels} * (outch + {OutChannels} * (kx + {KernelWidth} * (ky + {KernelHeight} * kz)))) * 2;
-                    
+
                             float uv_hi = 0.0, uv_lo = 0.0;
-                    
+
                             for(unsigned int ox = ox_offset, ix = ox + kx; ox < ox_offset + {BatchPixels} && ox < outwidth; ox++, ix++){{
                                 if(tidx == 0 && outch < {OutChannels}){{
                                     vs[tidy] = outmap[outch + {OutChannels} * (ox + outwidth * (oy + outheight * oz))];
-                                }}                
+                                }}
                                 if(tidy == 0 && inch < {InChannels}){{
                                     us[tidx] = inmap[inch + {InChannels} * (ix + inwidth * (iy + inheight * iz))];
                                 }}

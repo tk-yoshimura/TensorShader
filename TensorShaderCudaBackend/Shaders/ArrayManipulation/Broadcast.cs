@@ -16,10 +16,10 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         public Broadcast() {
             string code = $@"
 
-            __global__ void broadcast(float *inmap, float *outmap, 
-                                      unsigned int inmap_stride, unsigned int outmap_stride, 
+            __global__ void broadcast(float *inmap, float *outmap,
+                                      unsigned int inmap_stride, unsigned int outmap_stride,
                                       unsigned int slides) {{
-                
+
                 unsigned int i = {Defines.IndexX}, j = {Defines.IndexY};
                 if (i >= outmap_stride || j >= slides) {{
                     return;

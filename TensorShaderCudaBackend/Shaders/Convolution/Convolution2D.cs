@@ -46,7 +46,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             {Defines.FloatFloatAdd}
 
-            __global__ void convolution_2d(float *inmap, float *outmap, float *filter, 
+            __global__ void convolution_2d(float *inmap, float *outmap, float *filter,
                                            unsigned int oy_offset,
                                            unsigned int inwidth, unsigned int outwidth) {{
 
@@ -57,7 +57,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 float uv_hi = 0.0, uv_lo = 0.0;
 
                 for(unsigned int ky = 0, iy = oy; ky < {KernelHeight}; ky++, iy++){{
-                    for(unsigned int kx = 0, ix = ox; kx < {KernelWidth}; kx++, ix++){{ 
+                    for(unsigned int kx = 0, ix = ox; kx < {KernelWidth}; kx++, ix++){{
 
                         unsigned int inmap_idx = {InChannels} * (ix + inwidth * iy);
                         unsigned int filter_idx = outch + {InChannels * OutChannels} * (kx + {KernelWidth} * ky);
@@ -67,8 +67,8 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                         }}
                         __syncthreads();
 
-                        if(outch < {OutChannels}){{                        
-                            for(unsigned int inch = 0; inch < {InChannels}; inch++){{                            
+                        if(outch < {OutChannels}){{
+                            for(unsigned int inch = 0; inch < {InChannels}; inch++){{
                                 float u = us[inch];
                                 float v = filter[filter_idx];
 

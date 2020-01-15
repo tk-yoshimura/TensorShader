@@ -42,7 +42,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             __global__ void chwise_deconvolution_2d(float *inmap, float *outmap, float *filter,
                                                     unsigned int oy_offset,
-                                                    unsigned int inwidth, unsigned int outwidth, 
+                                                    unsigned int inwidth, unsigned int outwidth,
                                                     unsigned int inheight) {{
 
                 unsigned int ch = {Defines.IndexX};
@@ -54,20 +54,20 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
                 float uv_hi = 0.0, uv_lo = 0.0;
 
-                for(unsigned int ky = 0, iy = oy - {KernelHeight - 1}; ky < {KernelHeight}; ky++, iy++){{ 
+                for(unsigned int ky = 0, iy = oy - {KernelHeight - 1}; ky < {KernelHeight}; ky++, iy++){{
                     if(iy >= inheight){{
                         continue;
                     }}
 
-                    for(unsigned int kx = 0, ix = ox - {KernelWidth - 1}; kx < {KernelWidth}; kx++, ix++){{ 
+                    for(unsigned int kx = 0, ix = ox - {KernelWidth - 1}; kx < {KernelWidth}; kx++, ix++){{
                         if(ix >= inwidth){{
                             continue;
                         }}
 
                         unsigned int inmap_idx = ch + {Channels} * (ix + inwidth * iy);
-                        unsigned int filter_idx = ch + {Channels} * 
+                        unsigned int filter_idx = ch + {Channels} *
                                                   (({KernelWidth - 1} - kx) + {KernelWidth} * ({KernelHeight - 1} - ky));
-                                              
+
                         float u = inmap[inmap_idx];
                         float v = filter[filter_idx];
 

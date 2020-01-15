@@ -46,7 +46,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 __shared__ float us[{InChannels}];
                 float uv_hi = 0.0, uv_lo = 0.0;
 
-                for(unsigned int kx = 0, ix = ox - {KernelWidth - 1}; kx < {KernelWidth}; kx++, ix++){{ 
+                for(unsigned int kx = 0, ix = ox - {KernelWidth - 1}; kx < {KernelWidth}; kx++, ix++){{
                     if(ix >= inwidth){{
                         continue;
                     }}
@@ -59,8 +59,8 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                     }}
                     __syncthreads();
 
-                    if(outch < {OutChannels}){{                        
-                        for(unsigned int inch = 0; inch < {InChannels}; inch++){{                            
+                    if(outch < {OutChannels}){{
+                        for(unsigned int inch = 0; inch < {InChannels}; inch++){{
                             float u = us[inch];
                             float v = filter[filter_idx];
 

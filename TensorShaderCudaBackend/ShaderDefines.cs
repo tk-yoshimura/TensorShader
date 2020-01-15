@@ -36,7 +36,7 @@
             public static string ThreadsY => "(blockDim.y)";
 
             /// <summary>FloatFloat加算</summary>
-            public static string FloatFloatAdd => 
+            public static string FloatFloatAdd =>
             $@"
             static __inline__ __device__ void floatfloat_add(float &hi, float &lo, float val){{
                 float tmp = hi;
@@ -45,7 +45,7 @@
             }}";
 
             /// <summary>FloatFloat減算</summary>
-            public static string FloatFloatSub => 
+            public static string FloatFloatSub =>
             $@"
             static __inline__ __device__ void floatfloat_sub(float &hi, float &lo, float val){{
                 float tmp = hi;
@@ -54,28 +54,28 @@
             }}";
 
             /// <summary>Float2コンストラクタ</summary>
-            public static string CtorFloat2 => 
+            public static string CtorFloat2 =>
             $@"
             static __inline__ __device__ float2 ctor_float2(float x, float y){{
                 float2 t; t.x = x; t.y = y; return t;
             }}";
 
             /// <summary>Float3コンストラクタ</summary>
-            public static string CtorFloat3 => 
+            public static string CtorFloat3 =>
             $@"
             static __inline__ __device__ float3 ctor_float3(float x, float y, float z){{
                 float3 t; t.x = x; t.y = y; t.z = z; return t;
             }}";
 
             /// <summary>Float4コンストラクタ</summary>
-            public static string CtorFloat4 => 
+            public static string CtorFloat4 =>
             $@"
             static __inline__ __device__ float4 ctor_float4(float x, float y, float z, float w){{
                 float4 t; t.x = x; t.y = y; t.z = z; t.w = w; return t;
             }}";
 
             /// <summary>原子性保証加算</summary>
-            public static string AtomicAdd => 
+            public static string AtomicAdd =>
             $@"
             static __inline__ __device__ void floatfloat_atomicadd(float *ptr, float hi, float lo){{
                 float tmp = atomicAdd(ptr, hi);
@@ -85,7 +85,7 @@
             /// <summary>複素数</summary>
             public static class Complex {
                 /// <summary>カーネル積</summary>
-                public static string KernelProd => 
+                public static string KernelProd =>
                 $@"
                 static __inline__ __device__ void complex_kernelprod(float2 &hi, float2 &lo, float2 x1, float2 x2){{
                     floatfloat_add(hi.x, lo.x, x1.x * x2.x);
@@ -95,7 +95,7 @@
                 }}";
 
                 /// <summary>積</summary>
-                public static string Mul => 
+                public static string Mul =>
                 $@"
                 static __inline__ __device__ void complex_mul(float2 &hi, float2 &lo, float2 x1, float2 x2){{
                     floatfloat_add(hi.x, lo.x, x1.x * x2.x);
@@ -105,7 +105,7 @@
                 }}";
 
                 /// <summary>積勾配</summary>
-                public static string MulGrad => 
+                public static string MulGrad =>
                 $@"
                 static __inline__ __device__ void complex_mulgrad(float2 &hi, float2 &lo, float2 x1, float2 x2){{
                     floatfloat_add(hi.x, lo.x, x1.x * x2.x);
@@ -115,7 +115,7 @@
                 }}";
 
                 /// <summary>原子性保証加算</summary>
-                public static string AtomicAdd => 
+                public static string AtomicAdd =>
                 $@"
                 static __inline__ __device__ void floatfloat_atomicadd(float2 *ptr, float2 hi, float2 lo){{
                     float *ptr_float = (float*)(void*)ptr;
@@ -130,7 +130,7 @@
             /// <summary>四元数</summary>
             public static class Quaternion {
                 /// <summary>カーネル積</summary>
-                public static string KernelProd => 
+                public static string KernelProd =>
                 $@"
                 static __inline__ __device__ void quaternion_kernelprod(float4 &hi, float4 &lo, float4 x1, float4 x2){{
                     floatfloat_add(hi.x, lo.x, x1.x * x2.x);
@@ -155,7 +155,7 @@
                 }}";
 
                 /// <summary>積</summary>
-                public static string Mul => 
+                public static string Mul =>
                 $@"
                 static __inline__ __device__ void quaternion_mul(float4 &hi, float4 &lo, float4 x1, float4 x2){{
                     floatfloat_add(hi.x, lo.x, x1.x * x2.x);
@@ -180,7 +180,7 @@
                 }}";
 
                 /// <summary>積勾配</summary>
-                public static string MulGrad => 
+                public static string MulGrad =>
                 $@"
                 static __inline__ __device__ void quaternion_mulgrad(float4 &hi, float4 &lo, float4 x1, float4 x2){{
                     floatfloat_add(hi.x, lo.x, x1.x * x2.x);
@@ -205,7 +205,7 @@
                 }}";
 
                 /// <summary>原子性保証加算</summary>
-                public static string AtomicAdd => 
+                public static string AtomicAdd =>
                 $@"
                 static __inline__ __device__ void floatfloat_atomicadd(float4 *ptr, float4 hi, float4 lo){{
                     float *ptr_float = (float*)(void*)ptr;
@@ -224,7 +224,7 @@
             /// <summary>3次元ベクトル</summary>
             public static class Trivector {
                 /// <summary>カーネル積</summary>
-                public static string KernelProd => 
+                public static string KernelProd =>
                 $@"
                 static __inline__ __device__ void trivector_quaternion_kernelprod(float4 &hi, float4 &lo, float3 v, float3 u, float4 q){{
                     float vxqx = v.x * q.x, vxqy = v.x * q.y, vxqz = v.x * q.z, vxqw = v.x * q.w;
@@ -249,11 +249,11 @@
                 }}";
 
                 /// <summary>積</summary>
-                public static string Mul => 
+                public static string Mul =>
                 $@"
                 static __inline__ __device__ void trivector_quaternion_mul(float3 &hi, float3 &lo, float3 v, float4 q){{
-                    float sx = q.x * q.x, sy = q.y * q.y, sz = q.z * q.z, sw = q.w * q.w; 
-                    float mx = q.y * q.z, my = q.z * q.w, mz = q.w * q.y; 
+                    float sx = q.x * q.x, sy = q.y * q.y, sz = q.z * q.z, sw = q.w * q.w;
+                    float mx = q.y * q.z, my = q.z * q.w, mz = q.w * q.y;
                     float nx = q.x * q.y, ny = q.x * q.z, nz = q.x * q.w;
 
                     floatfloat_add(hi.x, lo.x, v.x * (sx + sy - sz - sw));
@@ -270,11 +270,11 @@
                 }}";
 
                 /// <summary>積勾配</summary>
-                public static string MulGrad => 
+                public static string MulGrad =>
                 $@"
                 static __inline__ __device__ void trivector_quaternion_mulgrad(float3 &hi, float3 &lo, float3 v, float4 q){{
-                    float sx = q.x * q.x, sy = q.y * q.y, sz = q.z * q.z, sw = q.w * q.w; 
-                    float mx = q.y * q.z, my = q.z * q.w, mz = q.w * q.y; 
+                    float sx = q.x * q.x, sy = q.y * q.y, sz = q.z * q.z, sw = q.w * q.w;
+                    float mx = q.y * q.z, my = q.z * q.w, mz = q.w * q.y;
                     float nx = q.x * q.y, ny = q.x * q.z, nz = q.x * q.w;
 
                     floatfloat_add(hi.x, lo.x, v.x * (sx + sy - sz - sw));

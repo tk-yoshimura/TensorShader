@@ -59,8 +59,8 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                 }}
                 __syncthreads();
 
-                if(outch < {OutChannels}){{                        
-                    for(unsigned int inch = 0; inch < {InChannels}; inch++){{                            
+                if(outch < {OutChannels}){{
+                    for(unsigned int inch = 0; inch < {InChannels}; inch++){{
                         float2 u = us[inch];
                         float2 v = filter[filter_idx];
 

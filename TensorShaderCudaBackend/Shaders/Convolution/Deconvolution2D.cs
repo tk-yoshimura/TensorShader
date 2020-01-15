@@ -46,7 +46,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             __global__ void deconvolution_2d(float *inmap, float *outmap, float *filter,
                                              unsigned int oy_offset,
-                                             unsigned int inwidth, unsigned int outwidth, 
+                                             unsigned int inwidth, unsigned int outwidth,
                                              unsigned int inheight) {{
 
                 unsigned int outch = {Defines.IndexX}, tid = {Defines.ThreadIdX}, threads = {Defines.ThreadsX};
@@ -55,18 +55,18 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 __shared__ float us[{InChannels}];
                 float uv_hi = 0.0, uv_lo = 0.0;
 
-                for(unsigned int ky = 0, iy = oy - {KernelHeight - 1}; ky < {KernelHeight}; ky++, iy++){{ 
+                for(unsigned int ky = 0, iy = oy - {KernelHeight - 1}; ky < {KernelHeight}; ky++, iy++){{
                     if(iy >= inheight){{
                         continue;
                     }}
 
-                    for(unsigned int kx = 0, ix = ox - {KernelWidth - 1}; kx < {KernelWidth}; kx++, ix++){{ 
+                    for(unsigned int kx = 0, ix = ox - {KernelWidth - 1}; kx < {KernelWidth}; kx++, ix++){{
                         if(ix >= inwidth){{
                             continue;
                         }}
 
                         unsigned int inmap_idx = {InChannels} * (ix + inwidth * iy);
-                        unsigned int filter_idx = outch + {InChannels * OutChannels} * 
+                        unsigned int filter_idx = outch + {InChannels * OutChannels} *
                                                   (({KernelWidth - 1} - kx) + {KernelWidth} * ({KernelHeight - 1} - ky));
 
                         for(unsigned int inch = tid; inch < {InChannels}; inch += threads){{
@@ -74,8 +74,8 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                         }}
                         __syncthreads();
 
-                        if(outch < {OutChannels}){{                        
-                            for(unsigned int inch = 0; inch < {InChannels}; inch++){{                            
+                        if(outch < {OutChannels}){{
+                            for(unsigned int inch = 0; inch < {InChannels}; inch++){{
                                 float u = us[inch];
                                 float v = filter[filter_idx];
 

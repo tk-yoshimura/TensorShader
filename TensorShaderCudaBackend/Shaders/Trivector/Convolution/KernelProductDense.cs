@@ -55,7 +55,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
 
                 unsigned int outmap_offset = {OutChannels} * th;
                 outmap += outmap_offset;
-                
+
                 unsigned int filter_offset = inch + {InChannels} * outch;
                 filter_value += filter_offset;
                 filter_grad += filter_offset * 2;
@@ -64,7 +64,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
 
                 if(tidx == 0 && outch < {OutChannels}){{
                     vs[tidy] = outmap[outch];
-                }}                
+                }}
                 if(tidy == 0 && inch < {InChannels}){{
                     us[tidx] = inmap[inch];
                 }}

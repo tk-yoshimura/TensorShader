@@ -69,11 +69,11 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             {Defines.Complex.KernelProd}
             {Defines.Complex.AtomicAdd}
 
-            __global__ void complex_kernelproduct_3d(float2 *inmap, float2 *outmap, float2 *filter, 
-                                                     unsigned int oy_offset, 
+            __global__ void complex_kernelproduct_3d(float2 *inmap, float2 *outmap, float2 *filter,
+                                                     unsigned int oy_offset,
                                                      unsigned int oz,
                                                      unsigned int xsets,
-                                                     unsigned int inwidth, unsigned int outwidth, 
+                                                     unsigned int inwidth, unsigned int outwidth,
                                                      unsigned int inheight, unsigned int outheight) {{
 
                 unsigned int inch = {Defines.IndexX}, outch = {Defines.IndexY};
@@ -87,13 +87,13 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                     for(unsigned int ky = 0, iy = oy; ky < {KernelHeight}; ky++, iy++){{
                         for(unsigned int kx = 0; kx < {KernelWidth}; kx++){{
                             unsigned int filter_index = (inch + {InChannels} * (outch + {OutChannels} * (kx + {KernelWidth} * (ky + {KernelHeight} * kz)))) * 2;
-                    
+
                             float2 uv_hi = ctor_float2(0.0, 0.0), uv_lo = ctor_float2(0.0, 0.0);
-                    
+
                             for(unsigned int ox = ox_offset, ix = ox + kx; ox < ox_offset + {BatchPixels} && ox < outwidth; ox++, ix++){{
                                 if(tidx == 0 && outch < {OutChannels}){{
                                     vs[tidy] = outmap[outch + {OutChannels} * (ox + outwidth * (oy + outheight * oz))];
-                                }}                
+                                }}
                                 if(tidy == 0 && inch < {InChannels}){{
                                     us[tidx] = inmap[inch + {InChannels} * (ix + inwidth * (iy + inheight * iz))];
                                 }}

@@ -12,8 +12,8 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Arithmetric {
         public QuaternionMulQGrad() {
             string code = $@"
 
-            __global__ void trivector_quaternion_mulqgrad(float3 *inmap1_vector, 
-                                                          float3 *inmap2_vector, 
+            __global__ void trivector_quaternion_mulqgrad(float3 *inmap1_vector,
+                                                          float3 *inmap2_vector,
                                                           float4 *inmap_quaternion,
                                                           float4 *outmap_quaternion,
                                                           unsigned int n) {{

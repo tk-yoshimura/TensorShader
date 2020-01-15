@@ -10,7 +10,7 @@
 
             string code = $@"
 
-            __global__ void linearzoom_1d(float *inmap, float *outmap, 
+            __global__ void linearzoom_1d(float *inmap, float *outmap,
                                          unsigned int inwidth) {{
 
                 unsigned int ch = {Defines.IndexX}, ix = {Defines.IndexY};

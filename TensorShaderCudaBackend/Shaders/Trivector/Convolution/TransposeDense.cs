@@ -58,8 +58,8 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
                 }}
                 __syncthreads();
 
-                if(outch < {OutChannels}){{                        
-                    for(unsigned int inch = 0; inch < {InChannels}; inch++){{                            
+                if(outch < {OutChannels}){{
+                    for(unsigned int inch = 0; inch < {InChannels}; inch++){{
                         float3 v = vs[inch];
                         float4 q = filter[filter_idx];
 

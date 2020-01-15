@@ -54,7 +54,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             {Defines.Complex.Mul}
             {Defines.Complex.MulGrad}
 
-            __global__ void complex_convolution_2d(float2 *inmap, float2 *outmap, float2 *filter, 
+            __global__ void complex_convolution_2d(float2 *inmap, float2 *outmap, float2 *filter,
                                                    unsigned int oy_offset,
                                                    unsigned int inwidth, unsigned int outwidth) {{
 
@@ -65,7 +65,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                 float2 uv_hi = ctor_float2(0.0, 0.0), uv_lo = ctor_float2(0.0, 0.0);
 
                 for(unsigned int ky = 0, iy = oy; ky < {KernelHeight}; ky++, iy++){{
-                    for(unsigned int kx = 0, ix = ox; kx < {KernelWidth}; kx++, ix++){{ 
+                    for(unsigned int kx = 0, ix = ox; kx < {KernelWidth}; kx++, ix++){{
 
                         unsigned int inmap_idx = {InChannels} * (ix + inwidth * iy);
                         unsigned int filter_idx = outch + {InChannels * OutChannels} * (kx + {KernelWidth} * ky);
@@ -75,8 +75,8 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                         }}
                         __syncthreads();
 
-                        if(outch < {OutChannels}){{                        
-                            for(unsigned int inch = 0; inch < {InChannels}; inch++){{                            
+                        if(outch < {OutChannels}){{
+                            for(unsigned int inch = 0; inch < {InChannels}; inch++){{
                                 float2 u = us[inch];
                                 float2 v = filter[filter_idx];
 

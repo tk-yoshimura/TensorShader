@@ -10,10 +10,10 @@
 
             string code = $@"
 
-            __global__ void linearzoom_3d(float *inmap, float *outmap, 
+            __global__ void linearzoom_3d(float *inmap, float *outmap,
                                          unsigned int iz,
-                                         unsigned int inwidth, unsigned int outwidth, 
-                                         unsigned int inheight, unsigned int outheight, 
+                                         unsigned int inwidth, unsigned int outwidth,
+                                         unsigned int inheight, unsigned int outheight,
                                          unsigned int indepth) {{
 
                 unsigned int ch = {Defines.IndexX}, ix = {Defines.IndexY}, iy = {Defines.IndexZ};

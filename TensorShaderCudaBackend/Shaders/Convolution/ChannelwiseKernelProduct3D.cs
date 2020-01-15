@@ -53,14 +53,14 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             {Defines.FloatFloatAdd}
             {Defines.AtomicAdd}
 
-            __global__ void chwise_kernelproduct_3d(float *inmap, float *outmap, float *filter, 
-                                                    unsigned int oy_offset, unsigned int oz, 
-                                                    unsigned int inwidth, unsigned int outwidth, 
+            __global__ void chwise_kernelproduct_3d(float *inmap, float *outmap, float *filter,
+                                                    unsigned int oy_offset, unsigned int oz,
+                                                    unsigned int inwidth, unsigned int outwidth,
                                                     unsigned int inheight, unsigned int outheight) {{
 
                 unsigned int ch = {Defines.IndexX};
                 unsigned int ox_offset = {Defines.BlockIndexY} * {BatchPixels}, oy = oy_offset + {Defines.BlockIndexZ};
-                
+
                 if(ch >= {Channels}){{
                     return;
                 }}
@@ -69,11 +69,11 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                     for(unsigned int ky = 0, iy = oy; ky < {KernelHeight}; ky++, iy++){{
                         for(unsigned int kx = 0; kx < {KernelWidth}; kx++){{
                             unsigned int filter_index = (ch + {Channels} * (kx + {KernelWidth} * (ky + {KernelHeight} * kz))) * 2;
-                    
+
                             float uv_hi = 0.0, uv_lo = 0.0;
-                    
+
                             for(unsigned int ox = ox_offset, ix = ox + kx; ox < ox_offset + {BatchPixels} && ox < outwidth; ox++, ix++){{
-    
+
                                 unsigned int inmap_idx = ch + {Channels} * (ix + inwidth * (iy + inheight * iz));
                                 unsigned int outmap_idx = ch + {Channels} * (ox + outwidth * (oy + outheight * oz));
 

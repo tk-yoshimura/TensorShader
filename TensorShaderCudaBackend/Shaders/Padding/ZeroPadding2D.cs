@@ -9,8 +9,8 @@
 
             string code = $@"
 
-            __global__ void zeropadding_2d(float *inmap, float *outmap, 
-                                          unsigned int inwidth, unsigned int outwidth, 
+            __global__ void zeropadding_2d(float *inmap, float *outmap,
+                                          unsigned int inwidth, unsigned int outwidth,
                                           unsigned int inheight, unsigned int outheight) {{
 
                 unsigned int ch = {Defines.IndexX}, ox = {Defines.IndexY}, oy = {Defines.IndexZ};
