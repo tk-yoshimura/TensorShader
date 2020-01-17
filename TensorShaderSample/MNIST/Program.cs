@@ -37,7 +37,10 @@ namespace MNIST {
             Console.WriteLine("Build model...");
             Field y = CNN.Forward(x, classes);
             Field acc = Accuracy(y, t);
-            Field err = Sum(SoftmaxCrossEntropy(y, OneHotVector(t, classes)), axes: new int[] { Axis.Map0D.Channels });
+            Field err = Sum(
+                    SoftmaxCrossEntropy(y, OneHotVector(t, classes)), 
+                    Axis.Map0D.Channels
+                );
             StoreField accnode = acc.Save(), lossnode = Average(err).Save();
 
             Console.WriteLine("Set iterator event...");
