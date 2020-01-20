@@ -33,6 +33,10 @@ namespace TensorShader {
 
         /// <summary>更新則を追加</summary>
         public void AddUpdater(Func<ParameterField, Updater> gen_updater) {
+            if (parameter_fields.Count <= 0) {
+                throw new InvalidOperationException(ExceptionMessage.EmptyList());
+            }
+
             foreach (ParameterField parameter_field in parameter_fields) {
                 parameter_field.AddUpdater(gen_updater(parameter_field));
             }
@@ -40,6 +44,10 @@ namespace TensorShader {
 
         /// <summary>更新則を初期化</summary>
         public void InitializeUpdater() {
+            if (parameter_fields.Count <= 0) {
+                throw new InvalidOperationException(ExceptionMessage.EmptyList());
+            }
+
             foreach (ParameterField parameter_field in parameter_fields) {
                 foreach (Updater updater in parameter_field.Updaters) {
                     updater.Initialize();
@@ -49,6 +57,10 @@ namespace TensorShader {
 
         /// <summary>更新</summary>
         public void Update() {
+            if (parameter_fields.Count <= 0) {
+                throw new InvalidOperationException(ExceptionMessage.EmptyList());
+            }
+
             foreach (ParameterField parameter_field in parameter_fields) {
                 parameter_field.Update();
             }
@@ -56,6 +68,10 @@ namespace TensorShader {
 
         /// <summary>初期化</summary>
         public void InitializeTensor(Func<Tensor, Initializer> initializer) {
+            if (parameter_fields.Count <= 0) {
+                throw new InvalidOperationException(ExceptionMessage.EmptyList());
+            }
+
             foreach (ParameterField parameter_field in parameter_fields) {
                 parameter_field.Initialize(initializer);
             }
@@ -68,7 +84,7 @@ namespace TensorShader {
                 string[] name_split = name.Split('.');
 
                 if (name_split.Length != 2) {
-                    throw new FormatException("The name argument must be specified by \"class name\".\"property name\".");
+                     throw new FormatException(ExceptionMessage.InvalidParamKey());
                 }
 
                 string class_name = name.Split('.')[0];
@@ -99,7 +115,7 @@ namespace TensorShader {
                 }
 
                 if (!has_changed) {
-                    throw new ArgumentException($"Not found value name : {name}.");
+                    throw new KeyNotFoundException(name);
                 }
             }
 
@@ -107,7 +123,7 @@ namespace TensorShader {
                 string[] name_split = name.Split('.');
 
                 if (name_split.Length != 2) {
-                    throw new FormatException("The name argument must be specified by \"class name\".\"property name\".");
+                    throw new FormatException(ExceptionMessage.InvalidParamKey());
                 }
 
                 List<object> values = new List<object>();
@@ -136,11 +152,11 @@ namespace TensorShader {
                 }
 
                 if (values.Count < 1) {
-                    throw new ArgumentException($"Not found value name : {name}.");
+                    throw new KeyNotFoundException(name);
                 }
 
                 if (values.Distinct().Count() != 1) {
-                    throw new ArgumentException($"Contains several different values : {name}.");
+                    throw new ArgumentException(ExceptionMessage.ContainsSeveralDifferentValues(name));
                 }
 
                 return values[0];

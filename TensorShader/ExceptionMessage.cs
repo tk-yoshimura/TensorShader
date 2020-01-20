@@ -203,5 +203,35 @@ namespace TensorShader {
                     return $"Invalid separate operation. {inshape} axis:{axis} -> {string.Join(", ", outshapes.Select((shape) => shape.ToString()))}";
             }
         }
+
+        /// <summary>空配列への操作</summary>
+        public static string EmptyList() {
+            switch (lang) {
+                case Lang.JP:
+                    return "空配列に操作を試みました。";
+                default:
+                    return "Attempted operation on an empty array.";
+            }
+        }
+
+        /// <summary>不正なパラメータキー</summary>
+        public static string InvalidParamKey() {
+            switch (lang) {
+                case Lang.JP:
+                    return "パラメータ名は\"クラス名\".\"プロパティ名\"を指定してください。";
+                default:
+                    return "The name argument must be specified by \"class name\".\"property name\".";
+            }
+        }
+
+        /// <summary>複数の異なるパラメータ値が含まれる</summary>
+        public static string ContainsSeveralDifferentValues(string name) {
+            switch (lang) {
+                case Lang.JP:
+                    return $"指定したパラメータキー {name} には複数の異なる値が含まれます。";
+                default:
+                    return $"Contains several different values : {name}.";
+            }
+        }
     }
 }
