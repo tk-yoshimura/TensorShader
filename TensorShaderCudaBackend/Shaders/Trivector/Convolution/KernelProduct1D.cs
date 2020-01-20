@@ -96,6 +96,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
             }}";
 
             this.Kernel = new Kernel(code, "trivector_kernelproduct_1d");
+            this.Kernel.SetCacheAllocationFromUsageSharedMemory((BlockSize.x + BlockSize.y) * 3 * 4);
         }
 
         /// <summary>実行</summary>

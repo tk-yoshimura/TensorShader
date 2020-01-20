@@ -83,10 +83,10 @@
             }}";
 
             /// <summary>シェアードメモリへ格納</summary>
-            public static string StoreSharedMemory(uint size) => 
+            public static string StoreSharedMemory(string elem, uint length) => 
             $@"
-            static __inline__ __device__ void store_smem(float *ptr, float *smem, unsigned int thread_idx, unsigned int threads){{
-                for(unsigned int i = thread_idx; i < {size}; i += threads){{
+            static __inline__ __device__ void store_smem({elem} *ptr, {elem} *smem, unsigned int thread_idx, unsigned int threads){{
+                for(unsigned int i = thread_idx; i < {length}; i += threads){{
                     smem[i] = ptr[i];
                 }}
                 __syncthreads();

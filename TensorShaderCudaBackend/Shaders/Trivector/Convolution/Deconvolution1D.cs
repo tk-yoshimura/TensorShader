@@ -43,7 +43,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
             {Defines.FloatFloatAdd}
             {Defines.Trivector.Mul}
             {Defines.Trivector.MulGrad}
-            {Defines.StoreSharedMemory(InChannels * 3)}
+            {Defines.StoreSharedMemory("float3", InChannels)}
 
             __global__ void trivector_deconvolution_1d(float3 *inmap, float3 *outmap, float4 *filter,
                                                        unsigned int inwidth) {{
@@ -62,7 +62,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
                     unsigned int inmap_idx = {InChannels} * ix;
                     unsigned int filter_idx = outch + {InChannels * OutChannels} * ({KernelWidth - 1} - kx);
 
-                    store_smem((float*)(void*)(inmap + inmap_idx), (float*)(void*)(vs), tid, threads);
+                    store_smem(inmap + inmap_idx, vs, tid, threads);
 
                     if(outch < {OutChannels}){{
                         for(unsigned int inch = 0; inch < {InChannels}; inch++){{
@@ -86,6 +86,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
             }}";
 
             this.Kernel = new Kernel(code, "trivector_deconvolution_1d");
+            this.Kernel.SetCacheAllocationFromUsageSharedMemory(InChannels * 3 * 4);
         }
 
         /// <summary>実行</summary>

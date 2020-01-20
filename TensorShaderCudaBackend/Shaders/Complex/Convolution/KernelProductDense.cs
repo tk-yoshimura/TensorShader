@@ -82,6 +82,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             }}";
 
             this.Kernel = new Kernel(code, "complex_kernelproduct_dense");
+            this.Kernel.SetCacheAllocationFromUsageSharedMemory((BlockSize.x + BlockSize.y) * 2 * 4);
         }
 
         /// <summary>実行</summary>

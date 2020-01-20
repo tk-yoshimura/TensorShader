@@ -37,7 +37,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             {Defines.FloatFloatSub}
             {Defines.Quaternion.Mul}
             {Defines.Quaternion.MulGrad}
-            {Defines.StoreSharedMemory(InChannels * 4)}
+            {Defines.StoreSharedMemory("float4", InChannels)}
 
             __global__ void quaternion_transpose_dense(float4 *inmap, float4 *outmap, float4 *filter) {{
 
@@ -55,7 +55,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
 
                 unsigned int filter_idx = outch;
 
-                store_smem((float*)(void*)(inmap), (float*)(void*)(us), tid, threads);
+                store_smem(inmap, us, tid, threads);
 
                 if(outch < {OutChannels}){{
                     for(unsigned int inch = 0; inch < {InChannels}; inch++){{
@@ -72,6 +72,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             }}";
 
             this.Kernel = new Kernel(code, "quaternion_transpose_dense");
+            this.Kernel.SetCacheAllocationFromUsageSharedMemory(InChannels * 4 * 4);
         }
 
         /// <summary>実行</summary>

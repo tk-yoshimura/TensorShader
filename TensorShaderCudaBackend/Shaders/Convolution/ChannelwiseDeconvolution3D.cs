@@ -18,8 +18,8 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
         /// <summary>フィルタサイズ</summary>
         public uint KernelDepth { private set; get; }
 
-        /// <summary>実行あたりの積数(2^25=33554432‬)</summary>
-        public static uint MulPerExecute => 0x2000000;
+        /// <summary>実行あたりの積数(2^30=1073741824‬)</summary>
+        public static ulong MulPerExecute => 0x40000000;
 
         /// <summary>識別子</summary>
         public override sealed string Signature =>
@@ -111,9 +111,9 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             uint outheight = inheight + KernelHeight - 1;
             uint outdepth = indepth + KernelDepth - 1;
 
-            uint mul_per_line = Channels * KernelWidth * KernelHeight * KernelDepth * outwidth;
+            ulong mul_per_line = (ulong)Channels * KernelWidth * KernelHeight * KernelDepth * outwidth;
 
-            uint lines_per_execute = MulPerExecute / mul_per_line + 1;
+            uint lines_per_execute = (uint)(MulPerExecute / mul_per_line + 1);
 
             for (uint th = 0; th < batches; th++) {
                 for (uint oz = 0; oz < outdepth; oz++) {

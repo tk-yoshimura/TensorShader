@@ -12,8 +12,8 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
         /// <summary>出力チャネル数</summary>
         public uint OutChannels { private set; get; }
 
-        /// <summary>実行あたりの積数(2^25=33554432‬)</summary>
-        public static uint MulPerExecute => 0x2000000;
+        /// <summary>実行あたりの積数(2^30=1073741824‬)</summary>
+        public static ulong MulPerExecute => 0x40000000;
 
         /// <summary>実行あたりのポイント数(2^14=16384‬)</summary>
         public static uint PointsPerExecute => 0x4000;
@@ -34,7 +34,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             string code = $@"
 
             {Defines.FloatFloatAdd}
-            {Defines.StoreSharedMemory(InChannels)}
+            {Defines.StoreSharedMemory("float", InChannels)}
 
             __global__ void ptwise_deconvolution(float *inmap, float *outmap, float *filter) {{
 
@@ -66,6 +66,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             }}";
 
             this.Kernel = new Kernel(code, "ptwise_deconvolution");
+            this.Kernel.SetCacheAllocationFromUsageSharedMemory(InChannels * 4);
         }
 
         /// <summary>実行</summary>
@@ -78,8 +79,8 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             uint pts = (args[3] as uint?).Value;
 
-            uint mul_per_point = InChannels * OutChannels;
-            uint points_per_execute_mul = MulPerExecute / mul_per_point + 1;
+            ulong mul_per_point = (ulong)InChannels * OutChannels;
+            uint points_per_execute_mul = (uint)(MulPerExecute / mul_per_point + 1);
             uint points_per_execute = Math.Min(PointsPerExecute, points_per_execute_mul);
 
             for (uint p = 0; p < pts; p += points_per_execute) {

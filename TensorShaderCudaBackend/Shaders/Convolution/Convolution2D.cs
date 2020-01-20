@@ -20,8 +20,8 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
         /// <summary>フィルタサイズ</summary>
         public uint KernelHeight { private set; get; }
 
-        /// <summary>実行あたりの積数(2^25=33554432‬)</summary>
-        public static uint MulPerExecute => 0x2000000;
+        /// <summary>実行あたりの積数(2^30=1073741824‬)</summary>
+        public static ulong MulPerExecute => 0x40000000;
 
         /// <summary>識別子</summary>
         public override sealed string Signature =>
@@ -45,7 +45,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             string code = $@"
 
             {Defines.FloatFloatAdd}
-            {Defines.StoreSharedMemory(InChannels)}
+            {Defines.StoreSharedMemory("float", InChannels)}
 
             __global__ void convolution_2d(float *inmap, float *outmap, float *filter,
                                            unsigned int oy_offset,
@@ -88,6 +88,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             }}";
 
             this.Kernel = new Kernel(code, "convolution_2d");
+            this.Kernel.SetCacheAllocationFromUsageSharedMemory(InChannels * 4);
         }
 
         /// <summary>実行</summary>
@@ -105,9 +106,9 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             uint outwidth = inwidth + 1 - KernelWidth;
             uint outheight = inheight + 1 - KernelHeight;
 
-            uint mul_per_line = InChannels * OutChannels * KernelWidth * KernelHeight * outwidth;
+            ulong mul_per_line = (ulong)InChannels * OutChannels * KernelWidth * KernelHeight * outwidth;
 
-            uint lines_per_execute = MulPerExecute / mul_per_line + 1;
+            uint lines_per_execute = (uint)(MulPerExecute / mul_per_line + 1);
 
             CudaArray<float> transpose_filter =
                 CudaArrayReserver<float>.Request(stream, filter.DeviceID, index: 0, InChannels * OutChannels * KernelWidth * KernelHeight);

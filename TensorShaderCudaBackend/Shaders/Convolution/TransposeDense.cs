@@ -28,7 +28,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             string code = $@"
 
             {Defines.FloatFloatAdd}
-            {Defines.StoreSharedMemory(InChannels)}
+            {Defines.StoreSharedMemory("float", InChannels)}
 
             __global__ void transpose_dense(float *inmap, float *outmap, float *filter) {{
 
@@ -64,6 +64,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             }}";
 
             this.Kernel = new Kernel(code, "transpose_dense");
+            this.Kernel.SetCacheAllocationFromUsageSharedMemory(InChannels * 4);
         }
 
         /// <summary>実行</summary>

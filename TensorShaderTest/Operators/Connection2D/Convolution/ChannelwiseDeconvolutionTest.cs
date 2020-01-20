@@ -65,7 +65,7 @@ namespace TensorShaderTest.Operators.Connection2D {
             int batch = 3;
             int channels = 49;
             int kwidth = 5, kheight = 3;
-            int inwidth = 125, inheight = 196;
+            int inwidth = 250, inheight = 196;
             int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
 
             float[] yval = (new float[outwidth * outheight * channels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();

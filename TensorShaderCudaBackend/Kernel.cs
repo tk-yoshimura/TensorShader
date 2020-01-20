@@ -118,6 +118,25 @@ namespace TensorShaderCudaBackend {
             Cuda.Memory.CopyDeviceToDeviceAsync<T>(array.Ptr, ptr, count, stream.Ptr);
         }
 
+        /// <summary>共有メモリ/LIキャッシュの配分比を設定</summary>
+        public void SetCacheAllocation(Cuda.FuncCache func_cache) { 
+            //Cuda.SetFuncCache(kernel, func_cache); /*TODO fix*/
+        }
+
+        /// <summary>共有メモリ/LIキャッシュの配分比を設定</summary>
+        public void SetCacheAllocationFromUsageSharedMemory(uint static_shared_memory_bytes) { 
+            long shared_memory_bytes = Cuda.CurrectDeviceProperty.SharedMemoryBytesPerBlock;
+            if(static_shared_memory_bytes < shared_memory_bytes / 4) { 
+                SetCacheAllocation(Cuda.FuncCache.PreferL1);
+            }
+            else if(static_shared_memory_bytes < shared_memory_bytes / 2) { 
+                SetCacheAllocation(Cuda.FuncCache.PreferEqual);
+            }
+            else{ 
+                SetCacheAllocation(Cuda.FuncCache.PreferShared);
+            }
+        }
+
         /// <summary>実行</summary>
         /// <remarks>streamにnullを指定したときデフォルトストリームが使用される</remarks>
         public void Execute(uint indexes, uint dynamic_shared_memory_bytes, Stream stream, params object[] args) {

@@ -20,8 +20,8 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
         /// <summary>フィルタサイズ</summary>
         public uint KernelDepth { private set; get; }
 
-        /// <summary>実行あたりの積数(2^24=16777216‬)</summary>
-        public static uint MulPerExecute => 0x1000000;
+        /// <summary>実行あたりの積数(2^29=536870912)</summary>
+        public static ulong MulPerExecute => 0x20000000;
 
         /// <summary>実行あたりのポイント数(2^14=16384‬)</summary>
         public static uint PointsPerExecute => 0x4000;
@@ -113,9 +113,9 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index: 0, Channels * KernelWidth * KernelHeight * KernelDepth * 2);
             dfloat_filter.ZerosetAsync(stream, Channels * KernelWidth * KernelHeight * KernelDepth * 2);
 
-            uint mul_per_line = Channels * KernelWidth * KernelHeight * KernelDepth * outwidth;
+            ulong mul_per_line = (ulong)Channels * KernelWidth * KernelHeight * KernelDepth * outwidth;
 
-            uint lines_per_execute_mul = MulPerExecute / mul_per_line + 1;
+            uint lines_per_execute_mul = (uint)(MulPerExecute / mul_per_line + 1);
             uint lines_per_execute_pixels = (PointsPerExecute + outwidth - 1) / outwidth;
 
             uint lines_per_execute = Math.Min(lines_per_execute_mul, lines_per_execute_pixels);

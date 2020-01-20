@@ -19,8 +19,8 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
         /// <summary>1スレッドで処理する対象ピクセル数</summary>
         private static uint BatchPixels => 32;
 
-        /// <summary>実行あたりの積数(2^24=16777216‬)</summary>
-        public static uint MulPerExecute => 0x1000000;
+        /// <summary>実行あたりの積数(2^29=536870912)</summary>
+        public static ulong MulPerExecute => 0x20000000;
 
         /// <summary>実行あたりのポイント数(2^14=16384‬)</summary>
         public static uint PointsPerExecute => 0x4000;
@@ -81,6 +81,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             }}";
 
             this.Kernel = new Kernel(code, "ptwise_kernelproduct");
+            this.Kernel.SetCacheAllocationFromUsageSharedMemory((BlockSize.x + BlockSize.y) * 4);
         }
 
         /// <summary>実行</summary>
@@ -97,8 +98,8 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index: 0, InChannels * OutChannels * 2);
             dfloat_filter.ZerosetAsync(stream, InChannels * OutChannels * 2);
 
-            uint mul_per_point = InChannels * OutChannels;
-            uint points_per_execute_mul = MulPerExecute / mul_per_point + 1;
+            ulong mul_per_point = (ulong)InChannels * OutChannels;
+            uint points_per_execute_mul = (uint)(MulPerExecute / mul_per_point + 1);
             uint points_per_execute = Math.Min(PointsPerExecute, points_per_execute_mul);
 
             for (uint p = 0; p < pts; p += points_per_execute) {

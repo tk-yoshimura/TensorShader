@@ -26,8 +26,8 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
         /// <summary>勾配</summary>
         public bool GradMode { private set; get; }
 
-        /// <summary>実行あたりの積数(2^25=33554432‬)</summary>
-        public static uint MulPerExecute => 0x2000000;
+        /// <summary>実行あたりの積数(2^30=1073741824‬)</summary>
+        public static ulong MulPerExecute => 0x40000000;
 
         /// <summary>識別子</summary>
         public override sealed string Signature =>
@@ -57,7 +57,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
             {Defines.FloatFloatAdd}
             {Defines.Trivector.Mul}
             {Defines.Trivector.MulGrad}
-            {Defines.StoreSharedMemory(InChannels * 3)}
+            {Defines.StoreSharedMemory("float3", InChannels)}
 
             __global__ void trivector_convolution_3d(float3 *inmap, float3 *outmap, float4 *filter,
                                                      unsigned int oy_offset, unsigned int oz,
@@ -77,7 +77,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
                             unsigned int inmap_idx = {InChannels} * (ix + inwidth * (iy + inheight * iz));
                             unsigned int filter_idx = outch + {InChannels * OutChannels} * (kx + {KernelWidth} * (ky + {KernelHeight} * kz));
 
-                            store_smem((float*)(void*)(inmap + inmap_idx), (float*)(void*)(vs), tid, threads);
+                            store_smem(inmap + inmap_idx, vs, tid, threads);
 
                             if(outch < {OutChannels}){{
                                 for(unsigned int inch = 0; inch < {InChannels}; inch++){{
@@ -103,6 +103,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
             }}";
 
             this.Kernel = new Kernel(code, "trivector_convolution_3d");
+            this.Kernel.SetCacheAllocationFromUsageSharedMemory(InChannels * 3 * 4);
         }
 
         /// <summary>実行</summary>
@@ -122,9 +123,9 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
             uint outheight = inheight + 1 - KernelHeight;
             uint outdepth = indepth + 1 - KernelDepth;
 
-            uint mul_per_line = InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * outwidth * 16;
+            ulong mul_per_line = (ulong)InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * outwidth * 16;
 
-            uint lines_per_execute = MulPerExecute / mul_per_line + 1;
+            uint lines_per_execute = (uint)(MulPerExecute / mul_per_line + 1);
 
             CudaArray<float> transpose_filter =
                 CudaArrayReserver<float>.Request(stream, filter.DeviceID, index: 0, InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * 4);

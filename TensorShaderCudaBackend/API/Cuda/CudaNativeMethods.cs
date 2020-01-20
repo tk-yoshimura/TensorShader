@@ -5,6 +5,7 @@ namespace TensorShaderCudaBackend.API {
     using size_t = Int64;
     using cudaError_t = Cuda.ErrorCode;
     using cudaDeviceProp = Cuda.DeviceProp;
+    using cudaFuncCache = Cuda.FuncCache;
 
     public static partial class Cuda {
 
@@ -84,6 +85,9 @@ namespace TensorShaderCudaBackend.API {
 
             [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
             public static extern cudaError_t cudaMemGetInfo(ref size_t free, ref size_t total);
+
+            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+            public static extern cudaError_t cudaFuncSetCacheConfig(IntPtr func, cudaFuncCache cacheConfig);
 
             [DllImport(DllName, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
             public static extern cudaError_t cudaProfilerInitialize(string configFile, string outputFile, cudaOutputMode outputMode);

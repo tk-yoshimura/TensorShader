@@ -44,7 +44,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             {Defines.FloatFloatSub}
             {Defines.Complex.Mul}
             {Defines.Complex.MulGrad}
-            {Defines.StoreSharedMemory(InChannels * 2)}
+            {Defines.StoreSharedMemory("float2", InChannels)}
 
             __global__ void complex_deconvolution_1d(float2 *inmap, float2 *outmap, float2 *filter,
                                                      unsigned int inwidth) {{
@@ -63,7 +63,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                     unsigned int inmap_idx = {InChannels} * ix;
                     unsigned int filter_idx = outch + {InChannels * OutChannels} * ({KernelWidth - 1} - kx);
 
-                    store_smem((float*)(void*)(inmap + inmap_idx), (float*)(void*)(us), tid, threads);
+                    store_smem(inmap + inmap_idx, us, tid, threads);
 
                     if(outch < {OutChannels}){{
                         for(unsigned int inch = 0; inch < {InChannels}; inch++){{
@@ -87,6 +87,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             }}";
 
             this.Kernel = new Kernel(code, "complex_deconvolution_1d");
+            this.Kernel.SetCacheAllocationFromUsageSharedMemory(InChannels * 2 * 4);
         }
 
         /// <summary>実行</summary>

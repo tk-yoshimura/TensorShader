@@ -21,8 +21,8 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
         /// <summary>勾配</summary>
         public bool GradMode { private set; get; }
 
-        /// <summary>実行あたりの積数(2^25=33554432‬)</summary>
-        public static uint MulPerExecute => 0x2000000;
+        /// <summary>実行あたりの積数(2^30=1073741824‬)</summary>
+        public static ulong MulPerExecute => 0x40000000;
 
         /// <summary>識別子</summary>
         public override sealed string Signature =>
@@ -51,7 +51,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             {Defines.FloatFloatSub}
             {Defines.Complex.Mul}
             {Defines.Complex.MulGrad}
-            {Defines.StoreSharedMemory(InChannels * 2)}
+            {Defines.StoreSharedMemory("float2", InChannels)}
 
             __global__ void complex_deconvolution_2d(float2 *inmap, float2 *outmap, float2 *filter,
                                                      unsigned int oy_offset,
@@ -78,7 +78,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                         unsigned int filter_idx = outch + {InChannels * OutChannels} *
                                                   (({KernelWidth - 1} - kx) + {KernelWidth} * ({KernelHeight - 1} - ky));
 
-                        store_smem((float*)(void*)(inmap + inmap_idx), (float*)(void*)(us), tid, threads);
+                        store_smem(inmap + inmap_idx, us, tid, threads);
 
                         if(outch < {OutChannels}){{
                             for(unsigned int inch = 0; inch < {InChannels}; inch++){{
@@ -103,6 +103,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             }}";
 
             this.Kernel = new Kernel(code, "complex_deconvolution_2d");
+            this.Kernel.SetCacheAllocationFromUsageSharedMemory(InChannels * 2 * 4);
         }
 
         /// <summary>実行</summary>
@@ -120,9 +121,9 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             uint outwidth = inwidth + KernelWidth - 1;
             uint outheight = inheight + KernelHeight - 1;
 
-            uint mul_per_line = InChannels * OutChannels * KernelWidth * KernelHeight * outwidth * 4;
+            ulong mul_per_line = (ulong)InChannels * OutChannels * KernelWidth * KernelHeight * outwidth * 4;
 
-            uint lines_per_execute = MulPerExecute / mul_per_line + 1;
+            uint lines_per_execute = (uint)(MulPerExecute / mul_per_line + 1);
 
             for (uint th = 0; th < batches; th++) {
                 for (uint oy_offset = 0; oy_offset < outheight; oy_offset += lines_per_execute) {
