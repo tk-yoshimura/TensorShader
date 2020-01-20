@@ -37,6 +37,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             {Defines.FloatFloatSub}
             {Defines.Complex.Mul}
             {Defines.Complex.MulGrad}
+            {Defines.StoreSharedMemory(InChannels * 2)}
 
             __global__ void complex_transpose_dense(float2 *inmap, float2 *outmap, float2 *filter) {{
 
@@ -54,10 +55,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
 
                 unsigned int filter_idx = outch;
 
-                for(unsigned int inch = tid; inch < {InChannels}; inch += threads){{
-                    us[inch] = inmap[inch];
-                }}
-                __syncthreads();
+                store_smem((float*)(void*)(inmap), (float*)(void*)(us), tid, threads);
 
                 if(outch < {OutChannels}){{
                     for(unsigned int inch = 0; inch < {InChannels}; inch++){{

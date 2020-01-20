@@ -57,6 +57,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
             {Defines.FloatFloatAdd}
             {Defines.Trivector.Mul}
             {Defines.Trivector.MulGrad}
+            {Defines.StoreSharedMemory(InChannels * 3)}
 
             __global__ void trivector_convolution_3d(float3 *inmap, float3 *outmap, float4 *filter,
                                                      unsigned int oy_offset, unsigned int oz,
@@ -76,10 +77,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
                             unsigned int inmap_idx = {InChannels} * (ix + inwidth * (iy + inheight * iz));
                             unsigned int filter_idx = outch + {InChannels * OutChannels} * (kx + {KernelWidth} * (ky + {KernelHeight} * kz));
 
-                            for(unsigned int inch = tid; inch < {InChannels}; inch += threads){{
-                                vs[inch] = inmap[inch + inmap_idx];
-                            }}
-                            __syncthreads();
+                            store_smem((float*)(void*)(inmap + inmap_idx), (float*)(void*)(vs), tid, threads);
 
                             if(outch < {OutChannels}){{
                                 for(unsigned int inch = 0; inch < {InChannels}; inch++){{

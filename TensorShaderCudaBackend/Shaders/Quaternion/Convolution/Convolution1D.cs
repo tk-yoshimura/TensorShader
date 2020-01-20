@@ -46,6 +46,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             {Defines.FloatFloatSub}
             {Defines.Quaternion.Mul}
             {Defines.Quaternion.MulGrad}
+            {Defines.StoreSharedMemory(InChannels * 4)}
 
             __global__ void quaternion_convolution_1d(float4 *inmap, float4 *outmap, float4 *filter) {{
 
@@ -60,10 +61,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
                     unsigned int inmap_idx = {InChannels} * ix;
                     unsigned int filter_idx = outch + {InChannels * OutChannels} * kx;
 
-                    for(unsigned int inch = tid; inch < {InChannels}; inch += threads){{
-                        us[inch] = inmap[inch + inmap_idx];
-                    }}
-                    __syncthreads();
+                    store_smem((float*)(void*)(inmap + inmap_idx), (float*)(void*)(us), tid, threads);
 
                     if(outch < {OutChannels}){{
                         for(unsigned int inch = 0; inch < {InChannels}; inch++){{

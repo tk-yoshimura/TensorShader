@@ -34,6 +34,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             string code = $@"
 
             {Defines.FloatFloatAdd}
+            {Defines.StoreSharedMemory(InChannels)}
 
             __global__ void ptwise_deconvolution(float *inmap, float *outmap, float *filter) {{
 
@@ -46,10 +47,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 unsigned int inmap_idx = {InChannels} * i;
                 unsigned int filter_idx = outch;
 
-                for(unsigned int inch = tid; inch < {InChannels}; inch += threads){{
-                    us[inch] = inmap[inch + inmap_idx];
-                }}
-                __syncthreads();
+                store_smem(inmap + inmap_idx, us, tid, threads);
 
                 if(outch < {OutChannels}){{
                     for(unsigned int inch = 0; inch < {InChannels}; inch++){{

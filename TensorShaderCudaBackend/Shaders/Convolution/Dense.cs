@@ -33,6 +33,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             string code = $@"
 
             {Defines.FloatFloatAdd}
+            {Defines.StoreSharedMemory(InChannels)}
 
             __global__ void dense(float *inmap, float *outmap, float *filter) {{
 
@@ -50,10 +51,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
                 unsigned int filter_idx = outch;
 
-                for(unsigned int inch = tid; inch < {InChannels}; inch += threads){{
-                    us[inch] = inmap[inch];
-                }}
-                __syncthreads();
+                store_smem(inmap, us, tid, threads);
 
                 if(outch < {OutChannels}){{
 

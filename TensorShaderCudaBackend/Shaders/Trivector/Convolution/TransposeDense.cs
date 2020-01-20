@@ -36,6 +36,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
             {Defines.FloatFloatAdd}
             {Defines.Trivector.Mul}
             {Defines.Trivector.MulGrad}
+            {Defines.StoreSharedMemory(InChannels * 3)}
 
             __global__ void trivector_transpose_dense(float3 *inmap, float3 *outmap, float4 *filter) {{
 
@@ -53,10 +54,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
 
                 unsigned int filter_idx = outch;
 
-                for(unsigned int inch = tid; inch < {InChannels}; inch += threads){{
-                    vs[inch] = inmap[inch];
-                }}
-                __syncthreads();
+                store_smem((float*)(void*)(inmap), (float*)(void*)(vs), tid, threads);
 
                 if(outch < {OutChannels}){{
                     for(unsigned int inch = 0; inch < {InChannels}; inch++){{
