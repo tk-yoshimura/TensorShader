@@ -95,7 +95,6 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             }}";
 
             this.Kernel = new Kernel(code, "deconvolution_2d");
-            this.Kernel.SetCacheAllocationFromUsageSharedMemory(InChannels * 4);
         }
 
         /// <summary>実行</summary>

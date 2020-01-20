@@ -109,7 +109,6 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             }}";
 
             this.Kernel = new Kernel(code, "quaternion_kernelproduct_2d");
-            this.Kernel.SetCacheAllocationFromUsageSharedMemory((BlockSize.x + BlockSize.y) * 4 * 4);
         }
 
         /// <summary>実行</summary>

@@ -114,7 +114,6 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
             }}";
 
             this.Kernel = new Kernel(code, "trivector_deconvolution_3d");
-            this.Kernel.SetCacheAllocationFromUsageSharedMemory(InChannels * 3 * 4);
         }
 
         /// <summary>実行</summary>

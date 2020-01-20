@@ -68,7 +68,6 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             }}";
 
             this.Kernel = new Kernel(code, "ptwise_convolution");
-            this.Kernel.SetCacheAllocationFromUsageSharedMemory(InChannels * 4);
         }
 
         /// <summary>実行</summary>

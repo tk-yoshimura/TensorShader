@@ -119,7 +119,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\Cuda\CudaFuncCache.cs" />
     <Compile Include="API\Cuda\CudaStream.cs" />
     <Compile Include="API\Cuda\CudaOutputMode.cs" />
     <Compile Include="API\Cuda\CudaMemory.cs" />

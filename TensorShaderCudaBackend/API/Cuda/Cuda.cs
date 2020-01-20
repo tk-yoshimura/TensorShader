@@ -165,18 +165,6 @@ namespace TensorShaderCudaBackend.API {
             }
         }
 
-        /// <summary>カーネルの共有メモリ/L1キャッシュ配分比を設定</summary>
-        internal static void SetFuncCache(IntPtr func, FuncCache func_cache) {
-            if(func == IntPtr.Zero) { 
-                throw new ArgumentException(nameof(func));
-            }
-
-            ErrorCode result = NativeMethods.cudaFuncSetCacheConfig(func, func_cache);
-            if (result != ErrorCode.Success) {
-                throw new CudaException(result);
-            }
-        }
-
         /// <summary>エラーコードメッセージ</summary>
         internal static string GetErrorString(ErrorCode error) {
             IntPtr ptr = NativeMethods.cudaGetErrorString(error);

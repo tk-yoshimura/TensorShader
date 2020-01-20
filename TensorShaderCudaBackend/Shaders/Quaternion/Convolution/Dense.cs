@@ -74,7 +74,6 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             }}";
 
             this.Kernel = new Kernel(code, "quaternion_dense");
-            this.Kernel.SetCacheAllocationFromUsageSharedMemory(InChannels * 4 * 4);
         }
 
         /// <summary>実行</summary>
