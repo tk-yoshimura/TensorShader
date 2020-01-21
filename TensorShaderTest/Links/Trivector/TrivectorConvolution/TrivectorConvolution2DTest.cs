@@ -38,6 +38,48 @@ namespace TensorShaderTest.Links.TrivectorConvolution {
             AssertError.Tolerance(gx_expect, gx_actual, 1e-6f, 1e-5f, $"not equal gx");
         }
 
+        [TestMethod]
+        public void TheoreticalTest() {
+            int inchannels = 9, outchannels = 12, kwidth = 3, kheight = 5, inwidth = 7, inheight = 8;
+            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, batch = 3;
+
+            float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+            float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+            float[] wval = (new float[kwidth * kheight * outchannels * inchannels / 9 * 4]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+
+            Tensor xtensor = new Tensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
+            Tensor ytensor = new Tensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
+            Tensor wtensor = new Tensor(Shape.Kernel2D(inchannels / 3 * 4, outchannels / 3, kwidth, kheight), wval);
+
+            ParameterField x = xtensor;
+            ParameterField w = wtensor;
+            VariableField y_actual = ytensor;
+
+            Field xx = TrivectorX(x), xy = TrivectorY(x), xz = TrivectorZ(x);
+            Field wr = QuaternionR(w), wi = QuaternionI(w), wj = QuaternionJ(w), wk = QuaternionK(w);
+            Field wrr = wr * wr, wii = wi * wi, wjj = wj * wj, wkk = wk * wk;
+            Field wri = wr * wi, wrj = wr * wj, wrk = wr * wk, wij = wi * wj, wik = wi * wk, wjk = wj * wk;
+
+            Field yx = Convolution2D(xx, (wrr + wii - wjj - wkk)) + 2 * (Convolution2D(xy, (wij - wrk)) + Convolution2D(xz, (wik + wrj)));
+            Field yy = Convolution2D(xy, (wrr - wii + wjj - wkk)) + 2 * (Convolution2D(xz, (wjk - wri)) + Convolution2D(xx, (wij + wrk)));
+            Field yz = Convolution2D(xz, (wrr - wii - wjj + wkk)) + 2 * (Convolution2D(xx, (wik - wrj)) + Convolution2D(xy, (wjk + wri)));
+
+            Field y_expect = TrivectorCast(yx, yy, yz);
+
+            Field err = y_expect - y_actual;
+
+            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+
+            flow.Execute();
+
+            float[] gx_actual = x.GradTensor.State;
+            float[] gw_actual = w.GradTensor.State;
+
+            AssertError.Tolerance(gw_expect, gw_actual, 1e-6f, 1e-4f, $"not equal gw");
+
+            AssertError.Tolerance(gx_expect, gx_actual, 1e-6f, 1e-4f, $"not equal gx");
+        }
+
         float[] gx_expect = new float[] {
             1.483564931e+01f,  1.507217277e+01f,  1.539981952e+01f,  1.466691541e+01f,  1.490073828e+01f,  1.522429323e+01f,
             1.449914691e+01f,  1.473028471e+01f,  1.504977337e+01f,  2.980714989e+01f,  3.024882569e+01f,  3.086141184e+01f,

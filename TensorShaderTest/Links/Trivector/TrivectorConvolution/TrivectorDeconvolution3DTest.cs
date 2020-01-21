@@ -38,6 +38,48 @@ namespace TensorShaderTest.Links.TrivectorConvolution {
             AssertError.Tolerance(gy_expect, gy_actual, 1e-6f, 1e-5f, $"not equal gy");
         }
 
+        [TestMethod]
+        public void TheoreticalTest() {
+            int inchannels = 9, outchannels = 12, kwidth = 3, kheight = 5, kdepth = 7, inwidth = 7, inheight = 8, indepth = 9;
+            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1, batch = 3;
+
+            float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+            float[] yval = (new float[outwidth * outheight * outdepth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+            float[] wval = (new float[kwidth * kheight * kdepth * outchannels * inchannels / 9 * 4]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+
+            Tensor xtensor = new Tensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
+            Tensor ytensor = new Tensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), yval);
+            Tensor wtensor = new Tensor(Shape.Kernel3D(inchannels / 3 * 4, outchannels / 3, kwidth, kheight, kdepth), wval);
+
+            VariableField x_actual = xtensor;
+            ParameterField w = wtensor;
+            ParameterField y = ytensor;
+
+            Field yx = TrivectorX(y), yy = TrivectorY(y), yz = TrivectorZ(y);
+            Field wr = QuaternionR(w), wi = QuaternionI(w), wj = QuaternionJ(w), wk = QuaternionK(w);
+            Field wrr = wr * wr, wii = wi * wi, wjj = wj * wj, wkk = wk * wk;
+            Field wri = wr * wi, wrj = wr * wj, wrk = wr * wk, wij = wi * wj, wik = wi * wk, wjk = wj * wk;
+
+            Field xx = Deconvolution3D(yx, (wrr + wii - wjj - wkk)) + 2 * (Deconvolution3D(yy, (wij - wrk)) + Deconvolution3D(yz, (wik + wrj)));
+            Field xy = Deconvolution3D(yy, (wrr - wii + wjj - wkk)) + 2 * (Deconvolution3D(yz, (wjk - wri)) + Deconvolution3D(yx, (wij + wrk)));
+            Field xz = Deconvolution3D(yz, (wrr - wii - wjj + wkk)) + 2 * (Deconvolution3D(yx, (wik - wrj)) + Deconvolution3D(yy, (wjk + wri)));
+
+            Field x_expect = TrivectorCast(xx, xy, xz);
+
+            Field err = x_expect - x_actual;
+
+            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+
+            flow.Execute();
+
+            float[] gy_actual = y.GradTensor.State;
+            float[] gw_actual = w.GradTensor.State;
+
+            AssertError.Tolerance(gw_expect, gw_actual, 1e-6f, 1e-5f, $"not equal gw");
+
+            AssertError.Tolerance(gy_expect, gy_actual, 1e-6f, 1e-5f, $"not equal gy");
+        }
+
         float[] gy_expect = new float[] {
             7.637501129e+06f,  7.667806884e+06f,  7.695920655e+06f,  7.576982696e+06f,  7.607074226e+06f,  7.634963513e+06f,
             7.516741867e+06f,  7.546620037e+06f,  7.574285940e+06f,  7.456778643e+06f,  7.486444319e+06f,  7.513887935e+06f,
