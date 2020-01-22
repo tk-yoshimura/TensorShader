@@ -62,15 +62,17 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
 
                 __shared__ float3 us[{BlockSize.x}], vs[{BlockSize.y}];
 
-                if(tidx == 0 && outch < {OutChannels}){{
+                { (OutChannels % BlockSize.y != 0 ? $"if(tidx == 0 && outch < {OutChannels}){{" : "if(tidx == 0){") }
                     vs[tidy] = outmap[outch];
                 }}
-                if(tidy == 0 && inch < {InChannels}){{
+                { (InChannels % BlockSize.x != 0 ? $"if(tidy == 0 && inch < {InChannels}){{" : "if(tidy == 0){") }
                     us[tidx] = inmap[inch];
                 }}
                 __syncthreads();
 
-                if(inch < {InChannels} && outch < {OutChannels}){{
+                { (InChannels % BlockSize.x != 0 ? $"if(inch < {InChannels}){{" : "") }
+                { (OutChannels % BlockSize.y != 0 ? $"if(outch < {OutChannels}){{" : "") }
+
                     float3 u = us[tidx];
                     float3 v = vs[tidy];
                     float4 q = filter_value[0];
@@ -80,7 +82,9 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
                     trivector_quaternion_kernelprod(gq_hi, gq_lo, {(Transpose ? "v, u" : "u, v")}, q);
 
                     floatfloat_atomicadd(filter_grad, gq_hi, gq_lo);
-                }}
+
+                { (InChannels % BlockSize.x != 0 ? "}" : "") }
+                { (OutChannels % BlockSize.y != 0 ? "}" : "") }
             }}";
 
             this.Kernel = new Kernel(code, "trivector_kernelproduct_dense");

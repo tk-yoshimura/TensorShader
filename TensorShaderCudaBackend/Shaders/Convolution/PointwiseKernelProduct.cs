@@ -58,26 +58,35 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 float uv_hi = 0.0, uv_lo = 0.0;
 
                 for(unsigned int i = i_offset; i < i_offset + {BatchPixels} && i < pl; i++){{
-                    if(tidx == 0 && outch < {OutChannels}){{
+                    { (OutChannels % BlockSize.y != 0 ? $"if(tidx == 0 && outch < {OutChannels}){{" : "if(tidx == 0){") }
                         vs[tidy] = outmap[outch + {OutChannels} * i];
                     }}
-                    if(tidy == 0 && inch < {InChannels}){{
+                    { (InChannels % BlockSize.x != 0 ? $"if(tidy == 0 && inch < {InChannels}){{" : "if(tidy == 0){") }
                         us[tidx] = inmap[inch + {InChannels} * i];
                     }}
                     __syncthreads();
 
-                    if(inch < {InChannels} && outch < {OutChannels}){{
+                    { (InChannels % BlockSize.x != 0 ? $"if(inch < {InChannels}){{" : "") }
+                    { (OutChannels % BlockSize.y != 0 ? $"if(outch < {OutChannels}){{" : "") }
+
                         float u = us[tidx];
                         float v = vs[tidy];
 
                         floatfloat_add(uv_hi, uv_lo, u * v);
-                    }}
+
+                    { (InChannels % BlockSize.x != 0 ? "}" : "") }
+                    { (OutChannels % BlockSize.y != 0 ? "}" : "") }
+
                     __syncthreads();
                 }}
 
-                if(inch < {InChannels} && outch < {OutChannels}){{
+                { (InChannels % BlockSize.x != 0 ? $"if(inch < {InChannels}){{" : "") }
+                { (OutChannels % BlockSize.y != 0 ? $"if(outch < {OutChannels}){{" : "") }
+
                     floatfloat_atomicadd(filter + filter_index, uv_hi, uv_lo);
-                }}
+
+                { (InChannels % BlockSize.x != 0 ? "}" : "") }
+                { (OutChannels % BlockSize.y != 0 ? "}" : "") }
             }}";
 
             this.Kernel = new Kernel(code, "ptwise_kernelproduct");

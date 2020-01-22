@@ -61,15 +61,17 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
 
                 __shared__ float4 us[{BlockSize.x}], vs[{BlockSize.y}];
 
-                if(tidx == 0 && outch < {OutChannels}){{
+                { (OutChannels % BlockSize.y != 0 ? $"if(tidx == 0 && outch < {OutChannels}){{" : "if(tidx == 0){") }
                     vs[tidy] = outmap[outch];
                 }}
-                if(tidy == 0 && inch < {InChannels}){{
+                { (InChannels % BlockSize.x != 0 ? $"if(tidy == 0 && inch < {InChannels}){{" : "if(tidy == 0){") }
                     us[tidx] = inmap[inch];
                 }}
                 __syncthreads();
 
-                if(inch < {InChannels} && outch < {OutChannels}){{
+                { (InChannels % BlockSize.x != 0 ? $"if(inch < {InChannels}){{" : "") }
+                { (OutChannels % BlockSize.y != 0 ? $"if(outch < {OutChannels}){{" : "") }
+
                     float4 u = us[tidx];
                     float4 v = vs[tidy];
 
@@ -78,7 +80,9 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
                     quaternion_kernelprod(uv_hi, uv_lo, {(Transpose ? "v, u" : "u, v")});
 
                     floatfloat_atomicadd(filter, uv_hi, uv_lo);
-                }}
+
+                { (InChannels % BlockSize.x != 0 ? "}" : "") }
+                { (OutChannels % BlockSize.y != 0 ? "}" : "") }
             }}";
 
             this.Kernel = new Kernel(code, "quaternion_kernelproduct_dense");

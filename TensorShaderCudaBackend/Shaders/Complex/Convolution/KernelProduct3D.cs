@@ -91,26 +91,35 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                             float2 uv_hi = ctor_float2(0.0, 0.0), uv_lo = ctor_float2(0.0, 0.0);
 
                             for(unsigned int ox = ox_offset, ix = ox + kx; ox < ox_offset + {BatchPixels} && ox < outwidth; ox++, ix++){{
-                                if(tidx == 0 && outch < {OutChannels}){{
+                                { (OutChannels % BlockSize.y != 0 ? $"if(tidx == 0 && outch < {OutChannels}){{" : "if(tidx == 0){") }
                                     vs[tidy] = outmap[outch + {OutChannels} * (ox + outwidth * (oy + outheight * oz))];
                                 }}
-                                if(tidy == 0 && inch < {InChannels}){{
+                                { (InChannels % BlockSize.x != 0 ? $"if(tidy == 0 && inch < {InChannels}){{" : "if(tidy == 0){") }
                                     us[tidx] = inmap[inch + {InChannels} * (ix + inwidth * (iy + inheight * iz))];
                                 }}
                                 __syncthreads();
 
-                                if(inch < {InChannels} && outch < {OutChannels}){{
+                                { (InChannels % BlockSize.x != 0 ? $"if(inch < {InChannels}){{" : "") }
+                                { (OutChannels % BlockSize.y != 0 ? $"if(outch < {OutChannels}){{" : "") }
+
                                     float2 u = us[tidx];
                                     float2 v = vs[tidy];
 
                                     complex_kernelprod(uv_hi, uv_lo, {(Transpose ? "v, u" : "u, v")});
-                                }}
+
+                                { (InChannels % BlockSize.x != 0 ? "}" : "") }
+                                { (OutChannels % BlockSize.y != 0 ? "}" : "") }
+
                                 __syncthreads();
                             }}
 
-                            if(inch < {InChannels} && outch < {OutChannels}){{
+                            { (InChannels % BlockSize.x != 0 ? $"if(inch < {InChannels}){{" : "") }
+                            { (OutChannels % BlockSize.y != 0 ? $"if(outch < {OutChannels}){{" : "") }
+
                                 floatfloat_atomicadd(filter + filter_index, uv_hi, uv_lo);
-                            }}
+
+                            { (InChannels % BlockSize.x != 0 ? "}" : "") }
+                            { (OutChannels % BlockSize.y != 0 ? "}" : "") }
                         }}
                     }}
                 }}

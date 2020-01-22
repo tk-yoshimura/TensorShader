@@ -55,20 +55,24 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
                 __shared__ float us[{BlockSize.x}], vs[{BlockSize.y}];
 
-                if(tidy == 0 && inch < {InChannels}){{
+                { (InChannels % BlockSize.x != 0 ? $"if(tidy == 0 && inch < {InChannels}){{" : "if(tidy == 0){") }
                     us[tidx] = inmap[inch];
                 }}
-                if(tidx == 0 && outch < {OutChannels}){{
+                { (OutChannels % BlockSize.y != 0 ? $"if(tidx == 0 && outch < {OutChannels}){{" : "if(tidx == 0){") }
                     vs[tidy] = outmap[outch];
                 }}
                 __syncthreads();
 
-                if(inch < {InChannels} && outch < {OutChannels}){{
+                { (InChannels % BlockSize.x != 0 ? $"if(inch < {InChannels}){{" : "") }
+                { (OutChannels % BlockSize.y != 0 ? $"if(outch < {OutChannels}){{" : "") }
+
                     float u = us[tidx];
                     float v = vs[tidy];
 
                     floatfloat_atomicadd(filter, u * v);
-                }}
+
+                { (InChannels % BlockSize.x != 0 ? "}" : "") }
+                { (OutChannels % BlockSize.y != 0 ? "}" : "") }
             }}";
 
             this.Kernel = new Kernel(code, "kernelproduct_dense");

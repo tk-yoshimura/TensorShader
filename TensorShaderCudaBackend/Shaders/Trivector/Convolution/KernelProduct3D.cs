@@ -94,26 +94,35 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
                             float4 gq_hi = ctor_float4(0.0, 0.0, 0.0, 0.0), gq_lo = ctor_float4(0.0, 0.0, 0.0, 0.0);
 
                             for(unsigned int ox = ox_offset, ix = ox + kx; ox < ox_offset + {BatchPixels} && ox < outwidth; ox++, ix++){{
-                                if(tidx == 0 && outch < {OutChannels}){{
+                                { (OutChannels % BlockSize.y != 0 ? $"if(tidx == 0 && outch < {OutChannels}){{" : "if(tidx == 0){") }
                                     vs[tidy] = outmap[outch + {OutChannels} * (ox + outwidth * (oy + outheight * oz))];
                                 }}
-                                if(tidy == 0 && inch < {InChannels}){{
+                                { (InChannels % BlockSize.x != 0 ? $"if(tidy == 0 && inch < {InChannels}){{" : "if(tidy == 0){") }
                                     us[tidx] = inmap[inch + {InChannels} * (ix + inwidth * (iy + inheight * iz))];
                                 }}
                                 __syncthreads();
 
-                                if(inch < {InChannels} && outch < {OutChannels}){{
+                                { (InChannels % BlockSize.x != 0 ? $"if(inch < {InChannels}){{" : "") }
+                                { (OutChannels % BlockSize.y != 0 ? $"if(outch < {OutChannels}){{" : "") }
+
                                     float3 u = us[tidx];
                                     float3 v = vs[tidy];
 
                                     trivector_quaternion_kernelprod(gq_hi, gq_lo, {(Transpose ? "v, u" : "u, v")}, q);
-                                }}
+
+                                { (InChannels % BlockSize.x != 0 ? "}" : "") }
+                                { (OutChannels % BlockSize.y != 0 ? "}" : "") }
+
                                 __syncthreads();
                             }}
 
-                            if(inch < {InChannels} && outch < {OutChannels}){{
+                            { (InChannels % BlockSize.x != 0 ? $"if(inch < {InChannels}){{" : "") }
+                            { (OutChannels % BlockSize.y != 0 ? $"if(outch < {OutChannels}){{" : "") }
+
                                 floatfloat_atomicadd(filter_grad + filter_index * 2, gq_hi, gq_lo);
-                            }}
+
+                            { (InChannels % BlockSize.x != 0 ? "}" : "") }
+                            { (OutChannels % BlockSize.y != 0 ? "}" : "") }
                         }}
                     }}
                 }}
