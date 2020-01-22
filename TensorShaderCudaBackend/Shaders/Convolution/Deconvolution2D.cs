@@ -21,6 +21,9 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
         /// <summary>実行あたりの積数(2^30=1073741824‬)</summary>
         public static ulong MulPerExecute => 0x40000000;
 
+        /// <summary>Xスレッド数</summary>
+        private uint ThreadsX { set; get; }
+
         /// <summary>識別子</summary>
         public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " +
@@ -40,17 +43,19 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             this.KernelWidth = kwidth;
             this.KernelHeight = kheight;
 
+            this.ThreadsX = Kernel.DefaultBlockSize(OutChannels);
+
             string code = $@"
 
             {Defines.FloatFloatAdd}
-            {Defines.StoreSharedMemory("float", InChannels)}
+            {Defines.StoreSharedMemory("float", InChannels, ThreadsX)}
 
             __global__ void deconvolution_2d(float *inmap, float *outmap, float *filter,
                                              unsigned int oy_offset,
                                              unsigned int inwidth, unsigned int outwidth,
                                              unsigned int inheight) {{
 
-                unsigned int outch = {Defines.IndexX}, tid = {Defines.ThreadIdX}, threads = {Defines.ThreadsX};
+                unsigned int outch = {Defines.IndexX}, tid = {Defines.ThreadIdX};
                 unsigned int ox = {Defines.BlockIndexY}, oy = oy_offset + {Defines.BlockIndexZ};
 
                 __shared__ float us[{InChannels}];
@@ -70,9 +75,9 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                         unsigned int filter_idx = outch + {InChannels * OutChannels} *
                                                   (({KernelWidth - 1} - kx) + {KernelWidth} * ({KernelHeight - 1} - ky));
 
-                        store_smem(inmap + inmap_idx, us, tid, threads);
+                        store_smem(inmap + inmap_idx, us, tid);
 
-                        if(outch < {OutChannels}){{
+                        { (OutChannels % ThreadsX != 0 ? $"if(outch < {OutChannels}){{" : "") }
                             for(unsigned int inch = 0; inch < {InChannels}; inch++){{
                                 float u = us[inch];
                                 float v = filter[filter_idx];
@@ -82,16 +87,16 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                                 filter_idx += {OutChannels};
                             }}
 
-                        }}
+                        { (OutChannels % ThreadsX != 0 ? "}" : "") }
                         __syncthreads();
                     }}
                 }}
 
-                if(outch < {OutChannels}){{
+                { (OutChannels % ThreadsX != 0 ? $"if(outch < {OutChannels}){{" : "") }
                     unsigned int outmap_idx = outch + {OutChannels} * (ox + outwidth * oy);
 
                     outmap[outmap_idx] = uv_hi + uv_lo;
-                }}
+                { (OutChannels % ThreadsX != 0 ? "}" : "") }
             }}";
 
             this.Kernel = new Kernel(code, "deconvolution_2d");
@@ -122,7 +127,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
                     Kernel.Execute(
                         indexes: (OutChannels, outwidth, lines),
-                        block: (Kernel.DefaultBlockSize(OutChannels), 1, 1),
+                        block: (ThreadsX, 1, 1),
                         dynamic_shared_memory_bytes: 0,
                         stream,
                         inmap.ElementPtr(th * InChannels * inwidth * inheight),

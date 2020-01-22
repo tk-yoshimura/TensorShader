@@ -18,6 +18,9 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
         /// <summary>実行あたりのポイント数(2^14=16384‬)</summary>
         public static uint PointsPerExecute => 0x4000;
 
+        /// <summary>Xスレッド数</summary>
+        private uint ThreadsX { set; get; }
+
         /// <summary>識別子</summary>
         public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels}";
@@ -31,14 +34,16 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             this.InChannels = inchannels;
             this.OutChannels = outchannels;
 
+            this.ThreadsX = Kernel.DefaultBlockSize(OutChannels);
+
             string code = $@"
 
             {Defines.FloatFloatAdd}
-            {Defines.StoreSharedMemory("float", InChannels)}
+            {Defines.StoreSharedMemory("float", InChannels, ThreadsX)}
 
             __global__ void ptwise_deconvolution(float *inmap, float *outmap, float *filter) {{
 
-                unsigned int outch = {Defines.IndexX}, tid = {Defines.ThreadIdX}, threads = {Defines.ThreadsX};
+                unsigned int outch = {Defines.IndexX}, tid = {Defines.ThreadIdX};
                 unsigned int i = {Defines.BlockIndexY};
 
                 __shared__ float us[{InChannels}];
@@ -47,9 +52,9 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 unsigned int inmap_idx = {InChannels} * i;
                 unsigned int filter_idx = outch;
 
-                store_smem(inmap + inmap_idx, us, tid, threads);
+                store_smem(inmap + inmap_idx, us, tid);
 
-                if(outch < {OutChannels}){{
+                { (OutChannels % ThreadsX != 0 ? $"if(outch < {OutChannels}){{" : "") }
                     for(unsigned int inch = 0; inch < {InChannels}; inch++){{
                         float u = us[inch];
                         float v = filter[filter_idx];
@@ -62,7 +67,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                     unsigned int outmap_idx = outch + {OutChannels} * i;
 
                     outmap[outmap_idx] = uv_hi + uv_lo;
-                }}
+                { (OutChannels % ThreadsX != 0 ? "}" : "") }
             }}";
 
             this.Kernel = new Kernel(code, "ptwise_deconvolution");
@@ -87,7 +92,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
                 Kernel.Execute(
                     indexes: (OutChannels, pl),
-                    block: (Kernel.DefaultBlockSize(OutChannels), 1),
+                    block: (ThreadsX, 1),
                     dynamic_shared_memory_bytes: 0,
                     stream,
                     inmap.ElementPtr(p * InChannels),

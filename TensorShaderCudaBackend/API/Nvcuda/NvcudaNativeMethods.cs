@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace TensorShaderCudaBackend.API {
     using CUresult = Nvcuda.ResultCode;
+    using CUfunc_cache = Nvcuda.FuncCache;
     using size_t = Int64;
 
     public static partial class Nvcuda {
@@ -35,6 +36,9 @@ namespace TensorShaderCudaBackend.API {
 
             [DllImport(DllName, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
             public static extern CUresult cuModuleGetGlobal_v2(ref IntPtr dptr, ref size_t bytes, IntPtr hmod, string name);
+
+            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+            public static extern CUresult cuCtxSetCacheConfig(CUfunc_cache config);
 
             [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
             public static extern CUresult cuGetErrorString(CUresult error, ref IntPtr pStr);

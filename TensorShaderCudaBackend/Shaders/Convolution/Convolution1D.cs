@@ -17,6 +17,9 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
         /// <summary>フィルタサイズ</summary>
         public uint KernelWidth { private set; get; }
 
+        /// <summary>Xスレッド数</summary>
+        private uint ThreadsX { set; get; }
+
         /// <summary>識別子</summary>
         public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " +
@@ -35,14 +38,16 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             this.OutChannels = outchannels;
             this.KernelWidth = kwidth;
 
+            this.ThreadsX = Kernel.DefaultBlockSize(OutChannels);
+
             string code = $@"
 
             {Defines.FloatFloatAdd}
-            {Defines.StoreSharedMemory("float", InChannels)}
+            {Defines.StoreSharedMemory("float", InChannels, ThreadsX)}
 
             __global__ void convolution_1d(float *inmap, float *outmap, float *filter) {{
 
-                unsigned int outch = {Defines.IndexX}, tid = {Defines.ThreadIdX}, threads = {Defines.ThreadsX};
+                unsigned int outch = {Defines.IndexX}, tid = {Defines.ThreadIdX};
                 unsigned int ox = {Defines.BlockIndexY};
 
                 __shared__ float us[{InChannels}];
@@ -53,9 +58,9 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                     unsigned int inmap_idx = {InChannels} * ix;
                     unsigned int filter_idx = outch + {InChannels * OutChannels} * kx;
 
-                    store_smem(inmap + inmap_idx, us, tid, threads);
+                    store_smem(inmap + inmap_idx, us, tid);
 
-                    if(outch < {OutChannels}){{
+                    { (OutChannels % ThreadsX != 0 ? $"if(outch < {OutChannels}){{" : "") }
                         for(unsigned int inch = 0; inch < {InChannels}; inch++){{
                             float u = us[inch];
                             float v = filter[filter_idx];
@@ -65,15 +70,15 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                             filter_idx += {OutChannels};
                         }}
 
-                    }}
+                    { (OutChannels % ThreadsX != 0 ? "}" : "") }
                     __syncthreads();
                 }}
 
-                if(outch < {OutChannels}){{
+                { (OutChannels % ThreadsX != 0 ? $"if(outch < {OutChannels}){{" : "") }
                     unsigned int outmap_idx = outch + {OutChannels} * ox;
 
                     outmap[outmap_idx] = uv_hi + uv_lo;
-                }}
+                { (OutChannels % ThreadsX != 0 ? "}" : "") }
             }}";
 
             this.Kernel = new Kernel(code, "convolution_1d");
@@ -100,7 +105,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             for (uint th = 0; th < batches; th++) {
                 Kernel.Execute(
                     indexes: (OutChannels, outwidth),
-                    block: (Kernel.DefaultBlockSize(OutChannels), 1),
+                    block: (ThreadsX, 1),
                     dynamic_shared_memory_bytes: 0,
                     stream,
                     inmap.ElementPtr(th * InChannels * inwidth),

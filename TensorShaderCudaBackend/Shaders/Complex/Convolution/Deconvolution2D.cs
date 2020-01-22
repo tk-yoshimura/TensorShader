@@ -24,6 +24,9 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
         /// <summary>実行あたりの積数(2^30=1073741824‬)</summary>
         public static ulong MulPerExecute => 0x40000000;
 
+        /// <summary>Xスレッド数</summary>
+        private uint ThreadsX { set; get; }
+
         /// <summary>識別子</summary>
         public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " +
@@ -44,6 +47,8 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             this.KernelHeight = kheight;
             this.GradMode = gradmode;
 
+            this.ThreadsX = Kernel.DefaultBlockSize(OutChannels);
+
             string code = $@"
 
             {Defines.CtorFloat2}
@@ -51,14 +56,14 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             {Defines.FloatFloatSub}
             {Defines.Complex.Mul}
             {Defines.Complex.MulGrad}
-            {Defines.StoreSharedMemory("float2", InChannels)}
+            {Defines.StoreSharedMemory("float2", InChannels, ThreadsX)}
 
             __global__ void complex_deconvolution_2d(float2 *inmap, float2 *outmap, float2 *filter,
                                                      unsigned int oy_offset,
                                                      unsigned int inwidth, unsigned int outwidth,
                                                      unsigned int inheight) {{
 
-                unsigned int outch = {Defines.IndexX}, tid = {Defines.ThreadIdX}, threads = {Defines.ThreadsX};
+                unsigned int outch = {Defines.IndexX}, tid = {Defines.ThreadIdX};
                 unsigned int ox = {Defines.BlockIndexY}, oy = oy_offset + {Defines.BlockIndexZ};
 
                 __shared__ float2 us[{InChannels}];
@@ -78,9 +83,9 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                         unsigned int filter_idx = outch + {InChannels * OutChannels} *
                                                   (({KernelWidth - 1} - kx) + {KernelWidth} * ({KernelHeight - 1} - ky));
 
-                        store_smem(inmap + inmap_idx, us, tid, threads);
+                        store_smem(inmap + inmap_idx, us, tid);
 
-                        if(outch < {OutChannels}){{
+                        { (OutChannels % ThreadsX != 0 ? $"if(outch < {OutChannels}){{" : "") }
                             for(unsigned int inch = 0; inch < {InChannels}; inch++){{
                                 float2 u = us[inch];
                                 float2 v = filter[filter_idx];
@@ -90,16 +95,16 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                                 filter_idx += {OutChannels};
                             }}
 
-                        }}
+                        { (OutChannels % ThreadsX != 0 ? "}" : "") }
                         __syncthreads();
                     }}
                 }}
 
-                if(outch < {OutChannels}){{
+                { (OutChannels % ThreadsX != 0 ? $"if(outch < {OutChannels}){{" : "") }
                     unsigned int outmap_idx = outch + {OutChannels} * (ox + outwidth * oy);
 
                     outmap[outmap_idx] = ctor_float2(uv_hi.x + uv_lo.x, uv_hi.y + uv_lo.y);
-                }}
+                { (OutChannels % ThreadsX != 0 ? "}" : "") }
             }}";
 
             this.Kernel = new Kernel(code, "complex_deconvolution_2d");
@@ -130,7 +135,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
 
                     Kernel.Execute(
                         indexes: (OutChannels, outwidth, lines),
-                        block: (Kernel.DefaultBlockSize(OutChannels), 1, 1),
+                        block: (ThreadsX, 1, 1),
                         dynamic_shared_memory_bytes: 0,
                         stream,
                         inmap.ElementPtr(th * InChannels * inwidth * inheight * 2),

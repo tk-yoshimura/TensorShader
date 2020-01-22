@@ -29,6 +29,9 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
         /// <summary>実行あたりの積数(2^30=1073741824‬)</summary>
         public static ulong MulPerExecute => 0x40000000;
 
+        /// <summary>Xスレッド数</summary>
+        private uint ThreadsX { set; get; }
+
         /// <summary>識別子</summary>
         public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " +
@@ -51,6 +54,8 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             this.KernelDepth = kdepth;
             this.GradMode = gradmode;
 
+            this.ThreadsX = Kernel.DefaultBlockSize(OutChannels);
+
             string code = $@"
 
             {Defines.CtorFloat4}
@@ -58,14 +63,14 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             {Defines.FloatFloatSub}
             {Defines.Quaternion.Mul}
             {Defines.Quaternion.MulGrad}
-            {Defines.StoreSharedMemory("float4", InChannels)}
+            {Defines.StoreSharedMemory("float4", InChannels, ThreadsX)}
 
             __global__ void quaternion_convolution_3d(float4 *inmap, float4 *outmap, float4 *filter,
                                                       unsigned int oy_offset, unsigned int oz,
                                                       unsigned int inwidth, unsigned int outwidth,
                                                       unsigned int inheight, unsigned int outheight) {{
 
-                unsigned int outch = {Defines.IndexX}, tid = {Defines.ThreadIdX}, threads = {Defines.ThreadsX};
+                unsigned int outch = {Defines.IndexX}, tid = {Defines.ThreadIdX};
                 unsigned int ox = {Defines.BlockIndexY}, oy = oy_offset + {Defines.BlockIndexZ};
 
                 __shared__ float4 us[{InChannels}];
@@ -78,9 +83,9 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
                             unsigned int inmap_idx = {InChannels} * (ix + inwidth * (iy + inheight * iz));
                             unsigned int filter_idx = outch + {InChannels * OutChannels} * (kx + {KernelWidth} * (ky + {KernelHeight} * kz));
 
-                            store_smem(inmap + inmap_idx, us, tid, threads);
+                            store_smem(inmap + inmap_idx, us, tid);
 
-                            if(outch < {OutChannels}){{
+                            { (OutChannels % ThreadsX != 0 ? $"if(outch < {OutChannels}){{" : "") }
                                 for(unsigned int inch = 0; inch < {InChannels}; inch++){{
                                     float4 u = us[inch];
                                     float4 v = filter[filter_idx];
@@ -90,17 +95,17 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
                                     filter_idx += {OutChannels};
                                 }}
 
-                            }}
+                            { (OutChannels % ThreadsX != 0 ? "}" : "") }
                             __syncthreads();
                         }}
                     }}
                 }}
 
-                if(outch < {OutChannels}){{
+                { (OutChannels % ThreadsX != 0 ? $"if(outch < {OutChannels}){{" : "") }
                     unsigned int outmap_idx = outch + {OutChannels} * (ox + outwidth * (oy + outheight * oz));
 
                     outmap[outmap_idx] = ctor_float4(uv_hi.x + uv_lo.x, uv_hi.y + uv_lo.y, uv_hi.z + uv_lo.z, uv_hi.w + uv_lo.w);
-                }}
+                { (OutChannels % ThreadsX != 0 ? "}" : "") }
             }}";
 
             this.Kernel = new Kernel(code, "quaternion_convolution_3d");
@@ -139,7 +144,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
 
                         Kernel.Execute(
                             indexes: (OutChannels, outwidth, lines),
-                            block: (Kernel.DefaultBlockSize(OutChannels), 1, 1),
+                            block: (ThreadsX, 1, 1),
                             dynamic_shared_memory_bytes: 0, stream,
                             inmap.ElementPtr(th * InChannels * inwidth * inheight * indepth * 4),
                             outmap.ElementPtr(th * OutChannels * outwidth * outheight * outdepth * 4),

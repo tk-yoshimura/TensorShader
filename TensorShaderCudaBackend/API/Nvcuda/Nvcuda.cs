@@ -19,6 +19,9 @@ namespace TensorShaderCudaBackend.API {
             IntPtr ptr = Cuda.Memory.Allocate<int>(4);
             Cuda.Memory.Free(ref ptr);
 
+            /* キャッシュ配分比変更 */
+            SetCacheConfig(FuncCache.PreferL1);
+
             initialized = true;
         }
 
@@ -73,6 +76,14 @@ namespace TensorShaderCudaBackend.API {
             }
 
             return (ptr, size);
+        }
+
+        /// <summary>共有メモリ/L1キャッシュ配分比を変更</summary>
+        internal static void SetCacheConfig(FuncCache func_cache) { 
+            ResultCode result = NativeMethods.cuCtxSetCacheConfig(func_cache);
+            if (result != ResultCode.Success) {
+                throw new CudaException(result);
+            }
         }
 
         /// <summary>カーネルを実行</summary>

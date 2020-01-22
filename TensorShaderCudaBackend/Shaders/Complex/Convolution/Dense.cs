@@ -17,6 +17,9 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
         /// <summary>勾配</summary>
         public bool GradMode { private set; get; }
 
+        /// <summary>Xスレッド数</summary>
+        private uint ThreadsX { set; get; }
+
         /// <summary>識別子</summary>
         public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " +
@@ -32,6 +35,8 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             this.OutChannels = outchannels / 2;
             this.GradMode = gradmode;
 
+            this.ThreadsX = Kernel.DefaultBlockSize(OutChannels);
+
             string code = $@"
 
             {Defines.CtorFloat2}
@@ -39,12 +44,12 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             {Defines.FloatFloatSub}
             {Defines.Complex.Mul}
             {Defines.Complex.MulGrad}
-            {Defines.StoreSharedMemory("float2", InChannels)}
+            {Defines.StoreSharedMemory("float2", InChannels, ThreadsX)}
 
             __global__ void complex_dense(float2 *inmap, float2 *outmap, float2 *filter) {{
 
                 unsigned int outch = {Defines.IndexX}, th = {Defines.BlockIndexY};
-                unsigned int tid = {Defines.ThreadIdX}, threads = {Defines.ThreadsX};
+                unsigned int tid = {Defines.ThreadIdX};
 
                 unsigned int inmap_offset = {InChannels} * th;
                 inmap += inmap_offset;
@@ -57,9 +62,9 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
 
                 unsigned int filter_idx = outch;
 
-                store_smem(inmap, us, tid, threads);
+                store_smem(inmap, us, tid);
 
-                if(outch < {OutChannels}){{
+                { (OutChannels % ThreadsX != 0 ? $"if(outch < {OutChannels}){{" : "") }
                     for(unsigned int inch = 0; inch < {InChannels}; inch++){{
                         float2 u = us[inch];
                         float2 v = filter[filter_idx];
@@ -68,9 +73,9 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
 
                         filter_idx += {OutChannels};
                     }}
-
                     outmap[outch] = ctor_float2(vu_hi.x + vu_lo.x, vu_hi.y + vu_lo.y);
-                }}
+
+                { (OutChannels % ThreadsX != 0 ? "}" : "") }
             }}";
 
             this.Kernel = new Kernel(code, "complex_dense");
@@ -93,7 +98,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
 
             Kernel.Execute(
                 indexes: (OutChannels, batches),
-                block: (Kernel.DefaultBlockSize(OutChannels), 1),
+                block: (ThreadsX, 1),
                 dynamic_shared_memory_bytes: 0, stream,
                 inmap,
                 outmap,

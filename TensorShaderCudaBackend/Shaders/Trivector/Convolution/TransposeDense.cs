@@ -15,6 +15,9 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
         /// <summary>勾配</summary>
         public bool GradMode { private set; get; }
 
+        /// <summary>Xスレッド数</summary>
+        private uint ThreadsX { set; get; }
+
         /// <summary>識別子</summary>
         public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " +
@@ -30,18 +33,20 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
             this.OutChannels = outchannels / 3;
             this.GradMode = gradmode;
 
+            this.ThreadsX = Kernel.DefaultBlockSize(OutChannels);
+
             string code = $@"
 
             {Defines.CtorFloat3}
             {Defines.FloatFloatAdd}
             {Defines.Trivector.Mul}
             {Defines.Trivector.MulGrad}
-            {Defines.StoreSharedMemory("float3", InChannels)}
+            {Defines.StoreSharedMemory("float3", InChannels, ThreadsX)}
 
             __global__ void trivector_transpose_dense(float3 *inmap, float3 *outmap, float4 *filter) {{
 
                 unsigned int outch = {Defines.IndexX}, th = {Defines.BlockIndexY};
-                unsigned int tid = {Defines.ThreadIdX}, threads = {Defines.ThreadsX};
+                unsigned int tid = {Defines.ThreadIdX};
 
                 unsigned int inmap_offset = {InChannels} * th;
                 inmap += inmap_offset;
@@ -54,9 +59,9 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
 
                 unsigned int filter_idx = outch;
 
-                store_smem(inmap, vs, tid, threads);
+                store_smem(inmap, vs, tid);
 
-                if(outch < {OutChannels}){{
+                { (OutChannels % ThreadsX != 0 ? $"if(outch < {OutChannels}){{" : "") }
                     for(unsigned int inch = 0; inch < {InChannels}; inch++){{
                         float3 v = vs[inch];
                         float4 q = filter[filter_idx];
@@ -67,7 +72,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
                     }}
 
                     outmap[outch] = ctor_float3(vq_hi.x + vq_lo.x, vq_hi.y + vq_lo.y, vq_hi.z + vq_lo.z);
-                }}
+                { (OutChannels % ThreadsX != 0 ? "}" : "") }
             }}";
 
             this.Kernel = new Kernel(code, "trivector_transpose_dense");
@@ -85,7 +90,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
 
             Kernel.Execute(
                 indexes: (OutChannels, batches),
-                block: (Kernel.DefaultBlockSize(OutChannels), 1),
+                block: (ThreadsX, 1),
                 dynamic_shared_memory_bytes: 0,
                 stream,
                 inmap,

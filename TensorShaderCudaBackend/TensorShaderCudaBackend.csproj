@@ -123,6 +123,7 @@
     <Compile Include="API\Cuda\CudaOutputMode.cs" />
     <Compile Include="API\Cuda\CudaMemory.cs" />
     <Compile Include="API\Cuda\CudaProfiler.cs" />
+    <Compile Include="API\Nvcuda\NvcudaFuncCache.cs" />
     <Compile Include="CudaArray.cs" />
     <Compile Include="API\Nvcuda\NvcudaResult.cs" />
     <Compile Include="API\Nvcuda\NvcudaNativeMethods.cs" />

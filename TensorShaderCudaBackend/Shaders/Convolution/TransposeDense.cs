@@ -12,6 +12,9 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
         /// <summary>出力チャネル数</summary>
         public uint OutChannels { private set; get; }
 
+        /// <summary>Xスレッド数</summary>
+        private uint ThreadsX { set; get; }
+
         /// <summary>識別子</summary>
         public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels}";
@@ -25,15 +28,17 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             this.InChannels = inchannels;
             this.OutChannels = outchannels;
 
+            this.ThreadsX = Kernel.DefaultBlockSize(OutChannels);
+
             string code = $@"
 
             {Defines.FloatFloatAdd}
-            {Defines.StoreSharedMemory("float", InChannels)}
+            {Defines.StoreSharedMemory("float", InChannels, ThreadsX)}
 
             __global__ void transpose_dense(float *inmap, float *outmap, float *filter) {{
 
                 unsigned int outch = {Defines.IndexX}, th = {Defines.BlockIndexY};
-                unsigned int tid = {Defines.ThreadIdX}, threads = {Defines.ThreadsX};
+                unsigned int tid = {Defines.ThreadIdX};
 
                 unsigned int inmap_offset = {InChannels} * th;
                 inmap += inmap_offset;
@@ -46,9 +51,9 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
                 unsigned int filter_idx = outch;
 
-                store_smem(inmap, us, tid, threads);
+                store_smem(inmap, us, tid);
 
-                if(outch < {OutChannels}){{
+                { (OutChannels % ThreadsX != 0 ? $"if(outch < {OutChannels}){{" : "") }
 
                     for(unsigned int inch = 0; inch < {InChannels}; inch++){{
                         float u = us[inch];
@@ -60,7 +65,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                     }}
 
                     outmap[outch] = uv_hi + uv_lo;
-                }}
+                { (OutChannels % ThreadsX != 0 ? "}" : "") }
             }}";
 
             this.Kernel = new Kernel(code, "transpose_dense");
@@ -78,7 +83,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             Kernel.Execute(
                 indexes: (OutChannels, batches),
-                block: (Kernel.DefaultBlockSize(OutChannels), 1),
+                block: (ThreadsX, 1),
                 dynamic_shared_memory_bytes: 0, stream,
                 inmap,
                 outmap,

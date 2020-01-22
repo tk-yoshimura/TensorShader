@@ -17,6 +17,9 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
         /// <summary>勾配</summary>
         public bool GradMode { private set; get; }
 
+        /// <summary>Xスレッド数</summary>
+        private uint ThreadsX { set; get; }
+
         /// <summary>識別子</summary>
         public override sealed string Signature =>
             $"{GetType().Name.Split(',').Last()} {nameof(InChannels)} = {InChannels} {nameof(OutChannels)} = {OutChannels} " +
@@ -32,6 +35,8 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             this.OutChannels = outchannels / 4;
             this.GradMode = gradmode;
 
+            this.ThreadsX = Kernel.DefaultBlockSize(OutChannels);
+
             string code = $@"
 
             {Defines.CtorFloat4}
@@ -39,12 +44,12 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             {Defines.FloatFloatSub}
             {Defines.Quaternion.Mul}
             {Defines.Quaternion.MulGrad}
-            {Defines.StoreSharedMemory("float4", InChannels)}
+            {Defines.StoreSharedMemory("float4", InChannels, ThreadsX)}
 
             __global__ void quaternion_dense(float4 *inmap, float4 *outmap, float4 *filter) {{
 
                 unsigned int outch = {Defines.IndexX}, th = {Defines.BlockIndexY};
-                unsigned int tid = {Defines.ThreadIdX}, threads = {Defines.ThreadsX};
+                unsigned int tid = {Defines.ThreadIdX};
 
                 unsigned int inmap_offset = {InChannels} * th;
                 inmap += inmap_offset;
@@ -57,9 +62,9 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
 
                 unsigned int filter_idx = outch;
 
-                store_smem(inmap, us, tid, threads);
+                store_smem(inmap, us, tid);
 
-                if(outch < {OutChannels}){{
+                { (OutChannels % ThreadsX != 0 ? $"if(outch < {OutChannels}){{" : "") }
                     for(unsigned int inch = 0; inch < {InChannels}; inch++){{
                         float4 u = us[inch];
                         float4 v = filter[filter_idx];
@@ -70,7 +75,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
                     }}
 
                     outmap[outch] = ctor_float4(uv_hi.x + uv_lo.x, uv_hi.y + uv_lo.y, uv_hi.z + uv_lo.z, uv_hi.w + uv_lo.w);
-                }}
+                { (OutChannels % ThreadsX != 0 ? "}" : "") }
             }}";
 
             this.Kernel = new Kernel(code, "quaternion_dense");
@@ -93,7 +98,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
 
             Kernel.Execute(
                 indexes: (OutChannels, batches),
-                block: (Kernel.DefaultBlockSize(OutChannels), 1),
+                block: (ThreadsX, 1),
                 dynamic_shared_memory_bytes: 0, stream,
                 inmap,
                 outmap,

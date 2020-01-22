@@ -1,4 +1,6 @@
-﻿namespace TensorShaderCudaBackend {
+﻿using System.Linq;
+
+namespace TensorShaderCudaBackend {
 
     /// <summary>コンピュートシェーダー</summary>
     public abstract partial class Shader {
@@ -83,14 +85,50 @@
             }}";
 
             /// <summary>シェアードメモリへ格納</summary>
-            public static string StoreSharedMemory(string elem, uint length) => 
-            $@"
-            static __inline__ __device__ void store_smem({elem} *ptr, {elem} *smem, unsigned int thread_idx, unsigned int threads){{
-                for(unsigned int i = thread_idx; i < {length}; i += threads){{
-                    smem[i] = ptr[i];
-                }}
-                __syncthreads();
-            }}";
+            public static string StoreSharedMemory(string elem, uint length, uint threads){
+                if(threads > length){
+                        return $@"
+                        static __inline__ __device__ void store_smem({elem} *ptr, {elem} *smem, unsigned int thread_idx){{
+                            if(thread_idx < {length}) smem[thread_idx] = ptr[thread_idx];
+                            __syncthreads();
+                        }}";
+                } 
+                else if(threads == length){ 
+                        return $@"
+                        static __inline__ __device__ void store_smem({elem} *ptr, {elem} *smem, unsigned int thread_idx){{
+                            smem[thread_idx] = ptr[thread_idx];
+                            __syncthreads();
+                        }}";
+                }
+                else if(threads * 8 >= length){
+                    if(length % threads == 0) { 
+                        return $@"
+                        static __inline__ __device__ void store_smem({elem} *ptr, {elem} *smem, unsigned int thread_idx){{
+                            unsigned int i = thread_idx;
+                            { string.Join(" ", Enumerable.Repeat($"smem[i] = ptr[i]; i += {threads};", (int)(length / threads))) }
+                            __syncthreads();
+                        }}";
+                    }
+                    else { 
+                        return $@"
+                        static __inline__ __device__ void store_smem({elem} *ptr, {elem} *smem, unsigned int thread_idx){{
+                            unsigned int i = thread_idx;
+                            { string.Join(" ", Enumerable.Repeat($"smem[i] = ptr[i]; i += {threads};", (int)(length / threads))) }
+                            if(i < {length}) smem[i] = ptr[i];
+                            __syncthreads();
+                        }}";
+                    }
+                }
+                else{
+                        return $@"
+                        static __inline__ __device__ void store_smem({elem} *ptr, {elem} *smem, unsigned int thread_idx){{ 
+                            for(unsigned int i = thread_idx; i < {length}; i += {threads}){{
+                                smem[i] = ptr[i];
+                            }}
+                            __syncthreads();
+                        }}";
+                }
+            }
 
             /// <summary>複素数</summary>
             public static class Complex {
