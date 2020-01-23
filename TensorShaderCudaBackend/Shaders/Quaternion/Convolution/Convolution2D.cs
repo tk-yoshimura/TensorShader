@@ -56,6 +56,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             {Defines.CtorFloat4}
             {Defines.FloatFloatAdd}
             {Defines.FloatFloatSub}
+            {Defines.FloatFloatHiLoAdd}
             {Defines.Quaternion.Mul}
             {Defines.Quaternion.MulGrad}
             {Defines.StoreSharedMemory("float4", InChannels, ThreadsX)}

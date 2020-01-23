@@ -66,6 +66,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             {Defines.CtorFloat2}
             {Defines.FloatFloatAdd}
             {Defines.FloatFloatSub}
+            {Defines.FloatFloatHiLoAdd}
             {Defines.Complex.KernelProd}
             {Defines.Complex.AtomicAdd}
 

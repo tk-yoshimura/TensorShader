@@ -49,6 +49,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             {Defines.CtorFloat2}
             {Defines.FloatFloatAdd}
             {Defines.FloatFloatSub}
+            {Defines.FloatFloatHiLoAdd}
             {Defines.Complex.Mul}
             {Defines.Complex.MulGrad}
             {Defines.StoreSharedMemory("float2", InChannels, ThreadsX)}

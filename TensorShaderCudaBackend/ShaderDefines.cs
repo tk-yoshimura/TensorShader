@@ -55,6 +55,15 @@ namespace TensorShaderCudaBackend {
                 lo -= val + (hi - tmp);
             }}";
 
+            /// <summary>FloatFloat加算</summary>
+            public static string FloatFloatHiLoAdd =>
+            $@"
+            static __inline__ __device__ void floatfloat_hilo_add(float &hi, float &lo, float val_hi, float val_lo){{
+                float tmp = hi;
+                hi += val_hi;
+                lo += val_lo + (val_hi - (hi - tmp));
+            }}";
+
             /// <summary>Float2コンストラクタ</summary>
             public static string CtorFloat2 =>
             $@"
@@ -136,30 +145,45 @@ namespace TensorShaderCudaBackend {
                 public static string KernelProd =>
                 $@"
                 static __inline__ __device__ void complex_kernelprod(float2 &hi, float2 &lo, float2 x1, float2 x2){{
-                    floatfloat_add(hi.x, lo.x, x1.x * x2.x);
-                    floatfloat_add(hi.x, lo.x, x1.y * x2.y);
-                    floatfloat_sub(hi.y, lo.y, x1.y * x2.x);
-                    floatfloat_add(hi.y, lo.y, x1.x * x2.y);
+                    float val_hi, val_lo;
+
+                    val_hi = x1.x * x2.x; val_lo = 0.0;
+                    floatfloat_add(val_hi, val_lo, x1.y * x2.y);
+                    floatfloat_hilo_add(hi.x, lo.x, val_hi, val_lo);
+
+                    val_hi = -x1.y * x2.x; val_lo = 0.0;
+                    floatfloat_add(val_hi, val_lo, x1.x * x2.y);
+                    floatfloat_hilo_add(hi.y, lo.y, val_hi, val_lo);
                 }}";
 
                 /// <summary>積</summary>
                 public static string Mul =>
                 $@"
                 static __inline__ __device__ void complex_mul(float2 &hi, float2 &lo, float2 x1, float2 x2){{
-                    floatfloat_add(hi.x, lo.x, x1.x * x2.x);
-                    floatfloat_sub(hi.x, lo.x, x1.y * x2.y);
-                    floatfloat_add(hi.y, lo.y, x1.x * x2.y);
-                    floatfloat_add(hi.y, lo.y, x1.y * x2.x);
+                    float val_hi, val_lo;
+                    
+                    val_hi = x1.x * x2.x; val_lo = 0.0;
+                    floatfloat_sub(val_hi, val_lo, x1.y * x2.y);
+                    floatfloat_hilo_add(hi.x, lo.x, val_hi, val_lo);
+
+                    val_hi = x1.x * x2.y; val_lo = 0.0;
+                    floatfloat_add(val_hi, val_lo, x1.y * x2.x);
+                    floatfloat_hilo_add(hi.y, lo.y, val_hi, val_lo);
                 }}";
 
                 /// <summary>積勾配</summary>
                 public static string MulGrad =>
                 $@"
                 static __inline__ __device__ void complex_mulgrad(float2 &hi, float2 &lo, float2 x1, float2 x2){{
-                    floatfloat_add(hi.x, lo.x, x1.x * x2.x);
-                    floatfloat_add(hi.x, lo.x, x1.y * x2.y);
-                    floatfloat_add(hi.y, lo.y, x1.y * x2.x);
-                    floatfloat_sub(hi.y, lo.y, x1.x * x2.y);
+                    float val_hi, val_lo;
+
+                    val_hi = x1.x * x2.x; val_lo = 0.0;
+                    floatfloat_add(val_hi, val_lo, x1.y * x2.y);
+                    floatfloat_hilo_add(hi.x, lo.x, val_hi, val_lo);
+
+                    val_hi = x1.y * x2.x; val_lo = 0.0;
+                    floatfloat_sub(val_hi, val_lo, x1.x * x2.y);
+                    floatfloat_hilo_add(hi.y, lo.y, val_hi, val_lo);
                 }}";
 
                 /// <summary>原子性保証加算</summary>
@@ -181,75 +205,93 @@ namespace TensorShaderCudaBackend {
                 public static string KernelProd =>
                 $@"
                 static __inline__ __device__ void quaternion_kernelprod(float4 &hi, float4 &lo, float4 x1, float4 x2){{
-                    floatfloat_add(hi.x, lo.x, x1.x * x2.x);
-                    floatfloat_add(hi.x, lo.x, x1.y * x2.y);
-                    floatfloat_add(hi.x, lo.x, x1.z * x2.z);
-                    floatfloat_add(hi.x, lo.x, x1.w * x2.w);
+                    float val_hi, val_lo;
 
-                    floatfloat_add(hi.y, lo.y, x1.x * x2.y);
-                    floatfloat_sub(hi.y, lo.y, x1.y * x2.x);
-                    floatfloat_sub(hi.y, lo.y, x1.z * x2.w);
-                    floatfloat_add(hi.y, lo.y, x1.w * x2.z);
+                    val_hi = x1.x * x2.x; val_lo = 0.0;
+                    floatfloat_add(val_hi, val_lo, x1.y * x2.y);
+                    floatfloat_add(val_hi, val_lo, x1.z * x2.z);
+                    floatfloat_add(val_hi, val_lo, x1.w * x2.w);
+                    floatfloat_hilo_add(hi.x, lo.x, val_hi, val_lo);
 
-                    floatfloat_add(hi.z, lo.z, x1.x * x2.z);
-                    floatfloat_add(hi.z, lo.z, x1.y * x2.w);
-                    floatfloat_sub(hi.z, lo.z, x1.z * x2.x);
-                    floatfloat_sub(hi.z, lo.z, x1.w * x2.y);
+                    val_hi = x1.x * x2.y; val_lo = 0.0;
+                    floatfloat_sub(val_hi, val_lo, x1.y * x2.x);
+                    floatfloat_sub(val_hi, val_lo, x1.z * x2.w);
+                    floatfloat_add(val_hi, val_lo, x1.w * x2.z);
+                    floatfloat_hilo_add(hi.y, lo.y, val_hi, val_lo);
 
-                    floatfloat_add(hi.w, lo.w, x1.x * x2.w);
-                    floatfloat_sub(hi.w, lo.w, x1.y * x2.z);
-                    floatfloat_add(hi.w, lo.w, x1.z * x2.y);
-                    floatfloat_sub(hi.w, lo.w, x1.w * x2.x);
+                    val_hi = x1.x * x2.z; val_lo = 0.0;
+                    floatfloat_add(val_hi, val_lo, x1.y * x2.w);
+                    floatfloat_sub(val_hi, val_lo, x1.z * x2.x);
+                    floatfloat_sub(val_hi, val_lo, x1.w * x2.y);
+                    floatfloat_hilo_add(hi.z, lo.z, val_hi, val_lo);
+
+                    val_hi = x1.x * x2.w; val_lo = 0.0;
+                    floatfloat_sub(val_hi, val_lo, x1.y * x2.z);
+                    floatfloat_add(val_hi, val_lo, x1.z * x2.y);
+                    floatfloat_sub(val_hi, val_lo, x1.w * x2.x);
+                    floatfloat_hilo_add(hi.w, lo.w, val_hi, val_lo);
                 }}";
 
                 /// <summary>積</summary>
                 public static string Mul =>
                 $@"
                 static __inline__ __device__ void quaternion_mul(float4 &hi, float4 &lo, float4 x1, float4 x2){{
-                    floatfloat_add(hi.x, lo.x, x1.x * x2.x);
-                    floatfloat_sub(hi.x, lo.x, x1.y * x2.y);
-                    floatfloat_sub(hi.x, lo.x, x1.z * x2.z);
-                    floatfloat_sub(hi.x, lo.x, x1.w * x2.w);
+                    float val_hi, val_lo;
 
-                    floatfloat_add(hi.y, lo.y, x1.x * x2.y);
-                    floatfloat_add(hi.y, lo.y, x1.y * x2.x);
-                    floatfloat_add(hi.y, lo.y, x1.z * x2.w);
-                    floatfloat_sub(hi.y, lo.y, x1.w * x2.z);
+                    val_hi = x1.x * x2.x; val_lo = 0.0;
+                    floatfloat_sub(val_hi, val_lo, x1.y * x2.y);
+                    floatfloat_sub(val_hi, val_lo, x1.z * x2.z);
+                    floatfloat_sub(val_hi, val_lo, x1.w * x2.w);
+                    floatfloat_hilo_add(hi.x, lo.x, val_hi, val_lo);
 
-                    floatfloat_add(hi.z, lo.z, x1.x * x2.z);
-                    floatfloat_sub(hi.z, lo.z, x1.y * x2.w);
-                    floatfloat_add(hi.z, lo.z, x1.z * x2.x);
-                    floatfloat_add(hi.z, lo.z, x1.w * x2.y);
+                    val_hi = x1.x * x2.y; val_lo = 0.0;
+                    floatfloat_add(val_hi, val_lo, x1.y * x2.x);
+                    floatfloat_add(val_hi, val_lo, x1.z * x2.w);
+                    floatfloat_sub(val_hi, val_lo, x1.w * x2.z);
+                    floatfloat_hilo_add(hi.y, lo.y, val_hi, val_lo);
 
-                    floatfloat_add(hi.w, lo.w, x1.x * x2.w);
-                    floatfloat_add(hi.w, lo.w, x1.y * x2.z);
-                    floatfloat_sub(hi.w, lo.w, x1.z * x2.y);
-                    floatfloat_add(hi.w, lo.w, x1.w * x2.x);
+                    val_hi = x1.x * x2.z; val_lo = 0.0;
+                    floatfloat_sub(val_hi, val_lo, x1.y * x2.w);
+                    floatfloat_add(val_hi, val_lo, x1.z * x2.x);
+                    floatfloat_add(val_hi, val_lo, x1.w * x2.y);
+                    floatfloat_hilo_add(hi.z, lo.z, val_hi, val_lo);
+
+                    val_hi = x1.x * x2.w; val_lo = 0.0;
+                    floatfloat_add(val_hi, val_lo, x1.y * x2.z);
+                    floatfloat_sub(val_hi, val_lo, x1.z * x2.y);
+                    floatfloat_add(val_hi, val_lo, x1.w * x2.x);
+                    floatfloat_hilo_add(hi.w, lo.w, val_hi, val_lo);
                 }}";
 
                 /// <summary>積勾配</summary>
                 public static string MulGrad =>
                 $@"
                 static __inline__ __device__ void quaternion_mulgrad(float4 &hi, float4 &lo, float4 x1, float4 x2){{
-                    floatfloat_add(hi.x, lo.x, x1.x * x2.x);
-                    floatfloat_add(hi.x, lo.x, x1.y * x2.y);
-                    floatfloat_add(hi.x, lo.x, x1.z * x2.z);
-                    floatfloat_add(hi.x, lo.x, x1.w * x2.w);
+                    float val_hi, val_lo;
 
-                    floatfloat_sub(hi.y, lo.y, x1.x * x2.y);
-                    floatfloat_add(hi.y, lo.y, x1.y * x2.x);
-                    floatfloat_sub(hi.y, lo.y, x1.z * x2.w);
-                    floatfloat_add(hi.y, lo.y, x1.w * x2.z);
+                    val_hi = x1.x * x2.x; val_lo = 0.0;
+                    floatfloat_add(val_hi, val_lo, x1.y * x2.y);
+                    floatfloat_add(val_hi, val_lo, x1.z * x2.z);
+                    floatfloat_add(val_hi, val_lo, x1.w * x2.w);
+                    floatfloat_hilo_add(hi.x, lo.x, val_hi, val_lo);
 
-                    floatfloat_sub(hi.z, lo.z, x1.x * x2.z);
-                    floatfloat_add(hi.z, lo.z, x1.y * x2.w);
-                    floatfloat_add(hi.z, lo.z, x1.z * x2.x);
-                    floatfloat_sub(hi.z, lo.z, x1.w * x2.y);
+                    val_hi = -x1.x * x2.y; val_lo = 0.0;
+                    floatfloat_add(val_hi, val_lo, x1.y * x2.x);
+                    floatfloat_sub(val_hi, val_lo, x1.z * x2.w);
+                    floatfloat_add(val_hi, val_lo, x1.w * x2.z);
+                    floatfloat_hilo_add(hi.y, lo.y, val_hi, val_lo);
 
-                    floatfloat_sub(hi.w, lo.w, x1.x * x2.w);
-                    floatfloat_sub(hi.w, lo.w, x1.y * x2.z);
-                    floatfloat_add(hi.w, lo.w, x1.z * x2.y);
-                    floatfloat_add(hi.w, lo.w, x1.w * x2.x);
+                    val_hi = -x1.x * x2.z; val_lo = 0.0;
+                    floatfloat_add(val_hi, val_lo, x1.y * x2.w);
+                    floatfloat_add(val_hi, val_lo, x1.z * x2.x);
+                    floatfloat_sub(val_hi, val_lo, x1.w * x2.y);
+                    floatfloat_hilo_add(hi.z, lo.z, val_hi, val_lo);
+
+                    val_hi = -x1.x * x2.w; val_lo = 0.0;
+                    floatfloat_sub(val_hi, val_lo, x1.y * x2.z);
+                    floatfloat_add(val_hi, val_lo, x1.z * x2.y);
+                    floatfloat_add(val_hi, val_lo, x1.w * x2.x);
+                    floatfloat_hilo_add(hi.w, lo.w, val_hi, val_lo);
                 }}";
 
                 /// <summary>原子性保証加算</summary>
@@ -279,21 +321,27 @@ namespace TensorShaderCudaBackend {
                     float vyqx = v.y * q.x, vyqy = v.y * q.y, vyqz = v.y * q.z, vyqw = v.y * q.w;
                     float vzqx = v.z * q.x, vzqy = v.z * q.y, vzqz = v.z * q.z, vzqw = v.z * q.w;
 
-                    floatfloat_add(hi.x, lo.x, u.x * (vzqz + vxqx - vyqw));
-                    floatfloat_add(hi.x, lo.x, u.y * (vxqw + vyqx - vzqy));
-                    floatfloat_add(hi.x, lo.x, u.z * (vyqy + vzqx - vxqz));
+                    float val_hi, val_lo;
 
-                    floatfloat_add(hi.y, lo.y, u.x * (vzqw + vxqy + vyqz));
-                    floatfloat_add(hi.y, lo.y, u.y * (vxqz - vyqy - vzqx));
-                    floatfloat_add(hi.y, lo.y, u.z * (vyqx - vzqy + vxqw));
+                    val_hi = u.x * (vzqz + vxqx - vyqw); val_lo = 0.0;
+                    floatfloat_add(val_hi, val_lo, u.y * (vxqw + vyqx - vzqy));
+                    floatfloat_add(val_hi, val_lo, u.z * (vyqy + vzqx - vxqz));
+                    floatfloat_hilo_add(hi.x, lo.x, val_hi, val_lo);
 
-                    floatfloat_add(hi.z, lo.z, u.x * (vzqx - vxqz + vyqy));
-                    floatfloat_add(hi.z, lo.z, u.y * (vxqy + vyqz + vzqw));
-                    floatfloat_add(hi.z, lo.z, u.z * (vyqw - vzqz - vxqx));
+                    val_hi = u.x * (vzqw + vxqy + vyqz); val_lo = 0.0;
+                    floatfloat_add(val_hi, val_lo, u.y * (vxqz - vyqy - vzqx));
+                    floatfloat_add(val_hi, val_lo, u.z * (vyqx - vzqy + vxqw));
+                    floatfloat_hilo_add(hi.y, lo.y, val_hi, val_lo);
 
-                    floatfloat_add(hi.w, lo.w, u.x * (vzqy - vxqw - vyqx));
-                    floatfloat_add(hi.w, lo.w, u.y * (vxqx - vyqw + vzqz));
-                    floatfloat_add(hi.w, lo.w, u.z * (vyqz + vzqw + vxqy));
+                    val_hi = u.x * (vzqx - vxqz + vyqy); val_lo = 0.0;
+                    floatfloat_add(val_hi, val_lo, u.y * (vxqy + vyqz + vzqw));
+                    floatfloat_add(val_hi, val_lo, u.z * (vyqw - vzqz - vxqx));
+                    floatfloat_hilo_add(hi.z, lo.z, val_hi, val_lo);
+
+                    val_hi = u.x * (vzqy - vxqw - vyqx); val_lo = 0.0;
+                    floatfloat_add(val_hi, val_lo, u.y * (vxqx - vyqw + vzqz));
+                    floatfloat_add(val_hi, val_lo, u.z * (vyqz + vzqw + vxqy));
+                    floatfloat_hilo_add(hi.w, lo.w, val_hi, val_lo);
                 }}";
 
                 /// <summary>積</summary>
@@ -303,18 +351,24 @@ namespace TensorShaderCudaBackend {
                     float sx = q.x * q.x, sy = q.y * q.y, sz = q.z * q.z, sw = q.w * q.w;
                     float mx = q.y * q.z, my = q.z * q.w, mz = q.w * q.y;
                     float nx = q.x * q.y, ny = q.x * q.z, nz = q.x * q.w;
+                    float vx2 = 2.0 * v.x, vy2 = 2.0 * v.y, vz2 = 2.0 * v.z;
 
-                    floatfloat_add(hi.x, lo.x, v.x * (sx + sy - sz - sw));
-                    floatfloat_add(hi.x, lo.x, 2.0 * (v.y * (mx - nz)));
-                    floatfloat_add(hi.x, lo.x, 2.0 * (v.z * (mz + ny)));
+                    float val_hi, val_lo;
 
-                    floatfloat_add(hi.y, lo.y, v.y * (sx - sy + sz - sw));
-                    floatfloat_add(hi.y, lo.y, 2.0 * (v.z * (my - nx)));
-                    floatfloat_add(hi.y, lo.y, 2.0 * (v.x * (mx + nz)));
+                    val_hi = v.x * (sx + sy - sz - sw); val_lo = 0.0;
+                    floatfloat_add(val_hi, val_lo, vy2 * (mx - nz));
+                    floatfloat_add(val_hi, val_lo, vz2 * (mz + ny));
+                    floatfloat_hilo_add(hi.x, lo.x, val_hi, val_lo);
 
-                    floatfloat_add(hi.z, lo.z, v.z * (sx - sy - sz + sw));
-                    floatfloat_add(hi.z, lo.z, 2.0 * (v.x * (mz - ny)));
-                    floatfloat_add(hi.z, lo.z, 2.0 * (v.y * (my + nx)));
+                    val_hi = v.y * (sx - sy + sz - sw); val_lo = 0.0;
+                    floatfloat_add(val_hi, val_lo, vz2 * (my - nx));
+                    floatfloat_add(val_hi, val_lo, vx2 * (mx + nz));
+                    floatfloat_hilo_add(hi.y, lo.y, val_hi, val_lo);
+
+                    val_hi = v.z * (sx - sy - sz + sw); val_lo = 0.0;
+                    floatfloat_add(val_hi, val_lo, vx2 * (mz - ny));
+                    floatfloat_add(val_hi, val_lo, vy2 * (my + nx));
+                    floatfloat_hilo_add(hi.z, lo.z, val_hi, val_lo);
                 }}";
 
                 /// <summary>積勾配</summary>
@@ -324,18 +378,24 @@ namespace TensorShaderCudaBackend {
                     float sx = q.x * q.x, sy = q.y * q.y, sz = q.z * q.z, sw = q.w * q.w;
                     float mx = q.y * q.z, my = q.z * q.w, mz = q.w * q.y;
                     float nx = q.x * q.y, ny = q.x * q.z, nz = q.x * q.w;
+                    float vx2 = 2.0 * v.x, vy2 = 2.0 * v.y, vz2 = 2.0 * v.z;
 
-                    floatfloat_add(hi.x, lo.x, v.x * (sx + sy - sz - sw));
-                    floatfloat_add(hi.x, lo.x, 2.0 * (v.y * (mx + nz)));
-                    floatfloat_add(hi.x, lo.x, 2.0 * (v.z * (mz - ny)));
+                    float val_hi, val_lo;
 
-                    floatfloat_add(hi.y, lo.y, v.y * (sx - sy + sz - sw));
-                    floatfloat_add(hi.y, lo.y, 2.0 * (v.z * (my + nx)));
-                    floatfloat_add(hi.y, lo.y, 2.0 * (v.x * (mx - nz)));
+                    val_hi = v.x * (sx + sy - sz - sw); val_lo = 0.0;
+                    floatfloat_add(val_hi, val_lo, vy2 * (mx + nz));
+                    floatfloat_add(val_hi, val_lo, vz2 * (mz - ny));
+                    floatfloat_hilo_add(hi.x, lo.x, val_hi, val_lo);
 
-                    floatfloat_add(hi.z, lo.z, v.z * (sx - sy - sz + sw));
-                    floatfloat_add(hi.z, lo.z, 2.0 * (v.x * (mz + ny)));
-                    floatfloat_add(hi.z, lo.z, 2.0 * (v.y * (my - nx)));
+                    val_hi = v.y * (sx - sy + sz - sw); val_lo = 0.0;
+                    floatfloat_add(val_hi, val_lo, vz2 * (my + nx));
+                    floatfloat_add(val_hi, val_lo, vx2 * (mx - nz));
+                    floatfloat_hilo_add(hi.y, lo.y, val_hi, val_lo);
+
+                    val_hi = v.z * (sx - sy - sz + sw); val_lo = 0.0;
+                    floatfloat_add(val_hi, val_lo, vx2 * (mz + ny));
+                    floatfloat_add(val_hi, val_lo, vy2 * (my - nx));
+                    floatfloat_hilo_add(hi.z, lo.z, val_hi, val_lo);
                 }}";
             }
         }

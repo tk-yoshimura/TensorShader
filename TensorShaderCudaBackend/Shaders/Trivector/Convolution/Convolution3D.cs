@@ -60,6 +60,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
 
             {Defines.CtorFloat3}
             {Defines.FloatFloatAdd}
+            {Defines.FloatFloatHiLoAdd}
             {Defines.Trivector.Mul}
             {Defines.Trivector.MulGrad}
             {Defines.StoreSharedMemory("float3", InChannels, ThreadsX)}

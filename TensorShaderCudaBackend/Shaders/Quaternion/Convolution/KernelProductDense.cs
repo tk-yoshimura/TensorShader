@@ -42,6 +42,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             {Defines.CtorFloat4}
             {Defines.FloatFloatAdd}
             {Defines.FloatFloatSub}
+            {Defines.FloatFloatHiLoAdd}
             {Defines.Quaternion.KernelProd}
             {Defines.Quaternion.AtomicAdd}
 
