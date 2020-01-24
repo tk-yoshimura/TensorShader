@@ -142,16 +142,11 @@ namespace TensorShaderTest.Operators.Trivector {
 
             Quaternion.QuaternionFilter0D gw = new Quaternion.QuaternionFilter0D(inchannels, outchannels);
 
-            for (int inch, outch = 0; outch < outchannels; outch++) {
-                for (inch = 0; inch < inchannels; inch++) {
-                    Quaternion.Quaternion sum = 0;
-                    Quaternion.Quaternion q = w[inch, outch];
-
-                    for (int th = 0; th < batch; th++) {
-                        sum += Trivector.MulQGrad(x[inch, th], gy[outch, th], q);
+            for (int th = 0; th < batch; th++) {
+                for (int inch, outch = 0; outch < outchannels; outch++) {
+                    for (inch = 0; inch < inchannels; inch++) {
+                        gw[inch, outch] += Trivector.MulQGrad(x[inch, th], gy[outch, th], w[inch, outch]);
                     }
-
-                    gw[inch, outch] += sum;
                 }
             }
 

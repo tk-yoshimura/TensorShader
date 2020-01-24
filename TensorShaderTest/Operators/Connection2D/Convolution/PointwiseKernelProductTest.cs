@@ -119,17 +119,13 @@ namespace TensorShaderTest.Operators.Connection2D {
             Filter2D w = new Filter2D(inchannels, outchannels, 1, 1);
 
             for (int th = 0; th < batch; th++) {
-                for (int inch, outch = 0; outch < outchannels; outch++) {
-                    for (inch = 0; inch < inchannels; inch++) {
-                        double sum = 0;
-
-                        for (int ix, iy = 0; iy < inh; iy++) {
-                            for (ix = 0; ix < inw; ix++) {
-                                sum += x[inch, ix, iy, th] * gy[outch, ix, iy, th];
+                for (int ix, iy = 0; iy < inh; iy++) {
+                    for (ix = 0; ix < inw; ix++) {
+                        for (int inch, outch = 0; outch < outchannels; outch++) {
+                            for (inch = 0; inch < inchannels; inch++) {
+                                w[inch, outch, 0, 0] += x[inch, ix, iy, th] * gy[outch, ix, iy, th];
                             }
                         }
-
-                        w[inch, outch, 0, 0] += sum;
                     }
                 }
             }

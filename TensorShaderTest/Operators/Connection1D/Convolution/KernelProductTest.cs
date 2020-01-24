@@ -129,15 +129,11 @@ namespace TensorShaderTest.Operators.Connection1D {
 
             for (int kx = 0; kx < kwidth; kx++) {
                 for (int th = 0; th < batch; th++) {
-                    for (int inch, outch = 0; outch < outchannels; outch++) {
-                        for (inch = 0; inch < inchannels; inch++) {
-                            double sum = 0;
-
-                            for (int ix = kx, ox = 0; ox < outw; ix++, ox++) {
-                                sum += x[inch, ix, th] * gy[outch, ox, th];
+                    for (int ix = kx, ox = 0; ox < outw; ix++, ox++) {
+                        for (int inch, outch = 0; outch < outchannels; outch++) {
+                            for (inch = 0; inch < inchannels; inch++) {
+                                w[inch, outch, kx] += x[inch, ix, th] * gy[outch, ox, th];
                             }
-
-                            w[inch, outch, kx] += sum;
                         }
                     }
                 }

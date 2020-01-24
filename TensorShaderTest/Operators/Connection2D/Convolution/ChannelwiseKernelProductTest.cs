@@ -132,18 +132,13 @@ namespace TensorShaderTest.Operators.Connection2D {
             for (int kx, ky = 0; ky < kheight; ky++) {
                 for (kx = 0; kx < kwidth; kx++) {
                     for (int th = 0; th < batch; th++) {
-                        for (int ch = 0; ch < channels; ch++) {
-                            double sum = 0;
-
-                            for (int ix, iy = ky, ox, oy = 0; oy < outh; iy++, oy++) {
-                                for (ix = kx, ox = 0; ox < outw; ix++, ox++) {
-                                    sum += x[ch, ix, iy, th] * gy[ch, ox, oy, th];
+                        for (int ix, iy = ky, ox, oy = 0; oy < outh; iy++, oy++) {
+                            for (ix = kx, ox = 0; ox < outw; ix++, ox++) {
+                                for (int ch = 0; ch < channels; ch++) {
+                                    w[ch, 0, kx, ky] += x[ch, ix, iy, th] * gy[ch, ox, oy, th];
                                 }
                             }
-
-                            w[ch, 0, kx, ky] += sum;
                         }
-
                     }
                 }
             }

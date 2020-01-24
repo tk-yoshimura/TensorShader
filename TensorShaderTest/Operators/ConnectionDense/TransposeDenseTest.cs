@@ -19,7 +19,7 @@ namespace TensorShaderTest.Operators.ConnectionDense {
                         float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
                         Map0D y = new Map0D(outchannels, batch, yval);
-                        Filter0D w = new Filter0D(inchannels, outchannels, 1, wval);
+                        Filter0D w = new Filter0D(inchannels, outchannels, wval);
 
                         Map0D x = Reference(y, w);
 
@@ -61,7 +61,7 @@ namespace TensorShaderTest.Operators.ConnectionDense {
             float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
 
             Map0D y = new Map0D(outchannels, batch, yval);
-            Filter0D w = new Filter0D(inchannels, outchannels, 1, wval);
+            Filter0D w = new Filter0D(inchannels, outchannels, wval);
 
             Map0D x = Reference(y, w);
 
@@ -116,7 +116,7 @@ namespace TensorShaderTest.Operators.ConnectionDense {
                     double sum = 0;
 
                     for (int outch = 0; outch < outchannels; outch++) {
-                        sum += y[outch, th] * w[inch, outch, 0];
+                        sum += y[outch, th] * w[inch, outch];
                     }
 
                     x[inch, th] = sum;
@@ -134,7 +134,7 @@ namespace TensorShaderTest.Operators.ConnectionDense {
             float[] wval = (new float[outchannels * inchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
             Map0D y = new Map0D(outchannels, batch, yval);
-            Filter0D w = new Filter0D(inchannels, outchannels, 1, wval);
+            Filter0D w = new Filter0D(inchannels, outchannels, wval);
 
             Map0D x = Reference(y, w);
 

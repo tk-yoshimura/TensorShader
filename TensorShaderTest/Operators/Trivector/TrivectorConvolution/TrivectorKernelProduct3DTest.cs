@@ -159,23 +159,17 @@ namespace TensorShaderTest.Operators.Trivector {
                 for (ky = 0; ky < kheight; ky++) {
                     for (kx = 0; kx < kwidth; kx++) {
                         for (int th = 0; th < batch; th++) {
-                            for (int inch, outch = 0; outch < outchannels; outch++) {
-                                for (inch = 0; inch < inchannels; inch++) {
-                                    Quaternion.Quaternion sum = 0;
-                                    Quaternion.Quaternion q = w[inch, outch, kx, ky, kz];
-
-                                    for (int ix, iy, iz = kz, ox, oy, oz = 0; oz < outd; iz++, oz++) {
-                                        for (iy = ky, oy = 0; oy < outh; iy++, oy++) {
-                                            for (ix = kx, ox = 0; ox < outw; ix++, ox++) {
-                                                sum += Trivector.MulQGrad(x[inch, ix, iy, iz, th], gy[outch, ox, oy, oz, th], q);
+                            for (int ix, iy, iz = kz, ox, oy, oz = 0; oz < outd; iz++, oz++) {
+                                for (iy = ky, oy = 0; oy < outh; iy++, oy++) {
+                                    for (ix = kx, ox = 0; ox < outw; ix++, ox++) {
+                                        for (int inch, outch = 0; outch < outchannels; outch++) {
+                                            for (inch = 0; inch < inchannels; inch++) {
+                                                gw[inch, outch, kx, ky, kz] += Trivector.MulQGrad(x[inch, ix, iy, iz, th], gy[outch, ox, oy, oz, th], w[inch, outch, kx, ky, kz]);
                                             }
                                         }
                                     }
-
-                                    gw[inch, outch, kx, ky, kz] += sum;
                                 }
                             }
-
                         }
                     }
                 }

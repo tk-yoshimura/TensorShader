@@ -117,15 +117,11 @@ namespace TensorShaderTest.Operators.Connection1D {
             Filter1D w = new Filter1D(inchannels, outchannels, 1);
 
             for (int th = 0; th < batch; th++) {
-                for (int inch, outch = 0; outch < outchannels; outch++) {
-                    for (inch = 0; inch < inchannels; inch++) {
-                        double sum = 0;
-
-                        for (int ix = 0; ix < inw; ix++) {
-                            sum += x[inch, ix, th] * gy[outch, ix, th];
+                for (int ix = 0; ix < inw; ix++) {
+                    for (int inch, outch = 0; outch < outchannels; outch++) {
+                        for (inch = 0; inch < inchannels; inch++) {
+                            w[inch, outch, 0] += x[inch, ix, th] * gy[outch, ix, th];
                         }
-
-                        w[inch, outch, 0] += sum;
                     }
                 }
             }

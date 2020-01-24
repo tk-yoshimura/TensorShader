@@ -7,15 +7,14 @@ namespace TensorShaderTest.Operators.ConnectionDense {
 
         public int InChannels { private set; get; }
         public int OutChannels { private set; get; }
-        public int Batch { private set; get; }
-        public int Length => InChannels * OutChannels * Batch;
+        public int Length => InChannels * OutChannels;
 
-        public Filter0D(int inchannels, int outchannels, int batch, float[] val = null) {
-            if (inchannels < 1 || outchannels < 1 || batch < 1) {
+        public Filter0D(int inchannels, int outchannels, float[] val = null) {
+            if (inchannels < 1 || outchannels < 1) {
                 throw new ArgumentException();
             }
 
-            int length = checked(inchannels * outchannels * batch);
+            int length = checked(inchannels * outchannels);
 
             if (!(val is null) && val.Length != length) {
                 throw new ArgumentException(nameof(val));
@@ -24,23 +23,22 @@ namespace TensorShaderTest.Operators.ConnectionDense {
             this.val = (val is null) ? new double[length] : val.Select((v) => (double)v).ToArray();
             this.InChannels = inchannels;
             this.OutChannels = outchannels;
-            this.Batch = batch;
         }
 
-        public double this[int inch, int outch, int th] {
+        public double this[int inch, int outch] {
             get {
-                if (inch < 0 || inch >= InChannels || outch < 0 || outch >= OutChannels || th < 0 || th >= Batch) {
+                if (inch < 0 || inch >= InChannels || outch < 0 || outch >= OutChannels) {
                     throw new IndexOutOfRangeException();
                 }
 
-                return val[inch + InChannels * (outch + OutChannels * th)];
+                return val[inch + InChannels * outch];
             }
             set {
-                if (inch < 0 || inch >= InChannels || outch < 0 || outch >= OutChannels || th < 0 || th >= Batch) {
+                if (inch < 0 || inch >= InChannels || outch < 0 || outch >= OutChannels) {
                     throw new IndexOutOfRangeException();
                 }
 
-                val[inch + InChannels * (outch + OutChannels * th)] = value;
+                val[inch + InChannels * outch] = value;
             }
         }
 
@@ -56,7 +54,6 @@ namespace TensorShaderTest.Operators.ConnectionDense {
         public static bool operator ==(Filter0D filter1, Filter0D filter2) {
             if (filter1.InChannels != filter2.InChannels) return false;
             if (filter1.OutChannels != filter2.OutChannels) return false;
-            if (filter1.Batch != filter2.Batch) return false;
 
             return filter1.val.SequenceEqual(filter2.val);
         }

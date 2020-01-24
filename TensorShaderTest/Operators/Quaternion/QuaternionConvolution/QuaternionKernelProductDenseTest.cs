@@ -127,17 +127,12 @@ namespace TensorShaderTest.Operators.Quaternion {
 
             QuaternionFilter0D w = new QuaternionFilter0D(inchannels, outchannels);
 
-            for (int inch, outch = 0; outch < outchannels; outch++) {
-                for (inch = 0; inch < inchannels; inch++) {
-                    Quaternion sum = 0;
-
-                    for (int th = 0; th < batch; th++) {
-                        sum += Quaternion.MulGrad(gy[outch, th], x[inch, th]);
+            for (int th = 0; th < batch; th++) {
+                for (int inch, outch = 0; outch < outchannels; outch++) {
+                    for (inch = 0; inch < inchannels; inch++) {
+                        w[inch, outch] += Quaternion.MulGrad(gy[outch, th], x[inch, th]);
                     }
-
-                    w[inch, outch] = sum;
                 }
-
             }
 
             return w;

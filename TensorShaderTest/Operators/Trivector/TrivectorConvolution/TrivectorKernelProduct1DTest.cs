@@ -158,20 +158,14 @@ namespace TensorShaderTest.Operators.Trivector {
 
             for (int kx = 0; kx < kwidth; kx++) {
                 for (int th = 0; th < batch; th++) {
-                    for (int inch, outch = 0; outch < outchannels; outch++) {
-                        for (inch = 0; inch < inchannels; inch++) {
-                            Quaternion.Quaternion sum = 0;
-                            Quaternion.Quaternion q = w[inch, outch, kx];
-
-                            for (int ix = kx, ox = 0; ox < outw; ix++, ox++) {
-                                sum += Trivector.MulQGrad(x[inch, ix, th], gy[outch, ox, th], q);
+                    for (int ix = kx, ox = 0; ox < outw; ix++, ox++) {
+                        for (int inch, outch = 0; outch < outchannels; outch++) {
+                            for (inch = 0; inch < inchannels; inch++) {
+                                gw[inch, outch, kx] += Trivector.MulQGrad(x[inch, ix, th], gy[outch, ox, th], w[inch, outch, kx]);
                             }
-
-                            gw[inch, outch, kx] += sum;
                         }
                     }
                 }
-
             }
 
             return gw;

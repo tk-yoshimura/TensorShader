@@ -144,18 +144,13 @@ namespace TensorShaderTest.Operators.Quaternion {
 
             for (int kx = 0; kx < kwidth; kx++) {
                 for (int th = 0; th < batch; th++) {
-                    for (int inch, outch = 0; outch < outchannels; outch++) {
-                        for (inch = 0; inch < inchannels; inch++) {
-                            Quaternion sum = 0;
-
-                            for (int ix = kx, ox = 0; ox < outw; ix++, ox++) {
-                                sum += Quaternion.MulGrad(gy[outch, ox, th], x[inch, ix, th]);
+                    for (int ix = kx, ox = 0; ox < outw; ix++, ox++) {
+                        for (int inch, outch = 0; outch < outchannels; outch++) {
+                            for (inch = 0; inch < inchannels; inch++) {
+                                w[inch, outch, kx] += Quaternion.MulGrad(gy[outch, ox, th], x[inch, ix, th]);
                             }
-
-                            w[inch, outch, kx] += sum;
                         }
                     }
-
                 }
             }
 

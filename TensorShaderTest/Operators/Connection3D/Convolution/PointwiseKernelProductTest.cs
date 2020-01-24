@@ -116,19 +116,15 @@ namespace TensorShaderTest.Operators.Connection3D {
             Filter3D w = new Filter3D(inchannels, outchannels, 1, 1, 1);
 
             for (int th = 0; th < batch; th++) {
-                for (int inch, outch = 0; outch < outchannels; outch++) {
-                    for (inch = 0; inch < inchannels; inch++) {
-                        double sum = 0;
-
-                        for (int ix, iy, iz = 0; iz < ind; iz++) {
-                            for (iy = 0; iy < inh; iy++) {
-                                for (ix = 0; ix < inw; ix++) {
-                                    sum += x[inch, ix, iy, iz, th] * gy[outch, ix, iy, iz, th];
+                for (int ix, iy, iz = 0; iz < ind; iz++) {
+                    for (iy = 0; iy < inh; iy++) {
+                        for (ix = 0; ix < inw; ix++) {
+                            for (int inch, outch = 0; outch < outchannels; outch++) {
+                                for (inch = 0; inch < inchannels; inch++) {
+                                    w[inch, outch, 0, 0, 0] += x[inch, ix, iy, iz, th] * gy[outch, ix, iy, iz, th];
                                 }
                             }
                         }
-
-                        w[inch, outch, 0, 0, 0] += sum;
                     }
                 }
             }

@@ -110,17 +110,13 @@ namespace TensorShaderTest.Operators.ConnectionDense {
         public static Filter0D Reference(Map0D x, Map0D y) {
             int inchannels = x.Channels, outchannels = y.Channels, batch = x.Batch;
 
-            Filter0D w = new Filter0D(inchannels, outchannels, 1);
+            Filter0D w = new Filter0D(inchannels, outchannels);
 
-            for (int inch, outch = 0; outch < outchannels; outch++) {
-                for (inch = 0; inch < inchannels; inch++) {
-                    double sum = 0;
-
-                    for (int th = 0; th < batch; th++) {
-                        sum += x[inch, th] * y[outch, th];
+            for (int th = 0; th < batch; th++) {
+                for (int inch, outch = 0; outch < outchannels; outch++) {
+                    for (inch = 0; inch < inchannels; inch++) {
+                        w[inch, outch] += x[inch, th] * y[outch, th];
                     }
-
-                    w[inch, outch, 0] = sum;
                 }
             }
 

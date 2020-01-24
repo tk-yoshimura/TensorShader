@@ -131,16 +131,12 @@ namespace TensorShaderTest.Operators.Complex {
                 return new System.Numerics.Complex(z1.Real * z2.Real + z1.Imaginary * z2.Imaginary, z1.Imaginary * z2.Real - z1.Real * z2.Imaginary);
             };
 
-            for (int inch, outch = 0; outch < outchannels; outch++) {
-                for (inch = 0; inch < inchannels; inch++) {
-                    System.Numerics.Complex sum = 0;
-                    for (int th = 0; th < batch; th++) {
-                        sum += mul_grad(gy[outch, th], x[inch, th]);
+            for (int th = 0; th < batch; th++) {
+                for (int inch, outch = 0; outch < outchannels; outch++) {
+                    for (inch = 0; inch < inchannels; inch++) {
+                        w[inch, outch] += mul_grad(gy[outch, th], x[inch, th]);
                     }
-
-                    w[inch, outch] = sum;
                 }
-
             }
 
             return w;

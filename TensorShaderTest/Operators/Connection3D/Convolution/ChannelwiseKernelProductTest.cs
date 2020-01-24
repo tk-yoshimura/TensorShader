@@ -126,18 +126,14 @@ namespace TensorShaderTest.Operators.Connection3D {
                 for (ky = 0; ky < kheight; ky++) {
                     for (kx = 0; kx < kwidth; kx++) {
                         for (int th = 0; th < batch; th++) {
-                            for (int ch = 0; ch < channels; ch++) {
-                                double sum = 0;
-
-                                for (int ix, iy, iz = kz, ox, oy, oz = 0; oz < outd; iz++, oz++) {
-                                    for (iy = ky, oy = 0; oy < outh; iy++, oy++) {
-                                        for (ix = kx, ox = 0; ox < outw; ix++, ox++) {
-                                            sum += x[ch, ix, iy, iz, th] * gy[ch, ox, oy, oz, th];
+                            for (int ix, iy, iz = kz, ox, oy, oz = 0; oz < outd; iz++, oz++) {
+                                for (iy = ky, oy = 0; oy < outh; iy++, oy++) {
+                                    for (ix = kx, ox = 0; ox < outw; ix++, ox++) {
+                                        for (int ch = 0; ch < channels; ch++) {
+                                            w[ch, 0, kx, ky, kz] += x[ch, ix, iy, iz, th] * gy[ch, ox, oy, oz, th];
                                         }
                                     }
                                 }
-
-                                w[ch, 0, kx, ky, kz] += sum;
                             }
                         }
                     }
