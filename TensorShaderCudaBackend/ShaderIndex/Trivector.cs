@@ -120,9 +120,9 @@ namespace TensorShaderCudaBackend {
                 "float sx2x = #x2.x * #x2.x, sx2y = #x2.y * #x2.y, sx2z = #x2.z * #x2.z;" +
                 "float norm = sx2x + sx2y + sx2z, norm_p1 = norm + 1;" +
                 "float norm_norm_p1 = norm_p1 * norm, inv_squa_norm_p1 = 1.0 / (norm_p1 * norm_p1);" +
-                "#y.x = (#x1.x * (2.0 * sx2x + norm_norm_p1) + 2.0 * #x2.x * (x12y + x12z)) * inv_squa_norm_p1;" +
-                "#y.y = (#x1.y * (2.0 * sx2y + norm_norm_p1) + 2.0 * #x2.y * (x12z + x12x)) * inv_squa_norm_p1;" +
-                "#y.z = (#x1.z * (2.0 * sx2z + norm_norm_p1) + 2.0 * #x2.z * (x12x + x12y)) * inv_squa_norm_p1;"
+                "#y.x = (#x1.x * (ldexpf(sx2x, 1) + norm_norm_p1) + ldexpf(#x2.x * (x12y + x12z), 1)) * inv_squa_norm_p1;" +
+                "#y.y = (#x1.y * (ldexpf(sx2y, 1) + norm_norm_p1) + ldexpf(#x2.y * (x12z + x12x), 1)) * inv_squa_norm_p1;" +
+                "#y.z = (#x1.z * (ldexpf(sx2z, 1) + norm_norm_p1) + ldexpf(#x2.z * (x12x + x12y), 1)) * inv_squa_norm_p1;"
             );
 
             if (stream == null) {

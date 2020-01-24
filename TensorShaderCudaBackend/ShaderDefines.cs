@@ -351,7 +351,7 @@ namespace TensorShaderCudaBackend {
                     float sx = q.x * q.x, sy = q.y * q.y, sz = q.z * q.z, sw = q.w * q.w;
                     float mx = q.y * q.z, my = q.z * q.w, mz = q.w * q.y;
                     float nx = q.x * q.y, ny = q.x * q.z, nz = q.x * q.w;
-                    float vx2 = 2.0 * v.x, vy2 = 2.0 * v.y, vz2 = 2.0 * v.z;
+                    float vx2 = ldexpf(v.x, 1), vy2 = ldexpf(v.y, 1), vz2 = ldexpf(v.z, 1);
 
                     float val_hi, val_lo;
 
@@ -378,7 +378,7 @@ namespace TensorShaderCudaBackend {
                     float sx = q.x * q.x, sy = q.y * q.y, sz = q.z * q.z, sw = q.w * q.w;
                     float mx = q.y * q.z, my = q.z * q.w, mz = q.w * q.y;
                     float nx = q.x * q.y, ny = q.x * q.z, nz = q.x * q.w;
-                    float vx2 = 2.0 * v.x, vy2 = 2.0 * v.y, vz2 = 2.0 * v.z;
+                    float vx2 = ldexpf(v.x, 1), vy2 = ldexpf(v.y, 1), vz2 = ldexpf(v.z, 1);
 
                     float val_hi, val_lo;
 

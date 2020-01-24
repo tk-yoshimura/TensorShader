@@ -29,9 +29,9 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Arithmetric {
                 float mx = q.y * q.z, my = q.z * q.w, mz = q.w * q.y;
                 float nx = q.x * q.y, ny = q.x * q.z, nz = q.x * q.w;
 
-                u.x = v.x * (sx + sy - sz - sw) + 2.0 * (v.y * (mx + nz) + v.z * (mz - ny));
-                u.y = v.y * (sx - sy + sz - sw) + 2.0 * (v.z * (my + nx) + v.x * (mx - nz));
-                u.z = v.z * (sx - sy - sz + sw) + 2.0 * (v.x * (mz + ny) + v.y * (my - nx));
+                u.x = v.x * (sx + sy - sz - sw) + ldexpf(v.y * (mx + nz) + v.z * (mz - ny), 1);
+                u.y = v.y * (sx - sy + sz - sw) + ldexpf(v.z * (my + nx) + v.x * (mx - nz), 1);
+                u.z = v.z * (sx - sy - sz + sw) + ldexpf(v.x * (mz + ny) + v.y * (my - nx), 1);
 
                 outmap_vector[i] = u;
             }}";

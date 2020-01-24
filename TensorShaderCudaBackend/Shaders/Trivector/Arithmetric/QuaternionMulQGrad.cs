@@ -30,10 +30,10 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Arithmetric {
                 float vyqx = v.y * q.x, vyqy = v.y * q.y, vyqz = v.y * q.z, vyqw = v.y * q.w;
                 float vzqx = v.z * q.x, vzqy = v.z * q.y, vzqz = v.z * q.z, vzqw = v.z * q.w;
 
-                p.x = 2.0 * (u.x * (vzqz + vxqx - vyqw) + u.y * (vxqw + vyqx - vzqy) + u.z * (vyqy + vzqx - vxqz));
-                p.y = 2.0 * (u.x * (vzqw + vxqy + vyqz) + u.y * (vxqz - vyqy - vzqx) + u.z * (vyqx - vzqy + vxqw));
-                p.z = 2.0 * (u.x * (vzqx - vxqz + vyqy) + u.y * (vxqy + vyqz + vzqw) + u.z * (vyqw - vzqz - vxqx));
-                p.w = 2.0 * (u.x * (vzqy - vxqw - vyqx) + u.y * (vxqx - vyqw + vzqz) + u.z * (vyqz + vzqw + vxqy));
+                p.x = ldexpf(u.x * (vzqz + vxqx - vyqw) + u.y * (vxqw + vyqx - vzqy) + u.z * (vyqy + vzqx - vxqz), 1);
+                p.y = ldexpf(u.x * (vzqw + vxqy + vyqz) + u.y * (vxqz - vyqy - vzqx) + u.z * (vyqx - vzqy + vxqw), 1);
+                p.z = ldexpf(u.x * (vzqx - vxqz + vyqy) + u.y * (vxqy + vyqz + vzqw) + u.z * (vyqw - vzqz - vxqx), 1);
+                p.w = ldexpf(u.x * (vzqy - vxqw - vyqx) + u.y * (vxqx - vyqw + vzqz) + u.z * (vyqz + vzqw + vxqy), 1);
 
                 outmap_quaternion[i] = p;
             }}";

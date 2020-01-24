@@ -130,7 +130,7 @@ namespace TensorShaderCudaBackend {
             Shader shader = UnaryArithmetric(
                 "complex_squa_ew",
                 "#y.x = #x.x * #x.x - #x.y * #x.y;" +
-                "#y.y = 2.0 * #x.x * #x.y;"
+                "#y.y = ldexpf(#x.x * #x.y, 1);"
             );
 
             if (stream == null) {
@@ -144,8 +144,8 @@ namespace TensorShaderCudaBackend {
         public static void SquareGrad(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst, Stream stream = null) {
             Shader shader = BinaryArithmetric(
                 "complex_squagrad_ew",
-                "#y.x = 2.0 * (#x1.x * #x2.x + #x1.y * #x2.y);" +
-                "#y.y = 2.0 * (#x1.y * #x2.x - #x1.x * #x2.y);"
+                "#y.x = ldexpf(#x1.x * #x2.x + #x1.y * #x2.y, 1);" +
+                "#y.y = ldexpf(#x1.y * #x2.x - #x1.x * #x2.y, 1);"
             );
 
             if (stream == null) {
@@ -180,8 +180,8 @@ namespace TensorShaderCudaBackend {
                 "float sx2x = #x2.x * #x2.x, sx2y = #x2.y * #x2.y;" +
                 "float norm = sx2x + sx2y, norm_p1 = norm + 1;" +
                 "float norm_norm_p1 = norm_p1 * norm, inv_squa_norm_p1 = 1.0 / (norm_p1 * norm_p1);" +
-                "#y.x = (#x1.x * (2.0 * sx2x + norm_norm_p1) + 2.0 * #x2.x * x12y) * inv_squa_norm_p1;" +
-                "#y.y = (#x1.y * (2.0 * sx2y + norm_norm_p1) + 2.0 * #x2.y * x12x) * inv_squa_norm_p1;"
+                "#y.x = (#x1.x * (ldexpf(sx2x, 1) + norm_norm_p1) + ldexpf(#x2.x * x12y, 1)) * inv_squa_norm_p1;" +
+                "#y.y = (#x1.y * (ldexpf(sx2y, 1) + norm_norm_p1) + ldexpf(#x2.y * x12x, 1)) * inv_squa_norm_p1;"
             );
 
             if (stream == null) {

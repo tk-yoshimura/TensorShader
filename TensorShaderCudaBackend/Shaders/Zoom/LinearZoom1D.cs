@@ -22,8 +22,8 @@
                 unsigned int ox = ix * 2;
                 unsigned int l = 0, r = {Channels};
 
-                unsigned int ixl = ((ix > 0) ? ix - 1 : 0);
-                unsigned int ixr = ((ix < inwidth - 1) ? ix + 1 : inwidth - 1);
+                unsigned int ixl = max(1, ix) - 1;
+                unsigned int ixr = min(inwidth - 1, ix + 1);
 
                 unsigned int inmap_c_idx = ch + {Channels} * ix;
                 unsigned int inmap_l_idx = ch + {Channels} * ixl;
@@ -31,12 +31,12 @@
 
                 unsigned int outmap_idx = ch + {Channels} * ox;
 
-                float xc = inmap[inmap_c_idx] * 2;
+                float xc = ldexpf(inmap[inmap_c_idx], 1);
                 float xl = inmap[inmap_l_idx];
                 float xr = inmap[inmap_r_idx];
 
-                outmap[outmap_idx + l] = (xc + xl) / 3;
-                outmap[outmap_idx + r] = (xc + xr) / 3;
+                outmap[outmap_idx + l] = (xc + xl) / 3.0;
+                outmap[outmap_idx + r] = (xc + xr) / 3.0;
             }}";
 
             this.Kernel = new Kernel(code, "linearzoom_1d");

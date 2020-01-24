@@ -26,12 +26,12 @@
                 unsigned int luf = 0, ruf = {Channels}, ldf = outwidth * {Channels}, rdf = ruf + ldf;
                 unsigned int lur = ldf * outheight, rur = lur + ruf, ldr = lur + ldf, rdr = lur + rdf;
 
-                unsigned int ixl = ((ix > 0) ? ix - 1 : 0);
-                unsigned int ixr = ((ix < inwidth - 1) ? ix + 1 : inwidth - 1);
-                unsigned int iyu = ((iy > 0) ? iy - 1 : 0);
-                unsigned int iyd = ((iy < inheight - 1) ? iy + 1 : inheight - 1);
-                unsigned int izf = ((iz > 0) ? iz - 1 : 0);
-                unsigned int izr = ((iz < indepth - 1) ? iz + 1 : indepth - 1);
+                unsigned int ixl = max(1, ix) - 1;
+                unsigned int ixr = min(inwidth - 1, ix + 1);
+                unsigned int iyu = max(1, iy) - 1;
+                unsigned int iyd = min(inheight - 1, iy + 1);
+                unsigned int izf = max(1, iz) - 1;
+                unsigned int izr = min(indepth - 1, iz + 1);
 
                 unsigned int inmap_c_idx    = ch + {Channels} * (ix  + inwidth * (iy  + inheight * iz ));
                 unsigned int inmap_xl_idx   = ch + {Channels} * (ixl + inwidth * (iy  + inheight * iz ));
@@ -63,25 +63,25 @@
 
                 unsigned int outmap_idx = ch + {Channels} * (ox + outwidth * (oy + outheight * oz));
 
-                float xc      = inmap[inmap_c_idx] * 8;
-                float xxl     = inmap[inmap_xl_idx] * 4;
-                float xxr     = inmap[inmap_xr_idx] * 4;
-                float xyu     = inmap[inmap_yu_idx] * 4;
-                float xyd     = inmap[inmap_yd_idx] * 4;
-                float xzf     = inmap[inmap_zf_idx] * 4;
-                float xzr     = inmap[inmap_zr_idx] * 4;
-                float xxlyu   = inmap[inmap_xlyu_idx] * 2;
-                float xxryu   = inmap[inmap_xryu_idx] * 2;
-                float xxlyd   = inmap[inmap_xlyd_idx] * 2;
-                float xxryd   = inmap[inmap_xryd_idx] * 2;
-                float xxlzf   = inmap[inmap_xlzf_idx] * 2;
-                float xxrzf   = inmap[inmap_xrzf_idx] * 2;
-                float xxlzr   = inmap[inmap_xlzr_idx] * 2;
-                float xxrzr   = inmap[inmap_xrzr_idx] * 2;
-                float xyuzf   = inmap[inmap_yuzf_idx] * 2;
-                float xydzf   = inmap[inmap_ydzf_idx] * 2;
-                float xyuzr   = inmap[inmap_yuzr_idx] * 2;
-                float xydzr   = inmap[inmap_ydzr_idx] * 2;
+                float xc      = ldexpf(inmap[inmap_c_idx] , 3);
+                float xxl     = ldexpf(inmap[inmap_xl_idx], 2);
+                float xxr     = ldexpf(inmap[inmap_xr_idx], 2);
+                float xyu     = ldexpf(inmap[inmap_yu_idx], 2);
+                float xyd     = ldexpf(inmap[inmap_yd_idx], 2);
+                float xzf     = ldexpf(inmap[inmap_zf_idx], 2);
+                float xzr     = ldexpf(inmap[inmap_zr_idx], 2);
+                float xxlyu   = ldexpf(inmap[inmap_xlyu_idx], 1);
+                float xxryu   = ldexpf(inmap[inmap_xryu_idx], 1);
+                float xxlyd   = ldexpf(inmap[inmap_xlyd_idx], 1);
+                float xxryd   = ldexpf(inmap[inmap_xryd_idx], 1);
+                float xxlzf   = ldexpf(inmap[inmap_xlzf_idx], 1);
+                float xxrzf   = ldexpf(inmap[inmap_xrzf_idx], 1);
+                float xxlzr   = ldexpf(inmap[inmap_xlzr_idx], 1);
+                float xxrzr   = ldexpf(inmap[inmap_xrzr_idx], 1);
+                float xyuzf   = ldexpf(inmap[inmap_yuzf_idx], 1);
+                float xydzf   = ldexpf(inmap[inmap_ydzf_idx], 1);
+                float xyuzr   = ldexpf(inmap[inmap_yuzr_idx], 1);
+                float xydzr   = ldexpf(inmap[inmap_ydzr_idx], 1);
                 float xxlyuzf = inmap[inmap_xlyuzf_idx];
                 float xxryuzf = inmap[inmap_xryuzf_idx];
                 float xxlydzf = inmap[inmap_xlydzf_idx];
@@ -91,14 +91,14 @@
                 float xxlydzr = inmap[inmap_xlydzr_idx];
                 float xxrydzr = inmap[inmap_xrydzr_idx];
 
-                outmap[outmap_idx + luf] = (xc + xxl + xyu + xzf + xxlyu + xxlzf + xyuzf + xxlyuzf) / 27;
-                outmap[outmap_idx + ruf] = (xc + xxr + xyu + xzf + xxryu + xxrzf + xyuzf + xxryuzf) / 27;
-                outmap[outmap_idx + ldf] = (xc + xxl + xyd + xzf + xxlyd + xxlzf + xydzf + xxlydzf) / 27;
-                outmap[outmap_idx + rdf] = (xc + xxr + xyd + xzf + xxryd + xxrzf + xydzf + xxrydzf) / 27;
-                outmap[outmap_idx + lur] = (xc + xxl + xyu + xzr + xxlyu + xxlzr + xyuzr + xxlyuzr) / 27;
-                outmap[outmap_idx + rur] = (xc + xxr + xyu + xzr + xxryu + xxrzr + xyuzr + xxryuzr) / 27;
-                outmap[outmap_idx + ldr] = (xc + xxl + xyd + xzr + xxlyd + xxlzr + xydzr + xxlydzr) / 27;
-                outmap[outmap_idx + rdr] = (xc + xxr + xyd + xzr + xxryd + xxrzr + xydzr + xxrydzr) / 27;
+                outmap[outmap_idx + luf] = (xc + xxl + xyu + xzf + xxlyu + xxlzf + xyuzf + xxlyuzf) / 27.0;
+                outmap[outmap_idx + ruf] = (xc + xxr + xyu + xzf + xxryu + xxrzf + xyuzf + xxryuzf) / 27.0;
+                outmap[outmap_idx + ldf] = (xc + xxl + xyd + xzf + xxlyd + xxlzf + xydzf + xxlydzf) / 27.0;
+                outmap[outmap_idx + rdf] = (xc + xxr + xyd + xzf + xxryd + xxrzf + xydzf + xxrydzf) / 27.0;
+                outmap[outmap_idx + lur] = (xc + xxl + xyu + xzr + xxlyu + xxlzr + xyuzr + xxlyuzr) / 27.0;
+                outmap[outmap_idx + rur] = (xc + xxr + xyu + xzr + xxryu + xxrzr + xyuzr + xxryuzr) / 27.0;
+                outmap[outmap_idx + ldr] = (xc + xxl + xyd + xzr + xxlyd + xxlzr + xydzr + xxlydzr) / 27.0;
+                outmap[outmap_idx + rdr] = (xc + xxr + xyd + xzr + xxryd + xxrzr + xydzr + xxrydzr) / 27.0;
             }}";
 
             this.Kernel = new Kernel(code, "linearzoom_3d");
