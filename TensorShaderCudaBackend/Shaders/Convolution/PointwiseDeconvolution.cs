@@ -39,7 +39,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             string code = $@"
 
             {Defines.FloatFloatAdd}
-            {Defines.StoreSharedMemory("float", InChannels, ThreadsX)}
+            {Defines.StoreFloatSharedMemory(elemsize: 1, InChannels, ThreadsX)}
 
             __global__ void ptwise_deconvolution(float *inmap, float *outmap, float *filter) {{
 

@@ -43,7 +43,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             {Defines.FloatFloatHiLoAdd}
             {Defines.Quaternion.Mul}
             {Defines.Quaternion.MulGrad}
-            {Defines.StoreSharedMemory("float4", InChannels, ThreadsX)}
+            {Defines.StoreFloatSharedMemory(elemsize: 4, InChannels, ThreadsX)}
 
             __global__ void quaternion_transpose_dense(float4 *inmap, float4 *outmap, float4 *filter) {{
 

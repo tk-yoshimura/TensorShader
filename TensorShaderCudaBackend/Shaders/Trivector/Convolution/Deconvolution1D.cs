@@ -49,7 +49,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
             {Defines.FloatFloatHiLoAdd}
             {Defines.Trivector.Mul}
             {Defines.Trivector.MulGrad}
-            {Defines.StoreSharedMemory("float3", InChannels, ThreadsX)}
+            {Defines.StoreFloatSharedMemory(elemsize: 3, InChannels, ThreadsX)}
 
             __global__ void trivector_deconvolution_1d(float3 *inmap, float3 *outmap, float4 *filter,
                                                        unsigned int inwidth) {{

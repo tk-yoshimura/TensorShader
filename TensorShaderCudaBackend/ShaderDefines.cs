@@ -94,48 +94,61 @@ namespace TensorShaderCudaBackend {
             }}";
 
             /// <summary>シェアードメモリへ格納</summary>
-            public static string StoreSharedMemory(string elem, uint length, uint threads){
+            public static string StoreFloatSharedMemory(uint elemsize, uint elements, uint threads){
+                string elem = elemsize > 1 ? $"float{elemsize}" : "float";
+                uint length = elements * elemsize;
+
+                string declare = $"static __inline__ __device__ void store_smem({elem} *ptr, {elem} *smem, unsigned int thread_idx)";
+
+                string repointer = @"
+                        const float* ptr_const = (const float*)(void*)ptr;
+                        volatile float* smem_volatile = (volatile float*)(void*)smem;
+                    ";
+                
                 if(threads > length){
-                        return $@"
-                        static __inline__ __device__ void store_smem({elem} *ptr, {elem} *smem, unsigned int thread_idx){{
-                            if(thread_idx < {length}) smem[thread_idx] = ptr[thread_idx];
-                            __syncthreads();
-                        }}";
+                    return $@"
+                    {declare}{{
+                        {repointer}
+                        if(thread_idx < {length}) smem_volatile[thread_idx] = ptr_const[thread_idx];
+                        __syncthreads();
+                    }}";
                 } 
                 else if(threads == length){ 
-                        return $@"
-                        static __inline__ __device__ void store_smem({elem} *ptr, {elem} *smem, unsigned int thread_idx){{
-                            smem[thread_idx] = ptr[thread_idx];
-                            __syncthreads();
-                        }}";
+                    return $@"
+                    {declare}{{
+                        {repointer}
+                        smem_volatile[thread_idx] = ptr_const[thread_idx];
+                        __syncthreads();
+                    }}";
                 }
-                else if(threads * 8 >= length){
-                    if(length % threads == 0) { 
-                        return $@"
-                        static __inline__ __device__ void store_smem({elem} *ptr, {elem} *smem, unsigned int thread_idx){{
-                            unsigned int i = thread_idx;
-                            { string.Join(" ", Enumerable.Repeat($"smem[i] = ptr[i]; i += {threads};", (int)(length / threads))) }
-                            __syncthreads();
-                        }}";
-                    }
-                    else { 
-                        return $@"
-                        static __inline__ __device__ void store_smem({elem} *ptr, {elem} *smem, unsigned int thread_idx){{
-                            unsigned int i = thread_idx;
-                            { string.Join(" ", Enumerable.Repeat($"smem[i] = ptr[i]; i += {threads};", (int)(length / threads))) }
-                            if(i < {length}) smem[i] = ptr[i];
-                            __syncthreads();
-                        }}";
-                    }
+                else if(threads * 8 >= length && length % threads == 0){
+                    return $@"
+                    {declare}{{
+                        {repointer}
+                        unsigned int i = thread_idx;
+                        { string.Join(" ", Enumerable.Repeat($"smem_volatile[i] = ptr_const[i]; i += {threads};", (int)(length / threads))) }
+                        __syncthreads();
+                    }}";
+                }
+                else if(threads * 8 >= length){ 
+                    return $@"
+                    {declare}{{
+                        {repointer}
+                        unsigned int i = thread_idx;
+                        { string.Join(" ", Enumerable.Repeat($"smem_volatile[i] = ptr_const[i]; i += {threads};", (int)(length / threads))) }
+                        if(i < {length}) smem_volatile[i] = ptr_const[i];
+                        __syncthreads();
+                    }}";
                 }
                 else{
-                        return $@"
-                        static __inline__ __device__ void store_smem({elem} *ptr, {elem} *smem, unsigned int thread_idx){{ 
-                            for(unsigned int i = thread_idx; i < {length}; i += {threads}){{
-                                smem[i] = ptr[i];
-                            }}
-                            __syncthreads();
-                        }}";
+                    return $@"
+                    {declare}{{ 
+                        {repointer}
+                        for(unsigned int i = thread_idx; i < {length}; i += {threads}){{
+                            smem_volatile[i] = ptr_const[i];
+                        }}
+                        __syncthreads();
+                    }}";
                 }
             }
 

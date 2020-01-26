@@ -52,7 +52,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             {Defines.FloatFloatHiLoAdd}
             {Defines.Complex.Mul}
             {Defines.Complex.MulGrad}
-            {Defines.StoreSharedMemory("float2", InChannels, ThreadsX)}
+            {Defines.StoreFloatSharedMemory(elemsize: 2, InChannels, ThreadsX)}
 
             __global__ void complex_convolution_1d(float2 *inmap, float2 *outmap, float2 *filter) {{
 
