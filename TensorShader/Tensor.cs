@@ -50,7 +50,7 @@ namespace TensorShader {
                 throw new ArgumentException(nameof(shape));
             }
             if (value != null && value.Length < shape.Length) {
-                throw new ArgumentException(ExceptionMessage.Argument("value.Length", value.Length, shape.Length));
+                throw new ArgumentException(ExceptionMessage.Argument($"{value}.Length", value.Length, shape.Length));
             }
 
             this.Buffer = value ?? (new float[shape.Length]);
@@ -68,7 +68,7 @@ namespace TensorShader {
                 throw new ArgumentNullException(nameof(array));
             }
             if ((int)array.Length < shape.Length) {
-                throw new ArgumentException(ExceptionMessage.Argument("value.Length", (int)array.Length, shape.Length));
+                throw new ArgumentException(ExceptionMessage.Argument($"{array}.Length", (int)array.Length, shape.Length));
             }
 
             this.Buffer = array;
@@ -85,7 +85,7 @@ namespace TensorShader {
             }
             set {
                 if (value.Length != Length) {
-                    throw new ArgumentException(ExceptionMessage.Argument("value.Length", value.Length, Length));
+                    throw new ArgumentException(ExceptionMessage.Argument($"{value}.Length", value.Length, Length));
                 }
 
                 Buffer.Write(value, (ulong)Length);
@@ -234,7 +234,7 @@ namespace TensorShader {
             }
             if (value != null) {
                 if (value.Length != shape.Length) {
-                    throw new ArgumentException(ExceptionMessage.Argument("value.Length", value.Length, shape.Length));
+                    throw new ArgumentException(ExceptionMessage.Argument($"{value}.Length", value.Length, shape.Length));
                 }
 
                 Buffer.Write(value, (ulong)shape.Length);
@@ -268,7 +268,7 @@ namespace TensorShader {
 
             set {
                 if (value.Length != Length) {
-                    throw new ArgumentException(ExceptionMessage.Argument("value.Length", value.Length, Length));
+                    throw new ArgumentException(ExceptionMessage.Argument($"{value}.Length", value.Length, Length));
                 }
 
                 Buffer.Write(value, (ulong)Length);

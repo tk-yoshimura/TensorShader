@@ -627,6 +627,7 @@
     <Compile Include="Links\Utility\Label.cs" />
     <Compile Include="Links\UnaryArithmetric\Abs.cs" />
     <Compile Include="Links\UnaryArithmetric\UnaryArithmetric.cs" />
+    <Compile Include="NdimArray.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="Operator.cs" />
     <Compile Include="Operators\ArrayManipulation\BatchIndexer.cs" />
