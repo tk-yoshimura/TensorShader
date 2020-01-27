@@ -55,14 +55,19 @@ namespace TensorShader {
         /// <summary>インデクサ</summary>
         public T this[params int[] indexes] {
             get {
-                return Value[ValuePos(indexes)];
+                return Value[Index(indexes)];
             }
             set {
-                Value[ValuePos(indexes)] = value;
+                Value[Index(indexes)] = value;
             }
         }
 
-        private long ValuePos(params int[] indexes) {
+        /// <summary>文字列化</summary>
+        public override string ToString() {
+            return Shape.ToString();
+        }
+
+        private long Index(params int[] indexes) {
             if (indexes.Length != Ndim) {
                 throw new ArgumentException(ExceptionMessage.Argument($"{indexes}.Length", indexes.Length, Ndim));
             }
