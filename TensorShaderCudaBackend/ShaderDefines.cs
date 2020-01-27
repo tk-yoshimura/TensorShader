@@ -55,6 +55,24 @@ namespace TensorShaderCudaBackend {
                 lo -= val + (hi - tmp);
             }}";
 
+            /// <summary>FloatFloat融合積和演算</summary>
+            public static string FloatFloatFma =>
+            $@"
+            static __inline__ __device__ void floatfloat_fma(float &hi, float &lo, float val_x, float val_y){{
+                float tmp = hi;
+                hi = fmaf(val_x, val_y, hi);
+                lo += fmaf(val_x, val_y, tmp - hi);
+            }}";
+
+            /// <summary>FloatFloat融合積差演算</summary>
+            public static string FloatFloatFms =>
+            $@"
+            static __inline__ __device__ void floatfloat_fms(float &hi, float &lo, float val_x, float val_y){{
+                float tmp = hi;
+                hi = fmaf(-val_x, val_y, hi);
+                lo -= fmaf(val_x, val_y, hi - tmp);
+            }}";
+
             /// <summary>FloatFloat加算</summary>
             public static string FloatFloatHiLoAdd =>
             $@"
