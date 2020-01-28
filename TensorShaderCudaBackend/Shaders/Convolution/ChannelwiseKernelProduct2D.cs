@@ -46,7 +46,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             string code = $@"
 
-            {Defines.FloatFloatAdd}
+            {Defines.FloatFloatFma}
             {Defines.AtomicAdd}
 
             __global__ void chwise_kernelproduct_2d(float *inmap, float *outmap, float *filter,
@@ -74,7 +74,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                             float u = inmap[inmap_idx];
                             float v = outmap[outmap_idx];
 
-                            floatfloat_add(uv_hi, uv_lo, u * v);
+                            floatfloat_fma(uv_hi, uv_lo, u, v);
                         }}
 
                         floatfloat_atomicadd(filter + filter_index, uv_hi, uv_lo);

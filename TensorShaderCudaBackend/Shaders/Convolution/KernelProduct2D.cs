@@ -54,7 +54,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             string code = $@"
 
-            {Defines.FloatFloatAdd}
+            {Defines.FloatFloatFma}
             {Defines.AtomicAdd}
 
             __global__ void kernelproduct_2d(float *inmap, float *outmap, float *filter,
@@ -90,7 +90,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                                 float u = us[tidx];
                                 float v = vs[tidy];
 
-                                floatfloat_add(uv_hi, uv_lo, u * v);
+                                floatfloat_fma(uv_hi, uv_lo, u, v);
 
                             { (InChannels % BlockSize.x != 0 ? "}" : "") }
                             { (OutChannels % BlockSize.y != 0 ? "}" : "") }

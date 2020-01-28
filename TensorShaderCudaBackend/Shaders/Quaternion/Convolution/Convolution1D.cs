@@ -47,8 +47,8 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             string code = $@"
 
             {Defines.CtorFloat4}
-            {Defines.FloatFloatAdd}
-            {Defines.FloatFloatSub}
+            {Defines.FloatFloatFma}
+            {Defines.FloatFloatFms}
             {Defines.FloatFloatHiLoAdd}
             {Defines.Quaternion.Mul}
             {Defines.Quaternion.MulGrad}

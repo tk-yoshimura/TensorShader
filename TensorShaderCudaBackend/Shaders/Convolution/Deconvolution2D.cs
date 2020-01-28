@@ -47,7 +47,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             string code = $@"
 
-            {Defines.FloatFloatAdd}
+            {Defines.FloatFloatFma}
             {Defines.StoreFloatSharedMemory(elemsize: 1, InChannels, ThreadsX)}
 
             __global__ void deconvolution_2d(float *inmap, float *outmap, float *filter,
@@ -82,7 +82,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                                 float u = us[inch];
                                 float v = filter[filter_idx];
 
-                                floatfloat_add(uv_hi, uv_lo, u * v);
+                                floatfloat_fma(uv_hi, uv_lo, u, v);
 
                                 filter_idx += {OutChannels};
                             }}

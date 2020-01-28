@@ -41,7 +41,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
             string code = $@"
 
             {Defines.CtorFloat4}
-            {Defines.FloatFloatAdd}
+            {Defines.FloatFloatFma}
             {Defines.FloatFloatHiLoAdd}
             {Defines.Trivector.KernelProd}
             {Defines.Quaternion.AtomicAdd}

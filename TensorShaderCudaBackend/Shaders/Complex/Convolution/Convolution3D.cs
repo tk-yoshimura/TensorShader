@@ -59,8 +59,8 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             string code = $@"
 
             {Defines.CtorFloat2}
-            {Defines.FloatFloatAdd}
-            {Defines.FloatFloatSub}
+            {Defines.FloatFloatFma}
+            {Defines.FloatFloatFms}
             {Defines.FloatFloatHiLoAdd}
             {Defines.Complex.Mul}
             {Defines.Complex.MulGrad}

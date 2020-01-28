@@ -42,7 +42,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             string code = $@"
 
-            {Defines.FloatFloatAdd}
+            {Defines.FloatFloatFma}
 
             __global__ void chwise_deconvolution_3d(float *inmap, float *outmap, float *filter,
                                                     unsigned int oy_offset, unsigned int oz,
@@ -81,7 +81,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                             float u = inmap[inmap_idx];
                             float v = filter[filter_idx];
 
-                            floatfloat_add(uv_hi, uv_lo, u * v);
+                            floatfloat_fma(uv_hi, uv_lo, u, v);
                         }}
                     }}
                 }}

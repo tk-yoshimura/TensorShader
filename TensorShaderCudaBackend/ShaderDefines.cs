@@ -179,11 +179,11 @@ namespace TensorShaderCudaBackend {
                     float val_hi, val_lo;
 
                     val_hi = x1.x * x2.x; val_lo = 0.0;
-                    floatfloat_add(val_hi, val_lo, x1.y * x2.y);
+                    floatfloat_fma(val_hi, val_lo, x1.y, x2.y);
                     floatfloat_hilo_add(hi.x, lo.x, val_hi, val_lo);
 
                     val_hi = -x1.y * x2.x; val_lo = 0.0;
-                    floatfloat_add(val_hi, val_lo, x1.x * x2.y);
+                    floatfloat_fma(val_hi, val_lo, x1.x, x2.y);
                     floatfloat_hilo_add(hi.y, lo.y, val_hi, val_lo);
                 }}";
 
@@ -194,11 +194,11 @@ namespace TensorShaderCudaBackend {
                     float val_hi, val_lo;
                     
                     val_hi = x1.x * x2.x; val_lo = 0.0;
-                    floatfloat_sub(val_hi, val_lo, x1.y * x2.y);
+                    floatfloat_fms(val_hi, val_lo, x1.y, x2.y);
                     floatfloat_hilo_add(hi.x, lo.x, val_hi, val_lo);
 
                     val_hi = x1.x * x2.y; val_lo = 0.0;
-                    floatfloat_add(val_hi, val_lo, x1.y * x2.x);
+                    floatfloat_fma(val_hi, val_lo, x1.y, x2.x);
                     floatfloat_hilo_add(hi.y, lo.y, val_hi, val_lo);
                 }}";
 
@@ -209,11 +209,11 @@ namespace TensorShaderCudaBackend {
                     float val_hi, val_lo;
 
                     val_hi = x1.x * x2.x; val_lo = 0.0;
-                    floatfloat_add(val_hi, val_lo, x1.y * x2.y);
+                    floatfloat_fma(val_hi, val_lo, x1.y, x2.y);
                     floatfloat_hilo_add(hi.x, lo.x, val_hi, val_lo);
 
                     val_hi = x1.y * x2.x; val_lo = 0.0;
-                    floatfloat_sub(val_hi, val_lo, x1.x * x2.y);
+                    floatfloat_fms(val_hi, val_lo, x1.x, x2.y);
                     floatfloat_hilo_add(hi.y, lo.y, val_hi, val_lo);
                 }}";
 
@@ -239,27 +239,27 @@ namespace TensorShaderCudaBackend {
                     float val_hi, val_lo;
 
                     val_hi = x1.x * x2.x; val_lo = 0.0;
-                    floatfloat_add(val_hi, val_lo, x1.y * x2.y);
-                    floatfloat_add(val_hi, val_lo, x1.z * x2.z);
-                    floatfloat_add(val_hi, val_lo, x1.w * x2.w);
+                    floatfloat_fma(val_hi, val_lo, x1.y, x2.y);
+                    floatfloat_fma(val_hi, val_lo, x1.z, x2.z);
+                    floatfloat_fma(val_hi, val_lo, x1.w, x2.w);
                     floatfloat_hilo_add(hi.x, lo.x, val_hi, val_lo);
 
                     val_hi = x1.x * x2.y; val_lo = 0.0;
-                    floatfloat_sub(val_hi, val_lo, x1.y * x2.x);
-                    floatfloat_sub(val_hi, val_lo, x1.z * x2.w);
-                    floatfloat_add(val_hi, val_lo, x1.w * x2.z);
+                    floatfloat_fms(val_hi, val_lo, x1.y, x2.x);
+                    floatfloat_fms(val_hi, val_lo, x1.z, x2.w);
+                    floatfloat_fma(val_hi, val_lo, x1.w, x2.z);
                     floatfloat_hilo_add(hi.y, lo.y, val_hi, val_lo);
 
                     val_hi = x1.x * x2.z; val_lo = 0.0;
-                    floatfloat_add(val_hi, val_lo, x1.y * x2.w);
-                    floatfloat_sub(val_hi, val_lo, x1.z * x2.x);
-                    floatfloat_sub(val_hi, val_lo, x1.w * x2.y);
+                    floatfloat_fma(val_hi, val_lo, x1.y, x2.w);
+                    floatfloat_fms(val_hi, val_lo, x1.z, x2.x);
+                    floatfloat_fms(val_hi, val_lo, x1.w, x2.y);
                     floatfloat_hilo_add(hi.z, lo.z, val_hi, val_lo);
 
                     val_hi = x1.x * x2.w; val_lo = 0.0;
-                    floatfloat_sub(val_hi, val_lo, x1.y * x2.z);
-                    floatfloat_add(val_hi, val_lo, x1.z * x2.y);
-                    floatfloat_sub(val_hi, val_lo, x1.w * x2.x);
+                    floatfloat_fms(val_hi, val_lo, x1.y, x2.z);
+                    floatfloat_fma(val_hi, val_lo, x1.z, x2.y);
+                    floatfloat_fms(val_hi, val_lo, x1.w, x2.x);
                     floatfloat_hilo_add(hi.w, lo.w, val_hi, val_lo);
                 }}";
 
@@ -270,27 +270,27 @@ namespace TensorShaderCudaBackend {
                     float val_hi, val_lo;
 
                     val_hi = x1.x * x2.x; val_lo = 0.0;
-                    floatfloat_sub(val_hi, val_lo, x1.y * x2.y);
-                    floatfloat_sub(val_hi, val_lo, x1.z * x2.z);
-                    floatfloat_sub(val_hi, val_lo, x1.w * x2.w);
+                    floatfloat_fms(val_hi, val_lo, x1.y, x2.y);
+                    floatfloat_fms(val_hi, val_lo, x1.z, x2.z);
+                    floatfloat_fms(val_hi, val_lo, x1.w, x2.w);
                     floatfloat_hilo_add(hi.x, lo.x, val_hi, val_lo);
 
                     val_hi = x1.x * x2.y; val_lo = 0.0;
-                    floatfloat_add(val_hi, val_lo, x1.y * x2.x);
-                    floatfloat_add(val_hi, val_lo, x1.z * x2.w);
-                    floatfloat_sub(val_hi, val_lo, x1.w * x2.z);
+                    floatfloat_fma(val_hi, val_lo, x1.y, x2.x);
+                    floatfloat_fma(val_hi, val_lo, x1.z, x2.w);
+                    floatfloat_fms(val_hi, val_lo, x1.w, x2.z);
                     floatfloat_hilo_add(hi.y, lo.y, val_hi, val_lo);
 
                     val_hi = x1.x * x2.z; val_lo = 0.0;
-                    floatfloat_sub(val_hi, val_lo, x1.y * x2.w);
-                    floatfloat_add(val_hi, val_lo, x1.z * x2.x);
-                    floatfloat_add(val_hi, val_lo, x1.w * x2.y);
+                    floatfloat_fms(val_hi, val_lo, x1.y, x2.w);
+                    floatfloat_fma(val_hi, val_lo, x1.z, x2.x);
+                    floatfloat_fma(val_hi, val_lo, x1.w, x2.y);
                     floatfloat_hilo_add(hi.z, lo.z, val_hi, val_lo);
 
                     val_hi = x1.x * x2.w; val_lo = 0.0;
-                    floatfloat_add(val_hi, val_lo, x1.y * x2.z);
-                    floatfloat_sub(val_hi, val_lo, x1.z * x2.y);
-                    floatfloat_add(val_hi, val_lo, x1.w * x2.x);
+                    floatfloat_fma(val_hi, val_lo, x1.y, x2.z);
+                    floatfloat_fms(val_hi, val_lo, x1.z, x2.y);
+                    floatfloat_fma(val_hi, val_lo, x1.w, x2.x);
                     floatfloat_hilo_add(hi.w, lo.w, val_hi, val_lo);
                 }}";
 
@@ -301,27 +301,27 @@ namespace TensorShaderCudaBackend {
                     float val_hi, val_lo;
 
                     val_hi = x1.x * x2.x; val_lo = 0.0;
-                    floatfloat_add(val_hi, val_lo, x1.y * x2.y);
-                    floatfloat_add(val_hi, val_lo, x1.z * x2.z);
-                    floatfloat_add(val_hi, val_lo, x1.w * x2.w);
+                    floatfloat_fma(val_hi, val_lo, x1.y, x2.y);
+                    floatfloat_fma(val_hi, val_lo, x1.z, x2.z);
+                    floatfloat_fma(val_hi, val_lo, x1.w, x2.w);
                     floatfloat_hilo_add(hi.x, lo.x, val_hi, val_lo);
 
                     val_hi = -x1.x * x2.y; val_lo = 0.0;
-                    floatfloat_add(val_hi, val_lo, x1.y * x2.x);
-                    floatfloat_sub(val_hi, val_lo, x1.z * x2.w);
-                    floatfloat_add(val_hi, val_lo, x1.w * x2.z);
+                    floatfloat_fma(val_hi, val_lo, x1.y, x2.x);
+                    floatfloat_fms(val_hi, val_lo, x1.z, x2.w);
+                    floatfloat_fma(val_hi, val_lo, x1.w, x2.z);
                     floatfloat_hilo_add(hi.y, lo.y, val_hi, val_lo);
 
                     val_hi = -x1.x * x2.z; val_lo = 0.0;
-                    floatfloat_add(val_hi, val_lo, x1.y * x2.w);
-                    floatfloat_add(val_hi, val_lo, x1.z * x2.x);
-                    floatfloat_sub(val_hi, val_lo, x1.w * x2.y);
+                    floatfloat_fma(val_hi, val_lo, x1.y, x2.w);
+                    floatfloat_fma(val_hi, val_lo, x1.z, x2.x);
+                    floatfloat_fms(val_hi, val_lo, x1.w, x2.y);
                     floatfloat_hilo_add(hi.z, lo.z, val_hi, val_lo);
 
                     val_hi = -x1.x * x2.w; val_lo = 0.0;
-                    floatfloat_sub(val_hi, val_lo, x1.y * x2.z);
-                    floatfloat_add(val_hi, val_lo, x1.z * x2.y);
-                    floatfloat_add(val_hi, val_lo, x1.w * x2.x);
+                    floatfloat_fms(val_hi, val_lo, x1.y, x2.z);
+                    floatfloat_fma(val_hi, val_lo, x1.z, x2.y);
+                    floatfloat_fma(val_hi, val_lo, x1.w, x2.x);
                     floatfloat_hilo_add(hi.w, lo.w, val_hi, val_lo);
                 }}";
 
@@ -355,23 +355,23 @@ namespace TensorShaderCudaBackend {
                     float val_hi, val_lo;
 
                     val_hi = u.x * (vzqz + vxqx - vyqw); val_lo = 0.0;
-                    floatfloat_add(val_hi, val_lo, u.y * (vxqw + vyqx - vzqy));
-                    floatfloat_add(val_hi, val_lo, u.z * (vyqy + vzqx - vxqz));
+                    floatfloat_fma(val_hi, val_lo, u.y, (vxqw + vyqx - vzqy));
+                    floatfloat_fma(val_hi, val_lo, u.z, (vyqy + vzqx - vxqz));
                     floatfloat_hilo_add(hi.x, lo.x, val_hi, val_lo);
 
                     val_hi = u.x * (vzqw + vxqy + vyqz); val_lo = 0.0;
-                    floatfloat_add(val_hi, val_lo, u.y * (vxqz - vyqy - vzqx));
-                    floatfloat_add(val_hi, val_lo, u.z * (vyqx - vzqy + vxqw));
+                    floatfloat_fma(val_hi, val_lo, u.y, (vxqz - vyqy - vzqx));
+                    floatfloat_fma(val_hi, val_lo, u.z, (vyqx - vzqy + vxqw));
                     floatfloat_hilo_add(hi.y, lo.y, val_hi, val_lo);
 
                     val_hi = u.x * (vzqx - vxqz + vyqy); val_lo = 0.0;
-                    floatfloat_add(val_hi, val_lo, u.y * (vxqy + vyqz + vzqw));
-                    floatfloat_add(val_hi, val_lo, u.z * (vyqw - vzqz - vxqx));
+                    floatfloat_fma(val_hi, val_lo, u.y, (vxqy + vyqz + vzqw));
+                    floatfloat_fma(val_hi, val_lo, u.z, (vyqw - vzqz - vxqx));
                     floatfloat_hilo_add(hi.z, lo.z, val_hi, val_lo);
 
                     val_hi = u.x * (vzqy - vxqw - vyqx); val_lo = 0.0;
-                    floatfloat_add(val_hi, val_lo, u.y * (vxqx - vyqw + vzqz));
-                    floatfloat_add(val_hi, val_lo, u.z * (vyqz + vzqw + vxqy));
+                    floatfloat_fma(val_hi, val_lo, u.y, (vxqx - vyqw + vzqz));
+                    floatfloat_fma(val_hi, val_lo, u.z, (vyqz + vzqw + vxqy));
                     floatfloat_hilo_add(hi.w, lo.w, val_hi, val_lo);
                 }}";
 
@@ -387,18 +387,18 @@ namespace TensorShaderCudaBackend {
                     float val_hi, val_lo;
 
                     val_hi = v.x * (sx + sy - sz - sw); val_lo = 0.0;
-                    floatfloat_add(val_hi, val_lo, vy2 * (mx - nz));
-                    floatfloat_add(val_hi, val_lo, vz2 * (mz + ny));
+                    floatfloat_fma(val_hi, val_lo, vy2, (mx - nz));
+                    floatfloat_fma(val_hi, val_lo, vz2, (mz + ny));
                     floatfloat_hilo_add(hi.x, lo.x, val_hi, val_lo);
 
                     val_hi = v.y * (sx - sy + sz - sw); val_lo = 0.0;
-                    floatfloat_add(val_hi, val_lo, vz2 * (my - nx));
-                    floatfloat_add(val_hi, val_lo, vx2 * (mx + nz));
+                    floatfloat_fma(val_hi, val_lo, vz2, (my - nx));
+                    floatfloat_fma(val_hi, val_lo, vx2, (mx + nz));
                     floatfloat_hilo_add(hi.y, lo.y, val_hi, val_lo);
 
                     val_hi = v.z * (sx - sy - sz + sw); val_lo = 0.0;
-                    floatfloat_add(val_hi, val_lo, vx2 * (mz - ny));
-                    floatfloat_add(val_hi, val_lo, vy2 * (my + nx));
+                    floatfloat_fma(val_hi, val_lo, vx2, (mz - ny));
+                    floatfloat_fma(val_hi, val_lo, vy2, (my + nx));
                     floatfloat_hilo_add(hi.z, lo.z, val_hi, val_lo);
                 }}";
 
@@ -414,18 +414,18 @@ namespace TensorShaderCudaBackend {
                     float val_hi, val_lo;
 
                     val_hi = v.x * (sx + sy - sz - sw); val_lo = 0.0;
-                    floatfloat_add(val_hi, val_lo, vy2 * (mx + nz));
-                    floatfloat_add(val_hi, val_lo, vz2 * (mz - ny));
+                    floatfloat_fma(val_hi, val_lo, vy2, (mx + nz));
+                    floatfloat_fma(val_hi, val_lo, vz2, (mz - ny));
                     floatfloat_hilo_add(hi.x, lo.x, val_hi, val_lo);
 
                     val_hi = v.y * (sx - sy + sz - sw); val_lo = 0.0;
-                    floatfloat_add(val_hi, val_lo, vz2 * (my + nx));
-                    floatfloat_add(val_hi, val_lo, vx2 * (mx - nz));
+                    floatfloat_fma(val_hi, val_lo, vz2, (my + nx));
+                    floatfloat_fma(val_hi, val_lo, vx2, (mx - nz));
                     floatfloat_hilo_add(hi.y, lo.y, val_hi, val_lo);
 
                     val_hi = v.z * (sx - sy - sz + sw); val_lo = 0.0;
-                    floatfloat_add(val_hi, val_lo, vx2 * (mz + ny));
-                    floatfloat_add(val_hi, val_lo, vy2 * (my - nx));
+                    floatfloat_fma(val_hi, val_lo, vx2, (mz + ny));
+                    floatfloat_fma(val_hi, val_lo, vy2, (my - nx));
                     floatfloat_hilo_add(hi.z, lo.z, val_hi, val_lo);
                 }}";
             }
