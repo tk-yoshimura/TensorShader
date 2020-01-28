@@ -44,15 +44,17 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
                 float uv_hi = 0.0, uv_lo = 0.0;
 
+                unsigned int filter_idx = ch;
+                unsigned int inmap_idx = ch + {Channels} * ox;
+
                 for(unsigned int kx = 0, ix = ox; kx < {KernelWidth}; kx++, ix++){{
-
-                    unsigned int inmap_idx = ch + {Channels} * ix;
-                    unsigned int filter_idx = ch + {Channels} * kx;
-
                     float u = inmap[inmap_idx];
                     float v = filter[filter_idx];
 
                     floatfloat_fma(uv_hi, uv_lo, u, v);
+
+                    filter_idx += {Channels};
+                    inmap_idx += {Channels};
                 }}
 
                 unsigned int outmap_idx = ch + {Channels} * ox;

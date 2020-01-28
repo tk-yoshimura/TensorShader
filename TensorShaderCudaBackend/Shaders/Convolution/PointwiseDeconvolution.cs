@@ -49,8 +49,8 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 __shared__ float us[{InChannels}];
                 float uv_hi = 0.0, uv_lo = 0.0;
 
-                unsigned int inmap_idx = {InChannels} * i;
                 unsigned int filter_idx = outch;
+                unsigned int inmap_idx = {InChannels} * i;
 
                 store_smem(inmap + inmap_idx, us, tid);
 

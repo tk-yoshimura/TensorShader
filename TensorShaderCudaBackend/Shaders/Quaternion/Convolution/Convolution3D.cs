@@ -77,14 +77,17 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
                 __shared__ float4 us[{InChannels}];
                 float4 uv_hi = ctor_float4(0.0, 0.0, 0.0, 0.0), uv_lo = ctor_float4(0.0, 0.0, 0.0, 0.0);
 
+                unsigned int filter_idx = outch;
+
                 for(unsigned int kz = 0, iz = oz; kz < {KernelDepth}; kz++, iz++){{
                     for(unsigned int ky = 0, iy = oy; ky < {KernelHeight}; ky++, iy++){{
+
+                        unsigned int inmap_idx = {InChannels} * (ox + inwidth * (iy + inheight * iz));
+
                         for(unsigned int kx = 0, ix = ox; kx < {KernelWidth}; kx++, ix++){{
 
-                            unsigned int inmap_idx = {InChannels} * (ix + inwidth * (iy + inheight * iz));
-                            unsigned int filter_idx = outch + {InChannels * OutChannels} * (kx + {KernelWidth} * (ky + {KernelHeight} * kz));
-
                             store_smem(inmap + inmap_idx, us, tid);
+                            inmap_idx += {InChannels};
 
                             { (OutChannels % ThreadsX != 0 ? $"if(outch < {OutChannels}){{" : "") }
                                 for(unsigned int inch = 0; inch < {InChannels}; inch++){{

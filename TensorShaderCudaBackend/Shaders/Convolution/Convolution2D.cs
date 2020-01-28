@@ -62,13 +62,16 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
                 __shared__ float us[{InChannels}];
                 float uv_hi = 0.0, uv_lo = 0.0;
 
+                unsigned int filter_idx = outch;
+
                 for(unsigned int ky = 0, iy = oy; ky < {KernelHeight}; ky++, iy++){{
+
+                    unsigned int inmap_idx = {InChannels} * (ox + inwidth * iy);
+
                     for(unsigned int kx = 0, ix = ox; kx < {KernelWidth}; kx++, ix++){{
 
-                        unsigned int inmap_idx = {InChannels} * (ix + inwidth * iy);
-                        unsigned int filter_idx = outch + {InChannels * OutChannels} * (kx + {KernelWidth} * ky);
-
                         store_smem(inmap + inmap_idx, us, tid);
+                        inmap_idx += {InChannels};
 
                         { (OutChannels % ThreadsX != 0 ? $"if(outch < {OutChannels}){{" : "") }
                             for(unsigned int inch = 0; inch < {InChannels}; inch++){{

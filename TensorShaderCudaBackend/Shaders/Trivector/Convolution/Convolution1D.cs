@@ -61,12 +61,13 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
                 __shared__ float3 vs[{InChannels}];
                 float3 vq_hi = ctor_float3(0.0, 0.0, 0.0), vq_lo = ctor_float3(0.0, 0.0, 0.0);
 
+                unsigned int inmap_idx = {InChannels} * ox;
+                unsigned int filter_idx = outch;
+
                 for(unsigned int kx = 0, ix = ox; kx < {KernelWidth}; kx++, ix++){{
 
-                    unsigned int inmap_idx = {InChannels} * ix;
-                    unsigned int filter_idx = outch + {InChannels * OutChannels} * kx;
-
                     store_smem(inmap + inmap_idx, vs, tid);
+                    inmap_idx += {InChannels};
 
                     { (OutChannels % ThreadsX != 0 ? $"if(outch < {OutChannels}){{" : "") }
                         for(unsigned int inch = 0; inch < {InChannels}; inch++){{
