@@ -13,6 +13,8 @@
             __global__ void linearzoom_1d(float *inmap, float *outmap,
                                          unsigned int inwidth) {{
 
+                const float inv = 1.0 / 3;
+
                 unsigned int ch = {Defines.IndexX}, ix = {Defines.IndexY};
 
                 if (ch >= {Channels} || ix >= inwidth) {{
@@ -35,8 +37,8 @@
                 float xl = inmap[inmap_l_idx];
                 float xr = inmap[inmap_r_idx];
 
-                outmap[outmap_idx + l] = (xc + xl) / 3.0;
-                outmap[outmap_idx + r] = (xc + xr) / 3.0;
+                outmap[outmap_idx + l] = (xc + xl) * inv;
+                outmap[outmap_idx + r] = (xc + xr) * inv;
             }}";
 
             this.Kernel = new Kernel(code, "linearzoom_1d");

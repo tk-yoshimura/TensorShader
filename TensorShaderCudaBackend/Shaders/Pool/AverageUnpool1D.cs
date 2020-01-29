@@ -14,6 +14,8 @@
             __global__ void averageunpool_1d(float *inmap, float *outmap,
                                              unsigned int inwidth) {{
 
+                const float inv = 1.0 / {Stride};
+
                 unsigned int ch = {Defines.IndexX}, ix = {Defines.IndexY};
 
                 if (ch >= {Channels} || ix >= inwidth) {{
@@ -25,7 +27,7 @@
                 unsigned int inmap_idx = ch + {Channels} * ix;
                 unsigned int outmap_idx = ch + {Channels} * ox;
 
-                float v = inmap[inmap_idx] / {Stride};
+                float v = inmap[inmap_idx] * inv;
 
                 for(int kx = 0; kx < {Stride}; kx++){{
                     outmap[outmap_idx] = v;

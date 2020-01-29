@@ -16,6 +16,8 @@
                                            unsigned int inwidth, unsigned int outwidth,
                                            unsigned int inheight, unsigned int outheight) {{
 
+                const float inv = 1.0 / {Stride * Stride * Stride};
+
                 unsigned int ch = {Defines.IndexX}, ox = {Defines.IndexY}, oy = {Defines.IndexZ};
 
                 if (ch >= {Channels} || ox >= outwidth || oy >= outheight) {{
@@ -38,7 +40,7 @@
                 }}
 
                 unsigned int outmap_idx = ch + {Channels} * (ox + outwidth * (oy + outheight * oz));
-                outmap[outmap_idx] = vsum / {Stride * Stride * Stride};
+                outmap[outmap_idx] = vsum * inv;
             }}";
 
             this.Kernel = new Kernel(code, "averagepool_3d");

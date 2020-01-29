@@ -15,6 +15,8 @@
                                              unsigned int inwidth, unsigned int outwidth,
                                              unsigned int inheight) {{
 
+                const float inv = 1.0 / {Stride * Stride};
+
                 unsigned int ch = {Defines.IndexX}, ix = {Defines.IndexY}, iy = {Defines.IndexZ};
 
                 if (ch >= {Channels} || ix >= inwidth || iy >= inheight) {{
@@ -25,7 +27,7 @@
 
                 unsigned int inmap_idx = ch + {Channels} * (ix + inwidth * iy);
 
-                float v = inmap[inmap_idx] / {Stride * Stride};
+                float v = inmap[inmap_idx] * inv;
 
                 for(int ky = 0; ky < {Stride}; ky++){{
                     unsigned int outmap_idx = ch + {Channels} * (ox + outwidth * (oy + ky));

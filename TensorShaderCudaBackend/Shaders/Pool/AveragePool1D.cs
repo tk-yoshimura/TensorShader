@@ -14,6 +14,8 @@
             __global__ void averagepool_1d(float *inmap, float *outmap,
                                            unsigned int outwidth) {{
 
+                const float inv = 1.0 / {Stride};
+
                 unsigned int ch = {Defines.IndexX}, ox = {Defines.IndexY};
 
                 if (ch >= {Channels} || ox >= outwidth) {{
@@ -31,7 +33,7 @@
                 }}
 
                 unsigned int outmap_idx = ch + {Channels} * ox;
-                outmap[outmap_idx] = vsum / {Stride};
+                outmap[outmap_idx] = vsum * inv;
             }}";
 
             this.Kernel = new Kernel(code, "averagepool_1d");
