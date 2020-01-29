@@ -87,6 +87,8 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
                         store_smem(inmap + inmap_idx, us, tid);
 
                         { (OutChannels % ThreadsX != 0 ? $"if(outch < {OutChannels}){{" : "") }
+
+                            #pragma unroll 8
                             for(unsigned int inch = 0; inch < {InChannels}; inch++){{
                                 float2 u = us[inch];
                                 float2 v = filter[filter_idx];

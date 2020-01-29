@@ -68,12 +68,15 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
                     unsigned int inmap_idx = {InChannels} * (ox + inwidth * iy);
 
+                    { (KernelWidth <= 7 ? "#pragma unroll" : "") }
                     for(unsigned int kx = 0, ix = ox; kx < {KernelWidth}; kx++, ix++){{
 
                         store_smem(inmap + inmap_idx, us, tid);
                         inmap_idx += {InChannels};
 
                         { (OutChannels % ThreadsX != 0 ? $"if(outch < {OutChannels}){{" : "") }
+
+                            #pragma unroll 8
                             for(unsigned int inch = 0; inch < {InChannels}; inch++){{
                                 float u = us[inch];
                                 float v = filter[filter_idx];

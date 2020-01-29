@@ -65,6 +65,8 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
                 store_smem(inmap, vs, tid);
 
                 { (OutChannels % ThreadsX != 0 ? $"if(outch < {OutChannels}){{" : "") }
+
+                    #pragma unroll 4
                     for(unsigned int inch = 0; inch < {InChannels}; inch++){{
                         float3 v = vs[inch];
                         float4 q = filter[filter_idx];
