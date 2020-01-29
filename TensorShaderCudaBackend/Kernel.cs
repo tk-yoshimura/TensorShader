@@ -25,6 +25,12 @@ namespace TensorShaderCudaBackend {
         /// </remarks>
         public static uint MaxBlockSize => Math.Min(512, (uint)Cuda.CurrectDeviceProperty.MaxThreadsPerBlock);
 
+        /// <summary>命令並列数</summary>
+        /// <remarks>
+        /// = 16 (constant)
+        /// </remarks>
+        public static uint HalfWarp = 16;
+
         /// <summary>コンストラクタ</summary>
         /// <param name="code">コード</param>
         /// <param name="entrypoint">関数名</param>
@@ -179,7 +185,7 @@ namespace TensorShaderCudaBackend {
 
             const double occupancy = 0.8; /*スレッドの稼働率下限*/
 
-            for (uint block = MaxBlockSize; block >= 2; block /= 2) {
+            for (uint block = MaxBlockSize; block > HalfWarp; block /= 2) {
                 uint threads = (indexes + block - 1) / block * block;
 
                 if (indexes > threads * occupancy) {
@@ -187,7 +193,13 @@ namespace TensorShaderCudaBackend {
                 }
             }
 
-            return 1;
+            for (uint block = 1; block <= HalfWarp; block *= 2) {
+                if (indexes <= block) {
+                    return block;
+                }
+            }
+
+            return HalfWarp;
         }
 
         /// <summary>既定ブロック数</summary>
