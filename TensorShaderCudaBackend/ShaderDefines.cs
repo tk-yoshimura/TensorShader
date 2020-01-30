@@ -119,8 +119,8 @@ namespace TensorShaderCudaBackend {
                 string declare = $"static __inline__ __device__ void store_smem({elem} *ptr, {elem} *smem, unsigned int thread_idx)";
 
                 string repointer = @"
-                        const float* ptr_const = (const float*)(void*)ptr;
-                        volatile float* smem_volatile = (volatile float*)(void*)smem;
+                        const float* ptr_const = (const float*)ptr;
+                        volatile float* smem_volatile = (volatile float*)smem;
                     ";
                 
                 if(threads > length){
@@ -228,7 +228,7 @@ namespace TensorShaderCudaBackend {
                 public static string AtomicAdd =>
                 $@"
                 static __inline__ __device__ void floatfloat_atomicadd(float2 *ptr, float2 hi, float2 lo){{
-                    float *ptr_float = (float*)(void*)ptr;
+                    float *ptr_float = (float*)ptr;
 
                     float tmpx = atomicAdd(ptr_float, hi.x);
                     atomicAdd(ptr_float + 1, lo.x - (((tmpx + hi.x) - tmpx) - hi.x));
@@ -348,7 +348,7 @@ namespace TensorShaderCudaBackend {
                 public static string AtomicAdd =>
                 $@"
                 static __inline__ __device__ void floatfloat_atomicadd(float4 *ptr, float4 hi, float4 lo){{
-                    float *ptr_float = (float*)(void*)ptr;
+                    float *ptr_float = (float*)ptr;
 
                     float tmpx = atomicAdd(ptr_float, hi.x);
                     atomicAdd(ptr_float + 1, lo.x - (((tmpx + hi.x) - tmpx) - hi.x));
