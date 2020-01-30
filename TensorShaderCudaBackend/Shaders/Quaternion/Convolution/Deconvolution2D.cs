@@ -59,7 +59,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             {Defines.Quaternion.MulGrad}
             {Defines.StoreFloatSharedMemory(elemsize: 4, InChannels, ThreadsX)}
 
-            __global__ void quaternion_deconvolution_2d(float4 *inmap, float4 *outmap, float4 *filter,
+            __global__ void quaternion_deconvolution_2d(const float4* __restrict__ inmap, float4* __restrict__ outmap, const float4* __restrict__ filter,
                                                         unsigned int oy_offset,
                                                         unsigned int inwidth, unsigned int outwidth,
                                                         unsigned int inheight) {{

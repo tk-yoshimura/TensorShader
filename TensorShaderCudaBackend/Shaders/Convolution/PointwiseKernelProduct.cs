@@ -45,7 +45,8 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             {Defines.FloatFloatFma}
             {Defines.AtomicAdd}
 
-            __global__ void ptwise_kernelproduct(float *inmap, float *outmap, float *filter, unsigned int pl) {{
+            __global__ void ptwise_kernelproduct(const float* __restrict__ inmap, const float* __restrict__ outmap, float* __restrict__ filter, 
+                                                 unsigned int pl) {{
 
                 unsigned int inch = {Defines.IndexX}, outch = {Defines.IndexY};
                 unsigned int i_offset = {Defines.BlockIndexZ} * {BatchPixels};

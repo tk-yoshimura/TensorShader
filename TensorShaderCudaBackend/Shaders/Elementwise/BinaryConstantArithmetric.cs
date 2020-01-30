@@ -10,7 +10,7 @@
         public BinaryConstantArithmetric(string name, string func)
             : base(constants: 1, arrays: 2, name) {
             string code = $@"
-            __global__ void {name}(float c, float *x, float *y, unsigned int length) {{
+            __global__ void {name}(float c, const float* __restrict__ x, float* __restrict__ y, unsigned int length) {{
                 unsigned int i = {Defines.IndexX};
                 if (i >= length) {{
                     return;

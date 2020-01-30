@@ -32,7 +32,7 @@ namespace TensorShaderCudaBackend.Shaders.Batchwise {
 
                 __constant__ float v[{Batches}];
 
-                __global__ void mul_bw(float *x, float *y, unsigned int map_stride) {{
+                __global__ void mul_bw(const float* __restrict__ x, float* __restrict__ y, unsigned int map_stride) {{
                     unsigned int i = {Defines.IndexX}, j = {Defines.IndexY};
                     if (i >= map_stride || j >= {Batches}) {{
                         return;
@@ -43,7 +43,8 @@ namespace TensorShaderCudaBackend.Shaders.Batchwise {
             else {
                 code = $@"
 
-                __global__ void mul_bw(float *v, float *x, float *y, unsigned int map_stride) {{
+                __global__ void mul_bw(const float* __restrict__ v, const float* __restrict__ x, 
+                                       float* __restrict__ y, unsigned int map_stride) {{
                     unsigned int i = {Defines.IndexX}, j = {Defines.IndexY};
                     if (i >= map_stride || j >= {Batches}) {{
                         return;

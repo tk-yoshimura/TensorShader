@@ -47,7 +47,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             {Defines.Quaternion.MulGrad}
             {Defines.StoreFloatSharedMemory(elemsize: 4, InChannels, ThreadsX)}
 
-            __global__ void quaternion_dense(float4 *inmap, float4 *outmap, float4 *filter) {{
+            __global__ void quaternion_dense(const float4* __restrict__ inmap, float4* __restrict__ outmap, const float4* __restrict__ filter) {{
 
                 unsigned int outch = {Defines.IndexX}, th = {Defines.BlockIndexY};
                 unsigned int tid = {Defines.ThreadIdX};

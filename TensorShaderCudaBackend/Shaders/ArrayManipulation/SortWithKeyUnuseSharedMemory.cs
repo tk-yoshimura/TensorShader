@@ -19,7 +19,7 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         public SortWithKeyUnuseSharedMemory() {
             string code = $@"
 
-            __global__ void sortwithkey(float *map, float *key,
+            __global__ void sortwithkey(float* __restrict__ map, float* __restrict__ key,
                                         unsigned int stride, unsigned int axislength, unsigned int slides) {{
 
                 __shared__ int is_swaped_threads;

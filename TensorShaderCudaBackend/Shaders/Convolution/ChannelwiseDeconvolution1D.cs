@@ -33,7 +33,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             {Defines.FloatFloatFma}
 
-            __global__ void chwise_deconvolution_1d(float *inmap, float *outmap, float *filter,
+            __global__ void chwise_deconvolution_1d(const float* __restrict__ inmap, float* __restrict__ outmap, const float* __restrict__ filter,
                                                     unsigned int inwidth) {{
 
                 unsigned int ch = {Defines.IndexX};

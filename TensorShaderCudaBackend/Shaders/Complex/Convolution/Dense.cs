@@ -47,7 +47,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             {Defines.Complex.MulGrad}
             {Defines.StoreFloatSharedMemory(elemsize: 2, InChannels, ThreadsX)}
 
-            __global__ void complex_dense(float2 *inmap, float2 *outmap, float2 *filter) {{
+            __global__ void complex_dense(const float2* __restrict__ inmap, float2* __restrict__ outmap, const float2* __restrict__ filter) {{
 
                 unsigned int outch = {Defines.IndexX}, th = {Defines.BlockIndexY};
                 unsigned int tid = {Defines.ThreadIdX};

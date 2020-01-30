@@ -10,11 +10,11 @@
 
             string code = $@"
 
-            __global__ void linearzoom_3d(float *inmap, float *outmap,
-                                         unsigned int iz,
-                                         unsigned int inwidth, unsigned int outwidth,
-                                         unsigned int inheight, unsigned int outheight,
-                                         unsigned int indepth) {{
+            __global__ void linearzoom_3d(const float* __restrict__ inmap, float* __restrict__ outmap,
+                                          unsigned int iz,
+                                          unsigned int inwidth, unsigned int outwidth,
+                                          unsigned int inheight, unsigned int outheight,
+                                          unsigned int indepth) {{
 
                 const float inv = 1.0 / 27;
 

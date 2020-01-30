@@ -10,7 +10,7 @@
         public BinaryArithmetric(string name, string func)
             : base(arrays: 3, name) {
             string code = $@"
-            __global__ void {name}(float *x1, float *x2, float *y, unsigned int length) {{
+            __global__ void {name}(const float* __restrict__ x1, const float* __restrict__ x2, float* __restrict__ y, unsigned int length) {{
                 unsigned int i = {Defines.IndexX};
                 if (i >= length) {{
                     return;

@@ -12,7 +12,7 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         public HorizontalAdd() {
             string code = $@"
 
-            __global__ void horizontal_add(float *inmap, float *outmap, unsigned int n) {{
+            __global__ void horizontal_add(const float* __restrict__ inmap, float* __restrict__ outmap, unsigned int n) {{
 
                 unsigned int i = {Defines.IndexX};
 

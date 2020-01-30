@@ -13,7 +13,7 @@
 
             {Defines.CtorFloat4}
 
-            __global__ void {name}(float4 *inmap, float4 *outmap, unsigned int n) {{
+            __global__ void {name}(const float4* __restrict__ inmap, float4* __restrict__ outmap, unsigned int n) {{
                 unsigned int i = {Defines.IndexX};
                 if (i >= n) {{
                     return;

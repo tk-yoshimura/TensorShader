@@ -12,7 +12,7 @@
             string code = $@"
             #define NEGATIVE_INF __int_as_float(0xff800000)
 
-            __global__ void maxpool_2d(float *inmap, float *outmap,
+            __global__ void maxpool_2d(const float* __restrict__ inmap, float* __restrict__ outmap,
                                        unsigned int inwidth, unsigned int outwidth,
                                        unsigned int outheight) {{
 

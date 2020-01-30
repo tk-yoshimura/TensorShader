@@ -30,7 +30,7 @@ namespace TensorShaderCudaBackend.Shaders.Transpose {
 
             string code = $@"
 
-            __global__ void transpose_quaternion_kernel_channels(float4 *inmap, float4 *outmap,
+            __global__ void transpose_quaternion_kernel_channels(const float4* __restrict__ inmap, float4* __restrict__ outmap,
                                                                  unsigned int pts) {{
 
                 unsigned int inch = {Defines.IndexX}, outch = {Defines.IndexY}, i = {Defines.IndexZ};

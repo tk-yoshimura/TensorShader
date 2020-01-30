@@ -13,7 +13,7 @@ namespace TensorShaderCudaBackend.Shaders.Pool {
 
             string code = $@"
 
-            __global__ void maxunpool_2d(float *ingrad, float *inpool, float *inmap, float *outmap,
+            __global__ void maxunpool_2d(const float* __restrict__ ingrad, const float* __restrict__ inpool, const float* __restrict__ inmap, float* __restrict__ outmap,
                                          unsigned int inwidth, unsigned int outwidth,
                                          unsigned int inheight) {{
 

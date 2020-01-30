@@ -10,8 +10,8 @@
 
             string code = $@"
 
-            __global__ void neighborzoom_1d(float *inmap, float *outmap,
-                                           unsigned int inwidth) {{
+            __global__ void neighborzoom_1d(const float* __restrict__ inmap, float* __restrict__ outmap,
+                                            unsigned int inwidth) {{
 
                 unsigned int ch = {Defines.IndexX}, ix = {Defines.IndexY};
 

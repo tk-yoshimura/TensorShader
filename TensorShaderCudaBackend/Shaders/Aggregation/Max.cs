@@ -9,7 +9,7 @@
 
             string code = $@"
 
-            __global__ void aggregate_max(float *inmap, float *outmap,
+            __global__ void aggregate_max(const float* __restrict__ inmap, float* __restrict__ outmap,
                                           unsigned int axislength, unsigned int shared_memory_length,
                                           unsigned int stride, unsigned int slide) {{
 

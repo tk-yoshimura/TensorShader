@@ -10,11 +10,11 @@
 
             string code = $@"
 
-            __global__ void neighborzoom_3d(float *inmap, float *outmap,
-                                           unsigned int iz,
-                                           unsigned int inwidth, unsigned int outwidth,
-                                           unsigned int inheight, unsigned int outheight,
-                                           unsigned int indepth) {{
+            __global__ void neighborzoom_3d(const float* __restrict__ inmap, float* __restrict__ outmap,
+                                            unsigned int iz,
+                                            unsigned int inwidth, unsigned int outwidth,
+                                            unsigned int inheight, unsigned int outheight,
+                                            unsigned int indepth) {{
 
                 unsigned int ch = {Defines.IndexX}, ix = {Defines.IndexY}, iy = {Defines.IndexZ};
 

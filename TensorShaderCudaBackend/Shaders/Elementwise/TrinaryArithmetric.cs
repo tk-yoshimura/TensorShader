@@ -10,7 +10,7 @@
         public TrinaryArithmetric(string name, string func)
             : base(arrays: 4, name) {
             string code = $@"
-            __global__ void {name}(float *x1, float *x2, float *x3, float *y, unsigned int length) {{
+            __global__ void {name}(const float* __restrict__ x1, const float* __restrict__ x2, const float* __restrict__ x3, float* __restrict__ y, unsigned int length) {{
                 unsigned int i = {Defines.IndexX};
                 if (i >= length) {{
                     return;

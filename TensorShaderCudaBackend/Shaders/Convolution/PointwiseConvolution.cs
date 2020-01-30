@@ -43,7 +43,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             {Defines.FloatFloatFma}
             {Defines.StoreFloatSharedMemory(elemsize: 1, InChannels, ThreadsX)}
 
-            __global__ void ptwise_convolution(float *inmap, float *outmap, float *filter) {{
+            __global__ void ptwise_convolution(const float* __restrict__ inmap, float* __restrict__ outmap, const float* __restrict__ filter) {{
 
                 unsigned int outch = {Defines.IndexX}, tid = {Defines.ThreadIdX};
                 unsigned int i = {Defines.BlockIndexY};

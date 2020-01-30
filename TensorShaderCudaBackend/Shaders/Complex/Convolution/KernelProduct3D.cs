@@ -70,7 +70,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             {Defines.Complex.KernelProd}
             {Defines.Complex.AtomicAdd}
 
-            __global__ void complex_kernelproduct_3d(float2 *inmap, float2 *outmap, float2 *filter,
+            __global__ void complex_kernelproduct_3d(const float2* __restrict__ inmap, const float2* __restrict__ outmap, float2* __restrict__ filter,
                                                      unsigned int oy_offset,
                                                      unsigned int oz,
                                                      unsigned int xsets,

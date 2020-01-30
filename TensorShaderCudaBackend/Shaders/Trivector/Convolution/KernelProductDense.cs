@@ -46,7 +46,8 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
             {Defines.Trivector.KernelProd}
             {Defines.Quaternion.AtomicAdd}
 
-            __global__ void trivector_kernelproduct_dense(float3 *inmap, float3 *outmap, float4 *filter_value, float4 *filter_grad) {{
+            __global__ void trivector_kernelproduct_dense(const float3* __restrict__ inmap, const float3* __restrict__ outmap, 
+                                                          const float4* __restrict__ filter_value, float4* __restrict__ filter_grad) {{
 
                 unsigned int inch = {Defines.IndexX}, outch = {Defines.IndexY}, th = {Defines.BlockIndexZ};
                 unsigned int tidx = {Defines.ThreadIdX}, tidy = {Defines.ThreadIdY};

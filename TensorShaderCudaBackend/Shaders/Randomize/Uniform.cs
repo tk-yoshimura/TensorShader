@@ -7,7 +7,7 @@
         /// <summary>コンストラクタ</summary>
         public Uniform() {
             string code = $@"
-            __global__ void uniform_random(float *y, unsigned int length, unsigned int warps,
+            __global__ void uniform_random(float* __restrict__ refmap, unsigned int length, unsigned int warps,
                                            unsigned int seed1, unsigned int seed2, unsigned int seed3) {{
                 unsigned int j = {Defines.IndexX}, k = {Defines.IndexY};
                 if (k >= warps) {{
@@ -29,7 +29,7 @@
                     sw = (sx ^ (sx << 3)) ^ (sy ^ (sy >> 19)) ^ (sz ^ (sz << 6));
                     sx = sy; sy = sz; sz = sw;
 
-                    y[idx] = sw * 2.328306436538696e-10;
+                    refmap[idx] = sw * 2.328306436538696e-10;
                 }}
             }}";
 

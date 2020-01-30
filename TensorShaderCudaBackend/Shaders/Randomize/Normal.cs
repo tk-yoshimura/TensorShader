@@ -6,7 +6,7 @@
         /// <summary>コンストラクタ</summary>
         public Normal() {
             string code = $@"
-            __global__ void normal_random(float *y, unsigned int length, unsigned int warps,
+            __global__ void normal_random(float* __restrict__ refmap, unsigned int length, unsigned int warps,
                                           unsigned int seed1, unsigned int seed2, unsigned int seed3) {{
                 unsigned int j = {Defines.IndexX}, k = {Defines.IndexY};
                 if (k >= warps) {{
@@ -30,7 +30,7 @@
 
                     float vy = (sy + 1.0) * 2.328306436538696e-10, vz = sz * 2.328306436538696e-10 * 6.283185307179586;
 
-                    y[idx] = sqrtf(-2 * logf(vy)) * cosf(vz);
+                    refmap[idx] = sqrtf(-2 * logf(vy)) * cosf(vz);
                 }}
             }}";
 

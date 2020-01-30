@@ -13,7 +13,7 @@ namespace TensorShaderCudaBackend.Shaders.Indexer {
         public Index() {
             string code = $@"
 
-            __global__ void index(float *y, unsigned int round, unsigned int stride, unsigned axislength) {{
+            __global__ void index(float* __restrict__ y, unsigned int round, unsigned int stride, unsigned axislength) {{
                 unsigned int i = {Defines.IndexX};
                 if (i >= round) {{
                     return;

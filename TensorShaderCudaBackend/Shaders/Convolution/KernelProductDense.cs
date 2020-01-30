@@ -36,10 +36,10 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
             static __inline__ __device__ void floatfloat_atomicadd(float *ptr, float val){{
                 float tmp = atomicAdd(ptr, val);
-                atomicAdd(ptr + 1, -(((tmp + val) - tmp) - val));
+                atomicAdd(ptr + 1, (val - ((tmp + val) - tmp)));
             }}
 
-            __global__ void kernelproduct_dense(float *inmap, float *outmap, float *filter) {{
+            __global__ void kernelproduct_dense(const float* __restrict__ inmap, const float* __restrict__ outmap, float* __restrict__ filter) {{
 
                 unsigned int inch = {Defines.IndexX}, outch = {Defines.IndexY}, th = {Defines.BlockIndexZ};
                 unsigned int tidx = {Defines.ThreadIdX}, tidy = {Defines.ThreadIdY};

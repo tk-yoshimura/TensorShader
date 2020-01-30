@@ -22,13 +22,13 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
 
             string code = $@"
 
-            __global__ void gather(float *x, float *y, unsigned int n) {{
+            __global__ void gather(const float* __restrict__ inmap, float* __restrict__ outmap, unsigned int n) {{
                 unsigned int i = {Defines.IndexX};
                 if (i >= n) {{
                     return;
                 }}
 
-                y[i * {Arrays}] = x[i];
+                outmap[i * {Arrays}] = inmap[i];
             }}";
 
             this.Kernel = new Kernel(code, "gather");

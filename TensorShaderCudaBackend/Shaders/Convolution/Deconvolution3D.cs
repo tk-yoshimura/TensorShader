@@ -54,7 +54,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             {Defines.FloatFloatFma}
             {Defines.StoreFloatSharedMemory(elemsize: 1, InChannels, ThreadsX)}
 
-            __global__ void deconvolution_3d(float *inmap, float *outmap, float *filter,
+            __global__ void deconvolution_3d(const float* __restrict__ inmap, float* __restrict__ outmap, const float* __restrict__ filter,
                                              unsigned int oy_offset, unsigned int oz,
                                              unsigned int inwidth, unsigned int outwidth,
                                              unsigned int inheight, unsigned int outheight,

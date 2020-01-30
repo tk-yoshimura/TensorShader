@@ -71,7 +71,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             {Defines.Quaternion.KernelProd}
             {Defines.Quaternion.AtomicAdd}
 
-            __global__ void quaternion_kernelproduct_3d(float4 *inmap, float4 *outmap, float4 *filter,
+            __global__ void quaternion_kernelproduct_3d(const float4* __restrict__ inmap, const float4* __restrict__ outmap, float4* __restrict__ filter,
                                                         unsigned int oy_offset,
                                                         unsigned int oz,
                                                         unsigned int xsets,

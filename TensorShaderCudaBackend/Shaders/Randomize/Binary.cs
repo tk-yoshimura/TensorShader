@@ -9,7 +9,7 @@ namespace TensorShaderCudaBackend.Shaders.Randomize {
         public Binary() :
             base(exparams: 1) {
             string code = $@"
-            __global__ void binary_random(float *y, unsigned int length, unsigned int warps,
+            __global__ void binary_random(float* __restrict__ refmap, unsigned int length, unsigned int warps,
                                            unsigned int seed1, unsigned int seed2, unsigned int seed3, float thr) {{
                 unsigned int j = {Defines.IndexX}, k = {Defines.IndexY};
                 if (k >= warps) {{
@@ -31,7 +31,7 @@ namespace TensorShaderCudaBackend.Shaders.Randomize {
                     sw = (sx ^ (sx << 3)) ^ (sy ^ (sy >> 19)) ^ (sz ^ (sz << 6));
                     sx = sy; sy = sz; sz = sw;
 
-                    y[idx] = (sw * 2.328306436538696e-10) < thr ? 1.0 : 0.0;
+                    refmap[idx] = (sw * 2.328306436538696e-10) < thr ? 1.0 : 0.0;
                 }}
             }}";
 

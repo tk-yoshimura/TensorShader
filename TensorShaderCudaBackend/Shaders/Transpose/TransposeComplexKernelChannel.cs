@@ -30,7 +30,7 @@ namespace TensorShaderCudaBackend.Shaders.Transpose {
 
             string code = $@"
 
-            __global__ void transpose_complex_kernel_channels(float2 *inmap, float2 *outmap,
+            __global__ void transpose_complex_kernel_channels(const float2* __restrict__ inmap, float2* __restrict__ outmap,
                                                               unsigned int pts) {{
 
                 unsigned int inch = {Defines.IndexX}, outch = {Defines.IndexY}, i = {Defines.IndexZ};

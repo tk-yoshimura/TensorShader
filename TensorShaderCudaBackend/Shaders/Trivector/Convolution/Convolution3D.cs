@@ -65,7 +65,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
             {Defines.Trivector.MulGrad}
             {Defines.StoreFloatSharedMemory(elemsize: 3, InChannels, ThreadsX)}
 
-            __global__ void trivector_convolution_3d(float3 *inmap, float3 *outmap, float4 *filter,
+            __global__ void trivector_convolution_3d(const float3* __restrict__ inmap, float3* __restrict__ outmap, const float4* __restrict__ filter,
                                                      unsigned int oy_offset, unsigned int oz,
                                                      unsigned int inwidth, unsigned int outwidth,
                                                      unsigned int inheight, unsigned int outheight) {{

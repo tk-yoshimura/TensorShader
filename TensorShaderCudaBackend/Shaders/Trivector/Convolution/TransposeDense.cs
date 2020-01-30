@@ -44,7 +44,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
             {Defines.Trivector.MulGrad}
             {Defines.StoreFloatSharedMemory(elemsize: 3, InChannels, ThreadsX)}
 
-            __global__ void trivector_transpose_dense(float3 *inmap, float3 *outmap, float4 *filter) {{
+            __global__ void trivector_transpose_dense(const float3* __restrict__ inmap, float3* __restrict__ outmap, const float4* __restrict__ filter) {{
 
                 unsigned int outch = {Defines.IndexX}, th = {Defines.BlockIndexY};
                 unsigned int tid = {Defines.ThreadIdX};

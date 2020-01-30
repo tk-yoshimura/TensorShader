@@ -23,7 +23,7 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         public SortUseSharedMemory() {
             string code = $@"
 
-            __global__ void sort(float *inmap, float *outmap,
+            __global__ void sort(const float* __restrict__ inmap, float* __restrict__ outmap,
                                  unsigned int stride, unsigned int axislength, unsigned int slides) {{
 
                 extern __shared__ float s[];

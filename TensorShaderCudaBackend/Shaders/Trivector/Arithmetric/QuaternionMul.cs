@@ -12,9 +12,9 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Arithmetric {
         public QuaternionMul() {
             string code = $@"
 
-            __global__ void trivector_quaternion_mul(float3 *inmap_vector,
-                                                     float4 *inmap_quaternion,
-                                                     float3 *outmap_vector,
+            __global__ void trivector_quaternion_mul(const float3* __restrict__ inmap_vector,
+                                                     const float4* __restrict__ inmap_quaternion,
+                                                     float3* __restrict__ outmap_vector,
                                                      unsigned int n) {{
 
                 unsigned int i = {Defines.IndexX};

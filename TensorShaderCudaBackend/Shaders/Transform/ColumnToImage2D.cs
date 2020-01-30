@@ -37,7 +37,7 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
 
             {Defines.FloatFloatAdd}
 
-            __global__ void column_to_image_2d(float *inmap, float *outmap,
+            __global__ void column_to_image_2d(const float* __restrict__ inmap, float* __restrict__ outmap,
                                                unsigned int inwidth, unsigned int outwidth,
                                                unsigned int inheight, unsigned int outheight) {{
 

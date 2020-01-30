@@ -22,7 +22,7 @@ namespace TensorShaderCudaBackend.Shaders.Indexer {
             this.Channels = channels;
 
             string code = $@"
-            __global__ void argmax(float *x, float *v, unsigned int indexes) {{
+            __global__ void argmax(const float* __restrict__ x, float* __restrict__ v, unsigned int indexes) {{
                 unsigned int i = {Defines.IndexX};
                 if (i >= indexes) {{
                     return;

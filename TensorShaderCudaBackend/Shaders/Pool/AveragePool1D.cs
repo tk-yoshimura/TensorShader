@@ -11,7 +11,7 @@
 
             string code = $@"
 
-            __global__ void averagepool_1d(float *inmap, float *outmap,
+            __global__ void averagepool_1d(const float* __restrict__ inmap, float* __restrict__ outmap,
                                            unsigned int outwidth) {{
 
                 const float inv = 1.0 / {Stride};

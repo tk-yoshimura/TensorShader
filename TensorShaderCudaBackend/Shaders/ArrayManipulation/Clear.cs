@@ -13,13 +13,13 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         public Clear() {
             string code = $@"
 
-            __global__ void clear(float *y, float c, unsigned int length) {{
+            __global__ void clear(float* __restrict__ refmap, float c, unsigned int length) {{
                 unsigned int i = {Defines.IndexX};
                 if (i >= length) {{
                     return;
                 }}
 
-                y[i] = c;
+                refmap[i] = c;
             }}";
 
             this.Kernel = new Kernel(code, "clear");

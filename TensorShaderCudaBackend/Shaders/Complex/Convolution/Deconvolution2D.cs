@@ -59,7 +59,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             {Defines.Complex.MulGrad}
             {Defines.StoreFloatSharedMemory(elemsize: 2, InChannels, ThreadsX)}
 
-            __global__ void complex_deconvolution_2d(float2 *inmap, float2 *outmap, float2 *filter,
+            __global__ void complex_deconvolution_2d(const float2* __restrict__ inmap, float2* __restrict__ outmap, const float2* __restrict__ filter,
                                                      unsigned int oy_offset,
                                                      unsigned int inwidth, unsigned int outwidth,
                                                      unsigned int inheight) {{

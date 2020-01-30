@@ -34,7 +34,7 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
 
             string code = $@"
 
-            __global__ void space_to_channel_2d(float *inmap, float *outmap,
+            __global__ void space_to_channel_2d(const float* __restrict__ inmap, float* __restrict__ outmap,
                                                 unsigned int outwidth, unsigned int outheight) {{
 
                 unsigned int outch = {Defines.IndexX}, ox = {Defines.IndexY}, oy = {Defines.IndexZ};

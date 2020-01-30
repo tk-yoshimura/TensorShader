@@ -16,7 +16,7 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         public Broadcast() {
             string code = $@"
 
-            __global__ void broadcast(float *inmap, float *outmap,
+            __global__ void broadcast(const float* __restrict__ inmap, float* __restrict__ outmap,
                                       unsigned int inmap_stride, unsigned int outmap_stride,
                                       unsigned int slides) {{
 

@@ -11,7 +11,7 @@
 
             string code = $@"
 
-            __global__ void strideunpool_3d(float *inmap, float *outmap,
+            __global__ void strideunpool_3d(const float* __restrict__ inmap, float* __restrict__ outmap,
                                             unsigned int iz,
                                             unsigned int inwidth, unsigned int outwidth,
                                             unsigned int inheight, unsigned int outheight) {{

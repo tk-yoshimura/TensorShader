@@ -57,7 +57,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             {Defines.FloatFloatFma}
             {Defines.AtomicAdd}
 
-            __global__ void kernelproduct_2d(float *inmap, float *outmap, float *filter,
+            __global__ void kernelproduct_2d(const float* __restrict__ inmap, const float* __restrict__ outmap, float* __restrict__ filter,
                                              unsigned int oy_offset,
                                              unsigned int xsets,
                                              unsigned int inwidth, unsigned int outwidth) {{

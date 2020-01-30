@@ -30,13 +30,13 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
 
             string code = $@"
 
-            __global__ void stride_copy(float *x, float *y, unsigned int n) {{
+            __global__ void stride_copy(const float* __restrict__ inmap, float* __restrict__ outmap, unsigned int n) {{
                 unsigned int i = {Defines.IndexX};
                 if (i >= n) {{
                     return;
                 }}
 
-                y[i * {Stride}] = x[i];
+                outmap[i * {Stride}] = inmap[i];
             }}";
 
             this.Kernel = new Kernel(code, "stride_copy");

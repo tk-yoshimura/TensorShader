@@ -56,7 +56,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             {Defines.Quaternion.KernelProd}
             {Defines.Quaternion.AtomicAdd}
 
-            __global__ void quaternion_kernelproduct_1d(float4 *inmap, float4 *outmap, float4 *filter,
+            __global__ void quaternion_kernelproduct_1d(const float4* __restrict__ inmap, const float4* __restrict__ outmap, float4* __restrict__ filter,
                                                         unsigned int outwidth) {{
 
                 unsigned int inch = {Defines.IndexX}, outch = {Defines.IndexY};

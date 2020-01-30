@@ -10,8 +10,8 @@
 
             string code = $@"
 
-            __global__ void linearzoom_1d(float *inmap, float *outmap,
-                                         unsigned int inwidth) {{
+            __global__ void linearzoom_1d(const float* __restrict__ inmap, float* __restrict__ outmap,
+                                          unsigned int inwidth) {{
 
                 const float inv = 1.0 / 3;
 

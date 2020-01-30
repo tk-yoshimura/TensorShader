@@ -13,7 +13,7 @@
 
             __constant__ float c;
 
-            __global__ void {name}(float *x, float *y, unsigned int length) {{
+            __global__ void {name}(const float* __restrict__ x, float* __restrict__ y, unsigned int length) {{
                 unsigned int i = {Defines.IndexX};
                 if (i >= length) {{
                     return;

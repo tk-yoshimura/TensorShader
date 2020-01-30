@@ -23,7 +23,7 @@ namespace TensorShaderCudaBackend.Shaders.Indexer {
 
             string code = $@"
 
-            __global__ void onehotvector(float *v, float *y, unsigned int indexes) {{
+            __global__ void onehotvector(const float* __restrict__ v, float* __restrict__ y, unsigned int indexes) {{
                 unsigned int ch = {Defines.IndexX}, i = {Defines.IndexY};
                 if (ch >= {Channels} || i >= indexes) {{
                     return;

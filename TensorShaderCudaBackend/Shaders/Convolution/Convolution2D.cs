@@ -52,7 +52,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             {Defines.FloatFloatFma}
             {Defines.StoreFloatSharedMemory(elemsize: 1, InChannels, ThreadsX)}
 
-            __global__ void convolution_2d(float *inmap, float *outmap, float *filter,
+            __global__ void convolution_2d(const float* __restrict__ inmap, float* __restrict__ outmap, const float* __restrict__ filter,
                                            unsigned int oy_offset,
                                            unsigned int inwidth, unsigned int outwidth) {{
 

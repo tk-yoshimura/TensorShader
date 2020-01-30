@@ -40,7 +40,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             {Defines.FloatFloatFma}
             {Defines.StoreFloatSharedMemory(elemsize: 1, InChannels, ThreadsX)}
 
-            __global__ void dense(float *inmap, float *outmap, float *filter) {{
+            __global__ void dense(const float* __restrict__ inmap, float* __restrict__ outmap, const float* __restrict__ filter) {{
 
                 unsigned int outch = {Defines.IndexX}, th = {Defines.BlockIndexY};
                 unsigned int tid = {Defines.ThreadIdX};

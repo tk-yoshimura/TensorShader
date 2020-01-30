@@ -41,7 +41,7 @@ namespace TensorShaderCudaBackend.Shaders.Trimming {
 
             string code = $@"
 
-            __global__ void trimming_2d(float *inmap, float *outmap,
+            __global__ void trimming_2d(const float* __restrict__ inmap, float* __restrict__ outmap,
                                        unsigned int inwidth, unsigned int outwidth,
                                        unsigned int outheight) {{
 
