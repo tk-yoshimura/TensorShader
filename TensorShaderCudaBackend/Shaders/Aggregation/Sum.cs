@@ -33,7 +33,7 @@
                     float x = inmap[j * stride];
                     float y = s_hi[i];
                     s_hi[i] += x;
-                    s_lo[i] -= (s_hi[i] - x) - y;
+                    s_lo[i] += (x - s_hi[i]) + y;
                 }}
 
                 __syncthreads();
@@ -43,7 +43,7 @@
                         float x = s_hi[i + k];
                         float y = s_hi[i];
                         s_hi[i] += x;
-                        s_lo[i] -= ((s_hi[i] - x) - y) - s_lo[i + k];
+                        s_lo[i] += s_lo[i + k] + ((x - s_hi[i]) + y);
                     }}
                     __syncthreads();
                 }}

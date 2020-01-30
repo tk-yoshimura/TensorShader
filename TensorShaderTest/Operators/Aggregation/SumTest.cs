@@ -177,7 +177,6 @@ namespace TensorShaderTest.Operators.Aggregation {
                                 }
                             }
                         }
-
                     }
                 }
             }

@@ -169,7 +169,7 @@ namespace TensorShaderTest.Operators.Aggregation {
                                 for (int j = 0; j < height; j++) {
                                     for (int i = 0; i < width; i++) {
                                         for (int f = 0; f < ch; f++) {
-                                            float sum = 0;
+                                            double sum = 0;
 
                                             for (int th = 0; th < batch; th++) {
                                                 int idx = f + ch * (i + width * (j + height * (k + length * th)));
@@ -187,7 +187,6 @@ namespace TensorShaderTest.Operators.Aggregation {
                                 }
                             }
                         }
-
                     }
                 }
             }

@@ -599,7 +599,7 @@
     <Compile Include="Operators\Aggregation\MaxTest.cs" />
     <Compile Include="Operators\ArrayManipulation\ExtractChannelTest.cs" />
     <Compile Include="Operators\ArrayManipulation\InsertChannelTest.cs" />
-    <Compile Include="Operators\Aggregation\MeanTest.cs" />
+    <Compile Include="Operators\Aggregation\AverageTest.cs" />
     <Compile Include="Operators\Aggregation\SumTest.cs" />
     <Compile Include="Operators\RandomGeneration\NormalRandomTest.cs" />
     <Compile Include="Operators\RandomGeneration\UniformRandomTest.cs" />
