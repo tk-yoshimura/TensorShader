@@ -93,14 +93,14 @@
                 float xxlydzr = inmap[inmap_xlydzr_idx];
                 float xxrydzr = inmap[inmap_xrydzr_idx];
 
-                outmap[outmap_idx + luf] = (xc + xxl + xyu + xzf + xxlyu + xxlzf + xyuzf + xxlyuzf) * inv;
-                outmap[outmap_idx + ruf] = (xc + xxr + xyu + xzf + xxryu + xxrzf + xyuzf + xxryuzf) * inv;
-                outmap[outmap_idx + ldf] = (xc + xxl + xyd + xzf + xxlyd + xxlzf + xydzf + xxlydzf) * inv;
-                outmap[outmap_idx + rdf] = (xc + xxr + xyd + xzf + xxryd + xxrzf + xydzf + xxrydzf) * inv;
-                outmap[outmap_idx + lur] = (xc + xxl + xyu + xzr + xxlyu + xxlzr + xyuzr + xxlyuzr) * inv;
-                outmap[outmap_idx + rur] = (xc + xxr + xyu + xzr + xxryu + xxrzr + xyuzr + xxryuzr) * inv;
-                outmap[outmap_idx + ldr] = (xc + xxl + xyd + xzr + xxlyd + xxlzr + xydzr + xxlydzr) * inv;
-                outmap[outmap_idx + rdr] = (xc + xxr + xyd + xzr + xxryd + xxrzr + xydzr + xxrydzr) * inv;
+                outmap[outmap_idx + luf] = (xc + ((xxl + xyu + xzf) + ((xxlyu + xxlzf + xyuzf) + xxlyuzf))) * inv;
+                outmap[outmap_idx + ruf] = (xc + ((xxr + xyu + xzf) + ((xxryu + xxrzf + xyuzf) + xxryuzf))) * inv;
+                outmap[outmap_idx + ldf] = (xc + ((xxl + xyd + xzf) + ((xxlyd + xxlzf + xydzf) + xxlydzf))) * inv;
+                outmap[outmap_idx + rdf] = (xc + ((xxr + xyd + xzf) + ((xxryd + xxrzf + xydzf) + xxrydzf))) * inv;
+                outmap[outmap_idx + lur] = (xc + ((xxl + xyu + xzr) + ((xxlyu + xxlzr + xyuzr) + xxlyuzr))) * inv;
+                outmap[outmap_idx + rur] = (xc + ((xxr + xyu + xzr) + ((xxryu + xxrzr + xyuzr) + xxryuzr))) * inv;
+                outmap[outmap_idx + ldr] = (xc + ((xxl + xyd + xzr) + ((xxlyd + xxlzr + xydzr) + xxlydzr))) * inv;
+                outmap[outmap_idx + rdr] = (xc + ((xxr + xyd + xzr) + ((xxryd + xxrzr + xydzr) + xxrydzr))) * inv;
             }}";
 
             this.Kernel = new Kernel(code, "linearzoom_3d");

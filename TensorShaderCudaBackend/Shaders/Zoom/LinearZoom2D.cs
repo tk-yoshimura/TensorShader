@@ -52,10 +52,10 @@
                 float xld = inmap[inmap_ld_idx];
                 float xrd = inmap[inmap_rd_idx];
 
-                outmap[outmap_idx + lu] = (xc + xl + xu + xlu) * inv;
-                outmap[outmap_idx + ru] = (xc + xr + xu + xru) * inv;
-                outmap[outmap_idx + ld] = (xc + xl + xd + xld) * inv;
-                outmap[outmap_idx + rd] = (xc + xr + xd + xrd) * inv;
+                outmap[outmap_idx + lu] = (xc + ((xl + xu) + xlu)) * inv;
+                outmap[outmap_idx + ru] = (xc + ((xr + xu) + xru)) * inv;
+                outmap[outmap_idx + ld] = (xc + ((xl + xd) + xld)) * inv;
+                outmap[outmap_idx + rd] = (xc + ((xr + xd) + xrd)) * inv;
             }}";
 
             this.Kernel = new Kernel(code, "linearzoom_2d");
