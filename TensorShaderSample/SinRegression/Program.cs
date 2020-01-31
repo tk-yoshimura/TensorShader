@@ -31,7 +31,7 @@ namespace SinRegression {
 
             Field err = AbsoluteError(y, t);
 
-            StoreField loss = err.Save();
+            StoreField loss = Sum(err).Save();
 
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
             float adam_alpha = 1e-2f;
