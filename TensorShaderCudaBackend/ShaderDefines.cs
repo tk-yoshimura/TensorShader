@@ -116,10 +116,10 @@ namespace TensorShaderCudaBackend {
                 string elem = elemsize > 1 ? $"float{elemsize}" : "float";
                 uint length = elements * elemsize;
 
-                string declare = $"static __inline__ __device__ void store_smem(const {elem} *ptr, {elem} *smem, unsigned int thread_idx)";
+                string declare = $"static __inline__ __device__ void store_smem(const {elem}* __restrict__ ptr, {elem} *smem, unsigned int thread_idx)";
 
                 string repointer = @"
-                        const float* ptr_const = (const float*)ptr;
+                        const float* __restrict__ ptr_const = (const float* __restrict__)ptr;
                         volatile float* smem_volatile = (volatile float*)smem;
                     ";
                 
