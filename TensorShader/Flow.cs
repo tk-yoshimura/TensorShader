@@ -390,10 +390,16 @@ namespace TensorShader {
             }
 
             if (error_fields.IsDuplicated()) {
-                throw new ArgumentNullException("Error fields are duplicated.");
+                throw new ArgumentException("Error fields are duplicated.");
             }
 
             foreach (Field error_field in error_fields) {
+                if (!error_field.IsTerminate) { 
+                    if(EnumerateReachableFields(forward: true, backward: false, error_field).fields.Intersect(error_fields).Count() > 1){ 
+                        throw new ArgumentException("Some error fields are included in the back propagation path from other error fields.");
+                    }
+                }
+
                 error_field.AddGrad(error_field.Value);
             }
 

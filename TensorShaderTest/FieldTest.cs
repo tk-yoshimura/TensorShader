@@ -651,6 +651,53 @@ namespace TensorShaderTest {
                     Assert.AreEqual(item.Value, optimize_flow.InTensors[item.Key]);
                 }
             }
+
+            {
+                ParameterField f1 = new ParameterField(intensor);
+                VariableField fo = new VariableField(outtensor);
+
+                Field f2 = Abs(f1);
+                Field ferr1 = f2 - fo;
+
+                Field f3 = f2 * f2;
+                Field ferr2 = f3 - fo * fo;
+
+                (Flow optimize_flow, List<ParameterField> parameters) = Flow.Optimize(ferr2, ferr1);
+
+                optimize_flow.Execute();
+
+                Assert.AreEqual(23, optimize_flow.NodeCount);
+                Assert.AreEqual(13, optimize_flow.VariableNodeCount);
+                Assert.AreEqual(10, optimize_flow.FunctionNodeCount);
+                Assert.AreEqual(2, optimize_flow.InTensorCount);
+                Assert.AreEqual(1, optimize_flow.OutTensorCount);
+
+                CollectionAssert.AreEquivalent(new ParameterField[] { f1 }, parameters);
+                Assert.AreEqual(intensor, f1.ValueTensor);
+                Assert.AreEqual(Math.Sign(-1.5f) * ((1.5f - 2f) + (1.5f * 1.5f - 2f * 2f) * 1.5f * 2), f1.GradTensor.State[0]);
+
+                StoreField n2 = f2.Save();
+                StoreField n3 = f3.Save();
+
+                Flow inference_flow = Flow.Inference(n3, n2);
+
+                inference_flow.Execute();
+
+                Assert.AreEqual(7, inference_flow.NodeCount);
+                Assert.AreEqual(5, inference_flow.VariableNodeCount);
+                Assert.AreEqual(2, inference_flow.FunctionNodeCount);
+                Assert.AreEqual(1, inference_flow.InTensorCount);
+                Assert.AreEqual(2, inference_flow.OutTensorCount);
+
+                Assert.AreEqual(intensor, f1.ValueTensor);
+                Assert.AreEqual(1.5f, n2.Tensor.State[0]);
+                Assert.AreEqual(1.5f * 1.5f, n3.Tensor.State[0]);
+
+                foreach (var item in inference_flow.InTensors) {
+                    Assert.IsTrue(optimize_flow.InTensors.ContainsKey(item.Key));
+                    Assert.AreEqual(item.Value, optimize_flow.InTensors[item.Key]);
+                }
+            }
         }
 
         [TestMethod]
@@ -916,15 +963,15 @@ namespace TensorShaderTest {
             {
                 ParameterField f1 = intensor;
 
-                (Field f2, Field f3) = (f1, -f1);
+                (Field f2, Field f3) = (-(-f1), -f1);
 
                 (Flow flow, List<ParameterField> parameters) = Flow.Optimize(f2, f3);
 
                 flow.Execute();
 
-                Assert.AreEqual(8, flow.NodeCount);
-                Assert.AreEqual(5, flow.VariableNodeCount);
-                Assert.AreEqual(3, flow.FunctionNodeCount);
+                Assert.AreEqual(16, flow.NodeCount);
+                Assert.AreEqual(9, flow.VariableNodeCount);
+                Assert.AreEqual(7, flow.FunctionNodeCount);
                 Assert.AreEqual(1, flow.InTensorCount);
                 Assert.AreEqual(1, flow.OutTensorCount);
 
@@ -936,7 +983,7 @@ namespace TensorShaderTest {
             {
                 VariableField f1 = intensor;
 
-                (Field f2, Field f3) = (f1, -f1);
+                (Field f2, Field f3) = (-(-f1), -f1);
                 StoreField n2 = f2.Save();
                 StoreField n3 = f3.Save();
 
@@ -944,9 +991,9 @@ namespace TensorShaderTest {
 
                 flow.Execute();
 
-                Assert.AreEqual(5, flow.NodeCount);
-                Assert.AreEqual(4, flow.VariableNodeCount);
-                Assert.AreEqual(1, flow.FunctionNodeCount);
+                Assert.AreEqual(9, flow.NodeCount);
+                Assert.AreEqual(6, flow.VariableNodeCount);
+                Assert.AreEqual(3, flow.FunctionNodeCount);
                 Assert.AreEqual(1, flow.InTensorCount);
                 Assert.AreEqual(2, flow.OutTensorCount);
 
@@ -957,7 +1004,7 @@ namespace TensorShaderTest {
             {
                 ParameterField f1 = intensor;
 
-                (Field f2, Field f3) = (f1, -f1);
+                (Field f2, Field f3) = (-(-f1), -f1);
 
                 (Flow optimize_flow, List<ParameterField> parameters) = Flow.Optimize(f2, f3);
 
@@ -970,9 +1017,9 @@ namespace TensorShaderTest {
 
                 inference_flow.Execute();
 
-                Assert.AreEqual(8, optimize_flow.NodeCount);
-                Assert.AreEqual(5, optimize_flow.VariableNodeCount);
-                Assert.AreEqual(3, optimize_flow.FunctionNodeCount);
+                Assert.AreEqual(16, optimize_flow.NodeCount);
+                Assert.AreEqual(9, optimize_flow.VariableNodeCount);
+                Assert.AreEqual(7, optimize_flow.FunctionNodeCount);
                 Assert.AreEqual(1, optimize_flow.InTensorCount);
                 Assert.AreEqual(1, optimize_flow.OutTensorCount);
 
@@ -980,9 +1027,9 @@ namespace TensorShaderTest {
                 Assert.AreEqual(intensor, f1.ValueTensor);
                 Assert.AreEqual(-1.5f - 1.5f, f1.GradTensor.State[0]);
 
-                Assert.AreEqual(5, inference_flow.NodeCount);
-                Assert.AreEqual(4, inference_flow.VariableNodeCount);
-                Assert.AreEqual(1, inference_flow.FunctionNodeCount);
+                Assert.AreEqual(9, inference_flow.NodeCount);
+                Assert.AreEqual(6, inference_flow.VariableNodeCount);
+                Assert.AreEqual(3, inference_flow.FunctionNodeCount);
                 Assert.AreEqual(1, inference_flow.InTensorCount);
                 Assert.AreEqual(2, inference_flow.OutTensorCount);
 
@@ -998,7 +1045,7 @@ namespace TensorShaderTest {
             {
                 ParameterField f1 = intensor;
 
-                (Field f2, Field f3) = (f1, -f1);
+                (Field f2, Field f3) = (-(-f1), -f1);
                 StoreField n2 = f2.Save();
                 StoreField n3 = f3.Save();
 
@@ -1010,9 +1057,9 @@ namespace TensorShaderTest {
 
                 optimize_flow.Execute();
 
-                Assert.AreEqual(10, optimize_flow.NodeCount);
-                Assert.AreEqual(7, optimize_flow.VariableNodeCount);
-                Assert.AreEqual(3, optimize_flow.FunctionNodeCount);
+                Assert.AreEqual(18, optimize_flow.NodeCount);
+                Assert.AreEqual(11, optimize_flow.VariableNodeCount);
+                Assert.AreEqual(7, optimize_flow.FunctionNodeCount);
                 Assert.AreEqual(1, optimize_flow.InTensorCount);
                 Assert.AreEqual(3, optimize_flow.OutTensorCount);
 
@@ -1020,9 +1067,50 @@ namespace TensorShaderTest {
                 Assert.AreEqual(intensor, f1.ValueTensor);
                 Assert.AreEqual(-1.5f - 1.5f, f1.GradTensor.State[0]);
 
-                Assert.AreEqual(5, inference_flow.NodeCount);
-                Assert.AreEqual(4, inference_flow.VariableNodeCount);
-                Assert.AreEqual(1, inference_flow.FunctionNodeCount);
+                Assert.AreEqual(9, inference_flow.NodeCount);
+                Assert.AreEqual(6, inference_flow.VariableNodeCount);
+                Assert.AreEqual(3, inference_flow.FunctionNodeCount);
+                Assert.AreEqual(1, inference_flow.InTensorCount);
+                Assert.AreEqual(2, inference_flow.OutTensorCount);
+
+                Assert.AreEqual(-1.5f, n2.Tensor.State[0]);
+                Assert.AreEqual(1.5f, n3.Tensor.State[0]);
+
+                foreach (var item in inference_flow.InTensors) {
+                    Assert.IsTrue(optimize_flow.InTensors.ContainsKey(item.Key));
+                    Assert.AreEqual(item.Value, optimize_flow.InTensors[item.Key]);
+                }
+            }
+
+            {
+                ParameterField f1 = intensor;
+
+                (Field f2, Field f3) = (-(-f1), -f1);
+
+                (Flow optimize_flow, List<ParameterField> parameters) = Flow.Optimize(f3, f2);
+
+                optimize_flow.Execute();
+
+                StoreField n2 = f2.Save();
+                StoreField n3 = f3.Save();
+
+                Flow inference_flow = Flow.Inference(n3, n2);
+
+                inference_flow.Execute();
+
+                Assert.AreEqual(16, optimize_flow.NodeCount);
+                Assert.AreEqual(9, optimize_flow.VariableNodeCount);
+                Assert.AreEqual(7, optimize_flow.FunctionNodeCount);
+                Assert.AreEqual(1, optimize_flow.InTensorCount);
+                Assert.AreEqual(1, optimize_flow.OutTensorCount);
+
+                CollectionAssert.AreEquivalent(new ParameterField[] { f1 }, parameters);
+                Assert.AreEqual(intensor, f1.ValueTensor);
+                Assert.AreEqual(-1.5f - 1.5f, f1.GradTensor.State[0]);
+
+                Assert.AreEqual(9, inference_flow.NodeCount);
+                Assert.AreEqual(6, inference_flow.VariableNodeCount);
+                Assert.AreEqual(3, inference_flow.FunctionNodeCount);
                 Assert.AreEqual(1, inference_flow.InTensorCount);
                 Assert.AreEqual(2, inference_flow.OutTensorCount);
 
@@ -1518,6 +1606,53 @@ namespace TensorShaderTest {
                 Assert.AreEqual(4, n4.State[0]);
                 Assert.AreEqual(null, f2.Grad);
                 Assert.AreEqual(null, f4.Grad);
+            }
+        }
+
+        [TestMethod]
+        public void BadFlowTest() {
+            Tensor intensor = new Tensor(Shape.Scalar(), new float[] { -1.5f });
+            Tensor outtensor = new Tensor(Shape.Scalar(), new float[] { 2 });
+
+            {
+                ParameterField f1 = new ParameterField(intensor);
+                VariableField fo = new VariableField(outtensor);
+
+                Field f2 = Abs(f1);
+                Field ferr1 = f2 - fo;
+
+                Field f3 = f2 * f2;
+                Field ferr2 = f3 - fo * fo;
+
+                Assert.ThrowsException<ArgumentException>(() => { 
+                    (Flow flow, List<ParameterField> parameters) = Flow.Optimize(ferr1, ferr1);
+                });
+            }
+
+            {
+                ParameterField f1 = new ParameterField(intensor);
+                VariableField fo = new VariableField(outtensor);
+
+                Field f2 = Abs(f1);
+
+                Field f3 = f2 * f2;
+
+                Assert.ThrowsException<ArgumentException>(() => { 
+                    (Flow flow, List<ParameterField> parameters) = Flow.Optimize(f2, f3);
+                });
+            }
+
+            {
+                ParameterField f1 = new ParameterField(intensor);
+                VariableField fo = new VariableField(outtensor);
+
+                Field f2 = Abs(f1);
+
+                Field f3 = f2 * f2;
+
+                Assert.ThrowsException<ArgumentException>(() => { 
+                    (Flow flow, List<ParameterField> parameters) = Flow.Optimize(f3, f2);
+                });
             }
         }
     }
