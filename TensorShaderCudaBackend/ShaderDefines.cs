@@ -128,7 +128,6 @@ namespace TensorShaderCudaBackend {
                     {declare}{{
                         {repointer}
                         if(thread_idx < {length}) smem_volatile[thread_idx] = ptr_const[thread_idx];
-                        __syncthreads();
                     }}";
                 } 
                 else if(threads == length){ 
@@ -136,7 +135,6 @@ namespace TensorShaderCudaBackend {
                     {declare}{{
                         {repointer}
                         smem_volatile[thread_idx] = ptr_const[thread_idx];
-                        __syncthreads();
                     }}";
                 }
                 else if(threads * 8 >= length && length % threads == 0){
@@ -145,7 +143,6 @@ namespace TensorShaderCudaBackend {
                         {repointer}
                         unsigned int i = thread_idx;
                         { string.Join(" ", Enumerable.Repeat($"smem_volatile[i] = ptr_const[i]; i += {threads};", (int)(length / threads))) }
-                        __syncthreads();
                     }}";
                 }
                 else if(threads * 8 >= length){ 
@@ -155,7 +152,6 @@ namespace TensorShaderCudaBackend {
                         unsigned int i = thread_idx;
                         { string.Join(" ", Enumerable.Repeat($"smem_volatile[i] = ptr_const[i]; i += {threads};", (int)(length / threads))) }
                         if(i < {length}) smem_volatile[i] = ptr_const[i];
-                        __syncthreads();
                     }}";
                 }
                 else{
@@ -166,7 +162,6 @@ namespace TensorShaderCudaBackend {
                         for(unsigned int i = thread_idx; i < {length}; i += {threads}){{
                             smem_volatile[i] = ptr_const[i];
                         }}
-                        __syncthreads();
                     }}";
                 }
             }

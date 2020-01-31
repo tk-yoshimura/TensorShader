@@ -24,6 +24,12 @@
         /// <summary>カーネルサイズ(512)</summary>
         public static uint KernelSize => 512;
 
+        /// <summary>畳み込み層の1スレッドで処理する対象ピクセル最大数</summary>
+        public static uint MaxConvBatchPixels => 16;
+
+        /// <summary>畳み込み層の最大共有メモリ長さ(4096)</summary>
+        public static uint MaxConvSharedMemoryLength => 0x1000;
+
         /// <summary>チャネル数チェック</summary>
         public static bool CheckChannels(params uint[] channels) {
             foreach (uint ch in channels) {
