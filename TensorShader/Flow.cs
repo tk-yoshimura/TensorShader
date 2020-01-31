@@ -399,7 +399,9 @@ namespace TensorShader {
                         throw new ArgumentException("Some error fields are included in the back propagation path from other error fields.");
                     }
                 }
+            }
 
+            foreach (Field error_field in error_fields) {
                 error_field.AddGrad(error_field.Value);
             }
 

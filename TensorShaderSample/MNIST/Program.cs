@@ -67,7 +67,7 @@ namespace MNIST {
             parameters.AddUpdater((parameter) => new Ridge(parameter, decay: 1e-4f));
 
             Console.WriteLine("Training...");
-            Train(train_iterator, loader, x, t, accnode, lossnode, trainflow, parameters);
+            Train(train_iterator, loader, x, t, trainflow, parameters);
 
             Console.WriteLine("Build inference flow...");
             Flow testflow = Flow.Inference(accnode);
@@ -88,7 +88,7 @@ namespace MNIST {
             Console.Read();
         }
 
-        static void Train(Iterator train_iterator, MnistLoader loader, VariableField x, VariableField t, StoreField accnode, StoreField lossnode, Flow trainflow, Parameters parameters) {
+        static void Train(Iterator train_iterator, MnistLoader loader, VariableField x, VariableField t, Flow trainflow, Parameters parameters) {
             Stopwatch sw = new Stopwatch();
 
             sw.Start();
