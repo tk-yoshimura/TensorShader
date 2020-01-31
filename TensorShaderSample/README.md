@@ -2,6 +2,6 @@
 
 - [SearchMinimum Sample](https://github.com/tk-yoshimura/TensorShader/blob/master/TensorShaderSample/SearchMinimum)
 
-- [MNIST Sample](https://github.com/tk-yoshimura/TensorShader/blob/master/TensorShaderSample/MNIST)
-
 - [SinRegression Sample](https://github.com/tk-yoshimura/TensorShader/blob/master/TensorShaderSample/SinRegression)
+
+- [MNIST Sample](https://github.com/tk-yoshimura/TensorShader/blob/master/TensorShaderSample/MNIST)
