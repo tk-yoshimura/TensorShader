@@ -94,7 +94,7 @@ Can't load Cuda dll!
 
 →Install GeForce Experience and Cuda. Check your environment variables.
 
-→Make sure the referenced backend.dll matches the installed Cuda version.
+→Make sure the referenced cudabackend.dll matches the installed Cuda version.
 
 System.BadImageFormatException is thrown and DLL cannot be loaded!
 
