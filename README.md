@@ -1,7 +1,7 @@
 ![TensorShader](https://github.com/tk-yoshimura/TensorShader/blob/master/logo.svg)
 
 # TensorShader
-**Deep Learning .NET library, For Regression.** 
+**Deep Learning .NET library, For Regression.**
 
 ## Description
 I tried to create a deep learning library of **Define and Run** / **NHWC format** from scratch.
