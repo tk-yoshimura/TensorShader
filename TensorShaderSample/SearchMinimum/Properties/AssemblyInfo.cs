@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("SearchMinimum")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("T.Yoshimura")]
 [assembly: AssemblyProduct("SearchMinimum")]
 [assembly: AssemblyCopyright("Copyright © T.Yoshimura 2020")]
 [assembly: AssemblyTrademark("")]

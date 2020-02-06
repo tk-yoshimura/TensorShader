@@ -2,7 +2,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("TensorShaderUtilTest")]
-[assembly: AssemblyDescription("Deep Learning .NET library, CUDA accelerated. Utility Test")]
+[assembly: AssemblyDescription("Deep Learning .NET library, For Regression. Utility Test")]
 
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("Release")]
 #endif
 
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("T.Yoshimura")]
 [assembly: AssemblyProduct("TensorShaderUtilTest")]
 [assembly: AssemblyCopyright("Copyright © T.Yoshimura 2019-2020")]
 [assembly: AssemblyTrademark("")]

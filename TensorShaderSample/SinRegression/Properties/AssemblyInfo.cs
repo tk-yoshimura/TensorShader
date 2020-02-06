@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("SinRegression")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("T.Yoshimura")]
 [assembly: AssemblyProduct("SinRegression")]
 [assembly: AssemblyCopyright("Copyright © T.Yoshimura 2020")]
 [assembly: AssemblyTrademark("")]

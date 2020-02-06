@@ -5,3 +5,5 @@
 - [SinRegression Sample](https://github.com/tk-yoshimura/TensorShader/blob/master/TensorShaderSample/SinRegression)
 
 - [MNIST Sample](https://github.com/tk-yoshimura/TensorShader/blob/master/TensorShaderSample/MNIST)
+
+- [CustomLink Sample](https://github.com/tk-yoshimura/TensorShader/blob/master/TensorShaderSample/CustomLink)

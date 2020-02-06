@@ -89,6 +89,7 @@
     <Compile Include="Functions\BinaryArithmetric\LimitAbs.cs" />
     <Compile Include="Functions\BinaryArithmetric\LeakyReluGrad.cs" />
     <Compile Include="Functions\BinaryArithmetric\Arctan2.cs" />
+    <Compile Include="Functions\BinaryArithmetric\Custom.cs" />
     <Compile Include="Functions\BinaryArithmetric\ReluGrad.cs" />
     <Compile Include="Functions\Complex\ComplexBinaryArithmetric\ComplexNormalizeGrad.cs" />
     <Compile Include="Functions\Complex\ComplexBinaryArithmetric\ComplexSquareGrad.cs" />
@@ -301,6 +302,7 @@
     <Compile Include="Functions\Trivector\TrivectorCast\TrivectorCast.cs" />
     <Compile Include="Functions\UnaryArithmetric\Arccos.cs" />
     <Compile Include="Functions\UnaryArithmetric\Clip.cs" />
+    <Compile Include="Functions\UnaryArithmetric\Custom.cs" />
     <Compile Include="Functions\UnaryArithmetric\UnaryArithmetric.cs" />
     <Compile Include="Functions\UnaryArithmetric\LogCosh.cs" />
     <Compile Include="Functions\UnaryArithmetric\Cosh.cs" />
@@ -640,6 +642,7 @@
     <Compile Include="Operators\ArrayManipulation\Sort.cs" />
     <Compile Include="Operators\ArrayManipulation\SortWithKey.cs" />
     <Compile Include="Operators\ArrayManipulation\Where.cs" />
+    <Compile Include="Operators\BinaryArithmetric\Custom.cs" />
     <Compile Include="Operators\BinaryArithmetric\BinaryRightConstantArithmetric.cs" />
     <Compile Include="Operators\BinaryArithmetric\BinaryLeftConstantArithmetric.cs" />
     <Compile Include="Operators\BinaryArithmetric\BinaryRightVectorArithmetric.cs" />
@@ -916,6 +919,7 @@
     <Compile Include="Operators\UnaryArithmetric\Arcsin.cs" />
     <Compile Include="Operators\UnaryArithmetric\SignedSqrt.cs" />
     <Compile Include="Operators\UnaryArithmetric\Rsqrt.cs" />
+    <Compile Include="Operators\UnaryArithmetric\Custom.cs" />
     <Compile Include="Operators\UnaryArithmetric\Step.cs" />
     <Compile Include="Operators\UnaryArithmetric\Square.cs" />
     <Compile Include="Operators\UnaryArithmetric\Sqrt.cs" />

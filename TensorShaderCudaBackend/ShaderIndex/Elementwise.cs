@@ -1088,5 +1088,107 @@ namespace TensorShaderCudaBackend {
                 shader.Execute(stream, src[n - 1], dst, length);
             }
         }
+
+        /// <summary>1項演算</summary>
+        public static void UnaryArithmetric(uint length, CudaArray<float> src, CudaArray<float> dst, string name, string func, Stream stream = null) {
+            Shader shader = UnaryArithmetric("custom_" + name, func);
+
+            if (stream == null) {
+                stream = Shader.DefaultStream;
+            }
+
+            shader.Execute(stream, src, dst, length);
+        }
+
+        /// <summary>2項演算</summary>
+        public static void BinaryArithmetric(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst, 
+                                             string name, string func, Stream stream = null) {
+
+            Shader shader = BinaryArithmetric("custom_" + name, func);
+
+            if (stream == null) {
+                stream = Shader.DefaultStream;
+            }
+
+            shader.Execute(stream, src1, src2, dst, length);
+        }
+
+        /// <summary>定数付き2項演算</summary>
+        public static void BinaryConstantArithmetric(uint length, float c, CudaArray<float> src, CudaArray<float> dst, 
+                                                     string name, string func, Stream stream = null) {
+
+            Shader shader = BinaryConstantArithmetric("custom_" + name, func);
+
+            if (stream == null) {
+                stream = Shader.DefaultStream;
+            }
+
+            shader.Execute(stream, c, src, dst, length);
+        }
+
+        /// <summary>指数付き2項演算</summary>
+        public static void BinaryFactorArithmetric(uint length, CudaArray<float> c, CudaArray<float> src, CudaArray<float> dst, 
+                                                   string name, string func, Stream stream = null) {
+
+            Shader shader = BinaryFactorArithmetric("custom_" + name, func);
+
+            if (stream == null) {
+                stream = Shader.DefaultStream;
+            }
+
+            shader.Execute(stream, c, src, dst, length);
+        }
+
+        /// <summary>3項演算</summary>
+        public static void TrinaryArithmetric(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> src3, CudaArray<float> dst, 
+                                              string name, string func, Stream stream = null) {
+
+            Shader shader = TrinaryArithmetric("custom_" + name, func);
+
+            if (stream == null) {
+                stream = Shader.DefaultStream;
+            }
+
+            shader.Execute(stream, src1, src2, src3, dst, length);
+        }
+
+        /// <summary>定数付き3項演算</summary>
+        public static void TrinaryBiConstantArithmetric(uint length, float c1, float c2, CudaArray<float> src, CudaArray<float> dst, 
+                                                        string name, string func, Stream stream = null) {
+
+            Shader shader = TrinaryBiConstantArithmetric("custom_" + name, func);
+
+            if (stream == null) {
+                stream = Shader.DefaultStream;
+            }
+
+            shader.Execute(stream, c1, c2, src, dst, length);
+        }
+
+        /// <summary>指数付き3項演算</summary>
+        public static void TrinaryBiFactorArithmetric(uint length, float c1, float c2, CudaArray<float> src, CudaArray<float> dst, 
+                                                      string name, string func, Stream stream = null) {
+
+            Shader shader = TrinaryBiFactorArithmetric("custom_" + name, func);
+
+            if (stream == null) {
+                stream = Shader.DefaultStream;
+            }
+
+            shader.Execute(stream, c1, c2, src, dst, length);
+        }
+
+        /// <summary>定数付き3項演算</summary>
+        public static void TrinaryUniConstantArithmetric(uint length, float c, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst, 
+                                                         string name, string func, Stream stream = null) {
+
+            Shader shader = TrinaryUniConstantArithmetric("custom_" + name, func);
+
+            if (stream == null) {
+                stream = Shader.DefaultStream;
+            }
+
+            shader.Execute(stream, c, src1, src2, dst, length);
+        }
     }
 }

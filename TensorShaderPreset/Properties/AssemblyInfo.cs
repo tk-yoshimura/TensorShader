@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // 制御されます。アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
 [assembly: AssemblyTitle("TensorShaderPreset")]
-[assembly: AssemblyDescription("Deep Learning .NET library, CUDA accelerated. Preset")]
+[assembly: AssemblyDescription("Deep Learning .NET library, For Regression. Preset")]
 
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("Release")]
 #endif
 
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("T.Yoshimura")]
 [assembly: AssemblyProduct("TensorShaderPreset")]
 [assembly: AssemblyCopyright("Copyright © T.Yoshimura 2019-2020")]
 [assembly: AssemblyTrademark("")]

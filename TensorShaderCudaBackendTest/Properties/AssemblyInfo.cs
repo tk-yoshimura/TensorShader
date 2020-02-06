@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("Release")]
 #endif
 
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("T.Yoshimura")]
 [assembly: AssemblyProduct("TensorShaderCudaBackendTest")]
 [assembly: AssemblyCopyright("Copyright © T.Yoshimura 2019-2020")]
 [assembly: AssemblyTrademark("")]
