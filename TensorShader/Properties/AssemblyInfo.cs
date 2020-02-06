@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // 制御されます。アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
 [assembly: AssemblyTitle("TensorShader Deep Learning .NET library")]
-[assembly: AssemblyDescription("Deep Learning .NET library, CUDA accelerated.")]
+[assembly: AssemblyDescription("Deep Learning .NET library, For Regression.")]
 
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
