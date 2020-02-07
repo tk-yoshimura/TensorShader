@@ -41,7 +41,7 @@ namespace TensorShaderTest.Links.Connection1D {
             Field err1 = y1_expect - y_actual;
             Field err2 = y2_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err1, err2);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err1, err2);
 
             flow.Execute();
 

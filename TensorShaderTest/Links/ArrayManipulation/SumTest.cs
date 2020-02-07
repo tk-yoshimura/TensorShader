@@ -30,7 +30,7 @@ namespace TensorShaderTest.Links.ArrayManipulation {
             Field y_expect = Sum(x1, x2, x3);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 

@@ -58,10 +58,10 @@ namespace TensorShaderTest.Functions.RandomGeneration {
                 Flow flow = Flow.FromInputs(node);
 
                 flow.Execute();
-                float[] y1 = output.Tensor.State;
+                float[] y1 = output.State;
 
                 flow.Execute();
-                float[] y2 = output.Tensor.State;
+                float[] y2 = output.State;
 
                 CollectionAssert.AreNotEqual(y1, y2);
 

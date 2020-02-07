@@ -26,7 +26,7 @@ namespace TensorShaderTest.Links.QuaternionConvolution {
             Field x_expect = QuaternionDeconvolution2D(y, w);
             Field err = x_expect - x_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
@@ -69,7 +69,7 @@ namespace TensorShaderTest.Links.QuaternionConvolution {
 
             Field err = x_expect - x_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 

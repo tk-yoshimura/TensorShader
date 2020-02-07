@@ -34,7 +34,7 @@ namespace CustomLink {
 
                 Field sin_xy = Sin(x * y);
                 Field err = sin_xy - t;
-                StoreField sin_xy_store = sin_xy.Save();
+                StoreField sin_xy_store = sin_xy;
 
                 (Flow flow, _) = Flow.Optimize(err);
 
@@ -53,7 +53,7 @@ namespace CustomLink {
 
                 Field sin_xy = CustomBinaryArithmetric.SinXY(x, y);
                 Field err = sin_xy - t;
-                StoreField sin_xy_store = sin_xy.Save();
+                StoreField sin_xy_store = sin_xy;
 
                 (Flow flow, _) = Flow.Optimize(err);
 
@@ -103,7 +103,7 @@ namespace CustomLink {
 
                 Field expsin = Exp(Sin(x));
                 Field err = expsin - t;
-                StoreField expsin_store = expsin.Save();
+                StoreField expsin_store = expsin;
 
                 (Flow flow, _) = Flow.Optimize(err);
 
@@ -120,7 +120,7 @@ namespace CustomLink {
 
                 Field expsin = CustomUnaryArithmetric.ExpSin(x);
                 Field err = expsin - t;
-                StoreField expsin_store = expsin.Save();
+                StoreField expsin_store = expsin;
 
                 (Flow flow, _) = Flow.Optimize(err);
 

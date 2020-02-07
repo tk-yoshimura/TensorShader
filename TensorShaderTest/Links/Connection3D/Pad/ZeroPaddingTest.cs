@@ -26,7 +26,7 @@ namespace TensorShaderTest.Links.Connection3D {
             Field y_expect = ZeroPadding3D(x, pad_left, pad_right, pad_top, pad_bottom, pad_front, pad_rear);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 

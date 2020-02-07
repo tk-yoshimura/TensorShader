@@ -24,19 +24,19 @@ namespace TensorShaderTest.Links.Loss {
 
             Field loss = HuberLoss(x, t, delta);
 
-            OutputNode diffnode = Abs(x - t).Value.Save();
-            OutputNode lossnode = loss.Value.Save();
+            StoreField diff_store = Abs(x - t);
+            StoreField loss_store = loss;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(loss);
+            (Flow flow, Parameters parameters) = Flow.Optimize(loss);
 
             flow.Execute();
 
-            float[] diff = diffnode.Tensor.State;
+            float[] diff = diff_store.State;
 
             Assert.IsTrue(diff.Where((v) => v > delta).Count() > 0);
             Assert.IsTrue(diff.Where((v) => v < delta).Count() > 0);
 
-            float[] loss_actual = lossnode.Tensor.State;
+            float[] loss_actual = loss_store.State;
 
             AssertError.Tolerance(loss_expect, loss_actual, 1e-7f, 1e-5f, $"not equal loss");
 

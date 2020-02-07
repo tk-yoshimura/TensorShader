@@ -123,7 +123,7 @@ namespace TensorShader {
         /// <param name="tensor">テンソル</param>
         /// <param name="name">ノード名</param>
         public StoreField Save(Tensor tensor = null, string name = "") {
-            return Value.Save(tensor, name);
+            return new StoreField(this, tensor, name);
         }
 
         /// <summary>文字列化</summary>
@@ -138,13 +138,9 @@ namespace TensorShader {
         public override string Name => string.IsNullOrEmpty((Value as InputNode).Name) ? base.Name : (Value as InputNode).Name;
 
         /// <summary>コンストラクタ</summary>
-        public VariableField(VariableNode node) {
+        public VariableField(InputNode node) {
             if (node == null) {
                 throw new ArgumentNullException(nameof(node));
-            }
-
-            if (node is OutputNode) {
-                throw new ArgumentException("Node is terminated.");
             }
 
             this.Value = node;
@@ -156,7 +152,7 @@ namespace TensorShader {
             : this(new InputNode(tensor.Shape, tensor, name)) { }
 
         /// <summary>変数フィールドへキャスト</summary>
-        public static implicit operator VariableField(VariableNode node) {
+        public static implicit operator VariableField(InputNode node) {
             return new VariableField(node);
         }
 
@@ -265,14 +261,18 @@ namespace TensorShader {
         /// <summary>出力ノード</summary>
         internal OutputNode OutputNode { get; }
 
+        /// <summary>出力ノード</summary>
+        internal Field InField { get; }
+
         /// <summary>コンストラクタ</summary>
-        public StoreField(OutputNode output_node) {
-            this.OutputNode = output_node;
+        internal StoreField(Field field, Tensor tensor = null, string name = "") {
+            this.OutputNode = field.Value.Save(tensor, name);
+            this.InField = field;
         }
 
-        /// <summary>出力ノードからのキャスト</summary>
-        public static implicit operator StoreField(OutputNode output_node) {
-            return new StoreField(output_node);
+        /// <summary>フィールドからのキャスト</summary>
+        public static implicit operator StoreField(Field field) {
+            return new StoreField(field);
         }
 
         /// <summary>文字列化</summary>

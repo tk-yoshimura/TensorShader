@@ -24,7 +24,7 @@ namespace TensorShaderTest.Links.Connection1D {
             Field y_expect = LinearZoom1D(x);
             Field err = Abs(y_expect - y_actual);
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 

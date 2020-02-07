@@ -23,13 +23,13 @@ namespace TensorShaderTest.Links.UnaryArithmetric {
             Field y_expect = Sign(x);
             Field err = y_expect - y_actual;
 
-            StoreField errnode = err.Value.Save();
+            StoreField err_store = err;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] err_actual = errnode.State;
+            float[] err_actual = err_store.State;
 
             AssertError.Tolerance(err_expect, err_actual, 1e-7f, 1e-5f, $"not equal err");
         }

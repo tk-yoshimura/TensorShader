@@ -29,7 +29,7 @@ namespace TensorShaderTest.Links.ArrayManipulation {
             Field y_expect = Where(c, x1, x2);
             Field err = Abs(y_expect - y_actual);
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 

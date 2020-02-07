@@ -26,7 +26,7 @@ namespace TensorShaderTest.Links.Connection2D {
             Field y_expect = Convolution2D(x, w);
             Field err = Abs(y_expect - y_actual);
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 

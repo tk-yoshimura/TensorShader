@@ -27,7 +27,7 @@ namespace TensorShaderTest.Links.BinaryArithmetric {
             Field y_expect = Arctan2(x1, x2);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 

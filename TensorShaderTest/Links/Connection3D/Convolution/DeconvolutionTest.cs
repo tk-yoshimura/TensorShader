@@ -25,9 +25,9 @@ namespace TensorShaderTest.Links.Connection3D {
 
             Field x_expect = Deconvolution3D(y, w);
             Field err = Abs(x_expect - x_actual);
-            OutputNode err_node = err.Value.Save();
+            StoreField err_store = err;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 

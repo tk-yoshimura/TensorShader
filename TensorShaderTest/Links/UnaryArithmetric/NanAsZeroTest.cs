@@ -25,7 +25,7 @@ namespace TensorShaderTest.Links.UnaryArithmetric {
             Field y_expect = NanAsZero(x + 1);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 

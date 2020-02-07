@@ -26,7 +26,7 @@ namespace TensorShaderTest.Links.TrivectorConvolution {
             Field y_expect = TrivectorConvolution2D(x, w);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
@@ -68,7 +68,7 @@ namespace TensorShaderTest.Links.TrivectorConvolution {
 
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 

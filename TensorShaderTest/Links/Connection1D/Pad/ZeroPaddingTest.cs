@@ -24,7 +24,7 @@ namespace TensorShaderTest.Links.Connection1D {
             Field y_expect = ZeroPadding1D(x, pad_left, pad_right);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 

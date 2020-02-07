@@ -14,20 +14,20 @@ namespace TensorShader.Updaters.OptimizeMethod {
         /// <summary>学習定数</summary>
         public float Lambda {
             get {
-                return lambda.Tensor.State[0];
+                return lambda.State[0];
             }
             set {
-                lambda.Tensor.State = new float[] { value };
+                lambda.State = new float[] { value };
             }
         }
 
         /// <summary>慣性係数</summary>
         public float Alpha {
             get {
-                return alpha.Tensor.State[0];
+                return alpha.State[0];
             }
             set {
-                alpha.Tensor.State = new float[] { value };
+                alpha.State = new float[] { value };
             }
         }
 

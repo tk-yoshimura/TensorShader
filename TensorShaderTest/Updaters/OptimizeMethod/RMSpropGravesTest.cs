@@ -21,7 +21,7 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
             Field g = Square(Sin(x + Sin(y))) + Square(Sin(y + Sin(x)));
 
             Field loss = f / 20 + g;
-            StoreField lossnode = loss.Save();
+            StoreField lossnode = loss;
 
             (Flow flow, Parameters parameters) = Flow.Optimize(loss);
             parameters.AddUpdater((parameter) => new RMSpropGraves(parameter, lambda: 0.01f, rho: 0.9f));
@@ -72,7 +72,7 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
             Field g = Square(Sin(x + Sin(y))) + Square(Sin(y + Sin(x)));
 
             Field loss = f / 20 + g;
-            StoreField lossnode = loss.Save();
+            StoreField lossnode = loss;
 
             (Flow flow, Parameters parameters) = Flow.Optimize(loss);
             parameters.AddUpdater((parameter) => new RMSpropGraves(parameter, lambda: 0.1f, rho: 0.9f));

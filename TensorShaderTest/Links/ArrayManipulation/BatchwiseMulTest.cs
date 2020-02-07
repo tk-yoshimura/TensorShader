@@ -25,7 +25,7 @@ namespace TensorShaderTest.Links.ArrayManipulation {
             Field f = BatchwiseMul(x, v);
             Field err = Abs(f - y);
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 

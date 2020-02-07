@@ -54,15 +54,15 @@ namespace TensorShaderTest.Links.Evaluation.Classify {
             VariableField t = ttensor;
 
             Field matches = Matches(x, t);
-            OutputNode matches_node = matches.Value.Save();
+            StoreField matches_store = matches;
 
-            Flow flow = Flow.Inference(matches_node);
+            (Flow flow, _) = Flow.Inference(matches_store);
 
             flow.Execute();
 
-            float[] matches_actual = matches_node.Tensor.State;
+            float[] matches_actual = matches_store.State;
 
-            Assert.AreEqual(Shape.Vector(channels), matches_node.Shape);
+            Assert.AreEqual(Shape.Vector(channels), matches_store.Shape);
             CollectionAssert.AreEqual(new float[] { 1, 1, 2 }, matches_actual);
         }
     }

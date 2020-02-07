@@ -25,7 +25,7 @@ namespace TensorShaderTest.Links.Utility {
             Field y_expect = x1 + Field.Unchain(x2);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 

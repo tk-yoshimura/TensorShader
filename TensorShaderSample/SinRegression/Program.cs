@@ -31,7 +31,7 @@ namespace SinRegression {
 
             Field err = AbsoluteError(y, t);
 
-            StoreField loss = Sum(err).Save();
+            StoreField sum_err = Sum(err);
 
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
             float adam_alpha = 1e-2f;
@@ -42,7 +42,7 @@ namespace SinRegression {
                 parameters.Update();
 
                 Console.WriteLine(
-                    $"loss:{loss.State[0]:E5}, " +
+                    $"loss:{sum_err.State[0]:E5}, " +
                     $"p3:{p3.ValueTensor.State[0]:E5}, " +
                     $"p5:{p5.ValueTensor.State[0]:E5}, " + 
                     $"p7:{p7.ValueTensor.State[0]:E5}");

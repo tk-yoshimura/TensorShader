@@ -21,7 +21,7 @@ namespace TensorShaderTest.Links.FactorArithmetric {
             Field y_expect = SignedPow(x, p);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 

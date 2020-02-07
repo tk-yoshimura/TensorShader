@@ -45,9 +45,9 @@ namespace TensorShaderTest {
 
             {
                 ParameterField f1 = new ParameterField(intensor);
-                StoreField n1 = f1.Save();
+                StoreField n1 = f1;
 
-                Flow flow = Flow.Inference(n1);
+                (Flow flow, _) = Flow.Inference(n1);
 
                 flow.Execute();
 
@@ -55,14 +55,14 @@ namespace TensorShaderTest {
                 Assert.AreEqual(1, flow.InTensorCount);
                 Assert.AreEqual(1, flow.OutTensorCount);
 
-                Assert.AreEqual(1, n1.Tensor.State[0]);
+                Assert.AreEqual(1, n1.State[0]);
             }
 
             {
                 VariableField f1 = intensor;
-                StoreField n1 = f1.Save();
+                StoreField n1 = f1;
 
-                Flow flow = Flow.Inference(n1);
+                (Flow flow, _) = Flow.Inference(n1);
 
                 flow.Execute();
 
@@ -71,7 +71,7 @@ namespace TensorShaderTest {
                 Assert.AreEqual(1, flow.OutTensorCount);
 
                 Assert.AreEqual(null, f1.Grad);
-                Assert.AreEqual(1, n1.Tensor.State[0]);
+                Assert.AreEqual(1, n1.State[0]);
             }
 
             {
@@ -81,9 +81,9 @@ namespace TensorShaderTest {
 
                 optimize_flow.Execute();
 
-                StoreField n1 = f1.Save();
+                StoreField n1 = f1;
 
-                Flow inference_flow = Flow.Inference(n1);
+                (Flow inference_flow, _) = Flow.Inference(n1);
 
                 inference_flow.Execute();
 
@@ -99,7 +99,7 @@ namespace TensorShaderTest {
                 Assert.AreEqual(1, inference_flow.InTensorCount);
                 Assert.AreEqual(1, inference_flow.OutTensorCount);
 
-                Assert.AreEqual(1, n1.Tensor.State[0]);
+                Assert.AreEqual(1, n1.State[0]);
 
                 foreach (var item in inference_flow.InTensors) {
                     Assert.IsTrue(optimize_flow.InTensors.ContainsKey(item.Key));
@@ -114,9 +114,9 @@ namespace TensorShaderTest {
 
                 optimize_flow.Execute();
 
-                StoreField n1 = f1.Save();
+                StoreField n1 = f1;
 
-                Flow inference_flow = Flow.Inference(n1);
+                (Flow inference_flow, _) = Flow.Inference(n1);
 
                 inference_flow.Execute();
 
@@ -131,7 +131,7 @@ namespace TensorShaderTest {
                 Assert.AreEqual(1, inference_flow.InTensorCount);
                 Assert.AreEqual(1, inference_flow.OutTensorCount);
 
-                Assert.AreEqual(1, n1.Tensor.State[0]);
+                Assert.AreEqual(1, n1.State[0]);
 
                 foreach (var item in inference_flow.InTensors) {
                     Assert.IsTrue(optimize_flow.InTensors.ContainsKey(item.Key));
@@ -141,9 +141,9 @@ namespace TensorShaderTest {
 
             {
                 ParameterField f1 = new ParameterField(intensor);
-                StoreField n1 = f1.Save();
+                StoreField n1 = f1;
 
-                Flow inference_flow = Flow.Inference(n1);
+                (Flow inference_flow, _) = Flow.Inference(n1);
 
                 inference_flow.Execute();
 
@@ -163,7 +163,7 @@ namespace TensorShaderTest {
                 Assert.AreEqual(1, inference_flow.InTensorCount);
                 Assert.AreEqual(1, inference_flow.OutTensorCount);
 
-                Assert.AreEqual(1, n1.Tensor.State[0]);
+                Assert.AreEqual(1, n1.State[0]);
 
                 foreach (var item in inference_flow.InTensors) {
                     Assert.IsTrue(optimize_flow.InTensors.ContainsKey(item.Key));
@@ -173,9 +173,9 @@ namespace TensorShaderTest {
 
             {
                 VariableField f1 = new VariableField(intensor);
-                StoreField n1 = f1.Save();
+                StoreField n1 = f1;
 
-                Flow inference_flow = Flow.Inference(n1);
+                (Flow inference_flow, _) = Flow.Inference(n1);
 
                 inference_flow.Execute();
 
@@ -194,7 +194,7 @@ namespace TensorShaderTest {
                 Assert.AreEqual(1, inference_flow.InTensorCount);
                 Assert.AreEqual(1, inference_flow.OutTensorCount);
 
-                Assert.AreEqual(1, n1.Tensor.State[0]);
+                Assert.AreEqual(1, n1.State[0]);
 
                 foreach (var item in inference_flow.InTensors) {
                     Assert.IsTrue(optimize_flow.InTensors.ContainsKey(item.Key));
@@ -234,9 +234,9 @@ namespace TensorShaderTest {
                 ParameterField f1 = new ParameterField(intensor);
 
                 Field f3 = Abs(f1);
-                StoreField n3 = f3.Save();
+                StoreField n3 = f3;
 
-                Flow flow = Flow.Inference(n3);
+                (Flow flow, _) = Flow.Inference(n3);
 
                 flow.Execute();
 
@@ -247,7 +247,7 @@ namespace TensorShaderTest {
                 Assert.AreEqual(1, flow.OutTensorCount);
 
                 Assert.AreEqual(intensor, f1.ValueTensor);
-                Assert.AreEqual(1.5f, n3.Tensor.State[0]);
+                Assert.AreEqual(1.5f, n3.State[0]);
             }
 
             {
@@ -256,13 +256,13 @@ namespace TensorShaderTest {
 
                 Field f2 = Abs(f1);
                 Field ferr = f2 - fo;
-                StoreField n3 = f2.Save();
+                StoreField n3 = f2;
 
                 (Flow optimize_flow, List<ParameterField> parameters) = Flow.Optimize(ferr);
 
                 optimize_flow.Execute();
 
-                Flow inference_flow = Flow.Inference(n3);
+                (Flow inference_flow, _) = Flow.Inference(n3);
 
                 inference_flow.Execute();
 
@@ -283,7 +283,7 @@ namespace TensorShaderTest {
                 Assert.AreEqual(1, inference_flow.OutTensorCount);
 
                 Assert.AreEqual(intensor, f1.ValueTensor);
-                Assert.AreEqual(1.5f, n3.Tensor.State[0]);
+                Assert.AreEqual(1.5f, n3.State[0]);
 
                 foreach (var item in inference_flow.InTensors) {
                     Assert.IsTrue(optimize_flow.InTensors.ContainsKey(item.Key));
@@ -297,9 +297,9 @@ namespace TensorShaderTest {
 
                 Field f2 = Abs(f1);
                 Field ferr = f2 - fo;
-                StoreField n3 = f2.Save();
+                StoreField n3 = f2;
 
-                Flow inference_flow = Flow.Inference(n3);
+                (Flow inference_flow, _) = Flow.Inference(n3);
 
                 inference_flow.Execute();
 
@@ -324,7 +324,7 @@ namespace TensorShaderTest {
                 Assert.AreEqual(1, inference_flow.OutTensorCount);
 
                 Assert.AreEqual(intensor, f1.ValueTensor);
-                Assert.AreEqual(1.5f, n3.Tensor.State[0]);
+                Assert.AreEqual(1.5f, n3.State[0]);
 
                 foreach (var item in inference_flow.InTensors) {
                     Assert.IsTrue(optimize_flow.InTensors.ContainsKey(item.Key));
@@ -394,9 +394,9 @@ namespace TensorShaderTest {
                 VariableField f2 = new VariableField(in2tensor);
 
                 Field f3 = f1 + f2;
-                StoreField n3 = f3.Save();
+                StoreField n3 = f3;
 
-                Flow flow = Flow.Inference(n3);
+                (Flow flow, _) = Flow.Inference(n3);
 
                 flow.Execute();
 
@@ -408,7 +408,7 @@ namespace TensorShaderTest {
 
                 Assert.AreEqual(in1tensor, f1.ValueTensor);
                 Assert.AreEqual(in2tensor, f2.ValueTensor);
-                Assert.AreEqual(3, n3.Tensor.State[0]);
+                Assert.AreEqual(3, n3.State[0]);
             }
 
             {
@@ -418,7 +418,7 @@ namespace TensorShaderTest {
 
                 Field f3 = f1 + f2;
                 Field ferr = f3 - fo;
-                StoreField n3 = f3.Save();
+                StoreField n3 = f3;
 
                 (Flow optimize_flow, List<ParameterField> parameters) = Flow.Optimize(ferr);
 
@@ -436,7 +436,7 @@ namespace TensorShaderTest {
                 Assert.AreEqual(6, f1.GradTensor.State[0]);
                 Assert.AreEqual(null, f2.Grad);
 
-                Flow inference_flow = Flow.Inference(n3);
+                (Flow inference_flow, _) = Flow.Inference(n3);
 
                 inference_flow.Execute();
 
@@ -448,7 +448,7 @@ namespace TensorShaderTest {
 
                 Assert.AreEqual(in1tensor, f1.ValueTensor);
                 Assert.AreEqual(in2tensor, f2.ValueTensor);
-                Assert.AreEqual(3, n3.Tensor.State[0]);
+                Assert.AreEqual(3, n3.State[0]);
 
                 foreach (var item in inference_flow.InTensors) {
                     Assert.IsTrue(optimize_flow.InTensors.ContainsKey(item.Key));
@@ -463,9 +463,9 @@ namespace TensorShaderTest {
 
                 Field f3 = f1 + f2;
                 Field ferr = f3 - fo;
-                StoreField n3 = f3.Save();
+                StoreField n3 = f3;
 
-                Flow inference_flow = Flow.Inference(n3);
+                (Flow inference_flow, _) = Flow.Inference(n3);
 
                 inference_flow.Execute();
 
@@ -493,7 +493,7 @@ namespace TensorShaderTest {
 
                 Assert.AreEqual(in1tensor, f1.ValueTensor);
                 Assert.AreEqual(in2tensor, f2.ValueTensor);
-                Assert.AreEqual(3, n3.Tensor.State[0]);
+                Assert.AreEqual(3, n3.State[0]);
 
                 foreach (var item in inference_flow.InTensors) {
                     Assert.IsTrue(optimize_flow.InTensors.ContainsKey(item.Key));
@@ -563,10 +563,10 @@ namespace TensorShaderTest {
                 Field f2 = Abs(f1);
                 Field f3 = f2 * f2;
 
-                StoreField n2 = f2.Save();
-                StoreField n3 = f3.Save();
+                StoreField n2 = f2;
+                StoreField n3 = f3;
 
-                Flow flow = Flow.Inference(n2, n3);
+                (Flow flow, _) = Flow.Inference(n2, n3);
 
                 flow.Execute();
 
@@ -577,8 +577,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(2, flow.OutTensorCount);
 
                 Assert.AreEqual(intensor, f1.ValueTensor);
-                Assert.AreEqual(1.5f, n2.Tensor.State[0]);
-                Assert.AreEqual(1.5f * 1.5f, n3.Tensor.State[0]);
+                Assert.AreEqual(1.5f, n2.State[0]);
+                Assert.AreEqual(1.5f * 1.5f, n3.State[0]);
             }
 
             {
@@ -587,10 +587,10 @@ namespace TensorShaderTest {
                 Field f2 = Abs(f1);
                 Field f3 = f2 * f2;
 
-                StoreField n2 = f2.Save();
-                StoreField n3 = f3.Save();
+                StoreField n2 = f2;
+                StoreField n3 = f3;
 
-                Flow flow = Flow.Inference(n3, n2);
+                (Flow flow, _) = Flow.Inference(n3, n2);
 
                 flow.Execute();
 
@@ -601,8 +601,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(2, flow.OutTensorCount);
 
                 Assert.AreEqual(intensor, f1.ValueTensor);
-                Assert.AreEqual(1.5f, n2.Tensor.State[0]);
-                Assert.AreEqual(1.5f * 1.5f, n3.Tensor.State[0]);
+                Assert.AreEqual(1.5f, n2.State[0]);
+                Assert.AreEqual(1.5f * 1.5f, n3.State[0]);
             }
 
             {
@@ -629,10 +629,10 @@ namespace TensorShaderTest {
                 Assert.AreEqual(intensor, f1.ValueTensor);
                 Assert.AreEqual(Math.Sign(-1.5f) * ((1.5f - 2f) + (1.5f * 1.5f - 2f * 2f) * 1.5f * 2), f1.GradTensor.State[0]);
 
-                StoreField n2 = f2.Save();
-                StoreField n3 = f3.Save();
+                StoreField n2 = f2;
+                StoreField n3 = f3;
 
-                Flow inference_flow = Flow.Inference(n2, n3);
+                (Flow inference_flow, _) = Flow.Inference(n2, n3);
 
                 inference_flow.Execute();
 
@@ -643,8 +643,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(2, inference_flow.OutTensorCount);
 
                 Assert.AreEqual(intensor, f1.ValueTensor);
-                Assert.AreEqual(1.5f, n2.Tensor.State[0]);
-                Assert.AreEqual(1.5f * 1.5f, n3.Tensor.State[0]);
+                Assert.AreEqual(1.5f, n2.State[0]);
+                Assert.AreEqual(1.5f * 1.5f, n3.State[0]);
 
                 foreach (var item in inference_flow.InTensors) {
                     Assert.IsTrue(optimize_flow.InTensors.ContainsKey(item.Key));
@@ -676,10 +676,10 @@ namespace TensorShaderTest {
                 Assert.AreEqual(intensor, f1.ValueTensor);
                 Assert.AreEqual(Math.Sign(-1.5f) * ((1.5f - 2f) + (1.5f * 1.5f - 2f * 2f) * 1.5f * 2), f1.GradTensor.State[0]);
 
-                StoreField n2 = f2.Save();
-                StoreField n3 = f3.Save();
+                StoreField n2 = f2;
+                StoreField n3 = f3;
 
-                Flow inference_flow = Flow.Inference(n3, n2);
+                (Flow inference_flow, _) = Flow.Inference(n3, n2);
 
                 inference_flow.Execute();
 
@@ -690,8 +690,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(2, inference_flow.OutTensorCount);
 
                 Assert.AreEqual(intensor, f1.ValueTensor);
-                Assert.AreEqual(1.5f, n2.Tensor.State[0]);
-                Assert.AreEqual(1.5f * 1.5f, n3.Tensor.State[0]);
+                Assert.AreEqual(1.5f, n2.State[0]);
+                Assert.AreEqual(1.5f * 1.5f, n3.State[0]);
 
                 foreach (var item in inference_flow.InTensors) {
                     Assert.IsTrue(optimize_flow.InTensors.ContainsKey(item.Key));
@@ -791,11 +791,11 @@ namespace TensorShaderTest {
                 Field ferr2 = fo2 - Abs(fi2);
                 Field ferr3 = fo3 - Abs(fi3);
 
-                StoreField n1 = ferr1.Save();
-                StoreField n2 = ferr2.Save();
-                StoreField n3 = ferr3.Save();
+                StoreField n1 = ferr1;
+                StoreField n2 = ferr2;
+                StoreField n3 = ferr3;
 
-                Flow flow = Flow.Inference(n1, n2, n3);
+                (Flow flow, _) = Flow.Inference(n1, n2, n3);
 
                 flow.Execute();
 
@@ -805,9 +805,9 @@ namespace TensorShaderTest {
                 Assert.AreEqual(6, flow.InTensorCount);
                 Assert.AreEqual(3, flow.OutTensorCount);
 
-                Assert.AreEqual(0.5f, n1.Tensor.State[0]);
-                Assert.AreEqual(1.5f, n2.Tensor.State[0]);
-                Assert.AreEqual(3.5f, n3.Tensor.State[0]);
+                Assert.AreEqual(0.5f, n1.State[0]);
+                Assert.AreEqual(1.5f, n2.State[0]);
+                Assert.AreEqual(3.5f, n3.State[0]);
             }
 
             {
@@ -839,10 +839,10 @@ namespace TensorShaderTest {
                 Assert.AreEqual(1.5f, fi2.GradTensor.State[0]);
                 Assert.AreEqual(3.5f, fi3.GradTensor.State[0]);
 
-                StoreField n1 = ferr1.Save();
-                StoreField n2 = ferr2.Save();
+                StoreField n1 = ferr1;
+                StoreField n2 = ferr2;
 
-                Flow inference_flow = Flow.Inference(n1, n2);
+                (Flow inference_flow, _) = Flow.Inference(n1, n2);
 
                 inference_flow.Execute();
 
@@ -852,8 +852,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(4, inference_flow.InTensorCount);
                 Assert.AreEqual(2, inference_flow.OutTensorCount);
 
-                Assert.AreEqual(0.5f, n1.Tensor.State[0]);
-                Assert.AreEqual(1.5f, n2.Tensor.State[0]);
+                Assert.AreEqual(0.5f, n1.State[0]);
+                Assert.AreEqual(1.5f, n2.State[0]);
 
                 foreach (var item in inference_flow.InTensors) {
                     Assert.IsTrue(optimize_flow.InTensors.ContainsKey(item.Key));
@@ -896,9 +896,9 @@ namespace TensorShaderTest {
                 (Field f2, Field f3) = (f1, -f1);
                 Field f4 = f2 * f3;
 
-                StoreField n4 = f4.Save();
+                StoreField n4 = f4;
 
-                Flow flow = Flow.Inference(n4);
+                (Flow flow, _) = Flow.Inference(n4);
 
                 flow.Execute();
 
@@ -909,7 +909,7 @@ namespace TensorShaderTest {
                 Assert.AreEqual(1, flow.OutTensorCount);
 
                 Assert.AreEqual(intensor, f1.ValueTensor);
-                Assert.AreEqual(-2.25f, n4.Tensor.State[0]);
+                Assert.AreEqual(-2.25f, n4.State[0]);
             }
 
             {
@@ -934,9 +934,9 @@ namespace TensorShaderTest {
                 Assert.AreEqual(intensor, f1.ValueTensor);
                 Assert.AreEqual((-2.25f + 2) * 1.5f * 2, f1.GradTensor.State[0]);
 
-                StoreField n4 = f4.Save();
+                StoreField n4 = f4;
 
-                Flow inference_flow = Flow.Inference(n4);
+                (Flow inference_flow, _) = Flow.Inference(n4);
 
                 inference_flow.Execute();
 
@@ -947,7 +947,7 @@ namespace TensorShaderTest {
                 Assert.AreEqual(1, inference_flow.OutTensorCount);
 
                 Assert.AreEqual(intensor, f1.ValueTensor);
-                Assert.AreEqual(-2.25f, n4.Tensor.State[0]);
+                Assert.AreEqual(-2.25f, n4.State[0]);
 
                 foreach (var item in inference_flow.InTensors) {
                     Assert.IsTrue(optimize_flow.InTensors.ContainsKey(item.Key));
@@ -984,10 +984,10 @@ namespace TensorShaderTest {
                 VariableField f1 = intensor;
 
                 (Field f2, Field f3) = (-(-f1), -f1);
-                StoreField n2 = f2.Save();
-                StoreField n3 = f3.Save();
+                StoreField n2 = f2;
+                StoreField n3 = f3;
 
-                Flow flow = Flow.Inference(n2, n3);
+                (Flow flow, _) = Flow.Inference(n2, n3);
 
                 flow.Execute();
 
@@ -997,8 +997,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(1, flow.InTensorCount);
                 Assert.AreEqual(2, flow.OutTensorCount);
 
-                Assert.AreEqual(-1.5f, n2.Tensor.State[0]);
-                Assert.AreEqual(1.5f, n3.Tensor.State[0]);
+                Assert.AreEqual(-1.5f, n2.State[0]);
+                Assert.AreEqual(1.5f, n3.State[0]);
             }
 
             {
@@ -1010,10 +1010,10 @@ namespace TensorShaderTest {
 
                 optimize_flow.Execute();
 
-                StoreField n2 = f2.Save();
-                StoreField n3 = f3.Save();
+                StoreField n2 = f2;
+                StoreField n3 = f3;
 
-                Flow inference_flow = Flow.Inference(n2, n3);
+                (Flow inference_flow, _) = Flow.Inference(n2, n3);
 
                 inference_flow.Execute();
 
@@ -1033,8 +1033,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(1, inference_flow.InTensorCount);
                 Assert.AreEqual(2, inference_flow.OutTensorCount);
 
-                Assert.AreEqual(-1.5f, n2.Tensor.State[0]);
-                Assert.AreEqual(1.5f, n3.Tensor.State[0]);
+                Assert.AreEqual(-1.5f, n2.State[0]);
+                Assert.AreEqual(1.5f, n3.State[0]);
 
                 foreach (var item in inference_flow.InTensors) {
                     Assert.IsTrue(optimize_flow.InTensors.ContainsKey(item.Key));
@@ -1046,10 +1046,10 @@ namespace TensorShaderTest {
                 ParameterField f1 = intensor;
 
                 (Field f2, Field f3) = (-(-f1), -f1);
-                StoreField n2 = f2.Save();
-                StoreField n3 = f3.Save();
+                StoreField n2 = f2;
+                StoreField n3 = f3;
 
-                Flow inference_flow = Flow.Inference(n2, n3);
+                (Flow inference_flow, _) = Flow.Inference(n2, n3);
 
                 inference_flow.Execute();
 
@@ -1073,8 +1073,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(1, inference_flow.InTensorCount);
                 Assert.AreEqual(2, inference_flow.OutTensorCount);
 
-                Assert.AreEqual(-1.5f, n2.Tensor.State[0]);
-                Assert.AreEqual(1.5f, n3.Tensor.State[0]);
+                Assert.AreEqual(-1.5f, n2.State[0]);
+                Assert.AreEqual(1.5f, n3.State[0]);
 
                 foreach (var item in inference_flow.InTensors) {
                     Assert.IsTrue(optimize_flow.InTensors.ContainsKey(item.Key));
@@ -1091,10 +1091,10 @@ namespace TensorShaderTest {
 
                 optimize_flow.Execute();
 
-                StoreField n2 = f2.Save();
-                StoreField n3 = f3.Save();
+                StoreField n2 = f2;
+                StoreField n3 = f3;
 
-                Flow inference_flow = Flow.Inference(n3, n2);
+                (Flow inference_flow, _) = Flow.Inference(n3, n2);
 
                 inference_flow.Execute();
 
@@ -1114,8 +1114,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(1, inference_flow.InTensorCount);
                 Assert.AreEqual(2, inference_flow.OutTensorCount);
 
-                Assert.AreEqual(-1.5f, n2.Tensor.State[0]);
-                Assert.AreEqual(1.5f, n3.Tensor.State[0]);
+                Assert.AreEqual(-1.5f, n2.State[0]);
+                Assert.AreEqual(1.5f, n3.State[0]);
 
                 foreach (var item in inference_flow.InTensors) {
                     Assert.IsTrue(optimize_flow.InTensors.ContainsKey(item.Key));
@@ -1237,7 +1237,7 @@ namespace TensorShaderTest {
 
                 Field f3 = f1 + f2;
                 Field ferr = f3 - fo;
-                StoreField loss = VariableNode.Average(ferr.Value).Save();
+                StoreField ave_ferr = Average(ferr);
 
                 (Flow flow, List<ParameterField> parameters) = Flow.Optimize(ferr);
 
@@ -1254,7 +1254,7 @@ namespace TensorShaderTest {
 
                 CollectionAssert.AreEqual(new float[] { -2f, 0f, 2f, 4f, 6f }, y1);
                 CollectionAssert.AreEqual(new float[] { 10f }, y2);
-                CollectionAssert.AreEqual(new float[] { 2f }, loss.Tensor.State);
+                CollectionAssert.AreEqual(new float[] { 2f }, ave_ferr.State);
             }
         }
 
@@ -1552,8 +1552,8 @@ namespace TensorShaderTest {
 
                 Field f3 = f1 + f2;
                 Field ferr = f3 - fo;
-                StoreField n3 = f3.Save();
-                StoreField n4 = (f3 * f4).Save();
+                StoreField n3 = f3;
+                StoreField n4 = f3 * f4;
 
                 (Flow optimize_flow, List<ParameterField> parameters) = Flow.Optimize(ferr);
 
@@ -1584,8 +1584,8 @@ namespace TensorShaderTest {
 
                 Field f3 = f1 + f2;
                 Field ferr = f3 - fo;
-                StoreField n3 = f3.Save();
-                StoreField n4 = (f3 + f1).Save();
+                StoreField n3 = f3;
+                StoreField n4 = f3 + f1;
 
                 (Flow optimize_flow, List<ParameterField> parameters) = Flow.Optimize(ferr);
 

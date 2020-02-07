@@ -23,13 +23,13 @@ namespace TensorShaderTest.Links.UnaryArithmetric {
             Field y_expect = Cosh(x);
             Field err = y_expect - y_actual;
 
-            OutputNode n = err.Value.Save();
+            StoreField n = err;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] div = n.Tensor.State;
+            float[] div = n.State;
 
             float[] gx_actual = x.GradTensor.State;
 

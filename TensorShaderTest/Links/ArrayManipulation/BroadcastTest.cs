@@ -22,7 +22,7 @@ namespace TensorShaderTest.Links.ArrayManipulation {
             Field y_expect = Broadcast(x, ytensor.Shape);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 

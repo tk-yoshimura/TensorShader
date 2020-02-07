@@ -41,12 +41,12 @@ namespace MNIST {
                     SoftmaxCrossEntropy(y, OneHotVector(t, classes)), 
                     Axis.Map0D.Channels
                 );
-            StoreField accnode = acc.Save(), lossnode = Average(err).Save();
+            StoreField acc_store = acc, loss_store = Average(err);
 
             Console.WriteLine("Set iterator event...");
             train_iterator.IncreasedEpoch += (iter) => {
-                float train_acc = accnode.State[0];
-                float train_loss = lossnode.State[0];
+                float train_acc = acc_store.State[0];
+                float train_loss = loss_store.State[0];
 
                 Console.WriteLine($"[{iter.Iteration}] train acc: {train_acc:F3} train loss: {train_loss:E3}");
             };
@@ -70,10 +70,10 @@ namespace MNIST {
             Train(train_iterator, loader, x, t, trainflow, parameters);
 
             Console.WriteLine("Build inference flow...");
-            Flow testflow = Flow.Inference(accnode);
+            (Flow testflow, _) = Flow.Inference(acc_store);
 
             Console.WriteLine("Testing...");
-            Test(test_iterator, loader, x, t, testflow, accnode);
+            Test(test_iterator, loader, x, t, testflow, acc_store);
 
             Console.WriteLine("Saving snapshot...");
             Snapshot snapshot = parameters.Save();

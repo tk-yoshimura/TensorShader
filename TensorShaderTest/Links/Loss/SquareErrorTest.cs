@@ -20,13 +20,13 @@ namespace TensorShaderTest.Links.Loss {
             VariableField t = ttensor;
 
             Field loss = SquareError(x, t);
-            OutputNode lossnode = loss.Value.Save();
+            StoreField lossnode = loss;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(loss);
+            (Flow flow, Parameters parameters) = Flow.Optimize(loss);
 
             flow.Execute();
 
-            float[] loss_actual = lossnode.Tensor.State;
+            float[] loss_actual = lossnode.State;
 
             AssertError.Tolerance(loss_expect, loss_actual, 1e-7f, 1e-5f, $"not equal loss");
 

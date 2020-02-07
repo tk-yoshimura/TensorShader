@@ -19,9 +19,9 @@ namespace TensorShaderTest.Links.LogicalArithmetric {
             VariableField f = new Tensor(Shape.Map1D(ch, length), x);
 
             Field fout = IsNan(f);
-            StoreField output = fout.Save();
+            StoreField output = fout;
 
-            Flow flow = Flow.Inference(output);
+            (Flow flow, _) = Flow.Inference(output);
             flow.Execute();
 
             CollectionAssert.AreEqual(idxes.Select((idx) => float.IsNaN(x[idx]) ? 1f : 0f).ToArray(), output.State);

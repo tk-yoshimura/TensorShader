@@ -23,7 +23,7 @@ namespace TensorShaderTest.Links.QuaternionArithmetric {
             Field y_expect = QuaternionRRelu(x);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
@@ -51,7 +51,7 @@ namespace TensorShaderTest.Links.QuaternionArithmetric {
             Field y_expect = QuaternionCast(Relu(r), i, j, k);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 

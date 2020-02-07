@@ -23,11 +23,11 @@ namespace TensorShaderTest.Links.ArrayManipulation {
 
             Field y = Flip(x, axis: 3);
 
-            StoreField o = y.Save();
+            StoreField o = y;
 
             Field err = y - t;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 

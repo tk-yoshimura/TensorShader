@@ -14,14 +14,14 @@ namespace TensorShaderTest.Links.RandomGeneration {
             Shape shape = Shape.Vector(length);
 
             VariableField field = NormalRandom(shape, new Random(1234));
-            OutputNode output = field.Value.Save();
-            Flow flow = Flow.Inference(output);
+            StoreField output = field;
+            (Flow flow, _) = Flow.Inference(output);
 
             flow.Execute();
-            float[] y1 = output.Tensor.State;
+            float[] y1 = output.State;
 
             flow.Execute();
-            float[] y2 = output.Tensor.State;
+            float[] y2 = output.State;
 
             CollectionAssert.AreNotEqual(y1, y2);
 

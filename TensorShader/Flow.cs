@@ -461,11 +461,23 @@ namespace TensorShader {
         }
 
         /// <summary>推論計算グラフを構築</summary>
-        /// <returns>計算フロー</returns>
-        public static Flow Inference(params StoreField[] fields) {
-            Flow flow = FromOutputs(fields.Select((field) => field.OutputNode).ToArray());
+        /// <returns>計算フローと計算に必要となるパラメータ</returns>
+        public static (Flow flow, Parameters parameters) Inference(params StoreField[] store_fields) {
+            // ストアフィールドを出力したフィールドを列挙
+            Field[] infields = store_fields.Select((field) => field.InField).ToArray();
 
-            return flow;
+            // 逆伝搬で到達可能なリンク・フィールドを探索、パラメータを列挙
+            (List<Field> reachable_fields, _) =
+                EnumerateReachableFields(forward: false, backward: true, infields);
+            List<ParameterField> parameters = reachable_fields.OfType<ParameterField>().ToList();
+
+            // ストアフィールドの出力ノードを列挙
+            OutputNode[] output_nodes = store_fields.Select((field) => field.OutputNode).ToArray();
+
+            // 出力ノードから計算フローを構築
+            Flow flow = FromOutputs(output_nodes);
+
+            return (flow, parameters);
         }
 
         /// <summary>計算フローを実行</summary>

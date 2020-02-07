@@ -26,7 +26,7 @@ namespace TensorShaderTest.Links.ComplexConvolution {
             Field y_expect = ComplexConvolution2D(x, w);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
@@ -65,7 +65,7 @@ namespace TensorShaderTest.Links.ComplexConvolution {
 
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 

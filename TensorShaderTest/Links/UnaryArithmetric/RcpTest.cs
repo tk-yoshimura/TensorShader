@@ -23,7 +23,7 @@ namespace TensorShaderTest.Links.UnaryArithmetric {
             Field y_expect = Rcp(x);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 

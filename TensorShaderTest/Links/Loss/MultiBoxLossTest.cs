@@ -37,10 +37,10 @@ namespace TensorShaderTest.Links.Loss {
 
             (Field locloss, Field confloss) = MultiBoxLoss(loc, gt, conf, label, hard_negative_mining_rate: 2);
 
-            StoreField locloss_node = locloss.Save();
-            StoreField confloss_node = confloss.Save();
+            StoreField locloss_store = locloss;
+            StoreField confloss_store = confloss;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(locloss, confloss);
+            (Flow flow, Parameters parameters) = Flow.Optimize(locloss, confloss);
 
             flow.Execute();
 
@@ -49,11 +49,11 @@ namespace TensorShaderTest.Links.Loss {
             Assert.IsTrue(gt.Grad == null);
             Assert.IsTrue(label.Grad == null);
 
-            float[] locloss_actual = locloss_node.Tensor.State;
+            float[] locloss_actual = locloss_store.State;
 
             AssertError.Tolerance(locloss_expect, locloss_actual, 1e-6f, 1e-4f, $"not equal locloss");
 
-            float[] confloss_actual = confloss_node.Tensor.State;
+            float[] confloss_actual = confloss_store.State;
 
             AssertError.Tolerance(confloss_expect, confloss_actual, 1e-6f, 1e-4f, $"not equal confloss");
 

@@ -23,7 +23,7 @@ namespace TensorShaderTest.Links.ComplexArithmetric {
             Field y_expect = ComplexDecay(x);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
@@ -53,7 +53,7 @@ namespace TensorShaderTest.Links.ComplexArithmetric {
             Field y_expect = ComplexCast(x_real * s, x_imag * s);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 

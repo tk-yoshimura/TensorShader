@@ -35,7 +35,7 @@ namespace TensorShaderTest.Links.ArrayManipulation {
             Field y_expect = Concat(axis: 0, x1, x2, x3, x4);
             Field err = Abs(y_expect - y_actual);
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
@@ -98,7 +98,7 @@ namespace TensorShaderTest.Links.ArrayManipulation {
 
                         Field err = yfield - tfield;
 
-                        (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+                        (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
                         flow.Execute();
 

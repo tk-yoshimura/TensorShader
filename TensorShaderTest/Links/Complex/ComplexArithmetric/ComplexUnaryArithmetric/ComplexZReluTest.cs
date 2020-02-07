@@ -23,7 +23,7 @@ namespace TensorShaderTest.Links.ComplexArithmetric {
             Field y_expect = ComplexZRelu(x);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
@@ -52,7 +52,7 @@ namespace TensorShaderTest.Links.ComplexArithmetric {
             Field y_expect = ComplexCast(x_real * isphase1, x_imag * isphase1);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 

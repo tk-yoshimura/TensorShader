@@ -30,13 +30,13 @@ namespace TensorShaderTest.Links.ConnectionDense {
             Field y = Softmax(x);
             Field err = y - t;
 
-            OutputNode ynode = y.Value.Save();
+            StoreField ynode = y;
 
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] y_actual = ynode.Tensor.State;
+            float[] y_actual = ynode.State;
 
             AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, $"not equal y");
 

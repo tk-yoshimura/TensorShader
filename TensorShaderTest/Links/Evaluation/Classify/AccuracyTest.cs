@@ -53,14 +53,13 @@ namespace TensorShaderTest.Links.Evaluation.Classify {
             VariableField x = xtensor;
             VariableField t = ttensor;
 
-            Field acc = Accuracy(x, t);
-            OutputNode accnode = acc.Value.Save();
+            StoreField acc = Accuracy(x, t);
 
-            Flow flow = Flow.Inference(accnode);
+            (Flow flow, _) = Flow.Inference(acc);
 
             flow.Execute();
 
-            float[] acc_actual = accnode.Tensor.State;
+            float[] acc_actual = acc.State;
 
             Assert.AreEqual(1, acc_actual.Length);
             Assert.AreEqual(4 / 16.0f, acc_actual[0]);

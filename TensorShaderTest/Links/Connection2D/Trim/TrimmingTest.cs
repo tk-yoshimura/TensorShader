@@ -25,7 +25,7 @@ namespace TensorShaderTest.Links.Connection2D {
             Field y_expect = Trimming2D(x, trim_left, trim_right, trim_top, trim_bottom);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 

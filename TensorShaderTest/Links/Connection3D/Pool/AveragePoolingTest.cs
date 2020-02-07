@@ -24,7 +24,7 @@ namespace TensorShaderTest.Links.Connection3D {
             Field y_expect = AveragePooling3D(x, stride);
             Field err = y_expect - y_actual;
 
-            (Flow flow, Parameters Parameters) = Flow.Optimize(err);
+            (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
