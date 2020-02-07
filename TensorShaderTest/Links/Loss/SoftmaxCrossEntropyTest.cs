@@ -27,7 +27,7 @@ namespace TensorShaderTest.Links.Loss {
             ParameterField x = xtensor;
             VariableField t = ttensor;
 
-            StoreField loss = Sum(SoftmaxCrossEntropy(x, t), axes: new int[] { Axis.Map0D.Channels });
+            StoreField loss = Sum(SoftmaxCrossEntropy(x, t), Axis.Map0D.Channels);
             (Flow flow, _) = Flow.Optimize(loss);
 
             flow.Execute();
