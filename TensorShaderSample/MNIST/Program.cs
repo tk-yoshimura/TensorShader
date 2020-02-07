@@ -108,7 +108,7 @@ namespace MNIST {
             Console.WriteLine($"{sw.ElapsedMilliseconds} msec, {sw.ElapsedMilliseconds / train_iterator.Epoch} msec/epoch");
         }
 
-        static void Test(Iterator test_iterator, MnistLoader loader, VariableField x, VariableField t, Flow testflow, StoreField accnode) {
+        static void Test(Iterator test_iterator, MnistLoader loader, VariableField x, VariableField t, Flow testflow, StoreField acc) {
             List<float> test_acc_list = new List<float>();
 
             Stopwatch sw = new Stopwatch();
@@ -123,7 +123,7 @@ namespace MNIST {
 
                 testflow.Execute();
 
-                float test_acc = accnode.State[0];
+                float test_acc = acc.State[0];
 
                 test_acc_list.Add(test_acc);
             }
