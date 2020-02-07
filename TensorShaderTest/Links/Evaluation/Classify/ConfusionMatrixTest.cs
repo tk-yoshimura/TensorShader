@@ -55,8 +55,8 @@ namespace TensorShaderTest.Links.Evaluation.Classify {
             VariableField t = ttensor;
 
             StoreField mat = ConfusionMatrix(x, t);
-            StoreField exp = Sum(mat, Axis.ConfusionMatrix.Actual );
-            StoreField act = Sum(mat, Axis.ConfusionMatrix.Expect );
+            StoreField exp = Sum(mat, Axis.ConfusionMatrix.Actual);
+            StoreField act = Sum(mat, Axis.ConfusionMatrix.Expect);
 
             (Flow flow, _) = Flow.Inference(mat, exp, act);
 
