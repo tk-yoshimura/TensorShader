@@ -112,7 +112,7 @@ namespace TensorShaderCudaBackend {
             }}";
 
             /// <summary>シェアードメモリへ格納</summary>
-            public static string StoreFloatSharedMemory(uint elemsize, uint elements, uint threads){
+            public static string StoreFloatSharedMemory(uint elemsize, uint elements, uint threads) {
                 string elem = elemsize > 1 ? $"float{elemsize}" : "float";
                 uint length = elements * elemsize;
 
@@ -122,16 +122,16 @@ namespace TensorShaderCudaBackend {
                         const float* __restrict__ ptr_const = (const float* __restrict__)ptr;
                         volatile float* smem_volatile = (volatile float*)smem;
                     ";
-                
-                if(threads > length){
+
+                if (threads > length) {
                     return $@"
                     {declare}{{
                         {repointer}
                         if(thread_idx < {length}) smem_volatile[thread_idx] = ptr_const[thread_idx];
                         __syncthreads();
                     }}";
-                } 
-                else if(threads == length){ 
+                }
+                else if (threads == length) {
                     return $@"
                     {declare}{{
                         {repointer}
@@ -139,7 +139,7 @@ namespace TensorShaderCudaBackend {
                         __syncthreads();
                     }}";
                 }
-                else if(threads * 8 >= length && length % threads == 0){
+                else if (threads * 8 >= length && length % threads == 0) {
                     return $@"
                     {declare}{{
                         {repointer}
@@ -148,7 +148,7 @@ namespace TensorShaderCudaBackend {
                         __syncthreads();
                     }}";
                 }
-                else if(threads * 8 >= length){ 
+                else if (threads * 8 >= length) {
                     return $@"
                     {declare}{{
                         {repointer}
@@ -158,7 +158,7 @@ namespace TensorShaderCudaBackend {
                         __syncthreads();
                     }}";
                 }
-                else{
+                else {
                     return $@"
                     {declare}{{ 
                         {repointer}

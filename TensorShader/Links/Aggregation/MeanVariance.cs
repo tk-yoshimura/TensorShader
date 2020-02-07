@@ -10,7 +10,7 @@ namespace TensorShader {
 
         /// <summary>平均/分散</summary>
         public static (Field mean, Field variance) AverageVariance(Field x, int axis, bool keepdims = false) {
-            return AverageVariance(x, new int[]{ axis }, keepdims);
+            return AverageVariance(x, new int[] { axis }, keepdims);
         }
     }
 }

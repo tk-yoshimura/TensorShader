@@ -13,7 +13,7 @@ namespace CustomLink {
             Console.WriteLine("END");
             Console.Read();
         }
-        
+
         static void TestSinXY() {
             const int points = 32;
 
@@ -101,7 +101,7 @@ namespace CustomLink {
 
                 StoreField expsin = Exp(Sin(x));
                 Field err = expsin - t;
-                
+
                 (Flow flow, _) = Flow.Optimize(err);
 
                 flow.Execute();
@@ -117,7 +117,7 @@ namespace CustomLink {
 
                 StoreField expsin = CustomUnaryArithmetric.ExpSin(x);
                 Field err = expsin - t;
-                
+
                 (Flow flow, _) = Flow.Optimize(err);
 
                 flow.Execute();

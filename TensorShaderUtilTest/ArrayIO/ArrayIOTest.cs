@@ -18,7 +18,7 @@ namespace TensorShaderUtilTest {
             strs = ArrayIO.Read1D(filepath);
             CollectionAssert.AreEqual(new string[] { "c1", "c2", "c3", "c4" }, strs);
 
-            strs = ArrayIO.Read1D(filepath, skip_rows:1);
+            strs = ArrayIO.Read1D(filepath, skip_rows: 1);
             CollectionAssert.AreEqual(new string[] { "c2", "c3", "c4" }, strs);
 
 

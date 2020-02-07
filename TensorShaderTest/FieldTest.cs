@@ -1609,7 +1609,7 @@ namespace TensorShaderTest {
                 Field f3 = f2 * f2;
                 Field ferr2 = f3 - fo * fo;
 
-                Assert.ThrowsException<ArgumentException>(() => { 
+                Assert.ThrowsException<ArgumentException>(() => {
                     (Flow flow, List<ParameterField> parameters) = Flow.Optimize(ferr1, ferr1);
                 });
             }
@@ -1622,7 +1622,7 @@ namespace TensorShaderTest {
 
                 Field f3 = f2 * f2;
 
-                Assert.ThrowsException<ArgumentException>(() => { 
+                Assert.ThrowsException<ArgumentException>(() => {
                     (Flow flow, List<ParameterField> parameters) = Flow.Optimize(f2, f3);
                 });
             }
@@ -1635,7 +1635,7 @@ namespace TensorShaderTest {
 
                 Field f3 = f2 * f2;
 
-                Assert.ThrowsException<ArgumentException>(() => { 
+                Assert.ThrowsException<ArgumentException>(() => {
                     (Flow flow, List<ParameterField> parameters) = Flow.Optimize(f3, f2);
                 });
             }

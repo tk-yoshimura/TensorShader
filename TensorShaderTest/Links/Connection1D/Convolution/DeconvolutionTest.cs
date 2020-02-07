@@ -25,7 +25,7 @@ namespace TensorShaderTest.Links.Connection1D {
 
             Field x_expect = Deconvolution1D(y, w);
             StoreField err = Abs(x_expect - x_actual);
-            
+
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();

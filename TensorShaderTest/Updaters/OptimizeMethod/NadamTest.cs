@@ -21,7 +21,7 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
             Field g = Square(Sin(x + Sin(y))) + Square(Sin(y + Sin(x)));
 
             StoreField loss = f / 20 + g;
-            
+
             (Flow flow, Parameters parameters) = Flow.Optimize(loss);
             parameters.AddUpdater((parameter) => new Nadam(parameter, alpha: 0.1f));
 
@@ -71,7 +71,7 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
             Field g = Square(Sin(x + Sin(y))) + Square(Sin(y + Sin(x)));
 
             StoreField loss = f / 20 + g;
-            
+
             (Flow flow, Parameters parameters) = Flow.Optimize(loss);
             parameters.AddUpdater((parameter) => new Nadam(parameter, alpha: 0.1f));
 

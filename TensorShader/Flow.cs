@@ -345,12 +345,12 @@ namespace TensorShader {
             List<Field> reachable_fields = new List<Field>(fields.Distinct());
             Stack<Field> stack = new Stack<Field>(fields);
 
-            while(stack.Count > 0) {
+            while (stack.Count > 0) {
                 Field field = stack.Pop();
 
                 //探索フィールドを入力とするリンクを探索
                 if (forward) {
-                    foreach(Link link in field.InLinks) {
+                    foreach (Link link in field.InLinks) {
                         if (!reachable_links.Contains(link)) {
                             reachable_links.Add(link);
                         }
@@ -363,12 +363,12 @@ namespace TensorShader {
                 }
                 //探索フィールドを出力とするリンクを探索
                 if (backward) {
-                    if(field.OutLink != null) {
+                    if (field.OutLink != null) {
                         if (!reachable_links.Contains(field.OutLink)) {
                             reachable_links.Add(field.OutLink);
                         }
 
-                        foreach(Field push_field in field.OutLink.InFields) {
+                        foreach (Field push_field in field.OutLink.InFields) {
                             if (!reachable_fields.Contains(push_field)) {
                                 stack.Push(push_field);
                                 reachable_fields.Add(push_field);
@@ -394,8 +394,8 @@ namespace TensorShader {
             }
 
             foreach (Field error_field in error_fields) {
-                if (!error_field.IsTerminate) { 
-                    if(EnumerateReachableFields(forward: true, backward: false, error_field).fields.Intersect(error_fields).Count() > 1){ 
+                if (!error_field.IsTerminate) {
+                    if (EnumerateReachableFields(forward: true, backward: false, error_field).fields.Intersect(error_fields).Count() > 1) {
                         throw new ArgumentException("Some error fields are included in the back propagation path from other error fields.");
                     }
                 }

@@ -20,7 +20,7 @@ namespace TensorShaderTest.Links.Loss {
             VariableField t = ttensor;
 
             StoreField loss = HingeLoss(x, t);
-            
+
             (Flow flow, Parameters parameters) = Flow.Optimize(loss);
 
             flow.Execute();

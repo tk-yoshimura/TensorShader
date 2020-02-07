@@ -7,7 +7,7 @@ namespace TensorShader {
 
         /// <summary>分散</summary>
         public static Field Variance(Field x, int axis, bool keepdims = false) {
-            return Variance(x, new int[]{ axis }, keepdims);
+            return Variance(x, new int[] { axis }, keepdims);
         }
     }
 }

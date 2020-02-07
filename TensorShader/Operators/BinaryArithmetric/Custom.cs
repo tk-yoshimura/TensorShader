@@ -5,8 +5,8 @@ namespace TensorShader.Operators.BinaryArithmetric {
 
         /// <summary>コンストラクタ</summary>
         public Custom(Shape shape, string funcname, string funccode)
-            : base(shape) { 
-        
+            : base(shape) {
+
             this.funcname = funcname;
             this.funccode = funccode;
         }

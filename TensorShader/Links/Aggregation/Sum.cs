@@ -14,7 +14,7 @@ namespace TensorShader {
 
         /// <summary>総和</summary>
         public static Field Sum(Field x, int axis, bool keepdims = false) {
-            return Sum(x, new int[]{ axis }, keepdims);
+            return Sum(x, new int[] { axis }, keepdims);
         }
     }
 }

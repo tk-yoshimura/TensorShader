@@ -14,7 +14,7 @@ namespace TensorShader {
 
         /// <summary>2乗和</summary>
         public static Field SquareSum(Field x, int axis, bool keepdims = false) {
-            return SquareSum(x, new int[]{ axis }, keepdims);
+            return SquareSum(x, new int[] { axis }, keepdims);
         }
     }
 }

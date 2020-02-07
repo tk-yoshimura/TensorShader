@@ -38,7 +38,7 @@ namespace MNIST {
             Field y = CNN.Forward(x, classes);
             StoreField acc = Accuracy(y, t);
             Field loss = Sum(
-                    SoftmaxCrossEntropy(y, OneHotVector(t, classes)), 
+                    SoftmaxCrossEntropy(y, OneHotVector(t, classes)),
                     Axis.Map0D.Channels
                 );
             StoreField avg_loss = Average(loss);

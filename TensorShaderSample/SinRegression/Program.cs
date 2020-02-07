@@ -18,10 +18,10 @@ namespace SinRegression {
             VariableField x = new Tensor(Shape.Vector(points), xval);
             VariableField t = new Tensor(Shape.Vector(points), tval);
 
-            ParameterField p3 = new Tensor(Shape.Scalar(), new float[]{ (float)random.NextDouble() * 2 - 1 });
-            ParameterField p5 = new Tensor(Shape.Scalar(), new float[]{ (float)random.NextDouble() * 0.02f - 0.01f });
-            ParameterField p7 = new Tensor(Shape.Scalar(), new float[]{ (float)random.NextDouble() * 0.0002f - 0.0001f });
-            
+            ParameterField p3 = new Tensor(Shape.Scalar(), new float[] { (float)random.NextDouble() * 2 - 1 });
+            ParameterField p5 = new Tensor(Shape.Scalar(), new float[] { (float)random.NextDouble() * 0.02f - 0.01f });
+            ParameterField p7 = new Tensor(Shape.Scalar(), new float[] { (float)random.NextDouble() * 0.0002f - 0.0001f });
+
             Field x2 = Square(x);
             Field x3 = x * x2;
             Field x5 = x3 * x2;
@@ -37,14 +37,14 @@ namespace SinRegression {
             float adam_alpha = 1e-2f;
             parameters.AddUpdater((parameter) => new Adam(parameter, adam_alpha));
 
-            for(int i = 0; i < loops; i++) {
+            for (int i = 0; i < loops; i++) {
                 flow.Execute();
                 parameters.Update();
 
                 Console.WriteLine(
                     $"loss:{sum_err.State[0]:E5}, " +
                     $"p3:{p3.State[0]:E5}, " +
-                    $"p5:{p5.State[0]:E5}, " + 
+                    $"p5:{p5.State[0]:E5}, " +
                     $"p7:{p7.State[0]:E5}");
 
                 parameters["Adam.Alpha"] = adam_alpha *= 0.999f;

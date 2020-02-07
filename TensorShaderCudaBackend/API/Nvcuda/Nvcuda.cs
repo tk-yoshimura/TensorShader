@@ -79,7 +79,7 @@ namespace TensorShaderCudaBackend.API {
         }
 
         /// <summary>共有メモリ/L1キャッシュ配分比を変更</summary>
-        internal static void SetCacheConfig(FuncCache func_cache) { 
+        internal static void SetCacheConfig(FuncCache func_cache) {
             ResultCode result = NativeMethods.cuCtxSetCacheConfig(func_cache);
             if (result != ResultCode.Success) {
                 throw new CudaException(result);

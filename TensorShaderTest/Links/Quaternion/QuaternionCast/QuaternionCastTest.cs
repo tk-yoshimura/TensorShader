@@ -32,7 +32,7 @@ namespace TensorShaderTest.Links.Quaternion {
 
             Field t_expect = QuaternionCast(x, y, z, w);
             StoreField err = t_expect - t_actual;
-            
+
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();

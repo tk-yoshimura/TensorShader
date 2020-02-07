@@ -24,7 +24,7 @@ namespace SearchMinimum {
             (Flow flow, Parameters parameters) = Flow.Optimize(h);
             parameters.AddUpdater((parameter) => new Adam(parameter, alpha: 0.1f));
 
-            for(int i = 0; i < loops; i++) {
+            for (int i = 0; i < loops; i++) {
                 flow.Execute();
                 parameters.Update();
 

@@ -29,7 +29,7 @@ namespace TensorShaderTest.Links.Trivector {
 
             Field t_expect = TrivectorCast(x, y, z);
             StoreField err = t_expect - t_actual;
-            
+
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();

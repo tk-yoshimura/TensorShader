@@ -1101,7 +1101,7 @@ namespace TensorShaderCudaBackend {
         }
 
         /// <summary>2項演算</summary>
-        public static void BinaryArithmetric(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst, 
+        public static void BinaryArithmetric(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst,
                                              string name, string func, Stream stream = null) {
 
             Shader shader = BinaryArithmetric("custom_" + name, func);
@@ -1114,7 +1114,7 @@ namespace TensorShaderCudaBackend {
         }
 
         /// <summary>定数付き2項演算</summary>
-        public static void BinaryConstantArithmetric(uint length, float c, CudaArray<float> src, CudaArray<float> dst, 
+        public static void BinaryConstantArithmetric(uint length, float c, CudaArray<float> src, CudaArray<float> dst,
                                                      string name, string func, Stream stream = null) {
 
             Shader shader = BinaryConstantArithmetric("custom_" + name, func);
@@ -1127,7 +1127,7 @@ namespace TensorShaderCudaBackend {
         }
 
         /// <summary>指数付き2項演算</summary>
-        public static void BinaryFactorArithmetric(uint length, CudaArray<float> c, CudaArray<float> src, CudaArray<float> dst, 
+        public static void BinaryFactorArithmetric(uint length, CudaArray<float> c, CudaArray<float> src, CudaArray<float> dst,
                                                    string name, string func, Stream stream = null) {
 
             Shader shader = BinaryFactorArithmetric("custom_" + name, func);
@@ -1140,7 +1140,7 @@ namespace TensorShaderCudaBackend {
         }
 
         /// <summary>3項演算</summary>
-        public static void TrinaryArithmetric(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> src3, CudaArray<float> dst, 
+        public static void TrinaryArithmetric(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> src3, CudaArray<float> dst,
                                               string name, string func, Stream stream = null) {
 
             Shader shader = TrinaryArithmetric("custom_" + name, func);
@@ -1153,7 +1153,7 @@ namespace TensorShaderCudaBackend {
         }
 
         /// <summary>定数付き3項演算</summary>
-        public static void TrinaryBiConstantArithmetric(uint length, float c1, float c2, CudaArray<float> src, CudaArray<float> dst, 
+        public static void TrinaryBiConstantArithmetric(uint length, float c1, float c2, CudaArray<float> src, CudaArray<float> dst,
                                                         string name, string func, Stream stream = null) {
 
             Shader shader = TrinaryBiConstantArithmetric("custom_" + name, func);
@@ -1166,7 +1166,7 @@ namespace TensorShaderCudaBackend {
         }
 
         /// <summary>指数付き3項演算</summary>
-        public static void TrinaryBiFactorArithmetric(uint length, float c1, float c2, CudaArray<float> src, CudaArray<float> dst, 
+        public static void TrinaryBiFactorArithmetric(uint length, float c1, float c2, CudaArray<float> src, CudaArray<float> dst,
                                                       string name, string func, Stream stream = null) {
 
             Shader shader = TrinaryBiFactorArithmetric("custom_" + name, func);
@@ -1179,7 +1179,7 @@ namespace TensorShaderCudaBackend {
         }
 
         /// <summary>定数付き3項演算</summary>
-        public static void TrinaryUniConstantArithmetric(uint length, float c, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst, 
+        public static void TrinaryUniConstantArithmetric(uint length, float c, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst,
                                                          string name, string func, Stream stream = null) {
 
             Shader shader = TrinaryUniConstantArithmetric("custom_" + name, func);

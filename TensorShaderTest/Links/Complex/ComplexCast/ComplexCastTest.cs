@@ -26,7 +26,7 @@ namespace TensorShaderTest.Links.Complex {
 
             Field t_expect = ComplexCast(x, y);
             StoreField err = t_expect - t_actual;
-            
+
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();

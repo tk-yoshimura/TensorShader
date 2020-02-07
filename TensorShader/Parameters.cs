@@ -84,7 +84,7 @@ namespace TensorShader {
                 string[] name_split = name.Split('.');
 
                 if (name_split.Length != 2) {
-                     throw new FormatException(ExceptionMessage.InvalidParamKey());
+                    throw new FormatException(ExceptionMessage.InvalidParamKey());
                 }
 
                 string class_name = name.Split('.')[0];

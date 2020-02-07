@@ -25,7 +25,7 @@ namespace TensorShaderTest.Links.Connection2D {
 
             Field x_expect = ChannelwiseDeconvolution2D(y, w);
             StoreField err = Abs(x_expect - x_actual);
-            
+
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
