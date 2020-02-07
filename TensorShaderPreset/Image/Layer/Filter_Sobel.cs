@@ -1,5 +1,4 @@
 ﻿using TensorShader;
-using static TensorShader.Field;
 
 namespace TensorShaderPreset.Image {
     /// <summary>フィルタ</summary>

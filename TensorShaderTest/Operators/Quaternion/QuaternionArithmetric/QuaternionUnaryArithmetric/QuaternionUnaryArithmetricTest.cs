@@ -3,7 +3,6 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.QuaternionUnaryArithmetric;
-using TensorShaderCudaBackend.API;
 
 namespace TensorShaderTest.Operators.Quaternion {
     [TestClass]

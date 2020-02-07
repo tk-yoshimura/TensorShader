@@ -3,7 +3,6 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.ComplexBinaryArithmetric;
-using TensorShaderCudaBackend.API;
 
 namespace TensorShaderTest.Operators.Complex {
     [TestClass]

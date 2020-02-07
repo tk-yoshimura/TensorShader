@@ -8,7 +8,6 @@ using TensorShader;
 using TensorShader.Initializers;
 using TensorShader.Updaters.OptimizeMethod;
 using TensorShader.Updaters.WeightDecay;
-using TensorShaderUtil;
 using TensorShaderUtil.Iterator;
 using TensorShaderUtil.SnapshotSaver;
 using static TensorShader.Field;
