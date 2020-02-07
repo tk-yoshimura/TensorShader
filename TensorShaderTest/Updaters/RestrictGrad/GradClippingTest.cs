@@ -25,9 +25,9 @@ namespace TensorShaderTest.Updaters.RestrictGrad {
             x.AddUpdater(new GradClipping(x, limit));
             x.Update();
 
-            AssertError.Tolerance(yval, x.GradTensor.State, 1e-7f, 1e-5f);
+            AssertError.Tolerance(yval, x.GradState, 1e-7f, 1e-5f);
 
-            CollectionAssert.AreEqual(xval, x.ValueTensor.State);
+            CollectionAssert.AreEqual(xval, x.State);
         }
     }
 }

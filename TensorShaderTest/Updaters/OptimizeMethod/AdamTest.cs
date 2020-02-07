@@ -20,9 +20,8 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
             Field f = Square(x) + Square(y);
             Field g = Square(Sin(x + Sin(y))) + Square(Sin(y + Sin(x)));
 
-            Field loss = f / 20 + g;
-            StoreField lossnode = loss;
-
+            StoreField loss = f / 20 + g;
+            
             (Flow flow, Parameters parameters) = Flow.Optimize(loss);
             parameters.AddUpdater((parameter) => new Adam(parameter, alpha: 0.1f));
 
@@ -32,7 +31,7 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
                 flow.Execute();
                 parameters.Update();
 
-                losses.Add(lossnode.State[0]);
+                losses.Add(loss.State[0]);
                 xs.Add(x_tensor.State[0]);
                 ys.Add(y_tensor.State[0]);
             }
@@ -71,9 +70,8 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
             Field f = Square(x) + Square(y);
             Field g = Square(Sin(x + Sin(y))) + Square(Sin(y + Sin(x)));
 
-            Field loss = f / 20 + g;
-            StoreField lossnode = loss;
-
+            StoreField loss = f / 20 + g;
+            
             (Flow flow, Parameters parameters) = Flow.Optimize(loss);
             parameters.AddUpdater((parameter) => new Adam(parameter, alpha: 0.1f));
 
@@ -85,7 +83,7 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
                 flow.Execute();
                 parameters.Update();
 
-                losses_first.Add(lossnode.State[0]);
+                losses_first.Add(loss.State[0]);
                 xs_first.Add(x_tensor.State[0]);
                 ys_first.Add(y_tensor.State[0]);
             }
@@ -101,7 +99,7 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
                 flow.Execute();
                 parameters.Update();
 
-                losses_second.Add(lossnode.State[0]);
+                losses_second.Add(loss.State[0]);
                 xs_second.Add(x_tensor.State[0]);
                 ys_second.Add(y_tensor.State[0]);
             }
@@ -118,7 +116,7 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
                 flow.Execute();
                 parameters.Update();
 
-                losses_third.Add(lossnode.State[0]);
+                losses_third.Add(loss.State[0]);
                 xs_third.Add(x_tensor.State[0]);
                 ys_third.Add(y_tensor.State[0]);
             }

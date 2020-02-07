@@ -20,8 +20,7 @@ namespace TensorShaderTest.Links.LogicalArithmetric {
             VariableField f1 = new Tensor(Shape.Map1D(ch, length), x1);
             VariableField f2 = new Tensor(Shape.Map1D(ch, length), x2);
 
-            Field fout = LessThan(f1, f2);
-            StoreField output = fout;
+            StoreField output = LessThan(f1, f2);
 
             (Flow flow, _) = Flow.Inference(output);
             flow.Execute();

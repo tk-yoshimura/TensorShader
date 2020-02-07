@@ -19,18 +19,17 @@ namespace TensorShaderTest.Links.Loss {
             ParameterField x = xtensor;
             VariableField t = ttensor;
 
-            Field loss = HingeLoss(x, t);
-            StoreField lossnode = loss;
-
+            StoreField loss = HingeLoss(x, t);
+            
             (Flow flow, Parameters parameters) = Flow.Optimize(loss);
 
             flow.Execute();
 
-            float[] loss_actual = lossnode.State;
+            float[] loss_actual = loss.State;
 
             AssertError.Tolerance(loss_expect, loss_actual, 1e-7f, 1e-5f, $"not equal loss");
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }

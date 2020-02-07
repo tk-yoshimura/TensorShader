@@ -47,8 +47,8 @@ namespace TensorShaderTest.Links.Connection2D {
 
             flow.Execute();
 
-            float[] gx1 = x1.GradTensor.State;
-            float[] gx2 = x2.GradTensor.State;
+            float[] gx1 = x1.GradState;
+            float[] gx2 = x2.GradState;
 
             AssertError.Tolerance(gx1, gx2, 1e-7f, 1e-5f, $"not equal gx");
         }

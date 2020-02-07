@@ -30,8 +30,8 @@ namespace TensorShaderTest.Links.QuaternionConvolution {
 
             flow.Execute();
 
-            float[] gy_actual = y.GradTensor.State;
-            float[] gw_actual = w.GradTensor.State;
+            float[] gy_actual = y.GradState;
+            float[] gw_actual = w.GradState;
 
             AssertError.Tolerance(gy_expect, gy_actual, 1e-7f, 1e-5f, $"not equal gy");
 
@@ -73,8 +73,8 @@ namespace TensorShaderTest.Links.QuaternionConvolution {
 
             flow.Execute();
 
-            float[] gy_actual = y.GradTensor.State;
-            float[] gw_actual = w.GradTensor.State;
+            float[] gy_actual = y.GradState;
+            float[] gw_actual = w.GradState;
 
             AssertError.Tolerance(gy_expect, gy_actual, 1e-7f, 1e-5f, $"not equal gy");
 

@@ -26,7 +26,7 @@ namespace TensorShaderTest.Links.UnaryArithmetric {
 
             flow.Execute();
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }

@@ -53,12 +53,12 @@ namespace TensorShaderTest.Operators.RandomGeneration {
                 double sq_sum = 0, sum = 0;
                 int[] cnt = new int[8];
 
-                double xy_sum = 0;
+                double sum_xy = 0;
 
                 for (int i = 1; i < y.Length; i++) {
                     float v = y[i] - y[i - 1];
 
-                    xy_sum += y[i] * y[i - 1];
+                    sum_xy += y[i] * y[i - 1];
 
                     sq_sum += v * v;
                     sum += v;
@@ -76,7 +76,7 @@ namespace TensorShaderTest.Operators.RandomGeneration {
 
                 Assert.AreEqual(0, mean, 1e-2, "mean");
                 Assert.AreEqual(2, variance, 1e-2, "variance");
-                Assert.AreEqual(0, xy_sum / (length - 1), 1e-2, "cov");
+                Assert.AreEqual(0, sum_xy / (length - 1), 1e-2, "cov");
 
                 Assert.AreEqual(0.520499878, (double)cnt[0] / (length - 1), 2e-2, "sigma1");
                 Assert.AreEqual(0.322200915, (double)cnt[1] / (length - 1), 2e-2, "sigma2");

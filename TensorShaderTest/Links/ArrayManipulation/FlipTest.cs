@@ -21,9 +21,7 @@ namespace TensorShaderTest.Links.ArrayManipulation {
             ParameterField x = xtensor;
             VariableField t = ttensor;
 
-            Field y = Flip(x, axis: 3);
-
-            StoreField o = y;
+            StoreField y = Flip(x, axis: 3);
 
             Field err = y - t;
 
@@ -31,11 +29,11 @@ namespace TensorShaderTest.Links.ArrayManipulation {
 
             flow.Execute();
 
-            float[] y_actual = o.State;
+            float[] y_actual = y.State;
 
             AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, $"not equal x");
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }

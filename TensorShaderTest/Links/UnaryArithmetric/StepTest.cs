@@ -21,15 +21,13 @@ namespace TensorShaderTest.Links.UnaryArithmetric {
             VariableField y_actual = ytensor;
 
             Field y_expect = Step(x);
-            Field err = y_expect - y_actual;
-
-            StoreField err_store = err;
+            StoreField err = y_expect - y_actual;
 
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] err_actual = err_store.State;
+            float[] err_actual = err.State;
 
             AssertError.Tolerance(err_expect, err_actual, 1e-7f, 1e-5f, $"not equal err");
         }

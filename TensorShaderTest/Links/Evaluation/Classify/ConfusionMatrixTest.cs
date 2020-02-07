@@ -54,23 +54,22 @@ namespace TensorShaderTest.Links.Evaluation.Classify {
             VariableField x = xtensor;
             VariableField t = ttensor;
 
-            Field mat = ConfusionMatrix(x, t);
-            StoreField mat_store = mat;
-            StoreField exp_store = Sum(mat, Axis.ConfusionMatrix.Actual );
-            StoreField act_store = Sum(mat, Axis.ConfusionMatrix.Expect );
+            StoreField mat = ConfusionMatrix(x, t);
+            StoreField exp = Sum(mat, Axis.ConfusionMatrix.Actual );
+            StoreField act = Sum(mat, Axis.ConfusionMatrix.Expect );
 
-            (Flow flow, _) = Flow.Inference(mat_store, exp_store, act_store);
+            (Flow flow, _) = Flow.Inference(mat, exp, act);
 
             flow.Execute();
 
-            float[] mat_actual = mat_store.State;
+            float[] mat_actual = mat.State;
 
             Assert.AreEqual(channels * channels, mat_actual.Length);
-            Assert.AreEqual(2, mat_store.Shape.Ndim);
+            Assert.AreEqual(2, mat.Shape.Ndim);
             Assert.AreEqual(batch, mat_actual.Sum());
             CollectionAssert.AreEqual(mat_expect, mat_actual);
-            CollectionAssert.AreEqual(new float[] { 5, 5, 6 }, exp_store.State);
-            CollectionAssert.AreEqual(new float[] { 5, 4, 7 }, act_store.State);
+            CollectionAssert.AreEqual(new float[] { 5, 5, 6 }, exp.State);
+            CollectionAssert.AreEqual(new float[] { 5, 4, 7 }, act.State);
         }
 
         float[] mat_expect =

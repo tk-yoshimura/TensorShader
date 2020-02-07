@@ -30,7 +30,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_true = x.GradTensor.State;
+                gxval_true = x.GradState;
             }
             catch (Exception e) {
                 Assert.Fail("axis:none keepdims:true  " + e.Message);
@@ -50,7 +50,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_false = x.GradTensor.State;
+                gxval_false = x.GradState;
 
                 CollectionAssert.AreEqual(gxval_true, gxval_false);
             }
@@ -72,7 +72,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_true = x.GradTensor.State;
+                gxval_true = x.GradState;
             }
             catch (Exception e) {
                 Assert.Fail("axis:0 keepdims:true  " + e.Message);
@@ -92,7 +92,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_false = x.GradTensor.State;
+                gxval_false = x.GradState;
 
                 CollectionAssert.AreEqual(gxval_true, gxval_false);
             }
@@ -114,7 +114,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_true = x.GradTensor.State;
+                gxval_true = x.GradState;
             }
             catch (Exception e) {
                 Assert.Fail("axis:1 keepdims:true  " + e.Message);
@@ -134,7 +134,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_false = x.GradTensor.State;
+                gxval_false = x.GradState;
 
                 CollectionAssert.AreEqual(gxval_true, gxval_false);
             }
@@ -156,7 +156,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_true = x.GradTensor.State;
+                gxval_true = x.GradState;
             }
             catch (Exception e) {
                 Assert.Fail("axis:2 keepdims:true  " + e.Message);
@@ -176,7 +176,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_false = x.GradTensor.State;
+                gxval_false = x.GradState;
 
                 CollectionAssert.AreEqual(gxval_true, gxval_false);
             }
@@ -198,7 +198,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_true = x.GradTensor.State;
+                gxval_true = x.GradState;
             }
             catch (Exception e) {
                 Assert.Fail("axis:3 keepdims:true  " + e.Message);
@@ -218,7 +218,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_false = x.GradTensor.State;
+                gxval_false = x.GradState;
 
                 CollectionAssert.AreEqual(gxval_true, gxval_false);
             }
@@ -240,7 +240,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_true = x.GradTensor.State;
+                gxval_true = x.GradState;
             }
             catch (Exception e) {
                 Assert.Fail("axis:0,1 keepdims:true  " + e.Message);
@@ -260,7 +260,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_false = x.GradTensor.State;
+                gxval_false = x.GradState;
 
                 CollectionAssert.AreEqual(gxval_true, gxval_false);
             }
@@ -282,7 +282,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_true = x.GradTensor.State;
+                gxval_true = x.GradState;
             }
             catch (Exception e) {
                 Assert.Fail("axis:0,2 keepdims:true  " + e.Message);
@@ -302,7 +302,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_false = x.GradTensor.State;
+                gxval_false = x.GradState;
 
                 CollectionAssert.AreEqual(gxval_true, gxval_false);
             }
@@ -324,7 +324,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_true = x.GradTensor.State;
+                gxval_true = x.GradState;
             }
             catch (Exception e) {
                 Assert.Fail("axis:0,3 keepdims:true  " + e.Message);
@@ -344,7 +344,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_false = x.GradTensor.State;
+                gxval_false = x.GradState;
 
                 CollectionAssert.AreEqual(gxval_true, gxval_false);
             }
@@ -366,7 +366,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_true = x.GradTensor.State;
+                gxval_true = x.GradState;
             }
             catch (Exception e) {
                 Assert.Fail("axis:1,2 keepdims:true  " + e.Message);
@@ -386,7 +386,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_false = x.GradTensor.State;
+                gxval_false = x.GradState;
 
                 CollectionAssert.AreEqual(gxval_true, gxval_false);
             }
@@ -408,7 +408,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_true = x.GradTensor.State;
+                gxval_true = x.GradState;
             }
             catch (Exception e) {
                 Assert.Fail("axis:2,3 keepdims:true  " + e.Message);
@@ -428,7 +428,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_false = x.GradTensor.State;
+                gxval_false = x.GradState;
 
                 CollectionAssert.AreEqual(gxval_true, gxval_false);
             }
@@ -450,7 +450,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_true = x.GradTensor.State;
+                gxval_true = x.GradState;
             }
             catch (Exception e) {
                 Assert.Fail("axis:0,1,2 keepdims:true  " + e.Message);
@@ -470,7 +470,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_false = x.GradTensor.State;
+                gxval_false = x.GradState;
 
                 CollectionAssert.AreEqual(gxval_true, gxval_false);
             }
@@ -492,7 +492,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_true = x.GradTensor.State;
+                gxval_true = x.GradState;
             }
             catch (Exception e) {
                 Assert.Fail("axis:0,1,3 keepdims:true  " + e.Message);
@@ -512,7 +512,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_false = x.GradTensor.State;
+                gxval_false = x.GradState;
 
                 CollectionAssert.AreEqual(gxval_true, gxval_false);
             }
@@ -534,7 +534,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_true = x.GradTensor.State;
+                gxval_true = x.GradState;
             }
             catch (Exception e) {
                 Assert.Fail("axis:0,2,3 keepdims:true  " + e.Message);
@@ -554,7 +554,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_false = x.GradTensor.State;
+                gxval_false = x.GradState;
 
                 CollectionAssert.AreEqual(gxval_true, gxval_false);
             }
@@ -576,7 +576,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_true = x.GradTensor.State;
+                gxval_true = x.GradState;
             }
             catch (Exception e) {
                 Assert.Fail("axis:1,2,3 keepdims:true  " + e.Message);
@@ -596,7 +596,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_false = x.GradTensor.State;
+                gxval_false = x.GradState;
 
                 CollectionAssert.AreEqual(gxval_true, gxval_false);
             }
@@ -618,7 +618,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_true = x.GradTensor.State;
+                gxval_true = x.GradState;
             }
             catch (Exception e) {
                 Assert.Fail("axis:all keepdims:true  " + e.Message);
@@ -638,7 +638,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
                 flow.Execute();
 
-                gxval_false = x.GradTensor.State;
+                gxval_false = x.GradState;
 
                 CollectionAssert.AreEqual(gxval_true, gxval_false);
             }
@@ -667,7 +667,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             flow.Execute();
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-9f, 1e-5f, $"not equal gx");
         }

@@ -19,9 +19,7 @@ namespace SearchMinimum {
             // g(x, y) = sin(x + sin(y))^2 + sin(y + sin(x))^2
             Field g = Square(Sin(x + Sin(y))) + Square(Sin(y + Sin(x)));
             // h(x, y) = f(x, y) / 20 + g(x, y)
-            Field h = f / 20 + g;
-
-            StoreField loss = h.Save();
+            StoreField h = f / 20 + g;
 
             (Flow flow, Parameters parameters) = Flow.Optimize(h);
             parameters.AddUpdater((parameter) => new Adam(parameter, alpha: 0.1f));
@@ -30,7 +28,7 @@ namespace SearchMinimum {
                 flow.Execute();
                 parameters.Update();
 
-                Console.WriteLine($"loss:{loss.State[0]:E5}, x:{vx.State[0]:E5}, y:{vy.State[0]:E5}");
+                Console.WriteLine($"h(x, y):{h.State[0]:E5}, x:{vx.State[0]:E5}, y:{vy.State[0]:E5}");
             }
 
             Console.WriteLine("END");

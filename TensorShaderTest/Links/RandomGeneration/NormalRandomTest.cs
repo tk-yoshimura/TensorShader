@@ -13,8 +13,7 @@ namespace TensorShaderTest.Links.RandomGeneration {
 
             Shape shape = Shape.Vector(length);
 
-            VariableField field = NormalRandom(shape, new Random(1234));
-            StoreField output = field;
+            StoreField output = NormalRandom(shape, new Random(1234));
             (Flow flow, _) = Flow.Inference(output);
 
             flow.Execute();

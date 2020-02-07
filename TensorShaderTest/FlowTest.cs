@@ -219,7 +219,7 @@ namespace TensorShaderTest {
                 var v9 = v8 + v1;  // 2/x + 3x
                 var v10 = v9.Save(); // 2/x + 3x
                 var v11 = v7.Save(); // 1/x + 2x
-                var v12 = v5.Update(v1);
+                _ = v5.Update(v1);
 
                 Flow flow = Flow.FromInputs(v1);
 
@@ -248,9 +248,9 @@ namespace TensorShaderTest {
                 var v7 = v3 + v6;  // 1/x + 2x
                 var v8 = v7 + v2;  // 2/x + 2x
                 var v9 = v8 + v1;  // 2/x + 3x
-                var v10 = v9.Save(); // 2/x + 3x
+                _ = v9.Save(); // 2/x + 3x
                 var v11 = v7.Save(); // 1/x + 2x
-                var v12 = v5.Update(v1);
+                _ = v5.Update(v1);
 
                 Flow flow = Flow.FromOutputs(v11);
 
@@ -278,8 +278,8 @@ namespace TensorShaderTest {
                 var v7 = v3 + v6;  // 1/x + 2x
                 var v8 = v7 + v2;  // 2/x + 2x
                 var v9 = v8 + v1;  // 2/x + 3x
-                var v10 = v9.Save(); // 2/x + 3x
-                var v11 = v7.Save(); // 1/x + 2x
+                _ = v9.Save(); // 2/x + 3x
+                _ = v7.Save(); // 1/x + 2x
                 var v12 = v5.Update(v1);
 
                 Flow flow = Flow.FromOutputs(v12);
@@ -322,7 +322,7 @@ namespace TensorShaderTest {
                 var v2 = v1 + 1;
                 var v3 = v2 + 2;
                 var v4 = v3.Save();
-                var v5 = v3.Update(v1);
+                _ = v3.Update(v1);
 
                 Flow flow = Flow.FromInputs(v1);
 
@@ -534,7 +534,7 @@ namespace TensorShaderTest {
             {
                 var v1 = new InputNode(Shape.Map0D(3, 4), t);
                 var v2 = v1 + 1;
-                var v3 = Reshape(v2, Shape.Vector(12)).Save();
+                _ = Reshape(v2, Shape.Vector(12)).Save();
 
                 Flow flow = Flow.FromInputs(v1);
                 flow.Execute();
@@ -545,8 +545,8 @@ namespace TensorShaderTest {
 
             {
                 var v1 = new InputNode(Shape.Map0D(3, 4), t);
-                var v2 = Reshape(v1, Shape.Vector(12)).Save();
-                var v3 = Reshape(v1, Shape.Map1D(2, 3, 2)).Save();
+                _ = Reshape(v1, Shape.Vector(12)).Save();
+                _ = Reshape(v1, Shape.Map1D(2, 3, 2)).Save();
 
                 Flow flow = Flow.FromInputs(v1);
                 flow.Execute();
@@ -557,8 +557,8 @@ namespace TensorShaderTest {
 
             {
                 var v1 = new InputNode(Shape.Map0D(3, 4), t);
-                var v2 = Reshape(Reshape(v1, Shape.Vector(12)), Shape.Map0D(2, 6)).Save();
-                var v3 = Reshape(v1, Shape.Map1D(2, 3, 2)).Save();
+                _ = Reshape(Reshape(v1, Shape.Vector(12)), Shape.Map0D(2, 6)).Save();
+                _ = Reshape(v1, Shape.Map1D(2, 3, 2)).Save();
 
                 Flow flow = Flow.FromInputs(v1);
                 flow.Execute();
@@ -570,8 +570,8 @@ namespace TensorShaderTest {
             {
                 var v1 = new InputNode(Shape.Map0D(3, 4), t);
                 var v2 = v1 + 1;
-                var v3 = Reshape(v2, Shape.Vector(12)).Save();
-                var v4 = Reshape(v2, Shape.Map1D(2, 3, 2)).Save();
+                _ = Reshape(v2, Shape.Vector(12)).Save();
+                _ = Reshape(v2, Shape.Map1D(2, 3, 2)).Save();
 
                 Flow flow = Flow.FromInputs(v1);
                 flow.Execute();

@@ -27,20 +27,17 @@ namespace TensorShaderTest.Links.ConnectionDense {
             ParameterField x = xtensor;
             VariableField t = ttensor;
 
-            Field y = Softmax(x);
+            StoreField y = Softmax(x);
             Field err = y - t;
-
-            StoreField ynode = y;
-
-            (Flow flow, Parameters parameters) = Flow.Optimize(err);
+            (Flow flow, _) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] y_actual = ynode.State;
+            float[] y_actual = y.State;
 
             AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, $"not equal y");
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }

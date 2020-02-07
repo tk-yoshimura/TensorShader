@@ -34,9 +34,9 @@ namespace TensorShaderTest.Links.ArrayManipulation {
 
             flow.Execute();
 
-            float[] gx1_actual = x1.GradTensor.State;
-            float[] gx2_actual = x2.GradTensor.State;
-            float[] gx3_actual = x3.GradTensor.State;
+            float[] gx1_actual = x1.GradState;
+            float[] gx2_actual = x2.GradState;
+            float[] gx3_actual = x3.GradState;
 
             AssertError.Tolerance(gx_expect, gx1_actual, 1e-7f, 1e-5f, $"not equal gx1");
 

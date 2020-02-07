@@ -29,8 +29,8 @@ namespace TensorShaderTest.Links.BinaryArithmetric {
 
             flow.Execute();
 
-            float[] gx1_actual = x1.GradTensor.State;
-            float[] gx2_actual = x2.GradTensor.State;
+            float[] gx1_actual = x1.GradState;
+            float[] gx2_actual = x2.GradState;
 
             AssertError.Tolerance(gx1_expect, gx1_actual, 1e-7f, 1e-5f, $"not equal gx1");
 

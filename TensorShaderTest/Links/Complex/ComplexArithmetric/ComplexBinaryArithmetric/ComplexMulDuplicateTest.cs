@@ -25,7 +25,7 @@ namespace TensorShaderTest.Links.ComplexArithmetric {
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
             flow.Execute();
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }
@@ -51,7 +51,7 @@ namespace TensorShaderTest.Links.ComplexArithmetric {
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
             flow.Execute();
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }

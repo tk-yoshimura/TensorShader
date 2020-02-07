@@ -32,17 +32,16 @@ namespace CustomLink {
                 ParameterField y = new Tensor(Shape.Vector(points), yval);
                 VariableField t = new Tensor(Shape.Vector(points), tval);
 
-                Field sin_xy = Sin(x * y);
+                StoreField sin_xy = Sin(x * y);
                 Field err = sin_xy - t;
-                StoreField sin_xy_store = sin_xy;
 
                 (Flow flow, _) = Flow.Optimize(err);
 
                 flow.Execute();
 
-                sin_xy_expected = sin_xy_store.State;
-                dx_expected = x.GradTensor.State;
-                dy_expected = y.GradTensor.State;
+                sin_xy_expected = sin_xy.State;
+                dx_expected = x.GradState;
+                dy_expected = y.GradState;
             }
 
             /*actual*/
@@ -51,17 +50,16 @@ namespace CustomLink {
                 ParameterField y = new Tensor(Shape.Vector(points), yval);
                 VariableField t = new Tensor(Shape.Vector(points), tval);
 
-                Field sin_xy = CustomBinaryArithmetric.SinXY(x, y);
+                StoreField sin_xy = CustomBinaryArithmetric.SinXY(x, y);
                 Field err = sin_xy - t;
-                StoreField sin_xy_store = sin_xy;
 
                 (Flow flow, _) = Flow.Optimize(err);
 
                 flow.Execute();
 
-                sin_xy_actual = sin_xy_store.State;
-                dx_actual = x.GradTensor.State;
-                dy_actual = y.GradTensor.State;
+                sin_xy_actual = sin_xy.State;
+                dx_actual = x.GradState;
+                dy_actual = y.GradState;
             }
 
             Console.WriteLine("x, y, sin_xy(expected), sin_xy(actual), dx(expected), dx(actual), dy(expected), dy(actual)");
@@ -101,16 +99,15 @@ namespace CustomLink {
                 ParameterField x = new Tensor(Shape.Vector(points), xval);
                 VariableField t = new Tensor(Shape.Vector(points), tval);
 
-                Field expsin = Exp(Sin(x));
+                StoreField expsin = Exp(Sin(x));
                 Field err = expsin - t;
-                StoreField expsin_store = expsin;
-
+                
                 (Flow flow, _) = Flow.Optimize(err);
 
                 flow.Execute();
 
-                expsin_expected = expsin_store.State;
-                dx_expected = x.GradTensor.State;
+                expsin_expected = expsin.State;
+                dx_expected = x.GradState;
             }
 
             /*actual*/
@@ -118,16 +115,15 @@ namespace CustomLink {
                 ParameterField x = new Tensor(Shape.Vector(points), xval);
                 VariableField t = new Tensor(Shape.Vector(points), tval);
 
-                Field expsin = CustomUnaryArithmetric.ExpSin(x);
+                StoreField expsin = CustomUnaryArithmetric.ExpSin(x);
                 Field err = expsin - t;
-                StoreField expsin_store = expsin;
-
+                
                 (Flow flow, _) = Flow.Optimize(err);
 
                 flow.Execute();
 
-                expsin_actual = expsin_store.State;
-                dx_actual = x.GradTensor.State;
+                expsin_actual = expsin.State;
+                dx_actual = x.GradState;
             }
 
             Console.WriteLine("x, expsin(expected), expsin(actual), dx(expected), dx(actual), dy(expected), dy(actual)");

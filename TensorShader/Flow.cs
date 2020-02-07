@@ -32,13 +32,13 @@ namespace TensorShader {
         /// <summary>保有バッファ総要素数</summary>
         public ulong BufferSize {
             get {
-                ulong size_sum = 0;
+                ulong sum_size = 0;
 
                 foreach (ulong size in tensors.Select((tensor) => tensor.Value.Buffer).Distinct().Select((buffer) => buffer.Length)) {
-                    size_sum += size;
+                    sum_size += size;
                 }
 
-                return size_sum;
+                return sum_size;
             }
         }
 

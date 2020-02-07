@@ -13,10 +13,10 @@ namespace TensorShaderUtilTest.Iterator {
             int[] indexes2 = iterator.Next();
             int[] indexes3 = iterator.Next();
             int[] indexes4 = iterator.Next();
-            int[] indexes5 = iterator.Next();
-            int[] indexes6 = iterator.Next();
-            int[] indexes7 = iterator.Next();
-            int[] indexes8 = iterator.Next();
+            _ = iterator.Next();
+            _ = iterator.Next();
+            _ = iterator.Next();
+            _ = iterator.Next();
 
             Assert.AreEqual(50, iterator.NumBatches);
             Assert.AreEqual(101, iterator.Counts);
@@ -36,10 +36,10 @@ namespace TensorShaderUtilTest.Iterator {
             int[] indexes2 = iterator.Next();
             int[] indexes3 = iterator.Next();
             int[] indexes4 = iterator.Next();
-            int[] indexes5 = iterator.Next();
-            int[] indexes6 = iterator.Next();
-            int[] indexes7 = iterator.Next();
-            int[] indexes8 = iterator.Next();
+            _ = iterator.Next();
+            _ = iterator.Next();
+            _ = iterator.Next();
+            _ = iterator.Next();
 
             Assert.AreEqual(50, iterator.NumBatches);
             Assert.AreEqual(100, iterator.Counts);

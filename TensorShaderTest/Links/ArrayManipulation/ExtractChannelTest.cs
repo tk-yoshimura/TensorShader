@@ -23,15 +23,13 @@ namespace TensorShaderTest.Links.ArrayManipulation {
 
             Field y = ExtractChannel(x, 13, 23);
 
-            StoreField o = y;
-
             Field err = y - t;
 
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }

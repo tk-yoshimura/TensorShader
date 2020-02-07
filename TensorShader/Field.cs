@@ -160,6 +160,16 @@ namespace TensorShader {
         public static implicit operator VariableField(Tensor tensor) {
             return new InputNode(tensor);
         }
+
+        /// <summary>テンソルの状態</summary>
+        public float[] State {
+            set {
+                ValueTensor.State = value;
+            }
+            get {
+                return ValueTensor.State;
+            }
+        }
     }
 
     /// <summary>パラメータカテゴリ</summary>
@@ -242,6 +252,26 @@ namespace TensorShader {
         public void SaveGrad() {
             ConfirmGrad();
         }
+
+        /// <summary>テンソルの状態</summary>
+        public float[] State {
+            set {
+                ValueTensor.State = value;
+            }
+            get {
+                return ValueTensor.State;
+            }
+        }
+
+        /// <summary>テンソルの勾配</summary>
+        public float[] GradState {
+            set {
+                GradTensor.State = value;
+            }
+            get {
+                return GradTensor.State;
+            }
+        }
     }
 
     /// <summary>ストアフィールド</summary>
@@ -273,6 +303,11 @@ namespace TensorShader {
         /// <summary>フィールドからのキャスト</summary>
         public static implicit operator StoreField(Field field) {
             return new StoreField(field);
+        }
+
+        /// <summary>フィールドへキャスト</summary>
+        public static implicit operator Field(StoreField field) {
+            return field.InField;
         }
 
         /// <summary>文字列化</summary>

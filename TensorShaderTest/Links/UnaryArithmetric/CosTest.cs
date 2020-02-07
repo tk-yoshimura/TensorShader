@@ -23,15 +23,11 @@ namespace TensorShaderTest.Links.UnaryArithmetric {
             Field y_expect = Cos(x);
             Field err = y_expect - y_actual;
 
-            StoreField n = err;
-
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] div = n.State;
-
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }

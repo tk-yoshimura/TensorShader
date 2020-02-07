@@ -43,9 +43,9 @@ namespace SinRegression {
 
                 Console.WriteLine(
                     $"loss:{sum_err.State[0]:E5}, " +
-                    $"p3:{p3.ValueTensor.State[0]:E5}, " +
-                    $"p5:{p5.ValueTensor.State[0]:E5}, " + 
-                    $"p7:{p7.ValueTensor.State[0]:E5}");
+                    $"p3:{p3.State[0]:E5}, " +
+                    $"p5:{p5.State[0]:E5}, " + 
+                    $"p7:{p7.State[0]:E5}");
 
                 parameters["Adam.Alpha"] = adam_alpha *= 0.999f;
             }

@@ -18,8 +18,7 @@ namespace TensorShaderTest.Links.LogicalArithmetric {
 
             VariableField f = new Tensor(Shape.Map1D(ch, length), x);
 
-            Field fout = IsNan(f);
-            StoreField output = fout;
+            StoreField output = IsNan(f);
 
             (Flow flow, _) = Flow.Inference(output);
             flow.Execute();

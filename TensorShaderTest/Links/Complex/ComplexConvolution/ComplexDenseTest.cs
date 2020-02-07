@@ -29,8 +29,8 @@ namespace TensorShaderTest.Links.ComplexConvolution {
 
             flow.Execute();
 
-            float[] gx_actual = x.GradTensor.State;
-            float[] gw_actual = w.GradTensor.State;
+            float[] gx_actual = x.GradState;
+            float[] gw_actual = w.GradState;
 
             AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"not equal gw");
 
@@ -67,8 +67,8 @@ namespace TensorShaderTest.Links.ComplexConvolution {
 
             flow.Execute();
 
-            float[] gx_actual = x.GradTensor.State;
-            float[] gw_actual = w.GradTensor.State;
+            float[] gx_actual = x.GradState;
+            float[] gw_actual = w.GradState;
 
             AssertError.Tolerance(gw_expect, gw_actual, 1e-9f, 1e-5f, $"not equal gw");
 

@@ -23,15 +23,11 @@ namespace TensorShaderTest.Links.UnaryArithmetric {
             Field y_expect = Arctan(x);
             Field err = y_expect - y_actual;
 
-            StoreField n = err;
-
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] div = n.State;
-
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-6f, 1e-4f, $"not equal gx"); /*nonlinear tolerance*/
         }

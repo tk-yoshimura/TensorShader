@@ -36,23 +36,23 @@ namespace MNIST {
 
             Console.WriteLine("Build model...");
             Field y = CNN.Forward(x, classes);
-            Field acc = Accuracy(y, t);
-            Field err = Sum(
+            StoreField acc = Accuracy(y, t);
+            Field loss = Sum(
                     SoftmaxCrossEntropy(y, OneHotVector(t, classes)), 
                     Axis.Map0D.Channels
                 );
-            StoreField acc_store = acc, loss_store = Average(err);
+            StoreField avg_loss = Average(loss);
 
             Console.WriteLine("Set iterator event...");
             train_iterator.IncreasedEpoch += (iter) => {
-                float train_acc = acc_store.State[0];
-                float train_loss = loss_store.State[0];
+                float train_acc = acc.State[0];
+                float train_loss = avg_loss.State[0];
 
                 Console.WriteLine($"[{iter.Iteration}] train acc: {train_acc:F3} train loss: {train_loss:E3}");
             };
 
             Console.WriteLine("Build optimize flow...");
-            (Flow trainflow, Parameters parameters) = Flow.Optimize(err);
+            (Flow trainflow, Parameters parameters) = Flow.Optimize(loss);
 
             Console.WriteLine("Initialize params...");
             parameters
@@ -70,10 +70,10 @@ namespace MNIST {
             Train(train_iterator, loader, x, t, trainflow, parameters);
 
             Console.WriteLine("Build inference flow...");
-            (Flow testflow, _) = Flow.Inference(acc_store);
+            (Flow testflow, _) = Flow.Inference(acc);
 
             Console.WriteLine("Testing...");
-            Test(test_iterator, loader, x, t, testflow, acc_store);
+            Test(test_iterator, loader, x, t, testflow, acc);
 
             Console.WriteLine("Saving snapshot...");
             Snapshot snapshot = parameters.Save();
@@ -93,11 +93,11 @@ namespace MNIST {
 
             sw.Start();
 
-            while (train_iterator.Epoch < 50) {
+            while (train_iterator.Epoch < 5) {
                 (float[] images, float[] labels) = loader.GetTrain(train_iterator.Next());
 
-                x.ValueTensor.State = images;
-                t.ValueTensor.State = labels;
+                x.State = images;
+                t.State = labels;
 
                 trainflow.Execute();
                 parameters.Update();
@@ -118,8 +118,8 @@ namespace MNIST {
             while (test_iterator.Epoch < 1) {
                 (float[] images, float[] labels) = loader.GetTest(test_iterator.Next());
 
-                x.ValueTensor.State = images;
-                t.ValueTensor.State = labels;
+                x.State = images;
+                t.State = labels;
 
                 testflow.Execute();
 

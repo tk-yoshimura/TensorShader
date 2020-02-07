@@ -24,16 +24,15 @@ namespace TensorShaderTest.Links.Connection1D {
             ParameterField y = ytensor;
 
             Field x_expect = ChannelwiseDeconvolution1D(y, w);
-            Field err = Abs(x_expect - x_actual);
-            StoreField err_store = err;
-
+            StoreField err = Abs(x_expect - x_actual);
+            
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] err_actual = err_store.State;
-            float[] gy_actual = y.GradTensor.State;
-            float[] gw_actual = w.GradTensor.State;
+            float[] err_actual = err.State;
+            float[] gy_actual = y.GradState;
+            float[] gw_actual = w.GradState;
 
             AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"not equal gw");
 

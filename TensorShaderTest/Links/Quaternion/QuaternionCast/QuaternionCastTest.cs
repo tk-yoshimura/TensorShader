@@ -31,26 +31,25 @@ namespace TensorShaderTest.Links.Quaternion {
             VariableField t_actual = ttensor;
 
             Field t_expect = QuaternionCast(x, y, z, w);
-            Field err = t_expect - t_actual;
-            StoreField err_store = err;
-
+            StoreField err = t_expect - t_actual;
+            
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
 
             flow.Execute();
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
 
-            float[] gy_actual = y.GradTensor.State;
+            float[] gy_actual = y.GradState;
 
             AssertError.Tolerance(gy_expect, gy_actual, 1e-7f, 1e-5f, $"not equal gy");
 
-            float[] gz_actual = z.GradTensor.State;
+            float[] gz_actual = z.GradState;
 
             AssertError.Tolerance(gz_expect, gz_actual, 1e-7f, 1e-5f, $"not equal gz");
 
-            float[] gw_actual = w.GradTensor.State;
+            float[] gw_actual = w.GradState;
 
             AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"not equal gw");
         }

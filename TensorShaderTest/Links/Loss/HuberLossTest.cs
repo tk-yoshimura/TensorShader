@@ -22,25 +22,24 @@ namespace TensorShaderTest.Links.Loss {
             ParameterField x = xtensor;
             VariableField t = ttensor;
 
-            Field loss = HuberLoss(x, t, delta);
+            StoreField loss = HuberLoss(x, t, delta);
 
-            StoreField diff_store = Abs(x - t);
-            StoreField loss_store = loss;
+            StoreField diff = Abs(x - t);
 
             (Flow flow, Parameters parameters) = Flow.Optimize(loss);
 
             flow.Execute();
 
-            float[] diff = diff_store.State;
+            float[] diffval = diff.State;
 
-            Assert.IsTrue(diff.Where((v) => v > delta).Count() > 0);
-            Assert.IsTrue(diff.Where((v) => v < delta).Count() > 0);
+            Assert.IsTrue(diffval.Where((v) => v > delta).Count() > 0);
+            Assert.IsTrue(diffval.Where((v) => v < delta).Count() > 0);
 
-            float[] loss_actual = loss_store.State;
+            float[] loss_actual = loss.State;
 
             AssertError.Tolerance(loss_expect, loss_actual, 1e-7f, 1e-5f, $"not equal loss");
 
-            float[] gx_actual = x.GradTensor.State;
+            float[] gx_actual = x.GradState;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }
