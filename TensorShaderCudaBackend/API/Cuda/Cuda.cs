@@ -109,7 +109,6 @@ namespace TensorShaderCudaBackend.API {
         /// <summary>ランタイムバージョン</summary>
         public static int RuntimeVersion {
             get {
-
                 int version = 0;
 
                 ErrorCode result = NativeMethods.cudaRuntimeGetVersion(ref version);
