@@ -44,10 +44,13 @@ namespace TensorShaderCudaBackend {
             string ptx = Nvrtc.CompileProgram(code, entrypoint + ".cu", options);
             IntPtr ptx_ansi = Marshal.StringToHGlobalAnsi(ptx);
 
-            this.module = Nvcuda.LoadModule(ptx_ansi);
-            this.kernel = Nvcuda.GetKernel(module, entrypoint);
-
-            Marshal.FreeHGlobal(ptx_ansi);
+            try {
+                this.module = Nvcuda.LoadModule(ptx_ansi);
+                this.kernel = Nvcuda.GetKernel(module, entrypoint);
+            }
+            finally {
+                Marshal.FreeHGlobal(ptx_ansi);
+            }
 
             this.Overview = entrypoint;
         }
