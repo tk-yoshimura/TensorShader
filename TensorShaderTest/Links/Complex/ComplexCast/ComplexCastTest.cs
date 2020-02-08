@@ -15,14 +15,9 @@ namespace TensorShaderTest.Links.Complex {
 
             float[] tval = (new float[length]).Select((_, idx) => (float)idx / 2).ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Vector(length / 2), xval);
-            Tensor ytensor = new Tensor(Shape.Vector(length / 2), yval);
-
-            Tensor ttensor = new Tensor(Shape.Vector(length), tval);
-
-            ParameterField x = xtensor;
-            ParameterField y = ytensor;
-            VariableField t_actual = ttensor;
+            ParameterField x = new Tensor(Shape.Vector(length / 2), xval);
+            ParameterField y = new Tensor(Shape.Vector(length / 2), yval);
+            VariableField t_actual = new Tensor(Shape.Vector(length), tval);
 
             Field t_expect = ComplexCast(x, y);
             StoreField err = t_expect - t_actual;

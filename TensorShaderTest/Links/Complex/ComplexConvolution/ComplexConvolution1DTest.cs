@@ -15,13 +15,9 @@ namespace TensorShaderTest.Links.ComplexConvolution {
             float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[kwidth * outchannels * inchannels / 2]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Map1D(inchannels, inwidth, batch), xval);
-            Tensor ytensor = new Tensor(Shape.Map1D(outchannels, outwidth, batch), yval);
-            Tensor wtensor = new Tensor(Shape.Kernel1D(inchannels, outchannels / 2, kwidth), wval);
-
-            ParameterField x = xtensor;
-            ParameterField w = wtensor;
-            VariableField y_actual = ytensor;
+            ParameterField x = new Tensor(Shape.Map1D(inchannels, inwidth, batch), xval);
+            ParameterField w = new Tensor(Shape.Kernel1D(inchannels, outchannels / 2, kwidth), wval);
+            VariableField y_actual = new Tensor(Shape.Map1D(outchannels, outwidth, batch), yval);
 
             Field y_expect = ComplexConvolution1D(x, w);
             Field err = y_expect - y_actual;
@@ -47,13 +43,9 @@ namespace TensorShaderTest.Links.ComplexConvolution {
             float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[kwidth * outchannels * inchannels / 2]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Map1D(inchannels, inwidth, batch), xval);
-            Tensor ytensor = new Tensor(Shape.Map1D(outchannels, outwidth, batch), yval);
-            Tensor wtensor = new Tensor(Shape.Kernel1D(inchannels, outchannels / 2, kwidth), wval);
-
-            ParameterField x = xtensor;
-            ParameterField w = wtensor;
-            VariableField y_actual = ytensor;
+            ParameterField x = new Tensor(Shape.Map1D(inchannels, inwidth, batch), xval);
+            ParameterField w = new Tensor(Shape.Kernel1D(inchannels, outchannels / 2, kwidth), wval);
+            VariableField y_actual = new Tensor(Shape.Map1D(outchannels, outwidth, batch), yval);
 
             Field x_real = ComplexReal(x), x_imag = ComplexImag(x);
             Field w_real = ComplexReal(w), w_imag = ComplexImag(w);

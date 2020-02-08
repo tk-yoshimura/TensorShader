@@ -17,18 +17,11 @@ namespace TensorShaderTest.Links.Quaternion {
 
             float[] tval = (new float[length]).Select((_, idx) => (float)idx / 2).ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Vector(length / 4), xval);
-            Tensor ytensor = new Tensor(Shape.Vector(length / 4), yval);
-            Tensor ztensor = new Tensor(Shape.Vector(length / 4), zval);
-            Tensor wtensor = new Tensor(Shape.Vector(length / 4), wval);
-
-            Tensor ttensor = new Tensor(Shape.Vector(length), tval);
-
-            ParameterField x = xtensor;
-            ParameterField y = ytensor;
-            ParameterField z = ztensor;
-            ParameterField w = wtensor;
-            VariableField t_actual = ttensor;
+            ParameterField x = new Tensor(Shape.Vector(length / 4), xval);
+            ParameterField y = new Tensor(Shape.Vector(length / 4), yval);
+            ParameterField z = new Tensor(Shape.Vector(length / 4), zval);
+            ParameterField w = new Tensor(Shape.Vector(length / 4), wval);
+            VariableField t_actual = new Tensor(Shape.Vector(length), tval);
 
             Field t_expect = QuaternionCast(x, y, z, w);
             StoreField err = t_expect - t_actual;

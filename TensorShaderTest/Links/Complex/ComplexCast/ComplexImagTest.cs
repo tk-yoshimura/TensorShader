@@ -13,12 +13,8 @@ namespace TensorShaderTest.Links.ComplexArithmetric {
             float[] xval = (new float[length]).Select((_, idx) => (float)idx * 2 - length).ToArray();
             float[] yval = (new float[length / 2]).Select((_, idx) => (float)idx / 2).ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Vector(length), xval);
-
-            Tensor ytensor = new Tensor(Shape.Vector(length / 2), yval);
-
-            ParameterField x = xtensor;
-            VariableField y_actual = ytensor;
+            ParameterField x = new Tensor(Shape.Vector(length), xval);
+            VariableField y_actual = new Tensor(Shape.Vector(length / 2), yval);
 
             Field y_expect = ComplexImag(x);
             Field err = y_expect - y_actual;

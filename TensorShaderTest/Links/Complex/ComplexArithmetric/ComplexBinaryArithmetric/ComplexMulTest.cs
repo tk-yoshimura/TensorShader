@@ -14,13 +14,9 @@ namespace TensorShaderTest.Links.ComplexArithmetric {
             float[] yval = (new float[length]).Select((_, idx) => (float)idx * 3 - length).Reverse().ToArray();
             float[] tval = (new float[length]).Select((_, idx) => (float)idx / 2).ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Vector(length), xval);
-            Tensor ytensor = new Tensor(Shape.Vector(length), yval);
-            Tensor ttensor = new Tensor(Shape.Vector(length), tval);
-
-            ParameterField x = xtensor;
-            ParameterField y = ytensor;
-            VariableField t = ttensor;
+            ParameterField x = new Tensor(Shape.Vector(length), xval);
+            ParameterField y = new Tensor(Shape.Vector(length), yval);
+            VariableField t = new Tensor(Shape.Vector(length), tval);
 
             Field xy = ComplexMul(x, y);
             Field err = xy - t;
@@ -45,13 +41,9 @@ namespace TensorShaderTest.Links.ComplexArithmetric {
             float[] yval = (new float[length]).Select((_, idx) => (float)idx * 3 - length).Reverse().ToArray();
             float[] tval = (new float[length]).Select((_, idx) => (float)idx / 2).ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Vector(length), xval);
-            Tensor ytensor = new Tensor(Shape.Vector(length), yval);
-            Tensor ttensor = new Tensor(Shape.Vector(length), tval);
-
-            ParameterField x = xtensor;
-            ParameterField y = ytensor;
-            VariableField t = ttensor;
+            ParameterField x = new Tensor(Shape.Vector(length), xval);
+            ParameterField y = new Tensor(Shape.Vector(length), yval);
+            VariableField t = new Tensor(Shape.Vector(length), tval);
 
             Field x_real = ComplexReal(x), x_imag = ComplexImag(x);
             Field y_real = ComplexReal(y), y_imag = ComplexImag(y);

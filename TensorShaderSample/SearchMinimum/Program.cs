@@ -9,10 +9,8 @@ namespace SearchMinimum {
             const int loops = 1000;
             const float x_init = 4, y_init = 3;
 
-            Tensor vx = new Tensor(Shape.Scalar(), new float[] { x_init });
-            Tensor vy = new Tensor(Shape.Scalar(), new float[] { y_init });
-
-            ParameterField x = vx, y = vy;
+            ParameterField x = new Tensor(Shape.Scalar(), new float[] { x_init });
+            ParameterField y = new Tensor(Shape.Scalar(), new float[] { y_init });
 
             // f(x, y) = x^2 + y^2
             Field f = Square(x) + Square(y);
@@ -28,7 +26,7 @@ namespace SearchMinimum {
                 flow.Execute();
                 parameters.Update();
 
-                Console.WriteLine($"h(x, y):{h.State[0]:E5}, x:{vx.State[0]:E5}, y:{vy.State[0]:E5}");
+                Console.WriteLine($"h(x, y):{h.State[0]:E5}, x:{x.State[0]:E5}, y:{y.State[0]:E5}");
             }
 
             Console.WriteLine("END");

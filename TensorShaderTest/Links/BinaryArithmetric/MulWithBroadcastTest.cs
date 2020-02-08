@@ -14,14 +14,9 @@ namespace TensorShaderTest.Links.BinaryArithmetric {
             float[] x2val = (new float[channel * width * height * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] yval = (new float[channel * width * height * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-            Tensor x1tensor = new Tensor(Shape.Vector(channel), x1val);
-            Tensor x2tensor = new Tensor(Shape.Map2D(channel, width, height, batch), x2val);
-
-            Tensor ytensor = new Tensor(Shape.Map2D(channel, width, height, batch), yval);
-
-            ParameterField x1 = x1tensor;
-            ParameterField x2 = x2tensor;
-            VariableField y_actual = ytensor;
+            ParameterField x1 = new Tensor(Shape.Vector(channel), x1val);
+            ParameterField x2 = new Tensor(Shape.Map2D(channel, width, height, batch), x2val);
+            VariableField y_actual = new Tensor(Shape.Map2D(channel, width, height, batch), yval);
 
             Field y_expect = x1 * x2;
             Field err = Abs(y_expect - y_actual);

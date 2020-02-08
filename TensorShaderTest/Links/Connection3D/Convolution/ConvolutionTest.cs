@@ -15,13 +15,9 @@ namespace TensorShaderTest.Links.Connection3D {
             float[] yval = (new float[outwidth * outheight * outdepth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[kwidth * kheight * kdepth * outchannels * inchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
-            Tensor ytensor = new Tensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), yval);
-            Tensor wtensor = new Tensor(Shape.Kernel3D(inchannels, outchannels, kwidth, kheight, kdepth), wval);
-
-            ParameterField x = xtensor;
-            ParameterField w = wtensor;
-            VariableField y_actual = ytensor;
+            ParameterField x = new Tensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
+            ParameterField w = new Tensor(Shape.Kernel3D(inchannels, outchannels, kwidth, kheight, kdepth), wval);
+            VariableField y_actual = new Tensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), yval);
 
             Field y_expect = Convolution3D(x, w);
             Field err = Abs(y_expect - y_actual);

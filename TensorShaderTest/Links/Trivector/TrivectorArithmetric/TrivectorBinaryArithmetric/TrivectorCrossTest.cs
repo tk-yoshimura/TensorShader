@@ -14,13 +14,9 @@ namespace TensorShaderTest.Links.TrivectorArithmetric {
             float[] uval = (new float[length]).Select((_, idx) => ((float)idx * 3 - length)).Reverse().ToArray();
             float[] tval = (new float[length]).Select((_, idx) => ((float)idx / 2)).ToArray();
 
-            Tensor vtensor = new Tensor(Shape.Vector(length), vval);
-            Tensor utensor = new Tensor(Shape.Vector(length), uval);
-            Tensor ttensor = new Tensor(Shape.Vector(length), tval);
-
-            ParameterField v = vtensor;
-            ParameterField u = utensor;
-            VariableField t = ttensor;
+            ParameterField v = new Tensor(Shape.Vector(length), vval);
+            ParameterField u = new Tensor(Shape.Vector(length), uval);
+            VariableField t = new Tensor(Shape.Vector(length), tval);
 
             Field vu = TrivectorCross(v, u);
             Field err = vu - t;
@@ -44,13 +40,9 @@ namespace TensorShaderTest.Links.TrivectorArithmetric {
             float[] uval = (new float[length]).Select((_, idx) => ((float)idx * 3 - length)).Reverse().ToArray();
             float[] tval = (new float[length]).Select((_, idx) => ((float)idx / 2)).ToArray();
 
-            Tensor vtensor = new Tensor(Shape.Vector(length), vval);
-            Tensor utensor = new Tensor(Shape.Vector(length), uval);
-            Tensor ttensor = new Tensor(Shape.Vector(length), tval);
-
-            ParameterField v = vtensor;
-            ParameterField u = utensor;
-            VariableField t = ttensor;
+            ParameterField v = new Tensor(Shape.Vector(length), vval);
+            ParameterField u = new Tensor(Shape.Vector(length), uval);
+            VariableField t = new Tensor(Shape.Vector(length), tval);
 
             Field vx = TrivectorX(v), vy = TrivectorY(v), vz = TrivectorZ(v);
             Field ux = TrivectorX(u), uy = TrivectorY(u), uz = TrivectorZ(u);

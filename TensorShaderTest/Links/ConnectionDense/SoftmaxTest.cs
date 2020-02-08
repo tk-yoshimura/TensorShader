@@ -21,11 +21,8 @@ namespace TensorShaderTest.Links.ConnectionDense {
                   0, 1, 0,
                   0, 1, 1 };
 
-            Tensor xtensor = new Tensor(Shape.Map0D(channels, batch), xval);
-            Tensor ttensor = new Tensor(Shape.Map0D(channels, batch), tval);
-
-            ParameterField x = xtensor;
-            VariableField t = ttensor;
+            ParameterField x = new Tensor(Shape.Map0D(channels, batch), xval);
+            VariableField t = new Tensor(Shape.Map0D(channels, batch), tval);
 
             StoreField y = Softmax(x);
             Field err = y - t;

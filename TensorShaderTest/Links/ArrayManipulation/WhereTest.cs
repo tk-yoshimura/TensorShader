@@ -16,15 +16,10 @@ namespace TensorShaderTest.Links.ArrayManipulation {
 
             float[] yval = (new float[length]).Select((_, idx) => (float)(idx % 13)).ToArray();
 
-            Tensor ctensor = new Tensor(new Shape(ShapeType.Vector, length), cval);
-            Tensor x1tensor = new Tensor(new Shape(ShapeType.Vector, length), x1val);
-            Tensor x2tensor = new Tensor(new Shape(ShapeType.Vector, length), x2val);
-            Tensor ytensor = new Tensor(new Shape(ShapeType.Vector, length), yval);
-
-            VariableField c = ctensor;
-            ParameterField x1 = x1tensor;
-            ParameterField x2 = x2tensor;
-            VariableField y_actual = ytensor;
+            VariableField c = new Tensor(new Shape(ShapeType.Vector, length), cval);
+            ParameterField x1 = new Tensor(new Shape(ShapeType.Vector, length), x1val);
+            ParameterField x2 = new Tensor(new Shape(ShapeType.Vector, length), x2val);
+            VariableField y_actual = new Tensor(new Shape(ShapeType.Vector, length), yval);
 
             Field y_expect = Where(c, x1, x2);
             Field err = Abs(y_expect - y_actual);

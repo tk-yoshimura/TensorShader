@@ -15,13 +15,9 @@ namespace TensorShaderTest.Links.Connection2D {
             float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[kwidth * kheight * outchannels * inchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
-            Tensor ytensor = new Tensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
-            Tensor wtensor = new Tensor(Shape.Kernel2D(inchannels, outchannels, kwidth, kheight), wval);
-
-            ParameterField x = xtensor;
-            ParameterField w = wtensor;
-            VariableField y_actual = ytensor;
+            ParameterField x = new Tensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
+            ParameterField w = new Tensor(Shape.Kernel2D(inchannels, outchannels, kwidth, kheight), wval);
+            VariableField y_actual = new Tensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
 
             Field y_expect = Convolution2D(x, w);
             Field err = Abs(y_expect - y_actual);

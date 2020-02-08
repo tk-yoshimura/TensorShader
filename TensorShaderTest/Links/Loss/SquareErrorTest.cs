@@ -13,11 +13,8 @@ namespace TensorShaderTest.Links.Loss {
             float[] xval = (new float[length]).Select((_, idx) => (float)(idx - 12) * (idx - 12) / 8 + 1).ToArray();
             float[] tval = (new float[length]).Select((_, idx) => (float)idx * 2).ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Vector(length), xval);
-            Tensor ttensor = new Tensor(Shape.Vector(length), tval);
-
-            ParameterField x = xtensor;
-            VariableField t = ttensor;
+            ParameterField x = new Tensor(Shape.Vector(length), xval);
+            VariableField t = new Tensor(Shape.Vector(length), tval);
 
             StoreField loss = SquareError(x, t);
 

@@ -15,13 +15,9 @@ namespace TensorShaderTest.Links.QuaternionConvolution {
             float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[kwidth * kheight * outchannels * inchannels / 4]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
-            Tensor ytensor = new Tensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
-            Tensor wtensor = new Tensor(Shape.Kernel2D(inchannels, outchannels / 4, kwidth, kheight), wval);
-
-            VariableField x_actual = xtensor;
-            ParameterField w = wtensor;
-            ParameterField y = ytensor;
+            VariableField x_actual = new Tensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
+            ParameterField w = new Tensor(Shape.Kernel2D(inchannels, outchannels / 4, kwidth, kheight), wval);
+            ParameterField y = new Tensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
 
             Field x_expect = QuaternionDeconvolution2D(y, w);
             Field err = x_expect - x_actual;
@@ -47,13 +43,9 @@ namespace TensorShaderTest.Links.QuaternionConvolution {
             float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[kwidth * kheight * outchannels * inchannels / 4]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
-            Tensor ytensor = new Tensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
-            Tensor wtensor = new Tensor(Shape.Kernel2D(inchannels, outchannels / 4, kwidth, kheight), wval);
-
-            VariableField x_actual = xtensor;
-            ParameterField w = wtensor;
-            ParameterField y = ytensor;
+            VariableField x_actual = new Tensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
+            ParameterField w = new Tensor(Shape.Kernel2D(inchannels, outchannels / 4, kwidth, kheight), wval);
+            ParameterField y = new Tensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
 
             Field yr = QuaternionR(y), yi = QuaternionI(y), yj = QuaternionJ(y), yk = QuaternionK(y);
             Field wr = QuaternionR(w), wi = QuaternionI(w), wj = QuaternionJ(w), wk = QuaternionK(w);

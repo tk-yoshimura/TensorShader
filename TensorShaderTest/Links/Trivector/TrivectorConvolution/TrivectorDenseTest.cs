@@ -14,13 +14,9 @@ namespace TensorShaderTest.Links.TrivectorConvolution {
             float[] yval = (new float[outchannels * batch]).Select((_, idx) => idx * 1e-2f).ToArray();
             float[] wval = (new float[outchannels * inchannels / 9 * 4]).Select((_, idx) => idx * 1e-2f).Reverse().ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Map0D(inchannels, batch), xval);
-            Tensor ytensor = new Tensor(Shape.Map0D(outchannels, batch), yval);
-            Tensor wtensor = new Tensor(Shape.Kernel0D(inchannels / 3 * 4, outchannels / 3), wval);
-
-            ParameterField x = xtensor;
-            ParameterField w = wtensor;
-            VariableField y_actual = ytensor;
+            ParameterField x = new Tensor(Shape.Map0D(inchannels, batch), xval);
+            ParameterField w = new Tensor(Shape.Kernel0D(inchannels / 3 * 4, outchannels / 3), wval);
+            VariableField y_actual = new Tensor(Shape.Map0D(outchannels, batch), yval);
 
             Field y_expect = TrivectorDense(x, w);
             Field err = y_expect - y_actual;
@@ -45,13 +41,9 @@ namespace TensorShaderTest.Links.TrivectorConvolution {
             float[] yval = (new float[outchannels * batch]).Select((_, idx) => idx * 1e-2f).ToArray();
             float[] wval = (new float[outchannels * inchannels / 9 * 4]).Select((_, idx) => idx * 1e-2f).Reverse().ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Map0D(inchannels, batch), xval);
-            Tensor ytensor = new Tensor(Shape.Map0D(outchannels, batch), yval);
-            Tensor wtensor = new Tensor(Shape.Kernel0D(inchannels / 3 * 4, outchannels / 3), wval);
-
-            ParameterField x = xtensor;
-            ParameterField w = wtensor;
-            VariableField y_actual = ytensor;
+            ParameterField x = new Tensor(Shape.Map0D(inchannels, batch), xval);
+            ParameterField w = new Tensor(Shape.Kernel0D(inchannels / 3 * 4, outchannels / 3), wval);
+            VariableField y_actual = new Tensor(Shape.Map0D(outchannels, batch), yval);
 
             Field xx = TrivectorX(x), xy = TrivectorY(x), xz = TrivectorZ(x);
             Field wr = QuaternionR(w), wi = QuaternionI(w), wj = QuaternionJ(w), wk = QuaternionK(w);

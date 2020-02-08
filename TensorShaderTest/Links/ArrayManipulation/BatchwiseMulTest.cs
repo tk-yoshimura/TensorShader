@@ -14,13 +14,9 @@ namespace TensorShaderTest.Links.ArrayManipulation {
             float[] vval = new float[batch] { 0, 0.2f, 0.6f, 0.4f, 1 };
             float[] yval = (new float[length * ch * batch]).Select((_, idx) => (float)idx).Reverse().ToArray();
 
-            Tensor xtensor = new Tensor(new Shape(ShapeType.Map, length, ch, batch), xval);
-            Tensor vtensor = new Tensor(new Shape(ShapeType.Vector, batch), vval);
-            Tensor ytensor = new Tensor(new Shape(ShapeType.Map, length, ch, batch), yval);
-
-            ParameterField x = xtensor;
-            ParameterField v = vtensor;
-            VariableField y = ytensor;
+            ParameterField x = new Tensor(new Shape(ShapeType.Map, length, ch, batch), xval);
+            ParameterField v = new Tensor(new Shape(ShapeType.Vector, batch), vval);
+            VariableField y = new Tensor(new Shape(ShapeType.Map, length, ch, batch), yval);
 
             Field f = BatchwiseMul(x, v);
             Field err = Abs(f - y);

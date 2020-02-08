@@ -16,16 +16,10 @@ namespace TensorShaderTest.Links.Trivector {
 
             float[] tval = (new float[length]).Select((_, idx) => (float)idx / 2).ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Vector(length / 3), xval);
-            Tensor ytensor = new Tensor(Shape.Vector(length / 3), yval);
-            Tensor ztensor = new Tensor(Shape.Vector(length / 3), zval);
-
-            Tensor ttensor = new Tensor(Shape.Vector(length), tval);
-
-            ParameterField x = xtensor;
-            ParameterField y = ytensor;
-            ParameterField z = ztensor;
-            VariableField t_actual = ttensor;
+            ParameterField x = new Tensor(Shape.Vector(length / 3), xval);
+            ParameterField y = new Tensor(Shape.Vector(length / 3), yval);
+            ParameterField z = new Tensor(Shape.Vector(length / 3), zval);
+            VariableField t_actual = new Tensor(Shape.Vector(length), tval);
 
             Field t_expect = TrivectorCast(x, y, z);
             StoreField err = t_expect - t_actual;

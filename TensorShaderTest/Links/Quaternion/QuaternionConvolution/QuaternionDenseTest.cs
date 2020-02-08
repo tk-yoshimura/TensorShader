@@ -14,13 +14,9 @@ namespace TensorShaderTest.Links.QuaternionConvolution {
             float[] yval = (new float[outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[outchannels * inchannels / 4]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Map0D(inchannels, batch), xval);
-            Tensor ytensor = new Tensor(Shape.Map0D(outchannels, batch), yval);
-            Tensor wtensor = new Tensor(Shape.Kernel0D(inchannels, outchannels / 4), wval);
-
-            ParameterField x = xtensor;
-            ParameterField w = wtensor;
-            VariableField y_actual = ytensor;
+            ParameterField x = new Tensor(Shape.Map0D(inchannels, batch), xval);
+            ParameterField w = new Tensor(Shape.Kernel0D(inchannels, outchannels / 4), wval);
+            VariableField y_actual = new Tensor(Shape.Map0D(outchannels, batch), yval);
 
             Field y_expect = QuaternionDense(x, w);
             Field err = y_expect - y_actual;
@@ -45,13 +41,9 @@ namespace TensorShaderTest.Links.QuaternionConvolution {
             float[] yval = (new float[outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[outchannels * inchannels / 4]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            Tensor xtensor = new Tensor(Shape.Map0D(inchannels, batch), xval);
-            Tensor ytensor = new Tensor(Shape.Map0D(outchannels, batch), yval);
-            Tensor wtensor = new Tensor(Shape.Kernel0D(inchannels, outchannels / 4), wval);
-
-            ParameterField x = xtensor;
-            ParameterField w = wtensor;
-            VariableField y_actual = ytensor;
+            ParameterField x = new Tensor(Shape.Map0D(inchannels, batch), xval);
+            ParameterField w = new Tensor(Shape.Kernel0D(inchannels, outchannels / 4), wval);
+            VariableField y_actual = new Tensor(Shape.Map0D(outchannels, batch), yval);
 
             Field xr = QuaternionR(x), xi = QuaternionI(x), xj = QuaternionJ(x), xk = QuaternionK(x);
             Field wr = QuaternionR(w), wi = QuaternionI(w), wj = QuaternionJ(w), wk = QuaternionK(w);

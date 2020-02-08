@@ -12,14 +12,10 @@ namespace TensorShaderTest.Links.ArrayManipulation {
             int length = shape.Length;
 
             float[] xval = (new float[length]).Select((_, idx) => (float)(((idx * 4969 % 17 + 3) * (idx * 6577 % 13 + 5) + idx) % 8)).ToArray();
-
             float[] tval = (new float[length]).Select((_, idx) => (float)(idx * 2)).ToArray();
 
-            Tensor xtensor = new Tensor(shape, xval);
-            Tensor ttensor = new Tensor(shape, tval);
-
-            ParameterField x = xtensor;
-            VariableField t = ttensor;
+            ParameterField x = new Tensor(shape, xval);
+            VariableField t = new Tensor(shape, tval);
 
             StoreField y = Flip(x, axis: 3);
 

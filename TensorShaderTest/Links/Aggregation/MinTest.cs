@@ -11,13 +11,10 @@ namespace TensorShaderTest.Links.Aggregation {
             int channels = 7, width = 3, height = 5, batch = 2;
 
             float[] xval = (new float[channels * width * height * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-            Tensor xtensor = new Tensor(Shape.Map2D(channels, width, height, batch), xval);
-
             float[] yval = (new float[width * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-            Tensor ytensor = new Tensor(Shape.Map0D(width, batch), yval);
 
-            VariableField x = xtensor;
-            VariableField y_actual = ytensor;
+            VariableField x = new Tensor(Shape.Map2D(channels, width, height, batch), xval);
+            VariableField y_actual = new Tensor(Shape.Map0D(width, batch), yval);
 
             Field y_expect = Min(x, new int[] { Axis.Map2D.Channels, Axis.Map2D.Height }, keepdims: false);
             StoreField err = y_expect - y_actual;

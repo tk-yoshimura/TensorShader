@@ -13,13 +13,10 @@ namespace TensorShaderTest.Links.ArrayManipulation {
             float[] xval = (new float[s0 * s1 * s2 * s3]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] yval = (new float[s3 * s2 * s1 * s0]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            Tensor xtensor = new Tensor(new Shape(ShapeType.Map, s0, s1, s2, s3), xval);
-            Tensor ytensor = new Tensor(new Shape(ShapeType.Map, s3 * s2, s1 * s0), yval);
+            ParameterField x = new Tensor(new Shape(ShapeType.Map, s0, s1, s2, s3), xval);
+            VariableField y_actual = new Tensor(new Shape(ShapeType.Map, s3 * s2, s1 * s0), yval);
 
-            ParameterField x = xtensor;
-            VariableField y_actual = ytensor;
-
-            Field y_expect = Reshape(x, ytensor.Shape);
+            Field y_expect = Reshape(x, y_actual.Shape);
             Field err = Abs(y_expect - y_actual);
 
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
