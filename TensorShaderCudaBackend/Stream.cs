@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Reflection;
 using TensorShaderCudaBackend.API;
 
 namespace TensorShaderCudaBackend {
