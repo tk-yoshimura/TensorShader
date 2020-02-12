@@ -10,7 +10,7 @@ namespace TensorShaderTest {
     public class FieldTest {
         [TestMethod]
         public void MinimumTest() {
-            Tensor intensor = new Tensor(Shape.Scalar(), new float[] { 1 });
+            Tensor intensor = new Tensor(Shape.Scalar, new float[] { 1 });
 
             {
                 ParameterField f1 = new ParameterField(intensor);
@@ -205,8 +205,8 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void In1Out1Test() {
-            Tensor intensor = new Tensor(Shape.Scalar(), new float[] { -1.5f });
-            Tensor outtensor = new Tensor(Shape.Scalar(), new float[] { 2 });
+            Tensor intensor = new Tensor(Shape.Scalar, new float[] { -1.5f });
+            Tensor outtensor = new Tensor(Shape.Scalar, new float[] { 2 });
 
             {
                 ParameterField f1 = new ParameterField(intensor);
@@ -335,9 +335,9 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void In2Out1Test() {
-            Tensor in1tensor = new Tensor(Shape.Scalar(), new float[] { 1 });
-            Tensor in2tensor = new Tensor(Shape.Scalar(), new float[] { 2 });
-            Tensor outtensor = new Tensor(Shape.Scalar(), new float[] { -3 });
+            Tensor in1tensor = new Tensor(Shape.Scalar, new float[] { 1 });
+            Tensor in2tensor = new Tensor(Shape.Scalar, new float[] { 2 });
+            Tensor outtensor = new Tensor(Shape.Scalar, new float[] { -3 });
 
             {
                 ParameterField f1 = new ParameterField(in1tensor);
@@ -504,8 +504,8 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void In1Out2Test() {
-            Tensor intensor = new Tensor(Shape.Scalar(), new float[] { -1.5f });
-            Tensor outtensor = new Tensor(Shape.Scalar(), new float[] { 2 });
+            Tensor intensor = new Tensor(Shape.Scalar, new float[] { -1.5f });
+            Tensor outtensor = new Tensor(Shape.Scalar, new float[] { 2 });
 
             {
                 ParameterField f1 = new ParameterField(intensor);
@@ -702,8 +702,8 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void In2Out2Test() {
-            Tensor intensor = new Tensor(Shape.Scalar(), new float[] { -1.5f });
-            Tensor outtensor = new Tensor(Shape.Scalar(), new float[] { 2 });
+            Tensor intensor = new Tensor(Shape.Scalar, new float[] { -1.5f });
+            Tensor outtensor = new Tensor(Shape.Scalar, new float[] { 2 });
 
             {
                 ParameterField f1 = new ParameterField(intensor);
@@ -734,14 +734,14 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void ParallelTest() {
-            Tensor intensor1 = new Tensor(Shape.Scalar(), new float[] { -1.5f });
-            Tensor outtensor1 = new Tensor(Shape.Scalar(), new float[] { 2 });
+            Tensor intensor1 = new Tensor(Shape.Scalar, new float[] { -1.5f });
+            Tensor outtensor1 = new Tensor(Shape.Scalar, new float[] { 2 });
 
-            Tensor intensor2 = new Tensor(Shape.Scalar(), new float[] { -2.5f });
-            Tensor outtensor2 = new Tensor(Shape.Scalar(), new float[] { 4 });
+            Tensor intensor2 = new Tensor(Shape.Scalar, new float[] { -2.5f });
+            Tensor outtensor2 = new Tensor(Shape.Scalar, new float[] { 4 });
 
-            Tensor intensor3 = new Tensor(Shape.Scalar(), new float[] { -4.5f });
-            Tensor outtensor3 = new Tensor(Shape.Scalar(), new float[] { 8 });
+            Tensor intensor3 = new Tensor(Shape.Scalar, new float[] { -4.5f });
+            Tensor outtensor3 = new Tensor(Shape.Scalar, new float[] { 8 });
 
             {
                 ParameterField fi1 = new ParameterField(intensor1);
@@ -860,8 +860,8 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void RejoinTest() {
-            Tensor intensor = new Tensor(Shape.Scalar(), new float[] { -1.5f });
-            Tensor outtensor = new Tensor(Shape.Scalar(), new float[] { -2 });
+            Tensor intensor = new Tensor(Shape.Scalar, new float[] { -1.5f });
+            Tensor outtensor = new Tensor(Shape.Scalar, new float[] { -2 });
 
             {
                 ParameterField f1 = new ParameterField(intensor);
@@ -954,7 +954,7 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void BifurcTest() {
-            Tensor intensor = new Tensor(Shape.Scalar(), new float[] { -1.5f });
+            Tensor intensor = new Tensor(Shape.Scalar, new float[] { -1.5f });
 
             {
                 ParameterField f1 = intensor;
@@ -1123,7 +1123,7 @@ namespace TensorShaderTest {
         [TestMethod]
         public void BroadcastTest() {
             Tensor intensor1 = new Tensor(Shape.Vector(5), new float[] { 0f, 1f, 2f, 3f, 4f });
-            Tensor intensor2 = new Tensor(Shape.Scalar(), new float[] { 2f });
+            Tensor intensor2 = new Tensor(Shape.Scalar, new float[] { 2f });
             Tensor outtensor1 = new Tensor(Shape.Vector(5), new float[] { 4f, 3f, 2f, 1f, 0f });
             Tensor outtensor2 = new Tensor(Shape.Vector(5), new float[] { 0f, 2f, 4f, 6f, 8f });
 
@@ -1411,8 +1411,8 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void DuplicateTest() {
-            Tensor intensor = new Tensor(Shape.Scalar(), new float[] { 1.5f });
-            Tensor outtensor = new Tensor(Shape.Scalar(), new float[] { 7f });
+            Tensor intensor = new Tensor(Shape.Scalar, new float[] { 1.5f });
+            Tensor outtensor = new Tensor(Shape.Scalar, new float[] { 7f });
 
             /*square*/
             {
@@ -1525,9 +1525,9 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void StoreTest() {
-            Tensor in1tensor = new Tensor(Shape.Scalar(), new float[] { 1 });
-            Tensor in2tensor = new Tensor(Shape.Scalar(), new float[] { 2 });
-            Tensor outtensor = new Tensor(Shape.Scalar(), new float[] { -3 });
+            Tensor in1tensor = new Tensor(Shape.Scalar, new float[] { 1 });
+            Tensor in2tensor = new Tensor(Shape.Scalar, new float[] { 2 });
+            Tensor outtensor = new Tensor(Shape.Scalar, new float[] { -3 });
 
             {
                 ParameterField f1 = new ParameterField(in1tensor);
@@ -1596,8 +1596,8 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void BadFlowTest() {
-            Tensor intensor = new Tensor(Shape.Scalar(), new float[] { -1.5f });
-            Tensor outtensor = new Tensor(Shape.Scalar(), new float[] { 2 });
+            Tensor intensor = new Tensor(Shape.Scalar, new float[] { -1.5f });
+            Tensor outtensor = new Tensor(Shape.Scalar, new float[] { 2 });
 
             {
                 ParameterField f1 = new ParameterField(intensor);

@@ -9,7 +9,7 @@ namespace TensorShader.Updaters.OptimizeMethod {
     /// arXiv:1308.0850
     /// </remarks>
     public class RMSpropGraves : OptimizeMethod {
-        private readonly InputNode m, v;
+        private readonly InputNode m, v, kahan_c;
 
         /// <summary>学習定数</summary>
         protected readonly InputNode lambda;
@@ -46,8 +46,10 @@ namespace TensorShader.Updaters.OptimizeMethod {
             this.m = new InputNode(new Tensor(parameter.Shape));
             this.v = new InputNode(new Tensor(parameter.Shape));
 
-            this.lambda = new InputNode(new Tensor(Shape.Scalar(), new float[] { lambda }));
-            this.rho = new InputNode(new Tensor(Shape.Scalar(), new float[] { rho }));
+            this.kahan_c = new InputNode(new Tensor(parameter.Shape));
+
+            this.lambda = new InputNode(new Tensor(Shape.Scalar, new float[] { lambda }));
+            this.rho = new InputNode(new Tensor(Shape.Scalar, new float[] { rho }));
 
             this.Eps = eps;
 
@@ -58,13 +60,16 @@ namespace TensorShader.Updaters.OptimizeMethod {
         public override Flow UpdateFlow() {
             VariableNode new_m = rho * m + (1 - rho) * Grad;
             VariableNode new_v = rho * v + (1 - rho) * Square(Grad);
-            VariableNode new_value = Value - lambda * Grad * Rsqrt(new_v - Square(new_m) + Eps);
+            VariableNode diff_value = - lambda * Grad * Rsqrt(new_v - Square(new_m) + Eps);
+
+            (VariableNode new_value, VariableNode new_kahan_c) = KahanSum(Value, diff_value, kahan_c);
 
             new_m.Update(m);
             new_v.Update(v);
             new_value.Update(Value);
+            new_kahan_c.Update(kahan_c);
 
-            return Flow.FromInputs(Value, Grad, m, v, lambda, rho);
+            return Flow.FromInputs(Value, Grad, m, v, kahan_c, lambda, rho);
         }
 
         /// <summary>内部状態</summary>
@@ -73,6 +78,7 @@ namespace TensorShader.Updaters.OptimizeMethod {
                 Dictionary<string, Tensor> table = new Dictionary<string, Tensor>(){
                     { "m", m.Tensor },
                     { "v", v.Tensor },
+                    { "kahan_c", kahan_c.Tensor },
                     { "lambda", lambda.Tensor },
                     { "rho", rho.Tensor },
                 };
@@ -85,6 +91,7 @@ namespace TensorShader.Updaters.OptimizeMethod {
         public override void Initialize() {
             m.Tensor.Zeroset();
             v.Tensor.Zeroset();
+            kahan_c.Tensor.Zeroset();
         }
     }
 }

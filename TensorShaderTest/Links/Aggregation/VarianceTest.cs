@@ -626,7 +626,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[1]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Scalar(), yval);
+                Tensor ytensor = new Tensor(Shape.Scalar, yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;

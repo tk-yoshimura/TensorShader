@@ -9,8 +9,8 @@ namespace TensorShader.Operators.TrinaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public TrinaryConstantArithmetric(Shape shape) {
             this.arguments = new List<(ArgumentType type, Shape shape)>{
-                (ArgumentType.In, Shape.Scalar()),
-                (ArgumentType.In, Shape.Scalar()),
+                (ArgumentType.In, Shape.Scalar),
+                (ArgumentType.In, Shape.Scalar),
                 (ArgumentType.In, shape),
                 (ArgumentType.Out, shape),
             };

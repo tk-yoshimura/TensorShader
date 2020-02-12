@@ -20,7 +20,7 @@ namespace TensorShader.Updaters.WeightDecay {
         /// <summary>コンストラクタ</summary>
         public Lasso(ParameterField parameter, float decay)
             : base(parameter) {
-            this.decay = new InputNode(new Tensor(Shape.Scalar(), new float[] { decay }));
+            this.decay = new InputNode(new Tensor(Shape.Scalar, new float[] { decay }));
         }
 
         /// <summary>更新フロー</summary>

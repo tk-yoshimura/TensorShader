@@ -14,7 +14,7 @@ namespace TensorShaderTest.Links.FactorArithmetric {
             float[] yval = (new float[length]).Select((_, idx) => (float)idx / 24).ToArray();
 
             ParameterField x = new Tensor(Shape.Vector(length), xval);
-            ParameterField p = new Tensor(Shape.Scalar(), new float[] { 1.5f });
+            ParameterField p = new Tensor(Shape.Scalar, new float[] { 1.5f });
 
             VariableField y_actual = new Tensor(Shape.Vector(length), yval);
 
