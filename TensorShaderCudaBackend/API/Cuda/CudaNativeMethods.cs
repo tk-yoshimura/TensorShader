@@ -68,6 +68,9 @@ namespace TensorShaderCudaBackend.API {
             public static extern cudaError_t cudaMemsetAsync(IntPtr devPtr, int value, size_t count, IntPtr stream);
 
             [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+			public static extern cudaError_t cudaMemAdvise(IntPtr devPtr, size_t count, cudaMemoryAdvise advice, int device);
+
+            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
             public static extern cudaError_t cudaDriverGetVersion(ref int driverVersion);
 
             [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]

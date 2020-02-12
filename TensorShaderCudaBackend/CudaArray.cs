@@ -242,6 +242,38 @@ namespace TensorShaderCudaBackend {
             Cuda.Memory.CopyDeviceToDeviceAsync<T>(src_ptr, dst_ptr, count, stream.Ptr);
         }
 
+        /// <summary>ほとんど読み込み専用領域であることを提示</summary>
+        public void SetReadMostlyAdvise() { 
+            Cuda.Memory.SetAdvise<T>(ptr, Length, Cuda.cudaMemoryAdvise.SetReadMostly, Cuda.CurrectDeviceID);
+        }
+
+        /// <summary>ほとんど読み込み専用領域であることを提示解除</summary>
+        public void UnsetReadMostlyAdvise() { 
+            Cuda.Memory.SetAdvise<T>(ptr, Length, Cuda.cudaMemoryAdvise.UnsetReadMostly, Cuda.CurrectDeviceID);
+        }
+
+        /// <summary>ほとんど読み込み専用領域であることを提示</summary>
+        public void SetReadMostlyAdvise(ulong index, ulong count) { 
+            if (index >= Length || index + count > Length) {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
+            IntPtr ptr = (IntPtr)(this.ptr.ToInt64() + (long)(ElementSize * index));
+
+            Cuda.Memory.SetAdvise<T>(ptr, count, Cuda.cudaMemoryAdvise.SetReadMostly, Cuda.CurrectDeviceID);
+        }
+
+        /// <summary>ほとんど読み込み専用領域であることを提示解除</summary>
+        public void UnsetReadMostlyAdvise(ulong index, ulong count) { 
+            if (index >= Length || index + count > Length) {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
+            IntPtr ptr = (IntPtr)(this.ptr.ToInt64() + (long)(ElementSize * index));
+
+            Cuda.Memory.SetAdvise<T>(ptr, count, Cuda.cudaMemoryAdvise.UnsetReadMostly, Cuda.CurrectDeviceID);
+        }
+
         /// <summary>文字列化</summary>
         public override string ToString() {
             return $"{nameof(CudaArray<T>)} {Overview}";

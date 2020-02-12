@@ -197,6 +197,20 @@ namespace TensorShaderCudaBackend.API {
                     throw new CudaException(result);
                 }
             }
+
+            /// <summary>メモリ使用法のヒントを提示</summary>
+            internal static void SetAdvise<T>(IntPtr ptr, ulong count, cudaMemoryAdvise advise, int device_id) {
+                if (ptr == IntPtr.Zero) {
+                    throw new ArgumentException(nameof(ptr));
+                }
+                
+                long bytesize = (long)((ulong)Marshal.SizeOf(typeof(T)) * count);
+
+                ErrorCode result = NativeMethods.cudaMemAdvise(ptr, bytesize, advise, device_id);
+                if (result != ErrorCode.Success) {
+                    throw new CudaException(result);
+                }
+            }
         }
     }
 }
