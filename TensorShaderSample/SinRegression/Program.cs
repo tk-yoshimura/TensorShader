@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using TensorShader;
+using TensorShaderUtil;
 using TensorShader.Updaters.OptimizeMethod;
 using static TensorShader.Field;
 
@@ -12,11 +13,11 @@ namespace SinRegression {
 
             Random random = new Random(1234);
 
-            float[] xval = (new float[points]).Select((_, idx) => start + (end - start) * idx / (points - 1)).ToArray();
-            float[] tval = xval.Select((v) => (float)Math.Sin(v)).ToArray();
+            NdimArray<float> xval = NdimArrayUtil.Linspace(start, end, points);
+            NdimArray<float> tval = xval.Select((v) => (float)Math.Sin(v));
 
-            VariableField x = new Tensor(Shape.Vector(points), xval);
-            VariableField t = new Tensor(Shape.Vector(points), tval);
+            VariableField x = (Tensor)xval;
+            VariableField t = (Tensor)tval;
 
             ParameterField p3 = new Tensor(Shape.Scalar, new float[] { (float)random.NextDouble() * 2 - 1 });
             ParameterField p5 = new Tensor(Shape.Scalar, new float[] { (float)random.NextDouble() * 0.02f - 0.01f });

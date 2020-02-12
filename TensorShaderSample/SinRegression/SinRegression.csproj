@@ -50,6 +50,9 @@
     <Reference Include="TensorShaderCudaBackend">
       <HintPath>..\..\TensorShader\bin\x64\Release\TensorShaderCudaBackend.dll</HintPath>
     </Reference>
+    <Reference Include="TensorShaderUtil">
+      <HintPath>..\..\TensorShaderUtil\bin\x64\Release\TensorShaderUtil.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
