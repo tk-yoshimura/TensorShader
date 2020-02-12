@@ -62,6 +62,7 @@
     <Compile Include="Iterator\Iterator.cs" />
     <Compile Include="Iterator\RepeatIterator.cs" />
     <Compile Include="Iterator\ShuffleIterator.cs" />
+    <Compile Include="NdimArrayUtil\NdimArrayUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SnapshotSaver\Crc32.cs" />
     <Compile Include="SnapshotSaver\ZippedBinaryShapshotSaver.cs" />

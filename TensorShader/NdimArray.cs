@@ -3,7 +3,7 @@
 namespace TensorShader {
 
     /// <summary>多次元配列</summary>
-    public class NdimArray<T> {
+    public class NdimArray<T> : ICloneable {
 
         /// <summary>値配列</summary>
         public T[] Value { private set; get; }
@@ -83,6 +83,25 @@ namespace TensorShader {
             }
 
             return pos;
+        }
+
+        /// <summary>形状変更</summary>
+        public NdimArray<T> Reshape(Shape shape, bool clone_value = false) {
+            if (shape.Length != Shape.Length) {
+                throw new ArgumentException(nameof(shape));
+            }
+
+            return new NdimArray<T>(Value, shape, clone_value);
+        }
+
+        /// <summary>ディープコピー</summary>
+        public object Clone() {
+            return Copy();
+        }
+
+        /// <summary>ディープコピー</summary>
+        public NdimArray<T> Copy() {
+            return new NdimArray<T>(Value, Shape, clone_value: true);
         }
     }
 
