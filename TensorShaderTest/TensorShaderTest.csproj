@@ -543,6 +543,7 @@
     <Compile Include="Updaters\OptimizeMethod\RMSpropGravesTest.cs" />
     <Compile Include="Updaters\OptimizeMethod\RMSpropTest.cs" />
     <Compile Include="Updaters\OptimizeMethod\SGDTest.cs" />
+    <Compile Include="Updaters\OptimizeMethod\KahanSumTest.cs" />
     <Compile Include="Updaters\RestrictGrad\GradRMSClippingTest.cs" />
     <Compile Include="Updaters\RestrictGrad\GradNormClippingTest.cs" />
     <Compile Include="Updaters\RestrictGrad\GradClippingTest.cs" />

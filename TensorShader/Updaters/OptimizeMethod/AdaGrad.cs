@@ -9,7 +9,7 @@ namespace TensorShader.Updaters.OptimizeMethod {
     /// http://jmlr.org/papers/v12/duchi11a.html
     /// </remarks>
     public class AdaGrad : OptimizeMethod {
-        private readonly InputNode v;
+        private readonly InputNode v, kahan_c;
 
         /// <summary>学習定数</summary>
         protected readonly InputNode lambda;
@@ -31,6 +31,8 @@ namespace TensorShader.Updaters.OptimizeMethod {
         public AdaGrad(ParameterField parameter, float lambda = 0.01f, float eps = 1e-5f)
             : base(parameter) {
             this.v = new InputNode(new Tensor(parameter.Shape));
+            this.kahan_c = new InputNode(new Tensor(parameter.Shape));
+
             this.lambda = new InputNode(new Tensor(Shape.Scalar, new float[] { lambda }));
 
             this.Eps = eps;
@@ -41,12 +43,15 @@ namespace TensorShader.Updaters.OptimizeMethod {
         /// <summary>更新フロー</summary>
         public override Flow UpdateFlow() {
             VariableNode new_v = v + Square(Grad);
-            VariableNode new_value = Value - lambda * Grad / (Sqrt(new_v) + Eps);
+            VariableNode diff_value = - lambda * Grad / (Sqrt(new_v) + Eps);
+
+            (VariableNode new_value, VariableNode new_kahan_c) = KahanSum(Value, diff_value, kahan_c);
 
             new_v.Update(v);
             new_value.Update(Value);
+            new_kahan_c.Update(kahan_c);
 
-            return Flow.FromInputs(Value, Grad, v, lambda);
+            return Flow.FromInputs(Value, Grad, v, kahan_c, lambda);
         }
 
         /// <summary>内部状態</summary>
@@ -54,6 +59,7 @@ namespace TensorShader.Updaters.OptimizeMethod {
             get {
                 Dictionary<string, Tensor> table = new Dictionary<string, Tensor>(){
                     { "v", v.Tensor },
+                    { "kahan_c", kahan_c.Tensor },
                     { "lambda", lambda.Tensor },
                 };
 
@@ -64,6 +70,7 @@ namespace TensorShader.Updaters.OptimizeMethod {
         /// <summary>初期化</summary>
         public override void Initialize() {
             v.Tensor.Zeroset();
+            kahan_c.Tensor.Zeroset();
         }
     }
 }

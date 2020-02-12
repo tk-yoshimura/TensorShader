@@ -8,7 +8,7 @@ namespace TensorShader.Updaters.OptimizeMethod {
     /// arXiv:1212.0901
     /// </remarks>
     public class NesterovAG : OptimizeMethod {
-        private readonly InputNode m;
+        private readonly InputNode m, kahan_c;
 
         /// <summary>学習定数</summary>
         protected readonly InputNode lambda;
@@ -40,6 +40,9 @@ namespace TensorShader.Updaters.OptimizeMethod {
         public NesterovAG(ParameterField parameter, float lambda = 0.01f, float alpha = 0.9f)
             : base(parameter) {
             this.m = new InputNode(new Tensor(parameter.Shape));
+
+            this.kahan_c = new InputNode(new Tensor(parameter.Shape));
+
             this.lambda = new InputNode(new Tensor(Shape.Scalar, new float[] { lambda }));
             this.alpha = new InputNode(new Tensor(Shape.Scalar, new float[] { alpha }));
 
@@ -49,12 +52,15 @@ namespace TensorShader.Updaters.OptimizeMethod {
         /// <summary>更新フロー</summary>
         public override Flow UpdateFlow() {
             VariableNode new_m = m * alpha - lambda * Grad;
-            VariableNode new_value = Value + alpha * alpha * new_m - (1 + alpha) * lambda * Grad;
+            VariableNode diff_value = alpha * alpha * new_m - (1 + alpha) * lambda * Grad;
+            
+            (VariableNode new_value, VariableNode new_kahan_c) = KahanSum(Value, diff_value, kahan_c);
 
             new_m.Update(m);
             new_value.Update(Value);
+            new_kahan_c.Update(kahan_c);
 
-            return Flow.FromInputs(Value, Grad, m, lambda, alpha);
+            return Flow.FromInputs(Value, Grad, m, kahan_c, lambda, alpha);
         }
 
         /// <summary>内部状態</summary>
@@ -62,6 +68,7 @@ namespace TensorShader.Updaters.OptimizeMethod {
             get {
                 Dictionary<string, Tensor> table = new Dictionary<string, Tensor>(){
                     { "m", m.Tensor },
+                    { "kahan_c", kahan_c.Tensor },
                     { "lambda", lambda.Tensor },
                     { "alpha", alpha.Tensor },
                 };
@@ -73,6 +80,7 @@ namespace TensorShader.Updaters.OptimizeMethod {
         /// <summary>初期化</summary>
         public override void Initialize() {
             m.Tensor.Zeroset();
+            kahan_c.Tensor.Zeroset();
         }
     }
 }

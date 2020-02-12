@@ -9,7 +9,7 @@ namespace TensorShader.Updaters.OptimizeMethod {
     /// arXiv:1212.5701
     /// </remarks>
     public class AdaDelta : OptimizeMethod {
-        private readonly InputNode r, v;
+        private readonly InputNode r, v, kahan_c;
 
         /// <summary>減衰定数</summary>
         protected readonly InputNode rho;
@@ -33,6 +33,8 @@ namespace TensorShader.Updaters.OptimizeMethod {
             this.r = new InputNode(new Tensor(parameter.Shape));
             this.v = new InputNode(new Tensor(parameter.Shape));
 
+            this.kahan_c = new InputNode(new Tensor(parameter.Shape));
+
             this.rho = new InputNode(new Tensor(Shape.Scalar, new float[] { rho }));
 
             this.Eps = eps;
@@ -46,13 +48,14 @@ namespace TensorShader.Updaters.OptimizeMethod {
             VariableNode s = Sqrt((v + Eps) / (new_r + Eps)) * Grad;
             VariableNode new_v = v + (1 - rho) * (Square(s) - v);
 
-            VariableNode new_value = Value - s;
+            (VariableNode new_value, VariableNode new_kahan_c) = KahanSum(Value, -s, kahan_c);
 
             new_r.Update(r);
             new_v.Update(v);
             new_value.Update(Value);
+            new_kahan_c.Update(kahan_c);
 
-            return Flow.FromInputs(Value, Grad, r, v, rho);
+            return Flow.FromInputs(Value, Grad, r, v, kahan_c, rho);
         }
 
         /// <summary>内部状態</summary>
@@ -61,6 +64,7 @@ namespace TensorShader.Updaters.OptimizeMethod {
                 Dictionary<string, Tensor> table = new Dictionary<string, Tensor>(){
                     { "r", r.Tensor },
                     { "v", v.Tensor },
+                    { "kahan_c", kahan_c.Tensor },
                     { "rho", rho.Tensor },
                 };
 
@@ -72,6 +76,7 @@ namespace TensorShader.Updaters.OptimizeMethod {
         public override void Initialize() {
             r.Tensor.Zeroset();
             v.Tensor.Zeroset();
+            kahan_c.Tensor.Zeroset();
         }
     }
 }

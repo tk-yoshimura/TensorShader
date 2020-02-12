@@ -9,7 +9,7 @@ namespace TensorShader.Updaters.OptimizeMethod {
     /// arXiv:1412.6980 (2014).
     /// </remarks>
     public class Adam : OptimizeMethod {
-        private readonly InputNode m, v, t;
+        private readonly InputNode m, v, t, kahan_c;
 
         /// <summary>α</summary>
         protected readonly InputNode alpha;
@@ -58,6 +58,8 @@ namespace TensorShader.Updaters.OptimizeMethod {
 
             this.t = new InputNode(new Tensor(Shape.Scalar));
 
+            this.kahan_c = new InputNode(new Tensor(parameter.Shape));
+
             this.alpha = new InputNode(new Tensor(Shape.Scalar, new float[] { alpha }));
             this.beta1 = new InputNode(new Tensor(Shape.Scalar, new float[] { beta1 }));
             this.beta2 = new InputNode(new Tensor(Shape.Scalar, new float[] { beta2 }));
@@ -77,7 +79,9 @@ namespace TensorShader.Updaters.OptimizeMethod {
             VariableNode m_hat = new_m / (1 - Pow(beta1, new_t));
             VariableNode v_hat = new_v / (1 - Pow(beta2, new_t));
 
-            VariableNode new_value = Value - alpha * m_hat * Rsqrt(v_hat + Eps);
+            VariableNode diff_value = - alpha * m_hat * Rsqrt(v_hat + Eps);
+
+            (VariableNode new_value, VariableNode new_kahan_c) = KahanSum(Value, diff_value, kahan_c);
 
             new_m.Update(m);
             new_v.Update(v);
@@ -85,8 +89,9 @@ namespace TensorShader.Updaters.OptimizeMethod {
             new_t.Update(t);
 
             new_value.Update(Value);
+            new_kahan_c.Update(kahan_c);
 
-            return Flow.FromInputs(Value, Grad, m, v, t, alpha, beta1, beta2);
+            return Flow.FromInputs(Value, Grad, m, v, t, kahan_c, alpha, beta1, beta2);
         }
 
         /// <summary>内部状態</summary>
@@ -96,6 +101,7 @@ namespace TensorShader.Updaters.OptimizeMethod {
                     { "m", m.Tensor },
                     { "v", v.Tensor },
                     { "t", t.Tensor },
+                    { "kahan_c", kahan_c.Tensor },
                     { "alpha", alpha.Tensor },
                     { "beta1", beta1.Tensor },
                     { "beta2", beta2.Tensor },
@@ -110,6 +116,7 @@ namespace TensorShader.Updaters.OptimizeMethod {
             m.Tensor.Zeroset();
             v.Tensor.Zeroset();
             t.Tensor.Zeroset();
+            kahan_c.Tensor.Zeroset();
         }
     }
 }
