@@ -50,6 +50,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             string code = $@"
 
             {Defines.FloatFloatFma}
+            {Defines.Prefetch}
             {Defines.StoreFloatSharedMemory(elemsize: 1, InChannels, ThreadsX)}
 
             __global__ void convolution_2d(const float* __restrict__ inmap, float* __restrict__ outmap, const float* __restrict__ filter,

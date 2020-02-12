@@ -171,6 +171,25 @@ namespace TensorShaderCudaBackend {
                 }
             }
 
+            /// <summary>プリフェッチ命令</summary>
+            public static string Prefetch => 
+            $@"
+            static __inline__ __device__ void __prefetch_global_l1(const void* const ptr){{
+                asm(""prefetch.global.L1 [%0];"" : : ""l""(ptr));
+            }}
+
+            static __inline__ __device__ void __prefetch_global_l2(const void* const ptr){{
+                asm(""prefetch.global.L2 [%0];"" : : ""l""(ptr));
+            }}
+
+            static __inline__ __device__ void __prefetch_local_l1(const void* const ptr){{
+                asm(""prefetch.local.L1 [%0];"" : : ""l""(ptr));
+            }}
+
+            static __inline__ __device__ void __prefetch_local_l2(const void* const ptr){{
+                asm(""prefetch.local.L2 [%0];"" : : ""l""(ptr));
+            }}";
+
             /// <summary>複素数</summary>
             public static class Complex {
                 /// <summary>カーネル積</summary>
