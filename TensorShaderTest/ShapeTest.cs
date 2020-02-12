@@ -7,7 +7,7 @@ namespace TensorShaderTest {
     public class ShapeTest {
         [TestMethod]
         public void ScalarTest() {
-            Shape shape = Shape.Scalar();
+            Shape shape = Shape.Scalar;
 
             Assert.AreEqual(ShapeType.Scalar, shape.Type, "mismatch type");
             Assert.AreEqual(0, shape.Ndim, "mismatch ndim");
@@ -23,7 +23,7 @@ namespace TensorShaderTest {
             Assert.AreEqual(1, shape.Batch, "mismatch batch");
             Assert.AreEqual("()", shape.ToString(), "mismatch string");
 
-            Assert.IsTrue(shape == Shape.Scalar(), "notequal shape");
+            Assert.IsTrue(shape == Shape.Scalar, "notequal shape");
         }
 
         [TestMethod]
@@ -232,14 +232,14 @@ namespace TensorShaderTest {
         public void CompareTest() {
             Shape[] shapelist1 = {
                 null,
-                Shape.Scalar(), Shape.Vector(5),
+                Shape.Scalar, Shape.Vector(5),
                 Shape.Map1D(3, 5), Shape.Map2D(3, 3, 5), Shape.Map3D(3, 3, 3, 5),
                 Shape.Kernel0D(3, 5), Shape.Kernel1D(3, 3, 5), Shape.Kernel2D(3, 3, 5, 5), Shape.Kernel3D(3, 3, 5, 7, 5),
             };
 
             Shape[] shapelist2 = {
                 null,
-                Shape.Scalar(), Shape.Vector(5),
+                Shape.Scalar, Shape.Vector(5),
                 Shape.Map1D(3, 5), Shape.Map2D(3, 3, 5), Shape.Map3D(3, 3, 3, 5),
                 Shape.Kernel0D(3, 5), Shape.Kernel1D(3, 3, 5), Shape.Kernel2D(3, 3, 5, 5), Shape.Kernel3D(3, 3, 5, 7, 5),
             };

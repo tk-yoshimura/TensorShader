@@ -11,7 +11,7 @@ namespace MNIST {
         public int Count { private set; get; }
 
         public MnistLabelsLoader(string filepath, int num_batches, int count)
-            : base(Shape.Scalar(), num_batches) {
+            : base(Shape.Scalar, num_batches) {
             byte[] filedata = null;
 
             using (var stream = new FileStream(filepath, FileMode.Open)) {

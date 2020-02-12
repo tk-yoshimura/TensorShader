@@ -45,8 +45,8 @@ namespace TensorShader.Updaters.OptimizeMethod {
             : base(parameter) {
             this.m = new InputNode(new Tensor(parameter.Shape));
 
-            this.lambda = new InputNode(new Tensor(Shape.Scalar(), new float[] { lambda }));
-            this.rho = new InputNode(new Tensor(Shape.Scalar(), new float[] { rho }));
+            this.lambda = new InputNode(new Tensor(Shape.Scalar, new float[] { lambda }));
+            this.rho = new InputNode(new Tensor(Shape.Scalar, new float[] { rho }));
 
             this.Eps = eps;
 

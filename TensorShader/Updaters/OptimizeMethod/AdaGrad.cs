@@ -31,7 +31,7 @@ namespace TensorShader.Updaters.OptimizeMethod {
         public AdaGrad(ParameterField parameter, float lambda = 0.01f, float eps = 1e-5f)
             : base(parameter) {
             this.v = new InputNode(new Tensor(parameter.Shape));
-            this.lambda = new InputNode(new Tensor(Shape.Scalar(), new float[] { lambda }));
+            this.lambda = new InputNode(new Tensor(Shape.Scalar, new float[] { lambda }));
 
             this.Eps = eps;
 

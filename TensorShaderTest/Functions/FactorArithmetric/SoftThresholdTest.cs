@@ -24,7 +24,7 @@ namespace TensorShaderTest.Functions.FactorArithmetric {
 
             {
                 Tensor t1 = new Tensor(Shape.Map1D(ch, length), x1);
-                Tensor t2 = new Tensor(Shape.Scalar(), coef);
+                Tensor t2 = new Tensor(Shape.Scalar, coef);
 
                 Tensor o = Tensor.SoftThreshold(t1, t2);
 
@@ -32,8 +32,8 @@ namespace TensorShaderTest.Functions.FactorArithmetric {
             }
 
             {
-                Tensor t1 = new Tensor(Shape.Scalar(), x2);
-                Tensor t2 = new Tensor(Shape.Scalar(), coef);
+                Tensor t1 = new Tensor(Shape.Scalar, x2);
+                Tensor t2 = new Tensor(Shape.Scalar, coef);
 
                 Tensor o = Tensor.SoftThreshold(t1, t2);
 
@@ -41,7 +41,7 @@ namespace TensorShaderTest.Functions.FactorArithmetric {
             }
 
             {
-                Tensor t1 = new Tensor(Shape.Scalar(), x2);
+                Tensor t1 = new Tensor(Shape.Scalar, x2);
 
                 Tensor o = Tensor.SoftThreshold(t1, t1);
 
@@ -50,7 +50,7 @@ namespace TensorShaderTest.Functions.FactorArithmetric {
 
             {
                 InputNode t1 = new Tensor(Shape.Map1D(ch, length), x1);
-                InputNode t2 = new Tensor(Shape.Scalar(), coef);
+                InputNode t2 = new Tensor(Shape.Scalar, coef);
 
                 var n1 = t1 + 0;
                 var n2 = t2 + 0;
@@ -64,8 +64,8 @@ namespace TensorShaderTest.Functions.FactorArithmetric {
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Scalar(), x2);
-                InputNode t2 = new Tensor(Shape.Scalar(), coef);
+                InputNode t1 = new Tensor(Shape.Scalar, x2);
+                InputNode t2 = new Tensor(Shape.Scalar, coef);
 
                 var n1 = t1 + 0;
                 var n2 = t2 + 0;
@@ -79,7 +79,7 @@ namespace TensorShaderTest.Functions.FactorArithmetric {
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Scalar(), x2);
+                InputNode t1 = new Tensor(Shape.Scalar, x2);
 
                 var n1 = t1 + 0;
 

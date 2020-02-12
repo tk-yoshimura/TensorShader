@@ -13,7 +13,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
             Random rd = new Random(1234);
 
             List<Shape> shapes = new List<Shape> {
-                Shape.Scalar(),
+                Shape.Scalar,
                 Shape.Vector(1), Shape.Vector(2),
                 Shape.Map0D(1, 1), Shape.Map0D(2, 1), Shape.Map0D(1, 3), Shape.Map0D(2, 3),
                 Shape.Map1D(1, 1, 1), Shape.Map1D(2, 1, 1), Shape.Map1D(1, 3, 1), Shape.Map1D(2, 3, 1),

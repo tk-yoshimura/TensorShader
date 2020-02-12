@@ -56,11 +56,11 @@ namespace TensorShader.Updaters.OptimizeMethod {
             this.m = new InputNode(new Tensor(parameter.Shape));
             this.v = new InputNode(new Tensor(parameter.Shape));
 
-            this.t = new InputNode(new Tensor(Shape.Scalar()));
+            this.t = new InputNode(new Tensor(Shape.Scalar));
 
-            this.alpha = new InputNode(new Tensor(Shape.Scalar(), new float[] { alpha }));
-            this.beta1 = new InputNode(new Tensor(Shape.Scalar(), new float[] { beta1 }));
-            this.beta2 = new InputNode(new Tensor(Shape.Scalar(), new float[] { beta2 }));
+            this.alpha = new InputNode(new Tensor(Shape.Scalar, new float[] { alpha }));
+            this.beta1 = new InputNode(new Tensor(Shape.Scalar, new float[] { beta1 }));
+            this.beta2 = new InputNode(new Tensor(Shape.Scalar, new float[] { beta2 }));
 
             this.Eps = eps;
 

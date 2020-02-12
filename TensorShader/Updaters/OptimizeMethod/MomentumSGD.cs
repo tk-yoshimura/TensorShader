@@ -35,8 +35,8 @@ namespace TensorShader.Updaters.OptimizeMethod {
         public MomentumSGD(ParameterField parameter, float lambda = 0.01f, float alpha = 0.9f)
             : base(parameter) {
             this.m = new InputNode(new Tensor(parameter.Shape));
-            this.lambda = new InputNode(new Tensor(Shape.Scalar(), new float[] { lambda }));
-            this.alpha = new InputNode(new Tensor(Shape.Scalar(), new float[] { alpha }));
+            this.lambda = new InputNode(new Tensor(Shape.Scalar, new float[] { lambda }));
+            this.alpha = new InputNode(new Tensor(Shape.Scalar, new float[] { alpha }));
 
             Initialize();
         }

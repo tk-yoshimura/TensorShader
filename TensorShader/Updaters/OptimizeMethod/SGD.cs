@@ -19,7 +19,7 @@ namespace TensorShader.Updaters.OptimizeMethod {
         /// <summary>コンストラクタ</summary>
         public SGD(ParameterField parameter, float lambda = 0.01f)
             : base(parameter) {
-            this.lambda = new InputNode(new Tensor(Shape.Scalar(), new float[] { lambda }));
+            this.lambda = new InputNode(new Tensor(Shape.Scalar, new float[] { lambda }));
         }
 
         /// <summary>更新フロー</summary>

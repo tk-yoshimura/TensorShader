@@ -10,7 +10,7 @@ namespace TensorShader.Operators.FactorArithmetric {
         public FactorArithmetric(Shape shape) {
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, shape),
-                (ArgumentType.In, Shape.Scalar()),
+                (ArgumentType.In, Shape.Scalar),
                 (ArgumentType.Out, shape),
             };
 
