@@ -141,7 +141,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
             uint outheight = inheight + 1 - KernelHeight;
 
             CudaArray<float> dfloat_filter =
-                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index: 0, InChannels * OutChannels * KernelWidth * KernelHeight * 8);
+                WorkspaceReserver<float>.Request(stream, inmap.DeviceID, index: 0, InChannels * OutChannels * KernelWidth * KernelHeight * 8);
             dfloat_filter.ZerosetAsync(stream, InChannels * OutChannels * KernelWidth * KernelHeight * 8);
 
             ulong mul_per_line = (ulong)InChannels * OutChannels * KernelWidth * KernelHeight * outwidth * 16;

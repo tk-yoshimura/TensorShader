@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace TensorShaderCudaBackend {
 
-    /// <summary>Cuda配列リザーバー</summary>
-    public static class CudaArrayReserver<T> where T : struct, IComparable {
+    /// <summary>作業領域リザーバー</summary>
+    public static class WorkspaceReserver<T> where T : struct, IComparable {
         private static volatile Dictionary<(Stream stream, int device_id, int index), CudaArray<T>> array_table;
 
         /// <summary>Cuda配列リクエスト</summary>

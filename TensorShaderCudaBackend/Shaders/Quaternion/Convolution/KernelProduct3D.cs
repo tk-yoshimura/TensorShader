@@ -148,7 +148,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             uint outdepth = indepth + 1 - KernelDepth;
 
             CudaArray<float> dfloat_filter =
-                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index: 0, InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * 8);
+                WorkspaceReserver<float>.Request(stream, inmap.DeviceID, index: 0, InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * 8);
             dfloat_filter.ZerosetAsync(stream, InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * 8);
 
             ulong mul_per_line = (ulong)InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * outwidth * 16;

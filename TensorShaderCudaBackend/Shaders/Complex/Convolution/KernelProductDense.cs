@@ -100,7 +100,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             uint batches = (args[3] as uint?).Value;
 
             CudaArray<float> dfloat_filter =
-                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index: 0, InChannels * OutChannels * 4);
+                WorkspaceReserver<float>.Request(stream, inmap.DeviceID, index: 0, InChannels * OutChannels * 4);
             dfloat_filter.ZerosetAsync(stream, InChannels * OutChannels * 4);
 
             Kernel.Execute(

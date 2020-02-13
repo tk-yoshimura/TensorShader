@@ -95,7 +95,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             uint batches = (args[3] as uint?).Value;
 
             CudaArray<float> transpose_filter =
-                CudaArrayReserver<float>.Request(stream, filter.DeviceID, index: 0, InChannels * OutChannels * 2);
+                WorkspaceReserver<float>.Request(stream, filter.DeviceID, index: 0, InChannels * OutChannels * 2);
 
             TransposeComplexKernelChannel(InChannels * 2, OutChannels * 2, 1u, filter, transpose_filter, stream);
 

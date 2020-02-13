@@ -110,7 +110,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
             uint outwidth = inwidth + 1 - KernelWidth;
 
             CudaArray<float> transpose_filter =
-                CudaArrayReserver<float>.Request(stream, filter.DeviceID, index: 0, InChannels * OutChannels * KernelWidth * 4);
+                WorkspaceReserver<float>.Request(stream, filter.DeviceID, index: 0, InChannels * OutChannels * KernelWidth * 4);
 
             TransposeQuaternionKernelChannel(InChannels * 4, OutChannels * 4, KernelWidth, filter, transpose_filter, stream);
 

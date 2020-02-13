@@ -95,7 +95,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution {
             uint batches = (args[3] as uint?).Value;
 
             CudaArray<float> transpose_filter =
-                CudaArrayReserver<float>.Request(stream, filter.DeviceID, index: 0, InChannels * OutChannels * 4);
+                WorkspaceReserver<float>.Request(stream, filter.DeviceID, index: 0, InChannels * OutChannels * 4);
 
             TransposeQuaternionKernelChannel(InChannels * 4, OutChannels * 4, 1u, filter, transpose_filter, stream);
 

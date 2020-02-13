@@ -132,7 +132,7 @@
     <Compile Include="API\Nvrtc\NvrtcCompileOptions.cs" />
     <Compile Include="API\Nvrtc\NvrtcNativeMethods.cs" />
     <Compile Include="API\Nvrtc\NvrtcResult.cs" />
-    <Compile Include="CudaArrayReserver.cs" />
+    <Compile Include="WorkspaceReserver.cs" />
     <Compile Include="CudaException.cs" />
     <Compile Include="Limits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

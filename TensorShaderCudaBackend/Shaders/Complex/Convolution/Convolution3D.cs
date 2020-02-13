@@ -140,7 +140,7 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution {
             uint lines_per_execute = (uint)(MulPerExecute / mul_per_line + 1);
 
             CudaArray<float> transpose_filter =
-                CudaArrayReserver<float>.Request(stream, filter.DeviceID, index: 0, InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * 2);
+                WorkspaceReserver<float>.Request(stream, filter.DeviceID, index: 0, InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * 2);
 
             TransposeComplexKernelChannel(InChannels * 2, OutChannels * 2, KernelWidth * KernelHeight * KernelDepth, filter, transpose_filter, stream);
 

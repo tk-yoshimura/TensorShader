@@ -124,7 +124,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
             uint outwidth = inwidth + 1 - KernelWidth;
 
             CudaArray<float> dfloat_filter =
-                CudaArrayReserver<float>.Request(stream, inmap.DeviceID, index: 0, InChannels * OutChannels * KernelWidth * 8);
+                WorkspaceReserver<float>.Request(stream, inmap.DeviceID, index: 0, InChannels * OutChannels * KernelWidth * 8);
             dfloat_filter.ZerosetAsync(stream, InChannels * OutChannels * KernelWidth * 8);
 
             uint xsets = (outwidth + BatchPixels - 1) / BatchPixels;

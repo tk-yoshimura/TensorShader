@@ -102,7 +102,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             uint outwidth = inwidth + 1 - KernelWidth;
 
             CudaArray<float> transpose_filter =
-                CudaArrayReserver<float>.Request(stream, filter.DeviceID, index: 0, InChannels * OutChannels * KernelWidth);
+                WorkspaceReserver<float>.Request(stream, filter.DeviceID, index: 0, InChannels * OutChannels * KernelWidth);
 
             TransposeKernelChannel(InChannels, OutChannels, KernelWidth, filter, transpose_filter, stream);
 
