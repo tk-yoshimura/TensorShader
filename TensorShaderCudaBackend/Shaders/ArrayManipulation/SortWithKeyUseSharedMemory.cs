@@ -7,8 +7,7 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
     public sealed class SortWithKeyUseSharedMemory : Shader {
 
         /// <summary>最大軸長さ</summary>
-        public static uint MaxAxisLength =>
-            (uint)(API.Cuda.CurrectDeviceProperty.SharedMemoryBytesPerBlock - 256) / sizeof(float) / 2;
+        public static uint MaxAxisLength => Limits.MaxSharedMemoryLength / 2;
 
         /// <summary>識別子</summary>
         public override sealed string Signature => $"{GetType().Name.Split(',').Last()}";

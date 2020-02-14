@@ -24,6 +24,10 @@
         /// <summary>カーネルサイズ(512)</summary>
         public static uint KernelSize => 512;
 
+        /// <summary>最大共有メモリ要素数</summary>
+        public static uint MaxSharedMemoryLength =>
+            (uint)(API.Cuda.CurrectDeviceProperty.SharedMemoryBytesPerBlock - 256) / sizeof(float);
+
         /// <summary>チャネル数チェック</summary>
         public static bool CheckChannels(params uint[] channels) {
             foreach (uint ch in channels) {

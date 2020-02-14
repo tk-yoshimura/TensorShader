@@ -112,11 +112,12 @@ namespace TensorShaderCudaBackend {
             }}";
 
             /// <summary>シェアードメモリへ格納</summary>
-            public static string StoreFloatSharedMemory(uint elemsize, uint elements, uint threads) {
+            public static string StoreFloatSharedMemory(uint elemsize, uint elements, uint threads, string identifier = null) {
                 string elem = elemsize > 1 ? $"float{elemsize}" : "float";
                 uint length = elements * elemsize;
 
-                string declare = $"static __inline__ __device__ void store_smem(const {elem}* __restrict__ ptr, {elem} *smem, unsigned int thread_idx)";
+                string declare = $"static __inline__ __device__ void store_smem{(string.IsNullOrEmpty(identifier) ? string.Empty : $"_{identifier}")}" +
+                                 $"(const {elem}* __restrict__ ptr, {elem} *smem, unsigned int thread_idx)";
 
                 string repointer = @"
                         const float* __restrict__ ptr_const = (const float* __restrict__)ptr;
