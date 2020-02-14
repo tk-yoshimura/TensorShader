@@ -2,19 +2,22 @@ using System.Collections.Generic;
 
 namespace TensorShader.Operators.TrinaryArithmetric {
     /// <summary>定数3項演算</summary>
-    internal abstract class TrinaryConstantArithmetric : Operator {
+    internal abstract class TrinaryUniConstantArithmetric : Operator {
         /// <summary>マップ形状</summary>
         public Shape Shape { private set; get; }
 
+        /// <summary>定数項</summary>
+        protected readonly float Constant;
+
         /// <summary>コンストラクタ</summary>
-        public TrinaryConstantArithmetric(Shape shape) {
+        public TrinaryUniConstantArithmetric(float c, Shape shape) {
             this.arguments = new List<(ArgumentType type, Shape shape)>{
-                (ArgumentType.In, Shape.Scalar),
-                (ArgumentType.In, Shape.Scalar),
+                (ArgumentType.In, shape),
                 (ArgumentType.In, shape),
                 (ArgumentType.Out, shape),
             };
 
+            this.Constant = c;
             this.Shape = shape;
         }
 

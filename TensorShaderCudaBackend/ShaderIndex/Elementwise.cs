@@ -70,6 +70,14 @@ namespace TensorShaderCudaBackend {
             return shaders[name];
         }
 
+        private static Shader TrinaryUniFactorArithmetric(string name, string func) {
+            if (!shaders.ContainsKey(name)) {
+                shaders.Add(name, new Shaders.Elementwise.TrinaryUniFactorArithmetric(name, func));
+            }
+
+            return shaders[name];
+        }
+
         /// <summary>加算</summary>
         public static void Add(uint length, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst, Stream stream = null) {
             Shader shader = BinaryArithmetric("add_ew", "#y = #x1 + #x2;");
@@ -1166,7 +1174,7 @@ namespace TensorShaderCudaBackend {
         }
 
         /// <summary>指数付き3項演算</summary>
-        public static void TrinaryBiFactorArithmetric(uint length, float c1, float c2, CudaArray<float> src, CudaArray<float> dst,
+        public static void TrinaryBiFactorArithmetric(uint length, CudaArray<float> c1, CudaArray<float> c2, CudaArray<float> src, CudaArray<float> dst,
                                                       string name, string func, Stream stream = null) {
 
             Shader shader = TrinaryBiFactorArithmetric("custom_" + name, func);
@@ -1183,6 +1191,19 @@ namespace TensorShaderCudaBackend {
                                                          string name, string func, Stream stream = null) {
 
             Shader shader = TrinaryUniConstantArithmetric("custom_" + name, func);
+
+            if (stream == null) {
+                stream = Shader.DefaultStream;
+            }
+
+            shader.Execute(stream, c, src1, src2, dst, length);
+        }
+
+        /// <summary>指数付き3項演算</summary>
+        public static void TrinaryUniFactorArithmetric(uint length, CudaArray<float> c, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst,
+                                                         string name, string func, Stream stream = null) {
+
+            Shader shader = TrinaryUniFactorArithmetric("custom_" + name, func);
 
             if (stream == null) {
                 stream = Shader.DefaultStream;

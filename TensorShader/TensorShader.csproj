@@ -267,6 +267,9 @@
     <Compile Include="Functions\RandomGeneration\UniformRandom.cs" />
     <Compile Include="Functions\Quaternion\QuaternionUnaryArithmetric\QuaternionSquash.cs" />
     <Compile Include="Functions\Quaternion\QuaternionUnaryArithmetric\QuaternionDecay.cs" />
+    <Compile Include="Functions\TrinaryArithmetric\Custom.cs" />
+    <Compile Include="Functions\TrinaryArithmetric\TrinaryBiConstantArithmetric.cs" />
+    <Compile Include="Functions\TrinaryArithmetric\TrinaryUniConstantArithmetric.cs" />
     <Compile Include="Functions\TrinaryArithmetric\TrinaryArithmetric.cs" />
     <Compile Include="Functions\TrinaryArithmetric\Clamp.cs" />
     <Compile Include="Functions\Trivector\TrivectorBinaryArithmetric\TrivectorNormalizeGrad.cs" />
@@ -566,6 +569,8 @@
     <Compile Include="Links\RandomGeneration\BinaryRandom.cs" />
     <Compile Include="Links\RandomGeneration\NormalRandom.cs" />
     <Compile Include="Links\RandomGeneration\UniformRandom.cs" />
+    <Compile Include="Links\TrinaryArithmetric\Clamp.cs" />
+    <Compile Include="Links\TrinaryArithmetric\TrinaryArithmetric.cs" />
     <Compile Include="Links\Trivector\TrivectorArithmetric\TrivectorBinaryArithmetric\TrivectorCross.cs" />
     <Compile Include="Links\Trivector\TrivectorArithmetric\TrivectorUnaryArithmetric\TrivectorNormalize.cs" />
     <Compile Include="Links\Trivector\TrivectorArithmetric\TrivectorUnaryArithmetric\TrivectorSquash.cs" />
@@ -583,6 +588,7 @@
     <Compile Include="Links\Trivector\TrivectorCast\TrivectorX.cs" />
     <Compile Include="Links\Trivector\TrivectorCast\TrivectorCast.cs" />
     <Compile Include="Links\UnaryArithmetric\Arccos.cs" />
+    <Compile Include="Links\UnaryArithmetric\Clamp.cs" />
     <Compile Include="Links\UnaryArithmetric\LogCosh.cs" />
     <Compile Include="Links\UnaryArithmetric\Cosh.cs" />
     <Compile Include="Links\UnaryArithmetric\Exp2.cs" />
@@ -852,8 +858,12 @@
     <Compile Include="Operators\Connection2D\Zoom\NeighborZoom.cs" />
     <Compile Include="Operators\Connection2D\Zoom\Zoom.cs" />
     <Compile Include="Operators\TrinaryArithmetric\Clamp.cs" />
+    <Compile Include="Operators\TrinaryArithmetric\Custom.cs" />
     <Compile Include="Operators\TrinaryArithmetric\TrinaryArithmetric.cs" />
-    <Compile Include="Operators\TrinaryArithmetric\TrinaryConstantArithmetric.cs" />
+    <Compile Include="Operators\TrinaryArithmetric\TrinaryBiConstantArithmetric.cs" />
+    <Compile Include="Operators\TrinaryArithmetric\TrinaryUniConstantArithmetric.cs" />
+    <Compile Include="Operators\TrinaryArithmetric\TrinaryUniFactorArithmetric.cs" />
+    <Compile Include="Operators\TrinaryArithmetric\TrinaryBiFactorArithmetric.cs" />
     <Compile Include="Operators\Trivector\TrivectorArithmetric\TrivectorBinaryArithmetric\TrivectorBinaryArithmetric.cs" />
     <Compile Include="Operators\Trivector\TrivectorArithmetric\TrivectorBinaryArithmetric\TrivectorDecayGrad.cs" />
     <Compile Include="Operators\Trivector\TrivectorArithmetric\TrivectorBinaryArithmetric\TrivectorCross.cs" />
