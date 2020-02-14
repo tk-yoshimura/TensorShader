@@ -34,7 +34,7 @@ namespace MNIST {
             VariableField t = new Tensor(Shape.Vector(loader.NumBatches));
 
             Console.WriteLine("Build model...");
-            Field y = CNN.Forward(x, classes);
+            Field y = Model.CNN(x, classes);
             StoreField acc = Accuracy(y, t);
             Field loss = Sum(
                     SoftmaxCrossEntropy(y, OneHotVector(t, classes)),

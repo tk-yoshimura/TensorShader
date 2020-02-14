@@ -4,8 +4,8 @@ using TensorShader.Layers;
 using static TensorShader.Field;
 
 namespace MNIST {
-    public static class CNN {
-        public static Field Forward(Field x, int classes) {
+    public static class Model {
+        public static Field CNN(Field x, int classes) {
             Convolution2D conv1 =
                 new Convolution2D(
                     inchannels: 1, outchannels: 4,

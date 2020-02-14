@@ -54,7 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CNN.cs" />
+    <Compile Include="Model.cs" />
     <Compile Include="MnistDownloader.cs" />
     <Compile Include="MnistLabelsLoader.cs" />
     <Compile Include="MnistImagesLoader.cs" />
