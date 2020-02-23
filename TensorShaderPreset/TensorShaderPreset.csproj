@@ -51,13 +51,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Image\Block\YamataniConvolution.cs" />
     <Compile Include="Image\Layer\Filter_SpatialFilter.cs" />
     <Compile Include="Image\Layer\Filter_Sobel.cs" />
     <Compile Include="Image\Layer\Convert_RGBtoYUV.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Image\Block\" />
     <Folder Include="Image\Model\" />
     <Folder Include="Wave\Block\" />
     <Folder Include="Wave\Layer\" />
