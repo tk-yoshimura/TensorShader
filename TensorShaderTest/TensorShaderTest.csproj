@@ -192,6 +192,7 @@
     <Compile Include="Links\ArrayManipulation\ReshapeTest.cs" />
     <Compile Include="Links\ArrayManipulation\BroadcastTest.cs" />
     <Compile Include="Links\BinaryArithmetric\Arctan2Test.cs" />
+    <Compile Include="Links\BinaryArithmetric\YamataniTest.cs" />
     <Compile Include="Links\BinaryArithmetric\LibitAbsTest.cs" />
     <Compile Include="Links\BinaryArithmetric\MinimumTest.cs" />
     <Compile Include="Links\BinaryArithmetric\MaximumTest.cs" />

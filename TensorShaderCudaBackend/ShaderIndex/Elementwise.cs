@@ -1067,6 +1067,34 @@ namespace TensorShaderCudaBackend {
             shader.Execute(stream, srccondition, src1, src2, dst, length);
         }
 
+        /// <summary>Yamatani</summary>
+        public static void Yamatani(uint length, float slope, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst, Stream stream = null) {
+            Shader shader = TrinaryUniConstantArithmetric(
+                "yamatani_ew", 
+                "#y = c * (#x1 + #x2) + ((#x1 > 0 && #x2 > 0) ? fminf(#x1, #x2) : ((#x1 < 0 && #x2 < 0) ? fmaxf(#x1, #x2) : 0.0));"
+            );
+
+            if (stream == null) {
+                stream = Shader.DefaultStream;
+            }
+
+            shader.Execute(stream, slope, src1, src2, dst, length);
+        }
+
+        /// <summary>Yamatani勾配</summary>
+        public static void YamataniGrad(uint length, float slope, CudaArray<float> src1, CudaArray<float> src2, CudaArray<float> dst, Stream stream = null) {
+            Shader shader = TrinaryUniConstantArithmetric(
+                "yamatanigrad_ew", 
+                "#y = c + ((#x1 > 0 && #x2 > 0) ? (#x1 <= #x2 ? 1.0 : 0.0) : ((#x1 < 0 && #x2 < 0) ? (#x1 >= #x2 ? 1.0 : 0.0) : 0.0));"
+            );
+
+            if (stream == null) {
+                stream = Shader.DefaultStream;
+            }
+
+            shader.Execute(stream, slope, src1, src2, dst, length);
+        }
+
         /// <summary>テンソル和</summary>
         public static void Sum(uint length, CudaArray<float>[] src, CudaArray<float> dst, Stream stream = null) {
             int n = src.Length;

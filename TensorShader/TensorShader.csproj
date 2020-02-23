@@ -267,6 +267,8 @@
     <Compile Include="Functions\RandomGeneration\UniformRandom.cs" />
     <Compile Include="Functions\Quaternion\QuaternionUnaryArithmetric\QuaternionSquash.cs" />
     <Compile Include="Functions\Quaternion\QuaternionUnaryArithmetric\QuaternionDecay.cs" />
+    <Compile Include="Functions\TrinaryArithmetric\YamataniGrad.cs" />
+    <Compile Include="Functions\TrinaryArithmetric\Yamatani.cs" />
     <Compile Include="Functions\TrinaryArithmetric\Custom.cs" />
     <Compile Include="Functions\TrinaryArithmetric\TrinaryBiConstantArithmetric.cs" />
     <Compile Include="Functions\TrinaryArithmetric\TrinaryUniConstantArithmetric.cs" />
@@ -430,6 +432,7 @@
     <Compile Include="Links\ArrayManipulation\Where.cs" />
     <Compile Include="Links\ArrayManipulation\Reshape.cs" />
     <Compile Include="Links\BinaryArithmetric\Arctan2.cs" />
+    <Compile Include="Links\BinaryArithmetric\Yamatani.cs" />
     <Compile Include="Links\BinaryArithmetric\LimitAbs.cs" />
     <Compile Include="Links\BinaryArithmetric\Minimum.cs" />
     <Compile Include="Links\BinaryArithmetric\Maximum.cs" />
@@ -857,6 +860,8 @@
     <Compile Include="Operators\Connection2D\Zoom\LinearZoom.cs" />
     <Compile Include="Operators\Connection2D\Zoom\NeighborZoom.cs" />
     <Compile Include="Operators\Connection2D\Zoom\Zoom.cs" />
+    <Compile Include="Operators\TrinaryArithmetric\YamataniGrad.cs" />
+    <Compile Include="Operators\TrinaryArithmetric\Yamatani.cs" />
     <Compile Include="Operators\TrinaryArithmetric\Clamp.cs" />
     <Compile Include="Operators\TrinaryArithmetric\Custom.cs" />
     <Compile Include="Operators\TrinaryArithmetric\TrinaryArithmetric.cs" />
