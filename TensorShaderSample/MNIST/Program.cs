@@ -8,6 +8,7 @@ using TensorShader;
 using TensorShader.Initializers;
 using TensorShader.Updaters.OptimizeMethod;
 using TensorShader.Updaters.WeightDecay;
+using TensorShaderUtil.GraphVisualization;
 using TensorShaderUtil.Iterator;
 using TensorShaderUtil.SnapshotSaver;
 using static TensorShader.Field;
@@ -41,6 +42,9 @@ namespace MNIST {
                     Axis.Map0D.Channels
                 );
             StoreField avg_loss = Average(loss);
+
+            Console.WriteLine("Visualize computation graph...");
+            Graph.WriteDotFile("graph.dot", loss, acc);
 
             Console.WriteLine("Set iterator event...");
             train_iterator.IncreasedEpoch += (iter) => {
