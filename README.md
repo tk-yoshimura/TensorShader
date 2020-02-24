@@ -66,6 +66,8 @@ CUDA 10.*, Compute Capability 5.0+
   - SGD MomentumSGD NesterovAG AdaGrad AdaDelta Adam Adamax RMSprop RMSpropGraves Nadam
 - **Random Generation**
   - Uniform Normal BernoulliBinary
+- **Experimentals**
+  - Yamatani Activation
 
 See also... 
 - [Links](https://github.com/tk-yoshimura/TensorShader/tree/master/TensorShader/Links)
