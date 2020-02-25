@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using TensorShader;
-using TensorShaderUtil;
 using TensorShader.Updaters.OptimizeMethod;
-using static TensorShader.Field;
+using TensorShaderUtil;
 using TensorShaderUtil.ParameterUtil;
+using static TensorShader.Field;
 
 namespace SinRegression {
     class Program {
