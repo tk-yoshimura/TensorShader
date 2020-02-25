@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using TensorShader;
 using TensorShader.Updaters.OptimizeMethod;
 using TensorShaderUtil.ParameterUtil;
@@ -39,6 +40,12 @@ namespace TensorShaderUtilTest.ParameterUtil {
             Assert.AreEqual(5e-4f, adam1.Alpha);
             Assert.AreEqual(5e-4f, adam2.Alpha);
             Assert.AreEqual(5e-4f, adam3.Alpha);
+
+            adam1.Alpha = 1e-3f;
+
+            Assert.ThrowsException<ArgumentException>(() => { 
+                _ = adam_alpha.Value;
+            });
         }
     }
 }
