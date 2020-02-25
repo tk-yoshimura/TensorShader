@@ -4,6 +4,7 @@ using TensorShader;
 using TensorShaderUtil;
 using TensorShader.Updaters.OptimizeMethod;
 using static TensorShader.Field;
+using TensorShaderUtil.ParameterUtil;
 
 namespace SinRegression {
     class Program {
@@ -35,8 +36,8 @@ namespace SinRegression {
             StoreField sum_err = Sum(err);
 
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
-            float adam_alpha = 1e-2f;
-            parameters.AddUpdater((parameter) => new Adam(parameter, adam_alpha));
+            parameters.AddUpdater((parameter) => new Adam(parameter, 1e-2f));
+            ParametersValue<float> adam_alpha = new ParametersValue<float>(parameters, "Adam.Alpha");
 
             for (int i = 0; i < loops; i++) {
                 flow.Execute();
@@ -48,7 +49,7 @@ namespace SinRegression {
                     $"p5:{p5.State[0]:E5}, " +
                     $"p7:{p7.State[0]:E5}");
 
-                parameters["Adam.Alpha"] = adam_alpha *= 0.999f;
+                adam_alpha.Value *= 0.999f;
             }
 
             Console.WriteLine("END");
