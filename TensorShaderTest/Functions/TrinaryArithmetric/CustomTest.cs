@@ -75,9 +75,9 @@ namespace TensorShaderTest.Functions.TrinaryArithmetric {
 
             {
                 InputNode t1 = new Tensor(Shape.Vector(length), x1);
-                
+
                 var n1 = t1 + 0;
-                
+
                 OutputNode o = VariableNode.TrinaryBiConstantArithmetric(4, 5, n1, "trinarybiconst_test", "#y = c * (#x + c2);").Save();
 
                 Flow flow = Flow.FromOutputs(o);
@@ -118,9 +118,9 @@ namespace TensorShaderTest.Functions.TrinaryArithmetric {
 
             {
                 InputNode t1 = new Tensor(Shape.Vector(length), x1);
-                
+
                 var n1 = t1 + 0;
-                
+
                 OutputNode o = VariableNode.TrinaryBiConstantArithmetric(8, 10, n1, "trinarybiconst_test", "#y = c * (#x + c2);").Save();
 
                 Flow flow = Flow.FromOutputs(o);

@@ -35,6 +35,6 @@ using System.Runtime.InteropServices;
 // すべての値を指定するか、次を使用してビルド番号とリビジョン番号を既定に設定できます
 // 既定値にすることができます:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("4.4.3.*")]
+[assembly: AssemblyVersion("4.4.4.*")]
 // 公開先のアセンブリを設定する。
 [assembly: InternalsVisibleTo("TensorShaderTest")]

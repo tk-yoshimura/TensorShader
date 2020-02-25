@@ -6,7 +6,7 @@ namespace TensorShader.Updaters.OptimizeMethod {
             : base(parameter) { }
 
         /// <summary>カハンの加算アルゴリズム</summary>
-        internal static (VariableNode new_x, VariableNode new_c) KahanSum(VariableNode x, VariableNode dx, VariableNode c) { 
+        internal static (VariableNode new_x, VariableNode new_c) KahanSum(VariableNode x, VariableNode dx, VariableNode c) {
             VariableNode y = dx - c;
             VariableNode t = x + y;
             VariableNode new_c = (t - x) - y;

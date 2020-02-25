@@ -78,7 +78,7 @@ namespace TensorShader.Updaters.OptimizeMethod {
 
             VariableNode m_hat = new_m / (1 - Pow(beta1, new_t));
 
-            VariableNode diff_value = - alpha * m_hat / (new_v + Eps);
+            VariableNode diff_value = -alpha * m_hat / (new_v + Eps);
 
             (VariableNode new_value, VariableNode new_kahan_c) = KahanSum(Value, diff_value, kahan_c);
 

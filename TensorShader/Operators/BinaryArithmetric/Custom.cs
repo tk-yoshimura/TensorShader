@@ -27,8 +27,8 @@ namespace TensorShader.Operators.BinaryArithmetric {
 
         /// <summary>コンストラクタ</summary>
         public CustomBinaryConstantArithmetric(float c, Shape shape, string funcname, string funccode)
-            : base(c, shape) { 
-        
+            : base(c, shape) {
+
             this.funcname = funcname;
             this.funccode = funccode;
         }

@@ -1,5 +1,3 @@
-using System;
-
 namespace TensorShader {
     public abstract partial class VariableNode {
         /// <summary>3項演算</summary>

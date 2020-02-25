@@ -26,7 +26,7 @@ namespace TensorShader.Links.UnaryArithmetric {
         /// <summary>コンストラクタ</summary>
         public Clamp(Field infield, Field outfield, float xmin, float xmax)
             : base(infield, outfield) {
-        
+
             this.Min = xmin;
             this.Max = xmax;
         }

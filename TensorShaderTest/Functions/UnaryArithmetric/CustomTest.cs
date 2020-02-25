@@ -26,7 +26,7 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
                 InputNode t = new Tensor(Shape.Vector(length), x);
 
                 var n = t + 0;
-                
+
                 OutputNode o = VariableNode.UnaryArithmetric(n, "unary_test", "#y = cosf(sinf(#x));").Save();
 
                 Flow flow = Flow.FromOutputs(o);

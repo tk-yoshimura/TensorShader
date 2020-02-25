@@ -12,7 +12,7 @@ namespace TensorShaderUtilTest {
 
             Assert.AreEqual(-2d, arr1.Value[0], 1e-8d);
             Assert.AreEqual(-1d, arr1.Value[1], 1e-8d);
-            Assert.AreEqual( 0d, arr1.Value[2], 1e-8d);
+            Assert.AreEqual(0d, arr1.Value[2], 1e-8d);
             Assert.AreEqual(+1d, arr1.Value[3], 1e-8d);
             Assert.AreEqual(+2d, arr1.Value[4], 1e-8d);
 
@@ -28,7 +28,7 @@ namespace TensorShaderUtilTest {
 
             Assert.AreEqual(-2f, arr3.Value[0], 1e-5f);
             Assert.AreEqual(-1f, arr3.Value[1], 1e-5f);
-            Assert.AreEqual( 0f, arr3.Value[2], 1e-5f);
+            Assert.AreEqual(0f, arr3.Value[2], 1e-5f);
             Assert.AreEqual(+1f, arr3.Value[3], 1e-5f);
             Assert.AreEqual(+2f, arr3.Value[4], 1e-5f);
 
@@ -49,7 +49,7 @@ namespace TensorShaderUtilTest {
 
             Assert.AreEqual(Math.Sin(-2d), arr2.Value[0]);
             Assert.AreEqual(Math.Sin(-1d), arr2.Value[1]);
-            Assert.AreEqual(Math.Sin( 0d), arr2.Value[2]);
+            Assert.AreEqual(Math.Sin(0d), arr2.Value[2]);
             Assert.AreEqual(Math.Sin(+1d), arr2.Value[3]);
             Assert.AreEqual(Math.Sin(+2d), arr2.Value[4]);
         }

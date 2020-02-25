@@ -53,7 +53,7 @@ namespace TensorShader.Updaters.OptimizeMethod {
         public override Flow UpdateFlow() {
             VariableNode new_m = m * alpha - lambda * Grad;
             VariableNode diff_value = alpha * alpha * new_m - (1 + alpha) * lambda * Grad;
-            
+
             (VariableNode new_value, VariableNode new_kahan_c) = KahanSum(Value, diff_value, kahan_c);
 
             new_m.Update(m);

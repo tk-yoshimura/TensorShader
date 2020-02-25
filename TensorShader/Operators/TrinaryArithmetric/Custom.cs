@@ -27,8 +27,8 @@ namespace TensorShader.Operators.TrinaryArithmetric {
 
         /// <summary>コンストラクタ</summary>
         public CustomTrinaryUniConstantArithmetric(float c, Shape shape, string funcname, string funccode)
-            : base(c, shape) { 
-        
+            : base(c, shape) {
+
             this.funcname = funcname;
             this.funccode = funccode;
         }
@@ -49,8 +49,8 @@ namespace TensorShader.Operators.TrinaryArithmetric {
 
         /// <summary>コンストラクタ</summary>
         public CustomTrinaryBiConstantArithmetric(float c1, float c2, Shape shape, string funcname, string funccode)
-            : base(c1, c2, shape) { 
-        
+            : base(c1, c2, shape) {
+
             this.funcname = funcname;
             this.funccode = funccode;
         }

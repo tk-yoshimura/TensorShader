@@ -66,8 +66,10 @@
     <Compile Include="Iterator\RepeatIteratorTest.cs" />
     <Compile Include="Iterator\ShuffleIteratorTest.cs" />
     <Compile Include="NdimArrayUtil\NdimArrayUtilTest.cs" />
+    <Compile Include="ParameterUtil\ParametersValueTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Crc32Test.cs" />
+    <Compile Include="ScheduleUtil\ConvergenceTesterTest.cs" />
     <Compile Include="SnapshotSaver\ZippedBinaryShapshotSaverTest.cs" />
     <Compile Include="SnapshotSaver\DefaultBinaryShapshotSaverTest.cs" />
   </ItemGroup>

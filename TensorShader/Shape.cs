@@ -153,7 +153,7 @@ namespace TensorShader {
 
         /// <summary>スカラー</summary>
         public static Shape Scalar => new Shape(ShapeType.Scalar);
-        
+
         /// <summary>ベクター</summary>
         public static Shape Vector(int channels) {
             return new Shape(ShapeType.Vector, channels);
