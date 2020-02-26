@@ -14,7 +14,7 @@ namespace TensorShaderUtil.SnapshotSaver {
         public Snapshot Load(string filepath) {
             Snapshot snapshot = null;
 
-            using (FileStream stream = new FileStream(filepath, FileMode.Open)) {
+            using (FileStream stream = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read)) {
                 snapshot = Load(stream);
             }
 
@@ -23,7 +23,7 @@ namespace TensorShaderUtil.SnapshotSaver {
 
         /// <summary>ファイル書き込み</summary>
         public void Save(string filepath, Snapshot snapshot) {
-            using (FileStream stream = new FileStream(filepath, FileMode.Create)) {
+            using (FileStream stream = new FileStream(filepath, FileMode.Create, FileAccess.Write, FileShare.None)) {
                 Save(stream, snapshot);
             }
         }

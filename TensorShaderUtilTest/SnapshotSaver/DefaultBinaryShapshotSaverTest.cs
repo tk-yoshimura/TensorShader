@@ -34,11 +34,16 @@ namespace TensorShaderUtilTest.SnapshotSaver {
             Assert.AreEqual(snapshot.Table["item2"].shape, snapshot2.Table["item2"].shape);
             CollectionAssert.AreEqual(snapshot.Table["item2"].state, snapshot2.Table["item2"].state);
 
-            using (var stream = new FileStream("debug.tss", FileMode.Create)) {
-                using (var writer = new BinaryWriter(stream)) {
-                    writer.Write(data);
-                }
-            }
+            saver.Save("debug.tss", snapshot);
+            Snapshot snapshot3 = saver.Load("debug.tss");
+
+            CollectionAssert.AreEquivalent(new string[] { "item1", "item2" }, snapshot3.Keys.ToArray());
+            Assert.AreEqual(snapshot.Table["item1"].shape, snapshot3.Table["item1"].shape);
+            CollectionAssert.AreEqual(snapshot.Table["item1"].state, snapshot3.Table["item1"].state);
+            Assert.AreEqual(snapshot.Table["item2"].shape, snapshot3.Table["item2"].shape);
+            CollectionAssert.AreEqual(snapshot.Table["item2"].state, snapshot3.Table["item2"].state);
+
+            File.Delete("debug.tss");
         }
     }
 }
