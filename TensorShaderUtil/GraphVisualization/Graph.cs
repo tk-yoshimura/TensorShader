@@ -12,6 +12,19 @@ namespace TensorShaderUtil.GraphVisualization {
 
             /// <summary>ノード名</summary>
             public string Name { set; get; }
+
+            /// <summary>ノードタイプ</summary>
+            public NodeType Type { set; get; }
+        }
+
+        /// <summary>ノードタイプ</summary>
+        public enum NodeType { 
+            /// <summary>未定義</summary>
+            Undefined,
+            /// <summary>フィールド</summary>
+            Field,
+            /// <summary>リンク</summary>
+            Link
         }
 
         /// <summary>エッジ</summary>
@@ -34,7 +47,7 @@ namespace TensorShaderUtil.GraphVisualization {
 
             Stack<Field> stack = new Stack<Field>(outputs);
             foreach (Field field in outputs) {
-                visited_field.Add(field, new Node() { ID = id++, Name = field.Name });
+                visited_field.Add(field, new Node() { ID = id++, Name = field.Name, Type = NodeType.Field });
             }
 
             while (stack.Count > 0) {
@@ -47,7 +60,7 @@ namespace TensorShaderUtil.GraphVisualization {
                 }
 
                 if (!visited_link.ContainsKey(link)) {
-                    visited_link.Add(link, new Node() { ID = id++, Name = link.Name });
+                    visited_link.Add(link, new Node() { ID = id++, Name = link.Name, Type = NodeType.Link });
                 }
 
                 edges.Add(new Edge() { InNode = visited_link[link], OutNode = visited_field[field_current] });
@@ -55,7 +68,7 @@ namespace TensorShaderUtil.GraphVisualization {
                 foreach (Field field in link.InFields) {
                     if (!visited_field.ContainsKey(field)) {
                         stack.Push(field);
-                        visited_field.Add(field, new Node() { ID = id++, Name = field.Name });
+                        visited_field.Add(field, new Node() { ID = id++, Name = field.Name, Type = NodeType.Field });
                     }
 
                     edges.Add(new Edge() { InNode = visited_field[field], OutNode = visited_link[link] });
