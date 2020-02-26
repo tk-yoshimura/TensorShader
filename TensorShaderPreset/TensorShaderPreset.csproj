@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Image\Block\YamataniConvolution.cs" />
+    <Compile Include="Image\Layer\Filter_Diff.cs" />
     <Compile Include="Image\Layer\Filter_SpatialFilter.cs" />
     <Compile Include="Image\Layer\Filter_Sobel.cs" />
     <Compile Include="Image\Layer\Convert_RGBtoYUV.cs" />
