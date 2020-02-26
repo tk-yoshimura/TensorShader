@@ -13,7 +13,7 @@ namespace TensorShaderPreset.Image {
                    +0.25f * scale, 0, -0.25f * scale,
                 };
 
-            return SpatialFilter(x, kwidth: 3, kheight: 3, kernel);
+            return SpatialFilter(x, kwidth: 3, kheight: 3, kernel, name: "SobelX");
         }
 
         /// <summary>Y方向ソーベルフィルタ</summary>
@@ -25,7 +25,7 @@ namespace TensorShaderPreset.Image {
                    -0.25f * scale, -0.50f * scale, -0.25f * scale,
                 };
 
-            return SpatialFilter(x, kwidth: 3, kheight: 3, kernel);
+            return SpatialFilter(x, kwidth: 3, kheight: 3, kernel, name: "SobelY");
         }
     }
 }
