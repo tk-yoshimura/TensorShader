@@ -11,12 +11,12 @@ namespace TensorShaderCudaBackend.API {
 #pragma warning disable IDE1006 // 命名スタイル
         private static class NativeMethods {
 
-#if PLATFORM_LINUX
+#if PLATFORM_WINDOWS
+            const string DllName = "nvcuda.dll";
+#elif PLATFORM_LINUX
             const string DllName = "libcuda.so";
 #elif PLATFORM_MAC
             const string DllName = "libcuda.dylib";
-#else
-            const string DllName = "nvcuda.dll";
 #endif
 
             [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]

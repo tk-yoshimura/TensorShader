@@ -7,21 +7,21 @@ using System.Runtime.InteropServices;
 // これらの属性値を変更してください。
 
 #if CUDA_10_0
-[assembly: AssemblyTitle("TensorShaderCudaBackend CUDA10.0")]
+[assembly: AssemblyTitle("TensorShaderCudaBackend For Windows CUDA10.0")]
 #elif CUDA_10_1
-[assembly: AssemblyTitle("TensorShaderCudaBackend CUDA10.1")]
+[assembly: AssemblyTitle("TensorShaderCudaBackend For Windows CUDA10.1")]
 #elif CUDA_10_2
-[assembly: AssemblyTitle("TensorShaderCudaBackend CUDA10.2")]
+[assembly: AssemblyTitle("TensorShaderCudaBackend For Windows CUDA10.2")]
 #elif CUDA_10_3
-[assembly: AssemblyTitle("TensorShaderCudaBackend CUDA10.3")]
+[assembly: AssemblyTitle("TensorShaderCudaBackend For Windows CUDA10.3")]
 #elif CUDA_10_4
-[assembly: AssemblyTitle("TensorShaderCudaBackend CUDA10.4")]
+[assembly: AssemblyTitle("TensorShaderCudaBackend For Windows CUDA10.4")]
 #elif PLATFORM_LINUX
 [assembly: AssemblyTitle("TensorShaderCudaBackend For Linux (notice: experiment)")]
 #elif PLATFORM_MAC
 [assembly: AssemblyTitle("TensorShaderCudaBackend For MacOS (notice: experiment)")]
 #else
-[assembly: AssemblyTitle("TensorShaderCudaBackend CUDA10.1")]
+[assembly: AssemblyTitle("TensorShaderCudaBackend For Windows CUDA10.1")]
 #endif
 
 [assembly: AssemblyDescription("Cuda Kernel Implementations")]

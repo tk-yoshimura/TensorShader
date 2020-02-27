@@ -11,46 +11,47 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DocumentationFile>bin\x64\Debug\netstandard2.0\TensorShaderCudaBackend.xml</DocumentationFile>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;PLATFORM_WINDOWS</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DocumentationFile>bin\x64\Release\netstandard2.0\TensorShaderCudaBackend.xml</DocumentationFile>
+    <DefineConstants>TRACE;PLATFORM_WINDOWS</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Cuda_10_0|x64'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DocumentationFile>bin\x64\Release_Cuda_10_0\netstandard2.0\TensorShaderCudaBackend.xml</DocumentationFile>
-    <DefineConstants>TRACE;CUDA_10_0</DefineConstants>
+    <DefineConstants>TRACE;PLATFORM_WINDOWS;CUDA_10_0</DefineConstants>
     <Optimize>true</Optimize>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Cuda_10_1|x64'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DocumentationFile>bin\x64\Release_Cuda_10_1\netstandard2.0\TensorShaderCudaBackend.xml</DocumentationFile>
-    <DefineConstants>TRACE;CUDA_10_1</DefineConstants>
+    <DefineConstants>TRACE;PLATFORM_WINDOWS;CUDA_10_1</DefineConstants>
     <Optimize>true</Optimize>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Cuda_10_2|x64'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DocumentationFile>bin\x64\Release_Cuda_10_2\netstandard2.0\TensorShaderCudaBackend.xml</DocumentationFile>
-    <DefineConstants>TRACE;CUDA_10_2</DefineConstants>
+    <DefineConstants>TRACE;PLATFORM_WINDOWS;CUDA_10_2</DefineConstants>
     <Optimize>true</Optimize>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Cuda_10_3|x64'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DocumentationFile>bin\x64\Release_Cuda_10_3\netstandard2.0\TensorShaderCudaBackend.xml</DocumentationFile>
-    <DefineConstants>TRACE;CUDA_10_3</DefineConstants>
+    <DefineConstants>TRACE;PLATFORM_WINDOWS;CUDA_10_3</DefineConstants>
     <Optimize>true</Optimize>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Cuda_10_4|x64'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DocumentationFile>bin\x64\Release_Cuda_10_4\netstandard2.0\TensorShaderCudaBackend.xml</DocumentationFile>
-    <DefineConstants>TRACE;CUDA_10_4</DefineConstants>
+    <DefineConstants>TRACE;PLATFORM_WINDOWS;CUDA_10_4</DefineConstants>
     <Optimize>true</Optimize>
   </PropertyGroup>
   
