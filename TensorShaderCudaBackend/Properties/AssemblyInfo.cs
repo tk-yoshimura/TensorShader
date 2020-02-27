@@ -16,6 +16,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("TensorShaderCudaBackend CUDA10.3")]
 #elif CUDA_10_4
 [assembly: AssemblyTitle("TensorShaderCudaBackend CUDA10.4")]
+#elif PLATFORM_LINUX
+[assembly: AssemblyTitle("TensorShaderCudaBackend For Linux (notice: experiment)")]
+#elif PLATFORM_MAC
+[assembly: AssemblyTitle("TensorShaderCudaBackend For MacOS (notice: experiment)")]
 #else
 [assembly: AssemblyTitle("TensorShaderCudaBackend CUDA10.1")]
 #endif

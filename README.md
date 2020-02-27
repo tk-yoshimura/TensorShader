@@ -15,6 +15,9 @@ For regression problems: **High precision calculate** by FP32-FP32 arithmetic (1
 
 CUDA 10.*, Compute Capability 5.0+
 
+validated: Windows
+experiment: Linux, MacOS
+
 ## Usage
 [Sample](https://github.com/tk-yoshimura/TensorShader/tree/master/TensorShaderSample)
 

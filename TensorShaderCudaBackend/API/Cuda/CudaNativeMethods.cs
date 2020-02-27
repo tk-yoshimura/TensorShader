@@ -21,6 +21,10 @@ namespace TensorShaderCudaBackend.API {
             const string DllName = "cudart64_103.dll";
 #elif CUDA_10_4
             const string DllName = "cudart64_104.dll";
+#elif PLATFORM_LINUX
+            const string DllName = "libcudart.so";
+#elif PLATFORM_MAC
+            const string DllName = "libcudart.dylib";
 #else
             const string DllName = "cudart64_101.dll";
 #endif

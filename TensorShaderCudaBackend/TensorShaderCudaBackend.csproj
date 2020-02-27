@@ -5,7 +5,7 @@
     <Platforms>x64</Platforms>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Deterministic>false</Deterministic>
-    <Configurations>Debug;Release;Release_Cuda_10_0;Release_Cuda_10_1;Release_Cuda_10_2;Release_Cuda_10_3;Release_Cuda_10_4</Configurations>
+    <Configurations>Debug;Release;Release_Cuda_10_0;Release_Cuda_10_1;Release_Cuda_10_2;Release_Cuda_10_3;Release_Cuda_10_4;Release_Linux;Release_Mac</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -51,6 +51,20 @@
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DocumentationFile>bin\x64\Release_Cuda_10_4\netstandard2.0\TensorShaderCudaBackend.xml</DocumentationFile>
     <DefineConstants>TRACE;CUDA_10_4</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Linux|x64'">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DocumentationFile>bin\x64\Release_Linux\netstandard2.0\TensorShaderCudaBackend.xml</DocumentationFile>
+    <DefineConstants>TRACE;PLATFORM_LINUX</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Mac|x64'">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DocumentationFile>bin\x64\Release_Mac\netstandard2.0\TensorShaderCudaBackend.xml</DocumentationFile>
+    <DefineConstants>TRACE;PLATFORM_MAC</DefineConstants>
     <Optimize>true</Optimize>
   </PropertyGroup>
 
