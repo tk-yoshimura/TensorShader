@@ -106,7 +106,7 @@ namespace TensorShaderTest.Operators.Connection1D {
 
             ChannelwiseConvolution ope = new ChannelwiseConvolution(inwidth, channels, ksize);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/chwise_convolution_1d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/chwise_convolution_1d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, w_tensor, y_tensor);

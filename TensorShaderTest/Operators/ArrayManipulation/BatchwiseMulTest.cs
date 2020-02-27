@@ -58,7 +58,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             BatchwiseMul ope = new BatchwiseMul(shape);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/batchwisemul.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/batchwisemul.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(v1, v2, v3);

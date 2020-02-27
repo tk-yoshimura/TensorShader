@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
-using TensorShader.Operators.ArrayManipulation;
 
 namespace TensorShaderTest.Operators.ArrayManipulation {
     [TestClass]
@@ -25,7 +24,8 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
                     OverflowCheckedTensor tensor = new OverflowCheckedTensor(shape);
 
-                    Index ope = new Index(shape, axis);
+                    TensorShader.Operators.ArrayManipulation.Index ope
+                        = new TensorShader.Operators.ArrayManipulation.Index(shape, axis);
 
                     ope.Execute(tensor);
 

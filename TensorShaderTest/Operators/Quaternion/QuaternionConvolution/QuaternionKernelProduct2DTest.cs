@@ -127,7 +127,7 @@ namespace TensorShaderTest.Operators.Quaternion {
 
             QuaternionKernelProduct2D ope = new QuaternionKernelProduct2D(inwidth, inheight, inchannels, outchannels, ksize, ksize);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/quaternion_kernelproduct_2d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/quaternion_kernelproduct_2d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor, gw_tensor);

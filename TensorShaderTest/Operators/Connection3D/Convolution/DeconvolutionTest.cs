@@ -107,7 +107,7 @@ namespace TensorShaderTest.Operators.Connection3D {
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/deconvolution_3d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/deconvolution_3d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(y_tensor, w_tensor, x_tensor);

@@ -138,7 +138,7 @@ namespace TensorShaderTest.Operators.Trivector {
 
             TrivectorKernelProduct1D ope = new TrivectorKernelProduct1D(inwidth, inchannels, outchannels, ksize);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/trivector_kernelproduct_1d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/trivector_kernelproduct_1d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor, w_tensor, gw_tensor);

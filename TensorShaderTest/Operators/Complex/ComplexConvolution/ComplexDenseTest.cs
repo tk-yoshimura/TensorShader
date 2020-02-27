@@ -113,7 +113,7 @@ namespace TensorShaderTest.Operators.Complex {
 
             ComplexDense ope = new ComplexDense(inchannels, outchannels);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/complex_dense.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/complex_dense.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, w_tensor, y_tensor);

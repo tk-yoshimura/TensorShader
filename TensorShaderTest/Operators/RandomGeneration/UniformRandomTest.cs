@@ -112,7 +112,7 @@ namespace TensorShaderTest.Operators.RandomGeneration {
 
             UniformRandom ope = new UniformRandom(shape, new Random(1234));
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/uniform_random.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/uniform_random.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(v1);

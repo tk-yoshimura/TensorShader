@@ -101,7 +101,7 @@ namespace TensorShaderTest.Operators.Connection3D {
 
             PointwiseConvolution ope = new PointwiseConvolution(width, height, depth, inchannels, outchannels);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/ptwise_convolution_3d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/ptwise_convolution_3d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, w_tensor, y_tensor);

@@ -194,7 +194,7 @@ namespace TensorShaderTest.Operators.Aggregation {
 
             Max ope = new Max(shape, axis: 1);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/aggregate_max.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/aggregate_max.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(v1, v2);

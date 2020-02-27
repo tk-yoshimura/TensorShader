@@ -4,7 +4,7 @@ using System.Linq;
 namespace TensorShader {
     /// <summary>関数クラス</summary>
     internal abstract class Function {
-        private Tensor[] intensors = (Tensor[])Enumerable.Empty<Tensor>(), outtensors = (Tensor[])Enumerable.Empty<Tensor>();
+        private Tensor[] intensors = Enumerable.Empty<Tensor>().ToArray(), outtensors = Enumerable.Empty<Tensor>().ToArray();
         private Tensor[] tensors = null;
         private Operator ope = null;
 

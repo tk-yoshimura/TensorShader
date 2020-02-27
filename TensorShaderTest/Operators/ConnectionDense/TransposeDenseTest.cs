@@ -98,7 +98,7 @@ namespace TensorShaderTest.Operators.ConnectionDense {
 
             TransposeDense ope = new TransposeDense(outchannels, inchannels);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/transpose_dense.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/transpose_dense.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(y_tensor, w_tensor, x_tensor);

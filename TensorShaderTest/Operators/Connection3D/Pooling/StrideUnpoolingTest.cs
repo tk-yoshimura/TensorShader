@@ -89,7 +89,7 @@ namespace TensorShaderTest.Operators.Connection3D {
 
             StrideUnpooling ope = new StrideUnpooling(outwidth, outheight, outdepth, channels, stride, batch);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/strideunpool_3d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/strideunpool_3d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor);

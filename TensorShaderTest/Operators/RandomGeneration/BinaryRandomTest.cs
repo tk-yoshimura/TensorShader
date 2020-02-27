@@ -37,7 +37,7 @@ namespace TensorShaderTest.Operators.RandomGeneration {
 
             BinaryRandom ope = new BinaryRandom(shape, new Random(1234), 0.25f);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/binary_random.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/binary_random.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(v1);

@@ -122,7 +122,7 @@ namespace TensorShaderTest.Operators.Complex {
 
             ComplexConvolution1D ope = new ComplexConvolution1D(inwidth, inchannels, outchannels, ksize);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/complex_convolution_1d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/complex_convolution_1d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, w_tensor, y_tensor);

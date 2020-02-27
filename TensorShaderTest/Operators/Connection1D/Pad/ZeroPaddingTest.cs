@@ -81,7 +81,7 @@ namespace TensorShaderTest.Operators.Connection1D {
 
             ZeroPadding ope = new ZeroPadding(inwidth, channels, leftpad, rightpad, batch);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/zeropadding_1d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/zeropadding_1d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor);

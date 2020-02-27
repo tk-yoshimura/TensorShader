@@ -193,7 +193,7 @@ namespace TensorShaderTest.Operators.Aggregation {
 
             Sum ope = new Sum(shape, axis: 1);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/aggregate_sum.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/aggregate_sum.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(v1, v2);

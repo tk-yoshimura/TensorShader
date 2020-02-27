@@ -114,7 +114,7 @@ namespace TensorShaderTest.Operators.Quaternion {
 
             QuaternionKernelProductDense ope = new QuaternionKernelProductDense(inchannels, outchannels);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/quaternion_kernelproduct_dense.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/quaternion_kernelproduct_dense.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor, gw_tensor);

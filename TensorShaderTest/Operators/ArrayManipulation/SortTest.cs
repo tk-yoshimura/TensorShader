@@ -80,7 +80,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             Sort ope = new Sort(shape, axis: 0);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/sort_random.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/sort_random.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x, y);
@@ -109,7 +109,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             Sort ope = new Sort(shape, axis: 0);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/sort_maxlength.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/sort_maxlength.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x, y);
@@ -138,7 +138,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             Sort ope = new Sort(shape, axis: 0);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/sort_overmaxlength.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/sort_overmaxlength.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x, y);
@@ -167,7 +167,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             Sort ope = new Sort(shape, axis: 0);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/sort_reverse.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/sort_reverse.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x, y);

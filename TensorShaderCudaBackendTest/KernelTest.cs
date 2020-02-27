@@ -54,7 +54,7 @@ namespace TensorShaderCudaBackendTest {
             float[] h_b = (new float[length]).Select((_) => (float)random.NextDouble()).ToArray();
             float[] h_c = new float[length];
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "vectoradd.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "vectoradd.nvvp");
             Cuda.Profiler.Start();
 
             CudaArray<float> d_a = new CudaArray<float>(h_a);
@@ -87,7 +87,7 @@ namespace TensorShaderCudaBackendTest {
 
             Kernel kernel = new Kernel(code, "add");
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "vectoraddasync.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "vectoraddasync.nvvp");
             Cuda.Profiler.Start();
 
             CudaArray<float> d_a = new CudaArray<float>(h_a);

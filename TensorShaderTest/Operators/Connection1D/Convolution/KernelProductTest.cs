@@ -109,7 +109,7 @@ namespace TensorShaderTest.Operators.Connection1D {
 
             KernelProduct ope = new KernelProduct(inwidth, inchannels, outchannels, ksize);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/kernelproduct_1d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/kernelproduct_1d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, gy_tensor, gw_tensor);

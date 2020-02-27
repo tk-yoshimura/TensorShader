@@ -61,7 +61,7 @@ namespace TensorShaderTest.Operators.Trivector {
 
             TrivectorCast ope = new TrivectorCast(inshape);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/trivector_cast.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/trivector_cast.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(v1, v2, v3, v4);

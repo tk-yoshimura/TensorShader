@@ -66,7 +66,7 @@ namespace TensorShaderTest.Operators.Quaternion {
 
             QuaternionCast ope = new QuaternionCast(inshape);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/quaternion_cast.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/quaternion_cast.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(v1, v2, v3, v4, v5);

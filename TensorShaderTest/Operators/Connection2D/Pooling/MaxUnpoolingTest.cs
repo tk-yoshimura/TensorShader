@@ -126,7 +126,7 @@ namespace TensorShaderTest.Operators.Connection2D {
 
             MaxUnpooling ope = new MaxUnpooling(inwidth, inheight, channels, stride, batch);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/maxunpool_2d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/maxunpool_2d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(gy_tensor, x_tensor, y_tensor, gx_tensor);

@@ -186,7 +186,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             Separate ope = new Separate(vc.Shape, new Shape[] { v1.Shape, v2.Shape, v3.Shape }, axis: 2);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/separate.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/separate.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(vc, v1, v2, v3);

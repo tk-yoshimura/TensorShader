@@ -59,7 +59,7 @@ namespace TensorShaderTest.Operators.Connection3D {
 
             ColumnToImage ope = new ColumnToImage(outwidth, outheight, outdepth, channels, ksize, ksize, ksize);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/column_to_image_3d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/column_to_image_3d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor);

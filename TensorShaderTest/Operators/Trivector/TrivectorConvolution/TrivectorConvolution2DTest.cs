@@ -126,7 +126,7 @@ namespace TensorShaderTest.Operators.Trivector {
 
             TrivectorConvolution2D ope = new TrivectorConvolution2D(inwidth, inheight, inchannels, outchannels, ksize, ksize);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/trivector_convolution_2d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/trivector_convolution_2d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, w_tensor, y_tensor);

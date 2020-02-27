@@ -56,7 +56,7 @@ namespace TensorShaderTest.Operators.Complex {
 
             ComplexCast ope = new ComplexCast(inshape);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/complex_cast.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/complex_cast.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(v1, v2, v3);

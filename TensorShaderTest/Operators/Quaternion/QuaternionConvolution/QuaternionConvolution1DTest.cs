@@ -123,7 +123,7 @@ namespace TensorShaderTest.Operators.Quaternion {
 
             QuaternionConvolution1D ope = new QuaternionConvolution1D(inwidth, inchannels, outchannels, ksize);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/quaternion_convolution_1d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/quaternion_convolution_1d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, w_tensor, y_tensor);

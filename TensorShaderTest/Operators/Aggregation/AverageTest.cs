@@ -203,7 +203,7 @@ namespace TensorShaderTest.Operators.Aggregation {
 
             Average ope = new Average(shape, axis: 1);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/aggregate_average.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/aggregate_average.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(v1, v2);

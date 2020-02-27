@@ -110,7 +110,7 @@ namespace TensorShaderTest.Operators.Connection2D {
 
             ChannelwiseConvolution ope = new ChannelwiseConvolution(inwidth, inheight, channels, ksize, ksize);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/chwise_convolution_2d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/chwise_convolution_2d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, w_tensor, y_tensor);

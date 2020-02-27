@@ -58,7 +58,7 @@ namespace TensorShaderTest.Operators.Connection1D {
 
             ChannelToSpace ope = new ChannelToSpace(inwidth, inchannels, scale);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/channel_to_space_1d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/channel_to_space_1d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor);

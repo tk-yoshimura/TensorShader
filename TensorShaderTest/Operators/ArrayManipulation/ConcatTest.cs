@@ -228,7 +228,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             Concat ope = new Concat(new Shape[] { v1.Shape, v2.Shape, v3.Shape }, vc.Shape, axis: 2);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/concat.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/concat.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(v1, v2, v3, vc);

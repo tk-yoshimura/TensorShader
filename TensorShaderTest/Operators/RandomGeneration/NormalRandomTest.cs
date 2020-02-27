@@ -97,7 +97,7 @@ namespace TensorShaderTest.Operators.RandomGeneration {
 
             NormalRandom ope = new NormalRandom(shape, new Random(1234));
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/normal_random.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/normal_random.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(v1);

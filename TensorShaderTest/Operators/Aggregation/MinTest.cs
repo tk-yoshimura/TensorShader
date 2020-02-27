@@ -194,7 +194,7 @@ namespace TensorShaderTest.Operators.Aggregation {
 
             Min ope = new Min(shape, axis: 1);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/aggregate_min.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/aggregate_min.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(v1, v2);

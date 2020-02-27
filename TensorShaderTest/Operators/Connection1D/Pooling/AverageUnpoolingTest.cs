@@ -84,7 +84,7 @@ namespace TensorShaderTest.Operators.Connection1D {
 
             AverageUnpooling ope = new AverageUnpooling(outwidth, channels, stride, batch);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/averageunpool_1d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/averageunpool_1d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor);

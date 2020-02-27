@@ -113,7 +113,7 @@ namespace TensorShaderTest.Operators.Trivector {
 
             TrivectorDense ope = new TrivectorDense(inchannels, outchannels);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/trivector_dense.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/trivector_dense.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, w_tensor, y_tensor);

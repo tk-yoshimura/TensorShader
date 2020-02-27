@@ -114,7 +114,7 @@ namespace TensorShaderTest.Operators.Complex {
 
             ComplexKernelProductDense ope = new ComplexKernelProductDense(inchannels, outchannels);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/complex_kernelproduct_dense.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/complex_kernelproduct_dense.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor, gw_tensor);

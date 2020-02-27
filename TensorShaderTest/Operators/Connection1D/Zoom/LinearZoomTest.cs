@@ -58,7 +58,7 @@ namespace TensorShaderTest.Operators.Connection1D {
 
             LinearZoom ope = new LinearZoom(inwidth, channels);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/linearzoom_1d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/linearzoom_1d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor);

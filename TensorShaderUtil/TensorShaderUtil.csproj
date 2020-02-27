@@ -1,85 +1,35 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9291E2D8-E250-4886-8845-AAF42B3C070C}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TensorShaderUtil</RootNamespace>
-    <AssemblyName>TensorShaderUtil</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Platforms>x64</Platforms>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Deterministic>false</Deterministic>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DocumentationFile>bin\x64\Debug\netstandard2.0\TensorShaderUtil.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DocumentationFile>bin\x64\Release\netstandard2.0\TensorShaderUtil.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DocumentationFile>bin\x64\Debug\TensorShaderUtil.xml</DocumentationFile>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>bin\x64\Release\TensorShaderUtil.xml</DocumentationFile>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
     <Reference Include="TensorShader">
-      <HintPath>..\TensorShader\bin\x64\Release\TensorShader.dll</HintPath>
+      <HintPath>..\TensorShader\bin\x64\Release\netstandard2.0\TensorShader.dll</HintPath>
     </Reference>
     <Reference Include="TensorShaderCudaBackend">
-      <HintPath>..\TensorShaderCudaBackend\bin\x64\Release\TensorShaderCudaBackend.dll</HintPath>
+      <HintPath>..\TensorShaderCudaBackend\bin\x64\Release\netstandard2.0\TensorShaderCudaBackend.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="BatchGenerator\BatchGenerator.cs" />
-    <Compile Include="BatchGenerator\MultitaskBatchGenerator.cs" />
-    <Compile Include="BatchGenerator\UnitaskBatchGenerator.cs" />
-    <Compile Include="BatchGenerator\IBatchGenerator.cs" />
-    <Compile Include="GraphVisualization\DotWriter.cs" />
-    <Compile Include="GraphVisualization\Graph.cs" />
-    <Compile Include="ArrayIO\ArrayIO.cs" />
-    <Compile Include="Iterator\Iterator.cs" />
-    <Compile Include="Iterator\RepeatIterator.cs" />
-    <Compile Include="Iterator\ShuffleIterator.cs" />
-    <Compile Include="NdimArrayUtil\NdimArrayUtil.cs" />
-    <Compile Include="ScheduleUtil\ConvergenceTester.cs" />
-    <Compile Include="ParameterUtil\ParametersValue.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SnapshotSaver\Crc32.cs" />
-    <Compile Include="SnapshotSaver\ZippedBinaryShapshotSaver.cs" />
-    <Compile Include="SnapshotSaver\DefaultBinaryShapshotSaver.cs" />
-    <Compile Include="SnapshotSaver\SnapshotSaver.cs" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>if "$(ConfigurationName)" == "Debug" (
-  exit
-)
 
-md "$(SolutionDir)dll\$(ConfigurationName)" &gt; NUL 2&gt;&amp;1
-copy  $(TargetPath)  $(SolutionDir)dll\$(ConfigurationName)\$(TargetFileName) /y
-copy  $(TargetDir)$(TargetName).xml $(SolutionDir)dll\$(ConfigurationName)\$(TargetName).xml /y</PostBuildEvent>
-  </PropertyGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if &quot;$(ConfigurationName)&quot; == &quot;Debug&quot; (&#xD;&#xA;  exit&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;md &quot;$(SolutionDir)dll\$(ConfigurationName)&quot; &gt; NUL 2&gt;&amp;1&#xD;&#xA;copy  $(TargetPath)  $(SolutionDir)dll\$(ConfigurationName)\$(TargetFileName) /y&#xD;&#xA;copy  $(TargetDir)$(TargetName).xml $(SolutionDir)dll\$(ConfigurationName)\$(TargetName).xml /y" />
+  </Target>
+
 </Project>

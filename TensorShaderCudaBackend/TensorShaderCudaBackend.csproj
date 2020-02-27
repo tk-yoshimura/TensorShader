@@ -1,352 +1,61 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D0343C7A-36A5-4F87-89D9-C0BFF56721F7}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TensorShaderCudaBackend</RootNamespace>
-    <AssemblyName>TensorShaderCudaBackend</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Platforms>x64</Platforms>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Deterministic>false</Deterministic>
+    <Configurations>Debug;Release;Release_Cuda_10_0;Release_Cuda_10_1;Release_Cuda_10_2;Release_Cuda_10_3;Release_Cuda_10_4</Configurations>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DocumentationFile>bin\x64\Debug\netstandard2.0\TensorShaderCudaBackend.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <NoWarn>
-    </NoWarn>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DocumentationFile>bin\x64\Debug\TensorShaderCudaBackend.xml</DocumentationFile>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <NoWarn>
-    </NoWarn>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DocumentationFile>bin\x64\Release\TensorShaderCudaBackend.xml</DocumentationFile>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DocumentationFile>bin\x64\Release\netstandard2.0\TensorShaderCudaBackend.xml</DocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release_Cuda_10_0|x64'">
-    <OutputPath>bin\x64\Release_Cuda_10_0\</OutputPath>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Cuda_10_0|x64'">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DocumentationFile>bin\x64\Release_Cuda_10_0\netstandard2.0\TensorShaderCudaBackend.xml</DocumentationFile>
     <DefineConstants>TRACE;CUDA_10_0</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DocumentationFile>bin\x64\Release_Cuda_10_0\TensorShaderCudaBackend.xml</DocumentationFile>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release_Cuda_10_1|x64'">
-    <OutputPath>bin\x64\Release_Cuda_10_1\</OutputPath>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Cuda_10_1|x64'">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DocumentationFile>bin\x64\Release_Cuda_10_1\netstandard2.0\TensorShaderCudaBackend.xml</DocumentationFile>
     <DefineConstants>TRACE;CUDA_10_1</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DocumentationFile>bin\x64\Release_Cuda_10_1\TensorShaderCudaBackend.xml</DocumentationFile>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release_Cuda_10_2|x64'">
-    <OutputPath>bin\x64\Release_Cuda_10_2\</OutputPath>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Cuda_10_2|x64'">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DocumentationFile>bin\x64\Release_Cuda_10_2\netstandard2.0\TensorShaderCudaBackend.xml</DocumentationFile>
     <DefineConstants>TRACE;CUDA_10_2</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DocumentationFile>bin\x64\Release_Cuda_10_2\TensorShaderCudaBackend.xml</DocumentationFile>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release_Cuda_10_3|x64'">
-    <OutputPath>bin\x64\Release_Cuda_10_3\</OutputPath>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Cuda_10_3|x64'">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DocumentationFile>bin\x64\Release_Cuda_10_3\netstandard2.0\TensorShaderCudaBackend.xml</DocumentationFile>
     <DefineConstants>TRACE;CUDA_10_3</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DocumentationFile>bin\x64\Release_Cuda_10_3\TensorShaderCudaBackend.xml</DocumentationFile>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release_Cuda_10_4|x64'">
-    <OutputPath>bin\x64\Release_Cuda_10_4\</OutputPath>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Cuda_10_4|x64'">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DocumentationFile>bin\x64\Release_Cuda_10_4\netstandard2.0\TensorShaderCudaBackend.xml</DocumentationFile>
     <DefineConstants>TRACE;CUDA_10_4</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DocumentationFile>bin\x64\Release_Cuda_10_4\TensorShaderCudaBackend.xml</DocumentationFile>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="API\Cuda\CudaStream.cs" />
-    <Compile Include="API\Cuda\CudaOutputMode.cs" />
-    <Compile Include="API\Cuda\CudaMemory.cs" />
-    <Compile Include="API\Cuda\CudaProfiler.cs" />
-    <Compile Include="API\Nvcuda\NvcudaFuncCache.cs" />
-    <Compile Include="CudaArray.cs" />
-    <Compile Include="API\Nvcuda\NvcudaResult.cs" />
-    <Compile Include="API\Nvcuda\NvcudaNativeMethods.cs" />
-    <Compile Include="API\Nvcuda\Nvcuda.cs" />
-    <Compile Include="API\Nvrtc\Nvrtc.cs" />
-    <Compile Include="API\Nvrtc\NvrtcCompileOptions.cs" />
-    <Compile Include="API\Nvrtc\NvrtcNativeMethods.cs" />
-    <Compile Include="API\Nvrtc\NvrtcResult.cs" />
-    <Compile Include="WorkspaceReserver.cs" />
-    <Compile Include="CudaException.cs" />
-    <Compile Include="Limits.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="API\Cuda\CudaMemcpyKind.cs" />
-    <Compile Include="API\Cuda\CudaDeviceProp.cs" />
-    <Compile Include="API\Cuda\CudaError.cs" />
-    <Compile Include="API\Cuda\CudaNativeMethods.cs" />
-    <Compile Include="API\Cuda\Cuda.cs" />
-    <Compile Include="Kernel.cs" />
-    <Compile Include="KernelArguments.cs" />
-    <Compile Include="ShaderDefines.cs" />
-    <Compile Include="ShaderIndex\Quaternion.cs" />
-    <Compile Include="ShaderIndex\Transpose.cs" />
-    <Compile Include="ShaderIndex\Trivector.cs" />
-    <Compile Include="ShaderIndex\Complex.cs" />
-    <Compile Include="ShaderIndex\Convolution.cs" />
-    <Compile Include="ShaderIndex\Zoom.cs" />
-    <Compile Include="ShaderIndex\Trimming.cs" />
-    <Compile Include="ShaderIndex\Padding.cs" />
-    <Compile Include="ShaderIndex\Transform.cs" />
-    <Compile Include="ShaderIndex\Pool.cs" />
-    <Compile Include="ShaderIndex\Aggregation.cs" />
-    <Compile Include="ShaderIndex\Randomize.cs" />
-    <Compile Include="ShaderIndex\Indexer.cs" />
-    <Compile Include="ShaderIndex\ArrayManipulation.cs" />
-    <Compile Include="ShaderIndex\Batchwise.cs" />
-    <Compile Include="ShaderIndex\Channelwise.cs" />
-    <Compile Include="ShaderIndex\Elementwise.cs" />
-    <Compile Include="Shaders\Aggregation\Aggregation.cs" />
-    <Compile Include="Shaders\Aggregation\Average.cs" />
-    <Compile Include="Shaders\Aggregation\Max.cs" />
-    <Compile Include="Shaders\Aggregation\Min.cs" />
-    <Compile Include="Shaders\Aggregation\Sum.cs" />
-    <Compile Include="Shaders\ArrayManipulation\Broadcast.cs" />
-    <Compile Include="Shaders\ArrayManipulation\StrideCopy.cs" />
-    <Compile Include="Shaders\ArrayManipulation\Scatter.cs" />
-    <Compile Include="Shaders\ArrayManipulation\Gather.cs" />
-    <Compile Include="Shaders\ArrayManipulation\HorizontalAdd.cs" />
-    <Compile Include="Shaders\Batchwise\BatchwiseMul.cs" />
-    <Compile Include="Shaders\ArrayManipulation\SortUnuseSharedMemory.cs" />
-    <Compile Include="Shaders\ArrayManipulation\SortUseSharedMemory.cs" />
-    <Compile Include="Shaders\ArrayManipulation\SortWithKeyUnuseSharedMemory.cs" />
-    <Compile Include="Shaders\ArrayManipulation\SortWithKeyUseSharedMemory.cs" />
-    <Compile Include="Shaders\ArrayManipulation\PatternCopy.cs" />
-    <Compile Include="Shaders\ArrayManipulation\Flip.cs" />
-    <Compile Include="Shaders\ArrayManipulation\Clear.cs" />
-    <Compile Include="Shaders\Channelwise\ChannelwiseBinaryArithmetric.cs" />
-    <Compile Include="Shaders\Channelwise\Channelwise.cs" />
-    <Compile Include="Shaders\Complex\Arithmetric\UnaryArithmetric.cs" />
-    <Compile Include="Shaders\Complex\Arithmetric\BinaryArithmetric.cs" />
-    <Compile Include="Shaders\Complex\Arithmetric\Elementwise.cs" />
-    <Compile Include="Shaders\Complex\Convolution\Convolution3D.cs" />
-    <Compile Include="Shaders\Complex\Convolution\Deconvolution3D.cs" />
-    <Compile Include="Shaders\Complex\Convolution\Dense.cs" />
-    <Compile Include="Shaders\Complex\Convolution\Convolution1D.cs" />
-    <Compile Include="Shaders\Complex\Convolution\Convolution2D.cs" />
-    <Compile Include="Shaders\Complex\Convolution\KernelProduct3D.cs" />
-    <Compile Include="Shaders\Complex\Convolution\TransposeDense.cs" />
-    <Compile Include="Shaders\Complex\Convolution\Deconvolution1D.cs" />
-    <Compile Include="Shaders\Complex\Convolution\Deconvolution2D.cs" />
-    <Compile Include="Shaders\Complex\Convolution\KernelProductDense.cs" />
-    <Compile Include="Shaders\Complex\Convolution\KernelProduct1D.cs" />
-    <Compile Include="Shaders\Complex\Convolution\KernelProduct2D.cs" />
-    <Compile Include="Shaders\Convolution\ChannelwiseConvolution1D.cs" />
-    <Compile Include="Shaders\Convolution\ChannelwiseConvolution3D.cs" />
-    <Compile Include="Shaders\Convolution\ChannelwiseConvolution2D.cs" />
-    <Compile Include="Shaders\Convolution\ChannelwiseDeconvolution1D.cs" />
-    <Compile Include="Shaders\Convolution\ChannelwiseDeconvolution3D.cs" />
-    <Compile Include="Shaders\Convolution\ChannelwiseDeconvolution2D.cs" />
-    <Compile Include="Shaders\Convolution\ChannelwiseKernelProduct1D.cs" />
-    <Compile Include="Shaders\Convolution\ChannelwiseKernelProduct3D.cs" />
-    <Compile Include="Shaders\Convolution\PointwiseConvolution.cs" />
-    <Compile Include="Shaders\Convolution\PointwiseDeconvolution.cs" />
-    <Compile Include="Shaders\Convolution\Deconvolution3D.cs" />
-    <Compile Include="Shaders\Convolution\Deconvolution2D.cs" />
-    <Compile Include="Shaders\Convolution\Deconvolution1D.cs" />
-    <Compile Include="Shaders\Convolution\Convolution3D.cs" />
-    <Compile Include="Shaders\Convolution\Convolution2D.cs" />
-    <Compile Include="Shaders\Convolution\Convolution1D.cs" />
-    <Compile Include="Shaders\Convolution\ChannelwiseKernelProduct2D.cs" />
-    <Compile Include="Shaders\Convolution\PointwiseKernelProduct.cs" />
-    <Compile Include="Shaders\Convolution\KernelProduct3D.cs" />
-    <Compile Include="Shaders\Convolution\KernelProduct2D.cs" />
-    <Compile Include="Shaders\Convolution\KernelProduct1D.cs" />
-    <Compile Include="Shaders\Convolution\KernelProductDense.cs" />
-    <Compile Include="Shaders\Convolution\TransposeDense.cs" />
-    <Compile Include="Shaders\Convolution\Dense.cs" />
-    <Compile Include="Shaders\Elementwise\BinaryFactorArithmetric.cs" />
-    <Compile Include="Shaders\Elementwise\BinaryConstantArithmetric.cs" />
-    <Compile Include="Shaders\Elementwise\FactorElementwise.cs" />
-    <Compile Include="Shaders\Elementwise\ConstantElementwise.cs" />
-    <Compile Include="Shaders\Elementwise\Elementwise.cs" />
-    <Compile Include="Shaders\Elementwise\TrinaryUniFactorArithmetric.cs" />
-    <Compile Include="Shaders\Elementwise\TrinaryUniConstantArithmetric.cs" />
-    <Compile Include="Shaders\Elementwise\TrinaryBiFactorArithmetric.cs" />
-    <Compile Include="Shaders\Elementwise\TrinaryBiConstantArithmetric.cs" />
-    <Compile Include="Shaders\Elementwise\TrinaryArithmetric.cs" />
-    <Compile Include="Shaders\Elementwise\BinaryArithmetric.cs" />
-    <Compile Include="Shader.cs" />
-    <Compile Include="Shaders\Elementwise\UnaryArithmetric.cs" />
-    <Compile Include="Shaders\Indexer\ArgMax.cs" />
-    <Compile Include="Shaders\Indexer\ArgMin.cs" />
-    <Compile Include="Shaders\Indexer\Index.cs" />
-    <Compile Include="Shaders\Indexer\OneHotVector.cs" />
-    <Compile Include="Shaders\Padding\EdgePadding3D.cs" />
-    <Compile Include="Shaders\Padding\EdgePadding2D.cs" />
-    <Compile Include="Shaders\Padding\EdgePadding1D.cs" />
-    <Compile Include="Shaders\Padding\Padding3D.cs" />
-    <Compile Include="Shaders\Padding\Padding2D.cs" />
-    <Compile Include="Shaders\Padding\ZeroPadding3D.cs" />
-    <Compile Include="Shaders\Padding\ZeroPadding2D.cs" />
-    <Compile Include="Shaders\Padding\ZeroPadding1D.cs" />
-    <Compile Include="Shaders\Padding\Padding1D.cs" />
-    <Compile Include="Shaders\Pool\StrideUnpool3D.cs" />
-    <Compile Include="Shaders\Pool\StrideUnpool2D.cs" />
-    <Compile Include="Shaders\Pool\StrideUnpool1D.cs" />
-    <Compile Include="Shaders\Pool\StridePool3D.cs" />
-    <Compile Include="Shaders\Pool\StridePool2D.cs" />
-    <Compile Include="Shaders\Pool\StridePool1D.cs" />
-    <Compile Include="Shaders\Pool\MaxUnpool3D.cs" />
-    <Compile Include="Shaders\Pool\MaxUnpool2D.cs" />
-    <Compile Include="Shaders\Pool\MaxUnpool1D.cs" />
-    <Compile Include="Shaders\Pool\AverageUnpool3D.cs" />
-    <Compile Include="Shaders\Pool\AverageUnpool2D.cs" />
-    <Compile Include="Shaders\Pool\AverageUnpool1D.cs" />
-    <Compile Include="Shaders\Pool\AveragePool1D.cs" />
-    <Compile Include="Shaders\Pool\AveragePool2D.cs" />
-    <Compile Include="Shaders\Pool\AveragePool3D.cs" />
-    <Compile Include="Shaders\Pool\MaxPool3D.cs" />
-    <Compile Include="Shaders\Pool\MaxPool2D.cs" />
-    <Compile Include="Shaders\Pool\MaxPool1D.cs" />
-    <Compile Include="Shaders\Pool\Unpool3D.cs" />
-    <Compile Include="Shaders\Pool\Unpool2D.cs" />
-    <Compile Include="Shaders\Pool\Unpool1D.cs" />
-    <Compile Include="Shaders\Pool\Pool3D.cs" />
-    <Compile Include="Shaders\Pool\Pool2D.cs" />
-    <Compile Include="Shaders\Pool\Pool1D.cs" />
-    <Compile Include="Shaders\Quaternion\Arithmetric\BinaryArithmetric.cs" />
-    <Compile Include="Shaders\Quaternion\Arithmetric\Elementwise.cs" />
-    <Compile Include="Shaders\Quaternion\Arithmetric\UnaryArithmetric.cs" />
-    <Compile Include="Shaders\Quaternion\Convolution\Convolution3D.cs" />
-    <Compile Include="Shaders\Quaternion\Convolution\Deconvolution3D.cs" />
-    <Compile Include="Shaders\Quaternion\Convolution\Dense.cs" />
-    <Compile Include="Shaders\Quaternion\Convolution\Convolution1D.cs" />
-    <Compile Include="Shaders\Quaternion\Convolution\Convolution2D.cs" />
-    <Compile Include="Shaders\Quaternion\Convolution\KernelProduct3D.cs" />
-    <Compile Include="Shaders\Quaternion\Convolution\TransposeDense.cs" />
-    <Compile Include="Shaders\Quaternion\Convolution\Deconvolution1D.cs" />
-    <Compile Include="Shaders\Quaternion\Convolution\Deconvolution2D.cs" />
-    <Compile Include="Shaders\Quaternion\Convolution\KernelProductDense.cs" />
-    <Compile Include="Shaders\Quaternion\Convolution\KernelProduct1D.cs" />
-    <Compile Include="Shaders\Quaternion\Convolution\KernelProduct2D.cs" />
-    <Compile Include="Shaders\Randomize\Randomize.cs" />
-    <Compile Include="Shaders\Randomize\Normal.cs" />
-    <Compile Include="Shaders\Randomize\Binary.cs" />
-    <Compile Include="Shaders\Randomize\Uniform.cs" />
-    <Compile Include="Shaders\Transform\ColumnToImage1D.cs" />
-    <Compile Include="Shaders\Transform\ColumnToImage3D.cs" />
-    <Compile Include="Shaders\Transform\ColumnToImage2D.cs" />
-    <Compile Include="Shaders\Transform\ImageToColumn1D.cs" />
-    <Compile Include="Shaders\Transform\ImageToColumn3D.cs" />
-    <Compile Include="Shaders\Transform\ImageToColumn2D.cs" />
-    <Compile Include="Shaders\Transform\SpaceToChannel3D.cs" />
-    <Compile Include="Shaders\Transform\ChannelToSpace3D.cs" />
-    <Compile Include="Shaders\Transform\SpaceToChannel2D.cs" />
-    <Compile Include="Shaders\Transform\ChannelToSpace2D.cs" />
-    <Compile Include="Shaders\Transpose\TransposeQuaternionKernelChannel.cs" />
-    <Compile Include="Shaders\Transpose\TransposeComplexKernelChannel.cs" />
-    <Compile Include="Shaders\Transpose\TransposeKernelChannel.cs" />
-    <Compile Include="Shaders\Trimming\Trimming1D.cs" />
-    <Compile Include="Shaders\Trimming\Trimming2D.cs" />
-    <Compile Include="Shaders\Trimming\Trimming3D.cs" />
-    <Compile Include="Shaders\Trivector\Arithmetric\BinaryArithmetric.cs" />
-    <Compile Include="Shaders\Trivector\Arithmetric\Elementwise.cs" />
-    <Compile Include="Shaders\Trivector\Arithmetric\QuaternionMulQGrad.cs" />
-    <Compile Include="Shaders\Trivector\Arithmetric\QuaternionMulVGrad.cs" />
-    <Compile Include="Shaders\Trivector\Arithmetric\QuaternionMul.cs" />
-    <Compile Include="Shaders\Trivector\Arithmetric\UnaryArithmetric.cs" />
-    <Compile Include="Shaders\Trivector\Convolution\Convolution3D.cs" />
-    <Compile Include="Shaders\Trivector\Convolution\Deconvolution3D.cs" />
-    <Compile Include="Shaders\Trivector\Convolution\Dense.cs" />
-    <Compile Include="Shaders\Trivector\Convolution\Convolution1D.cs" />
-    <Compile Include="Shaders\Trivector\Convolution\Convolution2D.cs" />
-    <Compile Include="Shaders\Trivector\Convolution\KernelProduct3D.cs" />
-    <Compile Include="Shaders\Trivector\Convolution\TransposeDense.cs" />
-    <Compile Include="Shaders\Trivector\Convolution\Deconvolution1D.cs" />
-    <Compile Include="Shaders\Trivector\Convolution\Deconvolution2D.cs" />
-    <Compile Include="Shaders\Trivector\Convolution\KernelProductDense.cs" />
-    <Compile Include="Shaders\Trivector\Convolution\KernelProduct1D.cs" />
-    <Compile Include="Shaders\Trivector\Convolution\KernelProduct2D.cs" />
-    <Compile Include="Shaders\Zoom\LinearZoom1D.cs" />
-    <Compile Include="Shaders\Zoom\LinearZoom2D.cs" />
-    <Compile Include="Shaders\Zoom\LinearZoom3D.cs" />
-    <Compile Include="Shaders\Zoom\NeighborZoom3D.cs" />
-    <Compile Include="Shaders\Zoom\NeighborZoom2D.cs" />
-    <Compile Include="Shaders\Zoom\NeighborZoom1D.cs" />
-    <Compile Include="Shaders\Zoom\Zoom3D.cs" />
-    <Compile Include="Shaders\Zoom\Zoom2D.cs" />
-    <Compile Include="Shaders\Zoom\Zoom1D.cs" />
-    <Compile Include="Stream.cs" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>if "$(ConfigurationName)" == "Release" (
-  exit
-)
 
-if "$(ConfigurationName)" == "Debug" (
-  exit
-)
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if &quot;$(ConfigurationName)&quot; == &quot;Release&quot; (&#xD;&#xA;  exit&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;if &quot;$(ConfigurationName)&quot; == &quot;Debug&quot; (&#xD;&#xA;  exit&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;md &quot;$(SolutionDir)dll\$(ConfigurationName)&quot; &gt; NUL 2&gt;&amp;1&#xD;&#xA;copy  $(TargetPath)  $(SolutionDir)dll\$(ConfigurationName)\$(TargetFileName) /y&#xD;&#xA;copy  $(TargetDir)$(TargetName).xml $(SolutionDir)dll\$(ConfigurationName)\$(TargetName).xml /y" />
+  </Target>
 
-md "$(SolutionDir)dll\$(ConfigurationName)" &gt; NUL 2&gt;&amp;1
-copy  $(TargetPath)  $(SolutionDir)dll\$(ConfigurationName)\$(TargetFileName) /y
-copy  $(TargetDir)$(TargetName).xml $(SolutionDir)dll\$(ConfigurationName)\$(TargetName).xml /y</PostBuildEvent>
-  </PropertyGroup>
 </Project>

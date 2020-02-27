@@ -99,7 +99,7 @@ namespace TensorShaderTest.Operators.ConnectionDense {
 
             KernelProduct ope = new KernelProduct(inchannels, outchannels, batch);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/kernelproduct_dense.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/kernelproduct_dense.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor, w_tensor);

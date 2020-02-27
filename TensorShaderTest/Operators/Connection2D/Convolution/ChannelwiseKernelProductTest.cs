@@ -111,7 +111,7 @@ namespace TensorShaderTest.Operators.Connection2D {
 
             ChannelwiseKernelProduct ope = new ChannelwiseKernelProduct(inwidth, inheight, channels, ksize, ksize);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/chwise_kernelproduct_2d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/chwise_kernelproduct_2d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, gy_tensor, gw_tensor);

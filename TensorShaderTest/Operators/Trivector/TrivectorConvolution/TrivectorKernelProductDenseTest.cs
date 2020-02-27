@@ -129,7 +129,7 @@ namespace TensorShaderTest.Operators.Trivector {
 
             TrivectorKernelProductDense ope = new TrivectorKernelProductDense(inchannels, outchannels);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/trivector_kernelproduct_dense.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/trivector_kernelproduct_dense.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor, w_tensor, gw_tensor);

@@ -79,7 +79,7 @@ namespace TensorShaderTest.Operators.Connection1D {
 
             EdgePadding ope = new EdgePadding(inwidth, channels, leftpad, rightpad, batch);
 
-            Cuda.Profiler.Initialize("../../../profiler.nvsetting", "../../nvprofiles/edgepadding_1d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/edgepadding_1d.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor);
