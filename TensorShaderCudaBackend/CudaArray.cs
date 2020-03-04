@@ -68,6 +68,16 @@ namespace TensorShaderCudaBackend {
         /// <summary>概要</summary>
         public string Overview { private set; get; }
 
+        static CudaArray() { 
+            T[] array = new T[2];
+            long stride = Marshal.UnsafeAddrOfPinnedArrayElement(array, 1).ToInt64()
+                        - Marshal.UnsafeAddrOfPinnedArrayElement(array, 0).ToInt64();
+
+            if((ulong)stride != ElementSize) { 
+                throw new NotSupportedException("Element size does not match array stride for the specified array type.");
+            }
+        }
+
         /// <summary>コンストラクタ</summary>
         public CudaArray(ulong length, bool zeroset = true) {
             if (length > MaxLength) {
