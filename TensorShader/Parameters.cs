@@ -26,13 +26,29 @@ namespace TensorShader {
             return new List<ParameterField>(parameters.parameter_fields);
         }
 
+        /// <summary>和集合</summary>
+        public static Parameters operator +(Parameters p1, Parameters p2) {
+            return new Parameters(p1.parameter_fields.Union(p2.parameter_fields));
+        }
+
+        /// <summary>積集合</summary>
+        public static Parameters operator *(Parameters p1, Parameters p2) {
+            return new Parameters(p1.parameter_fields.Intersect(p2.parameter_fields));
+        }
+
+        /// <summary>差集合</summary>
+        public static Parameters operator -(Parameters p1, Parameters p2) {
+            return new Parameters(p1.parameter_fields.Except(p2.parameter_fields));
+        }
+
         /// <summary>条件抜き出し</summary>
         public Parameters Where(Func<ParameterField, bool> predicate) {
             return new Parameters(parameter_fields.Where(predicate));
         }
 
         /// <summary>更新則を追加</summary>
-        public void AddUpdater(Func<ParameterField, Updater> gen_updater) {
+        /// <returns>メゾットチェーン可</returns>
+        public Parameters AddUpdater(Func<ParameterField, Updater> gen_updater) {
             if (parameter_fields.Count <= 0) {
                 throw new InvalidOperationException(ExceptionMessage.EmptyList());
             }
@@ -40,6 +56,8 @@ namespace TensorShader {
             foreach (ParameterField parameter_field in parameter_fields) {
                 parameter_field.AddUpdater(gen_updater(parameter_field));
             }
+
+            return this;
         }
 
         /// <summary>更新則を初期化</summary>

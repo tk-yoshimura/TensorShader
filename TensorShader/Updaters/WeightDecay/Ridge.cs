@@ -1,8 +1,14 @@
 using System.Collections.Generic;
 
+using static TensorShader.VariableNode;
+
 namespace TensorShader.Updaters.WeightDecay {
     /// <summary>Ridge減衰</summary>
     public class Ridge : WeightDecay {
+
+        /// <summary>勾配スケールに依存するか</summary>
+        protected bool DependGrad { private set; get; }
+
         /// <summary>減衰率</summary>
         protected readonly InputNode decay;
 
@@ -17,17 +23,29 @@ namespace TensorShader.Updaters.WeightDecay {
         }
 
         /// <summary>コンストラクタ</summary>
-        public Ridge(ParameterField parameter, float decay)
+        public Ridge(ParameterField parameter, float decay, bool depend_grad = false)
             : base(parameter) {
+
+            this.DependGrad = depend_grad;
             this.decay = new InputNode(new Tensor(Shape.Scalar, new float[] { decay }));
         }
 
         /// <summary>更新フロー</summary>
         public override Flow UpdateFlow() {
-            VariableNode new_value = Value * (1 - decay);
-            new_value.Update(Value);
+            if (DependGrad) {
+                VariableNode rms = Sqrt(Average(Square(Grad)));
 
-            return Flow.FromInputs(Value, decay);
+                VariableNode new_grad = Grad + Value * rms * decay;
+                new_grad.Update(Grad);
+
+                return Flow.FromInputs(Value, Grad, decay);
+            }
+            else {
+                VariableNode new_grad = Grad + Value * decay;
+                new_grad.Update(Grad);
+
+                return Flow.FromInputs(Value, Grad, decay);
+            }
         }
 
         /// <summary>内部状態</summary>
