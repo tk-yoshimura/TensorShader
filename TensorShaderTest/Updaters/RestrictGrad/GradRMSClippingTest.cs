@@ -16,7 +16,7 @@ namespace TensorShaderTest.Updaters.RestrictGrad {
 
                 float[] xval = (new float[length]).Select((_, idx) => 0.1f * ((float)idx * 3 - length)).ToArray();
                 float norm = xval.Select((v) => v * v).Average();
-                float rate = (float)Math.Sqrt(limit / Math.Max(norm, limit));
+                float rate = (float)Math.Sqrt(limit * limit / Math.Max(norm, limit * limit));
 
                 float[] yval = xval.Select((v) => v * rate).ToArray();
 
@@ -30,9 +30,9 @@ namespace TensorShaderTest.Updaters.RestrictGrad {
 
                 AssertError.Tolerance(yval, x.GradState, 1e-7f, 1e-5f);
 
-                float post_norm = x.GradState.Select((v) => v * v).Average();
+                float post_rms = (float)Math.Sqrt(x.GradState.Select((v) => v * v).Average());
 
-                Assert.AreEqual(limit, post_norm, 1e-5f);
+                Assert.AreEqual(limit, post_rms, 1e-5f);
 
                 CollectionAssert.AreEqual(xval, x.State);
             }
