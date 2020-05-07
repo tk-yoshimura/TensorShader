@@ -13,7 +13,7 @@ namespace TensorShaderUtil {
         /// <param name="directory_path">ディレクトリパス</param>
         /// <param name="filename_pattern">ファイル名パターン e.g. ( test*.txt )</param>
         /// <returns>ファイルパス及び連番</returns>
-        public static IEnumerable<(string path, int num)> EnumrateSerialFiles(string directory_path, string filename_pattern) {
+        public static IEnumerable<(string path, long num)> EnumrateSerialFiles(string directory_path, string filename_pattern) {
             if (!filename_pattern.Contains('*') || filename_pattern.IndexOf('*', filename_pattern.IndexOf('*') + 1) >= 0) {
                 throw new ArgumentException(nameof(filename_pattern));
             }
@@ -25,11 +25,11 @@ namespace TensorShaderUtil {
                 string filename = Path.GetFileName(filepath);
                 Match match = regex.Match(filename);
 
-                if (match.Success && int.TryParse(match.Groups["num"].Value, out int num)) {
+                if (match.Success && long.TryParse(match.Groups["num"].Value, out long num)) {
                     return (filepath, num);
                 }
-                return (filepath, num: int.MinValue);
-            }).Where((item) => item.num != int.MinValue);
+                return (filepath, num: long.MinValue);
+            }).Where((item) => item.num != long.MinValue);
 
             return filepaths_serials;
         }
@@ -38,7 +38,7 @@ namespace TensorShaderUtil {
         /// <param name="directory_path">ディレクトリパス</param>
         /// <param name="filename_pattern">ファイル名パターン e.g. ( test*.txt )</param>
         /// <remarks>対象ファイルが見つからないとき(path:null, num:0)を返す</remarks>
-        public static (string path, int num) SearchLastSerialFile(string directory_path, string filename_pattern) {
+        public static (string path, long num) SearchLastSerialFile(string directory_path, string filename_pattern) {
             var filepaths = EnumrateSerialFiles(directory_path, filename_pattern);
             return filepaths.OrderBy((filepath) => filepath.num).LastOrDefault();
         }
@@ -47,7 +47,7 @@ namespace TensorShaderUtil {
         /// <param name="directory_path">ディレクトリパス</param>
         /// <param name="filename_pattern">ファイル名パターン e.g. ( test*.txt )</param>
         /// <remarks>対象ファイルが見つからないとき(path:null, num:0)を返す</remarks>
-        public static (string path, int num) SearchFirstSerialFile(string directory_path, string filename_pattern) {
+        public static (string path, long num) SearchFirstSerialFile(string directory_path, string filename_pattern) {
             var filepaths = EnumrateSerialFiles(directory_path, filename_pattern);
             return filepaths.OrderBy((filepath) => filepath.num).FirstOrDefault();
         }
