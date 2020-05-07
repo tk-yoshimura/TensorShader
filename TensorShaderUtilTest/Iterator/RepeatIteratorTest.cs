@@ -8,12 +8,13 @@ namespace TensorShaderUtilTest.Iterator {
         [TestMethod]
         public void ExecuteTest1() {
             RepeatIterator iterator = new RepeatIterator(50, 101);
+            RepeatIterator iterator_skip = new RepeatIterator(50, 101);
 
             int[] indexes1 = iterator.Next();
             int[] indexes2 = iterator.Next();
             int[] indexes3 = iterator.Next();
             int[] indexes4 = iterator.Next();
-            _ = iterator.Next();
+            int[] indexes5 = iterator.Next();
             _ = iterator.Next();
             _ = iterator.Next();
             _ = iterator.Next();
@@ -26,17 +27,30 @@ namespace TensorShaderUtilTest.Iterator {
             CollectionAssert.AreNotEquivalent(indexes1, indexes2);
             CollectionAssert.AreNotEquivalent(indexes2, indexes3);
             CollectionAssert.AreNotEquivalent(indexes3, indexes4);
+
+            iterator_skip.SkipIteration(1);
+            int[] indexes2_skip = iterator_skip.Next();
+            Assert.AreEqual(0, iterator_skip.Epoch);
+            Assert.AreEqual(2, iterator_skip.Iteration);
+            CollectionAssert.AreEquivalent(indexes2, indexes2_skip);
+
+            iterator_skip.SkipEpoch(1);
+            int[] indexes5_skip = iterator_skip.Next();
+            Assert.AreEqual(2, iterator_skip.Epoch);
+            Assert.AreEqual(5, iterator_skip.Iteration);
+            CollectionAssert.AreEquivalent(indexes5, indexes5_skip);
         }
 
         [TestMethod]
         public void ExecuteTest2() {
             RepeatIterator iterator = new RepeatIterator(50, 100);
+            RepeatIterator iterator_skip = new RepeatIterator(50, 100);
 
             int[] indexes1 = iterator.Next();
             int[] indexes2 = iterator.Next();
             int[] indexes3 = iterator.Next();
             int[] indexes4 = iterator.Next();
-            _ = iterator.Next();
+            int[] indexes5 = iterator.Next();
             _ = iterator.Next();
             _ = iterator.Next();
             _ = iterator.Next();
@@ -49,6 +63,18 @@ namespace TensorShaderUtilTest.Iterator {
             CollectionAssert.AreNotEquivalent(indexes1, indexes2);
             CollectionAssert.AreNotEquivalent(indexes2, indexes3);
             CollectionAssert.AreNotEquivalent(indexes3, indexes4);
+
+            iterator_skip.SkipIteration(1);
+            int[] indexes2_skip = iterator_skip.Next();
+            Assert.AreEqual(1, iterator_skip.Epoch);
+            Assert.AreEqual(2, iterator_skip.Iteration);
+            CollectionAssert.AreEquivalent(indexes2, indexes2_skip);
+
+            iterator_skip.SkipEpoch(1);
+            int[] indexes5_skip = iterator_skip.Next();
+            Assert.AreEqual(2, iterator_skip.Epoch);
+            Assert.AreEqual(5, iterator_skip.Iteration);
+            CollectionAssert.AreEquivalent(indexes5, indexes5_skip);
         }
 
         [TestMethod]

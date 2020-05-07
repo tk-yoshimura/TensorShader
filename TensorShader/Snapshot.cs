@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TensorShader {
     /// <summary>スナップショット</summary>
@@ -69,6 +70,11 @@ namespace TensorShader {
         /// <summary>クリア</summary>
         public void Clear() {
             table.Clear();
+        }
+
+        /// <summary>キー名リスト</summary>
+        public override string ToString() {
+            return string.Join(", ", table.Select((item)=>item.Key));
         }
     }
 }

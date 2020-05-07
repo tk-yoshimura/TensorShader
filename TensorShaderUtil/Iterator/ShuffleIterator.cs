@@ -21,22 +21,20 @@ namespace TensorShaderUtil.Iterator {
         public override int[] Next() {
             IncreaseIteration();
 
-            if (pos + NumBatches > Counts) {
-                if (pos != Counts) {
-                    IncreaseEpoch();
-                }
-                pos = 0;
-                Shuffle(indexes, random);
-            }
-
             int[] batch_indexes = new int[NumBatches];
-            Array.Copy(indexes, pos, batch_indexes, 0, NumBatches);
 
-            pos += NumBatches;
+            if (pos + NumBatches >= Counts) {
+                Array.Copy(indexes, pos, batch_indexes, 0, Counts - pos);
+                Shuffle(indexes, random);
+                Array.Copy(indexes, 0, batch_indexes, Counts - pos, NumBatches - Counts + pos);
 
-            if (pos == Counts) {
                 IncreaseEpoch();
             }
+            else {
+                Array.Copy(indexes, pos, batch_indexes, 0, NumBatches);
+            }
+
+            pos = (pos + NumBatches) % Counts;
 
             return batch_indexes;
         }
@@ -49,6 +47,22 @@ namespace TensorShaderUtil.Iterator {
 
                 int j = random.Next(i + 1);
                 int swap = array[j]; array[j] = array[i]; array[i] = swap;
+            }
+        }
+
+        /// <summary>Iterationをスキップする</summary>
+        /// <remarks>増加時イベントは生じない</remarks>
+        public override void SkipIteration(long iter) {
+            long prev_epoch = Epoch;
+
+            base.SkipIteration(iter);
+
+            long post_epoch = Epoch;
+
+            pos = (int)((pos + NumBatches * iter) % Counts);
+
+            for (long epoch = prev_epoch; epoch < post_epoch; epoch++) {
+                Shuffle(indexes, random);
             }
         }
     }

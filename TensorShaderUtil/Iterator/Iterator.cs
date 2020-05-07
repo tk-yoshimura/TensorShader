@@ -52,5 +52,27 @@ namespace TensorShaderUtil.Iterator {
             Iteration++;
             IncreasedIteration?.Invoke(this);
         }
+
+        /// <summary>Epochをスキップする</summary>
+        /// <remarks>増加時イベントは生じない</remarks>
+        public void SkipEpoch(long epoch){
+            SkipIteration(epoch * (Counts / NumBatches));
+        }
+
+        /// <summary>Iterationをスキップする</summary>
+        /// <remarks>増加時イベントは生じない</remarks>
+        public virtual void SkipIteration(long iter) {
+            if (iter < 0) {
+                throw new ArgumentOutOfRangeException(nameof(iter));
+            }
+
+            Iteration += iter;
+            Epoch = Iteration * NumBatches / Counts;
+        }
+
+        /// <summary>状態</summary>
+        public override string ToString() {
+            return $"{nameof(Iteration)}:{Iteration} {nameof(Epoch)}:{Epoch} {nameof(Counts)}:{Counts} {nameof(NumBatches)}:{NumBatches}";
+        }
     }
 }

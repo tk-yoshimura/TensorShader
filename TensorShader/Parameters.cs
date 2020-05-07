@@ -286,5 +286,20 @@ namespace TensorShader {
 
             return snapshot;
         }
+
+        /// <summary>パラメータ名リスト</summary>
+        public override string ToString() {
+            return string.Join(
+                ", ",
+                parameter_fields.Select((field) => field.Name + '(' + 
+                    string.Join("->",
+                    field.Updaters.Select(
+                        (updater) => updater.Name
+                        )
+                    )
+                    + ')'
+                )
+            );
+        }
     }
 }

@@ -25,5 +25,13 @@ namespace TensorShaderUtil.Iterator {
 
             return batch_indexes;
         }
+
+        /// <summary>Iterationをスキップする</summary>
+        /// <remarks>増加時イベントは生じない</remarks>
+        public override void SkipIteration(long iter) {
+            base.SkipIteration(iter);
+
+            pos = (int)((pos + NumBatches * iter) % Counts);
+        }
     }
 }

@@ -7,13 +7,14 @@ namespace TensorShaderUtilTest.Iterator {
     public class ShuffleIteratorTest {
         [TestMethod]
         public void ExecuteTest1() {
-            ShuffleIterator iterator = new ShuffleIterator(50, 101, new Random());
+            ShuffleIterator iterator = new ShuffleIterator(50, 101, new Random(123));
+            ShuffleIterator iterator_skip = new ShuffleIterator(50, 101, new Random(123));
 
             int[] indexes1 = iterator.Next();
             int[] indexes2 = iterator.Next();
             int[] indexes3 = iterator.Next();
             int[] indexes4 = iterator.Next();
-            _ = iterator.Next();
+            int[] indexes5 = iterator.Next();
             _ = iterator.Next();
             _ = iterator.Next();
             _ = iterator.Next();
@@ -26,17 +27,30 @@ namespace TensorShaderUtilTest.Iterator {
             CollectionAssert.AreNotEquivalent(indexes1, indexes2);
             CollectionAssert.AreNotEquivalent(indexes3, indexes4);
             CollectionAssert.AreNotEqual(indexes1, indexes3);
+
+            iterator_skip.SkipIteration(1);
+            int[] indexes2_skip = iterator_skip.Next();
+            Assert.AreEqual(0, iterator_skip.Epoch);
+            Assert.AreEqual(2, iterator_skip.Iteration);
+            CollectionAssert.AreEquivalent(indexes2, indexes2_skip);
+
+            iterator_skip.SkipEpoch(1);
+            int[] indexes5_skip = iterator_skip.Next();
+            Assert.AreEqual(2, iterator_skip.Epoch);
+            Assert.AreEqual(5, iterator_skip.Iteration);
+            CollectionAssert.AreEquivalent(indexes5, indexes5_skip);
         }
 
         [TestMethod]
         public void ExecuteTest2() {
-            ShuffleIterator iterator = new ShuffleIterator(50, 100, new Random());
+            ShuffleIterator iterator = new ShuffleIterator(50, 100, new Random(123));
+            ShuffleIterator iterator_skip = new ShuffleIterator(50, 100, new Random(123));
 
             int[] indexes1 = iterator.Next();
             int[] indexes2 = iterator.Next();
             int[] indexes3 = iterator.Next();
             int[] indexes4 = iterator.Next();
-            _ = iterator.Next();
+            int[] indexes5 = iterator.Next();
             _ = iterator.Next();
             _ = iterator.Next();
             _ = iterator.Next();
@@ -49,11 +63,23 @@ namespace TensorShaderUtilTest.Iterator {
             CollectionAssert.AreNotEquivalent(indexes1, indexes2);
             CollectionAssert.AreNotEquivalent(indexes3, indexes4);
             CollectionAssert.AreNotEqual(indexes1, indexes3);
+
+            iterator_skip.SkipIteration(1);
+            int[] indexes2_skip = iterator_skip.Next();
+            Assert.AreEqual(1, iterator_skip.Epoch);
+            Assert.AreEqual(2, iterator_skip.Iteration);
+            CollectionAssert.AreEquivalent(indexes2, indexes2_skip);
+
+            iterator_skip.SkipEpoch(1);
+            int[] indexes5_skip = iterator_skip.Next();
+            Assert.AreEqual(2, iterator_skip.Epoch);
+            Assert.AreEqual(5, iterator_skip.Iteration);
+            CollectionAssert.AreEquivalent(indexes5, indexes5_skip);
         }
 
         [TestMethod]
         public void ExecuteTest3() {
-            ShuffleIterator iterator = new ShuffleIterator(1, 4, new Random());
+            ShuffleIterator iterator = new ShuffleIterator(1, 4, new Random(123));
 
             iterator.IncreasedEpoch += (iter) => { Console.WriteLine($"Epoch {iter.Epoch}"); };
             iterator.IncreasedIteration += (iter) => { Console.WriteLine($"Iteration {iter.Iteration}"); };
