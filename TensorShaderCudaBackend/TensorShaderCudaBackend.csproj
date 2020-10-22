@@ -5,7 +5,7 @@
     <Platforms>x64</Platforms>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Deterministic>false</Deterministic>
-    <Configurations>Debug;Release;Release_Cuda_10_0;Release_Cuda_10_1;Release_Cuda_10_2;Release_Cuda_10_3;Release_Cuda_10_4;Release_Linux;Release_Mac</Configurations>
+    <Configurations>Debug;Release;Release_Cuda_10_0;Release_Cuda_10_1;Release_Cuda_10_2;Release_Cuda_11_0;Release_Cuda_11_1;Release_Linux;Release_Mac</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -41,17 +41,17 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Cuda_10_3|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Cuda_11_0|x64'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DocumentationFile>bin\x64\Release_Cuda_10_3\netstandard2.0\TensorShaderCudaBackend.xml</DocumentationFile>
-    <DefineConstants>TRACE;PLATFORM_WINDOWS;CUDA_10_3</DefineConstants>
+    <DocumentationFile>bin\x64\Release_Cuda_11_0\netstandard2.0\TensorShaderCudaBackend.xml</DocumentationFile>
+    <DefineConstants>TRACE;PLATFORM_WINDOWS;CUDA_11_0</DefineConstants>
     <Optimize>true</Optimize>
   </PropertyGroup>
   
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Cuda_10_4|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Cuda_11_1|x64'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DocumentationFile>bin\x64\Release_Cuda_10_4\netstandard2.0\TensorShaderCudaBackend.xml</DocumentationFile>
-    <DefineConstants>TRACE;PLATFORM_WINDOWS;CUDA_10_4</DefineConstants>
+    <DocumentationFile>bin\x64\Release_Cuda_11_1\netstandard2.0\TensorShaderCudaBackend.xml</DocumentationFile>
+    <DefineConstants>TRACE;PLATFORM_WINDOWS;CUDA_11_1</DefineConstants>
     <Optimize>true</Optimize>
   </PropertyGroup>
   

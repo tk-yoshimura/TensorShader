@@ -16,10 +16,10 @@ namespace TensorShaderCudaBackend.API {
             const string DllName = "nvrtc64_101_0.dll";
 #elif CUDA_10_2
             const string DllName = "nvrtc64_102_0.dll";
-#elif CUDA_10_3
-            const string DllName = "nvrtc64_103_0.dll";
-#elif CUDA_10_4
-            const string DllName = "nvrtc64_104_0.dll";
+#elif CUDA_11_0
+            const string DllName = "nvrtc64_110_0.dll";
+#elif CUDA_11_1
+            const string DllName = "nvrtc64_111_0.dll";
 #elif PLATFORM_LINUX
             const string DllName = "libnvrtc.so";
 #elif PLATFORM_MAC

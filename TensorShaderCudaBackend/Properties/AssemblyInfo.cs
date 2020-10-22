@@ -12,10 +12,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("TensorShaderCudaBackend For Windows CUDA10.1")]
 #elif CUDA_10_2
 [assembly: AssemblyTitle("TensorShaderCudaBackend For Windows CUDA10.2")]
-#elif CUDA_10_3
-[assembly: AssemblyTitle("TensorShaderCudaBackend For Windows CUDA10.3")]
-#elif CUDA_10_4
-[assembly: AssemblyTitle("TensorShaderCudaBackend For Windows CUDA10.4")]
+#elif CUDA_11_0
+[assembly: AssemblyTitle("TensorShaderCudaBackend For Windows CUDA11.0")]
+#elif CUDA_11_1
+[assembly: AssemblyTitle("TensorShaderCudaBackend For Windows CUDA11.1")]
 #elif PLATFORM_LINUX
 [assembly: AssemblyTitle("TensorShaderCudaBackend For Linux (notice: experiment)")]
 #elif PLATFORM_MAC
@@ -56,6 +56,6 @@ using System.Runtime.InteropServices;
 // すべての値を指定するか、次を使用してビルド番号とリビジョン番号を既定に設定できます
 // 既定値にすることができます:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("4.8.0.*")]
+[assembly: AssemblyVersion("4.9.0.*")]
 
 [assembly: InternalsVisibleTo("TensorShaderCudaBackendTest")]
