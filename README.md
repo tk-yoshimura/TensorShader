@@ -13,7 +13,7 @@ For regression problems: **High precision calculate** by FP32-FP32 arithmetic (1
 ## Requirement
 .NET Standard 2.0
 
-CUDA 10.*, Compute Capability 5.0+
+CUDA 10.* 11.*, Compute Capability 5.0+
 
 validated: Windows
 experiment: Linux, MacOS
