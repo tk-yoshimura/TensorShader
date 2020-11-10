@@ -76,5 +76,10 @@ namespace TensorShader {
                 val.v
             );
         }
+
+        /// <summary>初期テンソルの生成</summary>
+        public static implicit operator Tensor(Shape shape) { 
+            return new Tensor(shape);
+        }
     }
 }
