@@ -32,13 +32,13 @@ namespace TensorShader.Layers {
         public ComplexDeconvolution3D(int inchannels, int outchannels, int kwidth, int kheight, int kdepth, bool use_bias, PaddingMode pad_mode, string label)
             : base(label) {
             this.W = new ParameterField(
-                new Tensor(Shape.Kernel3D(outchannels, inchannels / 2, kwidth, kheight, kdepth)),
+                Shape.Kernel3D(outchannels, inchannels / 2, kwidth, kheight, kdepth),
                 Label + "/w",
                 ParameterCategory.Kernel);
 
             this.Bias = use_bias
                 ? new ParameterField(
-                    new Tensor(Shape.Vector(outchannels)),
+                    Shape.Vector(outchannels),
                     Label + "/bias",
                     ParameterCategory.Bias)
                 : null;

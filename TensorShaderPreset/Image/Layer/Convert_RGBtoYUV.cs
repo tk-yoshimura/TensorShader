@@ -14,7 +14,7 @@ namespace TensorShaderPreset.Image {
                   +0.61497538f, -0.51496512f, -0.10001026f
                 };
 
-            VariableField w = new VariableField(new Tensor(Shape.Kernel0D(3, 3), wval), name: "RGBtoYUV");
+            VariableField w = new VariableField((Shape.Kernel0D(3, 3), wval), name: "RGBtoYUV");
 
             return PointwiseConvolution2D(x, w);
         }
@@ -28,7 +28,7 @@ namespace TensorShaderPreset.Image {
                   1, +2.032061853f,  0
                 };
 
-            VariableField w = new VariableField(new Tensor(Shape.Kernel0D(3, 3), wval), name: "YUVtoRGB");
+            VariableField w = new VariableField((Shape.Kernel0D(3, 3), wval), name: "YUVtoRGB");
 
             return PointwiseConvolution2D(x, w);
         }

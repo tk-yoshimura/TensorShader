@@ -20,13 +20,13 @@ namespace TensorShader.Layers {
         public TrivectorDense(int inchannels, int outchannels, bool use_bias, string label)
             : base(label) {
             this.W = new ParameterField(
-                new Tensor(Shape.Kernel0D(inchannels / 3 * 4, outchannels / 3)),
+                Shape.Kernel0D(inchannels / 3 * 4, outchannels / 3),
                 Label + "/w",
                 ParameterCategory.Kernel);
 
             this.Bias = use_bias
                 ? new ParameterField(
-                    new Tensor(Shape.Vector(outchannels)),
+                    Shape.Vector(outchannels),
                     Label + "/bias",
                     ParameterCategory.Bias)
                 : null;

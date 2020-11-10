@@ -23,7 +23,7 @@ namespace TensorShaderPreset.Image {
             }
 
             VariableField w = new VariableField(
-                new Tensor(Shape.Kernel2D(channels, 1, kwidth, kheight), wval), 
+                (Shape.Kernel2D(channels, 1, kwidth, kheight), wval), 
                 name
             );
 

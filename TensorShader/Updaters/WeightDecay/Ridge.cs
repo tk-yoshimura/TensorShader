@@ -27,7 +27,7 @@ namespace TensorShader.Updaters.WeightDecay {
             : base(parameter) {
 
             this.DependGrad = depend_grad;
-            this.decay = new InputNode(new Tensor(Shape.Scalar, new float[] { decay }));
+            this.decay = decay;
         }
 
         /// <summary>更新フロー</summary>

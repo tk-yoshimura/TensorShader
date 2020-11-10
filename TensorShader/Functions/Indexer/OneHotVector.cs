@@ -18,7 +18,7 @@ namespace TensorShader {
         public static Tensor OneHotVector(Tensor x, int channels) {
             Function function = new Functions.Indexer.OneHotVector(channels);
 
-            Tensor y = new Tensor(Shape.Map0D(channels, x.Channels));
+            Tensor y = Shape.Map0D(channels, x.Channels);
 
             function.Execute(new Tensor[] { x }, new Tensor[] { y });
 

@@ -41,12 +41,12 @@ namespace TensorShaderPreset.Image {
         public YamataniConvolution(int inchannels, int outchannels, int ksize, float yamatani_slope, PaddingMode pad_mode, string label)
             : base(label) {
             this.W1 = new ParameterField(
-                new Tensor(Shape.Kernel2D(inchannels, outchannels, ksize, ksize)),
+                Shape.Kernel2D(inchannels, outchannels, ksize, ksize),
                 Label + "/w1",
                 ParameterCategory.Kernel);
 
             this.W2 = new ParameterField(
-                new Tensor(Shape.Kernel2D(inchannels, outchannels, ksize, ksize)),
+                Shape.Kernel2D(inchannels, outchannels, ksize, ksize),
                 Label + "/w2",
                 ParameterCategory.Kernel);
 

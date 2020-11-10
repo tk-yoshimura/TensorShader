@@ -26,13 +26,13 @@ namespace TensorShader.Layers {
         public Deconvolution1D(int inchannels, int outchannels, int kwidth, bool use_bias, PaddingMode pad_mode, string label)
             : base(label) {
             this.W = new ParameterField(
-                new Tensor(Shape.Kernel1D(outchannels, inchannels, kwidth)),
+                Shape.Kernel1D(outchannels, inchannels, kwidth),
                 Label + "/w",
                 ParameterCategory.Kernel);
 
             this.Bias = use_bias
                 ? new ParameterField(
-                    new Tensor(Shape.Vector(outchannels)),
+                    Shape.Vector(outchannels),
                     Label + "/bias",
                     ParameterCategory.Bias)
                 : null;

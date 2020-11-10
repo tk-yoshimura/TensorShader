@@ -55,5 +55,10 @@
         public static implicit operator InputNode(Shape shape) { 
             return new Tensor(shape);
         }
+
+        /// <summary>初期ノードの生成</summary>
+        public static implicit operator InputNode((Shape shape, float[] v) val) { 
+            return new Tensor(val.shape, val.v);
+        }
     }
 }

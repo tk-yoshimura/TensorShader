@@ -29,13 +29,13 @@ namespace TensorShader.Layers {
         public QuaternionDeconvolution2D(int inchannels, int outchannels, int kwidth, int kheight, bool use_bias, PaddingMode pad_mode, string label)
             : base(label) {
             this.W = new ParameterField(
-                new Tensor(Shape.Kernel2D(outchannels, inchannels / 4, kwidth, kheight)),
+                Shape.Kernel2D(outchannels, inchannels / 4, kwidth, kheight),
                 Label + "/w",
                 ParameterCategory.Kernel);
 
             this.Bias = use_bias
                 ? new ParameterField(
-                    new Tensor(Shape.Vector(outchannels)),
+                    Shape.Vector(outchannels),
                     Label + "/bias",
                     ParameterCategory.Bias)
                 : null;

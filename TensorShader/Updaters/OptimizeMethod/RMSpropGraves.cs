@@ -43,13 +43,13 @@ namespace TensorShader.Updaters.OptimizeMethod {
         /// <summary>コンストラクタ</summary>
         public RMSpropGraves(ParameterField parameter, float lambda = 1e-3f, float rho = 0.9f, float eps = 1e-5f)
             : base(parameter) {
-            this.m = new InputNode(new Tensor(parameter.Shape));
-            this.v = new InputNode(new Tensor(parameter.Shape));
+            this.m = parameter.Shape;
+            this.v = parameter.Shape;
 
-            this.kahan_c = new InputNode(new Tensor(parameter.Shape));
+            this.kahan_c = parameter.Shape;
 
-            this.lambda = new InputNode(new Tensor(Shape.Scalar, new float[] { lambda }));
-            this.rho = new InputNode(new Tensor(Shape.Scalar, new float[] { rho }));
+            this.lambda = lambda;
+            this.rho = rho;
 
             this.Eps = eps;
 

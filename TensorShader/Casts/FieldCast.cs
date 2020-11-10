@@ -55,6 +55,11 @@
         public static implicit operator VariableField(Shape shape) { 
             return new Tensor(shape);
         }
+
+        /// <summary>初期フィールドの生成</summary>
+        public static implicit operator VariableField((Shape shape, float[] v) val) { 
+            return new Tensor(val.shape, val.v);
+        }
     }
 
     /// <summary>パラメータフィールド</summary>
@@ -112,6 +117,11 @@
         /// <summary>初期フィールドの生成</summary>
         public static implicit operator ParameterField(Shape shape) { 
             return new Tensor(shape);
+        }
+
+        /// <summary>初期フィールドの生成</summary>
+        public static implicit operator ParameterField((Shape shape, float[] v) val) { 
+            return new Tensor(val.shape, val.v);
         }
     }
 }

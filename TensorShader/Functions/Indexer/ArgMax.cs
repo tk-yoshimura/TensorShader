@@ -17,7 +17,7 @@ namespace TensorShader {
         public static Tensor ArgMax(Tensor x) {
             Function function = new Functions.Indexer.ArgMax();
 
-            Tensor y = new Tensor(Shape.Vector(x.Batch));
+            Tensor y = Shape.Vector(x.Batch);
 
             function.Execute(new Tensor[] { x }, new Tensor[] { y });
 

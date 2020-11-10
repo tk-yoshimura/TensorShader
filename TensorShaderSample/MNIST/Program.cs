@@ -31,8 +31,8 @@ namespace MNIST {
             Iterator test_iterator = new ShuffleIterator(loader.NumBatches, loader.CountTestDatas, random);
 
             Console.WriteLine("Create input tensor...");
-            VariableField x = new Tensor(loader.BatchShape);
-            VariableField t = new Tensor(Shape.Vector(loader.NumBatches));
+            VariableField x = loader.BatchShape;
+            VariableField t = Shape.Vector(loader.NumBatches);
 
             Console.WriteLine("Build model...");
             Field y = Model.CNN(x, classes);

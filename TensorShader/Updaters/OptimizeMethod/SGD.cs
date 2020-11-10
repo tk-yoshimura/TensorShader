@@ -21,9 +21,9 @@ namespace TensorShader.Updaters.OptimizeMethod {
         /// <summary>コンストラクタ</summary>
         public SGD(ParameterField parameter, float lambda = 0.01f)
             : base(parameter) {
-            this.kahan_c = new InputNode(new Tensor(parameter.Shape));
+            this.kahan_c = parameter.Shape;
 
-            this.lambda = new InputNode(new Tensor(Shape.Scalar, new float[] { lambda }));
+            this.lambda = lambda;
         }
 
         /// <summary>更新フロー</summary>

@@ -30,10 +30,10 @@ namespace TensorShader.Updaters.OptimizeMethod {
         /// <summary>コンストラクタ</summary>
         public AdaGrad(ParameterField parameter, float lambda = 0.01f, float eps = 1e-5f)
             : base(parameter) {
-            this.v = new InputNode(new Tensor(parameter.Shape));
-            this.kahan_c = new InputNode(new Tensor(parameter.Shape));
+            this.v = parameter.Shape;
+            this.kahan_c = parameter.Shape;
 
-            this.lambda = new InputNode(new Tensor(Shape.Scalar, new float[] { lambda }));
+            this.lambda = lambda;
 
             this.Eps = eps;
 

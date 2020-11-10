@@ -29,13 +29,13 @@ namespace TensorShader.Layers {
         public ChannelwiseConvolution2D(int channels, int kwidth, int kheight, bool use_bias, PaddingMode pad_mode, string label)
             : base(label) {
             this.W = new ParameterField(
-                new Tensor(Shape.Kernel2D(channels, 1, kwidth, kheight)),
+                Shape.Kernel2D(channels, 1, kwidth, kheight),
                 Label + "/w",
                 ParameterCategory.Kernel);
 
             this.Bias = use_bias
                 ? new ParameterField(
-                    new Tensor(Shape.Vector(channels)),
+                    Shape.Vector(channels),
                     Label + "/bias",
                     ParameterCategory.Bias)
                 : null;

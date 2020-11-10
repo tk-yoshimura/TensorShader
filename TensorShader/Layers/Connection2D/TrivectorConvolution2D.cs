@@ -29,13 +29,13 @@ namespace TensorShader.Layers {
         public TrivectorConvolution2D(int inchannels, int outchannels, int kwidth, int kheight, bool use_bias, PaddingMode pad_mode, string label)
             : base(label) {
             this.W = new ParameterField(
-                new Tensor(Shape.Kernel2D(inchannels / 3 * 4, outchannels / 3, kwidth, kheight)),
+                Shape.Kernel2D(inchannels / 3 * 4, outchannels / 3, kwidth, kheight),
                 Label + "/w",
                 ParameterCategory.Kernel);
 
             this.Bias = use_bias
                 ? new ParameterField(
-                    new Tensor(Shape.Vector(outchannels)),
+                    Shape.Vector(outchannels),
                     Label + "/bias",
                     ParameterCategory.Bias)
                 : null;

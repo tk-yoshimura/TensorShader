@@ -53,16 +53,16 @@ namespace TensorShader.Updaters.OptimizeMethod {
         /// <summary>コンストラクタ</summary>
         public Adamax(ParameterField parameter, float alpha = 2e-3f, float beta1 = 0.9f, float beta2 = 0.999f, float eps = 1e-5f)
             : base(parameter) {
-            this.m = new InputNode(new Tensor(parameter.Shape));
-            this.v = new InputNode(new Tensor(parameter.Shape));
+            this.m = parameter.Shape;
+            this.v = parameter.Shape;
 
-            this.t = new InputNode(new Tensor(Shape.Scalar));
+            this.t = Shape.Scalar;
 
-            this.kahan_c = new InputNode(new Tensor(parameter.Shape));
+            this.kahan_c = parameter.Shape;
 
-            this.alpha = new InputNode(new Tensor(Shape.Scalar, new float[] { alpha }));
-            this.beta1 = new InputNode(new Tensor(Shape.Scalar, new float[] { beta1 }));
-            this.beta2 = new InputNode(new Tensor(Shape.Scalar, new float[] { beta2 }));
+            this.alpha = alpha;
+            this.beta1 = beta1;
+            this.beta2 = beta2;
 
             this.Eps = eps;
 

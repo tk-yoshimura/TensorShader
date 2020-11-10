@@ -20,9 +20,9 @@ namespace SinRegression {
             VariableField x = (Tensor)xval;
             VariableField t = (Tensor)tval;
 
-            ParameterField p3 = new Tensor(Shape.Scalar, new float[] { (float)random.NextDouble() * 2 - 1 });
-            ParameterField p5 = new Tensor(Shape.Scalar, new float[] { (float)random.NextDouble() * 0.02f - 0.01f });
-            ParameterField p7 = new Tensor(Shape.Scalar, new float[] { (float)random.NextDouble() * 0.0002f - 0.0001f });
+            ParameterField p3 = (float)random.NextDouble() * 2 - 1;
+            ParameterField p5 = (float)random.NextDouble() * 0.02f - 0.01f;
+            ParameterField p7 = (float)random.NextDouble() * 0.0002f - 0.0001f;
 
             Field x2 = Square(x);
             Field x3 = x * x2;

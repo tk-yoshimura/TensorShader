@@ -30,12 +30,12 @@ namespace TensorShader.Updaters.OptimizeMethod {
         /// <summary>コンストラクタ</summary>
         public AdaDelta(ParameterField parameter, float rho = 0.95f, float eps = 1e-5f)
             : base(parameter) {
-            this.r = new InputNode(new Tensor(parameter.Shape));
-            this.v = new InputNode(new Tensor(parameter.Shape));
+            this.r = parameter.Shape;
+            this.v = parameter.Shape;
 
-            this.kahan_c = new InputNode(new Tensor(parameter.Shape));
+            this.kahan_c = parameter.Shape;
 
-            this.rho = new InputNode(new Tensor(Shape.Scalar, new float[] { rho }));
+            this.rho = rho;
 
             this.Eps = eps;
 
