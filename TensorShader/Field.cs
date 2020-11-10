@@ -133,7 +133,7 @@ namespace TensorShader {
     }
 
     /// <summary>変数フィールド</summary>
-    public class VariableField : Field {
+    public partial class VariableField : Field {
         /// <summary>フィールド名</summary>
         public override string Name => string.IsNullOrEmpty((Value as InputNode).Name) ? base.Name : (Value as InputNode).Name;
 
@@ -187,7 +187,7 @@ namespace TensorShader {
     }
 
     /// <summary>パラメータフィールド</summary>
-    public class ParameterField : Field {
+    public partial class ParameterField : Field {
         /// <summary>更新則</summary>
         public List<Updater> Updaters { private set; get; }
 

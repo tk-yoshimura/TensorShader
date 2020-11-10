@@ -28,9 +28,9 @@ namespace CustomLink {
 
             /*expected*/
             {
-                ParameterField x = new Tensor(Shape.Vector(points), xval);
-                ParameterField y = new Tensor(Shape.Vector(points), yval);
-                VariableField t = new Tensor(Shape.Vector(points), tval);
+                ParameterField x = xval;
+                ParameterField y = yval;
+                VariableField t = tval;
 
                 StoreField sin_xy = Sin(x * y);
                 Field err = sin_xy - t;
@@ -46,9 +46,9 @@ namespace CustomLink {
 
             /*actual*/
             {
-                ParameterField x = new Tensor(Shape.Vector(points), xval);
-                ParameterField y = new Tensor(Shape.Vector(points), yval);
-                VariableField t = new Tensor(Shape.Vector(points), tval);
+                ParameterField x = xval;
+                ParameterField y = yval;
+                VariableField t = tval;
 
                 StoreField sin_xy = CustomBinaryArithmetric.SinXY(x, y);
                 Field err = sin_xy - t;
@@ -96,8 +96,8 @@ namespace CustomLink {
 
             /*expected*/
             {
-                ParameterField x = new Tensor(Shape.Vector(points), xval);
-                VariableField t = new Tensor(Shape.Vector(points), tval);
+                ParameterField x = xval;
+                VariableField t = tval;
 
                 StoreField expsin = Exp(Sin(x));
                 Field err = expsin - t;
@@ -112,8 +112,8 @@ namespace CustomLink {
 
             /*actual*/
             {
-                ParameterField x = new Tensor(Shape.Vector(points), xval);
-                VariableField t = new Tensor(Shape.Vector(points), tval);
+                ParameterField x = xval;
+                VariableField t = tval;
 
                 StoreField expsin = CustomUnaryArithmetric.ExpSin(x);
                 Field err = expsin - t;

@@ -156,7 +156,7 @@ namespace TensorShader {
 
     /// <summary>入力ノード</summary>
     /// <remarks>計算フローの始点として機能</remarks>
-    public class InputNode : TensorNode {
+    public partial class InputNode : TensorNode {
         /// <summary>ノード名</summary>
         /// <remarks>計算フロー構築時に関与しない</remarks>
         public string Name { private set; get; } = string.Empty;
