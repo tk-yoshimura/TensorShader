@@ -1,26 +1,33 @@
 using System;
+using System.Runtime.CompilerServices;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TensorShaderTest {
     public static class AssertError {
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Tolerance(float expected, float actual, float minerr, float rateerr) {
             float delta = Math.Max(minerr, Math.Max(Math.Abs(expected), Math.Abs(actual)) * rateerr);
 
             Assert.AreEqual(expected, actual, delta);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Tolerance(float expected, float actual, float minerr, float rateerr, string message) {
             float delta = Math.Max(minerr, Math.Max(Math.Abs(expected), Math.Abs(actual)) * rateerr);
 
             Assert.AreEqual(expected, actual, delta, message);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Tolerance(double expected, double actual, double minerr, double rateerr) {
             double delta = Math.Max(minerr, Math.Max(Math.Abs(expected), Math.Abs(actual)) * rateerr);
 
             Assert.AreEqual(expected, actual, delta);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Tolerance(double expected, double actual, double minerr, double rateerr, string message) {
             double delta = Math.Max(minerr, Math.Max(Math.Abs(expected), Math.Abs(actual)) * rateerr);
 

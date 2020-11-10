@@ -219,7 +219,7 @@ namespace TensorShader {
     /// <summary>領域外アクセスチェック有効テンソル</summary>
     /// <remarks>デバック用</remarks>
     internal class OverflowCheckedTensor : Tensor {
-        private static Random random = new Random();
+        private static readonly Random random = new Random();
 
         private const int canary_length = 32;
         private readonly float[] canary;
