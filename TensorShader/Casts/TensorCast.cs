@@ -22,7 +22,7 @@ namespace TensorShader {
         }
 
         /// <summary>0次元マップの生成</summary>
-        public static implicit operator Tensor((float[] v, (int channels, int batch) shape) val) { 
+        public static implicit operator Tensor(((int channels, int batch) shape, float[] v) val) { 
             return new Tensor(
                 Shape.Map0D(val.shape.channels, val.shape.batch),
                 val.v
@@ -38,7 +38,7 @@ namespace TensorShader {
         }
 
         /// <summary>1次元マップの生成</summary>
-        public static implicit operator Tensor((float[] v, (int channels, int width, int batch) shape) val) { 
+        public static implicit operator Tensor(((int channels, int width, int batch) shape, float[] v) val) { 
             return new Tensor(
                 Shape.Map1D(val.shape.channels, val.shape.width, val.shape.batch),
                 val.v
@@ -54,7 +54,7 @@ namespace TensorShader {
         }
 
         /// <summary>2次元マップの生成</summary>
-        public static implicit operator Tensor((float[] v, (int channels, int width, int height, int batch) shape) val) { 
+        public static implicit operator Tensor(((int channels, int width, int height, int batch) shape, float[] v) val) { 
             return new Tensor(
                 Shape.Map2D(val.shape.channels, val.shape.width, val.shape.height, val.shape.batch),
                 val.v
@@ -70,7 +70,7 @@ namespace TensorShader {
         }
 
         /// <summary>3次元マップの生成</summary>
-        public static implicit operator Tensor((float[] v, (int channels, int width, int height, int depth, int batch) shape) val) { 
+        public static implicit operator Tensor(((int channels, int width, int height, int depth, int batch) shape, float[] v) val) { 
             return new Tensor(
                 Shape.Map3D(val.shape.channels, val.shape.width, val.shape.height, val.shape.depth, val.shape.batch),
                 val.v

@@ -17,7 +17,7 @@
         }
 
         /// <summary>0次元マップの生成</summary>
-        public static implicit operator InputNode((float[] v, (int channels, int batch) shape) val) { 
+        public static implicit operator InputNode(((int channels, int batch) shape, float[] v) val) { 
             return (Tensor)val;
         }
 
@@ -27,7 +27,7 @@
         }
 
         /// <summary>1次元マップの生成</summary>
-        public static implicit operator InputNode((float[] v, (int channels, int width, int batch) shape) val) { 
+        public static implicit operator InputNode(((int channels, int width, int batch) shape, float[] v) val) { 
             return (Tensor)val;
         }
 
@@ -37,7 +37,7 @@
         }
 
         /// <summary>2次元マップの生成</summary>
-        public static implicit operator InputNode((float[] v, (int channels, int width, int height, int batch) shape) val) { 
+        public static implicit operator InputNode(((int channels, int width, int height, int batch) shape, float[] v) val) { 
             return (Tensor)val;
         }
 
@@ -47,7 +47,7 @@
         }
 
         /// <summary>3次元マップの生成</summary>
-        public static implicit operator InputNode((float[] v, (int channels, int width, int height, int depth, int batch) shape) val) { 
+        public static implicit operator InputNode(((int channels, int width, int height, int depth, int batch) shape, float[] v) val) { 
             return (Tensor)val;
         }
     }
