@@ -20,7 +20,7 @@ namespace TensorShaderTest.Updaters.RestrictGrad {
 
                 float[] yval = xval.Select((v) => v * rate).ToArray();
 
-                ParameterField x = (Shape.Vector(length), xval);
+                ParameterField x = xval;
 
                 (Flow flow, _) = Flow.Optimize(x);
                 flow.Execute();
@@ -42,7 +42,7 @@ namespace TensorShaderTest.Updaters.RestrictGrad {
 
                 float[] xval = (new float[length]).Select((_, idx) => 0.1f * ((float)idx * 3 - length)).ToArray();
 
-                ParameterField x = (Shape.Vector(length), xval);
+                ParameterField x = xval;
 
                 (Flow flow, _) = Flow.Optimize(x);
                 flow.Execute();

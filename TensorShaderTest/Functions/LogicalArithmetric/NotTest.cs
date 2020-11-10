@@ -16,7 +16,7 @@ namespace TensorShaderTest.Functions.LogicalArithmetric {
             float[] x = (new float[length]).Select((_) => (float)rd.Next(2)).ToArray();
 
             {
-                Tensor t = (Shape.Vector(length), x);
+                Tensor t = x;
 
                 Tensor o = Tensor.LogicalNot(t);
 
@@ -24,7 +24,7 @@ namespace TensorShaderTest.Functions.LogicalArithmetric {
             }
 
             {
-                InputNode t = (Shape.Vector(length), x);
+                InputNode t = x;
 
                 var n = t + 0;
 

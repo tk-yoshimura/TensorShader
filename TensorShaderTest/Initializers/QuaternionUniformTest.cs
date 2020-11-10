@@ -20,7 +20,7 @@ namespace TensorShaderTest.Initializers {
 
                 for (int i = 0; i < tests; i++) {
                     Tensor x = Tensor.UniformRandom(Shape.Map0D(num * dims, batches), random) * (2 * range) - range;
-                    Tensor w = (Shape.Kernel0D(num * dims, dims));
+                    Tensor w = Shape.Kernel0D(num * dims, dims);
 
                     var initializer = new QuaternionUniform(w, random);
                     initializer.Execute();

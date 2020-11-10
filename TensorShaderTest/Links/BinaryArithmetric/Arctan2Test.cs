@@ -15,9 +15,9 @@ namespace TensorShaderTest.Links.BinaryArithmetric {
             float[] x2val = (new float[length]).Select((_, idx) => (float)Math.Cos(idx)).ToArray();
             float[] yval = (new float[length]).Select((_, idx) => (float)idx / 24).ToArray();
 
-            ParameterField x1 = (Shape.Vector(length), x1val);
-            ParameterField x2 = (Shape.Vector(length), x2val);
-            VariableField y_actual = (Shape.Vector(length), yval);
+            ParameterField x1 = x1val;
+            ParameterField x2 = x2val;
+            VariableField y_actual = yval;
 
             Field y_expect = Arctan2(x1, x2);
             Field err = y_expect - y_actual;

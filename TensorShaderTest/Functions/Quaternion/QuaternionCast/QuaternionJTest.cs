@@ -17,7 +17,7 @@ namespace TensorShaderTest.Functions.QuaternionArithmetric {
             float[] x1 = (new float[length]).Select((_) => (float)rd.NextDouble() * 2 - 1).ToArray();
 
             try {
-                Tensor t1 = (Shape.Vector(length), x1);
+                Tensor t1 = x1;
                 Tensor o = Tensor.QuaternionJ(t1);
 
                 float[] y = o.State;

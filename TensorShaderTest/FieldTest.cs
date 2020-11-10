@@ -10,7 +10,7 @@ namespace TensorShaderTest {
     public class FieldTest {
         [TestMethod]
         public void MinimumTest() {
-            Tensor intensor = (Shape.Scalar, new float[] { 1 });
+            Tensor intensor = 1;
 
             {
                 ParameterField f1 = new ParameterField(intensor);
@@ -205,8 +205,8 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void In1Out1Test() {
-            Tensor intensor = (Shape.Scalar, new float[] { -1.5f });
-            Tensor outtensor = (Shape.Scalar, new float[] { 2 });
+            Tensor intensor = -1.5f;
+            Tensor outtensor = 2;
 
             {
                 ParameterField f1 = new ParameterField(intensor);
@@ -335,9 +335,9 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void In2Out1Test() {
-            Tensor in1tensor = (Shape.Scalar, new float[] { 1 });
-            Tensor in2tensor = (Shape.Scalar, new float[] { 2 });
-            Tensor outtensor = (Shape.Scalar, new float[] { -3 });
+            Tensor in1tensor = 1;
+            Tensor in2tensor = 2;
+            Tensor outtensor = -3;
 
             {
                 ParameterField f1 = new ParameterField(in1tensor);
@@ -504,8 +504,8 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void In1Out2Test() {
-            Tensor intensor = (Shape.Scalar, new float[] { -1.5f });
-            Tensor outtensor = (Shape.Scalar, new float[] { 2 });
+            Tensor intensor = -1.5f;
+            Tensor outtensor = 2;
 
             {
                 ParameterField f1 = new ParameterField(intensor);
@@ -529,7 +529,7 @@ namespace TensorShaderTest {
 
                 CollectionAssert.AreEquivalent(new ParameterField[] { f1 }, parameters);
                 Assert.AreEqual(intensor, f1.ValueTensor);
-                Assert.AreEqual(Math.Sign(-1.5f) * ((1.5f - 2f) + (1.5f * 1.5f - 2f * 2f) * 1.5f * 2), f1.GradState[0]);
+                Assert.AreEqual(Math.Sign(-1.5f) * (1.5f - 2f + (1.5f * 1.5f - 2f * 2f) * 1.5f * 2), f1.GradState[0]);
             }
 
             {
@@ -554,7 +554,7 @@ namespace TensorShaderTest {
 
                 CollectionAssert.AreEquivalent(new ParameterField[] { f1 }, parameters);
                 Assert.AreEqual(intensor, f1.ValueTensor);
-                Assert.AreEqual(Math.Sign(-1.5f) * ((1.5f - 2f) + (1.5f * 1.5f - 2f * 2f) * 1.5f * 2), f1.GradState[0]);
+                Assert.AreEqual(Math.Sign(-1.5f) * (1.5f - 2f + (1.5f * 1.5f - 2f * 2f) * 1.5f * 2), f1.GradState[0]);
             }
 
             {
@@ -627,7 +627,7 @@ namespace TensorShaderTest {
 
                 CollectionAssert.AreEquivalent(new ParameterField[] { f1 }, parameters);
                 Assert.AreEqual(intensor, f1.ValueTensor);
-                Assert.AreEqual(Math.Sign(-1.5f) * ((1.5f - 2f) + (1.5f * 1.5f - 2f * 2f) * 1.5f * 2), f1.GradState[0]);
+                Assert.AreEqual(Math.Sign(-1.5f) * (1.5f - 2f + (1.5f * 1.5f - 2f * 2f) * 1.5f * 2), f1.GradState[0]);
 
                 StoreField n2 = f2;
                 StoreField n3 = f3;
@@ -674,7 +674,7 @@ namespace TensorShaderTest {
 
                 CollectionAssert.AreEquivalent(new ParameterField[] { f1 }, parameters);
                 Assert.AreEqual(intensor, f1.ValueTensor);
-                Assert.AreEqual(Math.Sign(-1.5f) * ((1.5f - 2f) + (1.5f * 1.5f - 2f * 2f) * 1.5f * 2), f1.GradState[0]);
+                Assert.AreEqual(Math.Sign(-1.5f) * (1.5f - 2f + (1.5f * 1.5f - 2f * 2f) * 1.5f * 2), f1.GradState[0]);
 
                 StoreField n2 = f2;
                 StoreField n3 = f3;
@@ -702,8 +702,8 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void In2Out2Test() {
-            Tensor intensor = (Shape.Scalar, new float[] { -1.5f });
-            Tensor outtensor = (Shape.Scalar, new float[] { 2 });
+            Tensor intensor = -1.5f;
+            Tensor outtensor = 2;
 
             {
                 ParameterField f1 = new ParameterField(intensor);
@@ -727,21 +727,21 @@ namespace TensorShaderTest {
 
                 CollectionAssert.AreEquivalent(new ParameterField[] { f1, fo }, parameters);
                 Assert.AreEqual(intensor, f1.ValueTensor);
-                Assert.AreEqual(Math.Sign(-1.5f) * ((1.5f - 2f) + (1.5f * 1.5f - 2f * 2f) * 1.5f * 2), f1.GradState[0]);
+                Assert.AreEqual(Math.Sign(-1.5f) * (1.5f - 2f + (1.5f * 1.5f - 2f * 2f) * 1.5f * 2), f1.GradState[0]);
                 Assert.AreEqual(-(1.5f - 2f) - (1.5f * 1.5f - 2f * 2f) * 2f * 2, fo.GradState[0]);
             }
         }
 
         [TestMethod]
         public void ParallelTest() {
-            Tensor intensor1 = (Shape.Scalar, new float[] { -1.5f });
-            Tensor outtensor1 = (Shape.Scalar, new float[] { 2 });
+            Tensor intensor1 = -1.5f;
+            Tensor outtensor1 = 2;
 
-            Tensor intensor2 = (Shape.Scalar, new float[] { -2.5f });
-            Tensor outtensor2 = (Shape.Scalar, new float[] { 4 });
+            Tensor intensor2 = -2.5f;
+            Tensor outtensor2 = 4;
 
-            Tensor intensor3 = (Shape.Scalar, new float[] { -4.5f });
-            Tensor outtensor3 = (Shape.Scalar, new float[] { 8 });
+            Tensor intensor3 = -4.5f;
+            Tensor outtensor3 = 8;
 
             {
                 ParameterField fi1 = new ParameterField(intensor1);
@@ -860,8 +860,8 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void RejoinTest() {
-            Tensor intensor = (Shape.Scalar, new float[] { -1.5f });
-            Tensor outtensor = (Shape.Scalar, new float[] { -2 });
+            Tensor intensor = -1.5f;
+            Tensor outtensor = -2;
 
             {
                 ParameterField f1 = new ParameterField(intensor);
@@ -954,7 +954,7 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void BifurcTest() {
-            Tensor intensor = (Shape.Scalar, new float[] { -1.5f });
+            Tensor intensor = -1.5f;
 
             {
                 ParameterField f1 = intensor;
@@ -1123,7 +1123,7 @@ namespace TensorShaderTest {
         [TestMethod]
         public void BroadcastTest() {
             Tensor intensor1 = (Shape.Vector(5), new float[] { 0f, 1f, 2f, 3f, 4f });
-            Tensor intensor2 = (Shape.Scalar, new float[] { 2f });
+            Tensor intensor2 = 2f;
             Tensor outtensor1 = (Shape.Vector(5), new float[] { 4f, 3f, 2f, 1f, 0f });
             Tensor outtensor2 = (Shape.Vector(5), new float[] { 0f, 2f, 4f, 6f, 8f });
 
@@ -1254,7 +1254,7 @@ namespace TensorShaderTest {
             float[] u = new float[12] { 7, 10, 2, 5, 11, 3, 8, 9, 4, 12, 1, 6, };
             float[] v = new float[12] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
             float[] err = (new float[12]).Select((_, idx) => u[idx] - v[idx]).ToArray();
-            float[] err_p1 = (new float[12]).Select((_, idx) => (u[idx] + 1) - v[idx]).ToArray();
+            float[] err_p1 = (new float[12]).Select((_, idx) => u[idx] + 1 - v[idx]).ToArray();
 
             Tensor intensor = (Shape.Map0D(3, 4), u);
             Tensor outtensor1 = (Shape.Vector(12), v);
@@ -1411,8 +1411,8 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void DuplicateTest() {
-            Tensor intensor = (Shape.Scalar, new float[] { 1.5f });
-            Tensor outtensor = (Shape.Scalar, new float[] { 7f });
+            Tensor intensor = 1.5f;
+            Tensor outtensor = 7f;
 
             /*square*/
             {
@@ -1525,9 +1525,9 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void StoreTest() {
-            Tensor in1tensor = (Shape.Scalar, new float[] { 1 });
-            Tensor in2tensor = (Shape.Scalar, new float[] { 2 });
-            Tensor outtensor = (Shape.Scalar, new float[] { -3 });
+            Tensor in1tensor = 1;
+            Tensor in2tensor = 2;
+            Tensor outtensor = -3;
 
             {
                 ParameterField f1 = new ParameterField(in1tensor);
@@ -1596,8 +1596,8 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void BadFlowTest() {
-            Tensor intensor = (Shape.Scalar, new float[] { -1.5f });
-            Tensor outtensor = (Shape.Scalar, new float[] { 2 });
+            Tensor intensor = -1.5f;
+            Tensor outtensor = 2;
 
             {
                 ParameterField f1 = new ParameterField(intensor);

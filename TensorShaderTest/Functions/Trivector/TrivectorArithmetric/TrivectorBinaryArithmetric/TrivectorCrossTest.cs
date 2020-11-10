@@ -18,8 +18,8 @@ namespace TensorShaderTest.Functions.TrivectorArithmetric {
             float[] x2 = (new float[length]).Select((_) => (float)rd.NextDouble() - 0.5f).ToArray();
 
             {
-                Tensor t1 = (Shape.Vector(length), x1);
-                Tensor t2 = (Shape.Vector(length), x2);
+                Tensor t1 = x1;
+                Tensor t2 = x2;
                 Tensor o = Tensor.TrivectorCross(t1, t2);
 
                 float[] y = o.State;
@@ -36,7 +36,7 @@ namespace TensorShaderTest.Functions.TrivectorArithmetric {
             }
 
             {
-                Tensor t1 = (Shape.Vector(length), x1);
+                Tensor t1 = x1;
                 Tensor o = Tensor.TrivectorCross(t1, t1);
 
                 float[] y = o.State;

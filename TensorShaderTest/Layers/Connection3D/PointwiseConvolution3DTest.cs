@@ -9,7 +9,7 @@ namespace TensorShaderTest.Layers {
         public void ExecuteTest() {
             int inchannels = 4, outchannels = 6, inwidth = 13, inheight = 17, indepth = 19, batch = 7;
 
-            VariableField x = (Shape.Map3D(inchannels, inwidth, inheight, indepth, batch));
+            VariableField x = Shape.Map3D(inchannels, inwidth, inheight, indepth, batch);
 
             Layer layer = new PointwiseConvolution3D(inchannels, outchannels, use_bias: true, "conv");
 

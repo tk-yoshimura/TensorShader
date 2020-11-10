@@ -21,7 +21,7 @@ namespace TensorShaderTest.Links.Quaternion {
             ParameterField y = (Shape.Vector(length / 4), yval);
             ParameterField z = (Shape.Vector(length / 4), zval);
             ParameterField w = (Shape.Vector(length / 4), wval);
-            VariableField t_actual = (Shape.Vector(length), tval);
+            VariableField t_actual = tval;
 
             Field t_expect = QuaternionCast(x, y, z, w);
             StoreField err = t_expect - t_actual;

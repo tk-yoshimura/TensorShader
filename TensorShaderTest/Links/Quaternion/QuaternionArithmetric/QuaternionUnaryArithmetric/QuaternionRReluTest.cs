@@ -13,8 +13,8 @@ namespace TensorShaderTest.Links.QuaternionArithmetric {
             float[] xval = (new float[length]).Select((_, idx) => (float)idx * 2 - length).ToArray();
             float[] yval = (new float[length]).Select((_, idx) => (float)idx / 2).ToArray();
 
-            ParameterField x = (Shape.Vector(length), xval);
-            VariableField y_actual = (Shape.Vector(length), yval);
+            ParameterField x = xval;
+            VariableField y_actual = yval;
 
             Field y_expect = QuaternionRRelu(x);
             Field err = y_expect - y_actual;
@@ -35,8 +35,8 @@ namespace TensorShaderTest.Links.QuaternionArithmetric {
             float[] xval = (new float[length]).Select((_, idx) => (float)idx * 2 - length).ToArray();
             float[] yval = (new float[length]).Select((_, idx) => (float)idx / 2).ToArray();
 
-            ParameterField x = (Shape.Vector(length), xval);
-            VariableField y_actual = (Shape.Vector(length), yval);
+            ParameterField x = xval;
+            VariableField y_actual = yval;
 
             Field r = QuaternionR(x), i = QuaternionI(x), j = QuaternionJ(x), k = QuaternionK(x);
 

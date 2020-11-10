@@ -17,15 +17,15 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             float[] x2 = (new float[length]).Select((_) => (float)rd.NextDouble()).ToArray();
 
             {
-                Tensor t1 = (Shape.Vector(length), x1);
-                Tensor t2 = (Shape.Vector(length), x2);
+                Tensor t1 = x1;
+                Tensor t2 = x2;
                 Tensor o = Tensor.Arctan2(t1, t2);
 
                 AssertError.Tolerance(idxes.Select((idx) => (float)Math.Atan2(x1[idx], x2[idx])).ToArray(), o.State, 1e-7f, 1e-3f); /*non linear tolerance*/
             }
 
             {
-                Tensor t1 = (Shape.Vector(length), x1);
+                Tensor t1 = x1;
 
                 Tensor o = Tensor.Arctan2(t1, t1);
 
@@ -33,8 +33,8 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             }
 
             {
-                InputNode t1 = (Shape.Vector(length), x1);
-                InputNode t2 = (Shape.Vector(length), x2);
+                InputNode t1 = x1;
+                InputNode t2 = x2;
 
                 var n1 = t1 + 0;
                 var n2 = t2 + 0;
@@ -48,8 +48,8 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             }
 
             {
-                InputNode t1 = (Shape.Vector(length), x1);
-                InputNode t2 = (Shape.Vector(length), x2);
+                InputNode t1 = x1;
+                InputNode t2 = x2;
 
                 var n1 = t1 + 0;
 
@@ -62,8 +62,8 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             }
 
             {
-                InputNode t1 = (Shape.Vector(length), x1);
-                InputNode t2 = (Shape.Vector(length), x2);
+                InputNode t1 = x1;
+                InputNode t2 = x2;
 
                 var n2 = t2 + 0;
 
@@ -76,7 +76,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             }
 
             {
-                InputNode t1 = (Shape.Vector(length), x1);
+                InputNode t1 = x1;
 
                 var n1 = t1 + 0;
 

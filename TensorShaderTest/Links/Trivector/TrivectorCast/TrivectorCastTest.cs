@@ -19,7 +19,7 @@ namespace TensorShaderTest.Links.Trivector {
             ParameterField x = (Shape.Vector(length / 3), xval);
             ParameterField y = (Shape.Vector(length / 3), yval);
             ParameterField z = (Shape.Vector(length / 3), zval);
-            VariableField t_actual = (Shape.Vector(length), tval);
+            VariableField t_actual = tval;
 
             Field t_expect = TrivectorCast(x, y, z);
             StoreField err = t_expect - t_actual;

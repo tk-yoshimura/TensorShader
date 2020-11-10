@@ -17,7 +17,7 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
             float cmin = -0.2f, cmax = 0.3f;
 
             {
-                Tensor t = (Shape.Vector(length), x);
+                Tensor t = x;
 
                 Tensor o = Tensor.Clip(t, cmin, cmax);
 
@@ -25,7 +25,7 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
             }
 
             {
-                InputNode t = (Shape.Vector(length), x);
+                InputNode t = x;
 
                 var n = t + 0;
 

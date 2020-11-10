@@ -10,13 +10,13 @@ namespace TensorShaderTest.Links.TrivectorArithmetric {
         public void ReferenceTest() {
             int length = 24;
 
-            float[] vval = (new float[length]).Select((_, idx) => ((float)idx * 2 - length)).ToArray();
-            float[] uval = (new float[length]).Select((_, idx) => ((float)idx * 3 - length)).Reverse().ToArray();
-            float[] tval = (new float[length]).Select((_, idx) => ((float)idx / 2)).ToArray();
+            float[] vval = (new float[length]).Select((_, idx) => (float)idx * 2 - length).ToArray();
+            float[] uval = (new float[length]).Select((_, idx) => (float)idx * 3 - length).Reverse().ToArray();
+            float[] tval = (new float[length]).Select((_, idx) => (float)idx / 2).ToArray();
 
-            ParameterField v = (Shape.Vector(length), vval);
-            ParameterField u = (Shape.Vector(length), uval);
-            VariableField t = (Shape.Vector(length), tval);
+            ParameterField v = vval;
+            ParameterField u = uval;
+            VariableField t = tval;
 
             Field vu = TrivectorCross(v, u);
             Field err = vu - t;
@@ -36,13 +36,13 @@ namespace TensorShaderTest.Links.TrivectorArithmetric {
         public void TheoreticalTest() {
             int length = 24;
 
-            float[] vval = (new float[length]).Select((_, idx) => ((float)idx * 2 - length)).ToArray();
-            float[] uval = (new float[length]).Select((_, idx) => ((float)idx * 3 - length)).Reverse().ToArray();
-            float[] tval = (new float[length]).Select((_, idx) => ((float)idx / 2)).ToArray();
+            float[] vval = (new float[length]).Select((_, idx) => (float)idx * 2 - length).ToArray();
+            float[] uval = (new float[length]).Select((_, idx) => (float)idx * 3 - length).Reverse().ToArray();
+            float[] tval = (new float[length]).Select((_, idx) => (float)idx / 2).ToArray();
 
-            ParameterField v = (Shape.Vector(length), vval);
-            ParameterField u = (Shape.Vector(length), uval);
-            VariableField t = (Shape.Vector(length), tval);
+            ParameterField v = vval;
+            ParameterField u = uval;
+            VariableField t = tval;
 
             Field vx = TrivectorX(v), vy = TrivectorY(v), vz = TrivectorZ(v);
             Field ux = TrivectorX(u), uy = TrivectorY(u), uz = TrivectorZ(u);

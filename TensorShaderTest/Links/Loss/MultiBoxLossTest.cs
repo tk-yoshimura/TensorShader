@@ -18,7 +18,7 @@ namespace TensorShaderTest.Links.Loss {
                   0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
 
             for (int i = 0; i < boxes * batches; i++) {
-                float p = ((i % 7 + 2) * 0.123f) % 1, q = ((i % 8 + 3) * 0.213f) % 1, r = ((i % 16 + 1) * 0.231f) % 1, s = ((i % 32 + 4) * 0.523f) % 1;
+                float p = (i % 7 + 2) * 0.123f % 1, q = (i % 8 + 3) * 0.213f % 1, r = (i % 16 + 1) * 0.231f % 1, s = (i % 32 + 4) * 0.523f % 1;
 
                 if (labelval[i] != 0) {
                     gtval[i * 4] = p; gtval[i * 4 + 1] = q; gtval[i * 4 + 2] = r; gtval[i * 4 + 3] = s;

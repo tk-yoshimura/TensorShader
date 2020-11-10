@@ -12,11 +12,11 @@ namespace TensorShaderTest.Links.TrivectorArithmetric {
 
             float[] vval = (new float[length]).Select((_, idx) => ((float)idx * 2 - length) * 0.01f).ToArray();
             float[] qval = (new float[length / 3 * 4]).Select((_, idx) => ((float)idx * 3 - length) * 0.01f).Reverse().ToArray();
-            float[] tval = (new float[length]).Select((_, idx) => ((float)idx / 2) * 0.01f).ToArray();
+            float[] tval = (new float[length]).Select((_, idx) => (float)idx / 2 * 0.01f).ToArray();
 
-            ParameterField v = (Shape.Vector(length), vval);
+            ParameterField v = vval;
             ParameterField q = (Shape.Vector(length / 3 * 4), qval);
-            VariableField t = (Shape.Vector(length), tval);
+            VariableField t = tval;
 
             Field vq = TrivectorQuaternionMul(v, q);
             Field err = vq - t;
@@ -38,11 +38,11 @@ namespace TensorShaderTest.Links.TrivectorArithmetric {
 
             float[] vval = (new float[length]).Select((_, idx) => ((float)idx * 2 - length) * 0.01f).ToArray();
             float[] qval = (new float[length / 3 * 4]).Select((_, idx) => ((float)idx * 3 - length) * 0.01f).Reverse().ToArray();
-            float[] tval = (new float[length]).Select((_, idx) => ((float)idx / 2) * 0.01f).ToArray();
+            float[] tval = (new float[length]).Select((_, idx) => (float)idx / 2 * 0.01f).ToArray();
 
-            ParameterField v = (Shape.Vector(length), vval);
+            ParameterField v = vval;
             ParameterField q = (Shape.Vector(length / 3 * 4), qval);
-            VariableField t = (Shape.Vector(length), tval);
+            VariableField t = tval;
 
             Field x = TrivectorX(v), y = TrivectorY(v), z = TrivectorZ(v);
             Field r = QuaternionR(q), i = QuaternionI(q), j = QuaternionJ(q), k = QuaternionK(q);

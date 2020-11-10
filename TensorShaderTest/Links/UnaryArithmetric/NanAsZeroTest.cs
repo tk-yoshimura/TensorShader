@@ -15,8 +15,8 @@ namespace TensorShaderTest.Links.UnaryArithmetric {
 
             xval[1] = xval[7] = xval[11] = float.NaN;
 
-            ParameterField x = (Shape.Vector(length), xval);
-            VariableField y_actual = (Shape.Vector(length), yval);
+            ParameterField x = xval;
+            VariableField y_actual = yval;
 
             Field y_expect = NanAsZero(x + 1);
             Field err = y_expect - y_actual;

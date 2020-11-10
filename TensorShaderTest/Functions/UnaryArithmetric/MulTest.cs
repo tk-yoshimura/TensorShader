@@ -17,7 +17,7 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
             float c = (float)rd.NextDouble();
 
             {
-                Tensor t = (Shape.Vector(length), x);
+                Tensor t = x;
 
                 Tensor o = t * c;
 
@@ -25,7 +25,7 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
             }
 
             {
-                InputNode t = (Shape.Vector(length), x);
+                InputNode t = x;
 
                 var n = t + 0;
 
@@ -38,7 +38,7 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
             }
 
             {
-                Tensor t = (Shape.Vector(length), x);
+                Tensor t = x;
 
                 Tensor o = c * t;
 
@@ -46,7 +46,7 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
             }
 
             {
-                InputNode t = (Shape.Vector(length), x);
+                InputNode t = x;
 
                 var n = t + 0;
 

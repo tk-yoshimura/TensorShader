@@ -8,7 +8,7 @@ namespace TensorShaderTest {
     public class UpdaterTest {
         [TestMethod]
         public void MinimumTest() {
-            Tensor errtensor = (Shape.Scalar, new float[] { -3 });
+            Tensor errtensor = -3;
 
             {
                 ParameterField ferr = new ParameterField(errtensor);
@@ -34,8 +34,8 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void In1Out1Test() {
-            Tensor intensor = (Shape.Scalar, new float[] { -1.5f });
-            Tensor outtensor = (Shape.Scalar, new float[] { 2 });
+            Tensor intensor = -1.5f;
+            Tensor outtensor = 2;
 
             {
                 ParameterField f1 = new ParameterField(intensor);
@@ -64,9 +64,9 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void In2Out1Test() {
-            Tensor in1tensor = (Shape.Scalar, new float[] { 1 });
-            Tensor in2tensor = (Shape.Scalar, new float[] { 2 });
-            Tensor outtensor = (Shape.Scalar, new float[] { -3 });
+            Tensor in1tensor = 1;
+            Tensor in2tensor = 2;
+            Tensor outtensor = -3;
 
             {
                 ParameterField f1 = new ParameterField(in1tensor);
@@ -99,8 +99,8 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void RejoinTest() {
-            Tensor intensor = (Shape.Scalar, new float[] { -1.5f });
-            Tensor outtensor = (Shape.Scalar, new float[] { -2 });
+            Tensor intensor = -1.5f;
+            Tensor outtensor = -2;
 
             {
                 ParameterField f1 = new ParameterField(intensor);
@@ -134,9 +134,9 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void ChangeUpdaterValueTest() {
-            Tensor in1tensor = (Shape.Scalar, new float[] { 1 });
-            Tensor in2tensor = (Shape.Scalar, new float[] { 2 });
-            Tensor outtensor = (Shape.Scalar, new float[] { -3 });
+            Tensor in1tensor = 1;
+            Tensor in2tensor = 2;
+            Tensor outtensor = -3;
 
             {
                 ParameterField f1 = new ParameterField(in1tensor);

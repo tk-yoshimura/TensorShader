@@ -12,7 +12,7 @@ namespace TensorShaderTest.Links.Connection2D {
             int channels = 2, inwidth = 10, inheight = 9, batch = 2;
             int outwidth = inwidth / stride, outheight = inheight / stride;
 
-            float[] xval = (new float[channels * inwidth * inheight * batch]).Select((_, idx) => (idx % 17) * 1e-3f).ToArray();
+            float[] xval = (new float[channels * inwidth * inheight * batch]).Select((_, idx) => idx % 17 * 1e-3f).ToArray();
             float[] yval = (new float[channels * outwidth * outheight * batch]).Select((_, idx) => idx * 2e-3f).ToArray();
 
             ParameterField x = (Shape.Map2D(channels, inwidth, inheight, batch), xval);

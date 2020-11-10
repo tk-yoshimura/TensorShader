@@ -52,9 +52,9 @@ namespace TensorShaderTest.Links.TrivectorConvolution {
             Field wrr = wr * wr, wii = wi * wi, wjj = wj * wj, wkk = wk * wk;
             Field wri = wr * wi, wrj = wr * wj, wrk = wr * wk, wij = wi * wj, wik = wi * wk, wjk = wj * wk;
 
-            Field xx = Deconvolution2D(yx, (wrr + wii - wjj - wkk)) + 2 * (Deconvolution2D(yy, (wij - wrk)) + Deconvolution2D(yz, (wik + wrj)));
-            Field xy = Deconvolution2D(yy, (wrr - wii + wjj - wkk)) + 2 * (Deconvolution2D(yz, (wjk - wri)) + Deconvolution2D(yx, (wij + wrk)));
-            Field xz = Deconvolution2D(yz, (wrr - wii - wjj + wkk)) + 2 * (Deconvolution2D(yx, (wik - wrj)) + Deconvolution2D(yy, (wjk + wri)));
+            Field xx = Deconvolution2D(yx, wrr + wii - wjj - wkk) + 2 * (Deconvolution2D(yy, wij - wrk) + Deconvolution2D(yz, wik + wrj));
+            Field xy = Deconvolution2D(yy, wrr - wii + wjj - wkk) + 2 * (Deconvolution2D(yz, wjk - wri) + Deconvolution2D(yx, wij + wrk));
+            Field xz = Deconvolution2D(yz, wrr - wii - wjj + wkk) + 2 * (Deconvolution2D(yx, wik - wrj) + Deconvolution2D(yy, wjk + wri));
 
             Field x_expect = TrivectorCast(xx, xy, xz);
 

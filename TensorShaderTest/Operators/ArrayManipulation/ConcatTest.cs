@@ -72,7 +72,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
                             for (int p = 0; p < slides; p++) {
                                 for (int q = 0; q < stride; q++) {
                                     for (int r = 0; r < inaxislength; r++) {
-                                        Assert.AreEqual(xs[i][q + r * stride + p * (stride * inaxislength)], y[q + (r + outindex) * stride + p * (stride * outaxislength)]);
+                                        Assert.AreEqual(xs[i][q + r * stride + p * stride * inaxislength], y[q + (r + outindex) * stride + p * stride * outaxislength]);
                                     }
                                 }
                             }

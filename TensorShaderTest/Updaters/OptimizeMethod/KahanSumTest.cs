@@ -10,9 +10,9 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
             const int loops = 1000;
             const double dx_val = 1.1;
 
-            InputNode x = (Shape.Scalar, new float[] { 0 });
-            InputNode dx = (Shape.Scalar, new float[] { (float)dx_val });
-            InputNode c = (Shape.Scalar, new float[] { 0 });
+            InputNode x = 0;
+            InputNode dx = (float)dx_val;
+            InputNode c = 0;
 
             (VariableNode new_x, VariableNode new_c) = TensorShader.Updaters.OptimizeMethod.OptimizeMethod.KahanSum(x, dx, c);
 

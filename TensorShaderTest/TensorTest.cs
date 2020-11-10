@@ -18,7 +18,7 @@ namespace TensorShaderTest {
             float[] v2 = (new float[length]).Select((_) => (float)random.NextDouble()).ToArray();
 
             {
-                Tensor tensor = (Shape.Map0D(channels, batch));
+                Tensor tensor = Shape.Map0D(channels, batch);
 
                 Assert.AreEqual(length, tensor.Length);
                 foreach (float v in tensor.State) {
@@ -71,7 +71,7 @@ namespace TensorShaderTest {
             float[] v1 = (new float[length]).Select((_) => (float)random.NextDouble()).ToArray();
 
             {
-                Tensor tensor = (Shape.Map0D(channels, batch));
+                Tensor tensor = Shape.Map0D(channels, batch);
 
                 tensor.Clear(1);
 
@@ -156,7 +156,7 @@ namespace TensorShaderTest {
 
             {
                 Tensor tensor1 = (Shape.Map0D(channels, batch), v1);
-                Tensor tensor2 = (Shape.Map0D(channels, batch));
+                Tensor tensor2 = Shape.Map0D(channels, batch);
 
                 tensor1.CopyTo(tensor2);
 
@@ -176,7 +176,7 @@ namespace TensorShaderTest {
 
             {
                 Tensor tensor1 = new OverflowCheckedTensor(Shape.Map0D(channels, batch), v1);
-                Tensor tensor2 = (Shape.Map0D(channels, batch));
+                Tensor tensor2 = Shape.Map0D(channels, batch);
 
                 tensor1.CopyTo(tensor2);
 

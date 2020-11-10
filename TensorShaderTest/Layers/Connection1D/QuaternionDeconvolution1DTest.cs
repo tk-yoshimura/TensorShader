@@ -9,7 +9,7 @@ namespace TensorShaderTest.Layers {
         public void ExecuteTest() {
             int inchannels = 8, outchannels = 12, inwidth = 13, kwidth = 3, batch = 7;
 
-            VariableField x = (Shape.Map1D(inchannels, inwidth, batch));
+            VariableField x = Shape.Map1D(inchannels, inwidth, batch);
 
             Layer layer = new QuaternionDeconvolution1D(inchannels, outchannels, kwidth, use_bias: true, pad_mode: PaddingMode.Edge, "conv");
 

@@ -16,10 +16,10 @@ namespace TensorShaderTest.Links.ArrayManipulation {
 
             float[] yval = (new float[length]).Select((_, idx) => (float)idx * 2).ToArray();
 
-            ParameterField x1 = (Shape.Vector(length), x1val);
-            ParameterField x2 = (Shape.Vector(length), x2val);
-            ParameterField x3 = (Shape.Vector(length), x3val);
-            VariableField y_actual = (Shape.Vector(length), yval);
+            ParameterField x1 = x1val;
+            ParameterField x2 = x2val;
+            ParameterField x3 = x3val;
+            VariableField y_actual = yval;
 
             Field y_expect = Sum(x1, x2, x3);
             Field err = y_expect - y_actual;

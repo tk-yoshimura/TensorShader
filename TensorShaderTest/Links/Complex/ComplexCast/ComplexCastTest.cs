@@ -17,7 +17,7 @@ namespace TensorShaderTest.Links.Complex {
 
             ParameterField x = (Shape.Vector(length / 2), xval);
             ParameterField y = (Shape.Vector(length / 2), yval);
-            VariableField t_actual = (Shape.Vector(length), tval);
+            VariableField t_actual = tval;
 
             Field t_expect = ComplexCast(x, y);
             StoreField err = t_expect - t_actual;

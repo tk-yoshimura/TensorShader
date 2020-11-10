@@ -12,8 +12,8 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
         public void ReferenceTest() {
             const int loops = 10;
 
-            ParameterField x = (Shape.Scalar, new float[] { 0.7f });
-            ParameterField y = (Shape.Scalar, new float[] { 0.8f });
+            ParameterField x = 0.7f;
+            ParameterField y = 0.8f;
 
             Field f = Square(x) + Square(y);
             Field g = Square(Sin(x + Sin(y))) + Square(Sin(y + Sin(x)));
@@ -60,8 +60,8 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
         public void InitializeTest() {
             const int loops = 10;
 
-            ParameterField x = (Shape.Scalar, new float[] { 0.7f });
-            ParameterField y = (Shape.Scalar, new float[] { 0.8f });
+            ParameterField x = 0.7f;
+            ParameterField y = 0.8f;
 
             Field f = Square(x) + Square(y);
             Field g = Square(Sin(x + Sin(y))) + Square(Sin(y + Sin(x)));

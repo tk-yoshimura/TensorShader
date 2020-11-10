@@ -13,9 +13,9 @@ namespace TensorShaderTest.Links.Utility {
             float[] x2val = (new float[length]).Select((_, idx) => (float)idx + 1).Reverse().ToArray();
             float[] yval = (new float[length]).Select((_, idx) => (float)idx * 2).ToArray();
 
-            ParameterField x1 = (Shape.Vector(length), x1val);
-            ParameterField x2 = (Shape.Vector(length), x2val);
-            VariableField y_actual = (Shape.Vector(length), yval);
+            ParameterField x1 = x1val;
+            ParameterField x2 = x2val;
+            VariableField y_actual = yval;
 
             Field y_expect = x1 + Field.Unchain(x2);
             Field err = y_expect - y_actual;

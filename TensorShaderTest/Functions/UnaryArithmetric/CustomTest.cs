@@ -16,14 +16,14 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
             float[] x = (new float[length]).Select((_) => (float)rd.NextDouble()).ToArray();
 
             {
-                Tensor t = (Shape.Vector(length), x);
+                Tensor t = x;
                 Tensor o = Tensor.UnaryArithmetric(t, "unary_test", "#y = cosf(sinf(#x));");
 
                 AssertError.Tolerance(idxes.Select((idx) => (float)Math.Cos(Math.Sin(x[idx]))).ToArray(), o.State, 1e-7f, 1e-5f);
             }
 
             {
-                InputNode t = (Shape.Vector(length), x);
+                InputNode t = x;
 
                 var n = t + 0;
 

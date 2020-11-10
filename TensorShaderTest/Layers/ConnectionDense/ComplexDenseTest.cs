@@ -9,7 +9,7 @@ namespace TensorShaderTest.Layers {
         public void ExecuteTest() {
             int inchannels = 4, outchannels = 6, batch = 7;
 
-            VariableField x = (Shape.Map0D(inchannels, batch));
+            VariableField x = Shape.Map0D(inchannels, batch);
 
             Layer layer = new ComplexDense(inchannels, outchannels, use_bias: true, "fc");
 

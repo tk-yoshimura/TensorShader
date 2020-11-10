@@ -52,9 +52,9 @@ namespace TensorShaderTest.Links.TrivectorConvolution {
             Field wrr = wr * wr, wii = wi * wi, wjj = wj * wj, wkk = wk * wk;
             Field wri = wr * wi, wrj = wr * wj, wrk = wr * wk, wij = wi * wj, wik = wi * wk, wjk = wj * wk;
 
-            Field yx = Convolution1D(xx, (wrr + wii - wjj - wkk)) + 2 * (Convolution1D(xy, (wij - wrk)) + Convolution1D(xz, (wik + wrj)));
-            Field yy = Convolution1D(xy, (wrr - wii + wjj - wkk)) + 2 * (Convolution1D(xz, (wjk - wri)) + Convolution1D(xx, (wij + wrk)));
-            Field yz = Convolution1D(xz, (wrr - wii - wjj + wkk)) + 2 * (Convolution1D(xx, (wik - wrj)) + Convolution1D(xy, (wjk + wri)));
+            Field yx = Convolution1D(xx, wrr + wii - wjj - wkk) + 2 * (Convolution1D(xy, wij - wrk) + Convolution1D(xz, wik + wrj));
+            Field yy = Convolution1D(xy, wrr - wii + wjj - wkk) + 2 * (Convolution1D(xz, wjk - wri) + Convolution1D(xx, wij + wrk));
+            Field yz = Convolution1D(xz, wrr - wii - wjj + wkk) + 2 * (Convolution1D(xx, wik - wrj) + Convolution1D(xy, wjk + wri));
 
             Field y_expect = TrivectorCast(yx, yy, yz);
 

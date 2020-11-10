@@ -13,8 +13,8 @@ namespace TensorShaderTest.Links.ComplexArithmetric {
             float[] xval = (new float[length]).Select((_, idx) => (float)idx * 2 - length).ToArray();
             float[] tval = (new float[length]).Select((_, idx) => (float)idx / 2).Reverse().ToArray();
 
-            ParameterField x = (Shape.Vector(length), xval);
-            VariableField t = (Shape.Vector(length), tval);
+            ParameterField x = xval;
+            VariableField t = tval;
 
             Field xy = ComplexMul(x, x);
             Field err = xy - t;
@@ -34,8 +34,8 @@ namespace TensorShaderTest.Links.ComplexArithmetric {
             float[] xval = (new float[length]).Select((_, idx) => (float)idx * 2 - length).ToArray();
             float[] tval = (new float[length]).Select((_, idx) => (float)idx / 2).Reverse().ToArray();
 
-            ParameterField x = (Shape.Vector(length), xval);
-            VariableField t = (Shape.Vector(length), tval);
+            ParameterField x = xval;
+            VariableField t = tval;
 
             Field x_real = ComplexReal(x), x_imag = ComplexImag(x);
 

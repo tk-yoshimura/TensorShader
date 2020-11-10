@@ -181,7 +181,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
             Shape shape = new Shape(ShapeType.Map, 4096, 500);
             int length = shape.Length, axis = 0, stride = 1, axislength = shape[axis];
 
-            float[] xval = (new float[length]).Select((_, idx) => (float)(idx)).Reverse().ToArray();
+            float[] xval = (new float[length]).Select((_, idx) => (float)idx).Reverse().ToArray();
             float[] ival = (new float[shape.Length]).Select((_, idx) => (float)(idx / stride % shape[axis])).ToArray();
 
             OverflowCheckedTensor x_key = new OverflowCheckedTensor(shape, xval);

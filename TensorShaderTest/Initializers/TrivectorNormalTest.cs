@@ -19,7 +19,7 @@ namespace TensorShaderTest.Initializers {
 
                 for (int i = 0; i < tests; i++) {
                     Tensor x = Tensor.NormalRandom(Shape.Map0D(num * dims, batches), random);
-                    Tensor w = (Shape.Kernel0D(num * dims / 3 * 4, dims));
+                    Tensor w = Shape.Kernel0D(num * dims / 3 * 4, dims);
 
                     var initializer = new TrivectorNormal(w, random);
                     initializer.Execute();

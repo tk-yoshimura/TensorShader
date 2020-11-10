@@ -50,9 +50,9 @@ namespace TensorShaderTest.Links.TrivectorConvolution {
             Field wrr = wr * wr, wii = wi * wi, wjj = wj * wj, wkk = wk * wk;
             Field wri = wr * wi, wrj = wr * wj, wrk = wr * wk, wij = wi * wj, wik = wi * wk, wjk = wj * wk;
 
-            Field yx = Dense(xx, (wrr + wii - wjj - wkk)) + 2 * (Dense(xy, (wij - wrk)) + Dense(xz, (wik + wrj)));
-            Field yy = Dense(xy, (wrr - wii + wjj - wkk)) + 2 * (Dense(xz, (wjk - wri)) + Dense(xx, (wij + wrk)));
-            Field yz = Dense(xz, (wrr - wii - wjj + wkk)) + 2 * (Dense(xx, (wik - wrj)) + Dense(xy, (wjk + wri)));
+            Field yx = Dense(xx, wrr + wii - wjj - wkk) + 2 * (Dense(xy, wij - wrk) + Dense(xz, wik + wrj));
+            Field yy = Dense(xy, wrr - wii + wjj - wkk) + 2 * (Dense(xz, wjk - wri) + Dense(xx, wij + wrk));
+            Field yz = Dense(xz, wrr - wii - wjj + wkk) + 2 * (Dense(xx, wik - wrj) + Dense(xy, wjk + wri));
 
             Field y_expect = TrivectorCast(yx, yy, yz);
 

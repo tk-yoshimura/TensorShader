@@ -11,7 +11,7 @@ namespace TensorShaderTest.Links.ArrayManipulation {
             Shape inshape = new Shape(ShapeType.Map, 85, 32);
             Shape outshape = new Shape(ShapeType.Map, 23, 32);
 
-            float[] xval = (new float[inshape.Length]).Select((_, idx) => (float)(idx)).Reverse().ToArray();
+            float[] xval = (new float[inshape.Length]).Select((_, idx) => (float)idx).Reverse().ToArray();
             float[] tval = (new float[outshape.Length]).Select((_, idx) => (float)(idx * 2)).ToArray();
 
             ParameterField x = (inshape, xval);

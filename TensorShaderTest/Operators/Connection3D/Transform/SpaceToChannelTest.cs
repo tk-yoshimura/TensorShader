@@ -55,7 +55,7 @@ namespace TensorShaderTest.Operators.Connection3D {
         [TestMethod]
         public void SpeedTest() {
             int inwidth = 64, inheight = 64, indepth = 64, inchannels = 32, scale = 2;
-            int outwidth = inwidth / scale, outheight = inheight / scale, outdepth = indepth / scale, outchannels = inchannels * (scale * scale * scale);
+            int outwidth = inwidth / scale, outheight = inheight / scale, outdepth = indepth / scale, outchannels = inchannels * scale * scale * scale;
 
             OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, inwidth, inheight, indepth));
             OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth));

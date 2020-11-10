@@ -9,7 +9,7 @@ namespace TensorShaderTest.Layers {
         public void ExecuteTest() {
             int inchannels = 8, outchannels = 12, inwidth = 13, inheight = 17, indepth = 19, kwidth = 3, kheight = 5, kdepth = 7, batch = 7;
 
-            VariableField x = (Shape.Map3D(inchannels, inwidth, inheight, indepth, batch));
+            VariableField x = Shape.Map3D(inchannels, inwidth, inheight, indepth, batch);
 
             Layer layer = new QuaternionConvolution3D(inchannels, outchannels, kwidth, kheight, kdepth, use_bias: true, pad_mode: PaddingMode.Edge, "conv");
 
