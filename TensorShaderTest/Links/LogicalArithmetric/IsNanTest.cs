@@ -16,7 +16,7 @@ namespace TensorShaderTest.Links.LogicalArithmetric {
 
             float[] x = (new float[length * ch]).Select((_) => (float)rd.Next(-2, 3) / rd.Next(-2, 3)).ToArray();
 
-            VariableField f = new Tensor(Shape.Map1D(ch, length), x);
+            VariableField f = (Shape.Map1D(ch, length), x);
 
             StoreField output = IsNan(f);
 

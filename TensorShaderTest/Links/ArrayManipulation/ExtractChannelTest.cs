@@ -14,8 +14,8 @@ namespace TensorShaderTest.Links.ArrayManipulation {
             float[] xval = (new float[inshape.Length]).Select((_, idx) => (float)(idx)).Reverse().ToArray();
             float[] tval = (new float[outshape.Length]).Select((_, idx) => (float)(idx * 2)).ToArray();
 
-            ParameterField x = new Tensor(inshape, xval);
-            VariableField t = new Tensor(outshape, tval);
+            ParameterField x = (inshape, xval);
+            VariableField t = (outshape, tval);
 
             Field y = ExtractChannel(x, 13, 23);
 

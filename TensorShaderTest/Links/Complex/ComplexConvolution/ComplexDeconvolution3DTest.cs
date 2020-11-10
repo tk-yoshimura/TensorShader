@@ -15,9 +15,9 @@ namespace TensorShaderTest.Links.ComplexConvolution {
             float[] yval = (new float[outwidth * outheight * outdepth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[kwidth * kheight * kdepth * outchannels * inchannels / 2]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            VariableField x_actual = new Tensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
-            ParameterField w = new Tensor(Shape.Kernel3D(inchannels, outchannels / 2, kwidth, kheight, kdepth), wval);
-            ParameterField y = new Tensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), yval);
+            VariableField x_actual = (Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
+            ParameterField w = (Shape.Kernel3D(inchannels, outchannels / 2, kwidth, kheight, kdepth), wval);
+            ParameterField y = (Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), yval);
 
             Field x_expect = ComplexDeconvolution3D(y, w);
             Field err = x_expect - x_actual;
@@ -43,9 +43,9 @@ namespace TensorShaderTest.Links.ComplexConvolution {
             float[] yval = (new float[outwidth * outheight * outdepth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[kwidth * kheight * kdepth * outchannels * inchannels / 2]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            VariableField x_actual = new Tensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
-            ParameterField w = new Tensor(Shape.Kernel3D(inchannels, outchannels / 2, kwidth, kheight, kdepth), wval);
-            ParameterField y = new Tensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), yval);
+            VariableField x_actual = (Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
+            ParameterField w = (Shape.Kernel3D(inchannels, outchannels / 2, kwidth, kheight, kdepth), wval);
+            ParameterField y = (Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), yval);
 
             Field y_real = ComplexReal(y), y_imag = ComplexImag(y);
             Field w_real = ComplexReal(w), w_imag = ComplexImag(w);

@@ -13,8 +13,8 @@ namespace TensorShaderTest.Links.ComplexArithmetric {
             float[] xval = { 1, 2, -3, 4, 5, -6, -1, 2, -3, -4, 5, 6, -1, 2, 3, -4, 5, -6, 1, -2, 3, -4, 5, 6 };
             float[] yval = (new float[length]).Select((_, idx) => (float)idx / 2).ToArray();
 
-            ParameterField x = new Tensor(Shape.Vector(length), xval);
-            VariableField y_actual = new Tensor(Shape.Vector(length), yval);
+            ParameterField x = (Shape.Vector(length), xval);
+            VariableField y_actual = (Shape.Vector(length), yval);
 
             Field y_expect = ComplexZRelu(x);
             Field err = y_expect - y_actual;
@@ -35,8 +35,8 @@ namespace TensorShaderTest.Links.ComplexArithmetric {
             float[] xval = { 1, 2, -3, 4, 5, -6, -1, 2, -3, -4, 5, 6, -1, 2, 3, -4, 5, -6, 1, -2, 3, -4, 5, 6 };
             float[] yval = (new float[length]).Select((_, idx) => (float)idx / 2).ToArray();
 
-            ParameterField x = new Tensor(Shape.Vector(length), xval);
-            VariableField y_actual = new Tensor(Shape.Vector(length), yval);
+            ParameterField x = (Shape.Vector(length), xval);
+            VariableField y_actual = (Shape.Vector(length), yval);
 
             Field x_real = ComplexReal(x), x_imag = ComplexImag(x);
             Field isphase1 = GreaterThanOrEqual(x_real, 0) * GreaterThanOrEqual(x_imag, 0);

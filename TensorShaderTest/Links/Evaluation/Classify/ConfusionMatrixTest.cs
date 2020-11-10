@@ -48,8 +48,8 @@ namespace TensorShaderTest.Links.Evaluation.Classify {
                   0
             };
 
-            VariableField x = new Tensor(Shape.Map0D(channels, batch), xval);
-            VariableField t = new Tensor(Shape.Vector(batch), tval);
+            VariableField x = (Shape.Map0D(channels, batch), xval);
+            VariableField t = (Shape.Vector(batch), tval);
 
             StoreField mat = ConfusionMatrix(x, t);
             StoreField exp = Sum(mat, Axis.ConfusionMatrix.Actual);

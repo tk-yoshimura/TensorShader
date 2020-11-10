@@ -9,7 +9,7 @@ namespace TensorShaderTest.Layers {
         public void ExecuteTest() {
             int inchannels = 9, outchannels = 12, batch = 7;
 
-            VariableField x = new Tensor(Shape.Map0D(inchannels, batch));
+            VariableField x = (Shape.Map0D(inchannels, batch));
 
             Layer layer = new TrivectorDense(inchannels, outchannels, use_bias: true, "fc");
 

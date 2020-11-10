@@ -18,18 +18,18 @@ namespace TensorShaderTest.Functions.TrinaryArithmetric {
             float[] x3 = (new float[length]).Select((_) => (float)rd.NextDouble()).ToArray();
 
             {
-                Tensor t1 = new Tensor(Shape.Vector(length), x1);
-                Tensor t2 = new Tensor(Shape.Vector(length), x2);
-                Tensor t3 = new Tensor(Shape.Vector(length), x3);
+                Tensor t1 = (Shape.Vector(length), x1);
+                Tensor t2 = (Shape.Vector(length), x2);
+                Tensor t3 = (Shape.Vector(length), x3);
                 Tensor o = Tensor.TrinaryArithmetric(t1, t2, t3, "trinary_test", "#y = (#x1 + #x2) * (#x1 - #x3);");
 
                 AssertError.Tolerance(idxes.Select((idx) => (x1[idx] + x2[idx]) * (x1[idx] - x3[idx])).ToArray(), o.State, 1e-7f, 1e-5f);
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Vector(length), x1);
-                InputNode t2 = new Tensor(Shape.Vector(length), x2);
-                InputNode t3 = new Tensor(Shape.Vector(length), x3);
+                InputNode t1 = (Shape.Vector(length), x1);
+                InputNode t2 = (Shape.Vector(length), x2);
+                InputNode t3 = (Shape.Vector(length), x3);
 
                 var n1 = t1 + 0;
                 var n2 = t2 + 0;
@@ -44,16 +44,16 @@ namespace TensorShaderTest.Functions.TrinaryArithmetric {
             }
 
             {
-                Tensor t1 = new Tensor(Shape.Vector(length), x1);
-                Tensor t2 = new Tensor(Shape.Vector(length), x2);
+                Tensor t1 = (Shape.Vector(length), x1);
+                Tensor t2 = (Shape.Vector(length), x2);
                 Tensor o = Tensor.TrinaryUniConstantArithmetric(4, t1, t2, "trinaryuniconst_test", "#y = c * (#x1 + #x2);");
 
                 AssertError.Tolerance(idxes.Select((idx) => 4 * (x1[idx] + x2[idx])).ToArray(), o.State, 1e-7f, 1e-5f);
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Vector(length), x1);
-                InputNode t2 = new Tensor(Shape.Vector(length), x2);
+                InputNode t1 = (Shape.Vector(length), x1);
+                InputNode t2 = (Shape.Vector(length), x2);
 
                 var n1 = t1 + 0;
                 var n2 = t2 + 0;
@@ -67,14 +67,14 @@ namespace TensorShaderTest.Functions.TrinaryArithmetric {
             }
 
             {
-                Tensor t1 = new Tensor(Shape.Vector(length), x1);
+                Tensor t1 = (Shape.Vector(length), x1);
                 Tensor o = Tensor.TrinaryBiConstantArithmetric(4, 5, t1, "trinarybiconst_test", "#y = c1 * (#x + c2);");
 
                 AssertError.Tolerance(idxes.Select((idx) => 4 * (x1[idx] + 5)).ToArray(), o.State, 1e-7f, 1e-5f);
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Vector(length), x1);
+                InputNode t1 = (Shape.Vector(length), x1);
 
                 var n1 = t1 + 0;
 
@@ -87,16 +87,16 @@ namespace TensorShaderTest.Functions.TrinaryArithmetric {
             }
 
             {
-                Tensor t1 = new Tensor(Shape.Vector(length), x1);
-                Tensor t2 = new Tensor(Shape.Vector(length), x2);
+                Tensor t1 = (Shape.Vector(length), x1);
+                Tensor t2 = (Shape.Vector(length), x2);
                 Tensor o = Tensor.TrinaryUniConstantArithmetric(8, t1, t2, "trinaryuniconst_test", "#y = c * (#x1 + #x2);");
 
                 AssertError.Tolerance(idxes.Select((idx) => 8 * (x1[idx] + x2[idx])).ToArray(), o.State, 1e-7f, 1e-5f);
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Vector(length), x1);
-                InputNode t2 = new Tensor(Shape.Vector(length), x2);
+                InputNode t1 = (Shape.Vector(length), x1);
+                InputNode t2 = (Shape.Vector(length), x2);
 
                 var n1 = t1 + 0;
                 var n2 = t2 + 0;
@@ -110,14 +110,14 @@ namespace TensorShaderTest.Functions.TrinaryArithmetric {
             }
 
             {
-                Tensor t1 = new Tensor(Shape.Vector(length), x1);
+                Tensor t1 = (Shape.Vector(length), x1);
                 Tensor o = Tensor.TrinaryBiConstantArithmetric(8, 10, t1, "trinarybiconst_test", "#y = c1 * (#x + c2);");
 
                 AssertError.Tolerance(idxes.Select((idx) => 8 * (x1[idx] + 10)).ToArray(), o.State, 1e-7f, 1e-5f);
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Vector(length), x1);
+                InputNode t1 = (Shape.Vector(length), x1);
 
                 var n1 = t1 + 0;
 

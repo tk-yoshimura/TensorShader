@@ -9,7 +9,7 @@ namespace TensorShaderTest.Layers {
         public void ExecuteTest() {
             int inchannels = 4, outchannels = 6, inwidth = 13, inheight = 17, batch = 7;
 
-            VariableField x = new Tensor(Shape.Map2D(inchannels, inwidth, inheight, batch));
+            VariableField x = (Shape.Map2D(inchannels, inwidth, inheight, batch));
 
             Layer layer = new PointwiseConvolution2D(inchannels, outchannels, use_bias: true, "conv");
 

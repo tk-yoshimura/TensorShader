@@ -16,7 +16,7 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
             float[] x = (new float[length]).Select((_) => (float)rd.NextDouble() + 1f).ToArray();
 
             {
-                Tensor t = new Tensor(Shape.Vector(length), x);
+                Tensor t = (Shape.Vector(length), x);
 
                 Tensor o = Tensor.Sqrt(t);
 
@@ -24,7 +24,7 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
             }
 
             {
-                InputNode t = new Tensor(Shape.Vector(length), x);
+                InputNode t = (Shape.Vector(length), x);
 
                 var n = t + 0;
 

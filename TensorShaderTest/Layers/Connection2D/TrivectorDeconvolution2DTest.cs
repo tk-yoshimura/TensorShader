@@ -9,7 +9,7 @@ namespace TensorShaderTest.Layers {
         public void ExecuteTest() {
             int inchannels = 9, outchannels = 12, inwidth = 13, inheight = 17, kwidth = 3, kheight = 5, batch = 7;
 
-            VariableField x = new Tensor(Shape.Map2D(inchannels, inwidth, inheight, batch));
+            VariableField x = (Shape.Map2D(inchannels, inwidth, inheight, batch));
 
             Layer layer = new TrivectorDeconvolution2D(inchannels, outchannels, kwidth, kheight, use_bias: true, pad_mode: PaddingMode.Edge, "conv");
 

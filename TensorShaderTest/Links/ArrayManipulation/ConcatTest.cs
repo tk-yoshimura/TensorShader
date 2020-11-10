@@ -19,11 +19,11 @@ namespace TensorShaderTest.Links.ArrayManipulation {
 
             float[] yval = (new float[chsum * s1 * s2 * s3]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            ParameterField x1 = new Tensor(new Shape(ShapeType.Map, ch1, s1, s2, s3), x1val);
-            ParameterField x2 = new Tensor(new Shape(ShapeType.Map, ch2, s1, s2, s3), x2val);
-            VariableField x3 = new Tensor(new Shape(ShapeType.Map, ch3, s1, s2, s3), x3val);
-            ParameterField x4 = new Tensor(new Shape(ShapeType.Map, ch4, s1, s2, s3), x4val);
-            VariableField y_actual = new Tensor(new Shape(ShapeType.Map, chsum, s1, s2, s3), yval);
+            ParameterField x1 = (new Shape(ShapeType.Map, ch1, s1, s2, s3), x1val);
+            ParameterField x2 = (new Shape(ShapeType.Map, ch2, s1, s2, s3), x2val);
+            VariableField x3 = (new Shape(ShapeType.Map, ch3, s1, s2, s3), x3val);
+            ParameterField x4 = (new Shape(ShapeType.Map, ch4, s1, s2, s3), x4val);
+            VariableField y_actual = (new Shape(ShapeType.Map, chsum, s1, s2, s3), yval);
 
             Field y_expect = Concat(axis: 0, x1, x2, x3, x4);
             Field err = Abs(y_expect - y_actual);

@@ -16,9 +16,9 @@ namespace TensorShaderTest.Links.Connection2D {
             float[] xval = (new float[channels * inwidth * inheight * batch]).Select((_, idx) => idx * 2e-3f).ToArray();
             float[] yval = (new float[kwidth * kheight * channels * outwidth * outheight * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-            ParameterField x1 = new Tensor(Shape.Map2D(channels, inwidth, inheight, batch), xval);
-            ParameterField x2 = new Tensor(Shape.Map2D(channels, inwidth, inheight, batch), xval);
-            VariableField y_actual = new Tensor(new Shape(ShapeType.Column, kwidth * kheight, channels, outwidth, outheight, batch), yval);
+            ParameterField x1 = (Shape.Map2D(channels, inwidth, inheight, batch), xval);
+            ParameterField x2 = (Shape.Map2D(channels, inwidth, inheight, batch), xval);
+            VariableField y_actual = (new Shape(ShapeType.Column, kwidth * kheight, channels, outwidth, outheight, batch), yval);
 
             Field y1_expect = ImageToColumn2D(x1, kwidth, kheight);
 

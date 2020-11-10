@@ -14,9 +14,9 @@ namespace TensorShaderTest.Links.BinaryArithmetric {
             float[] x2val = (new float[length]).Select((_, idx) => (float)(idx - 12) * (idx - 12) / 8 + 1).ToArray();
             float[] yval = (new float[length]).Select((_, idx) => (float)idx * 2).ToArray();
 
-            ParameterField x1 = new Tensor(Shape.Vector(length), x1val);
-            ParameterField x2 = new Tensor(Shape.Vector(length), x2val);
-            VariableField y_actual = new Tensor(Shape.Vector(length), yval);
+            ParameterField x1 = (Shape.Vector(length), x1val);
+            ParameterField x2 = (Shape.Vector(length), x2val);
+            VariableField y_actual = (Shape.Vector(length), yval);
 
             Field y_expect = LimitAbs(x1, x2);
             Field err = y_expect - y_actual;

@@ -15,9 +15,9 @@ namespace TensorShaderTest.Links.TrivectorConvolution {
             float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[kwidth * outchannels * inchannels / 9 * 4]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            VariableField x_actual = new Tensor(Shape.Map1D(inchannels, inwidth, batch), xval);
-            ParameterField w = new Tensor(Shape.Kernel1D(inchannels / 3 * 4, outchannels / 3, kwidth), wval);
-            ParameterField y = new Tensor(Shape.Map1D(outchannels, outwidth, batch), yval);
+            VariableField x_actual = (Shape.Map1D(inchannels, inwidth, batch), xval);
+            ParameterField w = (Shape.Kernel1D(inchannels / 3 * 4, outchannels / 3, kwidth), wval);
+            ParameterField y = (Shape.Map1D(outchannels, outwidth, batch), yval);
 
             Field x_expect = TrivectorDeconvolution1D(y, w);
             Field err = x_expect - x_actual;
@@ -43,9 +43,9 @@ namespace TensorShaderTest.Links.TrivectorConvolution {
             float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[kwidth * outchannels * inchannels / 9 * 4]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            VariableField x_actual = new Tensor(Shape.Map1D(inchannels, inwidth, batch), xval);
-            ParameterField w = new Tensor(Shape.Kernel1D(inchannels / 3 * 4, outchannels / 3, kwidth), wval);
-            ParameterField y = new Tensor(Shape.Map1D(outchannels, outwidth, batch), yval);
+            VariableField x_actual = (Shape.Map1D(inchannels, inwidth, batch), xval);
+            ParameterField w = (Shape.Kernel1D(inchannels / 3 * 4, outchannels / 3, kwidth), wval);
+            ParameterField y = (Shape.Map1D(outchannels, outwidth, batch), yval);
 
             Field yx = TrivectorX(y), yy = TrivectorY(y), yz = TrivectorZ(y);
             Field wr = QuaternionR(w), wi = QuaternionI(w), wj = QuaternionJ(w), wk = QuaternionK(w);

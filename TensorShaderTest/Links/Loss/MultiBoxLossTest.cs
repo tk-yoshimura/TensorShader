@@ -29,11 +29,11 @@ namespace TensorShaderTest.Links.Loss {
                 confval[i * 3] = p / (p + r + s); confval[i * 3 + 1] = r / (p + r + s); confval[i * 3 + 2] = s / (p + r + s);
             }
 
-            ParameterField loc = new Tensor(Shape.Map1D(elems, boxes, batches), locval);
-            ParameterField conf = new Tensor(Shape.Map1D(classes, boxes, batches), confval);
+            ParameterField loc = (Shape.Map1D(elems, boxes, batches), locval);
+            ParameterField conf = (Shape.Map1D(classes, boxes, batches), confval);
 
-            ParameterField gt = new Tensor(Shape.Map1D(elems, boxes, batches), gtval);
-            ParameterField label = new Tensor(Shape.Map0D(boxes, batches), labelval);
+            ParameterField gt = (Shape.Map1D(elems, boxes, batches), gtval);
+            ParameterField label = (Shape.Map0D(boxes, batches), labelval);
 
             (StoreField locloss, StoreField confloss) = MultiBoxLoss(loc, gt, conf, label, hard_negative_mining_rate: 2);
             (Flow flow, _) = Flow.Optimize(locloss, confloss);

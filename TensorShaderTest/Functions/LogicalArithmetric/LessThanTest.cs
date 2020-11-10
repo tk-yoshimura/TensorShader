@@ -18,8 +18,8 @@ namespace TensorShaderTest.Functions.LogicalArithmetric {
             float[] x2 = (new float[length * ch]).Select((_) => (float)rd.Next(5)).ToArray();
 
             {
-                Tensor t1 = new Tensor(Shape.Map1D(ch, length), x1);
-                Tensor t2 = new Tensor(Shape.Map1D(ch, length), x2);
+                Tensor t1 = (Shape.Map1D(ch, length), x1);
+                Tensor t2 = (Shape.Map1D(ch, length), x2);
 
                 Tensor o = LessThan(t1, t2);
 
@@ -27,7 +27,7 @@ namespace TensorShaderTest.Functions.LogicalArithmetric {
             }
 
             {
-                Tensor t1 = new Tensor(Shape.Map1D(ch, length), x1);
+                Tensor t1 = (Shape.Map1D(ch, length), x1);
 
                 Tensor o = LessThan(t1, t1);
 
@@ -35,8 +35,8 @@ namespace TensorShaderTest.Functions.LogicalArithmetric {
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Map1D(ch, length), x1);
-                InputNode t2 = new Tensor(Shape.Map1D(ch, length), x2);
+                InputNode t1 = (Shape.Map1D(ch, length), x1);
+                InputNode t2 = (Shape.Map1D(ch, length), x2);
 
                 var n1 = t1 + 0;
                 var n2 = t2 + 0;
@@ -50,8 +50,8 @@ namespace TensorShaderTest.Functions.LogicalArithmetric {
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Map1D(ch, length), x1);
-                InputNode t2 = new Tensor(Shape.Map1D(ch, length), x2);
+                InputNode t1 = (Shape.Map1D(ch, length), x1);
+                InputNode t2 = (Shape.Map1D(ch, length), x2);
 
                 var n1 = t1 + 0;
 
@@ -64,8 +64,8 @@ namespace TensorShaderTest.Functions.LogicalArithmetric {
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Map1D(ch, length), x1);
-                InputNode t2 = new Tensor(Shape.Map1D(ch, length), x2);
+                InputNode t1 = (Shape.Map1D(ch, length), x1);
+                InputNode t2 = (Shape.Map1D(ch, length), x2);
 
                 var n2 = t2 + 0;
 
@@ -78,7 +78,7 @@ namespace TensorShaderTest.Functions.LogicalArithmetric {
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Map1D(ch, length), x1);
+                InputNode t1 = (Shape.Map1D(ch, length), x1);
 
                 var n1 = t1 + 0;
 

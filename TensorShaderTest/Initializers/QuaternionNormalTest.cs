@@ -19,7 +19,7 @@ namespace TensorShaderTest.Initializers {
 
                 for (int i = 0; i < tests; i++) {
                     Tensor x = Tensor.NormalRandom(Shape.Map0D(num * dims, batches), random);
-                    Tensor w = new Tensor(Shape.Kernel0D(num * dims, dims));
+                    Tensor w = (Shape.Kernel0D(num * dims, dims));
 
                     var initializer = new QuaternionNormal(w, random);
                     initializer.Execute();

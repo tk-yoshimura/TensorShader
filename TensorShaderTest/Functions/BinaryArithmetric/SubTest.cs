@@ -19,8 +19,8 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             float[] x4 = { (float)rd.NextDouble() };
 
             {
-                Tensor t1 = new Tensor(Shape.Map1D(ch, length), x1);
-                Tensor t2 = new Tensor(Shape.Map1D(ch, length), x2);
+                Tensor t1 = (Shape.Map1D(ch, length), x1);
+                Tensor t2 = (Shape.Map1D(ch, length), x2);
 
                 Tensor o = t1 - t2;
 
@@ -28,7 +28,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             }
 
             {
-                Tensor t1 = new Tensor(Shape.Map1D(ch, length), x1);
+                Tensor t1 = (Shape.Map1D(ch, length), x1);
 
                 Tensor o = t1 - t1;
 
@@ -36,8 +36,8 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             }
 
             {
-                Tensor t1 = new Tensor(Shape.Map1D(ch, length), x1);
-                Tensor t3 = new Tensor(Shape.Vector(ch), x3);
+                Tensor t1 = (Shape.Map1D(ch, length), x1);
+                Tensor t3 = (Shape.Vector(ch), x3);
 
                 Tensor o = t1 - t3;
 
@@ -45,8 +45,8 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             }
 
             {
-                Tensor t1 = new Tensor(Shape.Map1D(ch, length), x1);
-                Tensor t3 = new Tensor(Shape.Vector(ch), x3);
+                Tensor t1 = (Shape.Map1D(ch, length), x1);
+                Tensor t3 = (Shape.Vector(ch), x3);
 
                 Tensor o = t3 - t1;
 
@@ -54,8 +54,8 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             }
 
             {
-                Tensor t1 = new Tensor(Shape.Map1D(ch, length), x1);
-                Tensor t4 = new Tensor(Shape.Scalar, x4);
+                Tensor t1 = (Shape.Map1D(ch, length), x1);
+                Tensor t4 = (Shape.Scalar, x4);
 
                 Tensor o = t1 - t4;
 
@@ -63,8 +63,8 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             }
 
             {
-                Tensor t1 = new Tensor(Shape.Map1D(ch, length), x1);
-                Tensor t4 = new Tensor(Shape.Scalar, x4);
+                Tensor t1 = (Shape.Map1D(ch, length), x1);
+                Tensor t4 = (Shape.Scalar, x4);
 
                 Tensor o = t4 - t1;
 
@@ -72,8 +72,8 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Map1D(ch, length), x1);
-                InputNode t2 = new Tensor(Shape.Map1D(ch, length), x2);
+                InputNode t1 = (Shape.Map1D(ch, length), x1);
+                InputNode t2 = (Shape.Map1D(ch, length), x2);
 
                 var n1 = t1 + 0;
                 var n2 = t2 + 0;
@@ -87,8 +87,8 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Map1D(ch, length), x1);
-                InputNode t2 = new Tensor(Shape.Map1D(ch, length), x2);
+                InputNode t1 = (Shape.Map1D(ch, length), x1);
+                InputNode t2 = (Shape.Map1D(ch, length), x2);
 
                 var n1 = t1 + 0;
 
@@ -101,8 +101,8 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Map1D(ch, length), x1);
-                InputNode t2 = new Tensor(Shape.Map1D(ch, length), x2);
+                InputNode t1 = (Shape.Map1D(ch, length), x1);
+                InputNode t2 = (Shape.Map1D(ch, length), x2);
 
                 var n2 = t2 + 0;
 
@@ -115,7 +115,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Map1D(ch, length), x1);
+                InputNode t1 = (Shape.Map1D(ch, length), x1);
 
                 var n1 = t1 + 0;
 
@@ -128,8 +128,8 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Map1D(ch, length), x1);
-                InputNode t3 = new Tensor(Shape.Vector(ch), x3);
+                InputNode t1 = (Shape.Map1D(ch, length), x1);
+                InputNode t3 = (Shape.Vector(ch), x3);
 
                 var n1 = t1 + 0;
                 var n3 = t3 + 0;
@@ -143,8 +143,8 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Map1D(ch, length), x1);
-                InputNode t3 = new Tensor(Shape.Vector(ch), x3);
+                InputNode t1 = (Shape.Map1D(ch, length), x1);
+                InputNode t3 = (Shape.Vector(ch), x3);
 
                 var n1 = t1 + 0;
                 var n3 = t3 + 0;
@@ -158,8 +158,8 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Map1D(ch, length), x1);
-                InputNode t4 = new Tensor(Shape.Scalar, x4);
+                InputNode t1 = (Shape.Map1D(ch, length), x1);
+                InputNode t4 = (Shape.Scalar, x4);
 
                 var n1 = t1 + 0;
                 var n4 = t4 + 0;
@@ -173,8 +173,8 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Map1D(ch, length), x1);
-                InputNode t4 = new Tensor(Shape.Scalar, x4);
+                InputNode t1 = (Shape.Map1D(ch, length), x1);
+                InputNode t4 = (Shape.Scalar, x4);
 
                 var n1 = t1 + 0;
                 var n4 = t4 + 0;

@@ -13,8 +13,8 @@ namespace TensorShaderTest.Links.TrivectorArithmetric {
             float[] vval = (new float[length]).Select((_, idx) => (float)idx * 2 - length).ToArray();
             float[] tval = (new float[length]).Select((_, idx) => (float)idx / 2).Reverse().ToArray();
 
-            ParameterField v = new Tensor(Shape.Vector(length), vval);
-            VariableField t = new Tensor(Shape.Vector(length), tval);
+            ParameterField v = (Shape.Vector(length), vval);
+            VariableField t = (Shape.Vector(length), tval);
 
             Field u = TrivectorDecay(v);
             Field err = u - t;
@@ -34,8 +34,8 @@ namespace TensorShaderTest.Links.TrivectorArithmetric {
             float[] vval = (new float[length]).Select((_, idx) => (float)idx * 2 - length).ToArray();
             float[] tval = (new float[length]).Select((_, idx) => (float)idx / 2).Reverse().ToArray();
 
-            ParameterField v = new Tensor(Shape.Vector(length), vval);
-            VariableField t = new Tensor(Shape.Vector(length), tval);
+            ParameterField v = (Shape.Vector(length), vval);
+            VariableField t = (Shape.Vector(length), tval);
 
             Field x = TrivectorX(v), y = TrivectorY(v), z = TrivectorZ(v);
             Field norm = x * x + y * y + z * z;

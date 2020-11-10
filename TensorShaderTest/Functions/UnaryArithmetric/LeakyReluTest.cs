@@ -17,7 +17,7 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
             float c = 0.25f;
 
             {
-                Tensor t = new Tensor(Shape.Vector(length), x);
+                Tensor t = (Shape.Vector(length), x);
 
                 Tensor o = Tensor.LeakyRelu(t, c);
 
@@ -25,7 +25,7 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
             }
 
             {
-                InputNode t = new Tensor(Shape.Vector(length), x);
+                InputNode t = (Shape.Vector(length), x);
 
                 var n = t + 0;
 

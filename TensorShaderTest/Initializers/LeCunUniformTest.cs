@@ -20,7 +20,7 @@ namespace TensorShaderTest.Initializers {
 
                 for (int i = 0; i < tests; i++) {
                     Tensor x = Tensor.UniformRandom(Shape.Map0D(num, batches), random) * (2 * range) - range;
-                    Tensor w = new Tensor(Shape.Kernel0D(num, 1));
+                    Tensor w = (Shape.Kernel0D(num, 1));
 
                     var initializer = new LeCunUniform(w, random);
                     initializer.Execute();

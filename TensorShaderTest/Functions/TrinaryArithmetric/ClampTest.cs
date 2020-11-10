@@ -18,18 +18,18 @@ namespace TensorShaderTest.Functions.TrinaryArithmetric {
             float[] xmax = (new float[length]).Select((_) => (float)rd.NextDouble() * 0.5f + 0.5f).ToArray();
 
             {
-                Tensor t1 = new Tensor(Shape.Vector(length), x);
-                Tensor t2 = new Tensor(Shape.Vector(length), xmin);
-                Tensor t3 = new Tensor(Shape.Vector(length), xmax);
+                Tensor t1 = (Shape.Vector(length), x);
+                Tensor t2 = (Shape.Vector(length), xmin);
+                Tensor t3 = (Shape.Vector(length), xmax);
                 Tensor o = Tensor.Clamp(t1, t2, t3);
 
                 AssertError.Tolerance(idxes.Select((idx) => Math.Min(Math.Max(x[idx], xmin[idx]), xmax[idx])).ToArray(), o.State, 1e-7f, 1e-5f);
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Vector(length), x);
-                InputNode t2 = new Tensor(Shape.Vector(length), xmin);
-                InputNode t3 = new Tensor(Shape.Vector(length), xmax);
+                InputNode t1 = (Shape.Vector(length), x);
+                InputNode t2 = (Shape.Vector(length), xmin);
+                InputNode t3 = (Shape.Vector(length), xmax);
 
                 var n1 = t1 + 0;
                 var n2 = t2 + 0;
@@ -44,14 +44,14 @@ namespace TensorShaderTest.Functions.TrinaryArithmetric {
             }
 
             {
-                Tensor t1 = new Tensor(Shape.Vector(length), x);
+                Tensor t1 = (Shape.Vector(length), x);
                 Tensor o = Tensor.Clamp(t1, -0.5f, 0.5f);
 
                 AssertError.Tolerance(idxes.Select((idx) => Math.Min(Math.Max(x[idx], -0.5f), 0.5f)).ToArray(), o.State, 1e-7f, 1e-5f);
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Vector(length), x);
+                InputNode t1 = (Shape.Vector(length), x);
 
                 var n1 = t1 + 0;
 

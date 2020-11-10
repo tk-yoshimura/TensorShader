@@ -14,9 +14,9 @@ namespace TensorShaderTest.Links.ComplexConvolution {
             float[] yval = (new float[outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[outchannels * inchannels / 2]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            ParameterField x = new Tensor(Shape.Map0D(inchannels, batch), xval);
-            ParameterField w = new Tensor(Shape.Kernel0D(inchannels, outchannels / 2), wval);
-            VariableField y_actual = new Tensor(Shape.Map0D(outchannels, batch), yval);
+            ParameterField x = (Shape.Map0D(inchannels, batch), xval);
+            ParameterField w = (Shape.Kernel0D(inchannels, outchannels / 2), wval);
+            VariableField y_actual = (Shape.Map0D(outchannels, batch), yval);
 
             Field y_expect = ComplexDense(x, w);
             Field err = y_expect - y_actual;
@@ -41,9 +41,9 @@ namespace TensorShaderTest.Links.ComplexConvolution {
             float[] yval = (new float[outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[outchannels * inchannels / 2]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            ParameterField x = new Tensor(Shape.Map0D(inchannels, batch), xval);
-            ParameterField w = new Tensor(Shape.Kernel0D(inchannels, outchannels / 2), wval);
-            VariableField y_actual = new Tensor(Shape.Map0D(outchannels, batch), yval);
+            ParameterField x = (Shape.Map0D(inchannels, batch), xval);
+            ParameterField w = (Shape.Kernel0D(inchannels, outchannels / 2), wval);
+            VariableField y_actual = (Shape.Map0D(outchannels, batch), yval);
 
             Field x_real = ComplexReal(x), x_imag = ComplexImag(x);
             Field w_real = ComplexReal(w), w_imag = ComplexImag(w);

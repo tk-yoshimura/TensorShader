@@ -16,8 +16,8 @@ namespace TensorShaderTest.Links.Connection3D {
             float[] xval = (new float[inchannels * inwidth * inheight * indepth * batch]).Select((_, idx) => idx * 2e-3f).ToArray();
             float[] yval = (new float[outchannels * outwidth * outheight * outdepth * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-            ParameterField x = new Tensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
-            VariableField y_actual = new Tensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), yval);
+            ParameterField x = (Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
+            VariableField y_actual = (Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), yval);
 
             Field y_expect = ChannelToSpace3D(x, scale);
             Field err = y_expect - y_actual;

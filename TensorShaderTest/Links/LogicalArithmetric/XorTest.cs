@@ -17,8 +17,8 @@ namespace TensorShaderTest.Links.LogicalArithmetric {
             float[] x1 = (new float[length * ch]).Select((_) => (float)rd.Next(2)).ToArray();
             float[] x2 = (new float[length * ch]).Select((_) => (float)rd.Next(2)).ToArray();
 
-            VariableField f1 = new Tensor(Shape.Map1D(ch, length), x1);
-            VariableField f2 = new Tensor(Shape.Map1D(ch, length), x2);
+            VariableField f1 = (Shape.Map1D(ch, length), x1);
+            VariableField f2 = (Shape.Map1D(ch, length), x2);
 
             StoreField output = Xor(f1, f2);
 

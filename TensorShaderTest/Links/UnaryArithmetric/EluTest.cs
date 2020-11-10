@@ -13,8 +13,8 @@ namespace TensorShaderTest.Links.UnaryArithmetric {
             float[] xval = (new float[length]).Select((_, idx) => (float)idx * 2 - 12).ToArray();
             float[] yval = (new float[length]).Select((_, idx) => idx / 2f).ToArray();
 
-            ParameterField x = new Tensor(Shape.Vector(length), xval);
-            VariableField y_actual = new Tensor(Shape.Vector(length), yval);
+            ParameterField x = (Shape.Vector(length), xval);
+            VariableField y_actual = (Shape.Vector(length), yval);
 
             Field y_expect = Elu(x, 0.5f);
             Field err = y_expect - y_actual;

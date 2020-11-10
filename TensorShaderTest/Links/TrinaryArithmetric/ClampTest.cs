@@ -15,10 +15,10 @@ namespace TensorShaderTest.Links.TrinaryArithmetric {
             float[] xmaxval = (new float[length]).Select((_, idx) => (float)(idx - 12) * (idx - 12) / 8 + 1).ToArray();
             float[] yval = (new float[length]).Select((_, idx) => (float)idx * 2).ToArray();
 
-            ParameterField x = new Tensor(Shape.Vector(length), xval);
-            ParameterField xmin = new Tensor(Shape.Vector(length), xminval);
-            ParameterField xmax = new Tensor(Shape.Vector(length), xmaxval);
-            VariableField y_actual = new Tensor(Shape.Vector(length), yval);
+            ParameterField x = (Shape.Vector(length), xval);
+            ParameterField xmin = (Shape.Vector(length), xminval);
+            ParameterField xmax = (Shape.Vector(length), xmaxval);
+            VariableField y_actual = (Shape.Vector(length), yval);
 
             Field y_expect = Clamp(x, xmin, xmax);
             Field err = y_expect - y_actual;
@@ -45,10 +45,10 @@ namespace TensorShaderTest.Links.TrinaryArithmetric {
             float[] xmaxval = (new float[length]).Select((_, idx) => (float)(idx - 12) * (idx - 12) / 8 + 1).ToArray();
             float[] yval = (new float[length]).Select((_, idx) => (float)idx * 2).ToArray();
 
-            ParameterField x = new Tensor(Shape.Vector(length), xval);
-            ParameterField xmin = new Tensor(Shape.Vector(length), xminval);
-            ParameterField xmax = new Tensor(Shape.Vector(length), xmaxval);
-            VariableField y_actual = new Tensor(Shape.Vector(length), yval);
+            ParameterField x = (Shape.Vector(length), xval);
+            ParameterField xmin = (Shape.Vector(length), xminval);
+            ParameterField xmax = (Shape.Vector(length), xmaxval);
+            VariableField y_actual = (Shape.Vector(length), yval);
 
             Field y_expect = Minimum(Maximum(x, xmin), xmax);
             Field err = y_expect - y_actual;

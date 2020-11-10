@@ -16,7 +16,7 @@ namespace TensorShaderTest.Functions.Aggregation {
 
             Shape shape = Shape.Map3D(ch, width, height, length, batch);
 
-            Tensor v1 = new Tensor(shape, x);
+            Tensor v1 = (shape, x);
 
             /*axis = 0, keepdims = true*/
             {

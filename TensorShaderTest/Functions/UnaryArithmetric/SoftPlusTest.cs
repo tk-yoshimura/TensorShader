@@ -20,7 +20,7 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
             }
 
             {
-                Tensor t = new Tensor(Shape.Vector(length), x);
+                Tensor t = (Shape.Vector(length), x);
 
                 Tensor o = Tensor.SoftPlus(t);
 
@@ -28,7 +28,7 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
             }
 
             {
-                InputNode t = new Tensor(Shape.Vector(length), x);
+                InputNode t = (Shape.Vector(length), x);
 
                 var n = t + 0;
 

@@ -17,15 +17,15 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             float[] x2 = (new float[length]).Select((_) => (float)rd.NextDouble()).ToArray();
 
             {
-                Tensor t1 = new Tensor(Shape.Vector(length), x1);
-                Tensor t2 = new Tensor(Shape.Vector(length), x2);
+                Tensor t1 = (Shape.Vector(length), x1);
+                Tensor t2 = (Shape.Vector(length), x2);
                 Tensor o = Tensor.Maximum(t1, t2);
 
                 AssertError.Tolerance(idxes.Select((idx) => Math.Max(x1[idx], x2[idx])).ToArray(), o.State, 1e-7f, 1e-5f);
             }
 
             {
-                Tensor t1 = new Tensor(Shape.Vector(length), x1);
+                Tensor t1 = (Shape.Vector(length), x1);
 
                 Tensor o = Tensor.Maximum(t1, t1);
 
@@ -33,8 +33,8 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Vector(length), x1);
-                InputNode t2 = new Tensor(Shape.Vector(length), x2);
+                InputNode t1 = (Shape.Vector(length), x1);
+                InputNode t2 = (Shape.Vector(length), x2);
 
                 var n1 = t1 + 0;
                 var n2 = t2 + 0;
@@ -48,8 +48,8 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Vector(length), x1);
-                InputNode t2 = new Tensor(Shape.Vector(length), x2);
+                InputNode t1 = (Shape.Vector(length), x1);
+                InputNode t2 = (Shape.Vector(length), x2);
 
                 var n1 = t1 + 0;
 
@@ -62,8 +62,8 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Vector(length), x1);
-                InputNode t2 = new Tensor(Shape.Vector(length), x2);
+                InputNode t1 = (Shape.Vector(length), x1);
+                InputNode t2 = (Shape.Vector(length), x2);
 
                 var n2 = t2 + 0;
 
@@ -76,7 +76,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
             }
 
             {
-                InputNode t1 = new Tensor(Shape.Vector(length), x1);
+                InputNode t1 = (Shape.Vector(length), x1);
 
                 var n1 = t1 + 0;
 

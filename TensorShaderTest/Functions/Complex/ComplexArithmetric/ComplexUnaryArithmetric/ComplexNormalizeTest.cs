@@ -18,7 +18,7 @@ namespace TensorShaderTest.Functions.ComplexArithmetric {
             float[] x2 = new float[length];
 
             {
-                Tensor t1 = new Tensor(Shape.Vector(length), x1);
+                Tensor t1 = (Shape.Vector(length), x1);
                 Tensor o = Tensor.ComplexNormalize(t1);
 
                 float[] y = o.State;
@@ -33,7 +33,7 @@ namespace TensorShaderTest.Functions.ComplexArithmetric {
             }
 
             {
-                Tensor t2 = new Tensor(Shape.Vector(length), x2);
+                Tensor t2 = (Shape.Vector(length), x2);
                 Tensor o = Tensor.ComplexNormalize(t2);
 
                 float[] y = o.State;

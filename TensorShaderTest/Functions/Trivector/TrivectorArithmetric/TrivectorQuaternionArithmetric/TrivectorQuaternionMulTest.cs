@@ -19,8 +19,8 @@ namespace TensorShaderTest.Functions.TrivectorArithmetric {
             float[] x2 = (new float[length / 3 * 4]).Select((_) => (float)rd.NextDouble() - 0.5f).ToArray();
 
             {
-                Tensor t1 = new Tensor(Shape.Vector(length), x1);
-                Tensor t2 = new Tensor(Shape.Vector(length / 3 * 4), x2);
+                Tensor t1 = (Shape.Vector(length), x1);
+                Tensor t2 = (Shape.Vector(length / 3 * 4), x2);
                 Tensor o = Tensor.TrivectorQuaternionMul(t1, t2);
 
                 float[] y = o.State;
@@ -39,9 +39,9 @@ namespace TensorShaderTest.Functions.TrivectorArithmetric {
             Function function = new TrivectorQuaternionMul();
 
             {
-                Tensor t1 = new Tensor(Shape.Vector(length), x1);
-                Tensor t2 = new Tensor(Shape.Vector(length / 3 * 4), x2);
-                Tensor o = new Tensor(Shape.Vector(length));
+                Tensor t1 = (Shape.Vector(length), x1);
+                Tensor t2 = (Shape.Vector(length / 3 * 4), x2);
+                Tensor o = (Shape.Vector(length));
 
                 function.Execute(new Tensor[] { t1, t2 }, new Tensor[] { o });
 

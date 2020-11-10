@@ -16,7 +16,7 @@ namespace TensorShaderTest.Updaters.RestrictParameter {
             float[] xval = (new float[length]).Select((_, idx) => 0.1f * ((float)idx * 3 * (idx % 5) - length)).ToArray();
             float[] yval = xval.Select((v) => Math.Sign(v) * Math.Max(Math.Abs(v) - decay, 0)).ToArray();
 
-            Tensor x_tensor = new Tensor(Shape.Map2D(ch, w, h), xval);
+            Tensor x_tensor = (Shape.Map2D(ch, w, h), xval);
 
             int[] axes = new int[] { Axis.Map2D.Width, Axis.Map2D.Height };
 

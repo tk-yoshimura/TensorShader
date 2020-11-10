@@ -29,7 +29,7 @@ namespace TensorShaderTest {
             }
 
             {
-                Tensor tensor = new Tensor(Shape.Scalar, new float[] { 1 });
+                Tensor tensor = (Shape.Scalar, new float[] { 1 });
 
                 var v1 = new InputNode(Shape.Scalar, tensor);
                 v1.Update(v1);
@@ -67,7 +67,7 @@ namespace TensorShaderTest {
             }
 
             {
-                Tensor tensor = new Tensor(Shape.Scalar);
+                Tensor tensor = (Shape.Scalar);
 
                 var v1 = new InputNode(Shape.Scalar, tensor);
                 var v2 = -v1;
@@ -90,7 +90,7 @@ namespace TensorShaderTest {
             }
 
             {
-                Tensor tensor = new Tensor(Shape.Scalar);
+                Tensor tensor = (Shape.Scalar);
 
                 var v1 = new InputNode(Shape.Scalar, tensor);
                 var v2 = -v1;
@@ -206,7 +206,7 @@ namespace TensorShaderTest {
             }
 
             {
-                Tensor tensor = new Tensor(Shape.Scalar);
+                Tensor tensor = (Shape.Scalar);
 
                 var v1 = new InputNode(Shape.Scalar, tensor); //x
                 var v2 = Rcp(v1); // 1/x
@@ -237,7 +237,7 @@ namespace TensorShaderTest {
             }
 
             {
-                Tensor tensor = new Tensor(Shape.Scalar);
+                Tensor tensor = (Shape.Scalar);
 
                 var v1 = new InputNode(Shape.Scalar, tensor); //x
                 var v2 = Rcp(v1); // 1/x
@@ -267,7 +267,7 @@ namespace TensorShaderTest {
             }
 
             {
-                Tensor tensor = new Tensor(Shape.Scalar);
+                Tensor tensor = (Shape.Scalar);
 
                 var v1 = new InputNode(Shape.Scalar, tensor); //x
                 var v2 = Rcp(v1); // 1/x
@@ -316,7 +316,7 @@ namespace TensorShaderTest {
             }
 
             {
-                Tensor tensor = new Tensor(Shape.Scalar);
+                Tensor tensor = (Shape.Scalar);
 
                 var v1 = new InputNode(Shape.Scalar, tensor);
                 var v2 = v1 + 1;
@@ -342,7 +342,7 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void CounterTest() {
-            Tensor t = new Tensor(Shape.Scalar, new float[] { 1 });
+            Tensor t = (Shape.Scalar, new float[] { 1 });
 
             var v1 = new InputNode(Shape.Scalar, t);
             var v2 = v1 + 1;
@@ -366,7 +366,7 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void DoubleFlowTest() {
-            Tensor t = new Tensor(Shape.Scalar, new float[] { 1 });
+            Tensor t = (Shape.Scalar, new float[] { 1 });
 
             var v1 = new InputNode(Shape.Scalar, t);
             var v2 = v1 + 1;
@@ -398,8 +398,8 @@ namespace TensorShaderTest {
         [TestMethod]
         public void CrossTest() {
             {
-                Tensor t1 = new Tensor(Shape.Scalar, new float[] { 1 });
-                Tensor t2 = new Tensor(Shape.Scalar, new float[] { 3 });
+                Tensor t1 = (Shape.Scalar, new float[] { 1 });
+                Tensor t2 = (Shape.Scalar, new float[] { 3 });
 
                 var v1 = new InputNode(Shape.Scalar, t1);
                 var v2 = v1 + 1;
@@ -428,8 +428,8 @@ namespace TensorShaderTest {
             }
 
             {
-                Tensor t1 = new Tensor(Shape.Scalar, new float[] { 1 });
-                Tensor t2 = new Tensor(Shape.Scalar, new float[] { 3 });
+                Tensor t1 = (Shape.Scalar, new float[] { 1 });
+                Tensor t2 = (Shape.Scalar, new float[] { 3 });
 
                 var v1 = new InputNode(Shape.Scalar, t1);
                 var v2 = v1 + 1;
@@ -457,8 +457,8 @@ namespace TensorShaderTest {
             }
 
             {
-                Tensor t1 = new Tensor(Shape.Scalar, new float[] { 1 });
-                Tensor t2 = new Tensor(Shape.Scalar, new float[] { 3 });
+                Tensor t1 = (Shape.Scalar, new float[] { 1 });
+                Tensor t2 = (Shape.Scalar, new float[] { 3 });
 
                 var v1 = new InputNode(Shape.Scalar, t1);
 
@@ -488,9 +488,9 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void ParallelTest() {
-            Tensor t1 = new Tensor(Shape.Scalar, new float[] { 1 });
-            Tensor t2 = new Tensor(Shape.Scalar, new float[] { 3 });
-            Tensor t3 = new Tensor(Shape.Scalar, new float[] { 5 });
+            Tensor t1 = (Shape.Scalar, new float[] { 1 });
+            Tensor t2 = (Shape.Scalar, new float[] { 3 });
+            Tensor t3 = (Shape.Scalar, new float[] { 5 });
 
             var v1 = new InputNode(Shape.Scalar, t1);
             var v2 = v1 + 1;
@@ -529,7 +529,7 @@ namespace TensorShaderTest {
         [TestMethod]
         public void ReshapeTest() {
             float[] u = new float[12] { 7, 10, 2, 5, 11, 3, 8, 9, 4, 12, 1, 6, };
-            Tensor t = new Tensor(Shape.Map0D(3, 4), u);
+            Tensor t = (Shape.Map0D(3, 4), u);
 
             {
                 var v1 = new InputNode(Shape.Map0D(3, 4), t);

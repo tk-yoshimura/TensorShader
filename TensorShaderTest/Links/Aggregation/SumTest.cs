@@ -12,13 +12,13 @@ namespace TensorShaderTest.Links.Aggregation {
             int channels = 7, width = 3, height = 5, batch = 2;
 
             float[] xval = (new float[channels * width * height * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-            Tensor xtensor = new Tensor(Shape.Map2D(channels, width, height, batch), xval);
+            Tensor xtensor = (Shape.Map2D(channels, width, height, batch), xval);
 
             float[] gxval_true = null, gxval_false = null;
 
             try {
                 float[] yval = (new float[channels * width * height * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map2D(channels, width, height, batch), yval);
+                Tensor ytensor = (Shape.Map2D(channels, width, height, batch), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -38,7 +38,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[channels * width * height * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map2D(channels, width, height, batch), yval);
+                Tensor ytensor = (Shape.Map2D(channels, width, height, batch), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -60,7 +60,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[width * height * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map2D(1, width, height, batch), yval);
+                Tensor ytensor = (Shape.Map2D(1, width, height, batch), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -80,7 +80,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[width * height * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map1D(width, height, batch), yval);
+                Tensor ytensor = (Shape.Map1D(width, height, batch), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -102,7 +102,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[channels * height * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map2D(channels, 1, height, batch), yval);
+                Tensor ytensor = (Shape.Map2D(channels, 1, height, batch), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -122,7 +122,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[channels * height * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map1D(channels, height, batch), yval);
+                Tensor ytensor = (Shape.Map1D(channels, height, batch), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -144,7 +144,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[channels * width * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map2D(channels, width, 1, batch), yval);
+                Tensor ytensor = (Shape.Map2D(channels, width, 1, batch), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -164,7 +164,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[channels * width * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map1D(channels, width, batch), yval);
+                Tensor ytensor = (Shape.Map1D(channels, width, batch), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -186,7 +186,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[channels * width * height]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map2D(channels, width, height, 1), yval);
+                Tensor ytensor = (Shape.Map2D(channels, width, height, 1), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -206,7 +206,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[channels * width * height]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map1D(channels, width, height), yval);
+                Tensor ytensor = (Shape.Map1D(channels, width, height), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -228,7 +228,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[height * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map2D(1, 1, height, batch), yval);
+                Tensor ytensor = (Shape.Map2D(1, 1, height, batch), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -248,7 +248,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[height * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map0D(height, batch), yval);
+                Tensor ytensor = (Shape.Map0D(height, batch), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -270,7 +270,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[width * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map2D(1, width, 1, batch), yval);
+                Tensor ytensor = (Shape.Map2D(1, width, 1, batch), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -290,7 +290,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[width * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map0D(width, batch), yval);
+                Tensor ytensor = (Shape.Map0D(width, batch), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -312,7 +312,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[width * height]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map2D(1, width, height, 1), yval);
+                Tensor ytensor = (Shape.Map2D(1, width, height, 1), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -332,7 +332,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[width * height]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map0D(width, height), yval);
+                Tensor ytensor = (Shape.Map0D(width, height), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -354,7 +354,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map2D(channels, 1, 1, batch), yval);
+                Tensor ytensor = (Shape.Map2D(channels, 1, 1, batch), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -374,7 +374,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map0D(channels, batch), yval);
+                Tensor ytensor = (Shape.Map0D(channels, batch), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -396,7 +396,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[channels * width]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map2D(channels, width, 1, 1), yval);
+                Tensor ytensor = (Shape.Map2D(channels, width, 1, 1), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -416,7 +416,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[channels * width]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map0D(channels, width), yval);
+                Tensor ytensor = (Shape.Map0D(channels, width), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -438,7 +438,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map2D(1, 1, 1, batch), yval);
+                Tensor ytensor = (Shape.Map2D(1, 1, 1, batch), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -458,7 +458,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Vector(batch), yval);
+                Tensor ytensor = (Shape.Vector(batch), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -480,7 +480,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[height]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map2D(1, 1, height, 1), yval);
+                Tensor ytensor = (Shape.Map2D(1, 1, height, 1), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -500,7 +500,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[height]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Vector(height), yval);
+                Tensor ytensor = (Shape.Vector(height), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -522,7 +522,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[width]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map2D(1, width, 1, 1), yval);
+                Tensor ytensor = (Shape.Map2D(1, width, 1, 1), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -542,7 +542,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[width]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Vector(width), yval);
+                Tensor ytensor = (Shape.Vector(width), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -564,7 +564,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[channels]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map2D(channels, 1, 1, 1), yval);
+                Tensor ytensor = (Shape.Map2D(channels, 1, 1, 1), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -584,7 +584,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[channels]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Vector(channels), yval);
+                Tensor ytensor = (Shape.Vector(channels), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -606,7 +606,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[1]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Map2D(1, 1, 1, 1), yval);
+                Tensor ytensor = (Shape.Map2D(1, 1, 1, 1), yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -626,7 +626,7 @@ namespace TensorShaderTest.Links.Aggregation {
 
             try {
                 float[] yval = (new float[1]).Select((_, idx) => idx * 1e-3f).ToArray();
-                Tensor ytensor = new Tensor(Shape.Scalar, yval);
+                Tensor ytensor = (Shape.Scalar, yval);
 
                 ParameterField x = xtensor;
                 VariableField y_actual = ytensor;
@@ -652,10 +652,10 @@ namespace TensorShaderTest.Links.Aggregation {
             int channels = 7, width = 3, height = 5, batch = 2;
 
             float[] xval = (new float[channels * width * height * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-            Tensor xtensor = new Tensor(Shape.Map2D(channels, width, height, batch), xval);
+            Tensor xtensor = (Shape.Map2D(channels, width, height, batch), xval);
 
             float[] yval = (new float[width * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-            Tensor ytensor = new Tensor(Shape.Map0D(width, batch), yval);
+            Tensor ytensor = (Shape.Map0D(width, batch), yval);
 
             ParameterField x = xtensor;
             VariableField y_actual = ytensor;

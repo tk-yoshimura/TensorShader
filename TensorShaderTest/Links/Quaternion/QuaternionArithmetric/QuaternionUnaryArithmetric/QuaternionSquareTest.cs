@@ -13,8 +13,8 @@ namespace TensorShaderTest.Links.QuaternionArithmetric {
             float[] xval = (new float[length]).Select((_, idx) => (float)idx * 2 - length).ToArray();
             float[] tval = (new float[length]).Select((_, idx) => (float)idx / 2).Reverse().ToArray();
 
-            ParameterField x = new Tensor(Shape.Vector(length), xval);
-            VariableField t = new Tensor(Shape.Vector(length), tval);
+            ParameterField x = (Shape.Vector(length), xval);
+            VariableField t = (Shape.Vector(length), tval);
 
             Field xy = QuaternionSquare(x);
             Field err = xy - t;
@@ -34,8 +34,8 @@ namespace TensorShaderTest.Links.QuaternionArithmetric {
             float[] xval = (new float[length]).Select((_, idx) => (float)idx * 2 - length).ToArray();
             float[] tval = (new float[length]).Select((_, idx) => (float)idx / 2).Reverse().ToArray();
 
-            ParameterField x = new Tensor(Shape.Vector(length), xval);
-            VariableField t = new Tensor(Shape.Vector(length), tval);
+            ParameterField x = (Shape.Vector(length), xval);
+            VariableField t = (Shape.Vector(length), tval);
 
             Field xr = QuaternionR(x), xi = QuaternionI(x), xj = QuaternionJ(x), xk = QuaternionK(x);
 

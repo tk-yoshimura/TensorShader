@@ -18,7 +18,7 @@ namespace TensorShaderTest.Functions.TrivectorArithmetric {
             float[] x2 = new float[length];
 
             {
-                Tensor t1 = new Tensor(Shape.Vector(length), x1);
+                Tensor t1 = (Shape.Vector(length), x1);
                 Tensor o = Tensor.TrivectorNormalize(t1);
 
                 float[] y = o.State;
@@ -34,7 +34,7 @@ namespace TensorShaderTest.Functions.TrivectorArithmetric {
             }
 
             {
-                Tensor t2 = new Tensor(Shape.Vector(length), x2);
+                Tensor t2 = (Shape.Vector(length), x2);
                 Tensor o = Tensor.TrivectorNormalize(t2);
 
                 float[] y = o.State;

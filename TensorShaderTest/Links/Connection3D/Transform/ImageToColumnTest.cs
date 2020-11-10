@@ -16,9 +16,9 @@ namespace TensorShaderTest.Links.Connection3D {
             float[] xval = (new float[channels * inwidth * inheight * indepth * batch]).Select((_, idx) => idx * 2e-3f).ToArray();
             float[] yval = (new float[kwidth * kheight * kdepth * channels * outwidth * outheight * outdepth * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-            ParameterField x1 = new Tensor(Shape.Map3D(channels, inwidth, inheight, indepth, batch), xval);
-            ParameterField x2 = new Tensor(Shape.Map3D(channels, inwidth, inheight, indepth, batch), xval);
-            VariableField y_actual = new Tensor(new Shape(ShapeType.Column, kwidth * kheight * kdepth, channels, outwidth, outheight, outdepth, batch), yval);
+            ParameterField x1 = (Shape.Map3D(channels, inwidth, inheight, indepth, batch), xval);
+            ParameterField x2 = (Shape.Map3D(channels, inwidth, inheight, indepth, batch), xval);
+            VariableField y_actual = (new Shape(ShapeType.Column, kwidth * kheight * kdepth, channels, outwidth, outheight, outdepth, batch), yval);
 
             Field y1_expect = ImageToColumn3D(x1, kwidth, kheight, kdepth);
 

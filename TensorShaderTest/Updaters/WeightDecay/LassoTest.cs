@@ -16,7 +16,7 @@ namespace TensorShaderTest.Updaters.WeightDecay {
             float[] xval = (new float[length]).Select((_, idx) => 0.1f * ((float)idx * 3 - length)).ToArray();
             float[] yval = xval.Select((v) => Math.Sign(v) * Math.Max(Math.Abs(v) - decay, 0)).ToArray();
 
-            ParameterField x = new Tensor(Shape.Vector(length), xval);
+            ParameterField x = (Shape.Vector(length), xval);
 
             (Flow flow, Parameters parameters) = Flow.Optimize(x);
 
@@ -34,7 +34,7 @@ namespace TensorShaderTest.Updaters.WeightDecay {
 
             float[] xval = (new float[length]).Select((_, idx) => 0.1f * ((float)idx * 3 - length)).ToArray();
 
-            ParameterField x = new Tensor(Shape.Vector(length), xval);
+            ParameterField x = (Shape.Vector(length), xval);
 
             (Flow flow, Parameters parameters) = Flow.Optimize(x);
 
@@ -57,8 +57,8 @@ namespace TensorShaderTest.Updaters.WeightDecay {
 
             float[] yval = xval.Select((v, i) => tval[i] - Math.Sign(v) * absmean * decay).ToArray();
 
-            ParameterField x = new Tensor(Shape.Vector(length), xval);
-            VariableField t = new Tensor(Shape.Vector(length), tval);
+            ParameterField x = (Shape.Vector(length), xval);
+            VariableField t = (Shape.Vector(length), tval);
 
             (Flow flow, Parameters parameters) = Flow.Optimize(x - t);
             parameters.AddUpdater((parameters) => new Lasso(x, decay, depend_grad:true))

@@ -9,7 +9,7 @@ namespace TensorShaderTest.Layers {
         public void ExecuteTest() {
             int channels = 4, inwidth = 13, inheight = 17, indepth = 19, kwidth = 3, kheight = 5, kdepth = 7, batch = 7;
 
-            VariableField x = new Tensor(Shape.Map3D(channels, inwidth, inheight, indepth, batch));
+            VariableField x = (Shape.Map3D(channels, inwidth, inheight, indepth, batch));
 
             Layer layer = new ChannelwiseDeconvolution3D(channels, kwidth, kheight, kdepth, use_bias: true, pad_mode: PaddingMode.Edge, label: "conv");
 

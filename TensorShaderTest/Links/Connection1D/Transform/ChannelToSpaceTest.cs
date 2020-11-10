@@ -15,8 +15,8 @@ namespace TensorShaderTest.Links.Connection1D {
             float[] xval = (new float[inchannels * inwidth * batch]).Select((_, idx) => idx * 2e-3f).ToArray();
             float[] yval = (new float[outchannels * outwidth * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-            ParameterField x = new Tensor(Shape.Map1D(inchannels, inwidth, batch), xval);
-            VariableField y_actual = new Tensor(Shape.Map1D(outchannels, outwidth, batch), yval);
+            ParameterField x = (Shape.Map1D(inchannels, inwidth, batch), xval);
+            VariableField y_actual = (Shape.Map1D(outchannels, outwidth, batch), yval);
 
             Field y_expect = ChannelToSpace1D(x, scale);
             Field err = y_expect - y_actual;
