@@ -100,9 +100,17 @@ namespace TensorShaderCudaBackendTest.APITest {
                 IntPtr ptr = Cuda.Memory.Allocate<float>(count);
                 IntPtr ptr2 = Cuda.Memory.Allocate<float>(count);
 
+                Cuda.Memory.Zeroset<float>(ptr, count);
+                Cuda.Memory.Zeroset<float>(ptr2, count);
+
                 Cuda.Memory.CopyHostToDevice(v, ptr, count - index, index);
                 Cuda.Memory.CopyDeviceToDevice<float>(ptr, ptr2, count);
                 Cuda.Memory.CopyDeviceToHost(ptr2, v2, count);
+
+                Console.WriteLine(ptr);
+                Console.WriteLine(ptr2);
+                Console.WriteLine(string.Join(',', v2));
+                Console.WriteLine(string.Join(',', v3));
 
                 CollectionAssert.AreEqual(v3, v2);
 
@@ -118,9 +126,17 @@ namespace TensorShaderCudaBackendTest.APITest {
                 IntPtr ptr = Cuda.Memory.Allocate<float>(count);
                 IntPtr ptr2 = Cuda.Memory.Allocate<float>(count);
 
+                Cuda.Memory.Zeroset<float>(ptr, count);
+                Cuda.Memory.Zeroset<float>(ptr2, count);
+
                 Cuda.Memory.CopyHostToDevice(v, ptr, count);
                 Cuda.Memory.CopyDeviceToDevice<float>(ptr, ptr2, count);
                 Cuda.Memory.CopyDeviceToHost(ptr2, v2, count - index, index);
+
+                Console.WriteLine(ptr);
+                Console.WriteLine(ptr2);
+                Console.WriteLine(string.Join(',', v2));
+                Console.WriteLine(string.Join(',', v3));
 
                 CollectionAssert.AreEqual(v3, v2);
 
