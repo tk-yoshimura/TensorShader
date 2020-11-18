@@ -126,12 +126,42 @@ namespace TensorShaderCudaBackend {
 
         /// <summary>GPUメモリへ書き込み</summary>
         public void Write(T[] array, ulong count) {
+            if(count > Length) { 
+                throw new ArgumentException(nameof(count));
+            }
+
             Cuda.Memory.CopyHostToDevice(array, ptr, count);
         }
 
         /// <summary>GPUメモリから読み込み</summary>
         public void Read(T[] array, ulong count) {
+            if(count > Length) { 
+                throw new ArgumentException(nameof(count));
+            }
+
             Cuda.Memory.CopyDeviceToHost(ptr, array, count);
+        }
+
+        /// <summary>GPUメモリへ書き込み</summary>
+        public void Write(ulong index, T[] array, ulong array_index, ulong count) {
+            if(index + count > Length) { 
+                throw new ArgumentException($"{nameof(index)},{nameof(count)}");
+            }
+
+            IntPtr ref_ptr = (IntPtr)(ptr.ToInt64() + (long)(ElementSize * index));
+
+            Cuda.Memory.CopyHostToDevice(array, ref_ptr, count, array_index);
+        }
+
+        /// <summary>GPUメモリから読み込み</summary>
+        public void Read(ulong index, T[] array, ulong array_index, ulong count) {
+            if(index + count > Length) { 
+                throw new ArgumentException($"{nameof(index)},{nameof(count)}");
+            }
+
+            IntPtr ref_ptr = (IntPtr)(ptr.ToInt64() + (long)(ElementSize * index));
+
+            Cuda.Memory.CopyDeviceToHost(ref_ptr, array, count, array_index);
         }
 
         /// <summary>ゼロクリア</summary>

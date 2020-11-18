@@ -1072,7 +1072,7 @@ namespace TensorShaderCudaBackend {
             if (slope != 0) {
                 Shader shader = TrinaryUniConstantArithmetric(
                     "yamatani_ew",
-                    "#y = c * (#x1 + #x2) + ((#x1 > 0 && #x2 > 0) ? fminf(#x1, #x2) : ((#x1 < 0 && #x2 < 0) ? fmaxf(#x1, #x2) : 0.0));"
+                    "#y = c * (#x1 + #x2) + ((#x1 > 0 & #x2 > 0) ? fminf(#x1, #x2) : ((#x1 < 0 && #x2 < 0) ? fmaxf(#x1, #x2) : 0.0));"
                 );
 
                 if (stream == null) {
@@ -1084,7 +1084,7 @@ namespace TensorShaderCudaBackend {
             else { 
                 Shader shader = BinaryArithmetric(
                     "yamatani_noslope_ew",
-                    "#y = (#x1 > 0 && #x2 > 0) ? fminf(#x1, #x2) : ((#x1 < 0 && #x2 < 0) ? fmaxf(#x1, #x2) : 0.0);"
+                    "#y = (#x1 > 0 & #x2 > 0) ? fminf(#x1, #x2) : ((#x1 < 0 && #x2 < 0) ? fmaxf(#x1, #x2) : 0.0);"
                 );
 
                 if (stream == null) {
@@ -1100,7 +1100,7 @@ namespace TensorShaderCudaBackend {
             if (slope != 0) {
                 Shader shader = TrinaryUniConstantArithmetric(
                     "yamatanigrad_ew",
-                    "#y = c + ((#x1 > 0 && #x2 > 0) ? (#x1 <= #x2 ? 1.0 : 0.0) : ((#x1 < 0 && #x2 < 0) ? (#x1 >= #x2 ? 1.0 : 0.0) : 0.0));"
+                    "#y = c + ((#x1 > 0 & #x2 > 0) ? (#x1 <= #x2 ? 1.0 : 0.0) : ((#x1 < 0 && #x2 < 0) ? (#x1 >= #x2 ? 1.0 : 0.0) : 0.0));"
                 );
 
                 if (stream == null) {
@@ -1112,7 +1112,7 @@ namespace TensorShaderCudaBackend {
             else {
                 Shader shader = BinaryArithmetric(
                     "yamatanigrad_noslope_ew",
-                    "#y = (#x1 > 0 && #x2 > 0) ? (#x1 <= #x2 ? 1.0 : 0.0) : ((#x1 < 0 && #x2 < 0) ? (#x1 >= #x2 ? 1.0 : 0.0) : 0.0);"
+                    "#y = (#x1 > 0 & #x2 > 0) ? (#x1 <= #x2 ? 1.0 : 0.0) : ((#x1 < 0 && #x2 < 0) ? (#x1 >= #x2 ? 1.0 : 0.0) : 0.0);"
                 );
 
                 if (stream == null) {

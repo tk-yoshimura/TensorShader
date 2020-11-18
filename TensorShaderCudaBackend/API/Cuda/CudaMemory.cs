@@ -73,11 +73,11 @@ namespace TensorShaderCudaBackend.API {
             }
 
             /// <summary>ホストデバイス間メモリ領域コピー</summary>
-            internal static void CopyDeviceToHost<T>(IntPtr src_ptr, T[] dst, ulong count) where T : struct, IComparable {
+            internal static void CopyDeviceToHost<T>(IntPtr src_ptr, T[] dst, ulong count, ulong index = 0) where T : struct, IComparable {
                 if (src_ptr == IntPtr.Zero) {
                     throw new ArgumentException(nameof(src_ptr));
                 }
-                if (dst == null || count > (ulong)dst.LongLength) {
+                if (dst == null || count + index > (ulong)dst.LongLength) {
                     throw new ArgumentException(nameof(dst));
                 }
 
@@ -85,7 +85,7 @@ namespace TensorShaderCudaBackend.API {
                 GCHandle pinned_handle = GCHandle.Alloc(dst, GCHandleType.Pinned);
 
                 try {
-                    IntPtr dst_ptr = Marshal.UnsafeAddrOfPinnedArrayElement(dst, 0);
+                    IntPtr dst_ptr = Marshal.UnsafeAddrOfPinnedArrayElement(dst, checked((int)index));
                     Copy(src_ptr, dst_ptr, bytesize, cudaMemcpyKind.DeviceToHost);
                 }
                 finally {
@@ -94,8 +94,8 @@ namespace TensorShaderCudaBackend.API {
             }
 
             /// <summary>ホストデバイス間メモリ領域コピー</summary>
-            internal static void CopyHostToDevice<T>(T[] src, IntPtr dst_ptr, ulong count) where T : struct, IComparable {
-                if (src == null || count > (ulong)src.LongLength) {
+            internal static void CopyHostToDevice<T>(T[] src, IntPtr dst_ptr, ulong count, ulong index = 0) where T : struct, IComparable {
+                if (src == null || count + index > (ulong)src.LongLength) {
                     throw new ArgumentException(nameof(src));
                 }
                 if (dst_ptr == IntPtr.Zero) {
@@ -106,7 +106,7 @@ namespace TensorShaderCudaBackend.API {
                 GCHandle pinned_handle = GCHandle.Alloc(src, GCHandleType.Pinned);
 
                 try {
-                    IntPtr src_ptr = Marshal.UnsafeAddrOfPinnedArrayElement(src, 0);
+                    IntPtr src_ptr = Marshal.UnsafeAddrOfPinnedArrayElement(src, checked((int)index));
                     Copy(src_ptr, dst_ptr, bytesize, cudaMemcpyKind.HostToDevice);
                 }
                 finally {

@@ -45,7 +45,7 @@ namespace TensorShader {
         /// <summary>コンストラクタ</summary>
         /// <param name="shape">形状</param>
         /// <param name="value">初期値(任意指定)</param>
-        public Tensor(Shape shape, float[] value = null) {
+        internal Tensor(Shape shape, float[] value = null) {
             if (shape == null) {
                 throw new ArgumentException(nameof(shape));
             }
@@ -60,7 +60,7 @@ namespace TensorShader {
         /// <summary>コンストラクタ</summary>
         /// <param name="shape">形状</param>
         /// <param name="array">バッファ</param>
-        protected Tensor(Shape shape, CudaArray<float> array) {
+        protected internal Tensor(Shape shape, CudaArray<float> array) {
             if (shape == null) {
                 throw new ArgumentException(nameof(shape));
             }
@@ -163,18 +163,20 @@ namespace TensorShader {
 
         /// <summary>インデクサ</summary>
         /// <param name="index">バッチ次元のインデクス</param>
-        public virtual Tensor this[int index] {
+        public virtual NdimArray<float> this[int index] {
             set {
                 if (index < 0 || index >= Batch) {
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
 
+                Shape shape = value.Shape;
+
                 if ((Type, Width, Height, Depth, Channels, InChannels, OutChannels)
-                    != (value.Type, value.Width, value.Height, value.Depth, value.Channels, value.InChannels, value.OutChannels)) {
+                    != (value.Type, shape.Width, shape.Height, shape.Depth, shape.Channels, shape.InChannels, shape.OutChannels)) {
                     throw new ArgumentException(nameof(value));
                 }
 
-                value.RegionCopyTo(this, 0, (uint)(Shape.DataSize * index), (uint)Shape.DataSize);
+                this.Buffer.Write.RegionCopyTo(this, 0, (uint)(Shape.DataSize * index), (uint)Shape.DataSize);
             }
 
             get {
@@ -227,7 +229,7 @@ namespace TensorShader {
         /// <summary>コンストラクタ</summary>
         /// <param name="shape">形状</param>
         /// <param name="value">初期値(任意指定)</param>
-        public OverflowCheckedTensor(Shape shape, float[] value = null)
+        internal OverflowCheckedTensor(Shape shape, float[] value = null)
             : base(shape, new float[shape.Length + canary_length]) {
             if (shape == null) {
                 throw new ArgumentException(nameof(shape));

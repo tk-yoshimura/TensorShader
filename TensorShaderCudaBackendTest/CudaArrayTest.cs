@@ -668,6 +668,155 @@ namespace TensorShaderCudaBackendTest {
         }
 
         [TestMethod]
+        public void RegionWriteTest() {
+            for(uint src_length = 1; src_length <= 16; src_length++) { 
+                float[] v = (new float[src_length]).Select((_, idx) => (float)idx).ToArray();
+                
+                for(uint dst_length = src_length; dst_length <= 16; dst_length++) { 
+                    CudaArray<float> arr = new CudaArray<float>(dst_length);
+
+                    for(uint src_index = 0; src_index < src_length; src_index++) { 
+                        for(uint dst_index = 0; dst_index < dst_length; dst_index++) { 
+                            for(uint count = 0; count <= Math.Min(src_length - src_index, dst_length - dst_index); count++) {
+
+                                float[] v2 = (new float[dst_length])
+                                    .Select((_, idx) => idx >= dst_index && idx < (dst_index + count) ? v[idx - dst_index + src_index] : 0)
+                                    .ToArray();
+                        
+                                arr.Zeroset();
+                                arr.Write(dst_index, v, src_index, count);
+
+                                float[] v3 = new float[dst_length];
+
+                                arr.Read(v3);
+
+                                CollectionAssert.AreEqual(v2, v3);
+                            }
+                        }
+                    }
+                }
+            }
+
+            for(uint src_length = 1; src_length <= 16; src_length++) { 
+                double[] v = (new double[src_length]).Select((_, idx) => (double)idx).ToArray();
+                
+                for(uint dst_length = src_length; dst_length <= 16; dst_length++) { 
+                    CudaArray<double> arr = new CudaArray<double>(dst_length);
+                    
+                    for(uint src_index = 0; src_index < src_length; src_index++) { 
+                        for(uint dst_index = 0; dst_index < dst_length; dst_index++) { 
+                            for(uint count = 0; count <= Math.Min(src_length - src_index, dst_length - dst_index); count++) {
+
+                                double[] v2 = (new double[dst_length])
+                                    .Select((_, idx) => idx >= dst_index && idx < (dst_index + count) ? v[idx - dst_index + src_index] : 0)
+                                    .ToArray();
+                        
+                                arr.Zeroset();
+                                arr.Write(dst_index, v, src_index, count);
+
+                                double[] v3 = new double[dst_length];
+
+                                arr.Read(v3);
+
+                                CollectionAssert.AreEqual(v2, v3);
+                            }
+                        }
+                    }
+                }
+            }
+
+            Assert.ThrowsException<ArgumentException>(() => { 
+                float[] v = (new float[16]).Select((_, idx) => (float)idx).ToArray();
+                CudaArray<float> arr = new CudaArray<float>(17);
+                arr.Write(2, v, 0, 16);
+            });
+
+            Assert.ThrowsException<ArgumentException>(() => { 
+                float[] v = (new float[16]).Select((_, idx) => (float)idx).ToArray();
+                CudaArray<float> arr = new CudaArray<float>(17);
+                arr.Write(0, v, 2, 16);
+            });
+
+            Assert.ThrowsException<ArgumentException>(() => { 
+                float[] v = (new float[16]).Select((_, idx) => (float)idx).ToArray();
+                CudaArray<float> arr = new CudaArray<float>(17);
+                arr.Write(1, v, 1, 16);
+            });
+        }
+
+        [TestMethod]
+        public void RegionReadTest() {
+            for(uint src_length = 1; src_length <= 16; src_length++) { 
+                float[] v = (new float[src_length]).Select((_, idx) => (float)idx).ToArray();
+                CudaArray<float> arr = new CudaArray<float>(v);
+                
+                for(uint dst_length = src_length; dst_length <= 16; dst_length++) { 
+                    for(uint src_index = 0; src_index < src_length; src_index++) { 
+                        for(uint dst_index = 0; dst_index < dst_length; dst_index++) { 
+                            for(uint count = 0; count <= Math.Min(src_length - src_index, dst_length - dst_index); count++) {
+
+                                float[] v2 = (new float[dst_length])
+                                    .Select((_, idx) => idx >= dst_index && idx < (dst_index + count) ? v[idx - dst_index + src_index] : 0)
+                                    .ToArray();
+                        
+                                float[] v3 = new float[dst_length];
+
+                                arr.Read(src_index, v3, dst_index, count);
+
+                                CollectionAssert.AreEqual(v2, v3);
+                            }
+                        }
+                    }
+                }
+            }
+
+            for(uint src_length = 1; src_length <= 16; src_length++) { 
+                double[] v = (new double[src_length]).Select((_, idx) => (double)idx).ToArray();
+                CudaArray<double> arr = new CudaArray<double>(v);
+                
+                for(uint dst_length = src_length; dst_length <= 16; dst_length++) { 
+                    for(uint src_index = 0; src_index < src_length; src_index++) { 
+                        for(uint dst_index = 0; dst_index < dst_length; dst_index++) { 
+                            for(uint count = 0; count <= Math.Min(src_length - src_index, dst_length - dst_index); count++) {
+
+                                double[] v2 = (new double[dst_length])
+                                    .Select((_, idx) => idx >= dst_index && idx < (dst_index + count) ? v[idx - dst_index + src_index] : 0)
+                                    .ToArray();
+                        
+                                double[] v3 = new double[dst_length];
+
+                                arr.Read(src_index, v3, dst_index, count);
+
+                                CollectionAssert.AreEqual(v2, v3);
+                            }
+                        }
+                    }
+                }
+            }
+
+            Assert.ThrowsException<ArgumentException>(() => { 
+                float[] v = (new float[16]).Select((_, idx) => (float)idx).ToArray();
+                CudaArray<float> arr = new CudaArray<float>(v);
+                float[] v2 = new float[17];
+                arr.Read(2, v2, 0, 16);
+            });
+
+            Assert.ThrowsException<ArgumentException>(() => { 
+                float[] v = (new float[16]).Select((_, idx) => (float)idx).ToArray();
+                CudaArray<float> arr = new CudaArray<float>(v);
+                float[] v2 = new float[17];
+                arr.Read(0, v2, 2, 16);
+            });
+
+            Assert.ThrowsException<ArgumentException>(() => { 
+                float[] v = (new float[16]).Select((_, idx) => (float)idx).ToArray();
+                CudaArray<float> arr = new CudaArray<float>(v);
+                float[] v2 = new float[17];
+                arr.Read(1, v2, 1, 16);
+            });
+        }
+
+        [TestMethod]
         public void BadCreateTest() {
             Assert.ThrowsException<TypeInitializationException>(() => { 
                 CudaArray<char> arr = new CudaArray<char>(32);

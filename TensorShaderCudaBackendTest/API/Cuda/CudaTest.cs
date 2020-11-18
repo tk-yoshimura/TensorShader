@@ -89,6 +89,47 @@ namespace TensorShaderCudaBackendTest.APITest {
         }
 
         [TestMethod]
+        public void MemcpyWithIndexTest() {
+            const int count = 15, index = 3;
+
+            /*write*/ { 
+                float[] v = (new float[count]).Select((_, idx) => (float)idx).ToArray();
+                float[] v2 = new float[count];
+                float[] v3 = (new float[count]).Select((_, idx) => idx < count - index ? (float)idx + index : 0).ToArray();
+
+                IntPtr ptr = Cuda.Memory.Allocate<float>(count);
+                IntPtr ptr2 = Cuda.Memory.Allocate<float>(count);
+
+                Cuda.Memory.CopyHostToDevice(v, ptr, count - index, index);
+                Cuda.Memory.CopyDeviceToDevice<float>(ptr, ptr2, count);
+                Cuda.Memory.CopyDeviceToHost(ptr2, v2, count);
+
+                CollectionAssert.AreEqual(v3, v2);
+
+                Cuda.Memory.Free(ref ptr);
+                Cuda.Memory.Free(ref ptr2);
+            }
+
+            /*read*/ { 
+                float[] v = (new float[count]).Select((_, idx) => (float)idx).ToArray();
+                float[] v2 = new float[count];
+                float[] v3 = (new float[count]).Select((_, idx) => idx < index ? 0 : (float)idx - index).ToArray();
+
+                IntPtr ptr = Cuda.Memory.Allocate<float>(count);
+                IntPtr ptr2 = Cuda.Memory.Allocate<float>(count);
+
+                Cuda.Memory.CopyHostToDevice(v, ptr, count);
+                Cuda.Memory.CopyDeviceToDevice<float>(ptr, ptr2, count);
+                Cuda.Memory.CopyDeviceToHost(ptr2, v2, count - index, index);
+
+                CollectionAssert.AreEqual(v3, v2);
+
+                Cuda.Memory.Free(ref ptr);
+                Cuda.Memory.Free(ref ptr2);
+            }
+        }
+
+        [TestMethod]
         public void ZerosetTest() {
             const int count = 15;
 
