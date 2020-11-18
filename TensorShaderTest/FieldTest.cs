@@ -1122,10 +1122,10 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void BroadcastTest() {
-            Tensor intensor1 = (Shape.Vector(5), new float[] { 0f, 1f, 2f, 3f, 4f });
+            Tensor intensor1 = new float[] { 0f, 1f, 2f, 3f, 4f };
             Tensor intensor2 = 2f;
-            Tensor outtensor1 = (Shape.Vector(5), new float[] { 4f, 3f, 2f, 1f, 0f });
-            Tensor outtensor2 = (Shape.Vector(5), new float[] { 0f, 2f, 4f, 6f, 8f });
+            Tensor outtensor1 = new float[] { 4f, 3f, 2f, 1f, 0f };
+            Tensor outtensor2 = new float[] { 0f, 2f, 4f, 6f, 8f };
 
             {
                 ParameterField f1 = intensor1;
