@@ -107,11 +107,6 @@ namespace TensorShaderCudaBackendTest.APITest {
                 Cuda.Memory.CopyDeviceToDevice<float>(ptr, ptr2, count);
                 Cuda.Memory.CopyDeviceToHost(ptr2, v2, count);
 
-                Console.WriteLine(ptr);
-                Console.WriteLine(ptr2);
-                Console.WriteLine(string.Join(',', v2));
-                Console.WriteLine(string.Join(',', v3));
-
                 CollectionAssert.AreEqual(v3, v2);
 
                 Cuda.Memory.Free(ref ptr);
@@ -132,11 +127,6 @@ namespace TensorShaderCudaBackendTest.APITest {
                 Cuda.Memory.CopyHostToDevice(v, ptr, count);
                 Cuda.Memory.CopyDeviceToDevice<float>(ptr, ptr2, count);
                 Cuda.Memory.CopyDeviceToHost(ptr2, v2, count - index, index);
-
-                Console.WriteLine(ptr);
-                Console.WriteLine(ptr2);
-                Console.WriteLine(string.Join(',', v2));
-                Console.WriteLine(string.Join(',', v3));
 
                 CollectionAssert.AreEqual(v3, v2);
 
