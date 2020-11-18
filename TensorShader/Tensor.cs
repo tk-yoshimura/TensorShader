@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using TensorShaderCudaBackend;
@@ -169,36 +170,30 @@ namespace TensorShader {
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
 
-                Shape shape = value.Shape;
-
-                if ((Type, Width, Height, Depth, Channels, InChannels, OutChannels)
-                    != (value.Type, shape.Width, shape.Height, shape.Depth, shape.Channels, shape.InChannels, shape.OutChannels)) {
+                if (Shape.DataShape != value.Shape.DataShape || value.Shape.Batch != 1) {
                     throw new ArgumentException(nameof(value));
                 }
 
-                this.Buffer.Write.RegionCopyTo(this, 0, (uint)(Shape.DataSize * index), (uint)Shape.DataSize);
+                this.Buffer.Write((uint)(Shape.DataSize * index), value.Value, 0, (uint)Shape.DataSize);
             }
-
             get {
                 if (index < 0 || index >= Batch) {
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
 
-                int[] s = Shape;
+                NdimArray<float> arr = new NdimArray<float>(Shape.DataShape);
 
-                if (s.Length >= 2 && Batch > 1) {
-                    s[s.Length - 1] = 1;
+                this.Buffer.Read((uint)(Shape.DataSize * index), arr.Value, 0, (uint)Shape.DataSize);
 
-                    Tensor tensor = (this is OverflowCheckedTensor)
-                                    ? new OverflowCheckedTensor(new Shape(Type, s))
-                                    : new Tensor(new Shape(Type, s));
+                return arr;
+            }
+        }
 
-                    RegionCopyTo(tensor, (uint)(Shape.DataSize * index), 0, (uint)Shape.DataSize);
-
-                    return tensor;
-                }
-                else {
-                    return Copy();
+        /// <summary>データリスト</summary>
+        public IEnumerable<NdimArray<float>> DataList {
+            get { 
+                for(int i = 0; i < Batch; i++) { 
+                    yield return this[i];
                 }
             }
         }

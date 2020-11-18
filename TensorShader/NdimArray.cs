@@ -21,7 +21,7 @@ namespace TensorShader {
         public ShapeType Type => Shape.Type;
 
         /// <summary>コンストラクタ</summary>
-        public NdimArray(T[] value, Shape shape, bool clone_value = false) {
+        public NdimArray(Shape shape, T[] value, bool clone_value = false) {
             if (value == null) {
                 throw new ArgumentNullException(nameof(value));
             }
@@ -91,7 +91,12 @@ namespace TensorShader {
                 throw new ArgumentException(nameof(shape));
             }
 
-            return new NdimArray<T>(Value, shape, clone_value);
+            return new NdimArray<T>(shape, Value, clone_value);
+        }
+
+        /// <summary>キャスト</summary>
+        public static implicit operator NdimArray<T>((Shape shape, T[] v) val) { 
+            return new NdimArray<T>(val.shape, val.v);
         }
 
         /// <summary>ディープコピー</summary>
@@ -101,7 +106,7 @@ namespace TensorShader {
 
         /// <summary>ディープコピー</summary>
         public NdimArray<T> Copy() {
-            return new NdimArray<T>(Value, Shape, clone_value: true);
+            return new NdimArray<T>(Shape, Value, clone_value: true);
         }
     }
 
@@ -109,7 +114,7 @@ namespace TensorShader {
     public partial class Tensor {
         /// <summary>テンソルから変換</summary>
         public static implicit operator NdimArray<float>(Tensor tensor) {
-            return new NdimArray<float>(tensor.State, tensor.Shape);
+            return new NdimArray<float>(tensor.Shape, tensor.State);
         }
 
         /// <summary>テンソルへ変換</summary>

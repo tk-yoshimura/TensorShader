@@ -105,6 +105,21 @@ namespace TensorShader {
         /// <summary>各軸の長さ</summary>
         public int this[int axis] => shape[axis];
 
+        /// <summary>データ形状(次元にバッチを含むならば、バッチを1とする)</summary>
+        public Shape DataShape{
+            get {
+                if(Type == ShapeType.Map || Type == ShapeType.Column) { 
+                    int[] ret_shape = (int[])this.shape.Clone();
+                    ret_shape[ret_shape.Length - 1] = 1;
+
+                    return new Shape(Type, ret_shape);
+                }
+                else {
+                    return this;
+                }
+            }
+        }
+
         /// <summary>コンストラクタ</summary>
         public Shape(ShapeType type, params int[] shape) {
             int length = 1;
