@@ -21,27 +21,11 @@ namespace TensorShader {
             );
         }
 
-        /// <summary>0次元マップの生成</summary>
-        public static implicit operator Tensor(((int channels, int batch) shape, float[] v) val) { 
-            return new Tensor(
-                Shape.Map0D(val.shape.channels, val.shape.batch),
-                val.v
-            );
-        }
-
         /// <summary>1次元マップの生成</summary>
         public static implicit operator Tensor(float[,,] val) { 
             return new Tensor(
                 Shape.Map1D(val.GetLength(2), val.GetLength(1), val.GetLength(0)), 
                 val.Cast<float>().ToArray()
-            );
-        }
-
-        /// <summary>1次元マップの生成</summary>
-        public static implicit operator Tensor(((int channels, int width, int batch) shape, float[] v) val) { 
-            return new Tensor(
-                Shape.Map1D(val.shape.channels, val.shape.width, val.shape.batch),
-                val.v
             );
         }
 
@@ -53,14 +37,6 @@ namespace TensorShader {
             );
         }
 
-        /// <summary>2次元マップの生成</summary>
-        public static implicit operator Tensor(((int channels, int width, int height, int batch) shape, float[] v) val) { 
-            return new Tensor(
-                Shape.Map2D(val.shape.channels, val.shape.width, val.shape.height, val.shape.batch),
-                val.v
-            );
-        }
-
         /// <summary>3次元マップの生成</summary>
         public static implicit operator Tensor(float[,,,,] val) { 
             return new Tensor(
@@ -69,22 +45,24 @@ namespace TensorShader {
             );
         }
 
-        /// <summary>3次元マップの生成</summary>
-        public static implicit operator Tensor(((int channels, int width, int height, int depth, int batch) shape, float[] v) val) { 
-            return new Tensor(
-                Shape.Map3D(val.shape.channels, val.shape.width, val.shape.height, val.shape.depth, val.shape.batch),
-                val.v
-            );
-        }
-
-        /// <summary>初期テンソルの生成</summary>
+        /// <summary>任意形状の生成</summary>
         public static implicit operator Tensor(Shape shape) { 
             return new Tensor(shape);
         }
 
-        /// <summary>初期テンソルの生成</summary>
+        /// <summary>任意形状任意初期値の生成</summary>
         public static implicit operator Tensor((Shape shape, float[] v) val) { 
             return new Tensor(val.shape, val.v);
+        }
+
+        /// <summary>NdimArrayへ変換</summary>
+        public static implicit operator NdimArray<float>(Tensor tensor) {
+            return tensor.State;
+        }
+
+        /// <summary>NdimArrayから変換</summary>
+        public static implicit operator Tensor(NdimArray<float> array) {
+            return new Tensor(array.Shape, array.Value);
         }
     }
 }

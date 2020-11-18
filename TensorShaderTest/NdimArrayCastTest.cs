@@ -4,74 +4,76 @@ using TensorShader;
 
 namespace TensorShaderTest {
     [TestClass]
-    public class TensorCastTest {
+    public class NdimArrayCastTest {
         [TestMethod]
         public void ScalarTest() {
-            Tensor tensor = 5;
+            NdimArray<float> array = 5;
 
-            Assert.AreEqual(Shape.Scalar, tensor.Shape);
-            CollectionAssert.AreEqual(new float[] { 5 }, tensor.State.Value);
+            Assert.AreEqual(Shape.Scalar, array.Shape);
+            CollectionAssert.AreEqual(new float[] { 5 }, array.Value);
+            Assert.AreEqual(5, (float)array);
         }
 
         [TestMethod]
         public void VectorTest() {
-            Tensor tensor = new float[]{ 1, 2, 3, 4 };
+            NdimArray<float> array = new float[]{ 1, 2, 3, 4 };
 
-            Assert.AreEqual(Shape.Vector(4), tensor.Shape);
-            CollectionAssert.AreEqual(new float[] { 1, 2, 3, 4 }, tensor.State.Value);
+            Assert.AreEqual(Shape.Vector(4), array.Shape);
+            CollectionAssert.AreEqual(new float[] { 1, 2, 3, 4 }, array.Value);
+            CollectionAssert.AreEqual(new float[] { 1, 2, 3, 4 }, (float[])array);
         }
 
         [TestMethod]
         public void Map0DTest() {
-            Tensor tensor = new float[,]{ { 1, 2, 3 } , { 4, 5, 6 } };
+            NdimArray<float> array = new float[,]{ { 1, 2, 3 } , { 4, 5, 6 } };
 
-            Assert.AreEqual(Shape.Map0D(3, 2), tensor.Shape);
-            CollectionAssert.AreEqual(new float[] { 1, 2, 3, 4, 5, 6 }, tensor.State.Value);
+            Assert.AreEqual(Shape.Map0D(3, 2), array.Shape);
+            CollectionAssert.AreEqual(new float[] { 1, 2, 3, 4, 5, 6 }, array.Value);
         }
 
         [TestMethod]
         public void Map1DTest() {
-            Tensor tensor = new float[,,]{ 
+            NdimArray<float> array = new float[,,]{ 
                 { { 1, 2, 3, 4 } , { 4, 5, 6, 7 } , { 7, 8, 9, 0 } },
                 { { 2, 3, 4, 1 } , { 5, 6, 7, 4 } , { 8, 9, 0, 7 } },
             };
 
-            Assert.AreEqual(Shape.Map1D(4, 3, 2), tensor.Shape);
+            Assert.AreEqual(Shape.Map1D(4, 3, 2), array.Shape);
             CollectionAssert.AreEqual(
                 new float[] { 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0, 2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7 },
-                tensor.State.Value
+                array.Value
             );
         }
 
         [TestMethod]
         public void Map2DTest() {
-            Tensor tensor = new float[,,,] {
+            NdimArray<float> array = new float[,,,] {
                 { 
                     { { 1, 2, 3, 4 } , { 4, 5, 6, 7 } , { 7, 8, 9, 0 } },
                     { { 2, 3, 4, 1 } , { 5, 6, 7, 4 } , { 8, 9, 0, 7 } },
                 }
             };
 
-            Assert.AreEqual(Shape.Map2D(4, 3, 2, 1), tensor.Shape);
+            Assert.AreEqual(Shape.Map2D(4, 3, 2, 1), array.Shape);
             CollectionAssert.AreEqual(
                 new float[] { 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0, 2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7 },
-                tensor.State.Value
+                array.Value
             );
         }
 
         [TestMethod]
         public void Map3DTest() {
-            Tensor tensor = new float[,,,,] {
+            NdimArray<float> array = new float[,,,,] {
                 {{ 
                     { { 1, 2, 3, 4 } , { 4, 5, 6, 7 } , { 7, 8, 9, 0 } },
                     { { 2, 3, 4, 1 } , { 5, 6, 7, 4 } , { 8, 9, 0, 7 } },
                 }}
             };
 
-            Assert.AreEqual(Shape.Map3D(4, 3, 2, 1, 1), tensor.Shape);
+            Assert.AreEqual(Shape.Map3D(4, 3, 2, 1, 1), array.Shape);
             CollectionAssert.AreEqual(
                 new float[] { 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0, 2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7 },
-                tensor.State.Value
+                array.Value
             );
         }
     }

@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace TensorShader {
 
     /// <summary>多次元配列</summary>
-    public class NdimArray<T> : ICloneable {
+    public partial class NdimArray<T> : ICloneable {
 
         /// <summary>値配列</summary>
         public T[] Value { private set; get; }
@@ -90,41 +89,6 @@ namespace TensorShader {
             return new NdimArray<T>(shape, Value, clone_value);
         }
 
-        /// <summary>キャスト</summary>
-        public static implicit operator NdimArray<T>(T value) { 
-            return new NdimArray<T>(Shape.Scalar, new T[]{ value });
-        }
-
-        /// <summary>キャスト</summary>
-        public static implicit operator NdimArray<T>(T[] value) { 
-            return new NdimArray<T>(Shape.Vector(value.Length), value);
-        }
-
-        /// <summary>キャスト</summary>
-        public static implicit operator NdimArray<T>(Shape shape) { 
-            return new NdimArray<T>(shape);
-        }
-
-        /// <summary>キャスト</summary>
-        public static implicit operator NdimArray<T>((Shape shape, T[] v) val) { 
-            return new NdimArray<T>(val.shape, val.v);
-        }
-
-        /// <summary>float配列へ変換</summary>
-        public static explicit operator T[](NdimArray<T> array) {
-            return array.Value;
-        }
-
-        /// <summary>floatへ変換</summary>
-        /// <exception cref="InvalidCastException">Not Scalar</exception>
-        public static explicit operator T(NdimArray<T> array) {
-            if(array.Shape != Shape.Scalar) { 
-                throw new InvalidCastException();
-            }
-            
-            return array.Value[0];
-        }
-
         /// <summary>ディープコピー</summary>
         public object Clone() {
             return Copy();
@@ -133,19 +97,6 @@ namespace TensorShader {
         /// <summary>ディープコピー</summary>
         public NdimArray<T> Copy() {
             return new NdimArray<T>(Shape, Value, clone_value: true);
-        }
-    }
-
-    /// <summary>テンソルクラス</summary>
-    public partial class Tensor {
-        /// <summary>テンソルから変換</summary>
-        public static implicit operator NdimArray<float>(Tensor tensor) {
-            return tensor.State;
-        }
-
-        /// <summary>テンソルへ変換</summary>
-        public static implicit operator Tensor(NdimArray<float> array) {
-            return new Tensor(array.Shape, array.Value);
         }
     }
 }

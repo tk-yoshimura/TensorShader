@@ -16,18 +16,8 @@
             return (Tensor)val;
         }
 
-        /// <summary>0次元マップの生成</summary>
-        public static implicit operator VariableField(((int channels, int batch) shape, float[] v) val) { 
-            return (Tensor)val;
-        }
-
         /// <summary>1次元マップの生成</summary>
         public static implicit operator VariableField(float[,,] val) { 
-            return (Tensor)val;
-        }
-
-        /// <summary>1次元マップの生成</summary>
-        public static implicit operator VariableField(((int channels, int width, int batch) shape, float[] v) val) { 
             return (Tensor)val;
         }
 
@@ -36,27 +26,17 @@
             return (Tensor)val;
         }
 
-        /// <summary>2次元マップの生成</summary>
-        public static implicit operator VariableField(((int channels, int width, int height, int batch) shape, float[] v) val) { 
-            return (Tensor)val;
-        }
-
         /// <summary>3次元マップの生成</summary>
         public static implicit operator VariableField(float[,,,,] val) { 
             return (Tensor)val;
         }
 
-        /// <summary>3次元マップの生成</summary>
-        public static implicit operator VariableField(((int channels, int width, int height, int depth, int batch) shape, float[] v) val) { 
-            return (Tensor)val;
-        }
-
-        /// <summary>初期フィールドの生成</summary>
+        /// <summary>任意形状の生成</summary>
         public static implicit operator VariableField(Shape shape) { 
             return new Tensor(shape);
         }
 
-        /// <summary>初期フィールドの生成</summary>
+        /// <summary>任意形状任意初期値の生成</summary>
         public static implicit operator VariableField((Shape shape, float[] v) val) { 
             return new Tensor(val.shape, val.v);
         }
@@ -79,18 +59,8 @@
             return (Tensor)val;
         }
 
-        /// <summary>0次元マップの生成</summary>
-        public static implicit operator ParameterField(((int channels, int batch) shape, float[] v) val) { 
-            return (Tensor)val;
-        }
-
         /// <summary>1次元マップの生成</summary>
         public static implicit operator ParameterField(float[,,] val) { 
-            return (Tensor)val;
-        }
-
-        /// <summary>1次元マップの生成</summary>
-        public static implicit operator ParameterField(((int channels, int width, int batch) shape, float[] v) val) { 
             return (Tensor)val;
         }
 
@@ -99,27 +69,17 @@
             return (Tensor)val;
         }
 
-        /// <summary>2次元マップの生成</summary>
-        public static implicit operator ParameterField(((int channels, int width, int height, int batch) shape, float[] v) val) { 
-            return (Tensor)val;
-        }
-
         /// <summary>3次元マップの生成</summary>
         public static implicit operator ParameterField(float[,,,,] val) { 
             return (Tensor)val;
         }
 
-        /// <summary>3次元マップの生成</summary>
-        public static implicit operator ParameterField(((int channels, int width, int height, int depth, int batch) shape, float[] v) val) { 
-            return (Tensor)val;
-        }
-
-        /// <summary>初期フィールドの生成</summary>
+        /// <summary>任意形状の生成</summary>
         public static implicit operator ParameterField(Shape shape) { 
             return new Tensor(shape);
         }
 
-        /// <summary>初期フィールドの生成</summary>
+        /// <summary>任意形状任意初期値の生成</summary>
         public static implicit operator ParameterField((Shape shape, float[] v) val) { 
             return new Tensor(val.shape, val.v);
         }
