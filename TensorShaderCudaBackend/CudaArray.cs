@@ -70,11 +70,19 @@ namespace TensorShaderCudaBackend {
 
         static CudaArray() { 
             T[] array = new T[2];
-            long stride = Marshal.UnsafeAddrOfPinnedArrayElement(array, 1).ToInt64()
-                        - Marshal.UnsafeAddrOfPinnedArrayElement(array, 0).ToInt64();
 
-            if((ulong)stride != ElementSize) { 
-                throw new NotSupportedException("Element size does not match array stride for the specified array type.");
+            GCHandle pinned_handle = GCHandle.Alloc(array, GCHandleType.Pinned);
+
+            try {
+                long stride = Marshal.UnsafeAddrOfPinnedArrayElement(array, 1).ToInt64()
+                            - Marshal.UnsafeAddrOfPinnedArrayElement(array, 0).ToInt64();
+
+                if ((ulong)stride != ElementSize) {
+                    throw new NotSupportedException("Element size does not match array stride for the specified array type.");
+                }
+            }
+            finally {
+                pinned_handle.Free();
             }
         }
 
