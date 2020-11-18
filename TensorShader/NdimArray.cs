@@ -11,14 +11,35 @@ namespace TensorShader {
         /// <summary>形状</summary>
         public Shape Shape { private set; get; }
 
-        /// <summary>長さ</summary>
+        /// <summary>形状タイプ</summary>
+        public ShapeType Type => Shape.Type;
+
+        /// <summary>要素数</summary>
         public int Length => Shape.Length;
 
         /// <summary>次元数</summary>
         public int Ndim => Shape.Ndim;
 
-        /// <summary>タイプ</summary>
-        public ShapeType Type => Shape.Type;
+        /// <summary>幅</summary>
+        public int Width => Shape.Width;
+
+        /// <summary>高さ</summary>
+        public int Height => Shape.Height;
+
+        /// <summary>奥行き</summary>
+        public int Depth => Shape.Depth;
+
+        /// <summary>チャネル数</summary>
+        public int Channels => Shape.Channels;
+
+        /// <summary>入力チャネル数</summary>
+        public int InChannels => Shape.InChannels;
+
+        /// <summary>出力チャネル数</summary>
+        public int OutChannels => Shape.OutChannels;
+
+        /// <summary>バッチ数</summary>
+        public int Batch => Shape.Batch;
 
         /// <summary>コンストラクタ</summary>
         public NdimArray(Shape shape, T[] value, bool clone_value = false) {

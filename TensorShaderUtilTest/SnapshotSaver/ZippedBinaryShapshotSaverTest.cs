@@ -10,8 +10,13 @@ namespace TensorShaderUtilTest.SnapshotSaver {
         [TestMethod]
         public void ExecuteTest() {
             Snapshot snapshot = new Snapshot();
+            snapshot.Append("item0", Shape.Vector(5), new float[] { 1f, 2f, 3f, 4f, 5f });
             snapshot.Append("item1", Shape.Map0D(2, 3), new float[] { 0f, 1f, 2f, 3f, 4f, 5f });
             snapshot.Append("item2", Shape.Map0D(3, 4), new float[] { 5f, 3f, 1f, 0f, 2f, 4f, 1f, 0f, 5f, 3f, 2f, 4f });
+            snapshot.Append("item3", Shape.Scalar, new float[] { 2f });
+            snapshot.Append("item4", Shape.Map1D(2, 1, 4), new float[] { 3f, 1f, 0f, 2f, 4f, 1f, 0f, 5f });
+
+            string[] items = new string[] { "item0", "item1", "item2", "item3", "item4" };
 
             ZippedBinaryShapshotSaver saver = new ZippedBinaryShapshotSaver();
 
@@ -28,20 +33,22 @@ namespace TensorShaderUtilTest.SnapshotSaver {
                 snapshot2 = saver.Load(stream);
             }
 
-            CollectionAssert.AreEquivalent(new string[] { "item1", "item2" }, snapshot2.Keys.ToArray());
-            Assert.AreEqual(snapshot.Table["item1"].Shape, snapshot2.Table["item1"].Shape);
-            CollectionAssert.AreEqual(snapshot.Table["item1"].Value, snapshot2.Table["item1"].Value);
-            Assert.AreEqual(snapshot.Table["item2"].Shape, snapshot2.Table["item2"].Shape);
-            CollectionAssert.AreEqual(snapshot.Table["item2"].Value, snapshot2.Table["item2"].Value);
+            CollectionAssert.AreEquivalent(items, snapshot2.Keys.ToArray());
+
+            foreach (string item in items) {
+                Assert.AreEqual(snapshot.Table[item].Shape, snapshot2.Table[item].Shape);
+                CollectionAssert.AreEqual(snapshot.Table[item].Value, snapshot2.Table[item].Value);
+            }
 
             saver.Save("debug.tss", snapshot);
             Snapshot snapshot3 = saver.Load("debug.tss");
 
-            CollectionAssert.AreEquivalent(new string[] { "item1", "item2" }, snapshot3.Keys.ToArray());
-            Assert.AreEqual(snapshot.Table["item1"].Shape, snapshot3.Table["item1"].Shape);
-            CollectionAssert.AreEqual(snapshot.Table["item1"].Value, snapshot3.Table["item1"].Value);
-            Assert.AreEqual(snapshot.Table["item2"].Shape, snapshot3.Table["item2"].Shape);
-            CollectionAssert.AreEqual(snapshot.Table["item2"].Value, snapshot3.Table["item2"].Value);
+            CollectionAssert.AreEquivalent(items, snapshot3.Keys.ToArray());
+
+            foreach (string item in items) {
+                Assert.AreEqual(snapshot.Table[item].Shape, snapshot3.Table[item].Shape);
+                CollectionAssert.AreEqual(snapshot.Table[item].Value, snapshot3.Table[item].Value);
+            }
 
             File.Delete("debug.tss");
         }

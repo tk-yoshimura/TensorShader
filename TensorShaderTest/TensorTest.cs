@@ -365,6 +365,23 @@ namespace TensorShaderTest {
             }
         }
 
+        [TestMethod]
+        public void OverflowTest() {
+            OverflowCheckedTensor tensor = new OverflowCheckedTensor(Shape.Vector(12));
+
+            Operator overflow = new OverflowOperator(tensor.Shape);
+
+            NdimArray<float> vs = tensor.State;
+
+            Assert.ThrowsException<AccessViolationException>(() => {
+                overflow.Execute(tensor);
+
+                vs = tensor.State;
+            });
+
+            Console.WriteLine("pass");
+        }
+
         internal class OverflowOperator : Operator {
             /// <summary>形状</summary>
             public Shape Shape { private set; get; }
