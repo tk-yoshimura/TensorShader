@@ -28,13 +28,13 @@ namespace TensorShaderTest.Updaters.RestrictGrad {
                 x.AddUpdater(new GradNormClipping(x, limit));
                 x.Update();
 
-                AssertError.Tolerance(yval, x.GradState, 1e-7f, 1e-5f);
+                AssertError.Tolerance(yval, x.GradState.Value, 1e-7f, 1e-5f);
 
-                float post_norm = x.GradState.Select((v) => v * v).Sum();
+                float post_norm = x.GradState.Value.Select((v) => v * v).Sum();
 
                 Assert.AreEqual(limit, post_norm, 1e-5f);
 
-                CollectionAssert.AreEqual(xval, x.State);
+                CollectionAssert.AreEqual(xval, x.State.Value);
             }
 
             {
@@ -50,9 +50,9 @@ namespace TensorShaderTest.Updaters.RestrictGrad {
                 x.AddUpdater(new GradNormClipping(x, limit));
                 x.Update();
 
-                AssertError.Tolerance(xval, x.GradState, 1e-7f, 1e-5f);
+                AssertError.Tolerance(xval, x.GradState.Value, 1e-7f, 1e-5f);
 
-                CollectionAssert.AreEqual(xval, x.State);
+                CollectionAssert.AreEqual(xval, x.State.Value);
             }
         }
     }

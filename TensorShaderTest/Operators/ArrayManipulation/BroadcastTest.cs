@@ -76,7 +76,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
                         broadcast.Execute(intensor, outtensor);
 
-                        float[] y = outtensor.State;
+                        float[] y = outtensor.State.Value;
 
                         int[] il = (new int[5]).Select((_, idx) => outshape.Ndim > idx ? outshape[idx] : 1).ToArray();
                         int[] jl = (new int[5]).Select((_, idx) => inshape.Ndim > idx ? inshape[idx] : 1).ToArray();
@@ -122,7 +122,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             broadcast.Execute(intensor, outtensor);
 
-            float[] y = outtensor.State;
+            float[] y = outtensor.State.Value;
 
             float[] y_expect = {
                  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14, 0, 1, 2, 3, 4, 5, 6, 7, 8,

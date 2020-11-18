@@ -32,11 +32,11 @@ namespace TensorShaderTest.Operators.Trivector {
 
                     ope.Execute(v1, v2, v3, v4);
 
-                    CollectionAssert.AreEqual(x, v1.State);
-                    CollectionAssert.AreEqual(y, v2.State);
-                    CollectionAssert.AreEqual(z, v3.State);
+                    CollectionAssert.AreEqual(x, v1.State.Value);
+                    CollectionAssert.AreEqual(y, v2.State.Value);
+                    CollectionAssert.AreEqual(z, v3.State.Value);
 
-                    float[] v = v4.State;
+                    float[] v = v4.State.Value;
 
                     for (int j = 0; j < length; j++) {
                         Assert.AreEqual(x[j], v[j * 3], 1e-6f, $"length:{length}, idx:{j}");

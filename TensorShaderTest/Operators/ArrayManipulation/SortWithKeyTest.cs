@@ -34,10 +34,10 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
                     ope.Execute(inkey, inval, outkey, outval);
 
-                    CollectionAssert.AreEqual(x1, inkey.State);
-                    CollectionAssert.AreEqual(x2, inval.State);
+                    CollectionAssert.AreEqual(x1, inkey.State.Value);
+                    CollectionAssert.AreEqual(x2, inval.State.Value);
 
-                    float[] y = outkey.State;
+                    float[] y = outkey.State.Value;
                     int p = 0;
 
                     for (int i = 0; i < shape.Length / axislength; i++, p = i / stride * stride * axislength + i % stride) {
@@ -52,7 +52,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
                     ope.Execute(outval, outkey, inval, inkey);
 
-                    float[] y2 = inval.State;
+                    float[] y2 = inval.State.Value;
                     p = 0;
 
                     for (int i = 0; i < shape.Length / axislength; i++, p = i / stride * stride * axislength + i % stride) {
@@ -65,7 +65,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
                     Assert.AreEqual(shape.Length, p);
 
-                    float[] y3 = inkey.State;
+                    float[] y3 = inkey.State.Value;
 
                     CollectionAssert.AreEqual(x1, y3, $"axis:{axis} inkey");
 
@@ -97,7 +97,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             Cuda.Profiler.Stop();
 
-            float[] v = y_key.State;
+            float[] v = y_key.State.Value;
 
             for (int i = 1; i < axislength; i++) {
                 Assert.IsTrue(v[i - 1] <= v[i], $"{i}: {v[i - 1]}, {v[i]}");
@@ -131,7 +131,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             Cuda.Profiler.Stop();
 
-            float[] v = y_key.State;
+            float[] v = y_key.State.Value;
 
             for (int i = 1; i < axislength; i++) {
                 Assert.IsTrue(v[i - 1] <= v[i], $"{i}: {v[i - 1]}, {v[i]}");
@@ -165,7 +165,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             Cuda.Profiler.Stop();
 
-            float[] v = y_key.State;
+            float[] v = y_key.State.Value;
 
             for (int i = 1; i < axislength; i++) {
                 Assert.IsTrue(v[i - 1] <= v[i], $"{i}: {v[i - 1]}, {v[i]}");
@@ -199,7 +199,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             Cuda.Profiler.Stop();
 
-            float[] v = y_key.State;
+            float[] v = y_key.State.Value;
 
             for (int i = 1; i < axislength; i++) {
                 Assert.IsTrue(v[i - 1] <= v[i], $"{i}: {v[i - 1]}, {v[i]}");

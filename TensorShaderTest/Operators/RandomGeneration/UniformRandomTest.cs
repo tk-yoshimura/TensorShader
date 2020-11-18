@@ -20,7 +20,7 @@ namespace TensorShaderTest.Operators.RandomGeneration {
 
             ope.Execute(v1);
 
-            float[] y = v1.State;
+            float[] y = v1.State.Value;
 
             Assert.IsTrue(y.Min() >= 0);
             Assert.IsTrue(y.Max() < 1);

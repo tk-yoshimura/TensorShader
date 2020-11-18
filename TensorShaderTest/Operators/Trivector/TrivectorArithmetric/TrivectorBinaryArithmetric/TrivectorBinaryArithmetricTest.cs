@@ -29,8 +29,8 @@ namespace TensorShaderTest.Operators.Trivector {
 
                     ope.Execute(v1, v2, v3);
 
-                    CollectionAssert.AreEqual(x, v1.State);
-                    CollectionAssert.AreEqual(y, v2.State);
+                    CollectionAssert.AreEqual(x, v1.State.Value);
+                    CollectionAssert.AreEqual(y, v2.State.Value);
 
                     v3.CheckOverflow();
                 };

@@ -55,15 +55,15 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
                         Concat concat = new Concat(inshapes, outshape, axis);
                         concat.Execute(intensors.Concat(new Tensor[] { outtensor }).ToArray());
 
-                        float[] y = outtensor.State;
+                        float[] y = outtensor.State.Value;
 
                         Separate separate = new Separate(outshape, inshapes, axis);
                         separate.Execute((new Tensor[] { outtensor }).Concat(outtensors).ToArray());
 
-                        CollectionAssert.AreEqual(y, outtensor.State);
+                        CollectionAssert.AreEqual(y, outtensor.State.Value);
 
                         for (int i = 0; i < n; i++) {
-                            CollectionAssert.AreEqual(xs[i], outtensors[i].State);
+                            CollectionAssert.AreEqual(xs[i], outtensors[i].State.Value);
                         }
 
                         Console.WriteLine($"pass {outshape} axis:{axis} -> {string.Join(", ", inshapes.Select((shape) => shape.ToString()))}");

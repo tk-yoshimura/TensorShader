@@ -34,12 +34,12 @@ namespace TensorShaderTest.Operators.Quaternion {
 
                     ope.Execute(v1, v2, v3, v4, v5);
 
-                    CollectionAssert.AreEqual(x, v1.State);
-                    CollectionAssert.AreEqual(y, v2.State);
-                    CollectionAssert.AreEqual(z, v3.State);
-                    CollectionAssert.AreEqual(w, v4.State);
+                    CollectionAssert.AreEqual(x, v1.State.Value);
+                    CollectionAssert.AreEqual(y, v2.State.Value);
+                    CollectionAssert.AreEqual(z, v3.State.Value);
+                    CollectionAssert.AreEqual(w, v4.State.Value);
 
-                    float[] v = v5.State;
+                    float[] v = v5.State.Value;
 
                     for (int j = 0; j < length; j++) {
                         Assert.AreEqual(x[j], v[j * 4], 1e-6f, $"length:{length}, idx:{j}");

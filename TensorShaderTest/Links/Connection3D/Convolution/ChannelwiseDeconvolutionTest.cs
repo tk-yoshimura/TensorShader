@@ -26,8 +26,8 @@ namespace TensorShaderTest.Links.Connection3D {
 
             flow.Execute();
 
-            float[] gy_actual = y.GradState;
-            float[] gw_actual = w.GradState;
+            float[] gy_actual = y.GradState.Value;
+            float[] gw_actual = w.GradState.Value;
 
             AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"not equal gw");
 

@@ -25,7 +25,7 @@ namespace TensorShaderTest.Links.LogicalArithmetric {
             (Flow flow, _) = Flow.Inference(output);
             flow.Execute();
 
-            CollectionAssert.AreEqual(idxes.Select((idx) => Math.Max(x1[idx], x2[idx]) - Math.Min(x1[idx], x2[idx])).ToArray(), output.State);
+            CollectionAssert.AreEqual(idxes.Select((idx) => Math.Max(x1[idx], x2[idx]) - Math.Min(x1[idx], x2[idx])).ToArray(), output.State.Value);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
 
                 Tensor o = Tensor.Maximum(t, c);
 
-                AssertError.Tolerance(idxes.Select((idx) => Math.Max(x[idx], c)).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => Math.Max(x[idx], c)).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -34,7 +34,7 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => Math.Max(x[idx], c)).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => Math.Max(x[idx], c)).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -42,7 +42,7 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
 
                 Tensor o = Tensor.Maximum(c, t);
 
-                AssertError.Tolerance(idxes.Select((idx) => Math.Max(c, x[idx])).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => Math.Max(c, x[idx])).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -55,7 +55,7 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => Math.Max(c, x[idx])).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => Math.Max(c, x[idx])).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
         }
     }

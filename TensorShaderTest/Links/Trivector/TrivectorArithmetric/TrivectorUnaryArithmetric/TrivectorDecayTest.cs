@@ -22,7 +22,7 @@ namespace TensorShaderTest.Links.TrivectorArithmetric {
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
             flow.Execute();
 
-            float[] gv_actual = v.GradState;
+            float[] gv_actual = v.GradState.Value;
 
             AssertError.Tolerance(gv_expect, gv_actual, 1e-7f, 1e-5f, $"not equal gv");
         }
@@ -47,7 +47,7 @@ namespace TensorShaderTest.Links.TrivectorArithmetric {
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
             flow.Execute();
 
-            float[] gv_actual = v.GradState;
+            float[] gv_actual = v.GradState.Value;
 
             AssertError.Tolerance(gv_expect, gv_actual, 1e-7f, 1e-5f, $"not equal gv");
         }

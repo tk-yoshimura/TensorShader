@@ -30,10 +30,10 @@ namespace TensorShaderTest.Operators.Complex {
 
                     ope.Execute(v1, v2, v3);
 
-                    CollectionAssert.AreEqual(x, v1.State);
-                    CollectionAssert.AreEqual(y, v2.State);
+                    CollectionAssert.AreEqual(x, v1.State.Value);
+                    CollectionAssert.AreEqual(y, v2.State.Value);
 
-                    float[] v = v3.State;
+                    float[] v = v3.State.Value;
 
                     for (int j = 0; j < length; j++) {
                         Assert.AreEqual(x[j], v[j * 2], 1e-6f, $"length:{length}, idx:{j}");

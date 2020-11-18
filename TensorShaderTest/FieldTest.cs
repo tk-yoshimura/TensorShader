@@ -1144,8 +1144,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(3, flow.InTensorCount);
                 Assert.AreEqual(2, flow.OutTensorCount);
 
-                float[] y1 = f1.GradState;
-                float[] y2 = f2.GradState;
+                float[] y1 = f1.GradState.Value;
+                float[] y2 = f2.GradState.Value;
 
                 CollectionAssert.AreEqual(new float[] { -2f, 0f, 2f, 4f, 6f }, y1);
                 CollectionAssert.AreEqual(new float[] { 10f }, y2);
@@ -1167,8 +1167,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(3, flow.InTensorCount);
                 Assert.AreEqual(2, flow.OutTensorCount);
 
-                float[] y1 = f1.GradState;
-                float[] y2 = f2.GradState;
+                float[] y1 = f1.GradState.Value;
+                float[] y2 = f2.GradState.Value;
 
                 CollectionAssert.AreEqual(new float[] { -2f, 0f, 2f, 4f, 6f }, y1);
                 CollectionAssert.AreEqual(new float[] { 10f }, y2);
@@ -1191,8 +1191,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(3, flow.InTensorCount);
                 Assert.AreEqual(2, flow.OutTensorCount);
 
-                float[] y1 = f1.GradState;
-                float[] y2 = f2.GradState;
+                float[] y1 = f1.GradState.Value;
+                float[] y2 = f2.GradState.Value;
 
                 CollectionAssert.AreEqual(new float[] { -8f, -2f, 4f, 10f, 16f }, y1);
                 CollectionAssert.AreEqual(new float[] { 50f }, y2);
@@ -1215,8 +1215,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(3, flow.InTensorCount);
                 Assert.AreEqual(2, flow.OutTensorCount);
 
-                float[] y1 = f1.GradState;
-                float[] y2 = f2.GradState;
+                float[] y1 = f1.GradState.Value;
+                float[] y2 = f2.GradState.Value;
 
                 CollectionAssert.AreEqual(new float[] { 0f, 0f, 0f, 0f, 0f }, y1);
                 CollectionAssert.AreEqual(new float[] { 0f }, y2);
@@ -1240,12 +1240,12 @@ namespace TensorShaderTest {
                 Assert.AreEqual(3, flow.InTensorCount);
                 Assert.AreEqual(3, flow.OutTensorCount);
 
-                float[] y1 = f1.GradState;
-                float[] y2 = f2.GradState;
+                float[] y1 = f1.GradState.Value;
+                float[] y2 = f2.GradState.Value;
 
                 CollectionAssert.AreEqual(new float[] { -2f, 0f, 2f, 4f, 6f }, y1);
                 CollectionAssert.AreEqual(new float[] { 10f }, y2);
-                CollectionAssert.AreEqual(new float[] { 2f }, ave_ferr.State);
+                CollectionAssert.AreEqual(new float[] { 2f }, ave_ferr.State.Value);
             }
         }
 
@@ -1281,8 +1281,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(4, flow.InTensorCount);
                 Assert.AreEqual(2, flow.OutTensorCount);
 
-                CollectionAssert.AreEqual(err.Select((c) => 3 * c).ToArray(), fin.GradState);
-                CollectionAssert.AreEqual(err.Select((c) => -c).ToArray(), g1.GradState);
+                CollectionAssert.AreEqual(err.Select((c) => 3 * c).ToArray(), fin.GradState.Value);
+                CollectionAssert.AreEqual(err.Select((c) => -c).ToArray(), g1.GradState.Value);
             }
 
             {
@@ -1306,8 +1306,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(4, flow.InTensorCount);
                 Assert.AreEqual(2, flow.OutTensorCount);
 
-                CollectionAssert.AreEqual(err_p1.Select((c) => 3 * c).ToArray(), fin.GradState);
-                CollectionAssert.AreEqual(err_p1.Select((c) => -c).ToArray(), g1.GradState);
+                CollectionAssert.AreEqual(err_p1.Select((c) => 3 * c).ToArray(), fin.GradState.Value);
+                CollectionAssert.AreEqual(err_p1.Select((c) => -c).ToArray(), g1.GradState.Value);
             }
 
             {
@@ -1330,8 +1330,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(4, flow.InTensorCount);
                 Assert.AreEqual(2, flow.OutTensorCount);
 
-                CollectionAssert.AreEqual(err.Select((c) => 3 * c).ToArray(), fin.GradState);
-                CollectionAssert.AreEqual(err.Select((c) => -c).ToArray(), g1.GradState);
+                CollectionAssert.AreEqual(err.Select((c) => 3 * c).ToArray(), fin.GradState.Value);
+                CollectionAssert.AreEqual(err.Select((c) => -c).ToArray(), g1.GradState.Value);
             }
 
             {
@@ -1355,8 +1355,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(4, flow.InTensorCount);
                 Assert.AreEqual(2, flow.OutTensorCount);
 
-                CollectionAssert.AreEqual(err_p1.Select((c) => 3 * c).ToArray(), fin.GradState);
-                CollectionAssert.AreEqual(err_p1.Select((c) => -c).ToArray(), g1.GradState);
+                CollectionAssert.AreEqual(err_p1.Select((c) => 3 * c).ToArray(), fin.GradState.Value);
+                CollectionAssert.AreEqual(err_p1.Select((c) => -c).ToArray(), g1.GradState.Value);
             }
 
             {
@@ -1379,8 +1379,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(4, flow.InTensorCount);
                 Assert.AreEqual(2, flow.OutTensorCount);
 
-                CollectionAssert.AreEqual(err.Select((c) => 3 * c).ToArray(), fin.GradState);
-                CollectionAssert.AreEqual(err.Select((c) => -c).ToArray(), g1.GradState);
+                CollectionAssert.AreEqual(err.Select((c) => 3 * c).ToArray(), fin.GradState.Value);
+                CollectionAssert.AreEqual(err.Select((c) => -c).ToArray(), g1.GradState.Value);
             }
 
             {
@@ -1404,8 +1404,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(4, flow.InTensorCount);
                 Assert.AreEqual(2, flow.OutTensorCount);
 
-                CollectionAssert.AreEqual(err_p1.Select((c) => 3 * c).ToArray(), fin.GradState);
-                CollectionAssert.AreEqual(err_p1.Select((c) => -c).ToArray(), g1.GradState);
+                CollectionAssert.AreEqual(err_p1.Select((c) => 3 * c).ToArray(), fin.GradState.Value);
+                CollectionAssert.AreEqual(err_p1.Select((c) => -c).ToArray(), g1.GradState.Value);
             }
         }
 
@@ -1427,7 +1427,7 @@ namespace TensorShaderTest {
 
                 flow.Execute();
 
-                float[] y = fi.GradState;
+                float[] y = fi.GradState.Value;
 
                 CollectionAssert.AreEqual(new float[] { 2 * 2.5f * (2.5f * 2.5f - 7f) }, y, "x * x");
             }
@@ -1445,7 +1445,7 @@ namespace TensorShaderTest {
 
                 flow.Execute();
 
-                float[] y = fi.GradState;
+                float[] y = fi.GradState.Value;
 
                 CollectionAssert.AreEqual(new float[] { 3 * 2.5f * 2.5f * (2.5f * 2.5f * 2.5f - 7f) }, y, "x * x * x");
             }
@@ -1463,7 +1463,7 @@ namespace TensorShaderTest {
 
                 flow.Execute();
 
-                float[] y = fi.GradState;
+                float[] y = fi.GradState.Value;
 
                 CollectionAssert.AreEqual(new float[] { 4 * 2.5f * 2.5f * 2.5f * (2.5f * 2.5f * 2.5f * 2.5f - 7f) }, y, "x * x * x * x");
             }
@@ -1481,7 +1481,7 @@ namespace TensorShaderTest {
 
                 flow.Execute();
 
-                float[] y = fi.GradState;
+                float[] y = fi.GradState.Value;
 
                 CollectionAssert.AreEqual(new float[] { 2 * 2.5f * (2.5f * 2.5f - 7f) }, y, "x / x * x * x");
             }
@@ -1499,7 +1499,7 @@ namespace TensorShaderTest {
 
                 flow.Execute();
 
-                float[] y = fi.GradState;
+                float[] y = fi.GradState.Value;
 
                 CollectionAssert.AreEqual(new float[] { 2 * 2.5f * (2.5f * 2.5f - 7f) }, y, "x * x / x * x");
             }
@@ -1517,7 +1517,7 @@ namespace TensorShaderTest {
 
                 flow.Execute();
 
-                float[] y = fi.GradState;
+                float[] y = fi.GradState.Value;
 
                 CollectionAssert.AreEqual(new float[] { 2 * 2.5f * (2.5f * 2.5f - 7f) }, y, "x * x * x / x");
             }

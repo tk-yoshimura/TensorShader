@@ -23,7 +23,7 @@ namespace TensorShaderTest.Functions.TrinaryArithmetric {
                 Tensor t3 = x3;
                 Tensor o = Tensor.TrinaryArithmetric(t1, t2, t3, "trinary_test", "#y = (#x1 + #x2) * (#x1 - #x3);");
 
-                AssertError.Tolerance(idxes.Select((idx) => (x1[idx] + x2[idx]) * (x1[idx] - x3[idx])).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => (x1[idx] + x2[idx]) * (x1[idx] - x3[idx])).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -40,7 +40,7 @@ namespace TensorShaderTest.Functions.TrinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => (x1[idx] + x2[idx]) * (x1[idx] - x3[idx])).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => (x1[idx] + x2[idx]) * (x1[idx] - x3[idx])).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -48,7 +48,7 @@ namespace TensorShaderTest.Functions.TrinaryArithmetric {
                 Tensor t2 = x2;
                 Tensor o = Tensor.TrinaryUniConstantArithmetric(4, t1, t2, "trinaryuniconst_test", "#y = c * (#x1 + #x2);");
 
-                AssertError.Tolerance(idxes.Select((idx) => 4 * (x1[idx] + x2[idx])).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => 4 * (x1[idx] + x2[idx])).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -63,14 +63,14 @@ namespace TensorShaderTest.Functions.TrinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => 4 * (x1[idx] + x2[idx])).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => 4 * (x1[idx] + x2[idx])).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
                 Tensor t1 = x1;
                 Tensor o = Tensor.TrinaryBiConstantArithmetric(4, 5, t1, "trinarybiconst_test", "#y = c1 * (#x + c2);");
 
-                AssertError.Tolerance(idxes.Select((idx) => 4 * (x1[idx] + 5)).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => 4 * (x1[idx] + 5)).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -83,7 +83,7 @@ namespace TensorShaderTest.Functions.TrinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => 4 * (x1[idx] + 5)).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => 4 * (x1[idx] + 5)).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -91,7 +91,7 @@ namespace TensorShaderTest.Functions.TrinaryArithmetric {
                 Tensor t2 = x2;
                 Tensor o = Tensor.TrinaryUniConstantArithmetric(8, t1, t2, "trinaryuniconst_test", "#y = c * (#x1 + #x2);");
 
-                AssertError.Tolerance(idxes.Select((idx) => 8 * (x1[idx] + x2[idx])).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => 8 * (x1[idx] + x2[idx])).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -106,14 +106,14 @@ namespace TensorShaderTest.Functions.TrinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => 8 * (x1[idx] + x2[idx])).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => 8 * (x1[idx] + x2[idx])).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
                 Tensor t1 = x1;
                 Tensor o = Tensor.TrinaryBiConstantArithmetric(8, 10, t1, "trinarybiconst_test", "#y = c1 * (#x + c2);");
 
-                AssertError.Tolerance(idxes.Select((idx) => 8 * (x1[idx] + 10)).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => 8 * (x1[idx] + 10)).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -126,7 +126,7 @@ namespace TensorShaderTest.Functions.TrinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => 8 * (x1[idx] + 10)).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => 8 * (x1[idx] + 10)).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
         }
     }

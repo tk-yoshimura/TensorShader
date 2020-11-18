@@ -28,7 +28,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
                                 ope.Execute(v1, v2);
 
-                                float[] y = v2.State;
+                                float[] y = v2.State.Value;
 
                                 for (int j = 0; j < length; j++) {
                                     for (int f = 0; f < idx_ch; f++) {

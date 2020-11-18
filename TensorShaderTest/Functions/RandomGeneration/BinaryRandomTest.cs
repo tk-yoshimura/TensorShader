@@ -15,7 +15,7 @@ namespace TensorShaderTest.Functions.RandomGeneration {
 
                 Tensor tensor = Tensor.BinaryRandom(shape, new Random(1234), (float)prob);
 
-                float[] y = tensor.State;
+                float[] y = tensor.State.Value;
 
                 Assert.AreEqual((float)prob, y.Average(), 1e-3f);
             }
@@ -31,10 +31,10 @@ namespace TensorShaderTest.Functions.RandomGeneration {
                 Flow flow = Flow.FromInputs(node);
 
                 flow.Execute();
-                float[] y1 = output.State;
+                float[] y1 = output.State.Value;
 
                 flow.Execute();
-                float[] y2 = output.State;
+                float[] y2 = output.State.Value;
 
                 CollectionAssert.AreNotEqual(y1, y2);
 

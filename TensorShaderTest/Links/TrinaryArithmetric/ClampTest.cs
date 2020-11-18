@@ -27,9 +27,9 @@ namespace TensorShaderTest.Links.TrinaryArithmetric {
 
             flow.Execute();
 
-            float[] gx_actual = x.GradState;
-            float[] gxmin_actual = xmin.GradState;
-            float[] gxmax_actual = xmax.GradState;
+            float[] gx_actual = x.GradState.Value;
+            float[] gxmin_actual = xmin.GradState.Value;
+            float[] gxmax_actual = xmax.GradState.Value;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
             AssertError.Tolerance(gxmin_expect, gxmin_actual, 1e-7f, 1e-5f, $"not equal gxmin");
@@ -57,9 +57,9 @@ namespace TensorShaderTest.Links.TrinaryArithmetric {
 
             flow.Execute();
 
-            float[] gx_actual = x.GradState;
-            float[] gxmin_actual = xmin.GradState;
-            float[] gxmax_actual = xmax.GradState;
+            float[] gx_actual = x.GradState.Value;
+            float[] gxmin_actual = xmin.GradState.Value;
+            float[] gxmax_actual = xmax.GradState.Value;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
             AssertError.Tolerance(gxmin_expect, gxmin_actual, 1e-7f, 1e-5f, $"not equal gxmin");

@@ -56,7 +56,7 @@ namespace TensorShaderTest.Links.Evaluation.Classify {
 
             flow.Execute();
 
-            float[] matches_actual = matches.State;
+            float[] matches_actual = matches.State.Value;
 
             Assert.AreEqual(Shape.Vector(channels), matches.Shape);
             CollectionAssert.AreEqual(new float[] { 1, 1, 2 }, matches_actual);

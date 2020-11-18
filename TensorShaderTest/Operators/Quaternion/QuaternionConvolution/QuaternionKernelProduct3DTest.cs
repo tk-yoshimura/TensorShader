@@ -45,10 +45,10 @@ namespace TensorShaderTest.Operators.Quaternion {
                             ope.Execute(x_tensor, y_tensor, gw_tensor);
 
                             float[] gw_expect = gw.ToArray();
-                            float[] gw_actual = gw_tensor.State;
+                            float[] gw_actual = gw_tensor.State.Value;
 
-                            CollectionAssert.AreEqual(xval, x_tensor.State);
-                            CollectionAssert.AreEqual(yval, y_tensor.State);
+                            CollectionAssert.AreEqual(xval, x_tensor.State.Value);
+                            CollectionAssert.AreEqual(yval, y_tensor.State.Value);
 
                             AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
 
@@ -98,10 +98,10 @@ namespace TensorShaderTest.Operators.Quaternion {
             ope.Execute(x_tensor, y_tensor, gw_tensor);
 
             float[] gw_expect = gw.ToArray();
-            float[] gw_actual = gw_tensor.State;
+            float[] gw_actual = gw_tensor.State.Value;
 
-            CollectionAssert.AreEqual(xval, x_tensor.State);
-            CollectionAssert.AreEqual(yval, y_tensor.State);
+            CollectionAssert.AreEqual(xval, x_tensor.State.Value);
+            CollectionAssert.AreEqual(yval, y_tensor.State.Value);
 
             AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
 

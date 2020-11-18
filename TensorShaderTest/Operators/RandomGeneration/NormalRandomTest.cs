@@ -19,7 +19,7 @@ namespace TensorShaderTest.Operators.RandomGeneration {
 
             ope.Execute(v1);
 
-            float[] y = v1.State;
+            float[] y = v1.State.Value;
 
             {
                 double sq_sum = 0, sum = 0;

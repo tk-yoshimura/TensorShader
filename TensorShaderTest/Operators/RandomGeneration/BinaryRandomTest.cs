@@ -21,7 +21,7 @@ namespace TensorShaderTest.Operators.RandomGeneration {
 
                 ope.Execute(v1);
 
-                float[] y = v1.State;
+                float[] y = v1.State.Value;
 
                 Assert.AreEqual((float)prob, y.Average(), 1e-3f);
             }

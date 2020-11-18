@@ -24,7 +24,7 @@ namespace TensorShaderTest.Functions.FactorArithmetric {
 
                 Tensor o = Tensor.SignedPow(t1, t2);
 
-                AssertError.Tolerance(idxes.Select((idx) => Math.Sign(x1[idx]) * (float)Math.Pow(Math.Abs(x1[idx]), coef[0])).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => Math.Sign(x1[idx]) * (float)Math.Pow(Math.Abs(x1[idx]), coef[0])).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -33,7 +33,7 @@ namespace TensorShaderTest.Functions.FactorArithmetric {
 
                 Tensor o = Tensor.SignedPow(t1, t2);
 
-                AssertError.Tolerance(new float[] { Math.Sign(x2[0]) * (float)Math.Pow(Math.Abs(x2[0]), coef[0]) }, o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(new float[] { Math.Sign(x2[0]) * (float)Math.Pow(Math.Abs(x2[0]), coef[0]) }, o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -41,7 +41,7 @@ namespace TensorShaderTest.Functions.FactorArithmetric {
 
                 Tensor o = Tensor.SignedPow(t1, t1);
 
-                AssertError.Tolerance(x2.Select((v) => Math.Sign(v) * (float)Math.Pow(Math.Abs(v), v)).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(x2.Select((v) => Math.Sign(v) * (float)Math.Pow(Math.Abs(v), v)).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -56,7 +56,7 @@ namespace TensorShaderTest.Functions.FactorArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => Math.Sign(x1[idx]) * (float)Math.Pow(Math.Abs(x1[idx]), coef[0])).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => Math.Sign(x1[idx]) * (float)Math.Pow(Math.Abs(x1[idx]), coef[0])).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -71,7 +71,7 @@ namespace TensorShaderTest.Functions.FactorArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(new float[] { Math.Sign(x2[0]) * (float)Math.Pow(Math.Abs(x2[0]), coef[0]) }, o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(new float[] { Math.Sign(x2[0]) * (float)Math.Pow(Math.Abs(x2[0]), coef[0]) }, o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -84,7 +84,7 @@ namespace TensorShaderTest.Functions.FactorArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(x2.Select((v) => Math.Sign(v) * (float)Math.Pow(Math.Abs(v), v)).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(x2.Select((v) => Math.Sign(v) * (float)Math.Pow(Math.Abs(v), v)).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
         }
     }

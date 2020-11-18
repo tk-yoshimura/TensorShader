@@ -20,7 +20,7 @@ namespace TensorShaderTest.Functions.LogicalArithmetric {
 
                 Tensor o = Tensor.GreaterThanOrEqual(t, 2);
 
-                AssertError.Tolerance(idxes.Select((idx) => x[idx] >= 2 ? 1f : 0f).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => x[idx] >= 2 ? 1f : 0f).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -33,7 +33,7 @@ namespace TensorShaderTest.Functions.LogicalArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => x[idx] >= 2 ? 1f : 0f).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => x[idx] >= 2 ? 1f : 0f).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -46,7 +46,7 @@ namespace TensorShaderTest.Functions.LogicalArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => x[idx] >= 2 ? 1f : 0f).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => x[idx] >= 2 ? 1f : 0f).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -54,7 +54,7 @@ namespace TensorShaderTest.Functions.LogicalArithmetric {
 
                 Tensor o = Tensor.GreaterThanOrEqual(2, t);
 
-                AssertError.Tolerance(idxes.Select((idx) => 2 >= x[idx] ? 1f : 0f).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => 2 >= x[idx] ? 1f : 0f).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -67,7 +67,7 @@ namespace TensorShaderTest.Functions.LogicalArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => 2 >= x[idx] ? 1f : 0f).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => 2 >= x[idx] ? 1f : 0f).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
         }
     }

@@ -39,9 +39,9 @@ namespace CustomLink {
 
                 flow.Execute();
 
-                sin_xy_expected = sin_xy.State;
-                dx_expected = x.GradState;
-                dy_expected = y.GradState;
+                sin_xy_expected = sin_xy.State.Value;
+                dx_expected = x.GradState.Value;
+                dy_expected = y.GradState.Value;
             }
 
             /*actual*/
@@ -57,9 +57,9 @@ namespace CustomLink {
 
                 flow.Execute();
 
-                sin_xy_actual = sin_xy.State;
-                dx_actual = x.GradState;
-                dy_actual = y.GradState;
+                sin_xy_actual = sin_xy.State.Value;
+                dx_actual = x.GradState.Value;
+                dy_actual = y.GradState.Value;
             }
 
             Console.WriteLine("x, y, sin_xy(expected), sin_xy(actual), dx(expected), dx(actual), dy(expected), dy(actual)");
@@ -106,8 +106,8 @@ namespace CustomLink {
 
                 flow.Execute();
 
-                expsin_expected = expsin.State;
-                dx_expected = x.GradState;
+                expsin_expected = expsin.State.Value;
+                dx_expected = x.GradState.Value;
             }
 
             /*actual*/
@@ -122,8 +122,8 @@ namespace CustomLink {
 
                 flow.Execute();
 
-                expsin_actual = expsin.State;
-                dx_actual = x.GradState;
+                expsin_actual = expsin.State.Value;
+                dx_actual = x.GradState.Value;
             }
 
             Console.WriteLine("x, expsin(expected), expsin(actual), dx(expected), dx(actual), dy(expected), dy(actual)");

@@ -24,7 +24,7 @@ namespace TensorShaderTest.Updaters.WeightDecay {
                       .AddUpdater((parameters) => new SGD(parameters, 1));
             parameters.Update();
 
-            AssertError.Tolerance(yval, x.State, 1e-7f, 1e-5f);
+            AssertError.Tolerance(yval, x.State.Value, 1e-7f, 1e-5f);
         }
 
         [TestMethod]
@@ -42,7 +42,7 @@ namespace TensorShaderTest.Updaters.WeightDecay {
                       .AddUpdater((parameters) => new SGD(parameters, 1));
             parameters.Update();
 
-            AssertError.Tolerance(xval, x.State, 1e-7f, 1e-5f);
+            AssertError.Tolerance(xval, x.State.Value, 1e-7f, 1e-5f);
         }
 
         [TestMethod]
@@ -68,7 +68,7 @@ namespace TensorShaderTest.Updaters.WeightDecay {
 
             parameters.Update();
 
-            AssertError.Tolerance(yval, x.State, 1e-7f, 1e-5f);
+            AssertError.Tolerance(yval, x.State.Value, 1e-7f, 1e-5f);
         }
     }
 }

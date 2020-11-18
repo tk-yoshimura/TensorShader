@@ -22,11 +22,11 @@ namespace TensorShaderTest.Links.Loss {
 
             flow.Execute();
 
-            float[] loss_actual = loss.State;
+            float[] loss_actual = loss.State.Value;
 
             AssertError.Tolerance(loss_expect, loss_actual, 1e-7f, 1e-5f, $"not equal loss");
 
-            float[] gx_actual = x.GradState;
+            float[] gx_actual = x.GradState.Value;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }

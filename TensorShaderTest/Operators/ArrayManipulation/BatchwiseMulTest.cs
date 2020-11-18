@@ -31,10 +31,10 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
                             ope.Execute(v1, v2, v3);
 
-                            CollectionAssert.AreEqual(x1, v1.State);
-                            CollectionAssert.AreEqual(x2, v2.State);
+                            CollectionAssert.AreEqual(x1, v1.State.Value);
+                            CollectionAssert.AreEqual(x2, v2.State.Value);
 
-                            float[] y = v3.State;
+                            float[] y = v3.State.Value;
 
                             for (int j = 0; j < length * ch; j++) {
                                 for (int k = 0; k < batch; k++)

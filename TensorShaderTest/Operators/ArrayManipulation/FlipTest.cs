@@ -30,9 +30,9 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
                     ope.Execute(inval, outval);
 
-                    CollectionAssert.AreEqual(x, inval.State);
+                    CollectionAssert.AreEqual(x, inval.State.Value);
 
-                    float[] y = outval.State;
+                    float[] y = outval.State.Value;
                     int p = 0;
 
                     for (int i = 0; i < shape.Length / length; i++, p = i / stride * stride * length + i % stride) {
@@ -63,7 +63,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             ope.Execute(x, y);
 
-            float[] y_actual = y.State;
+            float[] y_actual = y.State.Value;
 
             AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, $"not equal");
         }

@@ -30,11 +30,11 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
                     ope.Execute(condition, v1, v2, vret);
 
-                    CollectionAssert.AreEqual(c, condition.State);
-                    CollectionAssert.AreEqual(x1, v1.State);
-                    CollectionAssert.AreEqual(x2, v2.State);
+                    CollectionAssert.AreEqual(c, condition.State.Value);
+                    CollectionAssert.AreEqual(x1, v1.State.Value);
+                    CollectionAssert.AreEqual(x2, v2.State.Value);
 
-                    float[] y = vret.State;
+                    float[] y = vret.State.Value;
 
                     for (int j = 0; j < length; j++) {
                         Assert.AreEqual(x1[j] * c[j] + x2[j] * (1 - c[j]), y[j], 1e-6f, $"length:{length}, idx:{j}");

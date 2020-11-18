@@ -31,7 +31,7 @@ namespace TensorShaderTest.Operators.Aggregation {
 
                             ope.Execute(v1, v2);
 
-                            float[] y = v2.State;
+                            float[] y = v2.State.Value;
 
                             for (int th = 0; th < batch; th++) {
                                 for (int k = 0; k < length; k++) {
@@ -64,7 +64,7 @@ namespace TensorShaderTest.Operators.Aggregation {
 
                             ope.Execute(v1, v2);
 
-                            float[] y = v2.State;
+                            float[] y = v2.State.Value;
 
                             for (int th = 0; th < batch; th++) {
                                 for (int k = 0; k < length; k++) {
@@ -97,7 +97,7 @@ namespace TensorShaderTest.Operators.Aggregation {
 
                             ope.Execute(v1, v2);
 
-                            float[] y = v2.State;
+                            float[] y = v2.State.Value;
 
                             for (int th = 0; th < batch; th++) {
                                 for (int k = 0; k < length; k++) {
@@ -130,7 +130,7 @@ namespace TensorShaderTest.Operators.Aggregation {
 
                             ope.Execute(v1, v2);
 
-                            float[] y = v2.State;
+                            float[] y = v2.State.Value;
 
                             for (int th = 0; th < batch; th++) {
                                 for (int j = 0; j < height; j++) {
@@ -163,7 +163,7 @@ namespace TensorShaderTest.Operators.Aggregation {
 
                             ope.Execute(v1, v2);
 
-                            float[] y = v2.State;
+                            float[] y = v2.State.Value;
 
                             for (int k = 0; k < length; k++) {
                                 for (int j = 0; j < height; j++) {

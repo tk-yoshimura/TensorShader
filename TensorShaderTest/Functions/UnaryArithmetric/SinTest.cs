@@ -20,7 +20,7 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
 
                 Tensor o = Tensor.Sin(t);
 
-                AssertError.Tolerance(idxes.Select((idx) => (float)Math.Sin(x[idx])).ToArray(), o.State, 1e-6f, 1e-4f); /*nonlinear tolerance*/
+                AssertError.Tolerance(idxes.Select((idx) => (float)Math.Sin(x[idx])).ToArray(), o.State.Value, 1e-6f, 1e-4f); /*nonlinear tolerance*/
             }
 
             {
@@ -33,7 +33,7 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => (float)Math.Sin(x[idx])).ToArray(), o.State, 1e-6f, 1e-4f); /*nonlinear tolerance*/
+                AssertError.Tolerance(idxes.Select((idx) => (float)Math.Sin(x[idx])).ToArray(), o.State.Value, 1e-6f, 1e-4f); /*nonlinear tolerance*/
             }
         }
     }

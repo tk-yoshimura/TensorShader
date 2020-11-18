@@ -23,7 +23,7 @@ namespace TensorShaderTest.Functions.LogicalArithmetric {
 
                 Tensor o = NotEqual(t1, t2);
 
-                AssertError.Tolerance(idxes.Select((idx) => x1[idx] != x2[idx] ? 1f : 0f).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => x1[idx] != x2[idx] ? 1f : 0f).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -31,7 +31,7 @@ namespace TensorShaderTest.Functions.LogicalArithmetric {
 
                 Tensor o = NotEqual(t1, t1);
 
-                AssertError.Tolerance(idxes.Select((idx) => x1[idx] != x1[idx] ? 1f : 0f).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => x1[idx] != x1[idx] ? 1f : 0f).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -46,7 +46,7 @@ namespace TensorShaderTest.Functions.LogicalArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => x1[idx] != x2[idx] ? 1f : 0f).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => x1[idx] != x2[idx] ? 1f : 0f).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -60,7 +60,7 @@ namespace TensorShaderTest.Functions.LogicalArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => x1[idx] != x2[idx] ? 1f : 0f).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => x1[idx] != x2[idx] ? 1f : 0f).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -74,7 +74,7 @@ namespace TensorShaderTest.Functions.LogicalArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => x1[idx] != x2[idx] ? 1f : 0f).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => x1[idx] != x2[idx] ? 1f : 0f).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -87,7 +87,7 @@ namespace TensorShaderTest.Functions.LogicalArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => x1[idx] != x1[idx] ? 1f : 0f).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => x1[idx] != x1[idx] ? 1f : 0f).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
         }
     }

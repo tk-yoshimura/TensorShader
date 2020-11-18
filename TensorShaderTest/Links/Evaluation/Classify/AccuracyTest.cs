@@ -56,7 +56,7 @@ namespace TensorShaderTest.Links.Evaluation.Classify {
 
             flow.Execute();
 
-            float[] acc_actual = acc.State;
+            float[] acc_actual = acc.State.Value;
 
             Assert.AreEqual(1, acc_actual.Length);
             Assert.AreEqual(4 / 16.0f, acc_actual[0]);

@@ -59,14 +59,14 @@ namespace TensorShaderTest.Links.Evaluation.Classify {
 
             flow.Execute();
 
-            float[] mat_actual = mat.State;
+            float[] mat_actual = mat.State.Value;
 
             Assert.AreEqual(channels * channels, mat_actual.Length);
             Assert.AreEqual(2, mat.Shape.Ndim);
             Assert.AreEqual(batch, mat_actual.Sum());
             CollectionAssert.AreEqual(mat_expect, mat_actual);
-            CollectionAssert.AreEqual(new float[] { 5, 5, 6 }, exp.State);
-            CollectionAssert.AreEqual(new float[] { 5, 4, 7 }, act.State);
+            CollectionAssert.AreEqual(new float[] { 5, 5, 6 }, exp.State.Value);
+            CollectionAssert.AreEqual(new float[] { 5, 4, 7 }, act.State.Value);
         }
 
         float[] mat_expect =

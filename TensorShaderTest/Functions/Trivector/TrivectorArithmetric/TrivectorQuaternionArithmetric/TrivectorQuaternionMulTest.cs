@@ -23,7 +23,7 @@ namespace TensorShaderTest.Functions.TrivectorArithmetric {
                 Tensor t2 = (Shape.Vector(length / 3 * 4), x2);
                 Tensor o = Tensor.TrivectorQuaternionMul(t1, t2);
 
-                float[] y = o.State;
+                float[] y = o.State.Value;
 
                 for (int i = 0; i < y.Length / 3; i++) {
                     Quaternion v = new Quaternion(new Vector3(x1[i * 3], x1[i * 3 + 1], x1[i * 3 + 2]), 0);
@@ -45,7 +45,7 @@ namespace TensorShaderTest.Functions.TrivectorArithmetric {
 
                 function.Execute(new Tensor[] { t1, t2 }, new Tensor[] { o });
 
-                float[] y = o.State;
+                float[] y = o.State.Value;
 
                 for (int i = 0; i < y.Length / 3; i++) {
                     Quaternion v = new Quaternion(new Vector3(x1[i * 3], x1[i * 3 + 1], x1[i * 3 + 2]), 0);

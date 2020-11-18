@@ -25,8 +25,8 @@ namespace TensorShaderTest.Links.TrivectorConvolution {
 
             flow.Execute();
 
-            float[] gx_actual = x.GradState;
-            float[] gw_actual = w.GradState;
+            float[] gx_actual = x.GradState.Value;
+            float[] gw_actual = w.GradState.Value;
 
             AssertError.Tolerance(gw_expect, gw_actual, 1e-6f, 1e-5f, $"not equal gw");
 
@@ -62,8 +62,8 @@ namespace TensorShaderTest.Links.TrivectorConvolution {
 
             flow.Execute();
 
-            float[] gx_actual = x.GradState;
-            float[] gw_actual = w.GradState;
+            float[] gx_actual = x.GradState.Value;
+            float[] gw_actual = w.GradState.Value;
 
             AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"not equal gw");
 

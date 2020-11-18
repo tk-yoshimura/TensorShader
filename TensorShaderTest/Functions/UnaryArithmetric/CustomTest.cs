@@ -19,7 +19,7 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
                 Tensor t = x;
                 Tensor o = Tensor.UnaryArithmetric(t, "unary_test", "#y = cosf(sinf(#x));");
 
-                AssertError.Tolerance(idxes.Select((idx) => (float)Math.Cos(Math.Sin(x[idx]))).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => (float)Math.Cos(Math.Sin(x[idx]))).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -32,7 +32,7 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => (float)Math.Cos(Math.Sin(x[idx]))).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => (float)Math.Cos(Math.Sin(x[idx]))).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
         }
     }

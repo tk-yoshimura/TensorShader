@@ -21,7 +21,7 @@ namespace TensorShaderUtil {
                 val[i] = (float)(start + i * s);
             }
 
-            return new NdimArray<float>(val, Shape.Vector(num), clone_value: false);
+            return new NdimArray<float>(Shape.Vector(num), val, clone_value: false);
         }
 
         /// <summary>等差数列</summary>
@@ -38,7 +38,7 @@ namespace TensorShaderUtil {
                 val[i] = start + i * s;
             }
 
-            return new NdimArray<double>(val, Shape.Vector(num), clone_value: false);
+            return new NdimArray<double>(Shape.Vector(num), val, clone_value: false);
         }
 
         /// <summary>任意の写像を適用</summary>
@@ -50,7 +50,7 @@ namespace TensorShaderUtil {
                 val[i] = func(arrval[i]);
             }
 
-            return new NdimArray<T>(val, arr.Shape, clone_value: false);
+            return new NdimArray<T>(arr.Shape, val, clone_value: false);
         }
     }
 }

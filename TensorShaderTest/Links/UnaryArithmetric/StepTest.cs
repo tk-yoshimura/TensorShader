@@ -23,7 +23,7 @@ namespace TensorShaderTest.Links.UnaryArithmetric {
 
             flow.Execute();
 
-            float[] err_actual = err.State;
+            float[] err_actual = err.State.Value;
 
             AssertError.Tolerance(err_expect, err_actual, 1e-7f, 1e-5f, $"not equal err");
         }

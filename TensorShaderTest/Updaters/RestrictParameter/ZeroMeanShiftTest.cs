@@ -20,8 +20,8 @@ namespace TensorShaderTest.Updaters.RestrictParameter {
 
             int[] axes = new int[] { Axis.Map2D.Width, Axis.Map2D.Height };
 
-            float[] pre_variance = Variance(x_tensor, axes).State;
-            float[] pre_mean = Average(x_tensor, axes).State;
+            float[] pre_variance = Variance(x_tensor, axes).State.Value;
+            float[] pre_mean = Average(x_tensor, axes).State.Value;
 
             ParameterField x = x_tensor;
 
@@ -30,8 +30,8 @@ namespace TensorShaderTest.Updaters.RestrictParameter {
             x.AddUpdater(new ZeroMeanShift(x, axes));
             x.Update();
 
-            float[] post_variance = Variance(x_tensor, axes).State;
-            float[] post_mean = Average(x_tensor, axes).State;
+            float[] post_variance = Variance(x_tensor, axes).State.Value;
+            float[] post_mean = Average(x_tensor, axes).State.Value;
 
             AssertError.Tolerance(pre_variance, post_variance, 1e-7f, 1e-5f);
 

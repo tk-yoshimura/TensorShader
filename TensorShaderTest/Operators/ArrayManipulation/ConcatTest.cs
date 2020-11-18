@@ -55,10 +55,10 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
                         ope.Execute(intensors.Concat(new Tensor[] { outtensor }).ToArray());
 
-                        float[] y = outtensor.State;
+                        float[] y = outtensor.State.Value;
 
                         for (int i = 0, outindex = 0; i < n; i++) {
-                            CollectionAssert.AreEqual(xs[i], intensors[i].State);
+                            CollectionAssert.AreEqual(xs[i], intensors[i].State.Value);
 
                             int stride = 1, slides = 1;
                             int inaxislength = inshapes[i][axis], outaxislength = outshape[axis];
@@ -107,7 +107,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             ope.Execute(v1, v2, v3, vc);
 
-            CollectionAssert.AreEqual(y_expect, vc.State);
+            CollectionAssert.AreEqual(y_expect, vc.State.Value);
         }
 
         [TestMethod]

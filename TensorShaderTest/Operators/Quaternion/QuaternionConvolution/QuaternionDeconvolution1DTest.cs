@@ -46,10 +46,10 @@ namespace TensorShaderTest.Operators.Quaternion {
                                 ope.Execute(y_tensor, w_tensor, x_tensor);
 
                                 float[] x_expect = x.ToArray();
-                                float[] x_actual = x_tensor.State;
+                                float[] x_actual = x_tensor.State.Value;
 
-                                CollectionAssert.AreEqual(yval, y_tensor.State);
-                                CollectionAssert.AreEqual(wval, w_tensor.State);
+                                CollectionAssert.AreEqual(yval, y_tensor.State.Value);
+                                CollectionAssert.AreEqual(wval, w_tensor.State.Value);
 
                                 AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{inwidth},{batch}");
 
@@ -99,10 +99,10 @@ namespace TensorShaderTest.Operators.Quaternion {
             ope.Execute(y_tensor, w_tensor, x_tensor);
 
             float[] x_expect = x.ToArray();
-            float[] x_actual = x_tensor.State;
+            float[] x_actual = x_tensor.State.Value;
 
-            CollectionAssert.AreEqual(yval, y_tensor.State);
-            CollectionAssert.AreEqual(wval, w_tensor.State);
+            CollectionAssert.AreEqual(yval, y_tensor.State.Value);
+            CollectionAssert.AreEqual(wval, w_tensor.State.Value);
 
             AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{inwidth},{batch}");
 

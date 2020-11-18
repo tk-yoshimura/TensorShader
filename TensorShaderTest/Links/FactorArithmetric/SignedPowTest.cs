@@ -25,11 +25,11 @@ namespace TensorShaderTest.Links.FactorArithmetric {
 
             flow.Execute();
 
-            float[] gx_actual = x.GradState;
+            float[] gx_actual = x.GradState.Value;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
 
-            float[] gp_actual = p.GradState;
+            float[] gp_actual = p.GradState.Value;
 
             AssertError.Tolerance(gp_expect, gp_actual, 1e-7f, 1e-5f, $"not equal gp");
         }

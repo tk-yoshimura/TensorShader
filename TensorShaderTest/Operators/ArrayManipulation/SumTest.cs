@@ -38,10 +38,10 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
                         Cuda.Profiler.Stop();
 
                         for (int j = 0; j < n; j++) {
-                            CollectionAssert.AreEqual(xs[j], vs[j].State);
+                            CollectionAssert.AreEqual(xs[j], vs[j].State.Value);
                         }
 
-                        float[] y = u.State;
+                        float[] y = u.State.Value;
 
                         for (int j = 0; j < length; j++) {
                             float sum = 0;

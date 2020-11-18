@@ -29,7 +29,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
                     ope.Execute(tensor);
 
-                    CollectionAssert.AreEqual(x1, tensor.State);
+                    CollectionAssert.AreEqual(x1, tensor.State.Value);
                 }
             }
         }

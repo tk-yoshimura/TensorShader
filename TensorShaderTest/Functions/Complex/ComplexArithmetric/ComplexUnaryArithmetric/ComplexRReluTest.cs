@@ -20,7 +20,7 @@ namespace TensorShaderTest.Functions.ComplexArithmetric {
                 Tensor t1 = x1;
                 Tensor o = Tensor.ComplexRRelu(t1);
 
-                float[] y = o.State;
+                float[] y = o.State.Value;
 
                 for (int i = 0; i < y.Length / 2; i++) {
                     Complex c = new Complex(Math.Max(0, x1[i * 2]), x1[i * 2 + 1]);

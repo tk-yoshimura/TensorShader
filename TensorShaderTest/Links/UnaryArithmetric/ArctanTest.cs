@@ -23,7 +23,7 @@ namespace TensorShaderTest.Links.UnaryArithmetric {
 
             flow.Execute();
 
-            float[] gx_actual = x.GradState;
+            float[] gx_actual = x.GradState.Value;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-6f, 1e-4f, $"not equal gx"); /*nonlinear tolerance*/
         }

@@ -31,9 +31,9 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
                     ope.Execute(inval, outval);
 
-                    CollectionAssert.AreEqual(x1, inval.State);
+                    CollectionAssert.AreEqual(x1, inval.State.Value);
 
-                    float[] y = outval.State;
+                    float[] y = outval.State.Value;
                     int p = 0;
 
                     for (int i = 0; i < shape.Length / axislength; i++, p = i / stride * stride * axislength + i % stride) {
@@ -64,7 +64,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             ope.Execute(x, y);
 
-            float[] y_actual = y.State;
+            float[] y_actual = y.State.Value;
 
             AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, $"not equal");
         }
@@ -87,7 +87,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             Cuda.Profiler.Stop();
 
-            float[] v = y.State;
+            float[] v = y.State.Value;
 
             for (int i = 1; i < axislength / 5; i++) {
                 Assert.IsTrue(v[i - 1] <= v[i], $"{i}: {v[i - 1]}, {v[i]}");
@@ -116,7 +116,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             Cuda.Profiler.Stop();
 
-            float[] v = y.State;
+            float[] v = y.State.Value;
 
             for (int i = 1; i < axislength / 5; i++) {
                 Assert.IsTrue(v[i - 1] <= v[i], $"{i}: {v[i - 1]}, {v[i]}");
@@ -145,7 +145,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             Cuda.Profiler.Stop();
 
-            float[] v = y.State;
+            float[] v = y.State.Value;
 
             for (int i = 1; i < axislength / 5; i++) {
                 Assert.IsTrue(v[i - 1] <= v[i], $"{i}: {v[i - 1]}, {v[i]}");
@@ -174,7 +174,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             Cuda.Profiler.Stop();
 
-            float[] v = y.State;
+            float[] v = y.State.Value;
 
             for (int i = 1; i < axislength / 5; i++) {
                 Assert.IsTrue(v[i - 1] <= v[i], $"{i}: {v[i - 1]}, {v[i]}");

@@ -45,19 +45,19 @@ namespace TensorShaderTest.Links.Loss {
             Assert.IsTrue(gt.Grad == null);
             Assert.IsTrue(label.Grad == null);
 
-            float[] locloss_actual = locloss.State;
+            float[] locloss_actual = locloss.State.Value;
 
             AssertError.Tolerance(locloss_expect, locloss_actual, 1e-6f, 1e-4f, $"not equal locloss");
 
-            float[] confloss_actual = confloss.State;
+            float[] confloss_actual = confloss.State.Value;
 
             AssertError.Tolerance(confloss_expect, confloss_actual, 1e-6f, 1e-4f, $"not equal confloss");
 
-            float[] gloc_actual = loc.GradState;
+            float[] gloc_actual = loc.GradState.Value;
 
             AssertError.Tolerance(gloc_expect, gloc_actual, 1e-6f, 1e-4f, $"not equal gloc");
 
-            float[] gconf_actual = conf.GradState;
+            float[] gconf_actual = conf.GradState.Value;
 
             AssertError.Tolerance(gconf_expect, gconf_actual, 1e-6f, 1e-4f, $"not equal gconf");
         }

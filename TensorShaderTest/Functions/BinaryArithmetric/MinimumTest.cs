@@ -21,7 +21,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
                 Tensor t2 = x2;
                 Tensor o = Tensor.Minimum(t1, t2);
 
-                AssertError.Tolerance(idxes.Select((idx) => Math.Min(x1[idx], x2[idx])).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => Math.Min(x1[idx], x2[idx])).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -29,7 +29,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
 
                 Tensor o = Tensor.Minimum(t1, t1);
 
-                AssertError.Tolerance(idxes.Select((idx) => Math.Min(x1[idx], x1[idx])).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => Math.Min(x1[idx], x1[idx])).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -44,7 +44,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => Math.Min(x1[idx], x2[idx])).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => Math.Min(x1[idx], x2[idx])).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -58,7 +58,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => Math.Min(x1[idx], x2[idx])).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => Math.Min(x1[idx], x2[idx])).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -72,7 +72,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => Math.Min(x1[idx], x2[idx])).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => Math.Min(x1[idx], x2[idx])).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -85,7 +85,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => Math.Min(x1[idx], x1[idx])).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => Math.Min(x1[idx], x1[idx])).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
         }
     }

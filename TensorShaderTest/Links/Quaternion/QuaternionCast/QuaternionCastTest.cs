@@ -30,19 +30,19 @@ namespace TensorShaderTest.Links.Quaternion {
 
             flow.Execute();
 
-            float[] gx_actual = x.GradState;
+            float[] gx_actual = x.GradState.Value;
 
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
 
-            float[] gy_actual = y.GradState;
+            float[] gy_actual = y.GradState.Value;
 
             AssertError.Tolerance(gy_expect, gy_actual, 1e-7f, 1e-5f, $"not equal gy");
 
-            float[] gz_actual = z.GradState;
+            float[] gz_actual = z.GradState.Value;
 
             AssertError.Tolerance(gz_expect, gz_actual, 1e-7f, 1e-5f, $"not equal gz");
 
-            float[] gw_actual = w.GradState;
+            float[] gw_actual = w.GradState.Value;
 
             AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"not equal gw");
         }

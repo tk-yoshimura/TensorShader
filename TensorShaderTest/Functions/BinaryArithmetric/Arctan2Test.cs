@@ -21,7 +21,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
                 Tensor t2 = x2;
                 Tensor o = Tensor.Arctan2(t1, t2);
 
-                AssertError.Tolerance(idxes.Select((idx) => (float)Math.Atan2(x1[idx], x2[idx])).ToArray(), o.State, 1e-7f, 1e-3f); /*non linear tolerance*/
+                AssertError.Tolerance(idxes.Select((idx) => (float)Math.Atan2(x1[idx], x2[idx])).ToArray(), o.State.Value, 1e-7f, 1e-3f); /*non linear tolerance*/
             }
 
             {
@@ -29,7 +29,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
 
                 Tensor o = Tensor.Arctan2(t1, t1);
 
-                AssertError.Tolerance(idxes.Select((idx) => (float)Math.Atan2(x1[idx], x1[idx])).ToArray(), o.State, 1e-7f, 1e-3f); /*non linear tolerance*/
+                AssertError.Tolerance(idxes.Select((idx) => (float)Math.Atan2(x1[idx], x1[idx])).ToArray(), o.State.Value, 1e-7f, 1e-3f); /*non linear tolerance*/
             }
 
             {
@@ -44,7 +44,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => (float)Math.Atan2(x1[idx], x2[idx])).ToArray(), o.State, 1e-7f, 1e-3f); /*non linear tolerance*/
+                AssertError.Tolerance(idxes.Select((idx) => (float)Math.Atan2(x1[idx], x2[idx])).ToArray(), o.State.Value, 1e-7f, 1e-3f); /*non linear tolerance*/
             }
 
             {
@@ -58,7 +58,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => (float)Math.Atan2(x1[idx], x2[idx])).ToArray(), o.State, 1e-7f, 1e-3f); /*non linear tolerance*/
+                AssertError.Tolerance(idxes.Select((idx) => (float)Math.Atan2(x1[idx], x2[idx])).ToArray(), o.State.Value, 1e-7f, 1e-3f); /*non linear tolerance*/
             }
 
             {
@@ -72,7 +72,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => (float)Math.Atan2(x1[idx], x2[idx])).ToArray(), o.State, 1e-7f, 1e-3f); /*non linear tolerance*/
+                AssertError.Tolerance(idxes.Select((idx) => (float)Math.Atan2(x1[idx], x2[idx])).ToArray(), o.State.Value, 1e-7f, 1e-3f); /*non linear tolerance*/
             }
 
             {
@@ -85,7 +85,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => (float)Math.Atan2(x1[idx], x1[idx])).ToArray(), o.State, 1e-7f, 1e-3f); /*non linear tolerance*/
+                AssertError.Tolerance(idxes.Select((idx) => (float)Math.Atan2(x1[idx], x1[idx])).ToArray(), o.State.Value, 1e-7f, 1e-3f); /*non linear tolerance*/
             }
         }
     }

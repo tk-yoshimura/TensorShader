@@ -21,44 +21,44 @@ namespace TensorShaderTest {
                 Tensor tensor = Shape.Map0D(channels, batch);
 
                 Assert.AreEqual(length, tensor.Length);
-                foreach (float v in (float[])tensor.State) {
+                foreach (float v in (float[])tensor.State.Value) {
                     Assert.AreEqual(0f, v);
                 }
 
                 tensor.State = v2;
-                CollectionAssert.AreEqual(v2, tensor.State);
+                CollectionAssert.AreEqual(v2, tensor.State.Value);
             }
 
             {
                 Tensor tensor = (Shape.Map0D(channels, batch), v1);
 
                 Assert.AreEqual(length, tensor.Length);
-                CollectionAssert.AreEqual(v1, tensor.State);
+                CollectionAssert.AreEqual(v1, tensor.State.Value);
 
                 tensor.State = v2;
-                CollectionAssert.AreEqual(v2, tensor.State);
+                CollectionAssert.AreEqual(v2, tensor.State.Value);
             }
 
             {
                 Tensor tensor = new OverflowCheckedTensor(Shape.Map0D(channels, batch));
 
                 Assert.AreEqual(length, tensor.Length);
-                foreach (float v in tensor.State.Skip(1)) {
+                foreach (float v in tensor.State.Value.Skip(1)) {
                     Assert.AreEqual(0f, v);
                 }
 
                 tensor.State = v2;
-                CollectionAssert.AreEqual(v2, tensor.State);
+                CollectionAssert.AreEqual(v2, tensor.State.Value);
             }
 
             {
                 Tensor tensor = new OverflowCheckedTensor(Shape.Map0D(channels, batch), v1);
 
                 Assert.AreEqual(length, tensor.Length);
-                CollectionAssert.AreEqual(v1, tensor.State);
+                CollectionAssert.AreEqual(v1, tensor.State.Value);
 
                 tensor.State = v2;
-                CollectionAssert.AreEqual(v2, tensor.State);
+                CollectionAssert.AreEqual(v2, tensor.State.Value);
             }
         }
 
@@ -76,7 +76,7 @@ namespace TensorShaderTest {
                 tensor.Clear(1);
 
                 Assert.AreEqual(length, tensor.Length);
-                foreach (float v in tensor.State) {
+                foreach (float v in tensor.State.Value) {
                     Assert.AreEqual(1f, v);
                 }
             }
@@ -87,7 +87,7 @@ namespace TensorShaderTest {
                 tensor.Clear(1);
 
                 Assert.AreEqual(length, tensor.Length);
-                foreach (float v in tensor.State) {
+                foreach (float v in tensor.State.Value) {
                     Assert.AreEqual(1f, v);
                 }
             }
@@ -98,7 +98,7 @@ namespace TensorShaderTest {
                 tensor.Clear(1);
 
                 Assert.AreEqual(length, tensor.Length);
-                foreach (float v in tensor.State) {
+                foreach (float v in tensor.State.Value) {
                     Assert.AreEqual(1f, v);
                 }
             }
@@ -109,7 +109,7 @@ namespace TensorShaderTest {
                 tensor.Clear(1);
 
                 Assert.AreEqual(length, tensor.Length);
-                foreach (float v in tensor.State) {
+                foreach (float v in tensor.State.Value) {
                     Assert.AreEqual(1f, v);
                 }
             }
@@ -129,7 +129,7 @@ namespace TensorShaderTest {
                 tensor.Zeroset();
 
                 Assert.AreEqual(length, tensor.Length);
-                foreach (float v in tensor.State) {
+                foreach (float v in tensor.State.Value) {
                     Assert.AreEqual(0f, v);
                 }
             }
@@ -140,7 +140,7 @@ namespace TensorShaderTest {
                 tensor.Zeroset();
 
                 Assert.AreEqual(length, tensor.Length);
-                foreach (float v in tensor.State) {
+                foreach (float v in tensor.State.Value) {
                     Assert.AreEqual(0f, v);
                 }
             }
@@ -161,7 +161,7 @@ namespace TensorShaderTest {
                 tensor1.CopyTo(tensor2);
 
                 Assert.AreEqual(length, tensor2.Length);
-                CollectionAssert.AreEqual(v1, tensor2.State);
+                CollectionAssert.AreEqual(v1, tensor2.State.Value);
             }
 
             {
@@ -171,7 +171,7 @@ namespace TensorShaderTest {
                 tensor1.CopyTo(tensor2);
 
                 Assert.AreEqual(length, tensor2.Length);
-                CollectionAssert.AreEqual(v1, tensor2.State);
+                CollectionAssert.AreEqual(v1, tensor2.State.Value);
             }
 
             {
@@ -181,7 +181,7 @@ namespace TensorShaderTest {
                 tensor1.CopyTo(tensor2);
 
                 Assert.AreEqual(length, tensor2.Length);
-                CollectionAssert.AreEqual(v1, tensor2.State);
+                CollectionAssert.AreEqual(v1, tensor2.State.Value);
             }
 
             {
@@ -191,7 +191,7 @@ namespace TensorShaderTest {
                 tensor1.CopyTo(tensor2);
 
                 Assert.AreEqual(length, tensor2.Length);
-                CollectionAssert.AreEqual(v1, tensor2.State);
+                CollectionAssert.AreEqual(v1, tensor2.State.Value);
             }
         }
 
@@ -220,7 +220,7 @@ namespace TensorShaderTest {
 
                             tensor1.RegionCopyTo(tensor2, (uint)src_index, (uint)dst_index, (uint)count);
 
-                            CollectionAssert.AreEqual(v, tensor2.State);
+                            CollectionAssert.AreEqual(v, tensor2.State.Value);
                         }
 
                         {
@@ -229,7 +229,7 @@ namespace TensorShaderTest {
 
                             tensor1.RegionCopyTo(tensor2, (uint)src_index, (uint)dst_index, (uint)count);
 
-                            CollectionAssert.AreEqual(v, tensor2.State);
+                            CollectionAssert.AreEqual(v, tensor2.State.Value);
                         }
 
                         {
@@ -238,7 +238,7 @@ namespace TensorShaderTest {
 
                             tensor1.RegionCopyTo(tensor2, (uint)src_index, (uint)dst_index, (uint)count);
 
-                            CollectionAssert.AreEqual(v, tensor2.State);
+                            CollectionAssert.AreEqual(v, tensor2.State.Value);
                         }
 
                         {
@@ -247,7 +247,7 @@ namespace TensorShaderTest {
 
                             tensor1.RegionCopyTo(tensor2, (uint)src_index, (uint)dst_index, (uint)count);
 
-                            CollectionAssert.AreEqual(v, tensor2.State);
+                            CollectionAssert.AreEqual(v, tensor2.State.Value);
                         }
 
                     }
@@ -307,7 +307,7 @@ namespace TensorShaderTest {
                 Tensor tensor2 = tensor1.Copy();
 
                 Assert.AreEqual(length, tensor2.Length);
-                CollectionAssert.AreEqual(v1, tensor2.State);
+                CollectionAssert.AreEqual(v1, tensor2.State.Value);
             }
 
             {
@@ -316,7 +316,7 @@ namespace TensorShaderTest {
 
                 Assert.IsTrue(tensor2 is OverflowCheckedTensor);
                 Assert.AreEqual(length, tensor2.Length);
-                CollectionAssert.AreEqual(v1, tensor2.State);
+                CollectionAssert.AreEqual(v1, tensor2.State.Value);
             }
         }
 
@@ -346,7 +346,7 @@ namespace TensorShaderTest {
                         tensor2[dst_th] = tensor3;
 
                         Assert.AreEqual(Shape.Map1D(channels, width), tensor3.Shape);
-                        CollectionAssert.AreEqual(v, tensor2.State);
+                        CollectionAssert.AreEqual(v, tensor2.State.Value);
                     }
 
                     {
@@ -359,7 +359,7 @@ namespace TensorShaderTest {
 
                         Assert.IsTrue(tensor3 is OverflowCheckedTensor);
                         Assert.AreEqual(Shape.Map1D(channels, width), tensor3.Shape);
-                        CollectionAssert.AreEqual(v, tensor2.State);
+                        CollectionAssert.AreEqual(v, tensor2.State.Value);
                     }
 
                 }

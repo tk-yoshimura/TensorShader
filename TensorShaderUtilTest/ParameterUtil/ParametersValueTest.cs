@@ -9,9 +9,9 @@ namespace TensorShaderUtilTest.ParameterUtil {
     public class ParametersValueTest {
         [TestMethod]
         public void ExecuteTest() {
-            ParameterField p1 = new Tensor(Shape.Scalar);
-            ParameterField p2 = new Tensor(Shape.Scalar);
-            ParameterField p3 = new Tensor(Shape.Scalar);
+            ParameterField p1 = Shape.Scalar;
+            ParameterField p2 = Shape.Scalar;
+            ParameterField p3 = Shape.Scalar;
 
             StoreField s = p1 + p2 + p3;
 

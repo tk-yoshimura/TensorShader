@@ -34,9 +34,9 @@ namespace TensorShaderTest.Operators.Connection3D {
                                     ope.Execute(y_tensor, x_tensor);
 
                                     float[] x_expect = x.ToArray();
-                                    float[] x_actual = x_tensor.State;
+                                    float[] x_actual = x_tensor.State.Value;
 
-                                    CollectionAssert.AreEqual(yval, y_tensor.State);
+                                    CollectionAssert.AreEqual(yval, y_tensor.State.Value);
 
                                     AssertError.Tolerance(x_expect, x_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {channels},{stride},{inwidth},{inheight},{indepth},{batch}");
 

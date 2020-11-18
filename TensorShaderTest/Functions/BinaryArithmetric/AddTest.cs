@@ -24,7 +24,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
 
                 Tensor o = t1 + t2;
 
-                AssertError.Tolerance(idxes.Select((idx) => x1[idx] + x2[idx]).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => x1[idx] + x2[idx]).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -32,7 +32,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
 
                 Tensor o = t1 + t1;
 
-                AssertError.Tolerance(idxes.Select((idx) => x1[idx] + x1[idx]).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => x1[idx] + x1[idx]).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -41,7 +41,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
 
                 Tensor o = t1 + t3;
 
-                AssertError.Tolerance(idxes.Select((idx) => x1[idx] + x3[idx % ch]).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => x1[idx] + x3[idx % ch]).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -50,7 +50,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
 
                 Tensor o = t3 + t1;
 
-                AssertError.Tolerance(idxes.Select((idx) => x3[idx % ch] + x1[idx]).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => x3[idx % ch] + x1[idx]).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -59,7 +59,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
 
                 Tensor o = t1 + t4;
 
-                AssertError.Tolerance(idxes.Select((idx) => x1[idx] + x4[0]).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => x1[idx] + x4[0]).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -68,7 +68,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
 
                 Tensor o = t4 + t1;
 
-                AssertError.Tolerance(idxes.Select((idx) => x4[0] + x1[idx]).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => x4[0] + x1[idx]).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -83,7 +83,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => x1[idx] + x2[idx]).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => x1[idx] + x2[idx]).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -97,7 +97,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => x1[idx] + x2[idx]).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => x1[idx] + x2[idx]).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -111,7 +111,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => x1[idx] + x2[idx]).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => x1[idx] + x2[idx]).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -124,7 +124,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => x1[idx] + x1[idx]).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => x1[idx] + x1[idx]).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -139,7 +139,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => x1[idx] + x3[idx % ch]).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => x1[idx] + x3[idx % ch]).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -154,7 +154,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => x3[idx % ch] + x1[idx]).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => x3[idx % ch] + x1[idx]).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -169,7 +169,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => x1[idx] + x4[0]).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => x1[idx] + x4[0]).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -184,7 +184,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => x4[0] + x1[idx]).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => x4[0] + x1[idx]).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
         }
     }

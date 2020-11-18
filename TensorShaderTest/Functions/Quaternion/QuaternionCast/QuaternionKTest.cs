@@ -20,7 +20,7 @@ namespace TensorShaderTest.Functions.QuaternionArithmetric {
                 Tensor t1 = x1;
                 Tensor o = Tensor.QuaternionK(t1);
 
-                float[] y = o.State;
+                float[] y = o.State.Value;
 
                 for (int i = 0; i < y.Length / 4; i++) {
                     Quaternion q = new Quaternion(x1[i * 4 + 1], x1[i * 4 + 2], x1[i * 4 + 3], x1[i * 4]);

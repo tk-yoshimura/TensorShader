@@ -32,15 +32,15 @@ namespace TensorShaderTest.Links.ArrayManipulation {
 
             flow.Execute();
 
-            float[] gx1_actual = x1.GradState;
+            float[] gx1_actual = x1.GradState.Value;
 
             AssertError.Tolerance(gx1_expect, gx1_actual, 1e-7f, 1e-5f, $"not equal gx1");
 
-            float[] gx2_actual = x2.GradState;
+            float[] gx2_actual = x2.GradState.Value;
 
             AssertError.Tolerance(gx2_expect, gx2_actual, 1e-7f, 1e-5f, $"not equal gx2");
 
-            float[] gx4_actual = x4.GradState;
+            float[] gx4_actual = x4.GradState.Value;
 
             AssertError.Tolerance(gx4_expect, gx4_actual, 1e-7f, 1e-5f, $"not equal gx4");
         }

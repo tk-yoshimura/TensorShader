@@ -21,7 +21,7 @@ namespace TensorShaderTest.Functions.TrivectorArithmetric {
                 Tensor t1 = x1;
                 Tensor o = Tensor.TrivectorNormalize(t1);
 
-                float[] y = o.State;
+                float[] y = o.State.Value;
 
                 for (int i = 0; i < y.Length / 3; i++) {
                     Vector3 v = new Vector3(x1[i * 3], x1[i * 3 + 1], x1[i * 3 + 2]);
@@ -37,7 +37,7 @@ namespace TensorShaderTest.Functions.TrivectorArithmetric {
                 Tensor t2 = x2;
                 Tensor o = Tensor.TrivectorNormalize(t2);
 
-                float[] y = o.State;
+                float[] y = o.State.Value;
 
                 for (int i = 0; i < y.Length / 3; i++) {
                     Assert.AreEqual(0, y[i * 3], 1e-6f, $"not equal {i * 3}");

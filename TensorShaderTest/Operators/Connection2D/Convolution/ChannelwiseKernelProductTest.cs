@@ -38,10 +38,10 @@ namespace TensorShaderTest.Operators.Connection2D {
                                     ope.Execute(x_tensor, gy_tensor, gw_tensor);
 
                                     float[] gw_expect = gw.ToArray();
-                                    float[] gw_actual = gw_tensor.State;
+                                    float[] gw_actual = gw_tensor.State.Value;
 
-                                    CollectionAssert.AreEqual(xval, x_tensor.State);
-                                    CollectionAssert.AreEqual(gyval, gy_tensor.State);
+                                    CollectionAssert.AreEqual(xval, x_tensor.State.Value);
+                                    CollectionAssert.AreEqual(gyval, gy_tensor.State.Value);
 
                                     AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {channels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
 
@@ -87,10 +87,10 @@ namespace TensorShaderTest.Operators.Connection2D {
             ope.Execute(x_tensor, gy_tensor, gw_tensor);
 
             float[] gw_expect = gw.ToArray();
-            float[] gw_actual = gw_tensor.State;
+            float[] gw_actual = gw_tensor.State.Value;
 
-            CollectionAssert.AreEqual(xval, x_tensor.State);
-            CollectionAssert.AreEqual(gyval, gy_tensor.State);
+            CollectionAssert.AreEqual(xval, x_tensor.State.Value);
+            CollectionAssert.AreEqual(gyval, gy_tensor.State.Value);
 
             AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, ref max_err, $"mismatch value {channels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
 

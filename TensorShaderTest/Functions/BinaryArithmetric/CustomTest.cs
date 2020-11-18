@@ -21,7 +21,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
                 Tensor t2 = x2;
                 Tensor o = Tensor.BinaryArithmetric(t1, t2, "binary_test", "#y = (#x1 + #x2) * (#x1 - #x2);");
 
-                AssertError.Tolerance(idxes.Select((idx) => (x1[idx] + x2[idx]) * (x1[idx] - x2[idx])).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => (x1[idx] + x2[idx]) * (x1[idx] - x2[idx])).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -36,14 +36,14 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => (x1[idx] + x2[idx]) * (x1[idx] - x2[idx])).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => (x1[idx] + x2[idx]) * (x1[idx] - x2[idx])).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
                 Tensor t1 = x1;
                 Tensor o = Tensor.BinaryConstantArithmetric(4, t1, "binaryconst_test", "#y = c * (#x + c);");
 
-                AssertError.Tolerance(idxes.Select((idx) => 4 * (x1[idx] + 4)).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => 4 * (x1[idx] + 4)).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -56,14 +56,14 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => 4 * (x1[idx] + 4)).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => 4 * (x1[idx] + 4)).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
                 Tensor t1 = x1;
                 Tensor o = Tensor.BinaryConstantArithmetric(8, t1, "binaryconst_test", "#y = c * (#x + c);");
 
-                AssertError.Tolerance(idxes.Select((idx) => 8 * (x1[idx] + 8)).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => 8 * (x1[idx] + 8)).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -76,7 +76,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => 8 * (x1[idx] + 8)).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => 8 * (x1[idx] + 8)).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
         }
     }

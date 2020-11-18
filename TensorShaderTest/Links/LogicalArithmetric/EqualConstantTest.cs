@@ -23,7 +23,7 @@ namespace TensorShaderTest.Links.LogicalArithmetric {
             (Flow flow, _) = Flow.Inference(output);
             flow.Execute();
 
-            CollectionAssert.AreEqual(idxes.Select((idx) => x[idx] == 2 ? 1f : 0f).ToArray(), output.State);
+            CollectionAssert.AreEqual(idxes.Select((idx) => x[idx] == 2 ? 1f : 0f).ToArray(), output.State.Value);
         }
     }
 }

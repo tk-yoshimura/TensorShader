@@ -22,7 +22,7 @@ namespace TensorShaderTest.Functions.QuaternionArithmetric {
                 Tensor t2 = x2;
                 Tensor o = Tensor.QuaternionMul(t1, t2);
 
-                float[] y = o.State;
+                float[] y = o.State.Value;
 
                 for (int i = 0; i < y.Length / 4; i++) {
                     Quaternion a = new Quaternion(x1[i * 4 + 1], x1[i * 4 + 2], x1[i * 4 + 3], x1[i * 4]);
@@ -40,7 +40,7 @@ namespace TensorShaderTest.Functions.QuaternionArithmetric {
                 Tensor t1 = x1;
                 Tensor o = Tensor.QuaternionMul(t1, t1);
 
-                float[] y = o.State;
+                float[] y = o.State.Value;
 
                 for (int i = 0; i < y.Length / 4; i++) {
                     Quaternion a = new Quaternion(x1[i * 4 + 1], x1[i * 4 + 2], x1[i * 4 + 3], x1[i * 4]);

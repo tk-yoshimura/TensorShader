@@ -41,13 +41,13 @@ namespace TensorShaderTest.Operators.Connection2D {
                                 ope_unpool.Execute(gy_tensor, x_tensor, y_tensor, gx_tensor);
 
                                 float[] gx_expect = gx.ToArray();
-                                float[] gx_actual = gx_tensor.State;
+                                float[] gx_actual = gx_tensor.State.Value;
 
                                 int gx_expect_nonzero = gx_expect.Count((v) => v != 0);
                                 int gx_actual_nonzero = gx_expect.Count((v) => v != 0);
 
-                                CollectionAssert.AreEqual(xval, x_tensor.State);
-                                CollectionAssert.AreEqual(gyval, gy_tensor.State);
+                                CollectionAssert.AreEqual(xval, x_tensor.State.Value);
+                                CollectionAssert.AreEqual(gyval, gy_tensor.State.Value);
 
                                 Assert.AreEqual(y_tensor.Length, gx_expect_nonzero);
                                 Assert.AreEqual(y_tensor.Length, gx_actual_nonzero);

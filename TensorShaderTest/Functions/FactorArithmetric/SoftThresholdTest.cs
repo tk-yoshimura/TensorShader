@@ -28,7 +28,7 @@ namespace TensorShaderTest.Functions.FactorArithmetric {
 
                 Tensor o = Tensor.SoftThreshold(t1, t2);
 
-                AssertError.Tolerance(idxes.Select((idx) => soft_thr(x1[idx], coef[0])).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => soft_thr(x1[idx], coef[0])).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -37,7 +37,7 @@ namespace TensorShaderTest.Functions.FactorArithmetric {
 
                 Tensor o = Tensor.SoftThreshold(t1, t2);
 
-                AssertError.Tolerance(new float[] { soft_thr(x2[0], coef[0]) }, o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(new float[] { soft_thr(x2[0], coef[0]) }, o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -45,7 +45,7 @@ namespace TensorShaderTest.Functions.FactorArithmetric {
 
                 Tensor o = Tensor.SoftThreshold(t1, t1);
 
-                AssertError.Tolerance(x2.Select((v) => soft_thr(v, v)).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(x2.Select((v) => soft_thr(v, v)).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -60,7 +60,7 @@ namespace TensorShaderTest.Functions.FactorArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => soft_thr(x1[idx], coef[0])).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => soft_thr(x1[idx], coef[0])).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -75,7 +75,7 @@ namespace TensorShaderTest.Functions.FactorArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(new float[] { soft_thr(x2[0], coef[0]) }, o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(new float[] { soft_thr(x2[0], coef[0]) }, o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -88,7 +88,7 @@ namespace TensorShaderTest.Functions.FactorArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(x2.Select((v) => soft_thr(v, v)).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(x2.Select((v) => soft_thr(v, v)).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
         }
     }

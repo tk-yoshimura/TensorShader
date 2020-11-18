@@ -23,7 +23,7 @@ namespace TensorShaderTest.Functions.TrinaryArithmetric {
                 Tensor t3 = xmax;
                 Tensor o = Tensor.Clamp(t1, t2, t3);
 
-                AssertError.Tolerance(idxes.Select((idx) => Math.Min(Math.Max(x[idx], xmin[idx]), xmax[idx])).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => Math.Min(Math.Max(x[idx], xmin[idx]), xmax[idx])).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -40,14 +40,14 @@ namespace TensorShaderTest.Functions.TrinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => Math.Min(Math.Max(x[idx], xmin[idx]), xmax[idx])).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => Math.Min(Math.Max(x[idx], xmin[idx]), xmax[idx])).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
                 Tensor t1 = x;
                 Tensor o = Tensor.Clamp(t1, -0.5f, 0.5f);
 
-                AssertError.Tolerance(idxes.Select((idx) => Math.Min(Math.Max(x[idx], -0.5f), 0.5f)).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => Math.Min(Math.Max(x[idx], -0.5f), 0.5f)).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -60,7 +60,7 @@ namespace TensorShaderTest.Functions.TrinaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => Math.Min(Math.Max(x[idx], -0.5f), 0.5f)).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => Math.Min(Math.Max(x[idx], -0.5f), 0.5f)).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
         }
     }

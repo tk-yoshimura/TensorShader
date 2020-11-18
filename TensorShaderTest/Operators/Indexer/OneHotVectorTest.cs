@@ -22,9 +22,9 @@ namespace TensorShaderTest.Operators.Indexer {
 
                     ope.Execute(v1, v2);
 
-                    CollectionAssert.AreEqual(x1, v1.State);
+                    CollectionAssert.AreEqual(x1, v1.State.Value);
 
-                    float[] y = v2.State;
+                    float[] y = v2.State.Value;
 
                     for (int j = 0; j < batch; j++) {
                         for (int k = 0; k < channels; k++) {

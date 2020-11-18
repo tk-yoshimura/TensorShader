@@ -25,7 +25,7 @@ namespace TensorShaderTest.Links.LogicalArithmetric {
             (Flow flow, _) = Flow.Inference(output);
             flow.Execute();
 
-            CollectionAssert.AreEqual(idxes.Select((idx) => x1[idx] * x2[idx]).ToArray(), output.State);
+            CollectionAssert.AreEqual(idxes.Select((idx) => x1[idx] * x2[idx]).ToArray(), output.State.Value);
         }
     }
 }

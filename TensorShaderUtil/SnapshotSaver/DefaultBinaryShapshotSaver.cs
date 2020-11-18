@@ -74,8 +74,8 @@ namespace TensorShaderUtil.SnapshotSaver {
 
                     foreach (var item in snapshot.Table) {
                         writer.Write(item.Key);
-                        WriteShape(writer, item.Value.shape);
-                        WriteValue(writer, item.Value.state);
+                        WriteShape(writer, item.Value.Shape);
+                        WriteValue(writer, item.Value.Value);
                     }
 
                     writer.Write(crc_entry);

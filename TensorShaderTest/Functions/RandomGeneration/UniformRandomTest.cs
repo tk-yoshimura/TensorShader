@@ -18,7 +18,7 @@ namespace TensorShaderTest.Functions.RandomGeneration {
 
                 Assert.AreEqual(shape, t.Shape);
 
-                float[] y = t.State;
+                float[] y = t.State.Value;
 
                 Assert.IsTrue(y.Min() >= 0);
                 Assert.IsTrue(y.Max() < 1);
@@ -45,10 +45,10 @@ namespace TensorShaderTest.Functions.RandomGeneration {
                 Flow flow = Flow.FromInputs(node);
 
                 flow.Execute();
-                float[] y1 = output.State;
+                float[] y1 = output.State.Value;
 
                 flow.Execute();
-                float[] y2 = output.State;
+                float[] y2 = output.State.Value;
 
                 CollectionAssert.AreNotEqual(y1, y2);
 

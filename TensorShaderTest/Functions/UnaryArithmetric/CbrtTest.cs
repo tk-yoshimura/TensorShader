@@ -20,7 +20,7 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
 
                 Tensor o = Tensor.Cbrt(t);
 
-                AssertError.Tolerance(idxes.Select((idx) => Math.Sign(x[idx]) * (float)Math.Pow(Math.Abs(x[idx]), 1.0 / 3.0)).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => Math.Sign(x[idx]) * (float)Math.Pow(Math.Abs(x[idx]), 1.0 / 3.0)).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
 
             {
@@ -33,7 +33,7 @@ namespace TensorShaderTest.Functions.UnaryArithmetric {
                 Flow flow = Flow.FromOutputs(o);
                 flow.Execute();
 
-                AssertError.Tolerance(idxes.Select((idx) => Math.Sign(x[idx]) * (float)Math.Pow(Math.Abs(x[idx]), 1.0 / 3.0)).ToArray(), o.State, 1e-7f, 1e-5f);
+                AssertError.Tolerance(idxes.Select((idx) => Math.Sign(x[idx]) * (float)Math.Pow(Math.Abs(x[idx]), 1.0 / 3.0)).ToArray(), o.State.Value, 1e-7f, 1e-5f);
             }
         }
     }
