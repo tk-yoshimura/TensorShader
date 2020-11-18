@@ -121,7 +121,7 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void TensorCastTest() {
-            NdimArray<float> array = new NdimArray<float>(new float[60], new Shape(ShapeType.Undefined, 3, 4, 5));
+            NdimArray<float> array = new Shape(ShapeType.Undefined, 3, 4, 5);
 
             array[0, 0, 0] = 1;
 

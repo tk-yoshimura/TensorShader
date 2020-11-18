@@ -16,8 +16,8 @@ namespace TensorShaderTest {
 
                 Tensor intensor = flow.InTensors[v1], outtensor = flow.OutTensors[v2];
 
-                intensor.State = new float[] { 2 };
-                outtensor.State = new float[] { 255 };
+                intensor.State = 2;
+                outtensor.State = 255;
 
                 flow.Execute();
 

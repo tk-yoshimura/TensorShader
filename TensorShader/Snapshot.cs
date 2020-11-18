@@ -5,14 +5,14 @@ using System.Linq;
 namespace TensorShader {
     /// <summary>スナップショット</summary>
     public class Snapshot {
-        private readonly Dictionary<string, (Shape shape, float[] state)> table;
+        private readonly Dictionary<string, NdimArray<float>> table;
 
         /// <summary>状態テーブル</summary>
-        public IReadOnlyDictionary<string, (Shape shape, float[] state)> Table => table;
+        public IReadOnlyDictionary<string, NdimArray<float>> Table => table;
 
         /// <summary>コンストラクタ</summary>
         public Snapshot() {
-            this.table = new Dictionary<string, (Shape shape, float[] state)>();
+            this.table = new Dictionary<string, NdimArray<float>>();
         }
 
         /// <summary>スナップショットにテンソルの状態を追加</summary>
@@ -21,7 +21,7 @@ namespace TensorShader {
                 throw new ArgumentException(nameof(key));
             }
 
-            table.Add(key, (tensor.Shape, tensor.State));
+            table.Add(key, tensor);
         }
 
         /// <summary>スナップショットにfloat配列を追加</summary>
@@ -36,10 +36,10 @@ namespace TensorShader {
         /// <summary>スナップショットにテンソルの状態を保存</summary>
         public void Save(string key, Tensor tensor) {
             if (table.ContainsKey(key)) {
-                table[key] = (tensor.Shape, tensor.State);
+                table[key] = tensor;
             }
             else {
-                table.Add(key, (tensor.Shape, tensor.State));
+                table.Add(key, tensor);
             }
         }
 
@@ -49,13 +49,13 @@ namespace TensorShader {
                 throw new KeyNotFoundException(nameof(key));
             }
 
-            (Shape shape, float[] state) = table[key];
+            NdimArray<float> arr = table[key];
 
-            if (tensor.Shape != shape) {
-                throw new ArgumentException(ExceptionMessage.Shape(tensor.Shape, shape));
+            if (tensor.Shape != arr.Shape) {
+                throw new ArgumentException(ExceptionMessage.Shape(tensor.Shape, arr.Shape));
             }
 
-            tensor.State = state;
+            tensor.State = arr;
         }
 
         /// <summary>キーを列挙</summary>

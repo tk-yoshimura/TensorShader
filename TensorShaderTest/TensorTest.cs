@@ -21,7 +21,7 @@ namespace TensorShaderTest {
                 Tensor tensor = Shape.Map0D(channels, batch);
 
                 Assert.AreEqual(length, tensor.Length);
-                foreach (float v in tensor.State) {
+                foreach (float v in (float[])tensor.State) {
                     Assert.AreEqual(0f, v);
                 }
 

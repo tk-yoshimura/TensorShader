@@ -136,7 +136,7 @@ namespace TensorShader {
         }
 
         /// <summary>テンソルの状態</summary>
-        public float[] State {
+        public NdimArray<float> State {
             set {
                 if (Tensor == null) {
                     throw new InvalidOperationException("Tensor not assigned.");

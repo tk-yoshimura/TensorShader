@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TensorShader {
 
@@ -47,11 +48,6 @@ namespace TensorShader {
             this.Shape = shape;
         }
 
-        /// <summary>一次元配列へ変換</summary>
-        public static explicit operator T[](NdimArray<T> array) {
-            return array.Value;
-        }
-
         /// <summary>インデクサ</summary>
         public T this[params int[] indexes] {
             get {
@@ -95,8 +91,28 @@ namespace TensorShader {
         }
 
         /// <summary>キャスト</summary>
+        public static implicit operator NdimArray<T>(T value) { 
+            return new NdimArray<T>(Shape.Scalar, new T[]{ value });
+        }
+
+        /// <summary>キャスト</summary>
+        public static implicit operator NdimArray<T>(T[] value) { 
+            return new NdimArray<T>(Shape.Vector(value.Length), value);
+        }
+
+        /// <summary>キャスト</summary>
+        public static implicit operator NdimArray<T>(Shape shape) { 
+            return new NdimArray<T>(shape);
+        }
+
+        /// <summary>キャスト</summary>
         public static implicit operator NdimArray<T>((Shape shape, T[] v) val) { 
             return new NdimArray<T>(val.shape, val.v);
+        }
+
+        /// <summary>float配列へ変換</summary>
+        public static explicit operator T[](NdimArray<T> array) {
+            return array.Value;
         }
 
         /// <summary>ディープコピー</summary>
@@ -114,7 +130,7 @@ namespace TensorShader {
     public partial class Tensor {
         /// <summary>テンソルから変換</summary>
         public static implicit operator NdimArray<float>(Tensor tensor) {
-            return new NdimArray<float>(tensor.Shape, tensor.State);
+            return tensor.State;
         }
 
         /// <summary>テンソルへ変換</summary>

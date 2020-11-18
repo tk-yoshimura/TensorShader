@@ -162,7 +162,7 @@ namespace TensorShader {
         }
 
         /// <summary>テンソルの状態</summary>
-        public float[] State {
+        public NdimArray<float> State {
             set {
                 ValueTensor.State = value;
             }
@@ -254,7 +254,7 @@ namespace TensorShader {
         }
 
         /// <summary>テンソルの状態</summary>
-        public float[] State {
+        public NdimArray<float> State {
             set {
                 ValueTensor.State = value;
             }
@@ -264,7 +264,7 @@ namespace TensorShader {
         }
 
         /// <summary>テンソルの勾配</summary>
-        public float[] GradState {
+        public NdimArray<float> GradState {
             set {
                 GradTensor.State = value;
             }
@@ -277,7 +277,7 @@ namespace TensorShader {
     /// <summary>ストアフィールド</summary>
     public class StoreField {
         /// <summary>テンソルの状態</summary>
-        public float[] State => OutputNode.State;
+        public NdimArray<float> State => OutputNode.State;
 
         /// <summary>変数形状</summary>
         public Shape Shape => OutputNode.Shape;

@@ -77,19 +77,19 @@ namespace TensorShader {
         }
 
         /// <summary>状態</summary>
-        public virtual float[] State {
+        public virtual NdimArray<float> State {
             get {
                 float[] state = new float[Length];
                 Buffer.Read(state, (ulong)Length);
 
-                return state;
+                return new NdimArray<float>(Shape, state, clone_value: false);
             }
             set {
-                if (value.Length != Length) {
-                    throw new ArgumentException(ExceptionMessage.Argument($"{value}.Length", value.Length, Length));
+                if (value.Shape != Shape) {
+                    throw new ArgumentException(ExceptionMessage.Shape(Shape, value.Shape));
                 }
 
-                Buffer.Write(value, (ulong)Length);
+                Buffer.Write(value.Value, (ulong)Length);
             }
         }
 
@@ -174,7 +174,7 @@ namespace TensorShader {
                     throw new ArgumentException(nameof(value));
                 }
 
-                this.Buffer.Write((uint)(Shape.DataSize * index), value.Value, 0, (uint)Shape.DataSize);
+                Buffer.Write((uint)(Shape.DataSize * index), value.Value, 0, (uint)Shape.DataSize);
             }
             get {
                 if (index < 0 || index >= Batch) {
@@ -183,7 +183,7 @@ namespace TensorShader {
 
                 NdimArray<float> arr = new NdimArray<float>(Shape.DataShape);
 
-                this.Buffer.Read((uint)(Shape.DataSize * index), arr.Value, 0, (uint)Shape.DataSize);
+                Buffer.Read((uint)(Shape.DataSize * index), arr.Value, 0, (uint)Shape.DataSize);
 
                 return arr;
             }
@@ -252,23 +252,23 @@ namespace TensorShader {
         }
 
         /// <summary>状態</summary>
-        /// <exception cref="IndexOutOfRangeException">領域外アクセスが検知されたとき</exception>
-        public override float[] State {
+        /// <exception cref="AccessViolationException">領域外アクセスが検知されたとき</exception>
+        public override NdimArray<float> State {
             get {
                 CheckOverflow();
 
                 float[] state = new float[Length];
                 Buffer.Read(state, (ulong)Length);
 
-                return state;
+                return new NdimArray<float>(Shape, state, clone_value: false);
             }
 
             set {
-                if (value.Length != Length) {
-                    throw new ArgumentException(ExceptionMessage.Argument($"{value}.Length", value.Length, Length));
+                if (value.Shape != Shape) {
+                    throw new ArgumentException(ExceptionMessage.Shape(Shape, value.Shape));
                 }
 
-                Buffer.Write(value, (ulong)Length);
+                Buffer.Write(value.Value, (ulong)Length);
             }
         }
 
@@ -283,7 +283,7 @@ namespace TensorShader {
 
             for (int i = 0; i < canary_length; i++) {
                 if (value[Shape.Length + i] != canary[i]) {
-                    throw new IndexOutOfRangeException("Detected out of buffer access.");
+                    throw new AccessViolationException("Detected out of buffer access.");
                 }
             }
         }
