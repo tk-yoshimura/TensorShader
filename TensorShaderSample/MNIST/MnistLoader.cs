@@ -29,16 +29,16 @@ namespace MNIST {
             this.test_labels = new MnistLabelsLoader(dirpath + "/t10k-labels-idx1-ubyte.gz", num_batches, count: 10000);
         }
 
-        public (float[] images, float[] labels) GetTrain(int[] indexes) {
-            float[] images = train_images.Get(indexes);
-            float[] labels = train_labels.Get(indexes);
+        public (NdimArray<float> images, NdimArray<float> labels) GetTrain(int[] indexes) {
+            NdimArray<float> images = train_images.Get(indexes);
+            NdimArray<float> labels = train_labels.Get(indexes);
 
             return (images, labels);
         }
 
-        public (float[] images, float[] labels) GetTest(int[] indexes) {
-            float[] images = test_images.Get(indexes);
-            float[] labels = test_labels.Get(indexes);
+        public (NdimArray<float> images, NdimArray<float> labels) GetTest(int[] indexes) {
+            NdimArray<float> images = test_images.Get(indexes);
+            NdimArray<float> labels = test_labels.Get(indexes);
 
             return (images, labels);
         }

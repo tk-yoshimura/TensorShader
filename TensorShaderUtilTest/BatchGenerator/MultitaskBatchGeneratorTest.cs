@@ -17,15 +17,15 @@ namespace TensorShaderUtilTest.BatchGenerator {
 
             generator.Request(indexes);
 
-            float[] value = generator.Receive();
+            NdimArray<float> value = generator.Receive();
 
-            CollectionAssert.AreEqual((new int[channels * num_batches]).Select((_, idx) => (float)idx).ToArray(), value);
+            CollectionAssert.AreEqual((new int[channels * num_batches]).Select((_, idx) => (float)idx).ToArray(), value.Value);
 
             generator.Request();
 
-            float[] value2 = generator.Receive();
+            NdimArray<float> value2 = generator.Receive();
 
-            CollectionAssert.AreEqual((new int[channels * num_batches]).Select((_, idx) => (float)(idx % 5)).ToArray(), value2);
+            CollectionAssert.AreEqual((new int[channels * num_batches]).Select((_, idx) => (float)(idx % 5)).ToArray(), value2.Value);
         }
 
         [TestMethod]
@@ -37,7 +37,7 @@ namespace TensorShaderUtilTest.BatchGenerator {
             int[] indexes = (new int[num_batches]).Select((_, idx) => idx).ToArray();
 
             Assert.ThrowsException<InvalidOperationException>(
-                () => { float[] value = generator.Receive(); }
+                () => { NdimArray<float> value = generator.Receive(); }
             );
         }
 
@@ -49,7 +49,7 @@ namespace TensorShaderUtilTest.BatchGenerator {
                 this.Channels = channels;
             }
 
-            public override float[] GenerateData(int index) {
+            public override NdimArray<float> GenerateData(int index) {
                 return new float[] {
                     index * Channels,
                     index * Channels + 1,

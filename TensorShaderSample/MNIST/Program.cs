@@ -48,8 +48,8 @@ namespace MNIST {
 
             Console.WriteLine("Set iterator event...");
             train_iterator.IncreasedEpoch += (iter) => {
-                float train_acc = acc.State[0];
-                float train_loss = avg_loss.State[0];
+                float train_acc = (float)acc.State;
+                float train_loss = (float)avg_loss.State;
 
                 Console.WriteLine($"[{iter.Iteration}] train acc: {train_acc:F3} train loss: {train_loss:E3}");
             };
@@ -97,7 +97,7 @@ namespace MNIST {
             sw.Start();
 
             while (train_iterator.Epoch < 5) {
-                (float[] images, float[] labels) = loader.GetTrain(train_iterator.Next());
+                (NdimArray<float> images, NdimArray<float> labels) = loader.GetTrain(train_iterator.Next());
 
                 x.State = images;
                 t.State = labels;
@@ -119,14 +119,14 @@ namespace MNIST {
             sw.Start();
 
             while (test_iterator.Epoch < 1) {
-                (float[] images, float[] labels) = loader.GetTest(test_iterator.Next());
+                (NdimArray<float> images, NdimArray<float> labels) = loader.GetTest(test_iterator.Next());
 
                 x.State = images;
                 t.State = labels;
 
                 testflow.Execute();
 
-                float test_acc = acc.State[0];
+                float test_acc = (float)acc.State;
 
                 test_acc_list.Add(test_acc);
             }

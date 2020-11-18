@@ -17,10 +17,10 @@ namespace TensorShader.Updaters.OptimizeMethod {
         /// <summary>減衰定数</summary>
         public float Rho {
             get {
-                return rho.State[0];
+                return (float)rho.State;
             }
             set {
-                rho.State = new float[] { value };
+                rho.State = value;
             }
         }
 

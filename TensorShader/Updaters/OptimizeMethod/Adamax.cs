@@ -20,30 +20,30 @@ namespace TensorShader.Updaters.OptimizeMethod {
         /// <summary>α</summary>
         public float Alpha {
             get {
-                return alpha.State[0];
+                return (float)alpha.State;
             }
             set {
-                alpha.State = new float[] { value };
+                alpha.State = value;
             }
         }
 
         /// <summary>β1</summary>
         public float Beta1 {
             get {
-                return beta1.State[0];
+                return (float)beta1.State;
             }
             set {
-                beta1.State = new float[] { value };
+                beta1.State = value;
             }
         }
 
         /// <summary>β2</summary>
         public float Beta2 {
             get {
-                return beta2.State[0];
+                return (float)beta2.State;
             }
             set {
-                beta2.State = new float[] { value };
+                beta2.State = value;
             }
         }
 

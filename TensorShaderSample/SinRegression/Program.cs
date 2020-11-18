@@ -44,10 +44,10 @@ namespace SinRegression {
                 parameters.Update();
 
                 Console.WriteLine(
-                    $"loss:{sum_err.State[0]:E5}, " +
-                    $"p3:{p3.State[0]:E5}, " +
-                    $"p5:{p5.State[0]:E5}, " +
-                    $"p7:{p7.State[0]:E5}");
+                    $"loss:{(float)sum_err.State:E5}, " +
+                    $"p3:{(float)p3.State:E5}, " +
+                    $"p5:{(float)p5.State:E5}, " +
+                    $"p7:{(float)p7.State:E5}");
 
                 adam_alpha.Value *= 0.999f;
             }

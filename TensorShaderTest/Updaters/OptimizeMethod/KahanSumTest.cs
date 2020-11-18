@@ -24,10 +24,10 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
             for (int i = 0; i < loops; i++) {
                 flow.Execute();
 
-                Console.WriteLine($"{i + 1}: {x.State[0]:F8}, {c.State[0]:F8}");
+                Console.WriteLine($"{i + 1}: {(float)x.State:F8}, {(float)c.State:F8}");
             }
 
-            Assert.AreEqual(dx_val * loops, x.State[0], 1e-5f);
+            Assert.AreEqual(dx_val * loops, (float)x.State, 1e-5f);
         }
     }
 }

@@ -10,10 +10,10 @@ namespace TensorShader.Updaters.RestrictGrad {
         /// <summary>制限値</summary>
         public float Limit {
             get {
-                return limit.State[0];
+                return (float)limit.State;
             }
             set {
-                limit.State = new float[] { value };
+                limit.State = value;
             }
         }
 

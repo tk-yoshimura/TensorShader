@@ -14,10 +14,10 @@ namespace TensorShader.Updaters.WeightDecay {
         /// <summary>減衰率</summary>
         public float Decay {
             get {
-                return decay.State[0];
+                return (float)decay.State;
             }
             set {
-                decay.State = new float[] { value };
+                decay.State = value;
             }
         }
 

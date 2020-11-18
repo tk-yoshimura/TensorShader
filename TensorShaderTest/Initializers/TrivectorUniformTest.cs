@@ -27,7 +27,7 @@ namespace TensorShaderTest.Initializers {
 
                     Tensor y = Tensor.TrivectorDense(x, w);
 
-                    float variance = Tensor.Average(y * y).State[0];
+                    float variance = (float)Tensor.Average(y * y).State;
 
                     variance_list.Add(variance);
                 }

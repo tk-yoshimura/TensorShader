@@ -11,10 +11,10 @@ namespace TensorShader.Updaters.OptimizeMethod {
         /// <summary>学習定数</summary>
         public float Lambda {
             get {
-                return lambda.State[0];
+                return (float)lambda.State;
             }
             set {
-                lambda.State = new float[] { value };
+                lambda.State = value;
             }
         }
 

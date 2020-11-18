@@ -14,16 +14,16 @@ namespace TensorShaderUtil.BatchGenerator {
 
         /// <summary>データ生成</summary>
         /// <param name="index">データインデクス</param>
-        float[] GenerateData(int index);
+        NdimArray<float> GenerateData(int index);
 
         /// <summary>データ生成をリクエスト</summary>
         /// <param name="indexes">バッチのデータインデクス</param>
         void Request(int[] indexes = null);
 
         /// <summary>バッチを受け取る</summary>
-        float[] Receive();
+        NdimArray<float> Receive();
 
         /// <summary>バッチを取得する</summary>
-        float[] Get(int[] indexes = null);
+        NdimArray<float> Get(int[] indexes = null);
     }
 }

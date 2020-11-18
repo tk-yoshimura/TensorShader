@@ -35,7 +35,7 @@ namespace TensorShaderUtil.BatchGenerator {
         }
 
         /// <summary>バッチを受け取る</summary>
-        public override sealed float[] Receive() {
+        public override sealed NdimArray<float> Receive() {
             if (!Requested || tasks == null) {
                 throw new InvalidOperationException();
             }

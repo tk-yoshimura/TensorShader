@@ -24,6 +24,8 @@ namespace TensorShaderTest {
             Assert.AreEqual("()", shape.ToString(), "mismatch string");
 
             Assert.IsTrue(shape == Shape.Scalar, "notequal shape");
+
+            Assert.IsTrue(shape.DataShape == Shape.Scalar, "notequal shape");
         }
 
         [TestMethod]
@@ -46,6 +48,8 @@ namespace TensorShaderTest {
 
             Assert.IsTrue(shape == Shape.Vector(7), "notequal shape");
             Assert.IsTrue(shape != Shape.Vector(8), "notequal shape");
+
+            Assert.IsTrue(shape.DataShape == Shape.Vector(7), "notequal shape");
         }
 
         [TestMethod]
@@ -69,6 +73,8 @@ namespace TensorShaderTest {
             Assert.IsTrue(shape == Shape.Map0D(7, 2), "notequal shape");
             Assert.IsTrue(shape != Shape.Map0D(7, 1), "notequal shape");
             Assert.IsTrue(shape != Shape.Map0D(8, 1), "notequal shape");
+
+            Assert.IsTrue(shape.DataShape == Shape.Map0D(7, 1), "notequal shape");
         }
 
         [TestMethod]
@@ -92,6 +98,8 @@ namespace TensorShaderTest {
             Assert.IsTrue(shape == Shape.Map1D(7, 3, 4), "notequal shape");
             Assert.IsTrue(shape != Shape.Map1D(7, 3, 1), "notequal shape");
             Assert.IsTrue(shape != Shape.Map1D(8, 3, 1), "notequal shape");
+
+            Assert.IsTrue(shape.DataShape == Shape.Map1D(7, 3, 1), "notequal shape");
         }
 
         [TestMethod]
@@ -115,6 +123,8 @@ namespace TensorShaderTest {
             Assert.IsTrue(shape == Shape.Map2D(7, 3, 4, 2), "notequal shape");
             Assert.IsTrue(shape != Shape.Map2D(7, 3, 4, 1), "notequal shape");
             Assert.IsTrue(shape != Shape.Map2D(8, 3, 4, 1), "notequal shape");
+
+            Assert.IsTrue(shape.DataShape == Shape.Map2D(7, 3, 4, 1), "notequal shape");
         }
 
         [TestMethod]
@@ -138,6 +148,8 @@ namespace TensorShaderTest {
             Assert.IsTrue(shape == Shape.Map3D(7, 3, 4, 5, 4), "notequal shape");
             Assert.IsTrue(shape != Shape.Map3D(7, 3, 4, 5, 1), "notequal shape");
             Assert.IsTrue(shape != Shape.Map3D(8, 3, 4, 5, 1), "notequal shape");
+
+            Assert.IsTrue(shape.DataShape == Shape.Map3D(7, 3, 4, 5, 1), "notequal shape");
         }
 
         [TestMethod]
@@ -160,6 +172,8 @@ namespace TensorShaderTest {
 
             Assert.IsTrue(shape == Shape.Kernel0D(5, 7), "notequal shape");
             Assert.IsTrue(shape != Shape.Kernel0D(5, 8), "notequal shape");
+
+            Assert.IsTrue(shape.DataShape == Shape.Kernel0D(5, 7), "notequal shape");
         }
 
         [TestMethod]
@@ -182,6 +196,8 @@ namespace TensorShaderTest {
 
             Assert.IsTrue(shape == Shape.Kernel1D(5, 7, 3), "notequal shape");
             Assert.IsTrue(shape != Shape.Kernel1D(5, 8, 3), "notequal shape");
+
+            Assert.IsTrue(shape.DataShape == Shape.Kernel1D(5, 7, 3), "notequal shape");
         }
 
         [TestMethod]
@@ -204,6 +220,8 @@ namespace TensorShaderTest {
 
             Assert.IsTrue(shape == Shape.Kernel2D(5, 7, 3, 5), "notequal shape");
             Assert.IsTrue(shape != Shape.Kernel2D(5, 8, 3, 5), "notequal shape");
+
+            Assert.IsTrue(shape.DataShape == Shape.Kernel2D(5, 7, 3, 5), "notequal shape");
         }
 
         [TestMethod]
@@ -226,6 +244,8 @@ namespace TensorShaderTest {
 
             Assert.IsTrue(shape == Shape.Kernel3D(5, 7, 3, 5, 7), "notequal shape");
             Assert.IsTrue(shape != Shape.Kernel3D(5, 8, 3, 5, 7), "notequal shape");
+
+            Assert.IsTrue(shape.DataShape == Shape.Kernel3D(5, 7, 3, 5, 7), "notequal shape");
         }
 
         [TestMethod]

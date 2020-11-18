@@ -27,7 +27,7 @@ namespace SearchMinimum {
                 flow.Execute();
                 parameters.Update();
 
-                Console.WriteLine($"h(x, y):{h.State[0]:E5}, x:{x.State[0]:E5}, y:{y.State[0]:E5}");
+                Console.WriteLine($"h(x, y):{(float)h.State:E5}, x:{(float)x.State:E5}, y:{(float)y.State:E5}");
             }
 
             Console.WriteLine("END");

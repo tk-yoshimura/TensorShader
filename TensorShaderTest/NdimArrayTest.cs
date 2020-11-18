@@ -129,7 +129,7 @@ namespace TensorShaderTest {
 
             Assert.AreEqual(new Shape(ShapeType.Undefined, 3, 4, 5), tensor.Shape);
             Assert.AreEqual(60, tensor.Length);
-            Assert.AreEqual(1f, tensor.State[0]);
+            Assert.AreEqual(1f, tensor.State.Value[0]);
 
             NdimArray<float> array2 = tensor;
 

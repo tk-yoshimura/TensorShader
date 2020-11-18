@@ -21,8 +21,8 @@ namespace TensorShaderTest {
 
                 flow.Execute();
 
-                Assert.AreEqual(2, intensor.State[0]);
-                Assert.AreEqual(2, outtensor.State[0]);
+                Assert.AreEqual(2, (float)intensor.State);
+                Assert.AreEqual(2, (float)outtensor.State);
                 Assert.AreEqual(2, flow.TensorCount);
                 Assert.AreEqual(2, flow.BufferCount);
                 Assert.AreEqual(2, flow.NodeCount);
@@ -38,7 +38,7 @@ namespace TensorShaderTest {
 
                 flow.Execute();
 
-                Assert.AreEqual(1, tensor.State[0]);
+                Assert.AreEqual(1, (float)tensor.State);
                 Assert.AreEqual(1, flow.TensorCount);
                 Assert.AreEqual(1, flow.BufferCount);
                 Assert.AreEqual(2, flow.NodeCount);
@@ -57,11 +57,11 @@ namespace TensorShaderTest {
 
                 Tensor intensor = flow.InTensors[v1], outtensor = flow.OutTensors[v4];
 
-                intensor.State = new float[] { 2 };
+                intensor.State = 2;
 
                 flow.Execute();
 
-                Assert.AreEqual(2, outtensor.State[0]);
+                Assert.AreEqual(2, (float)outtensor.State);
                 Assert.AreEqual(4, flow.TensorCount);
                 Assert.AreEqual(2, flow.BufferCount);
             }
@@ -79,12 +79,12 @@ namespace TensorShaderTest {
 
                 Tensor intensor = flow.InTensors[v1], outtensor1 = flow.OutTensors[v4], outtensor2 = flow.OutTensors[v5];
 
-                intensor.State = new float[] { 2 };
+                intensor.State = 2;
 
                 flow.Execute();
 
-                Assert.AreEqual(2, outtensor1.State[0]);
-                Assert.AreEqual(-2, outtensor2.State[0]);
+                Assert.AreEqual(2, (float)outtensor1.State);
+                Assert.AreEqual(-2, (float)outtensor2.State);
                 Assert.AreEqual(4, flow.TensorCount);
                 Assert.AreEqual(3, flow.BufferCount);
             }
@@ -102,12 +102,12 @@ namespace TensorShaderTest {
 
                 Tensor intensor = flow.InTensors[v1], outtensor1 = flow.OutTensors[v4], outtensor2 = flow.OutTensors[v5];
 
-                intensor.State = new float[] { 2 };
+                intensor.State = 2;
 
                 flow.Execute();
 
-                Assert.AreEqual(2, outtensor1.State[0]);
-                Assert.AreEqual(-2, outtensor2.State[0]);
+                Assert.AreEqual(2, (float)outtensor1.State);
+                Assert.AreEqual(-2, (float)outtensor2.State);
                 Assert.AreEqual(4, flow.TensorCount);
                 Assert.AreEqual(3, flow.BufferCount);
             }
@@ -126,12 +126,12 @@ namespace TensorShaderTest {
 
                 Tensor intensor = flow.InTensors[v1], outtensor1 = flow.OutTensors[v4], outtensor2 = flow.OutTensors[v5];
 
-                intensor.State = new float[] { 2 };
+                intensor.State = 2;
 
                 flow.Execute();
 
-                Assert.AreEqual(2, outtensor1.State[0]);
-                Assert.AreEqual(-2, outtensor2.State[0]);
+                Assert.AreEqual(2, (float)outtensor1.State);
+                Assert.AreEqual(-2, (float)outtensor2.State);
                 Assert.AreEqual(5, flow.TensorCount);
                 Assert.AreEqual(3, flow.BufferCount);
             }
@@ -141,11 +141,11 @@ namespace TensorShaderTest {
 
                 Tensor intensor = flow.InTensors[v1], outtensor = flow.OutTensors[v4];
 
-                intensor.State = new float[] { 2 };
+                intensor.State = 2;
 
                 flow.Execute();
 
-                Assert.AreEqual(2, outtensor.State[0]);
+                Assert.AreEqual(2, (float)outtensor.State);
                 Assert.AreEqual(4, flow.TensorCount);
                 Assert.AreEqual(3, flow.BufferCount);
 
@@ -167,12 +167,12 @@ namespace TensorShaderTest {
 
             Tensor intensor1 = flow.InTensors[v1], intensor2 = flow.InTensors[v2], outtensor = flow.OutTensors[v5];
 
-            intensor1.State = new float[] { 2 };
-            intensor2.State = new float[] { 4 };
+            intensor1.State = 2;
+            intensor2.State = 4;
 
             flow.Execute();
 
-            Assert.AreEqual(-8, outtensor.State[0]);
+            Assert.AreEqual(-8, (float)outtensor.State);
             Assert.AreEqual(6, flow.TensorCount);
             Assert.AreEqual(3, flow.BufferCount);
         }
@@ -195,12 +195,12 @@ namespace TensorShaderTest {
 
                 Tensor intensor = flow.InTensors[v1], outtensor1 = flow.OutTensors[v10], outtensor2 = flow.OutTensors[v11];
 
-                intensor.State = new float[] { 2 };
+                intensor.State = 2;
 
                 flow.Execute();
 
-                Assert.AreEqual(7, outtensor1.State[0]);
-                Assert.AreEqual(4.5, outtensor2.State[0]);
+                Assert.AreEqual(7, (float)outtensor1.State);
+                Assert.AreEqual(4.5, (float)outtensor2.State);
                 Assert.AreEqual(11, flow.TensorCount);
                 Assert.AreEqual(5, flow.BufferCount);
             }
@@ -225,13 +225,13 @@ namespace TensorShaderTest {
 
                 Tensor outtensor1 = flow.OutTensors[v10], outtensor2 = flow.OutTensors[v11];
 
-                tensor.State = new float[] { 2 };
+                tensor.State = 2;
 
                 flow.Execute();
 
-                Assert.AreEqual(2, tensor.State[0]);
-                Assert.AreEqual(7, outtensor1.State[0]);
-                Assert.AreEqual(4.5, outtensor2.State[0]);
+                Assert.AreEqual(2, (float)tensor.State);
+                Assert.AreEqual(7, (float)outtensor1.State);
+                Assert.AreEqual(4.5, (float)outtensor2.State);
                 Assert.AreEqual(11, flow.TensorCount);
                 Assert.AreEqual(5, flow.BufferCount);
             }
@@ -256,12 +256,12 @@ namespace TensorShaderTest {
 
                 Tensor outtensor = flow.OutTensors[v11];
 
-                tensor.State = new float[] { 2 };
+                tensor.State = 2;
 
                 flow.Execute();
 
-                Assert.AreEqual(2, tensor.State[0]);
-                Assert.AreEqual(4.5, outtensor.State[0]);
+                Assert.AreEqual(2, (float)tensor.State);
+                Assert.AreEqual(4.5, (float)outtensor.State);
                 Assert.AreEqual(8, flow.TensorCount);
                 Assert.AreEqual(4, flow.BufferCount);
             }
@@ -284,11 +284,11 @@ namespace TensorShaderTest {
 
                 Flow flow = Flow.FromOutputs(v12);
 
-                tensor.State = new float[] { 2 };
+                tensor.State = 2;
 
                 flow.Execute();
 
-                Assert.AreEqual(2, tensor.State[0]);
+                Assert.AreEqual(2, (float)tensor.State);
                 Assert.AreEqual(5, flow.TensorCount);
                 Assert.AreEqual(2, flow.BufferCount);
             }
@@ -306,11 +306,11 @@ namespace TensorShaderTest {
 
                 Tensor intensor = flow.InTensors[v1], outtensor = flow.OutTensors[v4];
 
-                intensor.State = new float[] { 2 };
+                intensor.State = 2;
 
                 flow.Execute();
 
-                Assert.AreEqual(5, outtensor.State[0]);
+                Assert.AreEqual(5, (float)outtensor.State);
                 Assert.AreEqual(4, flow.TensorCount);
                 Assert.AreEqual(2, flow.BufferCount);
             }
@@ -328,12 +328,12 @@ namespace TensorShaderTest {
 
                 Tensor outtensor = flow.OutTensors[v4];
 
-                tensor.State = new float[] { 2 };
+                tensor.State = 2;
 
                 flow.Execute();
 
-                Assert.AreEqual(5, outtensor.State[0]);
-                Assert.AreEqual(5, tensor.State[0]);
+                Assert.AreEqual(5, (float)outtensor.State);
+                Assert.AreEqual(5, (float)tensor.State);
                 Assert.AreEqual(4, flow.TensorCount);
                 Assert.AreEqual(3, flow.BufferCount);
                 Assert.AreNotEqual(tensor, outtensor);
@@ -358,7 +358,7 @@ namespace TensorShaderTest {
             Assert.AreEqual(t, flow.InTensors[v1]);
             Assert.AreEqual(t, flow.OutTensors[v3]);
 
-            Assert.AreEqual(5, t.State[0]);
+            Assert.AreEqual(5, (float)t.State);
 
             Assert.AreEqual(2, flow.TensorCount);
             Assert.AreEqual(2, flow.BufferCount);
@@ -386,7 +386,7 @@ namespace TensorShaderTest {
             Assert.AreEqual(t, flow2.InTensors[v1]);
             Assert.AreEqual(t, flow2.OutTensors[v3]);
 
-            Assert.AreEqual(5, t.State[0]);
+            Assert.AreEqual(5, (float)t.State);
 
             Assert.AreEqual(2, flow1.TensorCount);
             Assert.AreEqual(2, flow1.BufferCount);
@@ -420,8 +420,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(t2, flow.InTensors[v4]);
                 Assert.AreEqual(t1, flow.OutTensors[v6]);
 
-                Assert.AreEqual(4, t1.State[0]);
-                Assert.AreEqual(2, t2.State[0]);
+                Assert.AreEqual(4, (float)t1.State);
+                Assert.AreEqual(2, (float)t2.State);
 
                 Assert.AreEqual(4, flow.TensorCount);
                 Assert.AreEqual(4, flow.BufferCount);
@@ -449,8 +449,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(t2, flow.InTensors[v4]);
                 Assert.AreEqual(t1, flow.OutTensors[v5]);
 
-                Assert.AreEqual(3, t1.State[0]);
-                Assert.AreEqual(2, t2.State[0]);
+                Assert.AreEqual(3, (float)t1.State);
+                Assert.AreEqual(2, (float)t2.State);
 
                 Assert.AreEqual(3, flow.TensorCount);
                 Assert.AreEqual(3, flow.BufferCount);
@@ -478,8 +478,8 @@ namespace TensorShaderTest {
                 Assert.AreEqual(t2, flow.InTensors[v4]);
                 Assert.AreEqual(t1, flow.OutTensors[v6]);
 
-                Assert.AreEqual(4, t1.State[0]);
-                Assert.AreEqual(1, t2.State[0]);
+                Assert.AreEqual(4, (float)t1.State);
+                Assert.AreEqual(1, (float)t2.State);
 
                 Assert.AreEqual(3, flow.TensorCount);
                 Assert.AreEqual(3, flow.BufferCount);
@@ -518,9 +518,9 @@ namespace TensorShaderTest {
             Assert.AreEqual(t3, flow.InTensors[v7]);
             Assert.AreEqual(t1, flow.OutTensors[v9]);
 
-            Assert.AreEqual(6, t1.State[0]);
-            Assert.AreEqual(2, t2.State[0]);
-            Assert.AreEqual(4, t3.State[0]);
+            Assert.AreEqual(6, (float)t1.State);
+            Assert.AreEqual(2, (float)t2.State);
+            Assert.AreEqual(4, (float)t3.State);
 
             Assert.AreEqual(6, flow.TensorCount);
             Assert.AreEqual(6, flow.BufferCount);

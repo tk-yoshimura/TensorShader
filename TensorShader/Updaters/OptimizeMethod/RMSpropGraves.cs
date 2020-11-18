@@ -20,20 +20,20 @@ namespace TensorShader.Updaters.OptimizeMethod {
         /// <summary>学習定数</summary>
         public float Lambda {
             get {
-                return lambda.State[0];
+                return (float)lambda.State;
             }
             set {
-                lambda.State = new float[] { value };
+                lambda.State = value;
             }
         }
 
         /// <summary>減衰定数</summary>
         public float Rho {
             get {
-                return rho.State[0];
+                return (float)rho.State;
             }
             set {
-                rho.State = new float[] { value };
+                rho.State = value;
             }
         }
 

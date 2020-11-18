@@ -32,7 +32,7 @@ namespace MNIST {
             this.filedata = filedata;
         }
 
-        public override float[] GenerateData(int index) {
+        public override NdimArray<float> GenerateData(int index) {
             if (index < 0 || index >= Count) {
                 throw new IndexOutOfRangeException(nameof(index));
             }
@@ -41,7 +41,7 @@ namespace MNIST {
 
             Buffer.BlockCopy(filedata, index * mnist_length + 16, data, 0, mnist_length);
 
-            return data.Select((b) => b / 255f).ToArray();
+            return (Shape.Map2D(1, mnist_size, mnist_size), data.Select((b) => b / 255f).ToArray());
         }
     }
 }

@@ -6,7 +6,7 @@ namespace TensorShaderUtil.BatchGenerator {
     /// <summary>バッチ生成</summary>
     public abstract class BatchGenerator : IBatchGenerator {
         /// <summary>生成データ配列</summary>
-        protected float[] Value { private set; get; }
+        protected NdimArray<float> Value { private set; get; }
 
         /// <summary>データ形状</summary>
         public Shape DataShape { get; }
@@ -35,8 +35,6 @@ namespace TensorShaderUtil.BatchGenerator {
                 throw new ArgumentException(nameof(num_batches));
             }
 
-            long length = data_shape.Length * num_batches;
-            this.Value = new float[length];
             this.DataShape = data_shape;
 
             switch (data_shape.Type) {
@@ -54,22 +52,23 @@ namespace TensorShaderUtil.BatchGenerator {
                     break;
             }
 
+            this.Value = BatchShape;
             this.NumBatches = num_batches;
         }
 
         /// <summary>データ生成</summary>
         /// <param name="index">データインデクス</param>
-        public abstract float[] GenerateData(int index);
+        public abstract NdimArray<float> GenerateData(int index);
 
         /// <summary>データ生成をリクエスト</summary>
         /// <param name="indexes">バッチのデータインデクス</param>
         public abstract void Request(int[] indexes = null);
 
         /// <summary>バッチを受け取る</summary>
-        public abstract float[] Receive();
+        public abstract NdimArray<float> Receive();
 
         /// <summary>バッチを取得する</summary>
-        public float[] Get(int[] indexes = null) {
+        public NdimArray<float> Get(int[] indexes = null) {
             Request(indexes);
             return Receive();
         }
@@ -77,13 +76,13 @@ namespace TensorShaderUtil.BatchGenerator {
         /// <summary>データ生成及びデータ挿入</summary>
         protected Action<BatchGenerator, int, int> GenerateToInsert
             = (BatchGenerator generator, int i, int index) => {
-                float[] data = generator.GenerateData(index);
+                NdimArray<float> data = generator.GenerateData(index);
 
-                if (data.Length != generator.DataShape.Length) {
+                if (data.Shape.DataShape != generator.DataShape) {
                     throw new Exception("Invalid data length.");
                 }
 
-                Buffer.BlockCopy(data, 0, generator.Value, i * data.Length * sizeof(float), data.Length * sizeof(float));
+                Buffer.BlockCopy(data.Value, 0, generator.Value.Value, i * data.Length * sizeof(float), data.Length * sizeof(float));
             };
     }
 }

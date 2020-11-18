@@ -29,14 +29,14 @@ namespace MNIST {
             this.filedata = filedata;
         }
 
-        public override float[] GenerateData(int index) {
+        public override NdimArray<float> GenerateData(int index) {
             if (index < 0 || index >= Count) {
                 throw new IndexOutOfRangeException(nameof(index));
             }
 
             float label = filedata[index + 8];
 
-            return new float[] { label };
+            return label;
         }
     }
 }

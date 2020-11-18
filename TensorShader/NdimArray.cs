@@ -115,6 +115,16 @@ namespace TensorShader {
             return array.Value;
         }
 
+        /// <summary>floatへ変換</summary>
+        /// <exception cref="InvalidCastException">Not Scalar</exception>
+        public static explicit operator T(NdimArray<T> array) {
+            if(array.Shape != Shape.Scalar) { 
+                throw new InvalidCastException();
+            }
+            
+            return array.Value[0];
+        }
+
         /// <summary>ディープコピー</summary>
         public object Clone() {
             return Copy();

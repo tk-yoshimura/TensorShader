@@ -21,11 +21,11 @@ namespace TensorShaderTest {
                 Tensor tensor = Shape.Map0D(channels, batch);
 
                 Assert.AreEqual(length, tensor.Length);
-                foreach (float v in (float[])tensor.State.Value) {
+                foreach (float v in tensor.State.Value) {
                     Assert.AreEqual(0f, v);
                 }
 
-                tensor.State = v2;
+                tensor.State = (tensor.Shape, v2);
                 CollectionAssert.AreEqual(v2, tensor.State.Value);
             }
 
@@ -35,7 +35,7 @@ namespace TensorShaderTest {
                 Assert.AreEqual(length, tensor.Length);
                 CollectionAssert.AreEqual(v1, tensor.State.Value);
 
-                tensor.State = v2;
+                tensor.State = (tensor.Shape, v2);
                 CollectionAssert.AreEqual(v2, tensor.State.Value);
             }
 
@@ -47,7 +47,7 @@ namespace TensorShaderTest {
                     Assert.AreEqual(0f, v);
                 }
 
-                tensor.State = v2;
+                tensor.State = (tensor.Shape, v2);
                 CollectionAssert.AreEqual(v2, tensor.State.Value);
             }
 
@@ -57,7 +57,7 @@ namespace TensorShaderTest {
                 Assert.AreEqual(length, tensor.Length);
                 CollectionAssert.AreEqual(v1, tensor.State.Value);
 
-                tensor.State = v2;
+                tensor.State = (tensor.Shape, v2);
                 CollectionAssert.AreEqual(v2, tensor.State.Value);
             }
         }
@@ -357,7 +357,6 @@ namespace TensorShaderTest {
 
                         tensor2[dst_th] = tensor3;
 
-                        Assert.IsTrue(tensor3 is OverflowCheckedTensor);
                         Assert.AreEqual(Shape.Map1D(channels, width), tensor3.Shape);
                         CollectionAssert.AreEqual(v, tensor2.State.Value);
                     }
