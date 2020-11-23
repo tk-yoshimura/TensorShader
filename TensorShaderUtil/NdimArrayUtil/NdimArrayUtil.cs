@@ -42,7 +42,7 @@ namespace TensorShaderUtil {
         }
 
         /// <summary>任意の写像を適用</summary>
-        public static NdimArray<T> Select<T>(this NdimArray<T> arr, Func<T, T> func) {
+        public static NdimArray<T> Select<T>(this NdimArray<T> arr, Func<T, T> func) where T : struct, IComparable {
             T[] val = new T[arr.Length];
             T[] arrval = arr.Value;
 

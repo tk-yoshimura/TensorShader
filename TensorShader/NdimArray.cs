@@ -3,7 +3,7 @@
 namespace TensorShader {
 
     /// <summary>多次元配列</summary>
-    public partial class NdimArray<T> : ICloneable {
+    public partial class NdimArray<T> : ICloneable where T : struct, IComparable {
 
         /// <summary>値配列</summary>
         public T[] Value { private set; get; }

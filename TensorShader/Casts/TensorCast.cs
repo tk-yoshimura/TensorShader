@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System;
 
 namespace TensorShader {
     /// <summary>テンソルクラス</summary>
@@ -17,7 +17,15 @@ namespace TensorShader {
         public static implicit operator Tensor(float[,] val) { 
             return new Tensor(
                 Shape.Map0D(val.GetLength(1), val.GetLength(0)), 
-                val.Cast<float>().ToArray()
+                val.Flatten()
+            );
+        }
+
+        /// <summary>0次元マップの生成</summary>
+        public static implicit operator Tensor(float[][] val) {
+            return new Tensor(
+                Shape.Map0D(val[0].GetLength(0), val.Length), 
+                val.Flatten()
             );
         }
 
@@ -25,7 +33,15 @@ namespace TensorShader {
         public static implicit operator Tensor(float[,,] val) { 
             return new Tensor(
                 Shape.Map1D(val.GetLength(2), val.GetLength(1), val.GetLength(0)), 
-                val.Cast<float>().ToArray()
+                val.Flatten()
+            );
+        }
+
+        /// <summary>1次元マップの生成</summary>
+        public static implicit operator Tensor(float[][,] val) { 
+            return new Tensor(
+                Shape.Map1D(val[0].GetLength(1), val[0].GetLength(0), val.Length), 
+                val.Flatten()
             );
         }
 
@@ -33,7 +49,15 @@ namespace TensorShader {
         public static implicit operator Tensor(float[,,,] val) { 
             return new Tensor(
                 Shape.Map2D(val.GetLength(3), val.GetLength(2), val.GetLength(1), val.GetLength(0)), 
-                val.Cast<float>().ToArray()
+                val.Flatten()
+            );
+        }
+
+        /// <summary>2次元マップの生成</summary>
+        public static implicit operator Tensor(float[][,,] val) { 
+            return new Tensor(
+                Shape.Map2D(val[0].GetLength(2), val[0].GetLength(1), val[0].GetLength(0), val.Length), 
+                val.Flatten()
             );
         }
 
@@ -41,7 +65,15 @@ namespace TensorShader {
         public static implicit operator Tensor(float[,,,,] val) { 
             return new Tensor(
                 Shape.Map3D(val.GetLength(4), val.GetLength(3), val.GetLength(2), val.GetLength(1), val.GetLength(0)), 
-                val.Cast<float>().ToArray()
+                val.Flatten()
+            );
+        }
+
+        /// <summary>3次元マップの生成</summary>
+        public static implicit operator Tensor(float[][,,,] val) { 
+            return new Tensor(
+                Shape.Map3D(val[0].GetLength(3), val[0].GetLength(2), val[0].GetLength(1), val[0].GetLength(0), val.Length), 
+                val.Flatten()
             );
         }
 
@@ -53,6 +85,15 @@ namespace TensorShader {
         /// <summary>任意形状任意初期値の生成</summary>
         public static implicit operator Tensor((Shape shape, float[] v) val) { 
             return new Tensor(val.shape, val.v);
+        }
+
+        /// <summary>任意形状任意初期値の生成</summary>
+        public static implicit operator Tensor((Shape shape, float[][] v) val) {
+            if (val.shape.Batch != val.v.Length) {
+                throw new ArgumentException("batch");
+            }
+
+            return new Tensor(val.shape, val.v.Flatten());
         }
 
         /// <summary>NdimArrayへ変換</summary>

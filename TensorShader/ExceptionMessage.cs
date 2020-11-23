@@ -70,6 +70,16 @@ namespace TensorShader {
             }
         }
 
+        /// <summary>テンソル形状の不正</summary>
+        public static string ShapeWithIndex(int index, string actual, string expected) {
+            switch (lang) {
+                case Lang.JP:
+                    return $"{index}番目のテンソル形状が不正です。{expected}が想定されていますが、{actual}が与えられました。";
+                default:
+                    return $"Invalid shape of {index}-th argument. expected:{expected} actual:{actual}";
+            }
+        }
+
         /// <summary>軸長さの不正</summary>
         public static string AxisLength(string axisname, int actual, int expected) {
             switch (lang) {
