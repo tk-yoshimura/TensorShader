@@ -137,5 +137,45 @@ namespace TensorShaderTest {
             Assert.AreEqual(60, array2.Length);
             Assert.AreEqual(1f, array2[0, 0, 0]);
         }
+
+        [TestMethod]
+        public void JoinTest() {
+            NdimArray<int> array1 = new int[,,] { { { 1, 1, 10 }, { 1, 1, 100 }, { 1, 1, 1000 } } };
+            NdimArray<int> array2 = new int[,,] { { { 2, 2, 20 }, { 2, 2, 200 }, { 2, 2, 2000 } } };
+            NdimArray<int> array3 = new int[,,] { { { 3, 3, 30 }, { 3, 3, 300 }, { 3, 3, 3000 } } };
+
+            NdimArray<int> array_axis0 = NdimArray<int>.Join(Axis.Map1D.Channels, array1.Reshape(Shape.Map1D(1, 3, 3)), array2.Reshape(Shape.Map1D(1, 3, 3)), array3.Reshape(Shape.Map1D(1, 3, 3)));
+
+            CollectionAssert.AreEqual(
+                new int[] { 
+                    1, 2, 3, 1, 2, 3, 10, 20, 30, 
+                    1, 2, 3, 1, 2, 3, 100, 200, 300, 
+                    1, 2, 3, 1, 2, 3, 1000, 2000, 3000, }, 
+                array_axis0.Value, 
+                "axis0"
+            );
+
+            NdimArray<int> array_axis1 = NdimArray<int>.Join(Axis.Map1D.Width, array1.Reshape(Shape.Map1D(3, 1, 3)), array2.Reshape(Shape.Map1D(3, 1, 3)), array3.Reshape(Shape.Map1D(3, 1, 3)));
+
+            CollectionAssert.AreEqual(
+                new int[] { 
+                    1, 1, 10, 2, 2, 20, 3, 3, 30,
+                    1, 1, 100, 2, 2, 200, 3, 3, 300,
+                    1, 1, 1000, 2, 2, 2000, 3, 3, 3000, }, 
+                array_axis1.Value, 
+                "axis1"
+            );
+
+            NdimArray<int> array_axis2 = NdimArray<int>.Join(Axis.Map1D.Batch, array1, array2, array3);
+
+            CollectionAssert.AreEqual(
+                new int[] { 
+                    1, 1, 10, 1, 1, 100, 1, 1, 1000, 
+                    2, 2, 20, 2, 2, 200, 2, 2, 2000, 
+                    3, 3, 30, 3, 3, 300, 3, 3, 3000 }, 
+                array_axis2.Value,
+                "axis2"
+            );
+        }
     }
 }
