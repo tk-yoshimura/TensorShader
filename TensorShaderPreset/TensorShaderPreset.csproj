@@ -20,10 +20,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Image\Model\" />
+    <Compile Remove="Image\Model\**" />
+    <Compile Remove="Wave\Model\**" />
+    <EmbeddedResource Remove="Image\Model\**" />
+    <EmbeddedResource Remove="Wave\Model\**" />
+    <None Remove="Image\Model\**" />
+    <None Remove="Wave\Model\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Wave\Block\" />
     <Folder Include="Wave\Layer\" />
-    <Folder Include="Wave\Model\" />
   </ItemGroup>
 
   <ItemGroup>
