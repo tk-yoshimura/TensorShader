@@ -39,9 +39,7 @@ namespace TensorShader.Links.Loss {
 
         /// <summary>順伝搬</summary>
         public override void Forward() {
-            VariableNode x_exp = Exp(X.Value);
-            VariableNode x_exp_sum = Sum(x_exp, new int[] { Axis.Map0D.Channels }, keepdims: true);
-            x_softmax = x_exp / Broadcast(x_exp_sum, X.Shape);
+            x_softmax = Softmax(X.Value);
 
             Y.AssignValue(-T.Value * Log(x_softmax + 1e-5f));
         }
