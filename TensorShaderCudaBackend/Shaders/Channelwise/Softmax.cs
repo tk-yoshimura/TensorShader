@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 
-namespace TensorShaderCudaBackend.Shaders.Indexer {
+namespace TensorShaderCudaBackend.Shaders.Channelwise {
 
-    /// <summary>ArgMin</summary>
-    public sealed class ArgMin : Shader {
+    /// <summary>Softmax</summary>
+    public sealed class Softmax : Shader {
 
         /// <summary>チャネル数</summary>
         public uint Channels { private set; get; }
@@ -14,7 +14,7 @@ namespace TensorShaderCudaBackend.Shaders.Indexer {
 
         /// <summary>コンストラクタ</summary>
         /// <param name="channels">チャネル数</param>
-        public ArgMin(uint channels) {
+        public Softmax(uint channels) {
             if (channels < 1) {
                 throw new ArgumentException(nameof(channels));
             }
@@ -22,31 +22,28 @@ namespace TensorShaderCudaBackend.Shaders.Indexer {
             this.Channels = channels;
 
             string code = $@"
-            __global__ void argmin(const float* __restrict__ x, float* __restrict__ y, unsigned int indexes) {{
+            __global__ void softmax(const float* __restrict__ x, float* __restrict__ y, unsigned int indexes) {{
                 unsigned int idx = {Defines.IndexX};
                 if (idx >= indexes) {{
                     return;
                 }}
 
-                unsigned int inmap_idx = idx * {Channels};
+                float vsum = 0;
 
-                float vmin = x[inmap_idx];
-                int vmin_i = 0;
-
-                for(int i = 1; i < {Channels}; i++){{
-                    inmap_idx++;
-
-                    float v = x[inmap_idx];
-                    if(v < vmin){{
-                        vmin = v;
-                        vmin_i = i;
-                    }}
+                for(int i = 0, map_idx = idx * {Channels}; i < {Channels}; i++, map_idx++){{
+                    float v = expf(x[map_idx]);
+                    y[map_idx] = v;
+                    vsum += v;
                 }}
 
-                y[idx] = (float)vmin_i;
+                float vscale = 1 / vsum;
+
+                for(int i = 0, map_idx = idx * {Channels}; i < {Channels}; i++, map_idx++){{
+                    y[map_idx] *= vscale;
+                }}
             }}";
 
-            this.Kernel = new Kernel(code, "argmin");
+            this.Kernel = new Kernel(code, "softmax");
         }
 
         /// <summary>実行</summary>
@@ -83,7 +80,7 @@ namespace TensorShaderCudaBackend.Shaders.Indexer {
                 throw new ArgumentException(nameof(x));
             }
 
-            if (!(args[1] is CudaArray<float> y) || y.Length < indexes) {
+            if (!(args[1] is CudaArray<float> y) || y.Length < length) {
                 throw new ArgumentException(nameof(y));
             }
         }

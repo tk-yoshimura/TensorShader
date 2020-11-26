@@ -99,5 +99,41 @@ namespace TensorShaderCudaBackend {
 
             shader.Execute(stream, srcvector, srcmap, dstmap, map_length);
         }
+
+        /// <summary>Softmax</summary>
+        public static void Softmax(uint length, uint channels, CudaArray<float> src, CudaArray<float> dst, Stream stream = null) {
+            string key = $"softmax " +
+                         $"{nameof(channels)}={channels}";
+
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Channelwise.Softmax(channels));
+            }
+
+            Shader shader = shaders[key];
+
+            if (stream == null) {
+                stream = Shader.DefaultStream;
+            }
+
+            shader.Execute(stream, src, dst, length, length / channels);
+        }
+
+        /// <summary>Hardmax</summary>
+        public static void Hardmax(uint length, uint channels, CudaArray<float> src, CudaArray<float> dst, Stream stream = null) {
+            string key = $"hardmax " +
+                         $"{nameof(channels)}={channels}";
+
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Channelwise.Hardmax(channels));
+            }
+
+            Shader shader = shaders[key];
+
+            if (stream == null) {
+                stream = Shader.DefaultStream;
+            }
+
+            shader.Execute(stream, src, dst, length, length / channels);
+        }
     }
 }

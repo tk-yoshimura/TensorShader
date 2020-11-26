@@ -22,13 +22,13 @@ namespace TensorShaderCudaBackend.Shaders.Indexer {
             this.Channels = channels;
 
             string code = $@"
-            __global__ void argmax(const float* __restrict__ x, float* __restrict__ v, unsigned int indexes) {{
-                unsigned int i = {Defines.IndexX};
-                if (i >= indexes) {{
+            __global__ void argmax(const float* __restrict__ x, float* __restrict__ y, unsigned int indexes) {{
+                unsigned int idx = {Defines.IndexX};
+                if (idx >= indexes) {{
                     return;
                 }}
 
-                unsigned int inmap_idx = i * {Channels};
+                unsigned int inmap_idx = idx * {Channels};
 
                 float vmax = x[inmap_idx];
                 int vmax_i = 0;
@@ -43,7 +43,7 @@ namespace TensorShaderCudaBackend.Shaders.Indexer {
                     }}
                 }}
 
-                v[i] = (float)vmax_i;
+                y[idx] = (float)vmax_i;
             }}";
 
             this.Kernel = new Kernel(code, "argmax");
@@ -83,8 +83,8 @@ namespace TensorShaderCudaBackend.Shaders.Indexer {
                 throw new ArgumentException(nameof(x));
             }
 
-            if (!(args[1] is CudaArray<float> v) || v.Length < indexes) {
-                throw new ArgumentException(nameof(v));
+            if (!(args[1] is CudaArray<float> y) || y.Length < indexes) {
+                throw new ArgumentException(nameof(y));
             }
         }
     }

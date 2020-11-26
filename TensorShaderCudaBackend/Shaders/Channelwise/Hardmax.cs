@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 
-namespace TensorShaderCudaBackend.Shaders.Indexer {
+namespace TensorShaderCudaBackend.Shaders.Channelwise {
 
-    /// <summary>ArgMin</summary>
-    public sealed class ArgMin : Shader {
+    /// <summary>Hardmax</summary>
+    public sealed class Hardmax : Shader {
 
         /// <summary>チャネル数</summary>
         public uint Channels { private set; get; }
@@ -14,7 +14,7 @@ namespace TensorShaderCudaBackend.Shaders.Indexer {
 
         /// <summary>コンストラクタ</summary>
         /// <param name="channels">チャネル数</param>
-        public ArgMin(uint channels) {
+        public Hardmax(uint channels) {
             if (channels < 1) {
                 throw new ArgumentException(nameof(channels));
             }
@@ -22,31 +22,33 @@ namespace TensorShaderCudaBackend.Shaders.Indexer {
             this.Channels = channels;
 
             string code = $@"
-            __global__ void argmin(const float* __restrict__ x, float* __restrict__ y, unsigned int indexes) {{
+            __global__ void hardmax(const float* __restrict__ x, float* __restrict__ y, unsigned int indexes) {{
                 unsigned int idx = {Defines.IndexX};
                 if (idx >= indexes) {{
                     return;
                 }}
 
-                unsigned int inmap_idx = idx * {Channels};
+                int inmap_idx = idx * {Channels};
 
-                float vmin = x[inmap_idx];
-                int vmin_i = 0;
+                float vmax = x[inmap_idx];
+                int vmax_i = 0;
 
                 for(int i = 1; i < {Channels}; i++){{
                     inmap_idx++;
 
                     float v = x[inmap_idx];
-                    if(v < vmin){{
-                        vmin = v;
-                        vmin_i = i;
+                    if(v > vmax){{
+                        vmax = v;
+                        vmax_i = i;
                     }}
                 }}
 
-                y[idx] = (float)vmin_i;
+                int outmap_idx = vmax_i + idx * {Channels};
+
+                y[outmap_idx] = 1;
             }}";
 
-            this.Kernel = new Kernel(code, "argmin");
+            this.Kernel = new Kernel(code, "hardmax");
         }
 
         /// <summary>実行</summary>
@@ -55,7 +57,10 @@ namespace TensorShaderCudaBackend.Shaders.Indexer {
 
             CudaArray<float> x = args[0] as CudaArray<float>;
             CudaArray<float> y = args[1] as CudaArray<float>;
+            uint length = (args[2] as uint?).Value;
             uint indexes = (args.Last() as uint?).Value;
+
+            y.Zeroset(length);
 
             Kernel.Execute(
                 indexes,
@@ -83,7 +88,7 @@ namespace TensorShaderCudaBackend.Shaders.Indexer {
                 throw new ArgumentException(nameof(x));
             }
 
-            if (!(args[1] is CudaArray<float> y) || y.Length < indexes) {
+            if (!(args[1] is CudaArray<float> y) || y.Length < length) {
                 throw new ArgumentException(nameof(y));
             }
         }

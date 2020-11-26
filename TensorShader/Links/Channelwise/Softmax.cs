@@ -6,7 +6,7 @@ namespace TensorShader {
         /// <summary>Softmax</summary>
         public static Field Softmax(Field x) {
             Field y = new Field();
-            Link link = new Links.ConnectionDense.Softmax(x, y);
+            Link link = new Links.Channelwise.Softmax(x, y);
 
             link.Forward();
 
@@ -15,7 +15,7 @@ namespace TensorShader {
     }
 }
 
-namespace TensorShader.Links.ConnectionDense {
+namespace TensorShader.Links.Channelwise {
     /// <summary>Softmax</summary>
     public class Softmax : Link {
         /// <summary>入力項</summary>
@@ -27,16 +27,14 @@ namespace TensorShader.Links.ConnectionDense {
         /// <summary>コンストラクタ</summary>
         public Softmax(Field infield, Field outfield)
             : base(new Field[] { infield }, outfield) {
-            if (infield.Shape.Type != ShapeType.Map || infield.Shape.Ndim != 2) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(infield.Shape, ("Ndim", 2), ("Type", ShapeType.Map)));
+            if (infield.Shape.Type != ShapeType.Map) {
+                throw new ArgumentException(ExceptionMessage.TensorType(infield.Shape.Type, ShapeType.Map));
             }
         }
 
         /// <summary>順伝搬</summary>
         public override void Forward() {
-            VariableNode x_exp = Exp(X.Value);
-            VariableNode x_exp_sum = Sum(x_exp, new int[] { Axis.Map0D.Channels }, keepdims: true);
-            Y.AssignValue(x_exp / Broadcast(x_exp_sum, X.Shape));
+            Y.AssignValue(Softmax(X.Value));
         }
 
         /// <summary>逆伝搬</summary>

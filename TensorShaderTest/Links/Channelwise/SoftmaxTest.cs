@@ -2,12 +2,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using static TensorShader.Field;
 
-namespace TensorShaderTest.Links.ConnectionDense {
+namespace TensorShaderTest.Links.Channelwise {
     [TestClass]
     public class SoftmaxTest {
         [TestMethod]
         public void ReferenceMethod() {
-            int channels = 3, batch = 4;
+            int channels = 3, indexes = 4;
 
             float[] xval =
                 { 1, 2, 3,
@@ -21,8 +21,8 @@ namespace TensorShaderTest.Links.ConnectionDense {
                   0, 1, 0,
                   0, 1, 1 };
 
-            ParameterField x = (Shape.Map0D(channels, batch), xval);
-            VariableField t = (Shape.Map0D(channels, batch), tval);
+            ParameterField x = (Shape.Map0D(channels, indexes), xval);
+            VariableField t = (Shape.Map0D(channels, indexes), tval);
 
             StoreField y = Softmax(x);
             Field err = y - t;
