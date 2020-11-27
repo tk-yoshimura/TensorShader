@@ -282,5 +282,75 @@ namespace TensorShaderTest {
                 "axis2"
             );
         }
+
+        [TestMethod]
+        public void ConcatTest() {
+            NdimArray<int> array1 = new int[,,] { { { 1, 1, 10 }, { 1, 1, 100 }, { 1, 1, 1000 } } };
+            NdimArray<int> array2 = new int[,,] { { { 2, 2, 20 }, { 2, 2, 200 }, { 2, 2, 2000 } } };
+            NdimArray<int> array3 = new int[,,] { { { 3, 3, 30 }, { 3, 3, 300 }, { 3, 3, 3000 } } };
+            NdimArray<int> array4 = new int[,,] { { { 4, 4, 40 }, { 4, 4, 400 }, { 4, 4, 4000 } } };
+
+            NdimArray<int> array = new NdimArray<int>[] { array1, array2, array3, array4 };
+
+            CollectionAssert.AreEqual(
+                new int[] { 
+                    1, 1, 10, 1, 1, 100, 1, 1, 1000, 
+                    2, 2, 20, 2, 2, 200, 2, 2, 2000, 
+                    3, 3, 30, 3, 3, 300, 3, 3, 3000, 
+                    4, 4, 40, 4, 4, 400, 4, 4, 4000
+                }, 
+                array.Value
+            );
+        }
+
+        [TestMethod]
+        public void BatchIndexerTest() {
+            NdimArray<int> array1 = new int[,,] { { { 1, 1, 10 }, { 1, 1, 100 }, { 1, 1, 1000 } } };
+            NdimArray<int> array2 = new int[,,] { { { 2, 2, 20 }, { 2, 2, 200 }, { 2, 2, 2000 } } };
+            NdimArray<int> array3 = new int[,,] { { { 3, 3, 30 }, { 3, 3, 300 }, { 3, 3, 3000 } } };
+            NdimArray<int> array4 = new int[,,] { { { 4, 4, 40 }, { 4, 4, 400 }, { 4, 4, 4000 } } };
+            NdimArray<int> array5 = new int[,,] { { { 5, 5, 50 }, { 5, 5, 500 }, { 5, 5, 5000 } } };
+
+            NdimArray<int> array = new NdimArray<int>[] { array1, array2, array3, array4 };
+
+            array[2] = array5;
+
+            CollectionAssert.AreEqual(
+                new int[] { 
+                    1, 1, 10, 1, 1, 100, 1, 1, 1000, 
+                    2, 2, 20, 2, 2, 200, 2, 2, 2000, 
+                    5, 5, 50, 5, 5, 500, 5, 5, 5000, 
+                    4, 4, 40, 4, 4, 400, 4, 4, 4000
+                }, 
+                array.Value
+            );
+
+            NdimArray<int> array6 = array[1];
+
+            CollectionAssert.AreEqual(
+                new int[] { 
+                    2, 2, 20, 2, 2, 200, 2, 2, 2000,
+                }, 
+                array6.Value
+            );
+        }
+
+        [TestMethod]
+        public void DataListTest() {
+            NdimArray<int> array1 = new int[,,] { { { 1, 1, 10 }, { 1, 1, 100 }, { 1, 1, 1000 } } };
+            NdimArray<int> array2 = new int[,,] { { { 2, 2, 20 }, { 2, 2, 200 }, { 2, 2, 2000 } } };
+            NdimArray<int> array3 = new int[,,] { { { 3, 3, 30 }, { 3, 3, 300 }, { 3, 3, 3000 } } };
+            NdimArray<int> array4 = new int[,,] { { { 4, 4, 40 }, { 4, 4, 400 }, { 4, 4, 4000 } } };
+
+            NdimArray<int> array = new NdimArray<int>[] { array1, array2, array3, array4 };
+            NdimArray<int>[] arrays = new NdimArray<int>[] { array1, array2, array3, array4 };
+
+            foreach ((int index, NdimArray<int> data) in array.DataList) {
+                CollectionAssert.AreEqual(
+                    arrays[index].Value,
+                    data.Value
+                );
+            }
+        }
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using TensorShaderCudaBackend;
@@ -159,42 +158,6 @@ namespace TensorShader {
                 CopyTo(tensor);
 
                 return tensor;
-            }
-        }
-
-        /// <summary>インデクサ</summary>
-        /// <param name="index">バッチ次元のインデクス</param>
-        public virtual NdimArray<float> this[int index] {
-            set {
-                if (index < 0 || index >= Batch) {
-                    throw new ArgumentOutOfRangeException(nameof(index));
-                }
-
-                if (Shape.DataShape != value.Shape.DataShape || value.Shape.Batch != 1) {
-                    throw new ArgumentException(nameof(value));
-                }
-
-                Buffer.Write((uint)(Shape.DataSize * index), value.Value, 0, (uint)Shape.DataSize);
-            }
-            get {
-                if (index < 0 || index >= Batch) {
-                    throw new ArgumentOutOfRangeException(nameof(index));
-                }
-
-                NdimArray<float> arr = new NdimArray<float>(Shape.DataShape);
-
-                Buffer.Read((uint)(Shape.DataSize * index), arr.Value, 0, (uint)Shape.DataSize);
-
-                return arr;
-            }
-        }
-
-        /// <summary>データリスト</summary>
-        public IEnumerable<NdimArray<float>> DataList {
-            get { 
-                for(int i = 0; i < Batch; i++) { 
-                    yield return this[i];
-                }
             }
         }
 

@@ -321,51 +321,6 @@ namespace TensorShaderTest {
         }
 
         [TestMethod]
-        public void IndexerTest() {
-            int channels = 2, width = 6, batch = 4, length = channels * width * batch;
-
-            Random random = new Random(1234);
-
-            float[] v1 = (new float[length]).Select((_) => (float)random.NextDouble()).ToArray();
-            float[] v2 = (new float[length]).Select((_) => (float)random.NextDouble()).ToArray();
-
-            for (int src_th = 0; src_th < batch; src_th++) {
-                for (int dst_th = 0; dst_th < batch; dst_th++) {
-                    float[] v = (float[])v2.Clone();
-
-                    for (int i = 0; i < channels * width; i++) {
-                        v[dst_th * channels * width + i] = v1[src_th * channels * width + i];
-                    }
-
-                    {
-                        Tensor tensor1 = (Shape.Map1D(channels, width, batch), v1);
-                        Tensor tensor2 = (Shape.Map1D(channels, width, batch), v2);
-
-                        Tensor tensor3 = tensor1[src_th];
-
-                        tensor2[dst_th] = tensor3;
-
-                        Assert.AreEqual(Shape.Map1D(channels, width), tensor3.Shape);
-                        CollectionAssert.AreEqual(v, tensor2.State.Value);
-                    }
-
-                    {
-                        Tensor tensor1 = new OverflowCheckedTensor(Shape.Map1D(channels, width, batch), v1);
-                        Tensor tensor2 = new OverflowCheckedTensor(Shape.Map1D(channels, width, batch), v2);
-
-                        Tensor tensor3 = tensor1[src_th];
-
-                        tensor2[dst_th] = tensor3;
-
-                        Assert.AreEqual(Shape.Map1D(channels, width), tensor3.Shape);
-                        CollectionAssert.AreEqual(v, tensor2.State.Value);
-                    }
-
-                }
-            }
-        }
-
-        [TestMethod]
         public void OverflowTest() {
             OverflowCheckedTensor tensor = new OverflowCheckedTensor(Shape.Vector(12));
 

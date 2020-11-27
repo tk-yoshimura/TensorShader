@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace TensorShader {
@@ -175,6 +177,62 @@ namespace TensorShader {
             }
 
             return arrays_separated;
+        }
+
+        /// <summary>インデクサ</summary>
+        /// <param name="index">バッチ次元のインデクス</param>
+        public virtual NdimArray<T> this[int index] {
+            set {
+                if (index < 0 || index >= Batch) {
+                    throw new ArgumentOutOfRangeException(nameof(index));
+                }
+
+                if (Shape.DataShape != value.Shape.DataShape || value.Shape.Batch != 1) {
+                    throw new ArgumentException(nameof(value));
+                }
+
+                Array.Copy(value.Value, 0, Value, Shape.DataSize * index, Shape.DataSize);
+            }
+            get {
+                if (index < 0 || index >= Batch) {
+                    throw new ArgumentOutOfRangeException(nameof(index));
+                }
+
+                NdimArray<T> arr = new NdimArray<T>(Shape.DataShape);
+
+                Array.Copy(Value, Shape.DataSize * index, arr.Value, 0, Shape.DataSize);
+
+                return arr;
+            }
+        }
+
+        /// <summary>データリスト</summary>
+        public IEnumerable<(int index, NdimArray<T> data)> DataList {
+            get {
+                for (int i = 0; i < Batch; i++) {
+                    yield return (i, this[i]);
+                }
+            }
+        }
+
+        /// <summary>バッチ方向に連結</summary>
+        public static implicit operator NdimArray<T>(NdimArray<T>[] arrays) {
+            if (arrays == null || arrays.Length == 0) {
+                throw new ArgumentException(nameof(arrays));
+            }
+
+            Shape shape = arrays.First().Shape;
+
+            if (shape.Type != ShapeType.Map) {
+                throw new ArgumentException(ExceptionMessage.TensorType(shape.Type, ShapeType.Map));
+            }
+
+            return Join(arrays.First().Shape.Ndim - 1, arrays);
+        }
+
+        /// <summary>バッチ方向に連結</summary>
+        public static implicit operator NdimArray<T>(List<NdimArray<T>> arrays) {
+            return arrays.ToArray();
         }
 
         /// <summary>ディープコピー</summary>
