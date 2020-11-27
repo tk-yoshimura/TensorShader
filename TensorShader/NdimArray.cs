@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace TensorShader {
 
@@ -145,6 +146,35 @@ namespace TensorShader {
             }
 
             return array_stacked;
+        }
+
+        /// <summary>分割</summary>
+        public NdimArray<T>[] Separate(int axis) {
+            int stride = 1, n = Shape[axis];
+            for (int i = 0; i < axis; i++) {
+                stride *= Shape[i];
+            }
+
+            int[] s = Shape;
+            s[axis] = 1;
+
+            Shape shape = new Shape(Shape.Type, s);
+
+            int size = shape.Length;
+
+            NdimArray<T>[] arrays_separated = (new NdimArray<T>[n]).Select((_) => (NdimArray<T>)shape).ToArray();
+
+            T[] src = Value;
+
+            for (int i = 0; i < arrays_separated.Length; i++) {
+                T[] dst = arrays_separated[i].Value;
+
+                for (int j = 0, k = i * stride; j < size; j += stride, k += n * stride) {
+                    Array.Copy(src, k, dst, j, stride);
+                }
+            }
+
+            return arrays_separated;
         }
 
         /// <summary>ディープコピー</summary>
