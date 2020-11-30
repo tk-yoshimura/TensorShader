@@ -3,7 +3,7 @@ using static TensorShader.VariableNode;
 namespace TensorShader {
     public partial class Field {
         /// <summary>チャネル方向に切り出し</summary>
-        public static Field ExtractChannel(Field x, int index, int channels) {
+        public static Field ExtractChannel(Field x, int index, int channels = 1) {
             Field y = new Field();
             Link link = new Links.ArrayManipulation.ExtractChannel(index, channels, x, y);
 

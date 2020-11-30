@@ -128,11 +128,8 @@ namespace TensorShader {
                 }
             }
 
-            int stride = 1, size = shape.Length, n = arrays.Length;
-            for (int i = 0; i < axis; i++) {
-                stride *= shape[i];
-            }
-
+            int stride = shape.Stride(axis), size = shape.Length, n = arrays.Length;
+            
             int[] s = shape;
             s[axis] = n;
 
@@ -152,11 +149,8 @@ namespace TensorShader {
 
         /// <summary>分割</summary>
         public NdimArray<T>[] Separate(int axis) {
-            int stride = 1, n = Shape[axis];
-            for (int i = 0; i < axis; i++) {
-                stride *= Shape[i];
-            }
-
+            int stride = Shape.Stride(axis), n = Shape[axis];
+            
             int[] s = Shape;
             s[axis] = 1;
 

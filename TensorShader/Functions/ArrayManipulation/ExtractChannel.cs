@@ -3,7 +3,7 @@ using System;
 namespace TensorShader {
     public abstract partial class VariableNode {
         /// <summary>チャネル方向に切り出し</summary>
-        public static VariableNode ExtractChannel(VariableNode x, int index, int channels) {
+        public static VariableNode ExtractChannel(VariableNode x, int index, int channels = 1) {
             Function function = new Functions.ArrayManipulation.ExtractChannel(index, channels);
 
             return Apply(function, x)[0];
@@ -12,7 +12,7 @@ namespace TensorShader {
 
     public partial class Tensor {
         /// <summary>チャネル方向に切り出し</summary>
-        public static Tensor ExtractChannel(Tensor x, int index, int channels) {
+        public static Tensor ExtractChannel(Tensor x, int index, int channels = 1) {
             Function function = new Functions.ArrayManipulation.ExtractChannel(index, channels);
 
             Tensor y = new Tensor(function.OutputShapes(x.Shape)[0]);

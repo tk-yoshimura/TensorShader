@@ -19,13 +19,8 @@ namespace TensorShader.Operators.ArrayManipulation {
                 (ArgumentType.Out, shape),
             };
 
-            int stride = 1;
-            for (int i = 0; i < axis; i++) {
-                stride *= shape[i];
-            }
-
             this.Shape = shape;
-            this.Stride = stride;
+            this.Stride = shape.Stride(axis);
             this.Length = shape[axis];
         }
 

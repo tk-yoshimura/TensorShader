@@ -102,6 +102,16 @@ namespace TensorShader {
         /// <remarks>要素数 / バッチ数</remarks>
         public int DataSize { private set; get; }
 
+        /// <summary>ストライド</summary>
+        public int Stride(int axis) { 
+            int stride = 1;
+            for (int i = 0; i < axis; i++) {
+                stride *= shape[i];
+            }
+
+            return stride;
+        }
+
         /// <summary>各軸の長さ</summary>
         public int this[int axis] => shape[axis];
 
