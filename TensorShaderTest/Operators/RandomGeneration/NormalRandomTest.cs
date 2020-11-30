@@ -1,5 +1,5 @@
-using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using TensorShader;
 using TensorShader.Operators.RandomGeneration;
 using TensorShaderCudaBackend.API;

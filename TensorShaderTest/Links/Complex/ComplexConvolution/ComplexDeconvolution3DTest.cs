@@ -1,5 +1,5 @@
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 using TensorShader;
 using static TensorShader.Field;
 
@@ -72,7 +72,7 @@ namespace TensorShaderTest.Links.ComplexConvolution {
             AssertError.Tolerance(gw_expect, gw_actual, 1e-6f, 1e-4f, $"not equal gw"); /*backward tolerance*/
         }
 
-        float[] gy_expect = new float[] {
+        readonly float[] gy_expect = new float[] {
             9.916529234e+04f,  1.008493674e+05f,  9.844867970e+04f,  1.001214069e+05f,  9.773206707e+04f,  9.939344636e+04f,
             9.701545443e+04f,  9.866548586e+04f,  1.337781861e+05f,  1.355220194e+05f,  1.328184449e+05f,  1.345508740e+05f,
             1.318587038e+05f,  1.335797286e+05f,  1.308989627e+05f,  1.326085832e+05f,  1.518487463e+05f,  1.536248910e+05f,
@@ -1834,8 +1834,7 @@ namespace TensorShaderTest.Links.ComplexConvolution {
             1.165820681e+06f,  1.186754752e+06f,  1.162122573e+06f,  1.182954773e+06f,  8.734175290e+05f,  8.946297347e+05f,
             8.706840390e+05f,  8.917934485e+05f,  8.679505490e+05f,  8.889571623e+05f,  8.652170591e+05f,  8.861208761e+05f,
         };
-
-        float[] gw_expect = new float[] {
+        readonly float[] gw_expect = new float[] {
             2.205397257e+07f,  2.228386731e+07f,  2.203046838e+07f,  2.226039027e+07f,  2.200696419e+07f,  2.223691324e+07f,
             2.205982711e+07f,  2.228978585e+07f,  2.203631678e+07f,  2.226630269e+07f,  2.201280645e+07f,  2.224281952e+07f,
             2.206568165e+07f,  2.229570440e+07f,  2.204216518e+07f,  2.227221510e+07f,  2.201864870e+07f,  2.224872580e+07f,

@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 
 namespace TensorShaderCudaBackend.API {
-    using size_t = Int64;
-    using cudaError_t = Cuda.ErrorCode;
     using cudaDeviceProp = Cuda.DeviceProp;
+    using cudaError_t = Cuda.ErrorCode;
+    using size_t = Int64;
 
     public static partial class Cuda {
 

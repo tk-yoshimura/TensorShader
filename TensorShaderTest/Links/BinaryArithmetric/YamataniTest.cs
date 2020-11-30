@@ -1,6 +1,6 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using static TensorShader.Field;
 
@@ -67,7 +67,7 @@ namespace TensorShaderTest.Links.BinaryArithmetric {
             AssertError.Tolerance(gx2_expect, gx2_actual, 1e-7f, 1e-5f, $"not equal gx2");
         }
 
-        float[] gx1_expect = {
+        readonly float[] gx1_expect = {
             0.00000000e+00f,  -2.28084441e-02f,  -2.20272239e-02f,  1.29993916e-03f,  4.56718281e-02f,  1.09152825e-01f,  1.89402586e-01f,  2.83711896e-01f,
             3.37157058e-02f,  3.10893290e-02f,  2.61812968e-02f,  1.88550783e-02f,  9.01569262e-03f,  -3.38807776e-03f,  -1.83620971e-02f,  -3.58659369e-02f,
             -5.11406814e-02f,  -5.61653880e-02f,  -6.15603803e-02f,  -6.73294668e-02f,  -7.34703215e-02f,  -7.99743715e-02f,  -8.68267704e-02f,  -9.40064619e-02f,
@@ -85,8 +85,7 @@ namespace TensorShaderTest.Links.BinaryArithmetric {
             -5.53598028e-01f,  -5.44766285e-01f,  -5.34945493e-01f,  -5.24263619e-01f,  -5.12859853e-01f,  -5.00883308e-01f,  -4.88491594e-01f,  -4.75849284e-01f,
             -4.63126275e-01f,  -4.50496070e-01f,  -4.38134001e-01f,  -4.26215398e-01f,  -4.14913739e-01f,  -4.04398786e-01f,  -3.87716669e+00f,  -2.38891099e+00f,
         };
-
-        float[] gx2_expect = {
+        readonly float[] gx2_expect = {
             0.00000000e+00f,  -2.07349492e-03f,  -2.00247490e-03f,  1.18176287e-04f,  4.15198437e-03f,  9.92298410e-03f,  1.72184169e-02f,  2.57919906e-02f,
             3.70872764e-01f,  3.41982619e-01f,  2.87994265e-01f,  2.07405862e-01f,  9.91726188e-02f,  -3.72688554e-02f,  -2.01983068e-01f,  -3.94525306e-01f,
             -5.11406814e-02f,  -5.61653880e-02f,  -6.15603803e-02f,  -6.73294668e-02f,  -7.34703215e-02f,  -7.99743715e-02f,  -8.68267704e-02f,  -9.40064619e-02f,

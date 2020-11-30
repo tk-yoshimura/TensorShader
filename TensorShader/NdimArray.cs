@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -119,7 +118,7 @@ namespace TensorShader {
             if (arrays == null || arrays.Length < 1) {
                 throw new ArgumentException(nameof(arrays));
             }
-            
+
             Shape shape = arrays[0].Shape;
 
             foreach (NdimArray<T> array in arrays) {
@@ -129,7 +128,7 @@ namespace TensorShader {
             }
 
             int stride = shape.Stride(axis), size = shape.Length, n = arrays.Length;
-            
+
             int[] s = shape;
             s[axis] = n;
 
@@ -150,7 +149,7 @@ namespace TensorShader {
         /// <summary>分割</summary>
         public NdimArray<T>[] Separate(int axis) {
             int stride = Shape.Stride(axis), n = Shape[axis];
-            
+
             int[] s = Shape;
             s[axis] = 1;
 

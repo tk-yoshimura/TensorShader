@@ -1,5 +1,5 @@
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 using TensorShader;
 using static TensorShader.Field;
 
@@ -69,7 +69,7 @@ namespace TensorShaderTest.Links.Evaluation.Classify {
             CollectionAssert.AreEqual(new float[] { 5, 4, 7 }, act.State.Value);
         }
 
-        float[] mat_expect =
+        readonly float[] mat_expect =
                 { 1,
                   2,
                   2,

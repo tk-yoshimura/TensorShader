@@ -1,5 +1,5 @@
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 using TensorShader;
 using static TensorShader.Field;
 
@@ -73,7 +73,7 @@ namespace TensorShaderTest.Links.QuaternionConvolution {
             AssertError.Tolerance(gw_expect, gw_actual, 1e-5f, 1e-3f, $"not equal gw"); /*backward tolerance*/
         }
 
-        float[] gy_expect = new float[] {
+        readonly float[] gy_expect = new float[] {
             1.840418506e+04f,  1.950692772e+04f,  1.956516151e+04f,  1.963977397e+04f,  1.827968372e+04f,  1.937239935e+04f,
             1.943003234e+04f,  1.950431006e+04f,  1.815518238e+04f,  1.923787098e+04f,  1.929490318e+04f,  1.936884615e+04f,
             2.556684550e+04f,  2.670826690e+04f,  2.678562998e+04f,  2.688596599e+04f,  2.539418798e+04f,  2.652548239e+04f,
@@ -435,8 +435,7 @@ namespace TensorShaderTest.Links.QuaternionConvolution {
             1.212539897e+05f,  1.320057068e+05f,  1.321340732e+05f,  1.321677347e+05f,  1.207478724e+05f,  1.314294945e+05f,
             1.315564710e+05f,  1.315903744e+05f,  1.202417551e+05f,  1.308532821e+05f,  1.309788687e+05f,  1.310130141e+05f,
         };
-
-        float[] gw_expect = new float[] {
+        readonly float[] gw_expect = new float[] {
             8.067057662e+04f,  8.565012844e+04f,  8.562487924e+04f,  8.556163139e+04f,  8.051076889e+04f,  8.549337128e+04f,
             8.546810153e+04f,  8.540489910e+04f,  8.087766159e+04f,  8.587075939e+04f,  8.584563339e+04f,  8.578183530e+04f,
             8.071744296e+04f,  8.571360203e+04f,  8.568845506e+04f,  8.562470322e+04f,  8.108474656e+04f,  8.609139035e+04f,

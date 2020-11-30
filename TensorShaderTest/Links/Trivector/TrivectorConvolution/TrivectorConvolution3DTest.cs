@@ -1,5 +1,5 @@
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 using TensorShader;
 using static TensorShader.Field;
 
@@ -72,7 +72,7 @@ namespace TensorShaderTest.Links.TrivectorConvolution {
             AssertError.Tolerance(gx_expect, gx_actual, 1e-6f, 1e-4f, $"not equal gx");
         }
 
-        float[] gx_expect = new float[] {
+        readonly float[] gx_expect = new float[] {
             3.331386658e+06f,  3.335688559e+06f,  3.342092098e+06f,  3.326079988e+06f,  3.330375032e+06f,  3.336766784e+06f,
             3.320777547e+06f,  3.325065741e+06f,  3.331445717e+06f,  6.638061586e+06f,  6.646583479e+06f,  6.659261247e+06f,
             6.627437374e+06f,  6.635945621e+06f,  6.648599907e+06f,  6.616821672e+06f,  6.625316283e+06f,  6.637947108e+06f,
@@ -2342,8 +2342,7 @@ namespace TensorShaderTest.Links.TrivectorConvolution {
             1.020697910e+04f,  1.021888477e+04f,  9.728826605e+03f,  1.831031583e+03f,  1.836756131e+03f,  1.679145735e+03f,
             1.436200137e+03f,  1.441905463e+03f,  1.306587513e+03f,  1.101853675e+03f,  1.107545266e+03f,  9.945806628e+02f,
         };
-
-        float[] gw_expect = new float[] {
+        readonly float[] gw_expect = new float[] {
             2.608214193e+09f,  2.608199982e+09f,  2.607209072e+09f,  2.606128066e+09f,  2.607186862e+09f,  2.607171692e+09f,
             2.606181185e+09f,  2.605101007e+09f,  2.606157874e+09f,  2.606141742e+09f,  2.605151642e+09f,  2.604072292e+09f,
             2.582900836e+09f,  2.582886918e+09f,  2.581902946e+09f,  2.580829984e+09f,  2.581878466e+09f,  2.581863592e+09f,

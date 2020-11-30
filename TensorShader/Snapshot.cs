@@ -74,7 +74,7 @@ namespace TensorShader {
 
         /// <summary>キー名リスト</summary>
         public override string ToString() {
-            return string.Join(", ", table.Select((item)=>item.Key));
+            return string.Join(", ", table.Select((item) => item.Key));
         }
     }
 }

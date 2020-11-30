@@ -38,14 +38,13 @@ namespace TensorShaderTest.Links.Loss {
             AssertError.Tolerance(gx_expect, gx_actual, 1e-6f, 1e-4f, $"not equal gx");
         }
 
-        float[] loss_expect = {
+        readonly float[] loss_expect = {
             4.07605964e-01f,
             2.13284523e+00f,
             1.32656264e+00f,
             1.86199480e+00f,
         };
-
-        float[] gx_expect = {
+        readonly float[] gx_expect = {
             3.66969986e-02f,
             9.97527845e-02f,
             -1.36449783e-01f,

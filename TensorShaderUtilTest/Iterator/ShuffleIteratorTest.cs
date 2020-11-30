@@ -1,5 +1,5 @@
-using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using TensorShaderUtil.Iterator;
 
 namespace TensorShaderUtilTest.Iterator {

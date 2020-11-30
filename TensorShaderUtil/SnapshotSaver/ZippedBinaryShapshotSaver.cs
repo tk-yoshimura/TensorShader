@@ -1,5 +1,5 @@
-using System.IO.Compression;
 using System.IO;
+using System.IO.Compression;
 using TensorShader;
 
 namespace TensorShaderUtil.SnapshotSaver {

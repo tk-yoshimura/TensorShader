@@ -1,5 +1,5 @@
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 using TensorShader;
 using static TensorShader.Field;
 
@@ -51,7 +51,7 @@ namespace TensorShaderTest.Links.TrivectorArithmetric {
             AssertError.Tolerance(gv_expect, gv_actual, 1e-7f, 1e-5f, $"not equal gv");
         }
 
-        float[] gv_expect = {
+        readonly float[] gv_expect = {
             1.222517518e-02f, -7.887209792e-04f, -1.380261714e-02f, 2.238993227e-02f, -2.035448388e-03f, -2.646082904e-02f,
             5.291026764e-02f, -8.140041176e-03f, -6.919034999e-02f, 2.099909758e-01f, -1.049954879e-01f, -4.199819516e-01f,
             -1.229837388e+00f, -4.919349550e-01f, 2.459674775e-01f, -1.088944443e-01f, -1.555634919e-02f, 7.778174593e-02f,

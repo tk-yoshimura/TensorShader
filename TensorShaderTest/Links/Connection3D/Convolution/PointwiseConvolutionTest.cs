@@ -1,5 +1,5 @@
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 using TensorShader;
 using static TensorShader.Field;
 
@@ -33,7 +33,7 @@ namespace TensorShaderTest.Links.Connection3D {
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }
 
-        float[] gx_expect = new float[] {
+        readonly float[] gx_expect = new float[] {
             -4.974000000e-06f,  -1.980000000e-06f,  -3.185200000e-05f,  -1.988800000e-05f,  -5.873000000e-05f,  -3.779600000e-05f,
             -8.560800000e-05f,  -5.570400000e-05f,  -1.124860000e-04f,  -7.361200000e-05f,  -1.393640000e-04f,  -9.152000000e-05f,
             -1.662420000e-04f,  -1.094280000e-04f,  -1.931200000e-04f,  -1.273360000e-04f,  -2.199980000e-04f,  -1.452440000e-04f,
@@ -175,8 +175,7 @@ namespace TensorShaderTest.Links.Connection3D {
             -1.113246600e-02f,  -7.415892000e-03f,  -1.115934400e-02f,  -7.433800000e-03f,  -1.118622200e-02f,  -7.451708000e-03f,
             -1.121310000e-02f,  -7.469616000e-03f,  -1.123997800e-02f,  -7.487524000e-03f,  -1.126685600e-02f,  -7.505432000e-03f,
         };
-
-        float[] gw_expect = new float[] {
+        readonly float[] gw_expect = new float[] {
             -1.467606328e+02f,  -1.470230173e+02f,  -1.473306906e+02f,  -1.475941999e+02f,  -1.479007485e+02f,  -1.481653825e+02f,
         };
     }

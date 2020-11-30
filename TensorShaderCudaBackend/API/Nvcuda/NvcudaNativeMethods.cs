@@ -2,8 +2,8 @@
 using System.Runtime.InteropServices;
 
 namespace TensorShaderCudaBackend.API {
-    using CUresult = Nvcuda.ResultCode;
     using CUfunc_cache = Nvcuda.FuncCache;
+    using CUresult = Nvcuda.ResultCode;
     using size_t = Int64;
 
     public static partial class Nvcuda {

@@ -1,6 +1,6 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using static TensorShader.Field;
 
@@ -33,7 +33,7 @@ namespace TensorShaderTest.Links.BinaryArithmetric {
             AssertError.Tolerance(gx2_expect, gx2_actual, 1e-6f, 1e-4f, $"not equal gx2"); /*nonlinear tolerance*/
         }
 
-        float[] gx1_expect = {
+        readonly float[] gx1_expect = {
             0.00000000e+00f,
             5.17789710e-01f,
             -7.97614770e-01f,
@@ -59,8 +59,7 @@ namespace TensorShaderTest.Links.BinaryArithmetric {
             4.04924927e+00f,
             1.64702659e+00f,
         };
-
-        float[] gx2_expect = {
+        readonly float[] gx2_expect = {
             -0.00000000e+00f,
             -8.06409694e-01f,
             -1.74282007e+00f,

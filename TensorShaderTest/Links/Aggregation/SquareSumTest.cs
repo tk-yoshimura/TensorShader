@@ -1,6 +1,6 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using static TensorShader.Field;
 
@@ -672,7 +672,7 @@ namespace TensorShaderTest.Links.Aggregation {
             AssertError.Tolerance(gx_expect, gx_actual, 1e-6f, 1e-4f, $"not equal gx"); /*backward tolerance*/
         }
 
-        float[] gx_expect = {
+        readonly float[] gx_expect = {
             0.0000e+00f, 2.0377e-04f, 4.0754e-04f, 6.1131e-04f, 8.1508e-04f,
             1.0188e-03f, 1.2226e-03f, 1.7451e-03f, 1.9944e-03f, 2.2437e-03f,
             2.4930e-03f, 2.7423e-03f, 2.9916e-03f, 3.2409e-03f, 4.2237e-03f,

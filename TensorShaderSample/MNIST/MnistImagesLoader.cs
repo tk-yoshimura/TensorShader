@@ -1,6 +1,6 @@
 using System;
-using System.IO.Compression;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using TensorShader;
 using TensorShaderUtil.BatchGenerator;

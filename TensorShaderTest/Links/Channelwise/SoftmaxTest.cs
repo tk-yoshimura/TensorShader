@@ -39,7 +39,7 @@ namespace TensorShaderTest.Links.Channelwise {
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }
 
-        float[] y_expect = {
+        readonly float[] y_expect = {
             9.00305732e-02f,
             2.44728471e-01f,
             6.65240956e-01f,
@@ -53,8 +53,7 @@ namespace TensorShaderTest.Links.Channelwise {
             4.22318798e-01f,
             4.22318798e-01f,
         };
-
-        float[] gx_expect = {
+        readonly float[] gx_expect = {
             2.20330445e-02f,
             9.77510046e-02f,
             -1.19784049e-01f,

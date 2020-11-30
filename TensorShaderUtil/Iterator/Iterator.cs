@@ -55,7 +55,7 @@ namespace TensorShaderUtil.Iterator {
 
         /// <summary>Epochをスキップする</summary>
         /// <remarks>増加時イベントは生じない</remarks>
-        public void SkipEpoch(long epoch){
+        public void SkipEpoch(long epoch) {
             SkipIteration(epoch * (Counts / NumBatches));
         }
 

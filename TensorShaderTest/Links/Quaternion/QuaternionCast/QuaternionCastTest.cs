@@ -1,5 +1,5 @@
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 using TensorShader;
 using static TensorShader.Field;
 
@@ -47,19 +47,16 @@ namespace TensorShaderTest.Links.Quaternion {
             AssertError.Tolerance(gw_expect, gw_actual, 1e-7f, 1e-5f, $"not equal gw");
         }
 
-        float[] gx_expect = {
+        readonly float[] gx_expect = {
             -2.400000e+01f, -2.400000e+01f, -2.400000e+01f, -2.400000e+01f, -2.400000e+01f, -2.400000e+01f,
         };
-
-        float[] gy_expect = {
+        readonly float[] gy_expect = {
             -9.500000e+00f, -1.450000e+01f, -1.950000e+01f, -2.450000e+01f, -2.950000e+01f, -3.450000e+01f,
         };
-
-        float[] gz_expect = {
+        readonly float[] gz_expect = {
             -2.500000e+01f, -2.300000e+01f, -2.100000e+01f, -1.900000e+01f, -1.700000e+01f, -1.500000e+01f,
         };
-
-        float[] gw_expect = {
+        readonly float[] gw_expect = {
             -5.000000e-01f, -7.500000e+00f, -1.450000e+01f, -2.150000e+01f, -2.850000e+01f, -3.550000e+01f,
         };
     }

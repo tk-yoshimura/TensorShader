@@ -5,7 +5,7 @@ namespace TensorShader {
 
     /// <summary>多次元配列1次元化拡張</summary>
     public static class ArrayFlattenExtensions {
-        
+
         private static int Shape<T>(this T[] v) where T : struct, IComparable {
             return v.GetLength(0);
         }
@@ -78,7 +78,7 @@ namespace TensorShader {
         public static T[] Flatten<T>(this T[,] vs) where T : struct, IComparable {
             T[] us = new T[vs.Length];
             vs.BlockCopyTo(us, 0);
-            
+
             return us;
         }
 
@@ -105,7 +105,7 @@ namespace TensorShader {
         public static T[] Flatten<T>(this T[,,] vs) where T : struct, IComparable {
             T[] us = new T[vs.Length];
             vs.BlockCopyTo(us, 0);
-            
+
             return us;
         }
 
@@ -132,7 +132,7 @@ namespace TensorShader {
         public static T[] Flatten<T>(this T[,,,] vs) where T : struct, IComparable {
             T[] us = new T[vs.Length];
             vs.BlockCopyTo(us, 0);
-            
+
             return us;
         }
 
@@ -159,7 +159,7 @@ namespace TensorShader {
         public static T[] Flatten<T>(this T[,,,,] vs) where T : struct, IComparable {
             T[] us = new T[vs.Length];
             vs.BlockCopyTo(us, 0);
-            
+
             return us;
         }
 
@@ -186,7 +186,7 @@ namespace TensorShader {
         public static T[] Flatten<T>(this T[,,,,,] vs) where T : struct, IComparable {
             T[] us = new T[vs.Length];
             vs.BlockCopyTo(us, 0);
-            
+
             return us;
         }
 

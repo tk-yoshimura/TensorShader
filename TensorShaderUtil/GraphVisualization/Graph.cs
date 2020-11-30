@@ -18,7 +18,7 @@ namespace TensorShaderUtil.GraphVisualization {
         }
 
         /// <summary>ノードタイプ</summary>
-        public enum NodeType { 
+        public enum NodeType {
             /// <summary>未定義</summary>
             Undefined,
             /// <summary>フィールド</summary>

@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using TensorShader;
 
 namespace TensorShaderTest {
@@ -146,44 +145,44 @@ namespace TensorShaderTest {
             NdimArray<int> array4 = new int[,,] { { { 4, 4, 40 }, { 4, 4, 400 }, { 4, 4, 4000 } } };
 
             NdimArray<int> array_axis0 = NdimArray<int>.Join(
-                Axis.Map1D.Channels, 
-                array1.Reshape(Shape.Map1D(1, 3, 3)), array2.Reshape(Shape.Map1D(1, 3, 3)), 
+                Axis.Map1D.Channels,
+                array1.Reshape(Shape.Map1D(1, 3, 3)), array2.Reshape(Shape.Map1D(1, 3, 3)),
                 array3.Reshape(Shape.Map1D(1, 3, 3)), array4.Reshape(Shape.Map1D(1, 3, 3))
             );
 
             CollectionAssert.AreEqual(
-                new int[] { 
+                new int[] {
                     1, 2, 3, 4, 1, 2, 3, 4, 10, 20, 30, 40,
-                    1, 2, 3, 4, 1, 2, 3, 4, 100, 200, 300, 400, 
-                    1, 2, 3, 4, 1, 2, 3, 4, 1000, 2000, 3000, 4000 }, 
-                array_axis0.Value, 
+                    1, 2, 3, 4, 1, 2, 3, 4, 100, 200, 300, 400,
+                    1, 2, 3, 4, 1, 2, 3, 4, 1000, 2000, 3000, 4000 },
+                array_axis0.Value,
                 "axis0"
             );
 
             NdimArray<int> array_axis1 = NdimArray<int>.Join(
-                Axis.Map1D.Width, 
-                array1.Reshape(Shape.Map1D(3, 1, 3)), array2.Reshape(Shape.Map1D(3, 1, 3)), 
+                Axis.Map1D.Width,
+                array1.Reshape(Shape.Map1D(3, 1, 3)), array2.Reshape(Shape.Map1D(3, 1, 3)),
                 array3.Reshape(Shape.Map1D(3, 1, 3)), array4.Reshape(Shape.Map1D(3, 1, 3))
             );
 
             CollectionAssert.AreEqual(
-                new int[] { 
+                new int[] {
                     1, 1, 10, 2, 2, 20, 3, 3, 30, 4, 4, 40,
                     1, 1, 100, 2, 2, 200, 3, 3, 300, 4, 4, 400,
-                    1, 1, 1000, 2, 2, 2000, 3, 3, 3000, 4, 4, 4000 }, 
-                array_axis1.Value, 
+                    1, 1, 1000, 2, 2, 2000, 3, 3, 3000, 4, 4, 4000 },
+                array_axis1.Value,
                 "axis1"
             );
 
             NdimArray<int> array_axis2 = NdimArray<int>.Join(Axis.Map1D.Batch, array1, array2, array3, array4);
 
             CollectionAssert.AreEqual(
-                new int[] { 
-                    1, 1, 10, 1, 1, 100, 1, 1, 1000, 
-                    2, 2, 20, 2, 2, 200, 2, 2, 2000, 
-                    3, 3, 30, 3, 3, 300, 3, 3, 3000, 
+                new int[] {
+                    1, 1, 10, 1, 1, 100, 1, 1, 1000,
+                    2, 2, 20, 2, 2, 200, 2, 2, 2000,
+                    3, 3, 30, 3, 3, 300, 3, 3, 3000,
                     4, 4, 40, 4, 4, 400, 4, 4, 4000
-                }, 
+                },
                 array_axis2.Value,
                 "axis2"
             );
@@ -197,88 +196,88 @@ namespace TensorShaderTest {
             NdimArray<int> array4 = new int[,,] { { { 4, 4, 40 }, { 4, 4, 400 }, { 4, 4, 4000 } } };
 
             NdimArray<int>[] arrays_axis0 = NdimArray<int>.Join(
-                Axis.Map1D.Channels, 
-                array1.Reshape(Shape.Map1D(1, 3, 3)), array2.Reshape(Shape.Map1D(1, 3, 3)), 
+                Axis.Map1D.Channels,
+                array1.Reshape(Shape.Map1D(1, 3, 3)), array2.Reshape(Shape.Map1D(1, 3, 3)),
                 array3.Reshape(Shape.Map1D(1, 3, 3)), array4.Reshape(Shape.Map1D(1, 3, 3))
             ).Separate(Axis.Map1D.Channels);
 
             CollectionAssert.AreEqual(
-                new int[] { 1, 1, 10, 1, 1, 100, 1, 1, 1000 }, 
-                arrays_axis0[0].Value, 
+                new int[] { 1, 1, 10, 1, 1, 100, 1, 1, 1000 },
+                arrays_axis0[0].Value,
                 "axis0"
             );
 
             CollectionAssert.AreEqual(
-                new int[] { 2, 2, 20, 2, 2, 200, 2, 2, 2000 }, 
-                arrays_axis0[1].Value, 
+                new int[] { 2, 2, 20, 2, 2, 200, 2, 2, 2000 },
+                arrays_axis0[1].Value,
                 "axis0"
             );
 
             CollectionAssert.AreEqual(
-                new int[] { 3, 3, 30, 3, 3, 300, 3, 3, 3000 }, 
-                arrays_axis0[2].Value, 
+                new int[] { 3, 3, 30, 3, 3, 300, 3, 3, 3000 },
+                arrays_axis0[2].Value,
                 "axis0"
             );
 
             CollectionAssert.AreEqual(
-                new int[] { 4, 4, 40, 4, 4, 400, 4, 4, 4000 }, 
-                arrays_axis0[3].Value, 
+                new int[] { 4, 4, 40, 4, 4, 400, 4, 4, 4000 },
+                arrays_axis0[3].Value,
                 "axis0"
             );
 
             NdimArray<int>[] arrays_axis1 = NdimArray<int>.Join(
-                Axis.Map1D.Width, 
-                array1.Reshape(Shape.Map1D(3, 1, 3)), array2.Reshape(Shape.Map1D(3, 1, 3)), 
+                Axis.Map1D.Width,
+                array1.Reshape(Shape.Map1D(3, 1, 3)), array2.Reshape(Shape.Map1D(3, 1, 3)),
                 array3.Reshape(Shape.Map1D(3, 1, 3)), array4.Reshape(Shape.Map1D(3, 1, 3))
             ).Separate(Axis.Map1D.Width);
 
             CollectionAssert.AreEqual(
-                new int[] { 1, 1, 10, 1, 1, 100, 1, 1, 1000 }, 
-                arrays_axis1[0].Value, 
+                new int[] { 1, 1, 10, 1, 1, 100, 1, 1, 1000 },
+                arrays_axis1[0].Value,
                 "axis1"
             );
 
             CollectionAssert.AreEqual(
-                new int[] { 2, 2, 20, 2, 2, 200, 2, 2, 2000 }, 
-                arrays_axis1[1].Value, 
+                new int[] { 2, 2, 20, 2, 2, 200, 2, 2, 2000 },
+                arrays_axis1[1].Value,
                 "axis1"
             );
 
             CollectionAssert.AreEqual(
-                new int[] { 3, 3, 30, 3, 3, 300, 3, 3, 3000 }, 
-                arrays_axis1[2].Value, 
+                new int[] { 3, 3, 30, 3, 3, 300, 3, 3, 3000 },
+                arrays_axis1[2].Value,
                 "axis1"
             );
 
             CollectionAssert.AreEqual(
-                new int[] { 4, 4, 40, 4, 4, 400, 4, 4, 4000 }, 
-                arrays_axis1[3].Value, 
+                new int[] { 4, 4, 40, 4, 4, 400, 4, 4, 4000 },
+                arrays_axis1[3].Value,
                 "axis1"
             );
 
             NdimArray<int>[] arrays_axis2 = NdimArray<int>.Join(Axis.Map1D.Batch, array1, array2, array3, array4).Separate(Axis.Map1D.Batch);
 
             CollectionAssert.AreEqual(
-                new int[] { 1, 1, 10, 1, 1, 100, 1, 1, 1000 }, 
-                arrays_axis2[0].Value, 
+                new int[] { 1, 1, 10, 1, 1, 100, 1, 1, 1000 },
+                arrays_axis2[0].Value,
                 "axis2"
             );
 
             CollectionAssert.AreEqual(
-                new int[] { 2, 2, 20, 2, 2, 200, 2, 2, 2000 }, 
-                arrays_axis2[1].Value, 
+                new int[] { 2, 2, 20, 2, 2, 200, 2, 2, 2000 },
+                arrays_axis2[1].Value,
                 "axis2"
             );
 
             CollectionAssert.AreEqual(
-                new int[] { 3, 3, 30, 3, 3, 300, 3, 3, 3000 }, 
-                arrays_axis2[2].Value, 
+                new int[] { 3, 3, 30, 3, 3, 300, 3, 3, 3000 },
+                arrays_axis2[2].Value,
                 "axis2"
             );
 
             CollectionAssert.AreEqual(
-                new int[] { 4, 4, 40, 4, 4, 400, 4, 4, 4000 }, 
-                arrays_axis2[3].Value, 
+                new int[] { 4, 4, 40, 4, 4, 400, 4, 4, 4000 },
+                arrays_axis2[3].Value,
                 "axis2"
             );
         }
@@ -293,12 +292,12 @@ namespace TensorShaderTest {
             NdimArray<int> array = new NdimArray<int>[] { array1, array2, array3, array4 };
 
             CollectionAssert.AreEqual(
-                new int[] { 
-                    1, 1, 10, 1, 1, 100, 1, 1, 1000, 
-                    2, 2, 20, 2, 2, 200, 2, 2, 2000, 
-                    3, 3, 30, 3, 3, 300, 3, 3, 3000, 
+                new int[] {
+                    1, 1, 10, 1, 1, 100, 1, 1, 1000,
+                    2, 2, 20, 2, 2, 200, 2, 2, 2000,
+                    3, 3, 30, 3, 3, 300, 3, 3, 3000,
                     4, 4, 40, 4, 4, 400, 4, 4, 4000
-                }, 
+                },
                 array.Value
             );
         }
@@ -316,21 +315,21 @@ namespace TensorShaderTest {
             array[2] = array5;
 
             CollectionAssert.AreEqual(
-                new int[] { 
-                    1, 1, 10, 1, 1, 100, 1, 1, 1000, 
-                    2, 2, 20, 2, 2, 200, 2, 2, 2000, 
-                    5, 5, 50, 5, 5, 500, 5, 5, 5000, 
+                new int[] {
+                    1, 1, 10, 1, 1, 100, 1, 1, 1000,
+                    2, 2, 20, 2, 2, 200, 2, 2, 2000,
+                    5, 5, 50, 5, 5, 500, 5, 5, 5000,
                     4, 4, 40, 4, 4, 400, 4, 4, 4000
-                }, 
+                },
                 array.Value
             );
 
             NdimArray<int> array6 = array[1];
 
             CollectionAssert.AreEqual(
-                new int[] { 
+                new int[] {
                     2, 2, 20, 2, 2, 200, 2, 2, 2000,
-                }, 
+                },
                 array6.Value
             );
         }

@@ -43,7 +43,7 @@ namespace TensorShaderUtilTest.ParameterUtil {
 
             adam1.Alpha = 1e-3f;
 
-            Assert.ThrowsException<ArgumentException>(() => { 
+            Assert.ThrowsException<ArgumentException>(() => {
                 _ = adam_alpha.Value;
             });
         }

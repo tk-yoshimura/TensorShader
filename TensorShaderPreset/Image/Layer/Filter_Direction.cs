@@ -64,7 +64,7 @@ namespace TensorShaderPreset.Image {
                         new_s[i * 2 - 1] = Math.Sqrt((1 - c2) / 2);
                     }
 
-                    n = new_n;  c = new_c;  s = new_s;
+                    n = new_n; c = new_c; s = new_s;
 
                     divdirs /= 2;
                 }

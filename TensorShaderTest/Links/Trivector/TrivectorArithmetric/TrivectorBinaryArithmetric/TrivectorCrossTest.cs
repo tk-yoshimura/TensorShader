@@ -1,5 +1,5 @@
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 using TensorShader;
 using static TensorShader.Field;
 
@@ -65,13 +65,12 @@ namespace TensorShaderTest.Links.TrivectorArithmetric {
             AssertError.Tolerance(gu_expect, gq_actual, 1e-7f, 1e-5f, $"not equal gq");
         }
 
-        float[] gv_expect = {
+        readonly float[] gv_expect = {
             -2.18250e+03f, 1.53000e+02f, 2.35350e+03f, -1.69650e+03f, 1.53000e+02f, 1.86750e+03f, -1.21050e+03f, 1.53000e+02f,
             1.38150e+03f, -7.24500e+02f, 1.53000e+02f, 8.95500e+02f, -2.38500e+02f, 1.53000e+02f, 4.09500e+02f, 2.47500e+02f,
             1.53000e+02f, -7.65000e+01f, 7.33500e+02f, 1.53000e+02f, -5.62500e+02f, 1.21950e+03f, 1.53000e+02f, -1.04850e+03f,
         };
-
-        float[] gu_expect = {
+        readonly float[] gu_expect = {
             -1.12800e+03f, 9.60000e+01f, 1.24800e+03f, -8.04000e+02f, 9.60000e+01f, 9.24000e+02f, -4.80000e+02f, 9.60000e+01f,
             6.00000e+02f, -1.56000e+02f, 9.60000e+01f, 2.76000e+02f, 1.68000e+02f, 9.60000e+01f, -4.80000e+01f, 4.92000e+02f,
             9.60000e+01f, -3.72000e+02f, 8.16000e+02f, 9.60000e+01f, -6.96000e+02f, 1.14000e+03f, 9.60000e+01f, -1.02000e+03f,

@@ -291,7 +291,7 @@ namespace TensorShader {
         public override string ToString() {
             return string.Join(
                 ", ",
-                parameter_fields.Select((field) => field.Name + '(' + 
+                parameter_fields.Select((field) => field.Name + '(' +
                     string.Join("->",
                     field.Updaters.Select(
                         (updater) => updater.Name

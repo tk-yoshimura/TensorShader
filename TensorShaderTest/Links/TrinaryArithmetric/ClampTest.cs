@@ -1,5 +1,5 @@
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 using TensorShader;
 using static TensorShader.Field;
 
@@ -66,7 +66,7 @@ namespace TensorShaderTest.Links.TrinaryArithmetric {
             AssertError.Tolerance(gxmax_expect, gxmax_actual, 1e-7f, 1e-5f, $"not equal gxmax");
         }
 
-        float[] gx_expect = {
+        readonly float[] gx_expect = {
             0,
             0,
             0,
@@ -92,8 +92,7 @@ namespace TensorShaderTest.Links.TrinaryArithmetric {
             0,
             0,
         };
-
-        float[] gxmin_expect = {
+        readonly float[] gxmin_expect = {
             17f,
             12.125f,
             7.5f,
@@ -119,8 +118,7 @@ namespace TensorShaderTest.Links.TrinaryArithmetric {
             -32.5f,
             -31.875f,
         };
-
-        float[] gxmax_expect = {
+        readonly float[] gxmax_expect = {
             0,
             0,
             0,

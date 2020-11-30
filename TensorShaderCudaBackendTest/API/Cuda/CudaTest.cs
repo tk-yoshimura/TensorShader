@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using TensorShaderCudaBackend.API;
 
 namespace TensorShaderCudaBackendTest.APITest {
@@ -92,7 +91,8 @@ namespace TensorShaderCudaBackendTest.APITest {
         public void MemcpyWithIndexTest() {
             const int count = 15, index = 3;
 
-            /*write*/ { 
+            /*write*/
+            {
                 float[] v = (new float[count]).Select((_, idx) => (float)idx).ToArray();
                 float[] v2 = new float[count];
                 float[] v3 = (new float[count]).Select((_, idx) => idx < count - index ? (float)idx + index : 0).ToArray();
@@ -113,7 +113,8 @@ namespace TensorShaderCudaBackendTest.APITest {
                 Cuda.Memory.Free(ref ptr2);
             }
 
-            /*read*/ { 
+            /*read*/
+            {
                 float[] v = (new float[count]).Select((_, idx) => (float)idx).ToArray();
                 float[] v2 = new float[count];
                 float[] v3 = (new float[count]).Select((_, idx) => idx < index ? 0 : (float)idx - index).ToArray();

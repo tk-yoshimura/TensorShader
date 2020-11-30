@@ -26,7 +26,7 @@ namespace TensorShaderPreset.Image {
         /// <summary>空間フィルタ</summary>
         public static Field SpatialFilter(Field x, int kwidth, int kheight, float[] kernel, string name) {
             VariableField w = new VariableField(
-                KernelSpatialFilter(x.Shape.Channels, kwidth, kheight, kernel), 
+                KernelSpatialFilter(x.Shape.Channels, kwidth, kheight, kernel),
                 name
             );
 

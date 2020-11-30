@@ -1,6 +1,6 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.ArrayManipulation;
 using TensorShaderCudaBackend.API;
@@ -236,7 +236,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
             Cuda.Profiler.Stop();
         }
 
-        float[] y_expect = {
+        readonly float[] y_expect = {
             2,  3,  4,  2,  3,  4,  2,  3,  4,  2,  3,  4,  2,  3,  4,  2,  3,  4,  2,  3,  4,
             2,  3,  4,  2,  3,  4,  2,  3,  4,  2,  3,  4,  2,  3,  4,  2,  3,  4,  2,  3,  4,
             2,  3,  4,  2,  3,  4,  2,  3,  4,  2,  3,  4,  2,  3,  4,  2,  3,  4,  2,  3,  4,

@@ -103,7 +103,7 @@ namespace TensorShader {
         public int DataSize { private set; get; }
 
         /// <summary>ストライド</summary>
-        public int Stride(int axis) { 
+        public int Stride(int axis) {
             int stride = 1;
             for (int i = 0; i < axis; i++) {
                 stride *= shape[i];
@@ -116,9 +116,9 @@ namespace TensorShader {
         public int this[int axis] => shape[axis];
 
         /// <summary>データ形状(次元にバッチを含むならば、バッチを1とする)</summary>
-        public Shape DataShape{
+        public Shape DataShape {
             get {
-                if(Type == ShapeType.Map || Type == ShapeType.Column) { 
+                if (Type == ShapeType.Map || Type == ShapeType.Column) {
                     int[] ret_shape = (int[])this.shape.Clone();
                     ret_shape[ret_shape.Length - 1] = 1;
 

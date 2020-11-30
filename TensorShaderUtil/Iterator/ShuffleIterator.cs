@@ -5,7 +5,7 @@ namespace TensorShaderUtil.Iterator {
     /// <summary>バッチインデクサをランダムに生成するイテレータ</summary>
     public class ShuffleIterator : Iterator {
         private int pos;
-        private int[] indexes;
+        private readonly int[] indexes;
         private readonly Random random;
 
         /// <summary>コンストラクタ</summary>

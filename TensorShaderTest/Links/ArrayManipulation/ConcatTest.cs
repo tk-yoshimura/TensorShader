@@ -1,6 +1,6 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using static TensorShader.Field;
 
@@ -101,7 +101,7 @@ namespace TensorShaderTest.Links.ArrayManipulation {
             }
         }
 
-        float[] gx1_expect = {
+        readonly float[] gx1_expect = {
             -1.1990e+00f, -1.1970e+00f, -1.1870e+00f, -1.1850e+00f, -1.1750e+00f,
             -1.1730e+00f, -1.1630e+00f, -1.1610e+00f, -1.1510e+00f, -1.1490e+00f,
             -1.1390e+00f, -1.1370e+00f, -1.1270e+00f, -1.1250e+00f, -1.1150e+00f,
@@ -151,8 +151,7 @@ namespace TensorShaderTest.Links.ArrayManipulation {
             1.8100e-01f, 1.8300e-01f, 1.9300e-01f, 1.9500e-01f, 2.0500e-01f,
             2.0700e-01f, 2.1700e-01f, 2.1900e-01f, 2.2900e-01f, 2.3100e-01f,
         };
-
-        float[] gx2_expect = {
+        readonly float[] gx2_expect = {
             -1.1970e+00f, -1.1860e+00f, -1.1750e+00f, -1.1640e+00f, -1.1530e+00f,
             -1.1420e+00f, -1.1310e+00f, -1.1200e+00f, -1.1090e+00f, -1.0980e+00f,
             -1.0870e+00f, -1.0760e+00f, -1.0650e+00f, -1.0540e+00f, -1.0430e+00f,
@@ -178,8 +177,7 @@ namespace TensorShaderTest.Links.ArrayManipulation {
             1.3000e-02f, 2.4000e-02f, 3.5000e-02f, 4.6000e-02f, 5.7000e-02f,
             6.8000e-02f, 7.9000e-02f, 9.0000e-02f, 1.0100e-01f, 1.1200e-01f,
         };
-
-        float[] gx4_expect = {
+        readonly float[] gx4_expect = {
             -1.1920e+00f, -1.1900e+00f, -1.1880e+00f, -1.1790e+00f, -1.1770e+00f,
             -1.1750e+00f, -1.1660e+00f, -1.1640e+00f, -1.1620e+00f, -1.1530e+00f,
             -1.1510e+00f, -1.1490e+00f, -1.1400e+00f, -1.1380e+00f, -1.1360e+00f,

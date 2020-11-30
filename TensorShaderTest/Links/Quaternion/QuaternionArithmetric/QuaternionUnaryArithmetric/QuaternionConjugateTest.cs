@@ -1,5 +1,5 @@
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 using TensorShader;
 using static TensorShader.Field;
 
@@ -50,7 +50,7 @@ namespace TensorShaderTest.Links.QuaternionArithmetric {
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }
 
-        float[] gx_expect = {
+        readonly float[] gx_expect = {
             -3.550000000e+01f, -1.100000000e+01f, -9.500000000e+00f, -8.000000000e+00f, -2.550000000e+01f, -5.000000000e+00f,
             -3.500000000e+00f, -2.000000000e+00f, -1.550000000e+01f, 1.000000000e+00f, 2.500000000e+00f, 4.000000000e+00f,
             -5.500000000e+00f, 7.000000000e+00f, 8.500000000e+00f, 1.000000000e+01f, 4.500000000e+00f, 1.300000000e+01f,

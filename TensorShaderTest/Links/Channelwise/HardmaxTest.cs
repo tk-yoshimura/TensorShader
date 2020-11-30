@@ -37,7 +37,7 @@ namespace TensorShaderTest.Links.Channelwise {
             Assert.IsTrue(x.Grad == null);
         }
 
-        float[] y_expect = {
+        readonly float[] y_expect = {
             0,
             0,
             1,

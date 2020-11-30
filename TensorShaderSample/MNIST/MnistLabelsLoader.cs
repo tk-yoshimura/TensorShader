@@ -1,8 +1,8 @@
 using System;
-using System.IO.Compression;
 using System.IO;
-using TensorShaderUtil.BatchGenerator;
+using System.IO.Compression;
 using TensorShader;
+using TensorShaderUtil.BatchGenerator;
 
 namespace MNIST {
     public class MnistLabelsLoader : UnitaskBatchGenerator {

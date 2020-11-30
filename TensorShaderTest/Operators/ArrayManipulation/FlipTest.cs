@@ -1,6 +1,6 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Operators.ArrayManipulation;
 
@@ -68,7 +68,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
             AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, $"not equal");
         }
 
-        float[] y_expect = {
+        readonly float[] y_expect = {
             1, 1, 7, 5, 0, 1, 5, 3, 7, 1, 2, 1, 6, 3, 6, 7, 0, 6, 2, 4, 2, 1, 6, 2, 0, 7, 4, 3, 5, 5, 2, 7, 2, 3, 5, 7, 4, 0, 2, 2, 4, 1, 4, 5, 4, 2, 6, 3,
             3, 1, 5, 5, 6, 5, 3, 7, 1, 3, 2, 0, 4, 1, 2, 1, 6, 0, 2, 2, 2, 7, 5, 7, 2, 7, 2, 3, 3, 1, 5, 6, 0, 0, 0, 5, 0, 6, 6, 4, 0, 3, 4, 3, 0, 5, 0, 1,
             5, 1, 3, 5, 4, 2, 6, 1, 2, 1, 2, 6, 0, 0, 6, 3, 6, 2, 4, 3, 1, 5, 7, 7, 4, 7, 0, 6, 4, 1, 4, 0, 0, 6, 0, 3, 4, 3, 2, 6, 0, 1, 1, 7, 3, 1, 2, 1,

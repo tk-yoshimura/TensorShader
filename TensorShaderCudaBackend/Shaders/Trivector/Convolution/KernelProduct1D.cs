@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Linq;
-
-using static TensorShaderCudaBackend.Elementwise;
 using static TensorShaderCudaBackend.ArrayManipulation;
+using static TensorShaderCudaBackend.Elementwise;
 
 namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution {
 

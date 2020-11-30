@@ -9,8 +9,8 @@ namespace SearchMinimum {
             const int loops = 1000;
             const float x_init = 4, y_init = 3;
 
-            ParameterField x =  x_init;
-            ParameterField y =  y_init;
+            ParameterField x = x_init;
+            ParameterField y = y_init;
             VariableField r = 0.05f;
 
             // f(x, y) = x^2 + y^2

@@ -1,5 +1,5 @@
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 using TensorShader;
 using static TensorShader.Field;
 
@@ -34,7 +34,7 @@ namespace TensorShaderTest.Links.FactorArithmetric {
             AssertError.Tolerance(gp_expect, gp_actual, 1e-7f, 1e-5f, $"not equal gp");
         }
 
-        float[] gx_expect = {
+        readonly float[] gx_expect = {
             -7.50000000e-01f,
             -6.02185530e-01f,
             -4.71122336e-01f,
@@ -60,8 +60,7 @@ namespace TensorShaderTest.Links.FactorArithmetric {
             4.71122336e-01f,
             6.02185530e-01f,
         };
-
-        float[] gp_expect = {
+        readonly float[] gp_expect = {
             -5.13477108e-01f,
         };
     }

@@ -1081,7 +1081,7 @@ namespace TensorShaderCudaBackend {
 
                 shader.Execute(stream, slope, src1, src2, dst, length);
             }
-            else { 
+            else {
                 Shader shader = BinaryArithmetric(
                     "yamatani_noslope_ew",
                     "#y = (#x1 > 0 & #x2 > 0) ? fminf(#x1, #x2) : ((#x1 < 0 && #x2 < 0) ? fmaxf(#x1, #x2) : 0.0);"

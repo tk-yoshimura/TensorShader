@@ -1,6 +1,6 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShader;
 using TensorShader.Updaters.OptimizeMethod;
 using TensorShader.Updaters.WeightDecay;
@@ -38,7 +38,7 @@ namespace TensorShaderTest.Updaters.WeightDecay {
 
             (Flow flow, Parameters parameters) = Flow.Optimize(x);
 
-            parameters.AddUpdater((parameters) => new Ridge(x, decay, depend_grad:true))
+            parameters.AddUpdater((parameters) => new Ridge(x, decay, depend_grad: true))
                       .AddUpdater((parameters) => new SGD(parameters, 1));
             parameters.Update();
 
@@ -61,7 +61,7 @@ namespace TensorShaderTest.Updaters.WeightDecay {
             VariableField t = tval;
 
             (Flow flow, Parameters parameters) = Flow.Optimize(x - t);
-            parameters.AddUpdater((parameters) => new Ridge(x, decay, depend_grad:true))
+            parameters.AddUpdater((parameters) => new Ridge(x, decay, depend_grad: true))
                       .AddUpdater((parameters) => new SGD(parameters, 1));
 
             flow.Execute();

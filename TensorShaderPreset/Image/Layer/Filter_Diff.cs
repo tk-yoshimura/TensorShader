@@ -6,7 +6,7 @@ namespace TensorShaderPreset.Image {
     public static partial class Filter {
 
         /// <summary>X方向微分フィルタ</summary>
-        public static NdimArray<float> KernelDiffX(int inchannels, float scale) { 
+        public static NdimArray<float> KernelDiffX(int inchannels, float scale) {
             float[] kernel =
                 {
                     0,      0, 0,
@@ -20,7 +20,7 @@ namespace TensorShaderPreset.Image {
         /// <summary>X方向微分フィルタ</summary>
         public static Field DiffX(Field x, float scale) {
             VariableField w = new VariableField(
-                KernelDiffX(x.Shape.Channels, scale), 
+                KernelDiffX(x.Shape.Channels, scale),
                 name: "DiffX"
             );
 
@@ -28,7 +28,7 @@ namespace TensorShaderPreset.Image {
         }
 
         /// <summary>Y方向微分フィルタ</summary>
-        public static NdimArray<float> KernelDiffY(int inchannels, float scale) { 
+        public static NdimArray<float> KernelDiffY(int inchannels, float scale) {
             float[] kernel =
                 {
                    0, +scale, 0,
@@ -42,7 +42,7 @@ namespace TensorShaderPreset.Image {
         /// <summary>Y方向微分フィルタ</summary>
         public static Field DiffY(Field x, float scale) {
             VariableField w = new VariableField(
-                KernelDiffY(x.Shape.Channels, scale), 
+                KernelDiffY(x.Shape.Channels, scale),
                 name: "DiffY"
             );
 

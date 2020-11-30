@@ -1,5 +1,5 @@
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 using TensorShader;
 using static TensorShader.Field;
 
@@ -39,7 +39,7 @@ namespace TensorShaderTest.Links.ArrayManipulation {
             AssertError.Tolerance(gx_expect, gx3_actual, 1e-7f, 1e-5f, $"not equal gx3");
         }
 
-        float[] gx_expect = {
+        readonly float[] gx_expect = {
             2.40000000e+01f,
             2.30000000e+01f,
             2.20000000e+01f,

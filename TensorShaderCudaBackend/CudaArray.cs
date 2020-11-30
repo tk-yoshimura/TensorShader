@@ -68,7 +68,7 @@ namespace TensorShaderCudaBackend {
         /// <summary>概要</summary>
         public string Overview { private set; get; }
 
-        static CudaArray() { 
+        static CudaArray() {
             T[] array = new T[2];
 
             GCHandle pinned_handle = GCHandle.Alloc(array, GCHandleType.Pinned);
@@ -134,7 +134,7 @@ namespace TensorShaderCudaBackend {
 
         /// <summary>GPUメモリへ書き込み</summary>
         public void Write(T[] array, ulong count) {
-            if(count > Length) { 
+            if (count > Length) {
                 throw new ArgumentException(nameof(count));
             }
 
@@ -143,7 +143,7 @@ namespace TensorShaderCudaBackend {
 
         /// <summary>GPUメモリから読み込み</summary>
         public void Read(T[] array, ulong count) {
-            if(count > Length) { 
+            if (count > Length) {
                 throw new ArgumentException(nameof(count));
             }
 
@@ -152,7 +152,7 @@ namespace TensorShaderCudaBackend {
 
         /// <summary>GPUメモリへ書き込み</summary>
         public void Write(ulong index, T[] array, ulong array_index, ulong count) {
-            if(index + count > Length) { 
+            if (index + count > Length) {
                 throw new ArgumentException($"{nameof(index)},{nameof(count)}");
             }
 
@@ -163,7 +163,7 @@ namespace TensorShaderCudaBackend {
 
         /// <summary>GPUメモリから読み込み</summary>
         public void Read(ulong index, T[] array, ulong array_index, ulong count) {
-            if(index + count > Length) { 
+            if (index + count > Length) {
                 throw new ArgumentException($"{nameof(index)},{nameof(count)}");
             }
 

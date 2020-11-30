@@ -41,10 +41,10 @@ namespace TensorShaderPreset.Wave {
             if (dt * hz * 4 > 1) {
                 throw new ArgumentException($"Nyquist frequency limit : {nameof(dt)} * {nameof(hz)} <= 1 / 4");
             }
-            if (ksize < 9 || ksize * dt * hz < 2) { 
+            if (ksize < 9 || ksize * dt * hz < 2) {
                 throw new ArgumentException($"Insufficient {nameof(ksize)} : {nameof(ksize)} >= 9 and {nameof(ksize)} * {nameof(dt)} * {nameof(hz)} >= 2");
             }
-            
+
             int m = ksize / 2;
 
             double hamming_weight(double x) {
@@ -53,20 +53,20 @@ namespace TensorShaderPreset.Wave {
 
             (double c, double s) cs(double x) {
                 double t = 2 * x * m * Math.PI * dt * hz;
-                
+
                 return (Math.Cos(t), Math.Sin(t));
             }
 
             double h = 1.0 / m, sum_c = 0, sum_s = 0;
             double[] cosw = new double[ksize], sinw = new double[ksize];
-            
+
             for (int i = 0, j = -m; i < ksize; i++, j++) {
                 double x = j * h;
                 double w = hamming_weight(x);
                 (double c, double s) = cs(x);
 
-                cosw[i] = c * w;  sinw[i] = s * w;
-                sum_c += c * c * w;  sum_s += s * s * w; 
+                cosw[i] = c * w; sinw[i] = s * w;
+                sum_c += c * c * w; sum_s += s * s * w;
             }
 
             float[] cosn = cosw.Select((v) => (float)(v / sum_c)).ToArray();

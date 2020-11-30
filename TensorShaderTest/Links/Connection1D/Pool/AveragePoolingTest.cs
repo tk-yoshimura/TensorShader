@@ -1,5 +1,5 @@
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 using TensorShader;
 using static TensorShader.Field;
 
@@ -30,7 +30,7 @@ namespace TensorShaderTest.Links.Connection1D {
             AssertError.Tolerance(gx_expect, gx_actual, 1e-7f, 1e-5f, $"not equal gx");
         }
 
-        float[] gx_expect = {
+        readonly float[] gx_expect = {
             6.66666667e-04f, 3.33333333e-04f, 6.66666667e-04f, 3.33333333e-04f, 6.66666667e-04f,
             3.33333333e-04f, 1.33333333e-03f, 1.00000000e-03f, 1.33333333e-03f, 1.00000000e-03f,
             1.33333333e-03f, 1.00000000e-03f, 2.00000000e-03f, 1.66666667e-03f, 2.00000000e-03f,

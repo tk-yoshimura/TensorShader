@@ -1,5 +1,5 @@
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 using TensorShader;
 using static TensorShader.Field;
 
@@ -28,7 +28,7 @@ namespace TensorShaderTest.Links.UnaryArithmetric {
             AssertError.Tolerance(gx_expect, gx_actual, 1e-6f, 8e-4f, $"not equal gx"); /*nonlinear tolerance*/
         }
 
-        float[] gx_expect = {
+        readonly float[] gx_expect = {
             -9.98383667e+00f,
             -5.35931140e+00f,
             -3.92991627e+00f,

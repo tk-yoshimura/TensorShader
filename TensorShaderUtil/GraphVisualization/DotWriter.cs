@@ -16,7 +16,7 @@ namespace TensorShaderUtil.GraphVisualization {
 
                 foreach (var node in nodes) {
                     string shape;
-                    switch (node.Type) { 
+                    switch (node.Type) {
                         case Graph.NodeType.Link:
                             shape = "octagon";
                             break;

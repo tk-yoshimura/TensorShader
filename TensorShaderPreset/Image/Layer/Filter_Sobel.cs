@@ -6,7 +6,7 @@ namespace TensorShaderPreset.Image {
     public static partial class Filter {
 
         /// <summary>X方向ソーベルフィルタ</summary>
-        public static NdimArray<float> KernelSobelX(int inchannels, float scale) { 
+        public static NdimArray<float> KernelSobelX(int inchannels, float scale) {
             float[] kernel =
                 {
                    +0.25f * scale, 0, -0.25f * scale,
@@ -20,7 +20,7 @@ namespace TensorShaderPreset.Image {
         /// <summary>X方向ソーベルフィルタ</summary>
         public static Field SobelX(Field x, float scale) {
             VariableField w = new VariableField(
-                KernelSobelX(x.Shape.Channels, scale), 
+                KernelSobelX(x.Shape.Channels, scale),
                 name: "SobelX"
             );
 
@@ -28,7 +28,7 @@ namespace TensorShaderPreset.Image {
         }
 
         /// <summary>Y方向ソーベルフィルタ</summary>
-        public static NdimArray<float> KernelSobelY(int inchannels, float scale) { 
+        public static NdimArray<float> KernelSobelY(int inchannels, float scale) {
             float[] kernel =
                 {
                    +0.25f * scale, +0.50f * scale, +0.25f * scale,
@@ -42,7 +42,7 @@ namespace TensorShaderPreset.Image {
         /// <summary>Y方向ソーベルフィルタ</summary>
         public static Field SobelY(Field x, float scale) {
             VariableField w = new VariableField(
-                KernelSobelY(x.Shape.Channels, scale), 
+                KernelSobelY(x.Shape.Channels, scale),
                 name: "SobelY"
             );
 

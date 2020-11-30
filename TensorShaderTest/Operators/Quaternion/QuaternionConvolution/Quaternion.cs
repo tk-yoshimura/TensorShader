@@ -1,5 +1,5 @@
-using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace TensorShaderTest.Operators.Quaternion {
     public struct Quaternion {

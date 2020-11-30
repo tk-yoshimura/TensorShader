@@ -1,5 +1,5 @@
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 using TensorShader;
 using static TensorShader.Field;
 
@@ -63,14 +63,13 @@ namespace TensorShaderTest.Links.ComplexArithmetric {
             AssertError.Tolerance(gy_expect, gy_actual, 1e-7f, 1e-5f, $"not equal gy");
         }
 
-        float[] gx_expect = {
+        readonly float[] gx_expect = {
             -9.095700e+04f, -8.338050e+04f, -5.643300e+04f, -5.072850e+04f, -3.196500e+04f, -2.786850e+04f,
             -1.582500e+04f, -1.307250e+04f, -6.285000e+03f, -4.612500e+03f, -1.617000e+03f, -7.605000e+02f,
             -9.300000e+01f, 2.115000e+02f, 1.500000e+01f, 3.150000e+01f, 4.350000e+02f, 4.275000e+02f,
             2.895000e+03f, 3.127500e+03f, 9.123000e+03f, 9.859500e+03f, 2.084700e+04f, 2.235150e+04f,
         };
-
-        float[] gy_expect = {
+        readonly float[] gy_expect = {
             4.771100e+04f, 4.453200e+04f, 2.828300e+04f, 2.607600e+04f, 1.498300e+04f, 1.357200e+04f,
             6.659000e+03f, 5.868000e+03f, 2.159000e+03f, 1.812000e+03f, 3.310000e+02f, 2.520000e+02f,
             2.300000e+01f, 3.600000e+01f, 8.300000e+01f, 1.200000e+01f, -6.410000e+02f, -9.720000e+02f,

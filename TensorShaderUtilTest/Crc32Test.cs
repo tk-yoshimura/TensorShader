@@ -1,6 +1,6 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TensorShaderUtil;
 
 namespace TensorShaderUtilTest {
