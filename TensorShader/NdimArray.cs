@@ -44,7 +44,7 @@ namespace TensorShader {
         public int Batch => Shape.Batch;
 
         /// <summary>コンストラクタ</summary>
-        public NdimArray(Shape shape, T[] value, bool clone_value = false) {
+        public NdimArray(Shape shape, T[] value, bool clone_value = true) {
             if (value == null) {
                 throw new ArgumentNullException(nameof(value));
             }
@@ -80,23 +80,18 @@ namespace TensorShader {
             }
         }
 
-        /// <summary>文字列化</summary>
-        public override string ToString() {
-            return Shape.ToString();
-        }
-
         private long Index(params int[] indexes) {
             if (indexes.Length != Ndim) {
                 throw new ArgumentException(ExceptionMessage.Argument($"{indexes}.Length", indexes.Length, Ndim));
             }
 
             long pos = 0;
-            for (int dim = Ndim - 1; dim >= 0; dim--) {
-                int index = indexes[dim];
-                if (index < 0 || index >= Shape[dim]) {
+            for (int dim = 0; dim < Ndim; dim++) {
+                int index = indexes[dim], length = Shape[Ndim - dim - 1];
+                if (index < 0 || index >= length) {
                     throw new ArgumentOutOfRangeException(nameof(indexes));
                 }
-                pos *= Shape[dim];
+                pos *= length;
                 pos += index;
             }
 
@@ -104,7 +99,7 @@ namespace TensorShader {
         }
 
         /// <summary>形状変更</summary>
-        public NdimArray<T> Reshape(Shape shape, bool clone_value = false) {
+        public NdimArray<T> Reshape(Shape shape, bool clone_value = true) {
             if (shape.Length != Shape.Length) {
                 throw new ArgumentException(nameof(shape));
             }
@@ -226,6 +221,11 @@ namespace TensorShader {
         /// <summary>バッチ方向に連結</summary>
         public static implicit operator NdimArray<T>(List<NdimArray<T>> arrays) {
             return arrays.ToArray();
+        }
+
+        /// <summary>文字列化</summary>
+        public override string ToString() {
+            return Shape.ToString();
         }
 
         /// <summary>ディープコピー</summary>
