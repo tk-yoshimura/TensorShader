@@ -21,7 +21,7 @@ namespace TensorShaderTest {
             Assert.AreEqual(1, shape.MapSize, "mismatch mapsize");
             Assert.AreEqual(1, shape.DataSize, "mismatch datasize");
             Assert.AreEqual(1, shape.Batch, "mismatch batch");
-            Assert.AreEqual("()", shape.ToString(), "mismatch string");
+            Assert.AreEqual("Scalar ()", shape.ToString(), "mismatch string");
 
             Assert.IsTrue(shape == Shape.Scalar, "notequal shape");
 
@@ -44,7 +44,7 @@ namespace TensorShaderTest {
             Assert.AreEqual(1, shape.MapSize, "mismatch mapsize");
             Assert.AreEqual(7, shape.DataSize, "mismatch datasize");
             Assert.AreEqual(1, shape.Batch, "mismatch batch");
-            Assert.AreEqual("(7)", shape.ToString(), "mismatch string");
+            Assert.AreEqual("Vector (7)", shape.ToString(), "mismatch string");
 
             Assert.IsTrue(shape == Shape.Vector(7), "notequal shape");
             Assert.IsTrue(shape != Shape.Vector(8), "notequal shape");
@@ -68,7 +68,7 @@ namespace TensorShaderTest {
             Assert.AreEqual(1, shape.MapSize, "mismatch mapsize");
             Assert.AreEqual(7, shape.DataSize, "mismatch datasize");
             Assert.AreEqual(2, shape.Batch, "mismatch batch");
-            Assert.AreEqual("(7, 2)", shape.ToString(), "mismatch string");
+            Assert.AreEqual("Map (7, 2)", shape.ToString(), "mismatch string");
 
             Assert.IsTrue(shape == Shape.Map0D(7, 2), "notequal shape");
             Assert.IsTrue(shape != Shape.Map0D(7, 1), "notequal shape");
@@ -93,7 +93,7 @@ namespace TensorShaderTest {
             Assert.AreEqual(3, shape.MapSize, "mismatch mapsize");
             Assert.AreEqual(7 * 3, shape.DataSize, "mismatch datasize");
             Assert.AreEqual(4, shape.Batch, "mismatch batch");
-            Assert.AreEqual("(7, 3, 4)", shape.ToString(), "mismatch string");
+            Assert.AreEqual("Map (7, 3, 4)", shape.ToString(), "mismatch string");
 
             Assert.IsTrue(shape == Shape.Map1D(7, 3, 4), "notequal shape");
             Assert.IsTrue(shape != Shape.Map1D(7, 3, 1), "notequal shape");
@@ -118,7 +118,7 @@ namespace TensorShaderTest {
             Assert.AreEqual(3 * 4, shape.MapSize, "mismatch mapsize");
             Assert.AreEqual(7 * 3 * 4, shape.DataSize, "mismatch datasize");
             Assert.AreEqual(2, shape.Batch, "mismatch batch");
-            Assert.AreEqual("(7, 3, 4, 2)", shape.ToString(), "mismatch string");
+            Assert.AreEqual("Map (7, 3, 4, 2)", shape.ToString(), "mismatch string");
 
             Assert.IsTrue(shape == Shape.Map2D(7, 3, 4, 2), "notequal shape");
             Assert.IsTrue(shape != Shape.Map2D(7, 3, 4, 1), "notequal shape");
@@ -143,7 +143,7 @@ namespace TensorShaderTest {
             Assert.AreEqual(3 * 4 * 5, shape.MapSize, "mismatch mapsize");
             Assert.AreEqual(7 * 3 * 4 * 5, shape.DataSize, "mismatch datasize");
             Assert.AreEqual(4, shape.Batch, "mismatch batch");
-            Assert.AreEqual("(7, 3, 4, 5, 4)", shape.ToString(), "mismatch string");
+            Assert.AreEqual("Map (7, 3, 4, 5, 4)", shape.ToString(), "mismatch string");
 
             Assert.IsTrue(shape == Shape.Map3D(7, 3, 4, 5, 4), "notequal shape");
             Assert.IsTrue(shape != Shape.Map3D(7, 3, 4, 5, 1), "notequal shape");
@@ -168,7 +168,7 @@ namespace TensorShaderTest {
             Assert.AreEqual(1, shape.MapSize, "mismatch mapsize");
             Assert.AreEqual(5 * 7, shape.DataSize, "mismatch datasize");
             Assert.AreEqual(1, shape.Batch, "mismatch batch");
-            Assert.AreEqual("(5, 7)", shape.ToString(), "mismatch string");
+            Assert.AreEqual("Kernel (5, 7)", shape.ToString(), "mismatch string");
 
             Assert.IsTrue(shape == Shape.Kernel0D(5, 7), "notequal shape");
             Assert.IsTrue(shape != Shape.Kernel0D(5, 8), "notequal shape");
@@ -192,7 +192,7 @@ namespace TensorShaderTest {
             Assert.AreEqual(3, shape.MapSize, "mismatch mapsize");
             Assert.AreEqual(5 * 7 * 3, shape.DataSize, "mismatch datasize");
             Assert.AreEqual(1, shape.Batch, "mismatch batch");
-            Assert.AreEqual("(5, 7, 3)", shape.ToString(), "mismatch string");
+            Assert.AreEqual("Kernel (5, 7, 3)", shape.ToString(), "mismatch string");
 
             Assert.IsTrue(shape == Shape.Kernel1D(5, 7, 3), "notequal shape");
             Assert.IsTrue(shape != Shape.Kernel1D(5, 8, 3), "notequal shape");
@@ -216,7 +216,7 @@ namespace TensorShaderTest {
             Assert.AreEqual(3 * 5, shape.MapSize, "mismatch mapsize");
             Assert.AreEqual(5 * 7 * 3 * 5, shape.DataSize, "mismatch datasize");
             Assert.AreEqual(1, shape.Batch, "mismatch batch");
-            Assert.AreEqual("(5, 7, 3, 5)", shape.ToString(), "mismatch string");
+            Assert.AreEqual("Kernel (5, 7, 3, 5)", shape.ToString(), "mismatch string");
 
             Assert.IsTrue(shape == Shape.Kernel2D(5, 7, 3, 5), "notequal shape");
             Assert.IsTrue(shape != Shape.Kernel2D(5, 8, 3, 5), "notequal shape");
@@ -240,7 +240,7 @@ namespace TensorShaderTest {
             Assert.AreEqual(3 * 5 * 7, shape.MapSize, "mismatch mapsize");
             Assert.AreEqual(5 * 7 * 3 * 5 * 7, shape.DataSize, "mismatch datasize");
             Assert.AreEqual(1, shape.Batch, "mismatch batch");
-            Assert.AreEqual("(5, 7, 3, 5, 7)", shape.ToString(), "mismatch string");
+            Assert.AreEqual("Kernel (5, 7, 3, 5, 7)", shape.ToString(), "mismatch string");
 
             Assert.IsTrue(shape == Shape.Kernel3D(5, 7, 3, 5, 7), "notequal shape");
             Assert.IsTrue(shape != Shape.Kernel3D(5, 8, 3, 5, 7), "notequal shape");

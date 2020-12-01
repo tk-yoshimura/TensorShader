@@ -255,7 +255,7 @@ namespace TensorShader {
 
         /// <summary>文字列化</summary>
         public override string ToString() {
-            return $"({string.Join(", ", shape)})";
+            return $"{Type} ({string.Join(", ", shape)})";
         }
 
         /// <summary>等価か判定</summary>
