@@ -36,7 +36,7 @@ namespace MNIST {
 
             Console.WriteLine("Build model...");
             Field y = Model.CNN(x, classes);
-            StoreField acc = Accuracy(y, t);
+            StoreField matches = Sum(Matches(y, t));
             Field loss = Sum(
                     SoftmaxCrossEntropy(y, OneHotVector(t, classes)),
                     Axis.Map0D.Channels
@@ -44,11 +44,11 @@ namespace MNIST {
             StoreField avg_loss = Average(loss);
 
             Console.WriteLine("Visualize computation graph...");
-            Graph.WriteDotFile("graph.dot", loss, acc);
+            Graph.WriteDotFile("graph.dot", loss, matches);
 
             Console.WriteLine("Set iterator event...");
             train_iterator.IncreasedEpoch += (iter) => {
-                float train_acc = acc.State;
+                float train_acc = (float)matches.State / test_iterator.NumBatches;
                 float train_loss = avg_loss.State;
 
                 Console.WriteLine($"[{iter.Iteration}] train acc: {train_acc:F3} train loss: {train_loss:E3}");
@@ -73,10 +73,10 @@ namespace MNIST {
             Train(train_iterator, loader, x, t, trainflow, parameters);
 
             Console.WriteLine("Build inference flow...");
-            (Flow testflow, _) = Flow.Inference(acc);
+            (Flow testflow, _) = Flow.Inference(matches);
 
             Console.WriteLine("Testing...");
-            Test(test_iterator, loader, x, t, testflow, acc);
+            Test(test_iterator, loader, x, t, testflow, matches);
 
             Console.WriteLine("Saving snapshot...");
             Snapshot snapshot = parameters.Save();
@@ -111,8 +111,8 @@ namespace MNIST {
             Console.WriteLine($"{sw.ElapsedMilliseconds} msec, {sw.ElapsedMilliseconds / train_iterator.Epoch} msec/epoch");
         }
 
-        static void Test(Iterator test_iterator, MnistLoader loader, VariableField x, VariableField t, Flow testflow, StoreField acc) {
-            List<float> test_acc_list = new List<float>();
+        static void Test(Iterator test_iterator, MnistLoader loader, VariableField x, VariableField t, Flow testflow, StoreField matches) {
+            float sum_matches = 0;
 
             Stopwatch sw = new Stopwatch();
 
@@ -126,16 +126,16 @@ namespace MNIST {
 
                 testflow.Execute();
 
-                float test_acc = acc.State;
-
-                test_acc_list.Add(test_acc);
+                sum_matches += (float)matches.State;
             }
 
             sw.Stop();
 
             Console.WriteLine($"{sw.ElapsedMilliseconds} msec");
 
-            Console.WriteLine($"[Result] acc: {test_acc_list.Average():F5}");
+            float acc = sum_matches / test_iterator.Counts;
+
+            Console.WriteLine($"[Result] acc: {acc:F5}");
         }
     }
 }
