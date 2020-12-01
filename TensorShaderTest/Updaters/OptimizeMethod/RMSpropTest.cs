@@ -29,9 +29,9 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
                 flow.Execute();
                 parameters.Update();
 
-                losses.Add((float)loss.State);
-                xs.Add((float)x.State);
-                ys.Add((float)y.State);
+                losses.Add(loss.State);
+                xs.Add(x.State);
+                ys.Add(y.State);
             }
 
             float[] losses_expect = {
@@ -79,9 +79,9 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
                 flow.Execute();
                 parameters.Update();
 
-                losses_first.Add((float)loss.State);
-                xs_first.Add((float)x.State);
-                ys_first.Add((float)y.State);
+                losses_first.Add(loss.State);
+                xs_first.Add(x.State);
+                ys_first.Add(y.State);
             }
 
             x.State = 0.7f;
@@ -95,9 +95,9 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
                 flow.Execute();
                 parameters.Update();
 
-                losses_second.Add((float)loss.State);
-                xs_second.Add((float)x.State);
-                ys_second.Add((float)y.State);
+                losses_second.Add(loss.State);
+                xs_second.Add(x.State);
+                ys_second.Add(y.State);
             }
 
             CollectionAssert.AreEqual(losses_first, losses_second);
@@ -112,9 +112,9 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
                 flow.Execute();
                 parameters.Update();
 
-                losses_third.Add((float)loss.State);
-                xs_third.Add((float)x.State);
-                ys_third.Add((float)y.State);
+                losses_third.Add(loss.State);
+                xs_third.Add(x.State);
+                ys_third.Add(y.State);
             }
 
             CollectionAssert.AreEqual(losses_first, losses_third);

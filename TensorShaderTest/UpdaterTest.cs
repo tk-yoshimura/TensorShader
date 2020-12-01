@@ -82,8 +82,8 @@ namespace TensorShaderTest {
                 flow.Execute();
                 parameters.Update();
 
-                Assert.AreEqual(0.4f, (float)f1.State, 1e-6f);
-                Assert.AreEqual(1.4f, (float)f2.State, 1e-6f);
+                Assert.AreEqual(0.4f, f1.State, 1e-6f);
+                Assert.AreEqual(1.4f, f2.State, 1e-6f);
 
                 Snapshot snapshot = parameters.Save();
 
@@ -92,8 +92,8 @@ namespace TensorShaderTest {
 
                 parameters.Load(snapshot);
 
-                Assert.AreEqual(0.4f, (float)f1.State, 1e-6f);
-                Assert.AreEqual(1.4f, (float)f2.State, 1e-6f);
+                Assert.AreEqual(0.4f, f1.State, 1e-6f);
+                Assert.AreEqual(1.4f, f2.State, 1e-6f);
             }
         }
 
@@ -118,7 +118,7 @@ namespace TensorShaderTest {
 
                 Assert.AreEqual((-2.25f + 2) * 1.5f * 2, (float)f1.GradState);
 
-                Assert.AreEqual(-1.5f - (-2.25f + 2) * 1.5f * 2 * 0.1f, (float)f1.State, 1e-6f);
+                Assert.AreEqual(-1.5f - (-2.25f + 2) * 1.5f * 2 * 0.1f, f1.State, 1e-6f);
 
                 Snapshot snapshot = parameters.Save();
 
@@ -127,7 +127,7 @@ namespace TensorShaderTest {
 
                 parameters.Load(snapshot);
 
-                Assert.AreEqual(-1.5f - (-2.25f + 2) * 1.5f * 2 * 0.1f, (float)f1.State, 1e-6f);
+                Assert.AreEqual(-1.5f - (-2.25f + 2) * 1.5f * 2 * 0.1f, f1.State, 1e-6f);
                 Assert.AreEqual((-2.25f + 2) * 1.5f * 2, (float)f1.GradState);
             }
         }
@@ -158,8 +158,8 @@ namespace TensorShaderTest {
                 flow.Execute();
                 parameters.Update();
 
-                Assert.AreEqual(-0.2f, (float)f1.State, 1e-6f);
-                Assert.AreEqual(0.8f, (float)f2.State, 1e-6f);
+                Assert.AreEqual(-0.2f, f1.State, 1e-6f);
+                Assert.AreEqual(0.8f, f2.State, 1e-6f);
 
                 Snapshot snapshot = parameters.Save();
 
@@ -171,8 +171,8 @@ namespace TensorShaderTest {
 
                 parameters.Load(snapshot);
 
-                Assert.AreEqual(-0.2f, (float)f1.State, 1e-6f);
-                Assert.AreEqual(0.8f, (float)f2.State, 1e-6f);
+                Assert.AreEqual(-0.2f, f1.State, 1e-6f);
+                Assert.AreEqual(0.8f, f2.State, 1e-6f);
 
                 parameters.Where((parameter) => parameter == f1)["SGD.Lambda"] = 0.3;
                 Assert.ThrowsException<System.ArgumentException>(() =>

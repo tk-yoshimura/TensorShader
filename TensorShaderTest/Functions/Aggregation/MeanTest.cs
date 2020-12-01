@@ -144,7 +144,7 @@ namespace TensorShaderTest.Functions.Aggregation {
                 Assert.AreEqual(Shape.Scalar, v2.Shape);
 
                 float average_expect = x.Average();
-                float average_actual = (float)v2.State;
+                float average_actual = v2.State;
 
                 Assert.AreEqual(average_expect, average_actual, 1e-6f);
             }

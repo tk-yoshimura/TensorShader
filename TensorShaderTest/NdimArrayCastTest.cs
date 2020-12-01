@@ -11,6 +11,8 @@ namespace TensorShaderTest {
 
             Assert.AreEqual(Shape.Scalar, arr.Shape);
             CollectionAssert.AreEqual(new float[] { 5 }, arr.Value);
+
+            Assert.AreEqual(5, (float)arr);
         }
 
         [TestMethod]
@@ -19,6 +21,8 @@ namespace TensorShaderTest {
 
             Assert.AreEqual(Shape.Vector(4), arr.Shape);
             CollectionAssert.AreEqual(new float[] { 1, 2, 3, 4 }, arr.Value);
+
+            CollectionAssert.AreEqual(new float[] { 1, 2, 3, 4 }, (float[])arr);
         }
 
         [TestMethod]
@@ -27,6 +31,8 @@ namespace TensorShaderTest {
 
             Assert.AreEqual(Shape.Map0D(3, 2), arr.Shape);
             CollectionAssert.AreEqual(new float[] { 1, 2, 3, 4, 5, 6 }, arr.Value);
+
+            CollectionAssert.AreEqual(new float[] { 1, 2, 3, 4, 5, 6 }, ((float[,])arr).Flatten());
         }
 
         [TestMethod]
@@ -35,6 +41,8 @@ namespace TensorShaderTest {
 
             Assert.AreEqual(Shape.Map0D(3, 2), arr.Shape);
             CollectionAssert.AreEqual(new float[] { 1, 2, 3, 4, 5, 6 }, arr.Value);
+
+            CollectionAssert.AreEqual(new float[] { 1, 2, 3, 4, 5, 6 }, ((float[][])arr).Flatten());
         }
 
         [TestMethod]
@@ -49,6 +57,11 @@ namespace TensorShaderTest {
                 new float[] { 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0, 2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7 },
                 arr.Value
             );
+
+            CollectionAssert.AreEqual(
+                new float[] { 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0, 2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7 },
+                ((float[,,])arr).Flatten()
+            );
         }
 
         [TestMethod]
@@ -62,6 +75,11 @@ namespace TensorShaderTest {
             CollectionAssert.AreEqual(
                 new float[] { 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0, 2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7 },
                 arr.Value
+            );
+
+            CollectionAssert.AreEqual(
+                new float[] { 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0, 2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7 },
+                ((float[][,])arr).Flatten()
             );
         }
 
@@ -86,6 +104,14 @@ namespace TensorShaderTest {
                 },
                 arr.Value
             );
+
+            CollectionAssert.AreEqual(
+                new float[] {
+                    1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0, 2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7,
+                    2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7, 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0,
+                },
+                ((float[,,,])arr).Flatten()
+            );
         }
 
         [TestMethod]
@@ -108,6 +134,14 @@ namespace TensorShaderTest {
                     2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7, 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0,
                 },
                 arr.Value
+            );
+
+            CollectionAssert.AreEqual(
+                new float[] {
+                    1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0, 2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7,
+                    2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7, 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0,
+                },
+                ((float[][,,])arr).Flatten()
             );
         }
 
@@ -146,6 +180,16 @@ namespace TensorShaderTest {
                 },
                 arr.Value
             );
+
+            CollectionAssert.AreEqual(
+                new float[] {
+                    1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0, 2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7,
+                    2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7, 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0,
+                    1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0, 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0,
+                    2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7, 2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7,
+                },
+                ((float[,,,,])arr).Flatten()
+            );
         }
 
         [TestMethod]
@@ -183,6 +227,21 @@ namespace TensorShaderTest {
                 },
                 arr.Value
             );
+
+            float[][,,,] remaparr = arr;
+
+            CollectionAssert.AreEqual(
+                new float[] {
+                    1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0, 2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7,
+                    2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7, 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0,
+                    1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0, 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0,
+                    2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7, 2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7,
+                },
+                remaparr.Flatten()
+            );
+
+            Assert.AreEqual(2, remaparr.Length);
+            Assert.AreEqual(, ((float[][,,,])arr).GetLength(0));
         }
     }
 }

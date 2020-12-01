@@ -63,7 +63,7 @@ namespace TensorShaderCudaBackend {
         public static Type ElementType => typeof(T);
 
         /// <summary>値</summary>
-        public T[] Value => (T[])this;
+        public T[] Value => this;
 
         /// <summary>概要</summary>
         public string Overview { private set; get; }

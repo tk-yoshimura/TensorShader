@@ -48,8 +48,8 @@ namespace MNIST {
 
             Console.WriteLine("Set iterator event...");
             train_iterator.IncreasedEpoch += (iter) => {
-                float train_acc = (float)acc.State;
-                float train_loss = (float)avg_loss.State;
+                float train_acc = acc.State;
+                float train_loss = avg_loss.State;
 
                 Console.WriteLine($"[{iter.Iteration}] train acc: {train_acc:F3} train loss: {train_loss:E3}");
             };
@@ -126,7 +126,7 @@ namespace MNIST {
 
                 testflow.Execute();
 
-                float test_acc = (float)acc.State;
+                float test_acc = acc.State;
 
                 test_acc_list.Add(test_acc);
             }

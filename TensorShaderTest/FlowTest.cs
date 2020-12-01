@@ -200,7 +200,7 @@ namespace TensorShaderTest {
                 flow.Execute();
 
                 Assert.AreEqual(7, (float)outtensor1.State);
-                Assert.AreEqual(4.5, (float)outtensor2.State);
+                Assert.AreEqual(4.5, outtensor2.State);
                 Assert.AreEqual(11, flow.TensorCount);
                 Assert.AreEqual(5, flow.BufferCount);
             }
@@ -231,7 +231,7 @@ namespace TensorShaderTest {
 
                 Assert.AreEqual(2, (float)tensor.State);
                 Assert.AreEqual(7, (float)outtensor1.State);
-                Assert.AreEqual(4.5, (float)outtensor2.State);
+                Assert.AreEqual(4.5, outtensor2.State);
                 Assert.AreEqual(11, flow.TensorCount);
                 Assert.AreEqual(5, flow.BufferCount);
             }
@@ -261,7 +261,7 @@ namespace TensorShaderTest {
                 flow.Execute();
 
                 Assert.AreEqual(2, (float)tensor.State);
-                Assert.AreEqual(4.5, (float)outtensor.State);
+                Assert.AreEqual(4.5, outtensor.State);
                 Assert.AreEqual(8, flow.TensorCount);
                 Assert.AreEqual(4, flow.BufferCount);
             }

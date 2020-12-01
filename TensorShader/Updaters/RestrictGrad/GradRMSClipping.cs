@@ -11,7 +11,7 @@ namespace TensorShader.Updaters.RestrictGrad {
         /// <summary>制限値</summary>
         public float Limit {
             get {
-                return (float)Math.Sqrt((float)limit.State);
+                return (float)Math.Sqrt(limit.State);
             }
             set {
                 limit.State = value * value;

@@ -27,7 +27,7 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
                 Console.WriteLine($"{i + 1}: {(float)x.State:F8}, {(float)c.State:F8}");
             }
 
-            Assert.AreEqual(dx_val * loops, (float)x.State, 1e-5f);
+            Assert.AreEqual(dx_val * loops, x.State, 1e-5f);
         }
     }
 }

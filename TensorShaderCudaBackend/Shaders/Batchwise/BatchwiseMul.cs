@@ -88,7 +88,7 @@ namespace TensorShaderCudaBackend.Shaders.Batchwise {
                 throw new ArgumentException(nameof(map_stride));
             }
 
-            if (!(args[0] is CudaArray<float> vectorarr) || vectorarr.Length < (ulong)Batches) {
+            if (!(args[0] is CudaArray<float> vectorarr) || vectorarr.Length < Batches) {
                 throw new ArgumentException(nameof(vectorarr));
             }
 

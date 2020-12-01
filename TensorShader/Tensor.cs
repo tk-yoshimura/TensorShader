@@ -128,7 +128,7 @@ namespace TensorShader {
                 throw new ArgumentOutOfRangeException();
             }
 
-            Buffer.CopyTo((ulong)src_index, tensor.Buffer, (ulong)dst_index, (ulong)count);
+            Buffer.CopyTo(src_index, tensor.Buffer, dst_index, count);
         }
 
         /// <summary>形状変更</summary>

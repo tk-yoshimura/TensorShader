@@ -72,7 +72,7 @@ namespace TensorShaderCudaBackend.Shaders.Channelwise {
             }
 
 
-            if (!(args[0] is CudaArray<float> vectorarr) || vectorarr.Length < (ulong)Channels) {
+            if (!(args[0] is CudaArray<float> vectorarr) || vectorarr.Length < Channels) {
                 throw new ArgumentException(nameof(vectorarr));
             }
 

@@ -56,7 +56,7 @@ namespace TensorShader.Operators.ArrayManipulation {
 
         /// <summary>ブロードキャスト出力形状</summary>
         internal static Shape BroadcastShape(Shape inshape, Shape targetshape) {
-            int[] outshape = (int[])inshape;
+            int[] outshape = inshape;
             int i;
             for (i = 0; i < outshape.Length; i++) {
                 if (outshape[i] == targetshape[i]) {

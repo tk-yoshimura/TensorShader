@@ -15,7 +15,7 @@ namespace TensorShaderCudaBackendTest {
 
                 Assert.IsTrue(arr.IsValid);
                 Assert.AreEqual(Marshal.SizeOf(typeof(float)) * length, (int)arr.ByteSize);
-                Assert.AreEqual((ulong)length, arr.Length);
+                Assert.AreEqual(length, arr.Length);
 
                 arr.Dispose();
 
@@ -29,7 +29,7 @@ namespace TensorShaderCudaBackendTest {
 
                 Assert.IsTrue(arr.IsValid);
                 Assert.AreEqual(Marshal.SizeOf(typeof(double)) * length, (int)arr.ByteSize);
-                Assert.AreEqual((ulong)length, arr.Length);
+                Assert.AreEqual(length, arr.Length);
 
                 arr.Dispose();
 

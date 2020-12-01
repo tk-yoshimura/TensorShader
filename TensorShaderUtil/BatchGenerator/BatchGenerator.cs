@@ -45,7 +45,7 @@ namespace TensorShaderUtil.BatchGenerator {
                     this.BatchShape = Shape.Map0D(data_shape.Channels, num_batches);
                     break;
                 case ShapeType.Map:
-                    int[] s = (int[])data_shape;
+                    int[] s = data_shape;
                     s[s.Length - 1] = num_batches;
 
                     this.BatchShape = new Shape(ShapeType.Map, s);
