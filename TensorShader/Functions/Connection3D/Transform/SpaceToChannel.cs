@@ -61,19 +61,19 @@ namespace TensorShader.Functions.Connection3D {
             base.CheckInputShapes(inshapes);
 
             if (inshapes[0].Type != ShapeType.Map || inshapes[0].Ndim != 5) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(inshapes[0], ("Ndim", 5), ("Type", ShapeType.Map)));
+                throw new ArgumentException(ExceptionMessage.ShapeElements(inshapes[0], ("Ndim", 5), ("Type", ShapeType.Map)));
             }
 
             if (inshapes[0].Width % Scale != 0) {
-                throw new ArgumentException(ExceptionMessage.TensorLengthMultiple("Width", inshapes[0], inshapes[0].Width, Scale));
+                throw new ArgumentException(ExceptionMessage.LengthMultiple("Width", inshapes[0], inshapes[0].Width, Scale));
             }
 
             if (inshapes[0].Height % Scale != 0) {
-                throw new ArgumentException(ExceptionMessage.TensorLengthMultiple("Height", inshapes[0], inshapes[0].Height, Scale));
+                throw new ArgumentException(ExceptionMessage.LengthMultiple("Height", inshapes[0], inshapes[0].Height, Scale));
             }
 
             if (inshapes[0].Depth % Scale != 0) {
-                throw new ArgumentException(ExceptionMessage.TensorLengthMultiple("Height", inshapes[0], inshapes[0].Depth, Scale));
+                throw new ArgumentException(ExceptionMessage.LengthMultiple("Height", inshapes[0], inshapes[0].Depth, Scale));
             }
         }
 

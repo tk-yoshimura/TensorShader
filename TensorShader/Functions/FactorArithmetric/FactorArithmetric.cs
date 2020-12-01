@@ -53,7 +53,7 @@ namespace TensorShader.Functions.FactorArithmetric {
             base.CheckInputShapes(inshapes);
 
             if (inshapes[1].Type != ShapeType.Scalar) {
-                throw new ArgumentException(ExceptionMessage.TensorType(inshapes[1].Type, ShapeType.Scalar));
+                throw new ArgumentException(ExceptionMessage.ShapeType(inshapes[1].Type, ShapeType.Scalar));
             }
         }
 

@@ -22,7 +22,11 @@ namespace TensorShaderTest {
             Assert.AreEqual(Shape.Vector(4), arr.Shape);
             CollectionAssert.AreEqual(new float[] { 1, 2, 3, 4 }, arr.Value);
 
+            float[] remaparr = arr;
+
             CollectionAssert.AreEqual(new float[] { 1, 2, 3, 4 }, (float[])arr);
+
+            Assert.AreEqual(4, remaparr.GetLength(0));
         }
 
         [TestMethod]
@@ -32,7 +36,12 @@ namespace TensorShaderTest {
             Assert.AreEqual(Shape.Map0D(3, 2), arr.Shape);
             CollectionAssert.AreEqual(new float[] { 1, 2, 3, 4, 5, 6 }, arr.Value);
 
-            CollectionAssert.AreEqual(new float[] { 1, 2, 3, 4, 5, 6 }, ((float[,])arr).Flatten());
+            float[,] remaparr = arr;
+
+            CollectionAssert.AreEqual(new float[] { 1, 2, 3, 4, 5, 6 }, remaparr.Flatten());
+
+            Assert.AreEqual(2, remaparr.GetLength(0));
+            Assert.AreEqual(3, remaparr.GetLength(1));
         }
 
         [TestMethod]
@@ -42,7 +51,12 @@ namespace TensorShaderTest {
             Assert.AreEqual(Shape.Map0D(3, 2), arr.Shape);
             CollectionAssert.AreEqual(new float[] { 1, 2, 3, 4, 5, 6 }, arr.Value);
 
-            CollectionAssert.AreEqual(new float[] { 1, 2, 3, 4, 5, 6 }, ((float[][])arr).Flatten());
+            float[][] remaparr = arr;
+
+            CollectionAssert.AreEqual(new float[] { 1, 2, 3, 4, 5, 6 }, remaparr.Flatten());
+
+            Assert.AreEqual(2, remaparr.Length);
+            Assert.AreEqual(3, remaparr[0].GetLength(0));
         }
 
         [TestMethod]
@@ -58,10 +72,16 @@ namespace TensorShaderTest {
                 arr.Value
             );
 
+            float[,,] remaparr = arr;
+
             CollectionAssert.AreEqual(
                 new float[] { 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0, 2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7 },
-                ((float[,,])arr).Flatten()
+                remaparr.Flatten()
             );
+
+            Assert.AreEqual(2, remaparr.GetLength(0));
+            Assert.AreEqual(3, remaparr.GetLength(1));
+            Assert.AreEqual(4, remaparr.GetLength(2));
         }
 
         [TestMethod]
@@ -77,10 +97,16 @@ namespace TensorShaderTest {
                 arr.Value
             );
 
+            float[][,] remaparr = arr;
+
             CollectionAssert.AreEqual(
                 new float[] { 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0, 2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7 },
-                ((float[][,])arr).Flatten()
+                remaparr.Flatten()
             );
+
+            Assert.AreEqual(2, remaparr.Length);
+            Assert.AreEqual(3, remaparr[0].GetLength(0));
+            Assert.AreEqual(4, remaparr[0].GetLength(1));
         }
 
         [TestMethod]
@@ -105,13 +131,20 @@ namespace TensorShaderTest {
                 arr.Value
             );
 
+            float[,,,] remaparr = arr;
+
             CollectionAssert.AreEqual(
                 new float[] {
                     1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0, 2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7,
                     2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7, 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0,
                 },
-                ((float[,,,])arr).Flatten()
+                remaparr.Flatten()
             );
+
+            Assert.AreEqual(2, remaparr.GetLength(0));
+            Assert.AreEqual(2, remaparr.GetLength(1));
+            Assert.AreEqual(3, remaparr.GetLength(2));
+            Assert.AreEqual(4, remaparr.GetLength(3));
         }
 
         [TestMethod]
@@ -136,13 +169,20 @@ namespace TensorShaderTest {
                 arr.Value
             );
 
+            float[][,,] remaparr = arr;
+
             CollectionAssert.AreEqual(
                 new float[] {
                     1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0, 2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7,
                     2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7, 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0,
                 },
-                ((float[][,,])arr).Flatten()
+                remaparr.Flatten()
             );
+
+            Assert.AreEqual(2, remaparr.Length);
+            Assert.AreEqual(2, remaparr[0].GetLength(0));
+            Assert.AreEqual(3, remaparr[0].GetLength(1));
+            Assert.AreEqual(4, remaparr[0].GetLength(2));
         }
 
         [TestMethod]
@@ -181,6 +221,8 @@ namespace TensorShaderTest {
                 arr.Value
             );
 
+            float[,,,,] remaparr = arr;
+
             CollectionAssert.AreEqual(
                 new float[] {
                     1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0, 2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7,
@@ -188,8 +230,14 @@ namespace TensorShaderTest {
                     1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0, 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 0,
                     2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7, 2, 3, 4, 1, 5, 6, 7, 4, 8, 9, 0, 7,
                 },
-                ((float[,,,,])arr).Flatten()
+                remaparr.Flatten()
             );
+
+            Assert.AreEqual(2, remaparr.GetLength(0));
+            Assert.AreEqual(2, remaparr.GetLength(1));
+            Assert.AreEqual(2, remaparr.GetLength(2));
+            Assert.AreEqual(3, remaparr.GetLength(3));
+            Assert.AreEqual(4, remaparr.GetLength(4));
         }
 
         [TestMethod]
@@ -241,7 +289,10 @@ namespace TensorShaderTest {
             );
 
             Assert.AreEqual(2, remaparr.Length);
-            Assert.AreEqual(, ((float[][,,,])arr).GetLength(0));
+            Assert.AreEqual(2, remaparr[0].GetLength(0));
+            Assert.AreEqual(2, remaparr[0].GetLength(1));
+            Assert.AreEqual(3, remaparr[0].GetLength(2));
+            Assert.AreEqual(4, remaparr[0].GetLength(3));
         }
     }
 }

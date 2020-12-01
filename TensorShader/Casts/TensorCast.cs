@@ -90,7 +90,7 @@ namespace TensorShader {
         /// <summary>任意形状任意初期値の生成</summary>
         public static implicit operator Tensor((Shape shape, float[][] v) val) {
             if (val.shape.Batch != val.v.Length) {
-                throw new ArgumentException("batch");
+                throw new ArgumentException(ExceptionMessage.Argument("Batch", val.v.Length, val.shape.Batch));
             }
 
             return new Tensor(val.shape, val.v.Flatten());

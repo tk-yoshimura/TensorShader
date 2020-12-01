@@ -55,11 +55,11 @@ namespace TensorShader.Functions.TrivectorArithmetric {
             }
 
             if (inshapes[0].Channels % 3 != 0) {
-                throw new AggregateException(ExceptionMessage.TensorLengthMultiple("Channels", inshapes[0], inshapes[0].Channels, 3));
+                throw new AggregateException(ExceptionMessage.LengthMultiple("Channels", inshapes[0], inshapes[0].Channels, 3));
             }
 
             if (inshapes[0].InChannels % 3 != 0) {
-                throw new AggregateException(ExceptionMessage.TensorLengthMultiple("InChannels", inshapes[0], inshapes[0].Channels, 3));
+                throw new AggregateException(ExceptionMessage.LengthMultiple("InChannels", inshapes[0], inshapes[0].Channels, 3));
             }
         }
 

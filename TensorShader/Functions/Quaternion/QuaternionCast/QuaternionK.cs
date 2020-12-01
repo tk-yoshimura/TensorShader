@@ -53,11 +53,11 @@ namespace TensorShader.Functions.Quaternion {
             }
 
             if (inshapes[0].Channels % 4 != 0) {
-                throw new AggregateException(ExceptionMessage.TensorLengthMultiple("Channels", inshapes[0], inshapes[0].Channels, 4));
+                throw new AggregateException(ExceptionMessage.LengthMultiple("Channels", inshapes[0], inshapes[0].Channels, 4));
             }
 
             if (inshapes[0].InChannels % 4 != 0) {
-                throw new AggregateException(ExceptionMessage.TensorLengthMultiple("InChannels", inshapes[0], inshapes[0].Channels, 4));
+                throw new AggregateException(ExceptionMessage.LengthMultiple("InChannels", inshapes[0], inshapes[0].Channels, 4));
             }
         }
 

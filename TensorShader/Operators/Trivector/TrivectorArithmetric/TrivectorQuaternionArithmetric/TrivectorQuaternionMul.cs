@@ -15,10 +15,10 @@ namespace TensorShader.Operators.TrivectorQuaternionArithmetric {
             }
 
             if (vectorshape.Channels % 3 != 0) {
-                throw new ArgumentException(ExceptionMessage.TensorLengthMultiple("Channels", vectorshape, vectorshape.Channels, 3));
+                throw new ArgumentException(ExceptionMessage.LengthMultiple("Channels", vectorshape, vectorshape.Channels, 3));
             }
             if (vectorshape.InChannels % 3 != 0) {
-                throw new ArgumentException(ExceptionMessage.TensorLengthMultiple("InChannels", vectorshape, vectorshape.InChannels, 3));
+                throw new ArgumentException(ExceptionMessage.LengthMultiple("InChannels", vectorshape, vectorshape.InChannels, 3));
             }
 
             int[] s = vectorshape;

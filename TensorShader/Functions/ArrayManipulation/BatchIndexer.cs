@@ -46,7 +46,7 @@ namespace TensorShader.Functions.ArrayManipulation {
             Shape inshape = inshapes[0];
 
             if (inshape.Ndim < 2 || inshape.Type != ShapeType.Map) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim>", 2), ("Type", ShapeType.Map)));
+                throw new ArgumentException(ExceptionMessage.ShapeElements(inshape, ("Ndim>", 2), ("Type", ShapeType.Map)));
             }
         }
 

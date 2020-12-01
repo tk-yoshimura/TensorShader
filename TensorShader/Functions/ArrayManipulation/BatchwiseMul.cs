@@ -31,7 +31,7 @@ namespace TensorShader.Functions.ArrayManipulation {
             base.CheckInputShapes(inshapes);
 
             if (inshapes[1].Type != ShapeType.Vector || inshapes[0].Batch != inshapes[1].Channels) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(inshapes[1], ("Type", ShapeType.Vector), ("Channels", inshapes[0].Batch)));
+                throw new ArgumentException(ExceptionMessage.ShapeElements(inshapes[1], ("Type", ShapeType.Vector), ("Channels", inshapes[0].Batch)));
             }
         }
 

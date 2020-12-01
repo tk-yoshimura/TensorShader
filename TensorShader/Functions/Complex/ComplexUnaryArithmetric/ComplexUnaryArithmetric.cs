@@ -55,11 +55,11 @@ namespace TensorShader.Functions.ComplexArithmetric {
             }
 
             if (inshapes[0].Channels % 2 != 0) {
-                throw new AggregateException(ExceptionMessage.TensorLengthMultiple("Channels", inshapes[0], inshapes[0].Channels, 2));
+                throw new AggregateException(ExceptionMessage.LengthMultiple("Channels", inshapes[0], inshapes[0].Channels, 2));
             }
 
             if (inshapes[0].InChannels % 2 != 0) {
-                throw new AggregateException(ExceptionMessage.TensorLengthMultiple("InChannels", inshapes[0], inshapes[0].Channels, 2));
+                throw new AggregateException(ExceptionMessage.LengthMultiple("InChannels", inshapes[0], inshapes[0].Channels, 2));
             }
         }
 

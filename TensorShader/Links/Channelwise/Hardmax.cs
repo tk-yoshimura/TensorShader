@@ -28,7 +28,7 @@ namespace TensorShader.Links.Channelwise {
         public Hardmax(Field infield, Field outfield)
             : base(new Field[] { infield }, outfield) {
             if (infield.Shape.Type != ShapeType.Map) {
-                throw new ArgumentException(ExceptionMessage.TensorType(infield.Shape.Type, ShapeType.Map));
+                throw new ArgumentException(ExceptionMessage.ShapeType(infield.Shape.Type, ShapeType.Map));
             }
         }
 

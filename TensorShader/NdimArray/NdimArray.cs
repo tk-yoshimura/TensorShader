@@ -82,7 +82,7 @@ namespace TensorShader {
 
         private long Index(params int[] indexes) {
             if (indexes.Length != Ndim) {
-                throw new ArgumentException(ExceptionMessage.Argument($"{indexes}.Length", indexes.Length, Ndim));
+                throw new ArgumentException(ExceptionMessage.Argument($"{nameof(indexes)}.Length", indexes.Length, Ndim));
             }
 
             long pos = 0;
@@ -212,7 +212,7 @@ namespace TensorShader {
             Shape shape = arrays.First().Shape;
 
             if (shape.Type != ShapeType.Map) {
-                throw new ArgumentException(ExceptionMessage.TensorType(shape.Type, ShapeType.Map));
+                throw new ArgumentException(ExceptionMessage.ShapeType(shape.Type, ShapeType.Map));
             }
 
             return Join(arrays.First().Shape.Ndim - 1, arrays);

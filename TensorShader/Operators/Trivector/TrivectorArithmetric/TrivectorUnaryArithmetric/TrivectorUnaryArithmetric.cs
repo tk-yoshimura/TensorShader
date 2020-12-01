@@ -18,10 +18,10 @@ namespace TensorShader.Operators.TrivectorUnaryArithmetric {
             }
 
             if (shape.Channels % 3 != 0) {
-                throw new ArgumentException(ExceptionMessage.TensorLengthMultiple("Channels", shape, shape.Channels, 3));
+                throw new ArgumentException(ExceptionMessage.LengthMultiple("Channels", shape, shape.Channels, 3));
             }
             if (shape.InChannels % 3 != 0) {
-                throw new ArgumentException(ExceptionMessage.TensorLengthMultiple("InChannels", shape, shape.InChannels, 3));
+                throw new ArgumentException(ExceptionMessage.LengthMultiple("InChannels", shape, shape.InChannels, 3));
             }
 
             this.Elements = shape.Length / 3;

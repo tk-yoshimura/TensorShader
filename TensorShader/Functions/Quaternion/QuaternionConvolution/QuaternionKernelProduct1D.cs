@@ -48,19 +48,19 @@ namespace TensorShader.Functions.QuaternionConvolution {
             : base(inputs: 2, outputs: 1, allow_resubstitution: false) {
 
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 3) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 3), ("Type", ShapeType.Map)));
+                throw new ArgumentException(ExceptionMessage.ShapeElements(inshape, ("Ndim", 3), ("Type", ShapeType.Map)));
             }
 
             if (outshape.Type != ShapeType.Map || outshape.Ndim != 3) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(outshape, ("Ndim", 3), ("Type", ShapeType.Map)));
+                throw new ArgumentException(ExceptionMessage.ShapeElements(outshape, ("Ndim", 3), ("Type", ShapeType.Map)));
             }
 
             if (inshape.Channels % 4 != 0) {
-                throw new AggregateException(ExceptionMessage.TensorLengthMultiple("Channels", inshape, inshape.Channels, 4));
+                throw new AggregateException(ExceptionMessage.LengthMultiple("Channels", inshape, inshape.Channels, 4));
             }
 
             if (outshape.InChannels % 4 != 0) {
-                throw new AggregateException(ExceptionMessage.TensorLengthMultiple("Channels", outshape, outshape.Channels, 4));
+                throw new AggregateException(ExceptionMessage.LengthMultiple("Channels", outshape, outshape.Channels, 4));
             }
 
             this.InShape = inshape;

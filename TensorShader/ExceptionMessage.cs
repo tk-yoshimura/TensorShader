@@ -24,7 +24,7 @@ namespace TensorShader {
         public static string Shape(Shape actual, Shape expected) {
             switch (lang) {
                 case Lang.JP:
-                    return $"テンソル形状が不正です。{expected}が想定されていますが、{actual}が与えられました。";
+                    return $"形状が不正です。{expected}が想定されていますが、{actual}が与えられました。";
                 default:
                     return $"Invalid shape. expected:{expected} actual:{actual}";
             }
@@ -34,7 +34,7 @@ namespace TensorShader {
         public static string Shape(string elementname, Shape shape) {
             switch (lang) {
                 case Lang.JP:
-                    return $"テンソル形状{shape}の{elementname}が不正です。";
+                    return $"形状{shape}の{elementname}が不正です。";
                 default:
                     return $"Invalid {elementname} of shape {shape}.";
             }
@@ -44,17 +44,17 @@ namespace TensorShader {
         public static string Shape(int[] shape) {
             switch (lang) {
                 case Lang.JP:
-                    return $"テンソル形状({string.Join(",", shape)})が不正です。";
+                    return $"形状({string.Join(",", shape)})が不正です。";
                 default:
                     return $"Invalid shape ({string.Join(",", shape)}).";
             }
         }
 
-        /// <summary>テンソル長さ倍数</summary>
-        public static string TensorLengthMultiple(string elementname, Shape shape, int actual, int multiple) {
+        /// <summary>長さ倍数</summary>
+        public static string LengthMultiple(string elementname, Shape shape, int actual, int multiple) {
             switch (lang) {
                 case Lang.JP:
-                    return $"テンソル形状{shape}の{elementname}が不正です。{multiple}の倍数が想定されていますが、{actual}が与えられました。";
+                    return $"形状{shape}の{elementname}が不正です。{multiple}の倍数が想定されていますが、{actual}が与えられました。";
                 default:
                     return $"Invalid {elementname} of shape {shape}. expected:number of {multiple} actual:{actual}";
             }
@@ -64,7 +64,7 @@ namespace TensorShader {
         public static string ShapeWithIndex(int index, Shape actual, Shape expected) {
             switch (lang) {
                 case Lang.JP:
-                    return $"{index}番目のテンソル形状が不正です。{expected}が想定されていますが、{actual}が与えられました。";
+                    return $"{index}番目の形状が不正です。{expected}が想定されていますが、{actual}が与えられました。";
                 default:
                     return $"Invalid shape of {index}-th argument. expected:{expected} actual:{actual}";
             }
@@ -74,7 +74,7 @@ namespace TensorShader {
         public static string ShapeWithIndex(int index, string actual, string expected) {
             switch (lang) {
                 case Lang.JP:
-                    return $"{index}番目のテンソル形状が不正です。{expected}が想定されていますが、{actual}が与えられました。";
+                    return $"{index}番目の形状が不正です。{expected}が想定されていますが、{actual}が与えられました。";
                 default:
                     return $"Invalid shape of {index}-th argument. expected:{expected} actual:{actual}";
             }
@@ -120,45 +120,45 @@ namespace TensorShader {
             }
         }
 
-        /// <summary>テンソル長さ</summary>
-        public static string TensorLength(Shape actual, Shape expected) {
+        /// <summary>長さ</summary>
+        public static string Length(Shape actual, Shape expected) {
             switch (lang) {
                 case Lang.JP:
-                    return $"テンソルの長さが一致しません。{expected}, {actual}";
+                    return $"長さが一致しません。{expected}, {actual}";
                 default:
-                    return $"Mismatch tensor length. {expected}, {actual}";
+                    return $"tensor length. {expected}, {actual}";
             }
         }
 
-        /// <summary>テンソルタイプ</summary>
-        public static string TensorType(ShapeType actual, ShapeType expected) {
+        /// <summary>形状タイプ</summary>
+        public static string ShapeType(ShapeType actual, ShapeType expected) {
             switch (lang) {
                 case Lang.JP:
-                    return $"テンソルのタイプが不正です。{expected}が想定されていますが、{actual}が与えられました。";
+                    return $"形状タイプが不正です。{expected}が想定されていますが、{actual}が与えられました。";
                 default:
-                    return $"Invalid tensor type. expected:{expected} actual:{actual}";
+                    return $"Invalid shape type. expected:{expected} actual:{actual}";
             }
         }
 
-        /// <summary>テンソルの複数要素</summary>
-        public static string TensorElements(Shape actual, params (string name, object obj)[] expected) {
+        /// <summary>複数要素</summary>
+        public static string ShapeElements(Shape actual, params (string name, object obj)[] expected) {
             string str = string.Join(", ", expected.Select((item) => $"{item.name}={item.obj}"));
 
             switch (lang) {
                 case Lang.JP:
-                    return $"テンソルの形状が不正です。{str}であることが想定されていますが、{actual.Type} {actual}が与えられました。";
+                    return $"形状が不正です。{str}であることが想定されていますが、{actual.Type} {actual}が与えられました。";
                 default:
-                    return $"Invalid tensor shape. expected:{str} actual:{actual.Type} {actual}";
+                    return $"Invalid shape. expected:{str} actual:{actual.Type} {actual}";
             }
         }
 
-        /// <summary>テンソルの複数要素</summary>
-        public static string TensorElementsWithIndex(int index, Shape actual, params (string name, object obj)[] expected) {
+        /// <summary>複数要素</summary>
+        public static string ShapeElementsWithIndex(int index, Shape actual, params (string name, object obj)[] expected) {
             string str = string.Join(", ", expected.Select((item) => $"{item.name}={item.obj}"));
 
             switch (lang) {
                 case Lang.JP:
-                    return $"{index}番目のテンソルの形状が不正です。{str}であることが想定されていますが、{actual.Type} {actual}が与えられました。";
+                    return $"{index}番目の形状が不正です。{str}であることが想定されていますが、{actual.Type} {actual}が与えられました。";
                 default:
                     return $"Invalid shape of {index}-th argument. expected:{str} actual:{actual.Type} {actual}";
             }
@@ -231,6 +231,16 @@ namespace TensorShader {
                     return "パラメータ名は\"クラス名\".\"プロパティ名\"を指定してください。";
                 default:
                     return "The name argument must be specified by \"class name\".\"property name\".";
+            }
+        }
+
+        /// <summary>不正な型</summary>
+        public static string InvalidType() {
+            switch (lang) {
+                case Lang.JP:
+                    return $"型が不正です。";
+                default:
+                    return $"Invalid type. ";
             }
         }
 

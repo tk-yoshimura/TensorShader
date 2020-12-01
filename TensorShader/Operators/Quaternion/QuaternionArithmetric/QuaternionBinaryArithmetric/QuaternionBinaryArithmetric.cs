@@ -18,10 +18,10 @@ namespace TensorShader.Operators.QuaternionBinaryArithmetric {
             }
 
             if (shape.Channels % 4 != 0) {
-                throw new ArgumentException(ExceptionMessage.TensorLengthMultiple("Channels", shape, shape.Channels, 4));
+                throw new ArgumentException(ExceptionMessage.LengthMultiple("Channels", shape, shape.Channels, 4));
             }
             if (shape.InChannels % 4 != 0) {
-                throw new ArgumentException(ExceptionMessage.TensorLengthMultiple("InChannels", shape, shape.InChannels, 4));
+                throw new ArgumentException(ExceptionMessage.LengthMultiple("InChannels", shape, shape.InChannels, 4));
             }
 
             this.Elements = shape.Length / 4;

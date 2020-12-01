@@ -91,7 +91,7 @@ namespace TensorShader {
         /// <summary>任意形状任意初期値の生成</summary>
         public static implicit operator NdimArray<T>((Shape shape, T[][] v) val) {
             if (val.shape.Batch != val.v.Length) {
-                throw new ArgumentException("batch");
+                throw new ArgumentException(ExceptionMessage.Argument("Batch", val.v.Length, val.shape.Batch));
             }
 
             return new NdimArray<T>(val.shape, val.v.Flatten());
@@ -106,7 +106,7 @@ namespace TensorShader {
         /// <exception cref="InvalidCastException">Not Scalar</exception>
         public static implicit operator T(NdimArray<T> array) {
             if (array.Shape != Shape.Scalar) {
-                throw new InvalidCastException();
+                throw new InvalidCastException(ExceptionMessage.ShapeElements(array.Shape, ("Type", ShapeType.Scalar)));
             }
 
             return array.Value[0];
@@ -116,7 +116,7 @@ namespace TensorShader {
         /// <exception cref="InvalidCastException">Not 2dim</exception>
         public static implicit operator T[,](NdimArray<T> array) {
             if (array.Ndim != 2) {
-                throw new InvalidCastException();
+                throw new InvalidCastException(ExceptionMessage.ShapeElements(array.Shape, ("Ndim", 2)));
             }
 
             return array.Value.To2DArray((array.Shape[0], array.Shape[1]));
@@ -125,18 +125,18 @@ namespace TensorShader {
         /// <summary>1次配列配列へ変換</summary>
         /// <exception cref="InvalidCastException">Not 2dim, Not Map</exception>
         public static implicit operator T[][](NdimArray<T> array) {
-            if (array.Ndim != 2 || array.Type != ShapeType.Map) {
-                throw new InvalidCastException();
+            if (array.Type != ShapeType.Map) {
+                throw new InvalidCastException(ExceptionMessage.ShapeElements(array.Shape, ("Type", ShapeType.Map)));
             }
 
-            return array.Value.To1DArrays(array.Shape[0], array.Batch);
+            return array.Value.To1DArrays(array.Shape.DataSize, array.Batch);
         }
 
         /// <summary>3次配列へ変換</summary>
         /// <exception cref="InvalidCastException">Not 3dim</exception>
         public static implicit operator T[,,](NdimArray<T> array) {
             if (array.Ndim != 3) {
-                throw new InvalidCastException();
+                throw new InvalidCastException(ExceptionMessage.ShapeElements(array.Shape, ("Ndim", 3)));
             }
 
             return array.Value.To3DArray((array.Shape[0], array.Shape[1], array.Shape[2]));
@@ -146,7 +146,7 @@ namespace TensorShader {
         /// <exception cref="InvalidCastException">Not 3dim, Not Map</exception>
         public static implicit operator T[][,](NdimArray<T> array) {
             if (array.Ndim != 3 || array.Type != ShapeType.Map) {
-                throw new InvalidCastException();
+                throw new InvalidCastException(ExceptionMessage.ShapeElements(array.Shape, ("Ndim", 3), ("Type", ShapeType.Map)));
             }
 
             return array.Value.To2DArrays((array.Shape[0], array.Shape[1]), array.Batch);
@@ -156,7 +156,7 @@ namespace TensorShader {
         /// <exception cref="InvalidCastException">Not 4dim</exception>
         public static implicit operator T[,,,](NdimArray<T> array) {
             if (array.Ndim != 4) {
-                throw new InvalidCastException();
+                throw new InvalidCastException(ExceptionMessage.ShapeElements(array.Shape, ("Ndim", 4)));
             }
 
             return array.Value.To4DArray((array.Shape[0], array.Shape[1], array.Shape[2], array.Shape[3]));
@@ -166,7 +166,7 @@ namespace TensorShader {
         /// <exception cref="InvalidCastException">Not 4dim, Not Map</exception>
         public static implicit operator T[][,,](NdimArray<T> array) {
             if (array.Ndim != 4 || array.Type != ShapeType.Map) {
-                throw new InvalidCastException();
+                throw new InvalidCastException(ExceptionMessage.ShapeElements(array.Shape, ("Ndim", 4), ("Type", ShapeType.Map)));
             }
 
             return array.Value.To3DArrays((array.Shape[0], array.Shape[1], array.Shape[2]), array.Batch);
@@ -176,7 +176,7 @@ namespace TensorShader {
         /// <exception cref="InvalidCastException">Not 5dim</exception>
         public static implicit operator T[,,,,](NdimArray<T> array) {
             if (array.Ndim != 5) {
-                throw new InvalidCastException();
+                throw new InvalidCastException(ExceptionMessage.ShapeElements(array.Shape, ("Ndim", 5)));
             }
 
             return array.Value.To5DArray((array.Shape[0], array.Shape[1], array.Shape[2], array.Shape[3], array.Shape[4]));
@@ -186,7 +186,7 @@ namespace TensorShader {
         /// <exception cref="InvalidCastException">Not 5dim, Not Map</exception>
         public static implicit operator T[][,,,](NdimArray<T> array) {
             if (array.Ndim != 5 || array.Type != ShapeType.Map) {
-                throw new InvalidCastException();
+                throw new InvalidCastException(ExceptionMessage.ShapeElements(array.Shape, ("Ndim", 5), ("Type", ShapeType.Map)));
             }
 
             return array.Value.To4DArrays((array.Shape[0], array.Shape[1], array.Shape[2], array.Shape[3]), array.Batch);

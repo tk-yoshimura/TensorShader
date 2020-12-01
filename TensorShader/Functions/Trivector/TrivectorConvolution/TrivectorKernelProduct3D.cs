@@ -48,19 +48,19 @@ namespace TensorShader.Functions.TrivectorConvolution {
             : base(inputs: 3, outputs: 1, allow_resubstitution: false) {
 
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 5) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 5), ("Type", ShapeType.Map)));
+                throw new ArgumentException(ExceptionMessage.ShapeElements(inshape, ("Ndim", 5), ("Type", ShapeType.Map)));
             }
 
             if (outshape.Type != ShapeType.Map || outshape.Ndim != 5) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(outshape, ("Ndim", 5), ("Type", ShapeType.Map)));
+                throw new ArgumentException(ExceptionMessage.ShapeElements(outshape, ("Ndim", 5), ("Type", ShapeType.Map)));
             }
 
             if (inshape.Channels % 3 != 0) {
-                throw new AggregateException(ExceptionMessage.TensorLengthMultiple("Channels", inshape, inshape.Channels, 3));
+                throw new AggregateException(ExceptionMessage.LengthMultiple("Channels", inshape, inshape.Channels, 3));
             }
 
             if (outshape.Channels % 3 != 0) {
-                throw new AggregateException(ExceptionMessage.TensorLengthMultiple("Channels", outshape, outshape.Channels, 3));
+                throw new AggregateException(ExceptionMessage.LengthMultiple("Channels", outshape, outshape.Channels, 3));
             }
 
             this.InShape = inshape;

@@ -48,23 +48,23 @@ namespace TensorShader.Functions.ComplexConvolution {
             : base(inputs: 2, outputs: 1, allow_resubstitution: false) {
 
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 3) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 3), ("Type", ShapeType.Map)));
+                throw new ArgumentException(ExceptionMessage.ShapeElements(inshape, ("Ndim", 3), ("Type", ShapeType.Map)));
             }
 
             if (kernelshape.Type != ShapeType.Kernel || kernelshape.Ndim != 3) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(kernelshape, ("Ndim", 3), ("Type", ShapeType.Kernel)));
+                throw new ArgumentException(ExceptionMessage.ShapeElements(kernelshape, ("Ndim", 3), ("Type", ShapeType.Kernel)));
             }
 
             if (inshape.Channels % 2 != 0) {
-                throw new AggregateException(ExceptionMessage.TensorLengthMultiple("Channels", inshape, inshape.Channels, 2));
+                throw new AggregateException(ExceptionMessage.LengthMultiple("Channels", inshape, inshape.Channels, 2));
             }
 
             if (kernelshape.InChannels % 2 != 0) {
-                throw new AggregateException(ExceptionMessage.TensorLengthMultiple("InChannels", kernelshape, kernelshape.Channels, 2));
+                throw new AggregateException(ExceptionMessage.LengthMultiple("InChannels", kernelshape, kernelshape.Channels, 2));
             }
 
             if (inshape.Channels != kernelshape.InChannels) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(kernelshape, ("InChannels", inshape.Channels)));
+                throw new ArgumentException(ExceptionMessage.ShapeElements(kernelshape, ("InChannels", inshape.Channels)));
             }
 
             int outwidth = inshape.Width - kernelshape.Width + 1;

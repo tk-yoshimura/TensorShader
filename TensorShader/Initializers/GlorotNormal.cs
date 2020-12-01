@@ -14,7 +14,7 @@ namespace TensorShader.Initializers {
 
         private static int Fan(Shape shape) {
             if (shape.Type != ShapeType.Kernel) {
-                throw new ArgumentException(ExceptionMessage.TensorType(shape.Type, ShapeType.Kernel));
+                throw new ArgumentException(ExceptionMessage.ShapeType(shape.Type, ShapeType.Kernel));
             }
 
             return shape.DataSize / shape.OutChannels + shape.OutChannels;

@@ -45,11 +45,11 @@ namespace TensorShader.Functions.Connection1D {
             : base(inputs: 2, outputs: 1, allow_resubstitution: false) {
 
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 3) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 3), ("Type", ShapeType.Map)));
+                throw new ArgumentException(ExceptionMessage.ShapeElements(inshape, ("Ndim", 3), ("Type", ShapeType.Map)));
             }
 
             if (outshape.Type != ShapeType.Map || outshape.Ndim != 3) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(outshape, ("Ndim", 3), ("Type", ShapeType.Map)));
+                throw new ArgumentException(ExceptionMessage.ShapeElements(outshape, ("Ndim", 3), ("Type", ShapeType.Map)));
             }
 
             this.InShape = inshape;

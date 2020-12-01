@@ -48,23 +48,23 @@ namespace TensorShader.Functions.TrivectorConvolution {
             : base(inputs: 2, outputs: 1, allow_resubstitution: false) {
 
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 2) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 2), ("Type", ShapeType.Map)));
+                throw new ArgumentException(ExceptionMessage.ShapeElements(inshape, ("Ndim", 2), ("Type", ShapeType.Map)));
             }
 
             if (kernelshape.Type != ShapeType.Kernel || kernelshape.Ndim != 2) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(kernelshape, ("Ndim", 2), ("Type", ShapeType.Kernel)));
+                throw new ArgumentException(ExceptionMessage.ShapeElements(kernelshape, ("Ndim", 2), ("Type", ShapeType.Kernel)));
             }
 
             if (inshape.Channels % 3 != 0) {
-                throw new AggregateException(ExceptionMessage.TensorLengthMultiple("Channels", inshape, inshape.Channels, 3));
+                throw new AggregateException(ExceptionMessage.LengthMultiple("Channels", inshape, inshape.Channels, 3));
             }
 
             if (kernelshape.InChannels % 4 != 0) {
-                throw new AggregateException(ExceptionMessage.TensorLengthMultiple("InChannels", kernelshape, kernelshape.Channels, 4));
+                throw new AggregateException(ExceptionMessage.LengthMultiple("InChannels", kernelshape, kernelshape.Channels, 4));
             }
 
             if (inshape.Channels / 3 * 4 != kernelshape.InChannels) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(kernelshape, ("InChannels", inshape.Channels / 3 * 4)));
+                throw new ArgumentException(ExceptionMessage.ShapeElements(kernelshape, ("InChannels", inshape.Channels / 3 * 4)));
             }
 
             this.InShape = inshape;

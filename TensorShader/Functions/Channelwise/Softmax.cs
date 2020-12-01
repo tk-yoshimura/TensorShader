@@ -44,7 +44,7 @@ namespace TensorShader.Functions.Channelwise {
             base.CheckInputShapes(inshapes);
 
             if (inshapes[0].Type != ShapeType.Map) {
-                throw new ArgumentException(ExceptionMessage.TensorType(inshapes[0].Type, ShapeType.Map));
+                throw new ArgumentException(ExceptionMessage.ShapeType(inshapes[0].Type, ShapeType.Map));
             }
         }
 

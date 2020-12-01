@@ -61,11 +61,11 @@ namespace TensorShader.Functions.Connection3D {
             base.CheckInputShapes(inshapes);
 
             if (inshapes[0].Type != ShapeType.Map || inshapes[0].Ndim != 5) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(inshapes[0], ("Ndim", 5), ("Type", ShapeType.Map)));
+                throw new ArgumentException(ExceptionMessage.ShapeElements(inshapes[0], ("Ndim", 5), ("Type", ShapeType.Map)));
             }
 
             if (inshapes[0].Channels % (Scale * Scale * Scale) != 0) {
-                throw new ArgumentException(ExceptionMessage.TensorLengthMultiple("Channels", inshapes[0], inshapes[0].Channels, Scale * Scale * Scale));
+                throw new ArgumentException(ExceptionMessage.LengthMultiple("Channels", inshapes[0], inshapes[0].Channels, Scale * Scale * Scale));
             }
         }
 

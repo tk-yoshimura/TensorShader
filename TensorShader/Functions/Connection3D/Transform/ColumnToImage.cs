@@ -75,7 +75,7 @@ namespace TensorShader.Functions.Connection3D {
             base.CheckInputShapes(inshapes);
 
             if (inshapes[0].Type != ShapeType.Column || inshapes[0].Ndim != 6) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(inshapes[0], ("Ndim", 6), ("Type", ShapeType.Column)));
+                throw new ArgumentException(ExceptionMessage.ShapeElements(inshapes[0], ("Ndim", 6), ("Type", ShapeType.Column)));
             }
         }
 

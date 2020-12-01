@@ -50,7 +50,7 @@ namespace TensorShader.Functions.ArrayManipulation {
             Shape inshape = inshapes[0];
 
             if (inshape.Length != OutShape.Length) {
-                throw new ArgumentException(ExceptionMessage.TensorLength(inshape, OutShape));
+                throw new ArgumentException(ExceptionMessage.Length(inshape, OutShape));
             }
         }
 

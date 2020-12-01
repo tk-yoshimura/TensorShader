@@ -46,7 +46,7 @@ namespace TensorShader.Functions.Indexer {
             base.CheckInputShapes(inshapes);
 
             if (inshapes[0].Type != ShapeType.Map || inshapes[0].Ndim != 2) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(inshapes[0], ("Ndim", 2), ("Type", ShapeType.Map)));
+                throw new ArgumentException(ExceptionMessage.ShapeElements(inshapes[0], ("Ndim", 2), ("Type", ShapeType.Map)));
             }
         }
 

@@ -56,7 +56,7 @@ namespace TensorShader.Functions.Connection1D {
             base.CheckInputShapes(inshapes);
 
             if (inshapes[0].Type != ShapeType.Map || inshapes[0].Ndim != 3) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(inshapes[0], ("Ndim", 3), ("Type", ShapeType.Map)));
+                throw new ArgumentException(ExceptionMessage.ShapeElements(inshapes[0], ("Ndim", 3), ("Type", ShapeType.Map)));
             }
         }
 

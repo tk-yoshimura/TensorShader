@@ -18,10 +18,10 @@ namespace TensorShader.Operators.ComplexUnaryArithmetric {
             }
 
             if (shape.Channels % 2 != 0) {
-                throw new ArgumentException(ExceptionMessage.TensorLengthMultiple("Channels", shape, shape.Channels, 2));
+                throw new ArgumentException(ExceptionMessage.LengthMultiple("Channels", shape, shape.Channels, 2));
             }
             if (shape.InChannels % 2 != 0) {
-                throw new ArgumentException(ExceptionMessage.TensorLengthMultiple("InChannels", shape, shape.InChannels, 2));
+                throw new ArgumentException(ExceptionMessage.LengthMultiple("InChannels", shape, shape.InChannels, 2));
             }
 
             this.Elements = shape.Length / 2;

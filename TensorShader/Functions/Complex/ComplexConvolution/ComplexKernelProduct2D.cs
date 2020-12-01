@@ -48,19 +48,19 @@ namespace TensorShader.Functions.ComplexConvolution {
             : base(inputs: 2, outputs: 1, allow_resubstitution: false) {
 
             if (inshape.Type != ShapeType.Map || inshape.Ndim != 4) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(inshape, ("Ndim", 4), ("Type", ShapeType.Map)));
+                throw new ArgumentException(ExceptionMessage.ShapeElements(inshape, ("Ndim", 4), ("Type", ShapeType.Map)));
             }
 
             if (outshape.Type != ShapeType.Map || outshape.Ndim != 4) {
-                throw new ArgumentException(ExceptionMessage.TensorElements(outshape, ("Ndim", 4), ("Type", ShapeType.Map)));
+                throw new ArgumentException(ExceptionMessage.ShapeElements(outshape, ("Ndim", 4), ("Type", ShapeType.Map)));
             }
 
             if (inshape.Channels % 2 != 0) {
-                throw new AggregateException(ExceptionMessage.TensorLengthMultiple("Channels", inshape, inshape.Channels, 2));
+                throw new AggregateException(ExceptionMessage.LengthMultiple("Channels", inshape, inshape.Channels, 2));
             }
 
             if (outshape.Channels % 2 != 0) {
-                throw new AggregateException(ExceptionMessage.TensorLengthMultiple("Channels", outshape, outshape.Channels, 2));
+                throw new AggregateException(ExceptionMessage.LengthMultiple("Channels", outshape, outshape.Channels, 2));
             }
 
             this.InShape = inshape;
