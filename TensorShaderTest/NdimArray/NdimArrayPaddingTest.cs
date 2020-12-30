@@ -5,7 +5,7 @@ using TensorShader;
 
 namespace TensorShaderTest {
     [TestClass]
-    public class NdimArrayManipulateTest {
+    public class NdimArrayPaddingTest {
         [TestMethod]
         public void ZeroPaddingTest() {
             Random random = new Random();
