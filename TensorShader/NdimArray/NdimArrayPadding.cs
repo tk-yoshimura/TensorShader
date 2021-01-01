@@ -28,10 +28,10 @@ namespace TensorShader {
                 s[axis] += pa + pb;
                 NdimArray<T> new_arr = new Shape(arr.Type, s);
 
-                int length = arr.Shape.Stride(axis + 1), new_length = new_arr.Shape.Stride(axis + 1);
-                int n = arr.Length / length, sft = pa * new_arr.Shape.Stride(axis);
+                long length = arr.Shape.Stride(axis + 1), new_length = new_arr.Shape.Stride(axis + 1);
+                long n = arr.Length / length, sft = pa * new_arr.Shape.Stride(axis);
 
-                for (int i = 0; i < n; i++) {
+                for (long i = 0; i < n; i++) {
                     Array.Copy(arr.Value, i * length, new_arr.Value, i * new_length + sft, length);
                 }
 
@@ -66,15 +66,15 @@ namespace TensorShader {
                 s[axis] += pa + pb;
                 NdimArray<T> new_arr = new Shape(arr.Type, s);
 
-                int stride = arr.Shape.Stride(axis), new_stride = new_arr.Shape.Stride(axis);
-                int length = arr.Shape.Stride(axis + 1), new_length = new_arr.Shape.Stride(axis + 1);
-                int n = arr.Length / length, sft = pa * new_stride;
+                long stride = arr.Shape.Stride(axis), new_stride = new_arr.Shape.Stride(axis);
+                long length = arr.Shape.Stride(axis + 1), new_length = new_arr.Shape.Stride(axis + 1);
+                long n = arr.Length / length, sft = pa * new_stride;
 
-                for (int i = 0; i < n; i++) {
+                for (long i = 0; i < n; i++) {
                     Array.Copy(arr.Value, i * length, new_arr.Value, i * new_length + sft, length);
                 }
 
-                for (int i = 0; i < n; i++) {
+                for (long i = 0; i < n; i++) {
                     for (int a = 0; a < pa; a++) {
                         Array.Copy(arr.Value, i * length, new_arr.Value, i * new_length + a * new_stride, stride);
                     }

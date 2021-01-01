@@ -30,10 +30,10 @@ namespace TensorShader {
                 s[axis] -= ta + tb;
                 NdimArray<T> new_arr = new Shape(arr.Type, s);
 
-                int length = arr.Shape.Stride(axis + 1), new_length = new_arr.Shape.Stride(axis + 1);
-                int n = arr.Length / length, sft = ta * arr.Shape.Stride(axis);
+                long length = arr.Shape.Stride(axis + 1), new_length = new_arr.Shape.Stride(axis + 1);
+                long n = arr.Length / length, sft = ta * arr.Shape.Stride(axis);
 
-                for (int i = 0; i < n; i++) {
+                for (long i = 0; i < n; i++) {
                     Array.Copy(arr.Value, i * length + sft, new_arr.Value, i * new_length, new_length);
                 }
 
