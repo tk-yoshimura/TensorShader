@@ -86,12 +86,12 @@ namespace TensorShader {
             }
 
             long pos = 0;
-            for (int dim = 0; dim < Ndim; dim++) {
-                int index = indexes[dim], length = Shape[Ndim - dim - 1];
-                if (index < 0 || index >= length) {
+            for (int dim = Ndim - 1; dim >= 0; dim--) {
+                int index = indexes[dim];
+                if (index < 0 || index >= Shape[dim]) {
                     throw new ArgumentOutOfRangeException(nameof(indexes));
                 }
-                pos *= length;
+                pos *= Shape[dim];
                 pos += index;
             }
 

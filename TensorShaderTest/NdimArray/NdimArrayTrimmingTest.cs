@@ -39,8 +39,8 @@ namespace TensorShaderTest {
                                 for (int i0 = 0; i0 < new_shape[0]; i0++) {
 
                                     Assert.AreEqual(
-                                        arr[i4 + trims[4].ta, i3 + trims[3].ta, i2 + trims[2].ta, i1 + trims[1].ta, i0 + trims[0].ta], 
-                                        new_arr[i4, i3, i2, i1, i0]
+                                        arr[i0 + trims[0].ta, i1 + trims[1].ta, i2 + trims[2].ta, i3 + trims[3].ta, i4 + trims[4].ta], 
+                                        new_arr[i0, i1, i2, i3, i4]
                                     );
 
                                 }

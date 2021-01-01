@@ -47,14 +47,14 @@ namespace TensorShaderTest {
                                         i4 >= ps[4] && i4 < ps[4] + src_shape[4]) {
 
                                         Assert.AreEqual(
-                                            src_arr[i4 - ps[4], i3 - ps[3], i2 - ps[2], i1 - ps[1], i0 - ps[0]],
-                                            ret_arr[i4, i3, i2, i1, i0]
+                                            src_arr[i0 - ps[0], i1 - ps[1], i2 - ps[2], i3 - ps[3], i4 - ps[4]],
+                                            ret_arr[i0, i1, i2, i3, i4]
                                         );
                                     }
                                     else { 
                                         Assert.AreEqual(
-                                            dst_arr[i4, i3, i2, i1, i0],
-                                            ret_arr[i4, i3, i2, i1, i0]
+                                            dst_arr[i0, i1, i2, i3, i4],
+                                            ret_arr[i0, i1, i2, i3, i4]
                                         );
                                     }
 

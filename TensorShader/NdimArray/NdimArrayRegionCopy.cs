@@ -45,7 +45,7 @@ namespace TensorShader {
             int[] ms = (int[])ps.Clone();
             
             for (int i = 0; i < n; i++) {
-                long dst_index = dst_arr.Index(ms.Reverse().ToArray());
+                long dst_index = dst_arr.Index(ms);
 
                 for (int j = 0; j < l; j++) {
                     Array.Copy(src_arr.Value, src_index, dst_arr.Value, dst_index, src_stride);
