@@ -111,7 +111,7 @@ namespace TensorShader {
                 throw new ArgumentException(ExceptionMessage.ShapeElements(arr.Shape, ("Ndim", range.Length + 2), ("Type", ShapeType.Map)));
             }
 
-            (int, int)[] new_range = (new (int, int)[] { (0, 0) }).Concat(range).Concat(new (int, int)[] { (0, 0) }).ToArray();
+            (int, int)[] new_range = (new (int, int)[] { (0, arr.Channels) }).Concat(range).Concat(new (int, int)[] { (0, arr.Batch) }).ToArray();
 
             return Slice(arr, new_range);
         }
