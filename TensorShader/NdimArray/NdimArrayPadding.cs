@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace TensorShader {
 
@@ -8,7 +9,7 @@ namespace TensorShader {
         /// <summary>ゼロパディング</summary>
         public static NdimArray<T> ZeroPadding(NdimArray<T> arr, params (int, int)[] pads) {
             if (arr.Ndim != pads.Length) {
-                throw new ArgumentException(ExceptionMessage.Argument(nameof(pads), arr.Ndim, pads.Length));
+                throw new ArgumentException(ExceptionMessage.Argument($"{nameof(pads)}.Length", arr.Ndim, pads.Length));
             }
 
             foreach ((int pa, int pb) in pads) {
@@ -44,7 +45,7 @@ namespace TensorShader {
         /// <summary>エッジパディング</summary>
         public static NdimArray<T> EdgePadding(NdimArray<T> arr, params (int, int)[] pads) {
             if (arr.Ndim != pads.Length) {
-                throw new ArgumentException(ExceptionMessage.Argument(nameof(pads), arr.Ndim, pads.Length));
+                throw new ArgumentException(ExceptionMessage.Argument($"{nameof(pads)}.Length", arr.Ndim, pads.Length));
             }
 
             foreach ((int pa, int pb) in pads) {
@@ -90,87 +91,107 @@ namespace TensorShader {
         }
 
         /// <summary>ゼロパディング</summary>
-        public static NdimArray<T> ZeroPadding1D(NdimArray<T> arr, int pad_left, int pad_right) {
-            if (arr.Type != ShapeType.Map || arr.Ndim != 3) { 
-                throw new ArgumentException(ExceptionMessage.ShapeElements(arr.Shape, ("Ndim", 3), ("Type", ShapeType.Map)));
+        public static NdimArray<T> ZeroPaddingND(NdimArray<T> arr, params (int, int)[] pads) {
+            if (arr.Type != ShapeType.Map || arr.Ndim != pads.Length + 2) { 
+                throw new ArgumentException(ExceptionMessage.ShapeElements(arr.Shape, ("Ndim", pads.Length + 2), ("Type", ShapeType.Map)));
             }
 
-            return ZeroPadding(arr, (0, 0), (pad_left, pad_right), (0, 0));
+            (int, int)[] new_pads = (new (int, int)[] { (0, 0) }).Concat(pads).Concat(new (int, int)[] { (0, 0) }).ToArray();
+
+            return ZeroPadding(arr, new_pads);
+        }
+
+        /// <summary>ゼロパディング</summary>
+        public static NdimArray<T> ZeroPaddingND(NdimArray<T> arr, int pad) {
+            if (arr.Type != ShapeType.Map || arr.Ndim >= 3) { 
+                throw new ArgumentException(ExceptionMessage.ShapeElements(arr.Shape, ("Ndim>", 3), ("Type", ShapeType.Map)));
+            }
+
+            (int, int)[] new_pads = (new (int, int)[] { (0, 0) }).Concat(Enumerable.Repeat((pad, pad), arr.Ndim - 2)).Concat(new (int, int)[] { (0, 0) }).ToArray();
+
+            return ZeroPadding(arr, new_pads);
+        }
+
+        /// <summary>ゼロパディング</summary>
+        public static NdimArray<T> ZeroPadding1D(NdimArray<T> arr, int pad_left, int pad_right) {
+            return ZeroPaddingND(arr, (pad_left, pad_right));
         }
 
         /// <summary>ゼロパディング</summary>
         public static NdimArray<T> ZeroPadding1D(NdimArray<T> arr, int pad) {
-            return ZeroPadding1D(arr, pad, pad);
+            return ZeroPaddingND(arr, pad);
         }
 
         /// <summary>ゼロパディング</summary>
         public static NdimArray<T> ZeroPadding2D(NdimArray<T> arr, int pad_left, int pad_right, int pad_top, int pad_bottom) {
-            if (arr.Type != ShapeType.Map || arr.Ndim != 4) { 
-                throw new ArgumentException(ExceptionMessage.ShapeElements(arr.Shape, ("Ndim", 4), ("Type", ShapeType.Map)));
-            }
-
-            return ZeroPadding(arr, (0, 0), (pad_left, pad_right), (pad_top, pad_bottom), (0, 0));
+            return ZeroPaddingND(arr, (pad_left, pad_right), (pad_top, pad_bottom));
         }
 
         /// <summary>ゼロパディング</summary>
         public static NdimArray<T> ZeroPadding2D(NdimArray<T> arr, int pad) {
-            return ZeroPadding2D(arr, pad, pad, pad, pad);
+            return ZeroPaddingND(arr, pad);
         }
 
         /// <summary>ゼロパディング</summary>
         public static NdimArray<T> ZeroPadding3D(NdimArray<T> arr, int pad_left, int pad_right, int pad_top, int pad_bottom, int pad_front, int pad_rear) {
-            if (arr.Type != ShapeType.Map || arr.Ndim != 5) { 
-                throw new ArgumentException(ExceptionMessage.ShapeElements(arr.Shape, ("Ndim", 5), ("Type", ShapeType.Map)));
-            }
-
-            return ZeroPadding(arr, (0, 0), (pad_left, pad_right), (pad_top, pad_bottom), (pad_front, pad_rear), (0, 0));
+            return ZeroPaddingND(arr, (pad_left, pad_right), (pad_top, pad_bottom), (pad_front, pad_rear));
         }
 
         /// <summary>ゼロパディング</summary>
         public static NdimArray<T> ZeroPadding3D(NdimArray<T> arr, int pad) {
-            return ZeroPadding3D(arr, pad, pad, pad, pad, pad, pad);
+            return ZeroPaddingND(arr, pad);
+        }
+
+        /// <summary>エッジパディング</summary>
+        public static NdimArray<T> EdgePaddingND(NdimArray<T> arr, params (int, int)[] pads) {
+            if (arr.Type != ShapeType.Map || arr.Ndim != pads.Length + 2) { 
+                throw new ArgumentException(ExceptionMessage.ShapeElements(arr.Shape, ("Ndim", pads.Length + 2), ("Type", ShapeType.Map)));
+            }
+
+            (int, int)[] new_pads = (new (int, int)[] { (0, 0) }).Concat(pads).Concat(new (int, int)[] { (0, 0) }).ToArray();
+
+            return EdgePadding(arr, new_pads);
+        }
+
+        /// <summary>エッジパディング</summary>
+        public static NdimArray<T> EdgePaddingND(NdimArray<T> arr, int pad) {
+            if (arr.Type != ShapeType.Map || arr.Ndim >= 3) { 
+                throw new ArgumentException(ExceptionMessage.ShapeElements(arr.Shape, ("Ndim>", 3), ("Type", ShapeType.Map)));
+            }
+
+            (int, int)[] new_pads = (new (int, int)[] { (0, 0) }).Concat(Enumerable.Repeat((pad, pad), arr.Ndim - 2)).Concat(new (int, int)[] { (0, 0) }).ToArray();
+
+            return EdgePadding(arr, new_pads);
         }
 
         /// <summary>エッジパディング</summary>
         public static NdimArray<T> EdgePadding1D(NdimArray<T> arr, int pad_left, int pad_right) {
-            if (arr.Type != ShapeType.Map || arr.Ndim != 3) { 
-                throw new ArgumentException(ExceptionMessage.ShapeElements(arr.Shape, ("Ndim", 3), ("Type", ShapeType.Map)));
-            }
-
-            return EdgePadding(arr, (0, 0), (pad_left, pad_right), (0, 0));
+            return EdgePaddingND(arr, (pad_left, pad_right));
         }
 
         /// <summary>エッジパディング</summary>
         public static NdimArray<T> EdgePadding1D(NdimArray<T> arr, int pad) {
-            return EdgePadding1D(arr, pad, pad);
+            return EdgePaddingND(arr, pad);
         }
 
         /// <summary>エッジパディング</summary>
         public static NdimArray<T> EdgePadding2D(NdimArray<T> arr, int pad_left, int pad_right, int pad_top, int pad_bottom) {
-            if (arr.Type != ShapeType.Map || arr.Ndim != 4) { 
-                throw new ArgumentException(ExceptionMessage.ShapeElements(arr.Shape, ("Ndim", 4), ("Type", ShapeType.Map)));
-            }
-
-            return EdgePadding(arr, (0, 0), (pad_left, pad_right), (pad_top, pad_bottom), (0, 0));
+            return EdgePaddingND(arr, (pad_left, pad_right), (pad_top, pad_bottom));
         }
 
         /// <summary>エッジパディング</summary>
         public static NdimArray<T> EdgePadding2D(NdimArray<T> arr, int pad) {
-            return EdgePadding2D(arr, pad, pad, pad, pad);
+            return EdgePaddingND(arr, pad);
         }
 
         /// <summary>エッジパディング</summary>
         public static NdimArray<T> EdgePadding3D(NdimArray<T> arr, int pad_left, int pad_right, int pad_top, int pad_bottom, int pad_front, int pad_rear) {
-            if (arr.Type != ShapeType.Map || arr.Ndim != 5) { 
-                throw new ArgumentException(ExceptionMessage.ShapeElements(arr.Shape, ("Ndim", 5), ("Type", ShapeType.Map)));
-            }
-
-            return EdgePadding(arr, (0, 0), (pad_left, pad_right), (pad_top, pad_bottom), (pad_front, pad_rear), (0, 0));
+            return EdgePaddingND(arr, (pad_left, pad_right), (pad_top, pad_bottom), (pad_front, pad_rear));
         }
 
         /// <summary>エッジパディング</summary>
         public static NdimArray<T> EdgePadding3D(NdimArray<T> arr, int pad) {
-            return EdgePadding3D(arr, pad, pad, pad, pad, pad, pad);
+            return EdgePaddingND(arr, pad);
         }
     }
 }

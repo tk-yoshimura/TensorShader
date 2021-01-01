@@ -9,7 +9,7 @@ namespace TensorShader {
         /// <summary>領域上書き</summary>
         public static void RegionCopy(NdimArray<T> src_arr, NdimArray<T> dst_arr, params int[] ps) {
             if (src_arr.Ndim != ps.Length) {
-                throw new ArgumentException(ExceptionMessage.Argument(nameof(ps), src_arr.Ndim, ps.Length));
+                throw new ArgumentException(ExceptionMessage.Argument($"{nameof(ps)}.Length", src_arr.Ndim, ps.Length));
             }
 
             if (src_arr.Ndim != dst_arr.Ndim || src_arr.Type != dst_arr.Type) {
@@ -74,6 +74,38 @@ namespace TensorShader {
 
                 ms = ms.Select((_, idx) => ps[idx] + ss[idx]).ToArray();
             }
+        }
+
+        /// <summary>領域上書き</summary>
+        public static void RegionCopyND(NdimArray<T> src_arr, NdimArray<T> dst_arr, params int[] ps) {
+            if (src_arr.Type != ShapeType.Map || src_arr.Ndim != ps.Length + 2) { 
+                throw new ArgumentException(ExceptionMessage.ShapeElements(src_arr.Shape, ("Ndim", ps.Length + 2), ("Type", ShapeType.Map)));
+            }
+            if (dst_arr.Type != ShapeType.Map || dst_arr.Ndim != ps.Length + 2) { 
+                throw new ArgumentException(ExceptionMessage.ShapeElements(dst_arr.Shape, ("Ndim", ps.Length + 2), ("Type", ShapeType.Map)));
+            }
+            if (src_arr.Channels != dst_arr.Channels || src_arr.Batch != dst_arr.Batch) { 
+                throw new ArgumentException(ExceptionMessage.ShapeElements(dst_arr.Shape, ("Channels", src_arr.Channels), ("Batch", src_arr.Batch)));
+            }
+
+            int[] new_ps = (new int[] { 0 }).Concat(ps).Concat(new int[] { 0 }).ToArray();
+
+            RegionCopy(src_arr, dst_arr, new_ps);
+        }
+
+        /// <summary>領域上書き</summary>
+        public static void RegionCopy1D(NdimArray<T> src_arr, NdimArray<T> dst_arr, int x) {
+            RegionCopyND(src_arr, dst_arr, x);
+        }
+
+        /// <summary>領域上書き</summary>
+        public static void RegionCopy2D(NdimArray<T> src_arr, NdimArray<T> dst_arr, int x, int y) {
+            RegionCopyND(src_arr, dst_arr, x, y);
+        }
+
+        /// <summary>領域上書き</summary>
+        public static void RegionCopy3D(NdimArray<T> src_arr, NdimArray<T> dst_arr, int x, int y, int z) {
+            RegionCopyND(src_arr, dst_arr, x, y, z);
         }
     }
 }
