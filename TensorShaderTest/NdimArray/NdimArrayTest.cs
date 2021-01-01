@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using TensorShader;
 
-namespace TensorShaderTest {
+namespace TensorShaderTest.NdimArray {
     [TestClass]
     public class NdimArrayTest {
         [TestMethod]

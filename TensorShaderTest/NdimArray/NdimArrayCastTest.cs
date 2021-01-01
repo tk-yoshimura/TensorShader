@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using TensorShader;
 
-namespace TensorShaderTest {
+namespace TensorShaderTest.NdimArray {
     [TestClass]
     public class NdimArrayCastTest {
         [TestMethod]

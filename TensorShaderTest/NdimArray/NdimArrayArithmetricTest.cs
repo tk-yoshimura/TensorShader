@@ -2,7 +2,7 @@
 using System;
 using TensorShader;
 
-namespace TensorShaderTest {
+namespace TensorShaderTest.NdimArray {
     [TestClass]
     public class NdimArrayArithmetricTest {
         [TestMethod]
