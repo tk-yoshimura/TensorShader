@@ -18,7 +18,7 @@ namespace TensorShader {
 
             int ndim = src_arr.Ndim;
 
-            for(int i = 0; i < ndim; i++) {
+            for (int i = 0; i < ndim; i++) {
                 int p = ps[i];
 
                 if (p < 0 || p + src_arr.Shape[i] > dst_arr.Shape[i]) {
@@ -27,7 +27,7 @@ namespace TensorShader {
             }
 
             int stride_axis = 0;
-            for(int i = 0; i < ndim; i++) {
+            for (int i = 0; i < ndim; i++) {
                 if (src_arr.Shape[i] != dst_arr.Shape[i]) {
                     break;
                 }
@@ -47,7 +47,7 @@ namespace TensorShader {
             long src_index = 0;
             int[] ss = new int[ndim + 3];
             int[] ms = (int[])ps.Clone();
-            
+
             for (int i = 0; i < n; i++) {
                 long dst_org = dst_arr.Index(ms);
 
@@ -78,13 +78,13 @@ namespace TensorShader {
 
         /// <summary>領域上書き</summary>
         public static void RegionCopyND(NdimArray<T> src_arr, NdimArray<T> dst_arr, params int[] ps) {
-            if (src_arr.Type != ShapeType.Map || src_arr.Ndim != ps.Length + 2) { 
+            if (src_arr.Type != ShapeType.Map || src_arr.Ndim != ps.Length + 2) {
                 throw new ArgumentException(ExceptionMessage.ShapeElements(src_arr.Shape, ("Ndim", ps.Length + 2), ("Type", ShapeType.Map)));
             }
-            if (dst_arr.Type != ShapeType.Map || dst_arr.Ndim != ps.Length + 2) { 
+            if (dst_arr.Type != ShapeType.Map || dst_arr.Ndim != ps.Length + 2) {
                 throw new ArgumentException(ExceptionMessage.ShapeElements(dst_arr.Shape, ("Ndim", ps.Length + 2), ("Type", ShapeType.Map)));
             }
-            if (src_arr.Channels != dst_arr.Channels || src_arr.Batch != dst_arr.Batch) { 
+            if (src_arr.Channels != dst_arr.Channels || src_arr.Batch != dst_arr.Batch) {
                 throw new ArgumentException(ExceptionMessage.ShapeElements(dst_arr.Shape, ("Channels", src_arr.Channels), ("Batch", src_arr.Batch)));
             }
 
@@ -116,11 +116,11 @@ namespace TensorShader {
 
         /// <summary>領域上書き</summary>
         public static void RegionCopyND(NdimArray<T> src_arr, NdimArray<T> dst_arr, params (int src_offset, int dst_offset, int count)[] region) {
-            if (src_arr.Type != ShapeType.Map || src_arr.Ndim != region.Length + 2) { 
+            if (src_arr.Type != ShapeType.Map || src_arr.Ndim != region.Length + 2) {
                 throw new ArgumentException(ExceptionMessage.ShapeElements(src_arr.Shape, ("Ndim", region.Length + 2), ("Type", ShapeType.Map)));
             }
-            
-            (int, int, int)[] new_region = 
+
+            (int, int, int)[] new_region =
                 (new (int, int, int)[] { (0, 0, src_arr.Channels) })
                 .Concat(region)
                 .Concat(new (int, int, int)[] { (0, 0, src_arr.Batch) }).ToArray();

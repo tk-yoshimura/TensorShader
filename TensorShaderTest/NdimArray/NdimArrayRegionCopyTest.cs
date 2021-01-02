@@ -79,7 +79,7 @@ namespace TensorShaderTest.NdimArray {
 
         [TestMethod]
         public void RegionCopyTest3() {
-            (Shape src_shape, Shape dst_shape, int[] ps)[] tests = new (Shape src_shape, Shape dst_shape, int[] ps)[] { 
+            (Shape src_shape, Shape dst_shape, int[] ps)[] tests = new (Shape src_shape, Shape dst_shape, int[] ps)[] {
                 (new Shape(ShapeType.Map, new int[] { 5, 9, 7 }), new Shape(ShapeType.Map, new int[] { 5, 10, 7 }), new int[]{ 0 }),
                 (new Shape(ShapeType.Map, new int[] { 5, 9, 7 }), new Shape(ShapeType.Map, new int[] { 5, 10, 7 }), new int[]{ 1 }),
                 (new Shape(ShapeType.Map, new int[] { 5, 9, 7, 8 }), new Shape(ShapeType.Map, new int[] { 5, 10, 8, 8 }), new int[]{ 0, 0 }),
@@ -114,7 +114,7 @@ namespace TensorShaderTest.NdimArray {
         [TestMethod]
         public void RegionCopyWithSliceTest() {
             (Shape src_shape, Shape dst_shape, (int src_offset, int dst_offset, int count)[] region)[] tests
-                = new (Shape src_shape, Shape dst_shape, (int src_offset, int dst_offset, int count)[] region)[] { 
+                = new (Shape src_shape, Shape dst_shape, (int src_offset, int dst_offset, int count)[] region)[] {
 
                 (new Shape(ShapeType.Map, new int[] { 5, 9, 7 }), new Shape(ShapeType.Map, new int[] { 5, 10, 7 }), new (int, int, int)[]{ (0, 1, 9) }),
                 (new Shape(ShapeType.Map, new int[] { 5, 9, 7 }), new Shape(ShapeType.Map, new int[] { 5, 10, 7 }), new (int, int, int)[]{ (1, 2, 7) }),
@@ -181,7 +181,7 @@ namespace TensorShaderTest.NdimArray {
 
             foreach ((Shape dst_shape, int[] ps) in tests) {
                 Assert.ThrowsException<ArgumentException>(
-                    () => { 
+                    () => {
                         Random random = new Random();
 
                         float[] src_v = (new float[src_shape.Length]).Select((v) => (float)random.NextDouble()).ToArray();
@@ -309,8 +309,8 @@ namespace TensorShaderTest.NdimArray {
 
                                 Assert.AreEqual(
                                     src_arr[
-                                        i0 + region[0].src_offset - region[0].dst_offset, 
-                                        i1 + region[1].src_offset - region[1].dst_offset, 
+                                        i0 + region[0].src_offset - region[0].dst_offset,
+                                        i1 + region[1].src_offset - region[1].dst_offset,
                                         i2 + region[2].src_offset - region[2].dst_offset],
                                     ret_arr[i0, i1, i2]
                                 );
@@ -342,9 +342,9 @@ namespace TensorShaderTest.NdimArray {
 
                                     Assert.AreEqual(
                                         src_arr[
-                                            i0 + region[0].src_offset - region[0].dst_offset, 
-                                            i1 + region[1].src_offset - region[1].dst_offset, 
-                                            i2 + region[2].src_offset - region[2].dst_offset, 
+                                            i0 + region[0].src_offset - region[0].dst_offset,
+                                            i1 + region[1].src_offset - region[1].dst_offset,
+                                            i2 + region[2].src_offset - region[2].dst_offset,
                                             i3 + region[3].src_offset - region[3].dst_offset],
                                         ret_arr[i0, i1, i2, i3]
                                     );
@@ -379,9 +379,9 @@ namespace TensorShaderTest.NdimArray {
 
                                         Assert.AreEqual(
                                             src_arr[
-                                                i0 + region[0].src_offset - region[0].dst_offset, 
-                                                i1 + region[1].src_offset - region[1].dst_offset, 
-                                                i2 + region[2].src_offset - region[2].dst_offset, 
+                                                i0 + region[0].src_offset - region[0].dst_offset,
+                                                i1 + region[1].src_offset - region[1].dst_offset,
+                                                i2 + region[2].src_offset - region[2].dst_offset,
                                                 i3 + region[3].src_offset - region[3].dst_offset,
                                                 i4 + region[4].src_offset - region[4].dst_offset],
                                             ret_arr[i0, i1, i2, i3, i4]

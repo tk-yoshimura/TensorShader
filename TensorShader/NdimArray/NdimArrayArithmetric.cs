@@ -248,10 +248,10 @@ namespace TensorShader {
 
         /// <summary>加算</summary>
         public static NdimArray<T> operator +(NdimArray<T> a, T b) {
-        
+
             NdimArray<T> c = new NdimArray<T>(a.Shape);
 
-            if(c.Value is int[]){
+            if (c.Value is int[]) {
                 int[] av = a.Value as int[], cv = c.Value as int[];
                 int bv = (int)(object)b;
 
@@ -261,7 +261,7 @@ namespace TensorShader {
 
                 return c;
             }
-            if(c.Value is long[]){
+            if (c.Value is long[]) {
                 long[] av = a.Value as long[], cv = c.Value as long[];
                 long bv = (long)(object)b;
 
@@ -271,7 +271,7 @@ namespace TensorShader {
 
                 return c;
             }
-            if(c.Value is float[]){
+            if (c.Value is float[]) {
                 float[] av = a.Value as float[], cv = c.Value as float[];
                 float bv = (float)(object)b;
 
@@ -281,7 +281,7 @@ namespace TensorShader {
 
                 return c;
             }
-            if(c.Value is double[]){
+            if (c.Value is double[]) {
                 double[] av = a.Value as double[], cv = c.Value as double[];
                 double bv = (double)(object)b;
 
@@ -305,7 +305,7 @@ namespace TensorShader {
 
             NdimArray<T> c = new NdimArray<T>(a.Shape);
 
-            if(c.Value is int[]){
+            if (c.Value is int[]) {
                 int[] av = a.Value as int[], cv = c.Value as int[];
                 int bv = (int)(object)b;
 
@@ -315,7 +315,7 @@ namespace TensorShader {
 
                 return c;
             }
-            if(c.Value is long[]){
+            if (c.Value is long[]) {
                 long[] av = a.Value as long[], cv = c.Value as long[];
                 long bv = (long)(object)b;
 
@@ -325,7 +325,7 @@ namespace TensorShader {
 
                 return c;
             }
-            if(c.Value is float[]){
+            if (c.Value is float[]) {
                 float[] av = a.Value as float[], cv = c.Value as float[];
                 float bv = (float)(object)b;
 
@@ -335,7 +335,7 @@ namespace TensorShader {
 
                 return c;
             }
-            if(c.Value is double[]){
+            if (c.Value is double[]) {
                 double[] av = a.Value as double[], cv = c.Value as double[];
                 double bv = (double)(object)b;
 
@@ -359,7 +359,7 @@ namespace TensorShader {
 
             NdimArray<T> c = new NdimArray<T>(a.Shape);
 
-            if(c.Value is int[]){
+            if (c.Value is int[]) {
                 int[] av = a.Value as int[], cv = c.Value as int[];
                 int bv = (int)(object)b;
 
@@ -369,7 +369,7 @@ namespace TensorShader {
 
                 return c;
             }
-            if(c.Value is long[]){
+            if (c.Value is long[]) {
                 long[] av = a.Value as long[], cv = c.Value as long[];
                 long bv = (long)(object)b;
 
@@ -379,7 +379,7 @@ namespace TensorShader {
 
                 return c;
             }
-            if(c.Value is float[]){
+            if (c.Value is float[]) {
                 float[] av = a.Value as float[], cv = c.Value as float[];
                 float bv = (float)(object)b;
 
@@ -389,7 +389,7 @@ namespace TensorShader {
 
                 return c;
             }
-            if(c.Value is double[]){
+            if (c.Value is double[]) {
                 double[] av = a.Value as double[], cv = c.Value as double[];
                 double bv = (double)(object)b;
 
@@ -413,7 +413,7 @@ namespace TensorShader {
 
             NdimArray<T> c = new NdimArray<T>(a.Shape);
 
-            if(c.Value is int[]){
+            if (c.Value is int[]) {
                 int[] av = a.Value as int[], cv = c.Value as int[];
                 int bv = (int)(object)b;
 
@@ -423,7 +423,7 @@ namespace TensorShader {
 
                 return c;
             }
-            if(c.Value is long[]){
+            if (c.Value is long[]) {
                 long[] av = a.Value as long[], cv = c.Value as long[];
                 long bv = (long)(object)b;
 
@@ -433,7 +433,7 @@ namespace TensorShader {
 
                 return c;
             }
-            if(c.Value is float[]){
+            if (c.Value is float[]) {
                 float[] av = a.Value as float[], cv = c.Value as float[];
                 float bv = (float)(object)b;
 
@@ -443,7 +443,7 @@ namespace TensorShader {
 
                 return c;
             }
-            if(c.Value is double[]){
+            if (c.Value is double[]) {
                 double[] av = a.Value as double[], cv = c.Value as double[];
                 double bv = (double)(object)b;
 
@@ -462,7 +462,7 @@ namespace TensorShader {
 
             NdimArray<T> c = new NdimArray<T>(b.Shape);
 
-            if(c.Value is int[]){
+            if (c.Value is int[]) {
                 int[] bv = b.Value as int[], cv = c.Value as int[];
                 int av = (int)(object)a;
 
@@ -472,7 +472,7 @@ namespace TensorShader {
 
                 return c;
             }
-            if(c.Value is long[]){
+            if (c.Value is long[]) {
                 long[] bv = b.Value as long[], cv = c.Value as long[];
                 long av = (long)(object)a;
 
@@ -482,7 +482,7 @@ namespace TensorShader {
 
                 return c;
             }
-            if(c.Value is float[]){
+            if (c.Value is float[]) {
                 float[] bv = b.Value as float[], cv = c.Value as float[];
                 float av = (float)(object)a;
 
@@ -492,7 +492,7 @@ namespace TensorShader {
 
                 return c;
             }
-            if(c.Value is double[]){
+            if (c.Value is double[]) {
                 double[] bv = b.Value as double[], cv = c.Value as double[];
                 double av = (double)(object)a;
 

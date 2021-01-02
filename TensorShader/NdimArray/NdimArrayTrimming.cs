@@ -12,7 +12,7 @@ namespace TensorShader {
                 throw new ArgumentException(ExceptionMessage.Argument($"{nameof(trims)}.Length", arr.Ndim, trims.Length));
             }
 
-            for(int i = 0; i < arr.Ndim; i++) {
+            for (int i = 0; i < arr.Ndim; i++) {
                 (int ta, int tb) = trims[i];
 
                 if (ta < 0 || tb < 0 || (ta + tb) >= arr.Shape[i]) {
@@ -46,7 +46,7 @@ namespace TensorShader {
 
         /// <summary>トリミング</summary>
         public static NdimArray<T> TrimmingND(NdimArray<T> arr, params (int, int)[] trims) {
-            if (arr.Type != ShapeType.Map || arr.Ndim != trims.Length + 2) { 
+            if (arr.Type != ShapeType.Map || arr.Ndim != trims.Length + 2) {
                 throw new ArgumentException(ExceptionMessage.ShapeElements(arr.Shape, ("Ndim", trims.Length + 2), ("Type", ShapeType.Map)));
             }
 
@@ -57,7 +57,7 @@ namespace TensorShader {
 
         /// <summary>トリミング</summary>
         public static NdimArray<T> TrimmingND(NdimArray<T> arr, int trim) {
-            if (arr.Type != ShapeType.Map || arr.Ndim >= 3) { 
+            if (arr.Type != ShapeType.Map || arr.Ndim >= 3) {
                 throw new ArgumentException(ExceptionMessage.ShapeElements(arr.Shape, ("Ndim>", 3), ("Type", ShapeType.Map)));
             }
 
@@ -107,7 +107,7 @@ namespace TensorShader {
 
         /// <summary>トリミング</summary>
         public static NdimArray<T> SliceND(NdimArray<T> arr, params (int offset, int count)[] range) {
-            if (arr.Type != ShapeType.Map || arr.Ndim != range.Length + 2) { 
+            if (arr.Type != ShapeType.Map || arr.Ndim != range.Length + 2) {
                 throw new ArgumentException(ExceptionMessage.ShapeElements(arr.Shape, ("Ndim", range.Length + 2), ("Type", ShapeType.Map)));
             }
 

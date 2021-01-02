@@ -28,7 +28,7 @@ namespace TensorShader {
         }
 
         private static void BlockCopyTo<T>(this T[] vs, T[] us, int length, int src_index, int dst_index) where T : struct, IComparable {
-            if (length < 0) { 
+            if (length < 0) {
                 throw new ArgumentOutOfRangeException(nameof(length));
             }
             if (src_index + length > vs.Length) {
@@ -275,7 +275,7 @@ namespace TensorShader {
             }
 
             T[][] us = (new T[batch][]).Select((_) => new T[length]).ToArray();
-            
+
             for (int i = 0, size = length; i < us.Length; i++) {
                 vs.BlockCopyTo(us[i], size, i * size, 0);
             }
@@ -302,7 +302,7 @@ namespace TensorShader {
             }
 
             T[][,] us = (new T[batch][,]).Select((_) => new T[length.Item2, length.Item1]).ToArray();
-            
+
             for (int i = 0, size = length.Item1 * length.Item2; i < us.Length; i++) {
                 vs.BlockCopyTo(us[i], i * size);
             }
@@ -329,7 +329,7 @@ namespace TensorShader {
             }
 
             T[][,,] us = (new T[batch][,,]).Select((_) => new T[length.Item3, length.Item2, length.Item1]).ToArray();
-            
+
             for (int i = 0, size = length.Item1 * length.Item2 * length.Item3; i < us.Length; i++) {
                 vs.BlockCopyTo(us[i], i * size);
             }
@@ -356,7 +356,7 @@ namespace TensorShader {
             }
 
             T[][,,,] us = (new T[batch][,,,]).Select((_) => new T[length.Item4, length.Item3, length.Item2, length.Item1]).ToArray();
-            
+
             for (int i = 0, size = length.Item1 * length.Item2 * length.Item3 * length.Item4; i < us.Length; i++) {
                 vs.BlockCopyTo(us[i], i * size);
             }

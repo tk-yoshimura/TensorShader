@@ -7,7 +7,7 @@ namespace TensorShaderTest.NdimArray {
     [TestClass]
     public class NdimArrayTrimmingTest {
         [TestMethod]
-        public void TrimmingTest1() {           
+        public void TrimmingTest1() {
             Shape shape = new Shape(ShapeType.Map, new int[] { 5, 9, 7, 8, 9 });
             (int ta, int tb)[][] trims_list = new (int ta, int tb)[][]{
                 new (int ta, int tb)[] { (1, 2), (3, 4), (2, 2), (4, 3), (2, 1) },
@@ -37,9 +37,9 @@ namespace TensorShaderTest.NdimArray {
         [TestMethod]
         public void TrimmingTest2() {
             (Shape shape, (int ta, int tb)[] trims)[] tests = new (Shape shape, (int ta, int tb)[] trims)[]{
-                (new Shape(ShapeType.Map, new int[] { 5, 9, 7 }), new (int ta, int tb)[] { (1, 1) }), 
-                (new Shape(ShapeType.Map, new int[] { 5, 9, 7, 8 }), new (int ta, int tb)[] { (1, 1), (1, 1) }), 
-                (new Shape(ShapeType.Map, new int[] { 5, 9, 7, 8, 9 }), new (int ta, int tb)[] { (1, 1), (1, 1), (1, 1) }), 
+                (new Shape(ShapeType.Map, new int[] { 5, 9, 7 }), new (int ta, int tb)[] { (1, 1) }),
+                (new Shape(ShapeType.Map, new int[] { 5, 9, 7, 8 }), new (int ta, int tb)[] { (1, 1), (1, 1) }),
+                (new Shape(ShapeType.Map, new int[] { 5, 9, 7, 8, 9 }), new (int ta, int tb)[] { (1, 1), (1, 1), (1, 1) }),
             };
 
             foreach ((Shape shape, (int ta, int tb)[] trims) in tests) {
@@ -58,12 +58,12 @@ namespace TensorShaderTest.NdimArray {
 
         [TestMethod]
         public void SliceTest() {
-            (Shape shape, (int offset, int count)[] range, (int ta, int tb)[] trims)[] tests = 
+            (Shape shape, (int offset, int count)[] range, (int ta, int tb)[] trims)[] tests =
                 new (Shape shape, (int offset, int count)[] range, (int ta, int tb)[] trims)[]{
 
-                (new Shape(ShapeType.Map, new int[] { 5, 9, 7 }), new (int offset, int count)[] { (1, 6) }, new (int ta, int tb)[] { (1, 2) }), 
-                (new Shape(ShapeType.Map, new int[] { 5, 9, 7, 8 }), new (int offset, int count)[] { (1, 6), (2, 5) }, new (int ta, int tb)[] { (1, 2), (2, 0) }), 
-                (new Shape(ShapeType.Map, new int[] { 5, 9, 7, 8, 9 }), new (int offset, int count)[] { (1, 6), (2, 5), (3, 4) }, new (int ta, int tb)[] { (1, 2), (2, 0), (3, 1) }), 
+                (new Shape(ShapeType.Map, new int[] { 5, 9, 7 }), new (int offset, int count)[] { (1, 6) }, new (int ta, int tb)[] { (1, 2) }),
+                (new Shape(ShapeType.Map, new int[] { 5, 9, 7, 8 }), new (int offset, int count)[] { (1, 6), (2, 5) }, new (int ta, int tb)[] { (1, 2), (2, 0) }),
+                (new Shape(ShapeType.Map, new int[] { 5, 9, 7, 8, 9 }), new (int offset, int count)[] { (1, 6), (2, 5), (3, 4) }, new (int ta, int tb)[] { (1, 2), (2, 0), (3, 1) }),
             };
 
             foreach ((Shape shape, (int offset, int count)[] range, (int ta, int tb)[] trims) in tests) {
@@ -94,7 +94,7 @@ namespace TensorShaderTest.NdimArray {
                         }
                     }
                 }
-                
+
                 return;
             }
 
@@ -111,7 +111,7 @@ namespace TensorShaderTest.NdimArray {
                         }
                     }
                 }
-                
+
                 return;
             }
 

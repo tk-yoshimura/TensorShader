@@ -36,9 +36,9 @@ namespace TensorShaderTest.NdimArray {
         [TestMethod]
         public void ZeroPaddingTest2() {
             (Shape shape, (int pa, int pb)[] pads)[] tests = new (Shape shape, (int pa, int pb)[] pads)[]{
-                (new Shape(ShapeType.Map, new int[] { 5, 9, 7 }), new (int pa, int pb)[] { (1, 1) }), 
-                (new Shape(ShapeType.Map, new int[] { 5, 9, 7, 8 }), new (int pa, int pb)[] { (1, 1), (1, 1) }), 
-                (new Shape(ShapeType.Map, new int[] { 5, 9, 7, 8, 9 }), new (int pa, int pb)[] { (1, 1), (1, 1), (1, 1) }), 
+                (new Shape(ShapeType.Map, new int[] { 5, 9, 7 }), new (int pa, int pb)[] { (1, 1) }),
+                (new Shape(ShapeType.Map, new int[] { 5, 9, 7, 8 }), new (int pa, int pb)[] { (1, 1), (1, 1) }),
+                (new Shape(ShapeType.Map, new int[] { 5, 9, 7, 8, 9 }), new (int pa, int pb)[] { (1, 1), (1, 1), (1, 1) }),
             };
 
             foreach ((Shape shape, (int pa, int pb)[] pads) in tests) {
@@ -85,9 +85,9 @@ namespace TensorShaderTest.NdimArray {
         [TestMethod]
         public void EdgePaddingTest2() {
             (Shape shape, (int pa, int pb)[] pads)[] tests = new (Shape shape, (int pa, int pb)[] pads)[]{
-                (new Shape(ShapeType.Map, new int[] { 5, 9, 7 }), new (int pa, int pb)[] { (1, 1) }), 
-                (new Shape(ShapeType.Map, new int[] { 5, 9, 7, 8 }), new (int pa, int pb)[] { (1, 1), (1, 1) }), 
-                (new Shape(ShapeType.Map, new int[] { 5, 9, 7, 8, 9 }), new (int pa, int pb)[] { (1, 1), (1, 1), (1, 1) }), 
+                (new Shape(ShapeType.Map, new int[] { 5, 9, 7 }), new (int pa, int pb)[] { (1, 1) }),
+                (new Shape(ShapeType.Map, new int[] { 5, 9, 7, 8 }), new (int pa, int pb)[] { (1, 1), (1, 1) }),
+                (new Shape(ShapeType.Map, new int[] { 5, 9, 7, 8, 9 }), new (int pa, int pb)[] { (1, 1), (1, 1), (1, 1) }),
             };
 
             foreach ((Shape shape, (int pa, int pb)[] pads) in tests) {
@@ -104,7 +104,7 @@ namespace TensorShaderTest.NdimArray {
             }
         }
 
-        private static void CheckZeroPadding(Shape shape, (int pa, int pb)[] pads, NdimArray<float> arr, NdimArray<float> new_arr) {            
+        private static void CheckZeroPadding(Shape shape, (int pa, int pb)[] pads, NdimArray<float> arr, NdimArray<float> new_arr) {
             Shape new_shape = new_arr.Shape;
 
             if (arr.Ndim == 3) {
@@ -128,7 +128,7 @@ namespace TensorShaderTest.NdimArray {
                         }
                     }
                 }
-                
+
                 return;
             }
 
@@ -214,7 +214,7 @@ namespace TensorShaderTest.NdimArray {
                         }
                     }
                 }
-                
+
                 return;
             }
 
