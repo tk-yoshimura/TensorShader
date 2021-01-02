@@ -146,9 +146,9 @@ namespace TensorShader {
 
             switch (lang) {
                 case Lang.JP:
-                    return $"形状が不正です。{str}であることが想定されていますが、{actual.Type} {actual}が与えられました。";
+                    return $"形状が不正です。{str}であることが想定されていますが、{actual}が与えられました。";
                 default:
-                    return $"Invalid shape. expected:{str} actual:{actual.Type} {actual}";
+                    return $"Invalid shape. expected:{str} actual:{actual}";
             }
         }
 
@@ -158,9 +158,9 @@ namespace TensorShader {
 
             switch (lang) {
                 case Lang.JP:
-                    return $"{index}番目の形状が不正です。{str}であることが想定されていますが、{actual.Type} {actual}が与えられました。";
+                    return $"{index}番目の形状が不正です。{str}であることが想定されていますが、{actual}が与えられました。";
                 default:
-                    return $"Invalid shape of {index}-th argument. expected:{str} actual:{actual.Type} {actual}";
+                    return $"Invalid shape of {index}-th argument. expected:{str} actual:{actual}";
             }
         }
 
