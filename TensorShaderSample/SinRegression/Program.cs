@@ -2,7 +2,6 @@
 using System.Linq;
 using TensorShader;
 using TensorShader.Updaters.OptimizeMethod;
-using TensorShaderUtil;
 using TensorShaderUtil.ParameterUtil;
 using static TensorShader.Field;
 

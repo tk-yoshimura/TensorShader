@@ -1,8 +1,6 @@
 ﻿using System;
 
-using TensorShader;
-
-namespace TensorShaderUtil {
+namespace TensorShader {
 
     /// <summary>多次元配列生成ヘルパー</summary>
     public static class NdimArrayUtil {

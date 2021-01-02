@@ -1,9 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using TensorShader;
-using TensorShaderUtil;
 
-namespace TensorShaderUtilTest {
+namespace TensorShaderTest.NdimArray {
     [TestClass]
     public class NdimArrayUtilTest {
         [TestMethod]
