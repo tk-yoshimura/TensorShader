@@ -128,7 +128,7 @@ namespace TensorShader {
 
         /// <summary>切り取り</summary>
         public static NdimArray<T> Slice3D(NdimArray<T> arr, int x, int width, int y, int height, int z, int depth) {
-            return Slice(arr, (x, width), (y, height), (z, depth));
+            return SliceND(arr, (x, width), (y, height), (z, depth));
         }
     }
 }

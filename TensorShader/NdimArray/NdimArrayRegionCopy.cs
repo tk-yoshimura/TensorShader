@@ -107,5 +107,41 @@ namespace TensorShader {
         public static void RegionCopy3D(NdimArray<T> src_arr, NdimArray<T> dst_arr, int x, int y, int z) {
             RegionCopyND(src_arr, dst_arr, x, y, z);
         }
+
+        /// <summary>領域上書き</summary>
+        public static void RegionCopy(NdimArray<T> src_arr, NdimArray<T> dst_arr, params (int src_offset, int dst_offset, int count)[] region) {
+            NdimArray<T> src_sliced_arr = Slice(src_arr, region.Select((r) => (r.src_offset, r.count)).ToArray());
+            RegionCopy(src_sliced_arr, dst_arr, region.Select((r) => r.dst_offset).ToArray());
+        }
+
+        /// <summary>領域上書き</summary>
+        public static void RegionCopyND(NdimArray<T> src_arr, NdimArray<T> dst_arr, params (int src_offset, int dst_offset, int count)[] region) {
+            if (src_arr.Type != ShapeType.Map || src_arr.Ndim != region.Length + 2) { 
+                throw new ArgumentException(ExceptionMessage.ShapeElements(src_arr.Shape, ("Ndim", region.Length + 2), ("Type", ShapeType.Map)));
+            }
+            
+            (int, int, int)[] new_region = 
+                (new (int, int, int)[] { (0, 0, src_arr.Channels) })
+                .Concat(region)
+                .Concat(new (int, int, int)[] { (0, 0, src_arr.Batch) }).ToArray();
+
+
+            RegionCopy(src_arr, dst_arr, new_region);
+        }
+
+        /// <summary>領域上書き</summary>
+        public static void RegionCopy1D(NdimArray<T> src_arr, NdimArray<T> dst_arr, int src_xoffset, int dst_xoffset, int xcount) {
+            RegionCopyND(src_arr, dst_arr, (src_xoffset, dst_xoffset, xcount));
+        }
+
+        /// <summary>領域上書き</summary>
+        public static void RegionCopy2D(NdimArray<T> src_arr, NdimArray<T> dst_arr, int src_xoffset, int dst_xoffset, int xcount, int src_yoffset, int dst_yoffset, int ycount) {
+            RegionCopyND(src_arr, dst_arr, (src_xoffset, dst_xoffset, xcount), (src_yoffset, dst_yoffset, ycount));
+        }
+
+        /// <summary>領域上書き</summary>
+        public static void RegionCopy3D(NdimArray<T> src_arr, NdimArray<T> dst_arr, int src_xoffset, int dst_xoffset, int xcount, int src_yoffset, int dst_yoffset, int ycount, int src_zoffset, int dst_zoffset, int zcount) {
+            RegionCopyND(src_arr, dst_arr, (src_xoffset, dst_xoffset, xcount), (src_yoffset, dst_yoffset, ycount), (src_zoffset, dst_zoffset, zcount));
+        }
     }
 }
