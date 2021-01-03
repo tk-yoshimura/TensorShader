@@ -142,6 +142,9 @@ namespace TensorShaderUtil.DataSplitUtil {
             else if (ndim == 2) {
                 Execute2D(inmap, outmap, incoords[0], incoords[1]);
             }
+            else if (ndim == 3) {
+                Execute3D(inmap, outmap, incoords[0], incoords[1], incoords[2]);
+            }
             else {
                 throw new ArgumentException(nameof(ndim));
             }
