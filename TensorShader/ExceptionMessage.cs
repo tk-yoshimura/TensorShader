@@ -91,12 +91,22 @@ namespace TensorShader {
         }
 
         /// <summary>引数</summary>
-        public static string Argument(string argname, int actual, int expected) {
+        public static string Argument(string argname, object actual, object expected) {
             switch (lang) {
                 case Lang.JP:
                     return $"{argname}が不正です。{expected}が想定されていますが、{actual}が与えられました。";
                 default:
                     return $"Invalid {argname}. expected:{expected} actual:{actual}";
+            }
+        }
+
+        /// <summary>引数</summary>
+        public static string Argument(string argname, object expected) {
+            switch (lang) {
+                case Lang.JP:
+                    return $"{argname}が不正です。{expected}が想定されています。";
+                default:
+                    return $"Invalid {argname}. expected:{expected}";
             }
         }
 
