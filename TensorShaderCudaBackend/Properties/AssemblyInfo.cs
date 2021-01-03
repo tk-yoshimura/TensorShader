@@ -34,7 +34,7 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyCompany("T.Yoshimura")]
 [assembly: AssemblyProduct("TensorShaderCudaBackend")]
-[assembly: AssemblyCopyright("Copyright © T.Yoshimura 2019-2020")]
+[assembly: AssemblyCopyright("Copyright © T.Yoshimura 2019-2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -56,6 +56,6 @@ using System.Runtime.InteropServices;
 // すべての値を指定するか、次を使用してビルド番号とリビジョン番号を既定に設定できます
 // 既定値にすることができます:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("5.1.1.*")]
+[assembly: AssemblyVersion("5.1.2.*")]
 
 [assembly: InternalsVisibleTo("TensorShaderCudaBackendTest")]

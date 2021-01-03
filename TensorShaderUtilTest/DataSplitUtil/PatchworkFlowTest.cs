@@ -314,7 +314,7 @@ namespace TensorShaderUtilTest.DataSplitUtil {
             Shape[] shapes = new Shape[]{
                 Shape.Map3D(3, 14, 20, 15, 2),
                 Shape.Map3D(3, 15, 21, 16, 2),
-                Shape.Map3D(3, 16, 32, 20, 2),
+                Shape.Map3D(3, 16, 32, 18, 2),
                 Shape.Map3D(3, 29, 64, 24, 2),
                 Shape.Map3D(3, 32, 64, 24, 2),
                 Shape.Map3D(3, 48, 64, 20, 2),
@@ -345,7 +345,7 @@ namespace TensorShaderUtilTest.DataSplitUtil {
             Shape[] shapes = new Shape[]{
                 Shape.Map3D(3, 14, 20, 15, 2),
                 Shape.Map3D(3, 15, 21, 16, 2),
-                Shape.Map3D(3, 16, 32, 20, 2),
+                Shape.Map3D(3, 16, 32, 18, 2),
                 Shape.Map3D(3, 29, 64, 24, 2),
                 Shape.Map3D(3, 32, 64, 24, 2),
                 Shape.Map3D(3, 48, 64, 20, 2),
@@ -386,7 +386,7 @@ namespace TensorShaderUtilTest.DataSplitUtil {
             Shape[] shapes = new Shape[]{
                 Shape.Map3D(3, 14, 20, 15, 2),
                 Shape.Map3D(3, 15, 21, 16, 2),
-                Shape.Map3D(3, 16, 32, 20, 2),
+                Shape.Map3D(3, 16, 32, 18, 2),
                 Shape.Map3D(3, 29, 64, 24, 2),
                 Shape.Map3D(3, 32, 64, 24, 2),
                 Shape.Map3D(3, 48, 64, 20, 2),
@@ -433,7 +433,7 @@ namespace TensorShaderUtilTest.DataSplitUtil {
             Shape[] shapes = new Shape[]{
                 Shape.Map3D(3, 14, 20, 15, 2),
                 Shape.Map3D(3, 15, 21, 16, 2),
-                Shape.Map3D(3, 16, 32, 20, 2),
+                Shape.Map3D(3, 15, 30, 18, 2),
                 Shape.Map3D(3, 29, 64, 24, 2),
                 Shape.Map3D(3, 32, 64, 24, 2),
                 Shape.Map3D(3, 48, 64, 20, 2),
