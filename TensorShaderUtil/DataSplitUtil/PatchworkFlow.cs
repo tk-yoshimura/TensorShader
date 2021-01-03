@@ -25,6 +25,7 @@ namespace TensorShaderUtil.DataSplitUtil {
         /// <param name="input">入力フィールド</param>
         /// <param name="output">出力フィールド</param>
         /// <param name="margin">出力フィールドへのブロック展開時に切り捨てられるマージン</param>
+        /// <remarks>入出力フィールドのマップサイズは整数比である必要がある</remarks>
         public PatchworkFlow(Flow flow, VariableField input, StoreField output, int[] margin) {
             if (margin == null || margin.Length < 1 || margin.Any((m) => m < 0)) {
                 throw new ArgumentException(nameof(margin));
@@ -88,6 +89,7 @@ namespace TensorShaderUtil.DataSplitUtil {
         /// <param name="input">入力フィールド</param>
         /// <param name="output">出力フィールド</param>
         /// <param name="margin">出力フィールドへのブロック展開時に切り捨てられるマージン</param>
+        /// <remarks>入出力フィールドのマップサイズは整数比である必要がある</remarks>
         public PatchworkFlow(Flow flow, VariableField input, StoreField output, int margin)
             : this(flow, input, output, Enumerable.Repeat(margin, input.Shape.Ndim - 2).ToArray()) { }
 
@@ -134,7 +136,10 @@ namespace TensorShaderUtil.DataSplitUtil {
 
             NdimArray<float> outmap = shape;
 
-            if (ndim == 2) {
+            if (ndim == 1) {
+                Execute1D(inmap, outmap, incoords[0]);
+            }
+            else if (ndim == 2) {
                 Execute2D(inmap, outmap, incoords[0], incoords[1]);
             }
             else {
@@ -150,6 +155,30 @@ namespace TensorShaderUtil.DataSplitUtil {
             }
 
             return outmap;
+        }
+
+        /// <summary>計算実行(1D)</summary>
+        private void Execute1D(NdimArray<float> inmap, NdimArray<float> outmap, PatchworkCoord inxcoords) {
+            int block_iw = inxcoords.BlockSize;
+
+            int n = inxcoords.Blocks;
+
+            for (int i = 0, x = 0; x < inxcoords.Blocks; x++, i++) { 
+                int patch_ix = inxcoords.PatchCoords[x], patch_iw = inxcoords.PatchSizes[x], block_ix = inxcoords.BlockCoords[x];
+                int patch_ox = RemapCoord(patch_ix, inmap.Width, outmap.Width);
+                int patch_ow = RemapCoord(patch_iw, inmap.Width, outmap.Width);
+                int block_ox = RemapCoord(block_ix, inmap.Width, outmap.Width);
+
+                NdimArray<float> inblock = NdimArray<float>.Slice1D(inmap, block_ix, block_iw);
+                input.State = inblock;
+                flow.Execute();
+                NdimArray<float> outblock = output.State;
+
+                NdimArray<float>.RegionCopy1D(outblock, outmap, 
+                    patch_ox - block_ox, patch_ox, patch_ow);
+
+                ProgressEvent?.Invoke(i + 1, n);
+            }
         }
 
         /// <summary>計算実行(2D)</summary>
@@ -180,6 +209,46 @@ namespace TensorShaderUtil.DataSplitUtil {
                         patch_oy - block_oy, patch_oy, patch_oh);
 
                     ProgressEvent?.Invoke(i + 1, n);
+                }
+            }
+        }
+
+        /// <summary>計算実行(3D)</summary>
+        private void Execute3D(NdimArray<float> inmap, NdimArray<float> outmap, PatchworkCoord inxcoords, PatchworkCoord inycoords, PatchworkCoord inzcoords) {
+            int block_id = inzcoords.BlockSize, block_ih = inycoords.BlockSize, block_iw = inxcoords.BlockSize;
+
+            int n = inzcoords.Blocks * inycoords.Blocks * inxcoords.Blocks;
+
+            for (int i = 0, z = 0; z < inzcoords.Blocks; z++) {
+                int patch_iz = inzcoords.PatchCoords[z], patch_id = inzcoords.PatchSizes[z], block_iz = inzcoords.BlockCoords[z];
+                int patch_oz = RemapCoord(patch_iz, inmap.Height, outmap.Height);
+                int patch_od = RemapCoord(patch_id, inmap.Height, outmap.Height);
+                int block_oz = RemapCoord(block_iz, inmap.Height, outmap.Height);
+
+                for (int y = 0; y < inycoords.Blocks; y++) {
+                    int patch_iy = inycoords.PatchCoords[y], patch_ih = inycoords.PatchSizes[y], block_iy = inycoords.BlockCoords[y];
+                    int patch_oy = RemapCoord(patch_iy, inmap.Height, outmap.Height);
+                    int patch_oh = RemapCoord(patch_ih, inmap.Height, outmap.Height);
+                    int block_oy = RemapCoord(block_iy, inmap.Height, outmap.Height);
+
+                    for (int x = 0; x < inxcoords.Blocks; x++, i++) {
+                        int patch_ix = inxcoords.PatchCoords[x], patch_iw = inxcoords.PatchSizes[x], block_ix = inxcoords.BlockCoords[x];
+                        int patch_ox = RemapCoord(patch_ix, inmap.Width, outmap.Width);
+                        int patch_ow = RemapCoord(patch_iw, inmap.Width, outmap.Width);
+                        int block_ox = RemapCoord(block_ix, inmap.Width, outmap.Width);
+
+                        NdimArray<float> inblock = NdimArray<float>.Slice3D(inmap, block_ix, block_iw, block_iy, block_ih, block_iz, block_id);
+                        input.State = inblock;
+                        flow.Execute();
+                        NdimArray<float> outblock = output.State;
+
+                        NdimArray<float>.RegionCopy3D(outblock, outmap,
+                            patch_ox - block_ox, patch_ox, patch_ow,
+                            patch_oy - block_oy, patch_oy, patch_oh,
+                            patch_oz - block_oz, patch_oz, patch_od);
+
+                        ProgressEvent?.Invoke(i + 1, n);
+                    }
                 }
             }
         }
