@@ -57,7 +57,7 @@ namespace TensorShader {
 
         /// <summary>トリミング</summary>
         public static NdimArray<T> TrimmingND(NdimArray<T> arr, int trim) {
-            if (arr.Type != ShapeType.Map || arr.Ndim >= 3) {
+            if (arr.Type != ShapeType.Map || arr.Ndim < 3) {
                 throw new ArgumentException(ExceptionMessage.ShapeElements(arr.Shape, ("Ndim>", 3), ("Type", ShapeType.Map)));
             }
 

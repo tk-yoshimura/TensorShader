@@ -103,7 +103,7 @@ namespace TensorShader {
 
         /// <summary>ゼロパディング</summary>
         public static NdimArray<T> ZeroPaddingND(NdimArray<T> arr, int pad) {
-            if (arr.Type != ShapeType.Map || arr.Ndim >= 3) {
+            if (arr.Type != ShapeType.Map || arr.Ndim < 3) {
                 throw new ArgumentException(ExceptionMessage.ShapeElements(arr.Shape, ("Ndim>", 3), ("Type", ShapeType.Map)));
             }
 
@@ -155,7 +155,7 @@ namespace TensorShader {
 
         /// <summary>エッジパディング</summary>
         public static NdimArray<T> EdgePaddingND(NdimArray<T> arr, int pad) {
-            if (arr.Type != ShapeType.Map || arr.Ndim >= 3) {
+            if (arr.Type != ShapeType.Map || arr.Ndim < 3) {
                 throw new ArgumentException(ExceptionMessage.ShapeElements(arr.Shape, ("Ndim>", 3), ("Type", ShapeType.Map)));
             }
 
