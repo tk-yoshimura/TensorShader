@@ -19,14 +19,14 @@
     <DocumentationFile>bin\x64\Release\netstandard2.0\TensorShader.xml</DocumentationFile>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Reference Include="TensorShaderCudaBackend">
-      <HintPath>..\TensorShaderCudaBackend\bin\x64\Release\netstandard2.0\TensorShaderCudaBackend.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="if &quot;$(ConfigurationName)&quot; == &quot;Debug&quot; (&#xD;&#xA;  exit&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;md &quot;$(SolutionDir)dll\$(ConfigurationName)&quot; &gt; NUL 2&gt;&amp;1&#xD;&#xA;copy  $(TargetPath)  $(SolutionDir)dll\$(ConfigurationName)\$(TargetFileName) /y&#xD;&#xA;copy  $(TargetDir)$(TargetName).xml $(SolutionDir)dll\$(ConfigurationName)\$(TargetName).xml /y" />
   </Target>
+
+  <ItemGroup>
+    <Reference Include="TensorShaderCudaBackend">
+      <HintPath>..\TensorShaderCudaBackend\bin\x64\Debug\netstandard2.0\TensorShaderCudaBackend.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 
 </Project>

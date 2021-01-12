@@ -97,10 +97,6 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
                 while(is_swaped_threads){{
                     int is_swaped = 0;
 
-                    if(tid == 0){{
-                        is_swaped_threads = 0;
-                    }}
-
                     for (int j = tid; ; j += threads) {{
                         int i = j * 2;
                         if(i + 1 >= axislength) break;
@@ -135,6 +131,12 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
                             sv[i + 1] = av;
                             is_swaped = 1;
                         }}
+                    }}
+
+                    __syncthreads();
+
+                    if(tid == 0){{
+                        is_swaped_threads = 0;
                     }}
 
                     __syncthreads();

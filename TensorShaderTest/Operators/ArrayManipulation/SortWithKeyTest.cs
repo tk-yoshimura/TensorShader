@@ -13,6 +13,28 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
             Random rd = new Random(1234);
 
             foreach (Shape shape in new Shape[]{
+                   new Shape(ShapeType.Map, 2, 200, 200, 6),
+                   new Shape(ShapeType.Map, 3, 200, 200, 4),
+                   new Shape(ShapeType.Map, 4, 200, 200, 2),
+                   new Shape(ShapeType.Map, 5, 200, 200, 1),
+                   new Shape(ShapeType.Map, 6, 200, 200, 1),
+                   new Shape(ShapeType.Map, 7, 200, 200, 1),
+                   new Shape(ShapeType.Map, 8, 200, 200, 1),
+                   new Shape(ShapeType.Map, 9, 200, 200, 1),
+                   new Shape(ShapeType.Map, 10, 200, 200, 1),
+                   new Shape(ShapeType.Map, 12, 200, 200, 1),
+                   new Shape(ShapeType.Map, 25, 200, 200, 1),
+                   new Shape(ShapeType.Map, 2, 1024, 1024, 6),
+                   new Shape(ShapeType.Map, 3, 1024, 1024, 4),
+                   new Shape(ShapeType.Map, 4, 1024, 1024, 2),
+                   new Shape(ShapeType.Map, 5, 1024, 1024, 1),
+                   new Shape(ShapeType.Map, 6, 1024, 1024, 1),
+                   new Shape(ShapeType.Map, 7, 1024, 1024, 1),
+                   new Shape(ShapeType.Map, 8, 1024, 1024, 1),
+                   new Shape(ShapeType.Map, 9, 1024, 1024, 1),
+                   new Shape(ShapeType.Map, 10, 1024, 1024, 1),
+                   new Shape(ShapeType.Map, 12, 1024, 1024, 1),
+                   new Shape(ShapeType.Map, 25, 1024, 1024, 1),
                    new Shape(ShapeType.Map, 16, 19, 23, 8, 1, 5, 6),
                    new Shape(ShapeType.Map, 17, 9, 2, 4, 1, 3, 67) }) {
 
@@ -43,7 +65,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
                     for (int i = 0; i < shape.Length / axislength; i++, p = i / stride * stride * axislength + i % stride) {
                         for (int j = 1; j < axislength; j++) {
                             if (y[p + (j - 1) * stride] > y[p + j * stride]) {
-                                Assert.Fail($"axis:{axis} outkey");
+                                Assert.Fail($"{shape}, axis{axis} outkey");
                             }
                         }
                     }
@@ -58,7 +80,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
                     for (int i = 0; i < shape.Length / axislength; i++, p = i / stride * stride * axislength + i % stride) {
                         for (int j = 1; j < axislength; j++) {
                             if (y2[p + (j - 1) * stride] > y2[p + j * stride]) {
-                                Assert.Fail($"axis:{axis} inval");
+                                Assert.Fail($"{shape}, axis{axis} inval");
                             }
                         }
                     }
