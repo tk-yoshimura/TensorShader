@@ -94,30 +94,58 @@ namespace TensorShaderCudaBackend {
         public static void Sort(uint stride, uint axislength, uint slides, CudaArray<float> src, CudaArray<float> dst, Stream stream = null) {
             Shader shader;
 
-            if (axislength <= Shaders.ArrayManipulation.SortUseSharedMemory.MaxAxisLength) {
-                string key = "sort_use_shared_memory";
+            if (stride > 1) {
+                if (axislength <= Shaders.ArrayManipulation.SortUseSharedMemory.MaxAxisLength) {
+                    string key = "sort_use_shared_memory";
 
-                if (!shaders.ContainsKey(key)) {
-                    shaders.Add(key, new Shaders.ArrayManipulation.SortUseSharedMemory());
+                    if (!shaders.ContainsKey(key)) {
+                        shaders.Add(key, new Shaders.ArrayManipulation.SortUseSharedMemory());
+                    }
+
+                    shader = shaders[key];
+                }
+                else {
+                    string key = "sort_unuse_shared_memory";
+
+                    if (!shaders.ContainsKey(key)) {
+                        shaders.Add(key, new Shaders.ArrayManipulation.SortUnuseSharedMemory());
+                    }
+
+                    shader = shaders[key];
                 }
 
-                shader = shaders[key];
+                if (stream == null) {
+                    stream = Shader.DefaultStream;
+                }
+
+                shader.Execute(stream, src, dst, stride, axislength, slides);
             }
             else {
-                string key = "sort_unuse_shared_memory";
+                if (axislength <= Shaders.ArrayManipulation.SortUseSharedMemory.MaxAxisLength) {
+                    string key = "sort_nostride_use_shared_memory";
 
-                if (!shaders.ContainsKey(key)) {
-                    shaders.Add(key, new Shaders.ArrayManipulation.SortUnuseSharedMemory());
+                    if (!shaders.ContainsKey(key)) {
+                        shaders.Add(key, new Shaders.ArrayManipulation.SortNoStrideUseSharedMemory());
+                    }
+
+                    shader = shaders[key];
+                }
+                else {
+                    string key = "sort_nostride_unuse_shared_memory";
+
+                    if (!shaders.ContainsKey(key)) {
+                        shaders.Add(key, new Shaders.ArrayManipulation.SortNoStrideUnuseSharedMemory());
+                    }
+
+                    shader = shaders[key];
                 }
 
-                shader = shaders[key];
-            }
+                if (stream == null) {
+                    stream = Shader.DefaultStream;
+                }
 
-            if (stream == null) {
-                stream = Shader.DefaultStream;
+                shader.Execute(stream, src, dst, axislength, slides);
             }
-
-            shader.Execute(stream, src, dst, stride, axislength, slides);
         }
 
         /// <summary>ソート(キーつき)</summary>
@@ -128,30 +156,58 @@ namespace TensorShaderCudaBackend {
 
             Shader shader;
 
-            if (axislength <= Shaders.ArrayManipulation.SortWithKeyUseSharedMemory.MaxAxisLength) {
-                string key = "sortwithkey_use_shared_memory";
+            if (stride > 1) {
+                if (axislength <= Shaders.ArrayManipulation.SortWithKeyUseSharedMemory.MaxAxisLength) {
+                    string key = "sortwithkey_use_shared_memory";
 
-                if (!shaders.ContainsKey(key)) {
-                    shaders.Add(key, new Shaders.ArrayManipulation.SortWithKeyUseSharedMemory());
+                    if (!shaders.ContainsKey(key)) {
+                        shaders.Add(key, new Shaders.ArrayManipulation.SortWithKeyUseSharedMemory());
+                    }
+
+                    shader = shaders[key];
+                }
+                else {
+                    string key = "sortwithkey_unuse_shared_memory";
+
+                    if (!shaders.ContainsKey(key)) {
+                        shaders.Add(key, new Shaders.ArrayManipulation.SortWithKeyUnuseSharedMemory());
+                    }
+
+                    shader = shaders[key];
                 }
 
-                shader = shaders[key];
-            }
-            else {
-                string key = "sortwithkey_unuse_shared_memory";
-
-                if (!shaders.ContainsKey(key)) {
-                    shaders.Add(key, new Shaders.ArrayManipulation.SortWithKeyUnuseSharedMemory());
+                if (stream == null) {
+                    stream = Shader.DefaultStream;
                 }
 
-                shader = shaders[key];
+                shader.Execute(stream, src_value, dst_value, src_key, dst_key, stride, axislength, slides);
             }
+            else { 
+                if (axislength <= Shaders.ArrayManipulation.SortWithKeyUseSharedMemory.MaxAxisLength) {
+                    string key = "sortwithkey_nostride_use_shared_memory";
 
-            if (stream == null) {
-                stream = Shader.DefaultStream;
+                    if (!shaders.ContainsKey(key)) {
+                        shaders.Add(key, new Shaders.ArrayManipulation.SortWithKeyNoStrideUseSharedMemory());
+                    }
+
+                    shader = shaders[key];
+                }
+                else {
+                    string key = "sortwithkey_nostride_unuse_shared_memory";
+
+                    if (!shaders.ContainsKey(key)) {
+                        shaders.Add(key, new Shaders.ArrayManipulation.SortWithKeyNoStrideUnuseSharedMemory());
+                    }
+
+                    shader = shaders[key];
+                }
+
+                if (stream == null) {
+                    stream = Shader.DefaultStream;
+                }
+
+                shader.Execute(stream, src_value, dst_value, src_key, dst_key, axislength, slides);
             }
-
-            shader.Execute(stream, src_value, dst_value, src_key, dst_key, stride, axislength, slides);
         }
 
         /// <summary>水平加算</summary>
