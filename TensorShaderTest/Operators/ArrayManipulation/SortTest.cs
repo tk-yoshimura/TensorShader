@@ -35,6 +35,9 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
                    new Shape(ShapeType.Map, 10, 1024, 1024, 1),
                    new Shape(ShapeType.Map, 12, 1024, 1024, 1),
                    new Shape(ShapeType.Map, 25, 1024, 1024, 1),
+                   new Shape(ShapeType.Map, 25, 8192, 32, 1),
+                   new Shape(ShapeType.Map, 25, 32, 8192, 1),
+                   new Shape(ShapeType.Map, 8192, 25, 32, 1),
                    new Shape(ShapeType.Map, 16, 19, 23, 8, 1, 5, 6),
                    new Shape(ShapeType.Map, 17, 9, 2, 4, 1, 3, 67) }) {
 
