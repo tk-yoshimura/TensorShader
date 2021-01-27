@@ -4,6 +4,10 @@ namespace TensorShaderCudaBackend {
 
     /// <summary>畳み込み</summary>
     public static class Convolution {
+        /// <summary>コンスタントメモリに入る最大カーネル要素数</summary>
+        public static uint ConstKernelSize =>
+            (uint)API.Cuda.CurrectDeviceProperty.ConstMemoryBytes / sizeof(float);
+
         private readonly static Dictionary<string, Shader> shaders = new Dictionary<string, Shader>();
 
         /// <summary>全結合</summary>
@@ -152,7 +156,12 @@ namespace TensorShaderCudaBackend {
                          $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight}";
 
             if (!shaders.ContainsKey(key)) {
-                shaders.Add(key, new Shaders.Convolution.Convolution2D(inchannels, outchannels, kwidth, kheight));
+                if (inchannels * outchannels * kwidth * kheight > ConstKernelSize) {
+                    shaders.Add(key, new Shaders.Convolution.Convolution2D_ConstMemNone(inchannels, outchannels, kwidth, kheight));
+                }
+                else { 
+                    shaders.Add(key, new Shaders.Convolution.Convolution2D_ConstChXY(inchannels, outchannels, kwidth, kheight));
+                }
             }
 
             Shader shader = shaders[key];
