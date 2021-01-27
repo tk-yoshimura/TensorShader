@@ -23,6 +23,9 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
         /// <summary>実行あたりの積数(2^30=1073741824‬)</summary>
         public static ulong MulPerExecute => 0x40000000;
 
+        /// <summary>タイルサイズ</summary>
+        public static uint TileSize => 8;
+
         /// <summary>Xスレッド数</summary>
         private uint ThreadsX { set; get; }
 
@@ -53,11 +56,19 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             {Defines.StoreFloatSharedMemory(elemsize: 1, InChannels, ThreadsX)}
 
             __global__ void convolution_2d(const float* __restrict__ inmap, float* __restrict__ outmap, const float* __restrict__ filter,
-                                           unsigned int oy_offset,
-                                           unsigned int inwidth, unsigned int outwidth) {{
+                                           unsigned int tile_offset, unsigned tile_xs,
+                                           unsigned int inwidth, unsigned int outwidth, unsigned int outheight) {{
 
                 unsigned int outch = {Defines.IndexX}, tid = {Defines.ThreadIdX};
-                unsigned int ox = {Defines.BlockIndexY}, oy = oy_offset + {Defines.BlockIndexZ};
+                unsigned int tile_index = {Defines.BlockIndexY}, tile_id = tile_offset + {Defines.BlockIndexZ};
+                unsigned int tile_x = tile_id % tile_xs, tile_y = tile_id / tile_xs;
+
+                unsigned int ox = tile_x * {TileSize} + tile_index % {TileSize};
+                unsigned int oy = tile_y * {TileSize} + tile_index / {TileSize};
+ 
+                if(ox >= outwidth || oy >= outheight){{
+                    return;
+                }}
 
                 __shared__ float us[{InChannels}];
                 float uv_hi = 0.0, uv_lo = 0.0;
@@ -116,9 +127,13 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             uint outwidth = inwidth + 1 - KernelWidth;
             uint outheight = inheight + 1 - KernelHeight;
 
-            ulong mul_per_line = (ulong)InChannels * OutChannels * KernelWidth * KernelHeight * outwidth;
+            uint tile_xs = (outwidth + TileSize - 1) / TileSize;
+            uint tile_ys = (outheight + TileSize - 1) / TileSize;
+            uint tile_counts = tile_xs * tile_ys;
 
-            uint lines_per_execute = (uint)(MulPerExecute / mul_per_line + 1);
+            ulong mul_per_tile = (ulong)InChannels * OutChannels * KernelWidth * KernelHeight * TileSize * TileSize;
+
+            uint tiles_per_execute = (uint)(MulPerExecute / mul_per_tile + 1);
 
             CudaArray<float> transpose_filter =
                 WorkspaceReserver<float>.Request(stream, filter.DeviceID, index: 0, InChannels * OutChannels * KernelWidth * KernelHeight);
@@ -126,18 +141,18 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
             TransposeKernelChannel(InChannels, OutChannels, KernelWidth * KernelHeight, filter, transpose_filter, stream);
 
             for (uint th = 0; th < batches; th++) {
-                for (uint oy_offset = 0; oy_offset < outheight; oy_offset += lines_per_execute) {
-                    uint lines = Math.Min(lines_per_execute, outheight - oy_offset);
+                for (uint tile_offset = 0; tile_offset < tile_counts; tile_offset += tiles_per_execute) {
+                    uint tiles = Math.Min(tiles_per_execute, tile_counts - tile_offset);
 
                     Kernel.Execute(
-                        indexes: (OutChannels, outwidth, lines),
+                        indexes: (OutChannels, TileSize * TileSize, tiles),
                         block: (ThreadsX, 1, 1),
                         dynamic_shared_memory_bytes: 0, stream,
                         inmap.ElementPtr(th * InChannels * inwidth * inheight),
                         outmap.ElementPtr(th * OutChannels * outwidth * outheight),
                         transpose_filter,
-                        oy_offset,
-                        inwidth, outwidth
+                        tile_offset, tile_xs,
+                        inwidth, outwidth, outheight
                     );
                 }
             }

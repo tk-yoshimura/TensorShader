@@ -100,7 +100,7 @@ namespace TensorShaderTest.Operators.Connection2D {
 
         [TestMethod]
         public void SpeedTest() {
-            int inwidth = 512, inheight = 512, inchannels = 31, outchannels = 31, ksize = 3;
+            int inwidth = 512, inheight = 512, inchannels = 64, outchannels = 64, ksize = 3;
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1;
 
             OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight));

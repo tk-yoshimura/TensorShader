@@ -458,6 +458,37 @@ namespace TensorShaderCudaBackend {
                     floatfloat_hilo_add(hi.z, lo.z, val_hi, val_lo);
                 }}";
             }
+
+            /// <summary>プリフェッチ</summary>
+            public static class Prefetch {
+                /// <summary>LocalL1</summary>
+                public static string LocalL1 =>
+                $@"
+                static __inline__ __device__ void prefetch_local_l1(void *addr){{
+                    asm("" prefetch.local.L1[%1]; "" : ""=l""(addr) : ""l""(addr));
+                }}";
+
+                /// <summary>GlobalL1</summary>
+                public static string GlobalL1 =>
+                $@"
+                static __inline__ __device__ void prefetch_global_l1(void *addr){{
+                    asm("" prefetch.global.L1[%1]; "" : ""=l""(addr) : ""l""(addr));
+                }}";
+
+                /// <summary>LocalL2</summary>
+                public static string LocalL2 =>
+                $@"
+                static __inline__ __device__ void prefetch_local_l2(void *addr){{
+                    asm("" prefetch.local.L2[%1]; "" : ""=l""(addr) : ""l""(addr));
+                }}";
+
+                /// <summary>GlobalL2</summary>
+                public static string GlobalL2 =>
+                $@"
+                static __inline__ __device__ void prefetch_global_l2(void *addr){{
+                    asm("" prefetch.global.L2[%1]; "" : ""=l""(addr) : ""l""(addr));
+                }}";
+            }
         }
     }
 }
