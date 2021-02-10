@@ -223,10 +223,15 @@ namespace TensorShader {
         }
 
         /// <summary>スナップショットから状態展開</summary>
-        public void Load(Snapshot snapshot) {
+        /// <param name="snapshot">スナップショット</param>
+        /// <param name="throws_unset">状態が更新されないパラメータが存在したとき例外送出するか</param>
+        /// <param name="throws_correspondence">スナップショットにパラメータ名と対応しないキーが存在したとき例外送出するか</param>
+        /// <exception cref="KeyNotFoundException">いずれかの例外送出フラグを有効にし、例外が生じたとき</exception>
+        public void Load(Snapshot snapshot, bool throws_unset = false, bool throws_correspondence = true) {
             var table = snapshot.Table;
 
             List<string> used_keys = new List<string>();
+            List<string> unset_keys = snapshot.Keys.ToList();
 
             foreach (ParameterField parameter_field in parameter_fields) {
                 string key = parameter_field.Name != string.Empty ? parameter_field.Name : "unnamed";
@@ -240,24 +245,46 @@ namespace TensorShader {
                 used_keys.Add(key);
 
                 string key_value = key + "/value";
-                if (parameter_field.ValueTensor != null && table.ContainsKey(key_value)) {
-                    snapshot.Load(key_value, parameter_field.ValueTensor);
+                if (parameter_field.ValueTensor != null){
+                    if (table.ContainsKey(key_value)) {
+                        snapshot.Load(key_value, parameter_field.ValueTensor);
+                        unset_keys.Remove(key_value);
+                    }
+                    else if(throws_unset) {
+                        throw new KeyNotFoundException(key_value);
+                    }
                 }
 
                 string key_grad = key + "/grad";
-                if (parameter_field.GradTensor != null && table.ContainsKey(key_grad)) {
-                    snapshot.Load(key_grad, parameter_field.GradTensor);
+                if (parameter_field.GradTensor != null) {
+                    if (table.ContainsKey(key_grad)) {
+                        snapshot.Load(key_grad, parameter_field.GradTensor);
+                        unset_keys.Remove(key_grad);
+                    }
+                    else if(throws_unset) {
+                        throw new KeyNotFoundException(key_grad);
+                    }
                 }
 
                 foreach (Updater updater in parameter_field.Updaters) {
                     foreach (var item in updater.States) {
                         string key_updaterstate = key + "/updater_" + updater.Name + '/' + item.Key;
-                        if (item.Value != null && table.ContainsKey(key_updaterstate)) {
-                            snapshot.Load(key_updaterstate, item.Value);
-                        }
 
+                        if (item.Value != null) {
+                            if (table.ContainsKey(key_updaterstate)) {
+                                snapshot.Load(key_updaterstate, item.Value);
+                                unset_keys.Remove(key_updaterstate);
+                            }
+                            else if(throws_unset) {
+                                throw new KeyNotFoundException(key_updaterstate);
+                            }
+                        }
                     }
                 }
+            }
+
+            if (unset_keys.Count > 0 && throws_correspondence) { 
+                throw new KeyNotFoundException($"{string.Join(", ", unset_keys)}");
             }
         }
 
