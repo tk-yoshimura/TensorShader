@@ -3,6 +3,10 @@
 /packages
 /**/bin
 /**/obj
-/TestResults
 /**/*.png
 /**/*.jpg
+/**/*.bak
+/**/*.user
+/TestResults
+/**/__pycache__
+/**/PublishProfiles
