@@ -15,7 +15,7 @@ namespace TensorShader {
         public static Tensor Where(Tensor condition, Tensor x1, Tensor x2, Shape shape) {
             Function function = new Functions.ArrayManipulation.Where(shape);
 
-            Tensor y = new Tensor(shape);
+            Tensor y = new(shape);
 
             function.Execute(new Tensor[] { condition, x1, x2 }, new Tensor[] { y });
 

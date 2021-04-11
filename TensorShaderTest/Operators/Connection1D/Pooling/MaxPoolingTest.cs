@@ -20,14 +20,14 @@ namespace TensorShaderTest.Operators.Connection1D {
 
                             float[] xval = (new float[inwidth * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-                            Map1D x = new Map1D(channels, inwidth, batch, xval);
+                            Map1D x = new(channels, inwidth, batch, xval);
 
                             Map1D y = Reference(x, stride);
 
-                            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, inwidth, batch), xval);
-                            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, outwidth, batch));
+                            OverflowCheckedTensor x_tensor = new(Shape.Map1D(channels, inwidth, batch), xval);
+                            OverflowCheckedTensor y_tensor = new(Shape.Map1D(channels, outwidth, batch));
 
-                            MaxPooling ope = new MaxPooling(inwidth, channels, stride, batch);
+                            MaxPooling ope = new(inwidth, channels, stride, batch);
 
                             ope.Execute(x_tensor, y_tensor);
 
@@ -52,7 +52,7 @@ namespace TensorShaderTest.Operators.Connection1D {
             int channels = x.Channels, batch = x.Batch;
             int inw = x.Width, outw = inw / stride;
 
-            Map1D y = new Map1D(channels, outw, batch);
+            Map1D y = new(channels, outw, batch);
 
             for (int th = 0; th < batch; th++) {
                 for (int ox = 0; ox < outw; ox++) {
@@ -76,10 +76,10 @@ namespace TensorShaderTest.Operators.Connection1D {
             int inwidth = 2048, channels = 1024, stride = 2, batch = 4;
             int outwidth = inwidth / stride;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, inwidth, batch));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, outwidth, batch));
+            OverflowCheckedTensor x_tensor = new(Shape.Map1D(channels, inwidth, batch));
+            OverflowCheckedTensor y_tensor = new(Shape.Map1D(channels, outwidth, batch));
 
-            MaxPooling ope = new MaxPooling(inwidth, channels, stride, batch);
+            MaxPooling ope = new(inwidth, channels, stride, batch);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/maxpool_1d.nvvp");
             Cuda.Profiler.Start();

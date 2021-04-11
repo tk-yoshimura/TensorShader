@@ -117,7 +117,7 @@ namespace TensorShader {
                         }
 
                         PropertyInfo prop_info = updater.GetType().GetProperty(property_name);
-                        if (prop_info == null) {
+                        if (prop_info is null) {
                             continue;
                         }
 
@@ -144,7 +144,7 @@ namespace TensorShader {
                     throw new FormatException(ExceptionMessage.InvalidParamKey());
                 }
 
-                List<object> values = new List<object>();
+                List<object> values = new();
 
                 string class_name = name.Split('.')[0];
                 string property_name = name.Split('.')[1];
@@ -156,12 +156,12 @@ namespace TensorShader {
                         }
 
                         PropertyInfo prop_info = updater.GetType().GetProperty(property_name);
-                        if (prop_info == null) {
+                        if (prop_info is null) {
                             continue;
                         }
 
                         object value = prop_info.GetValue(updater);
-                        if (value == null) {
+                        if (value is null) {
                             continue;
                         }
 
@@ -183,9 +183,9 @@ namespace TensorShader {
 
         /// <summary>スナップショットに状態保存</summary>
         public Snapshot Save() {
-            Snapshot snapshot = new Snapshot();
+            Snapshot snapshot = new();
 
-            List<string> used_keys = new List<string>();
+            List<string> used_keys = new();
 
             foreach (ParameterField parameter_field in parameter_fields) {
                 string key = parameter_field.Name != string.Empty ? parameter_field.Name : "unnamed";
@@ -198,19 +198,19 @@ namespace TensorShader {
 
                 used_keys.Add(key);
 
-                if (parameter_field.ValueTensor != null) {
+                if (parameter_field.ValueTensor is not null) {
                     string key_value = key + "/value";
                     snapshot.Append(key_value, parameter_field.ValueTensor);
                 }
 
-                if (parameter_field.GradTensor != null) {
+                if (parameter_field.GradTensor is not null) {
                     string key_grad = key + "/grad";
                     snapshot.Append(key_grad, parameter_field.GradTensor);
                 }
 
                 foreach (Updater updater in parameter_field.Updaters) {
                     foreach (var item in updater.States) {
-                        if (item.Value != null) {
+                        if (item.Value is not null) {
                             string key_updaterstate = key + "/updater_" + updater.Name + '/' + item.Key;
                             snapshot.Append(key_updaterstate, item.Value);
                         }
@@ -230,7 +230,7 @@ namespace TensorShader {
         public void Load(Snapshot snapshot, bool throws_unset = false, bool throws_correspondence = true) {
             var table = snapshot.Table;
 
-            List<string> used_keys = new List<string>();
+            List<string> used_keys = new();
             List<string> unset_keys = snapshot.Keys.ToList();
 
             foreach (ParameterField parameter_field in parameter_fields) {
@@ -245,23 +245,23 @@ namespace TensorShader {
                 used_keys.Add(key);
 
                 string key_value = key + "/value";
-                if (parameter_field.ValueTensor != null){
+                if (parameter_field.ValueTensor is not null) {
                     if (table.ContainsKey(key_value)) {
                         snapshot.Load(key_value, parameter_field.ValueTensor);
                         unset_keys.Remove(key_value);
                     }
-                    else if(throws_unset) {
+                    else if (throws_unset) {
                         throw new KeyNotFoundException(key_value);
                     }
                 }
 
                 string key_grad = key + "/grad";
-                if (parameter_field.GradTensor != null) {
+                if (parameter_field.GradTensor is not null) {
                     if (table.ContainsKey(key_grad)) {
                         snapshot.Load(key_grad, parameter_field.GradTensor);
                         unset_keys.Remove(key_grad);
                     }
-                    else if(throws_unset) {
+                    else if (throws_unset) {
                         throw new KeyNotFoundException(key_grad);
                     }
                 }
@@ -270,12 +270,12 @@ namespace TensorShader {
                     foreach (var item in updater.States) {
                         string key_updaterstate = key + "/updater_" + updater.Name + '/' + item.Key;
 
-                        if (item.Value != null) {
+                        if (item.Value is not null) {
                             if (table.ContainsKey(key_updaterstate)) {
                                 snapshot.Load(key_updaterstate, item.Value);
                                 unset_keys.Remove(key_updaterstate);
                             }
-                            else if(throws_unset) {
+                            else if (throws_unset) {
                                 throw new KeyNotFoundException(key_updaterstate);
                             }
                         }
@@ -283,16 +283,16 @@ namespace TensorShader {
                 }
             }
 
-            if (unset_keys.Count > 0 && throws_correspondence) { 
+            if (unset_keys.Count > 0 && throws_correspondence) {
                 throw new KeyNotFoundException($"{string.Join(", ", unset_keys)}");
             }
         }
 
         /// <summary>スナップショットにValueのみ保存</summary>
         public Snapshot Freeze() {
-            Snapshot snapshot = new Snapshot();
+            Snapshot snapshot = new();
 
-            List<string> used_keys = new List<string>();
+            List<string> used_keys = new();
 
             foreach (ParameterField parameter_field in parameter_fields) {
                 string key = parameter_field.Name != string.Empty ? parameter_field.Name : "unnamed";
@@ -305,7 +305,7 @@ namespace TensorShader {
 
                 used_keys.Add(key);
 
-                if (parameter_field.ValueTensor != null) {
+                if (parameter_field.ValueTensor is not null) {
                     string key_value = key + "/value";
                     snapshot.Append(key_value, parameter_field.ValueTensor);
                 }

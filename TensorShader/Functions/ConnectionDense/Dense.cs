@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>全結合</summary>
         public static Tensor Dense(Tensor x, Tensor w) {
             Functions.ConnectionDense.Dense function =
-                new Functions.ConnectionDense.Dense(x.Shape, w.Shape);
+                new(x.Shape, w.Shape);
 
-            Tensor y = new Tensor(function.OutShape);
+            Tensor y = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, w }, new Tensor[] { y });
 

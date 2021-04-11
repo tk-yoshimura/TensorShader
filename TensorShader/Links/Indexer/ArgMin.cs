@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>次元ごとに最小インデクスを抽出</summary>
         public static Field ArgMin(Field x) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Indexer.ArgMin(x, y);
 
             link.Forward();

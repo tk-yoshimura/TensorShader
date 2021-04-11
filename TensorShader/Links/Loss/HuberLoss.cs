@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>HuberLoss</summary>
         public static Field HuberLoss(Field x, Field t, float delta) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Loss.HuberLoss(x, t, y, delta);
 
             link.Forward();
@@ -52,7 +52,7 @@ namespace TensorShader.Links.Loss {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

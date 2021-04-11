@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>非数判定</summary>
         public static Field IsNan(Field x) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.LogicalArithmetric.IsNan(x, y);
 
             link.Forward();

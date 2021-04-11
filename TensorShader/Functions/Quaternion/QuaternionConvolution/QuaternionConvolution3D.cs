@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>四元数3次元畳み込み</summary>
         public static Tensor QuaternionConvolution3D(Tensor x, Tensor w, bool gradmode = false) {
             Functions.QuaternionConvolution.QuaternionConvolution3D function =
-                new Functions.QuaternionConvolution.QuaternionConvolution3D(x.Shape, w.Shape, gradmode);
+                new(x.Shape, w.Shape, gradmode);
 
-            Tensor y = new Tensor(function.OutShape);
+            Tensor y = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, w }, new Tensor[] { y });
 

@@ -14,9 +14,9 @@ namespace TensorShaderTest.Operators.RandomGeneration {
 
             Shape shape = Shape.Vector(length);
 
-            OverflowCheckedTensor v1 = new OverflowCheckedTensor(shape);
+            OverflowCheckedTensor v1 = new(shape);
 
-            UniformRandom ope = new UniformRandom(shape, new Random(1234));
+            UniformRandom ope = new(shape, new Random(1234));
 
             ope.Execute(v1);
 
@@ -108,9 +108,9 @@ namespace TensorShaderTest.Operators.RandomGeneration {
 
             Shape shape = Shape.Vector(length);
 
-            OverflowCheckedTensor v1 = new OverflowCheckedTensor(shape);
+            OverflowCheckedTensor v1 = new(shape);
 
-            UniformRandom ope = new UniformRandom(shape, new Random(1234));
+            UniformRandom ope = new(shape, new Random(1234));
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/uniform_random.nvvp");
             Cuda.Profiler.Start();

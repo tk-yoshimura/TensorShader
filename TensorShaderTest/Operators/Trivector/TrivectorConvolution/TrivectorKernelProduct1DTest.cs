@@ -10,7 +10,7 @@ namespace TensorShaderTest.Operators.Trivector {
     public class TrivectorKernelProduct1DTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             float max_err = 0;
 
@@ -34,19 +34,19 @@ namespace TensorShaderTest.Operators.Trivector {
                                 Quaternion.Quaternion[] wcval = (new Quaternion.Quaternion[wval.Length / 4])
                                     .Select((_, idx) => new Quaternion.Quaternion(wval[idx * 4], wval[idx * 4 + 1], wval[idx * 4 + 2], wval[idx * 4 + 3])).ToArray();
 
-                                TrivectorMap1D x = new TrivectorMap1D(inchannels / 3, inwidth, batch, xcval);
-                                TrivectorMap1D y = new TrivectorMap1D(outchannels / 3, outwidth, batch, ycval);
-                                Quaternion.QuaternionFilter1D w = new Quaternion.QuaternionFilter1D(inchannels / 3, outchannels / 3, kwidth, wcval);
+                                TrivectorMap1D x = new(inchannels / 3, inwidth, batch, xcval);
+                                TrivectorMap1D y = new(outchannels / 3, outwidth, batch, ycval);
+                                Quaternion.QuaternionFilter1D w = new(inchannels / 3, outchannels / 3, kwidth, wcval);
 
                                 Quaternion.QuaternionFilter1D gw = Reference(x, y, w, kwidth);
 
-                                OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth, batch), xval);
-                                OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth, batch), yval);
-                                OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels / 3 * 4, outchannels / 3, kwidth), wval);
+                                OverflowCheckedTensor x_tensor = new(Shape.Map1D(inchannels, inwidth, batch), xval);
+                                OverflowCheckedTensor y_tensor = new(Shape.Map1D(outchannels, outwidth, batch), yval);
+                                OverflowCheckedTensor w_tensor = new(Shape.Kernel1D(inchannels / 3 * 4, outchannels / 3, kwidth), wval);
 
-                                OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels / 3 * 4, outchannels / 3, kwidth));
+                                OverflowCheckedTensor gw_tensor = new(Shape.Kernel1D(inchannels / 3 * 4, outchannels / 3, kwidth));
 
-                                TrivectorKernelProduct1D ope = new TrivectorKernelProduct1D(inwidth, inchannels, outchannels, kwidth, transpose: false, batch);
+                                TrivectorKernelProduct1D ope = new(inwidth, inchannels, outchannels, kwidth, transpose: false, batch);
 
                                 ope.Execute(x_tensor, y_tensor, w_tensor, gw_tensor);
 
@@ -72,7 +72,7 @@ namespace TensorShaderTest.Operators.Trivector {
 
         [TestMethod]
         public void LargeMapTest() {
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             float max_err = 0;
 
@@ -95,19 +95,19 @@ namespace TensorShaderTest.Operators.Trivector {
             Quaternion.Quaternion[] wcval = (new Quaternion.Quaternion[wval.Length / 4])
                 .Select((_, idx) => new Quaternion.Quaternion(wval[idx * 4], wval[idx * 4 + 1], wval[idx * 4 + 2], wval[idx * 4 + 3])).ToArray();
 
-            TrivectorMap1D x = new TrivectorMap1D(inchannels / 3, inwidth, batch, xcval);
-            TrivectorMap1D y = new TrivectorMap1D(outchannels / 3, outwidth, batch, ycval);
-            Quaternion.QuaternionFilter1D w = new Quaternion.QuaternionFilter1D(inchannels / 3, outchannels / 3, kwidth, wcval);
+            TrivectorMap1D x = new(inchannels / 3, inwidth, batch, xcval);
+            TrivectorMap1D y = new(outchannels / 3, outwidth, batch, ycval);
+            Quaternion.QuaternionFilter1D w = new(inchannels / 3, outchannels / 3, kwidth, wcval);
 
             Quaternion.QuaternionFilter1D gw = Reference(x, y, w, kwidth);
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth, batch), xval);
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth, batch), yval);
-            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels / 3 * 4, outchannels / 3, kwidth), wval);
+            OverflowCheckedTensor x_tensor = new(Shape.Map1D(inchannels, inwidth, batch), xval);
+            OverflowCheckedTensor y_tensor = new(Shape.Map1D(outchannels, outwidth, batch), yval);
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel1D(inchannels / 3 * 4, outchannels / 3, kwidth), wval);
 
-            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels / 3 * 4, outchannels / 3, kwidth));
+            OverflowCheckedTensor gw_tensor = new(Shape.Kernel1D(inchannels / 3 * 4, outchannels / 3, kwidth));
 
-            TrivectorKernelProduct1D ope = new TrivectorKernelProduct1D(inwidth, inchannels, outchannels, kwidth, transpose: false, batch);
+            TrivectorKernelProduct1D ope = new(inwidth, inchannels, outchannels, kwidth, transpose: false, batch);
 
             ope.Execute(x_tensor, y_tensor, w_tensor, gw_tensor);
 
@@ -130,13 +130,13 @@ namespace TensorShaderTest.Operators.Trivector {
             int inwidth = 32, inchannels = 33, outchannels = 33, ksize = 3;
             int outwidth = inwidth - ksize + 1;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth));
-            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels / 3 * 4, outchannels / 3, ksize));
+            OverflowCheckedTensor x_tensor = new(Shape.Map1D(inchannels, inwidth));
+            OverflowCheckedTensor y_tensor = new(Shape.Map1D(outchannels, outwidth));
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel1D(inchannels / 3 * 4, outchannels / 3, ksize));
 
-            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels / 3 * 4, outchannels / 3, ksize));
+            OverflowCheckedTensor gw_tensor = new(Shape.Kernel1D(inchannels / 3 * 4, outchannels / 3, ksize));
 
-            TrivectorKernelProduct1D ope = new TrivectorKernelProduct1D(inwidth, inchannels, outchannels, ksize);
+            TrivectorKernelProduct1D ope = new(inwidth, inchannels, outchannels, ksize);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/trivector_kernelproduct_1d.nvvp");
             Cuda.Profiler.Start();
@@ -154,7 +154,7 @@ namespace TensorShaderTest.Operators.Trivector {
                 throw new ArgumentException("mismatch shape");
             }
 
-            Quaternion.QuaternionFilter1D gw = new Quaternion.QuaternionFilter1D(inchannels, outchannels, kwidth);
+            Quaternion.QuaternionFilter1D gw = new(inchannels, outchannels, kwidth);
 
             for (int kx = 0; kx < kwidth; kx++) {
                 for (int th = 0; th < batch; th++) {

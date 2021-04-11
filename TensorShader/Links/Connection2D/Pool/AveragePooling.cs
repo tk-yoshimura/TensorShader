@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>2次元平均値プーリング</summary>
         public static Field AveragePooling2D(Field x, int stride) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Connection2D.AveragePooling(x, y, stride);
 
             link.Forward();
@@ -39,7 +39,7 @@ namespace TensorShader.Links.Connection2D {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

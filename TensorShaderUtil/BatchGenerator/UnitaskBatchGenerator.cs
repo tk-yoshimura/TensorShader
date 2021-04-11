@@ -14,12 +14,12 @@ namespace TensorShaderUtil.BatchGenerator {
         /// <param name="indexes">バッチのデータインデクス</param>
         /// <remarks>indexesをnullにした場合、GenerateDataのindexを0として呼び出される</remarks>
         public override sealed void Request(int[] indexes = null) {
-            if (indexes != null && indexes.Length != NumBatches) {
+            if (indexes is not null && indexes.Length != NumBatches) {
                 throw new ArgumentException(nameof(indexes));
             }
 
             for (int i = 0; i < NumBatches; i++) {
-                int index = indexes != null ? indexes[i] : 0;
+                int index = indexes is not null ? indexes[i] : 0;
 
                 GenerateToInsert(this, i, index);
             }

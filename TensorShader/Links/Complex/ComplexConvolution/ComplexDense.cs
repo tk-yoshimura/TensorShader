@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>複素全結合</summary>
         public static Field ComplexDense(Field x, Field w) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.ComplexConvolution.ComplexDense(x, w, y);
 
             link.Forward();
@@ -37,7 +37,7 @@ namespace TensorShader.Links.ComplexConvolution {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

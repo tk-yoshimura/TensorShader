@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>ポイントごとの2次元畳み込み</summary>
         public static Tensor PointwiseConvolution2D(Tensor x, Tensor w) {
             Functions.Connection2D.PointwiseConvolution function =
-                new Functions.Connection2D.PointwiseConvolution(x.Shape, w.Shape);
+                new(x.Shape, w.Shape);
 
-            Tensor y = new Tensor(function.OutShape);
+            Tensor y = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, w }, new Tensor[] { y });
 

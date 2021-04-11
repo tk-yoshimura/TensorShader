@@ -10,7 +10,7 @@ namespace TensorShaderTest.Operators.Aggregation {
     public class SumTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
             int width = 4, height = 5;
 
@@ -21,13 +21,13 @@ namespace TensorShaderTest.Operators.Aggregation {
 
                         Shape shape = Shape.Map3D(ch, width, height, length, batch);
 
-                        OverflowCheckedTensor v1 = new OverflowCheckedTensor(shape, x);
+                        OverflowCheckedTensor v1 = new(shape, x);
 
                         /*axis = 0*/
                         {
-                            OverflowCheckedTensor v2 = new OverflowCheckedTensor(Shape.Map3D(1, width, height, length, batch));
+                            OverflowCheckedTensor v2 = new(Shape.Map3D(1, width, height, length, batch));
 
-                            Sum ope = new Sum(shape, axis: 0);
+                            Sum ope = new(shape, axis: 0);
 
                             ope.Execute(v1, v2);
 
@@ -56,9 +56,9 @@ namespace TensorShaderTest.Operators.Aggregation {
 
                         /*axis = 1*/
                         {
-                            OverflowCheckedTensor v2 = new OverflowCheckedTensor(Shape.Map3D(ch, 1, height, length, batch));
+                            OverflowCheckedTensor v2 = new(Shape.Map3D(ch, 1, height, length, batch));
 
-                            Sum ope = new Sum(shape, axis: 1);
+                            Sum ope = new(shape, axis: 1);
 
                             ope.Execute(v1, v2);
 
@@ -87,9 +87,9 @@ namespace TensorShaderTest.Operators.Aggregation {
 
                         /*axis = 2*/
                         {
-                            OverflowCheckedTensor v2 = new OverflowCheckedTensor(Shape.Map3D(ch, width, 1, length, batch));
+                            OverflowCheckedTensor v2 = new(Shape.Map3D(ch, width, 1, length, batch));
 
-                            Sum ope = new Sum(shape, axis: 2);
+                            Sum ope = new(shape, axis: 2);
 
                             ope.Execute(v1, v2);
 
@@ -118,9 +118,9 @@ namespace TensorShaderTest.Operators.Aggregation {
 
                         /*axis = 3*/
                         {
-                            OverflowCheckedTensor v2 = new OverflowCheckedTensor(Shape.Map3D(ch, width, height, 1, batch));
+                            OverflowCheckedTensor v2 = new(Shape.Map3D(ch, width, height, 1, batch));
 
-                            Sum ope = new Sum(shape, axis: 3);
+                            Sum ope = new(shape, axis: 3);
 
                             ope.Execute(v1, v2);
 
@@ -149,9 +149,9 @@ namespace TensorShaderTest.Operators.Aggregation {
 
                         /*axis = 4*/
                         {
-                            OverflowCheckedTensor v2 = new OverflowCheckedTensor(Shape.Map3D(ch, width, height, length, 1));
+                            OverflowCheckedTensor v2 = new(Shape.Map3D(ch, width, height, length, 1));
 
-                            Sum ope = new Sum(shape, axis: 4);
+                            Sum ope = new(shape, axis: 4);
 
                             ope.Execute(v1, v2);
 
@@ -188,10 +188,10 @@ namespace TensorShaderTest.Operators.Aggregation {
 
             Shape shape = Shape.Map1D(ch, length);
 
-            OverflowCheckedTensor v1 = new OverflowCheckedTensor(shape);
-            OverflowCheckedTensor v2 = new OverflowCheckedTensor(Shape.Map1D(ch, 1));
+            OverflowCheckedTensor v1 = new(shape);
+            OverflowCheckedTensor v2 = new(Shape.Map1D(ch, 1));
 
-            Sum ope = new Sum(shape, axis: 1);
+            Sum ope = new(shape, axis: 1);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/aggregate_sum.nvvp");
             Cuda.Profiler.Start();

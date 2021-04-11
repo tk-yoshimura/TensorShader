@@ -21,14 +21,14 @@ namespace TensorShaderTest.Operators.Connection1D {
 
                         float[] xval = (new float[inwidth * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-                        Map1D x = new Map1D(channels, inwidth, batch, xval);
+                        Map1D x = new(channels, inwidth, batch, xval);
 
                         Map1D y = Reference(x, scale);
 
-                        OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, inwidth, batch), xval);
-                        OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, outwidth, batch));
+                        OverflowCheckedTensor x_tensor = new(Shape.Map1D(channels, inwidth, batch), xval);
+                        OverflowCheckedTensor y_tensor = new(Shape.Map1D(channels, outwidth, batch));
 
-                        NeighborZoom ope = new NeighborZoom(inwidth, channels, batch);
+                        NeighborZoom ope = new(inwidth, channels, batch);
 
                         ope.Execute(x_tensor, y_tensor);
 
@@ -53,10 +53,10 @@ namespace TensorShaderTest.Operators.Connection1D {
             int inwidth = 512, channels = 32, scale = 2;
             int outwidth = inwidth * scale;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, inwidth));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, outwidth));
+            OverflowCheckedTensor x_tensor = new(Shape.Map1D(channels, inwidth));
+            OverflowCheckedTensor y_tensor = new(Shape.Map1D(channels, outwidth));
 
-            NeighborZoom ope = new NeighborZoom(inwidth, channels);
+            NeighborZoom ope = new(inwidth, channels);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/neighborzoom_1d.nvvp");
             Cuda.Profiler.Start();
@@ -70,7 +70,7 @@ namespace TensorShaderTest.Operators.Connection1D {
             int inw = x.Width, channels = x.Channels, batch = x.Batch;
 
             int outw = inw * scale;
-            Map1D y = new Map1D(channels, outw, batch);
+            Map1D y = new(channels, outw, batch);
 
             for (int th = 0; th < batch; th++) {
                 for (int ox = 0; ox < outw; ox++) {

@@ -4,7 +4,7 @@ namespace TensorShader {
     public abstract partial class VariableNode {
         /// <summary>1次元平均値逆プーリング</summary>
         public static VariableNode AverageUnpooling1D(VariableNode x, int stride, Shape outshape = null) {
-            if (outshape == null) {
+            if (outshape is null) {
                 int outwidth = x.Shape.Width * stride;
 
                 outshape = Shape.Map1D(x.Shape.Channels, outwidth, x.Shape.Batch);
@@ -22,7 +22,7 @@ namespace TensorShader {
     public partial class Tensor {
         /// <summary>1次元平均値逆プーリング</summary>
         public static Tensor AverageUnpooling1D(Tensor x, int stride, Shape outshape = null) {
-            if (outshape == null) {
+            if (outshape is null) {
                 int outwidth = x.Shape.Width * stride;
 
                 outshape = Shape.Map1D(x.Shape.Channels, outwidth, x.Shape.Batch);
@@ -31,7 +31,7 @@ namespace TensorShader {
             Function function =
                 new Functions.Connection1D.AverageUnpooling(outshape, stride);
 
-            Tensor y = new Tensor(function.OutputShapes(x.Shape)[0]);
+            Tensor y = new(function.OutputShapes(x.Shape)[0]);
 
             function.Execute(new Tensor[] { x }, new Tensor[] { y });
 

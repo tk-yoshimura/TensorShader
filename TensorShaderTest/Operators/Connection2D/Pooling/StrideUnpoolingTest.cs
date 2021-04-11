@@ -12,7 +12,7 @@ namespace TensorShaderTest.Operators.Connection2D {
         public void ExecuteTest() {
             float max_err = 0;
 
-            Random random = new Random();
+            Random random = new();
 
             foreach (int batch in new int[] { 1, 2, 3 }) {
                 foreach (int channels in new int[] { 1, 2, 3, 5 }) {
@@ -23,16 +23,16 @@ namespace TensorShaderTest.Operators.Connection2D {
 
                                 float[] yval = (new float[outwidth * outheight * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-                                Map2D y = new Map2D(channels, outwidth, outheight, batch, yval);
+                                Map2D y = new(channels, outwidth, outheight, batch, yval);
 
                                 Map2D x = Reference(y, inwidth, inheight, stride);
 
-                                OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, inwidth, inheight, batch));
-                                OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, outwidth, outheight, batch), yval);
+                                OverflowCheckedTensor x_tensor = new(Shape.Map2D(channels, inwidth, inheight, batch));
+                                OverflowCheckedTensor y_tensor = new(Shape.Map2D(channels, outwidth, outheight, batch), yval);
 
                                 TensorShaderCudaBackend.Randomize.Uniform((uint)x_tensor.Length, x_tensor.Buffer, random);
 
-                                StrideUnpooling ope = new StrideUnpooling(inwidth, inheight, channels, stride, batch);
+                                StrideUnpooling ope = new(inwidth, inheight, channels, stride, batch);
 
                                 ope.Execute(y_tensor, x_tensor);
 
@@ -58,7 +58,7 @@ namespace TensorShaderTest.Operators.Connection2D {
             int channels = y.Channels, batch = y.Batch;
             int inw = outw / stride, inh = outh / stride;
 
-            Map2D x = new Map2D(channels, outw, outh, batch);
+            Map2D x = new(channels, outw, outh, batch);
 
             for (int th = 0; th < batch; th++) {
                 for (int ix, iy = 0; iy < inh; iy++) {
@@ -80,10 +80,10 @@ namespace TensorShaderTest.Operators.Connection2D {
             int outwidth = 512, outheight = 512, channels = 32, stride = 2, batch = 4;
             int inwidth = outwidth / stride, inheight = outheight / stride;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, inwidth, inheight, batch));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, outwidth, outheight, batch));
+            OverflowCheckedTensor x_tensor = new(Shape.Map2D(channels, inwidth, inheight, batch));
+            OverflowCheckedTensor y_tensor = new(Shape.Map2D(channels, outwidth, outheight, batch));
 
-            StrideUnpooling ope = new StrideUnpooling(outwidth, outheight, channels, stride, batch);
+            StrideUnpooling ope = new(outwidth, outheight, channels, stride, batch);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/strideunpool_2d.nvvp");
             Cuda.Profiler.Start();

@@ -68,8 +68,8 @@ namespace TensorShaderTest.Operators.Trivector {
     public class TrivectorTest {
         [TestMethod]
         public void AddTest() {
-            Trivector v1 = new Trivector(2, 7, 31);
-            Trivector v2 = new Trivector(23, 17, 3);
+            Trivector v1 = new(2, 7, 31);
+            Trivector v2 = new(23, 17, 3);
 
             Trivector v_add = v1 + v2;
 
@@ -80,8 +80,8 @@ namespace TensorShaderTest.Operators.Trivector {
 
         [TestMethod]
         public void MulTest() {
-            Trivector v = new Trivector(4, 3, 2);
-            Quaternion.Quaternion q = new Quaternion.Quaternion(5, -6, 7, -8);
+            Trivector v = new(4, 3, 2);
+            Quaternion.Quaternion q = new(5, -6, 7, -8);
 
             Trivector u = v * q;
 
@@ -92,8 +92,8 @@ namespace TensorShaderTest.Operators.Trivector {
 
         [TestMethod]
         public void MulVGradTest() {
-            Trivector v = new Trivector(4, 3, 2);
-            Quaternion.Quaternion q = new Quaternion.Quaternion(5, -6, 7, -8);
+            Trivector v = new(4, 3, 2);
+            Quaternion.Quaternion q = new(5, -6, 7, -8);
 
             Trivector u = Trivector.MulVGrad(v, q);
 
@@ -104,9 +104,9 @@ namespace TensorShaderTest.Operators.Trivector {
 
         [TestMethod]
         public void MulQGradTest() {
-            Trivector v = new Trivector(4, -3, 2);
-            Trivector u = new Trivector(-2, 5, -7);
-            Quaternion.Quaternion q = new Quaternion.Quaternion(5, -6, 7, -8);
+            Trivector v = new(4, -3, 2);
+            Trivector u = new(-2, 5, -7);
+            Quaternion.Quaternion q = new(5, -6, 7, -8);
 
             Quaternion.Quaternion p = Trivector.MulQGrad(v, u, q);
 

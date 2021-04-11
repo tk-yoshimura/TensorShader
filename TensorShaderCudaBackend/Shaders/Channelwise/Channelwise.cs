@@ -48,7 +48,7 @@ namespace TensorShaderCudaBackend.Shaders.Channelwise {
             if (UseConstMemory) {
                 CudaArray<float> v = args[0] as CudaArray<float>;
 
-                if (stream != null) {
+                if (stream is not null) {
                     Kernel.StoreConstMemoryAsync(stream, "v", v, Channels);
                 }
                 else {
@@ -63,7 +63,7 @@ namespace TensorShaderCudaBackend.Shaders.Channelwise {
 
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
-            if (args == null || args.Length != MapArrays + 2) {
+            if (args is null || args.Length != MapArrays + 2) {
                 throw new ArgumentException(nameof(args));
             }
 

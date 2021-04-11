@@ -10,7 +10,7 @@ namespace TensorShaderTest.Operators.Trivector {
     public class TrivectorKernelProduct3DTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             float max_err = 0;
 
@@ -34,19 +34,19 @@ namespace TensorShaderTest.Operators.Trivector {
                             Quaternion.Quaternion[] wcval = (new Quaternion.Quaternion[wval.Length / 4])
                                 .Select((_, idx) => new Quaternion.Quaternion(wval[idx * 4], wval[idx * 4 + 1], wval[idx * 4 + 2], wval[idx * 4 + 3])).ToArray();
 
-                            TrivectorMap3D x = new TrivectorMap3D(inchannels / 3, inwidth, inheight, indepth, batch, xcval);
-                            TrivectorMap3D y = new TrivectorMap3D(outchannels / 3, outwidth, outheight, outdepth, batch, ycval);
-                            Quaternion.QuaternionFilter3D w = new Quaternion.QuaternionFilter3D(inchannels / 3, outchannels / 3, kwidth, kheight, kdepth, wcval);
+                            TrivectorMap3D x = new(inchannels / 3, inwidth, inheight, indepth, batch, xcval);
+                            TrivectorMap3D y = new(outchannels / 3, outwidth, outheight, outdepth, batch, ycval);
+                            Quaternion.QuaternionFilter3D w = new(inchannels / 3, outchannels / 3, kwidth, kheight, kdepth, wcval);
 
                             Quaternion.QuaternionFilter3D gw = Reference(x, y, w, kwidth, kheight, kdepth);
 
-                            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
-                            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), yval);
-                            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels / 3 * 4, outchannels / 3, kwidth, kheight, kdepth), wval);
+                            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
+                            OverflowCheckedTensor y_tensor = new(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), yval);
+                            OverflowCheckedTensor w_tensor = new(Shape.Kernel3D(inchannels / 3 * 4, outchannels / 3, kwidth, kheight, kdepth), wval);
 
-                            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels / 3 * 4, outchannels / 3, kwidth, kheight, kdepth));
+                            OverflowCheckedTensor gw_tensor = new(Shape.Kernel3D(inchannels / 3 * 4, outchannels / 3, kwidth, kheight, kdepth));
 
-                            TrivectorKernelProduct3D ope = new TrivectorKernelProduct3D(inwidth, inheight, indepth, inchannels, outchannels, kwidth, kheight, kdepth, transpose: false, batch);
+                            TrivectorKernelProduct3D ope = new(inwidth, inheight, indepth, inchannels, outchannels, kwidth, kheight, kdepth, transpose: false, batch);
 
                             ope.Execute(x_tensor, y_tensor, w_tensor, gw_tensor);
 
@@ -71,7 +71,7 @@ namespace TensorShaderTest.Operators.Trivector {
 
         [TestMethod]
         public void LargeMapTest() {
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             float max_err = 0;
 
@@ -94,19 +94,19 @@ namespace TensorShaderTest.Operators.Trivector {
             Quaternion.Quaternion[] wcval = (new Quaternion.Quaternion[wval.Length / 4])
                 .Select((_, idx) => new Quaternion.Quaternion(wval[idx * 4], wval[idx * 4 + 1], wval[idx * 4 + 2], wval[idx * 4 + 3])).ToArray();
 
-            TrivectorMap3D x = new TrivectorMap3D(inchannels / 3, inwidth, inheight, indepth, batch, xcval);
-            TrivectorMap3D y = new TrivectorMap3D(outchannels / 3, outwidth, outheight, outdepth, batch, ycval);
-            Quaternion.QuaternionFilter3D w = new Quaternion.QuaternionFilter3D(inchannels / 3, outchannels / 3, kwidth, kheight, kdepth, wcval);
+            TrivectorMap3D x = new(inchannels / 3, inwidth, inheight, indepth, batch, xcval);
+            TrivectorMap3D y = new(outchannels / 3, outwidth, outheight, outdepth, batch, ycval);
+            Quaternion.QuaternionFilter3D w = new(inchannels / 3, outchannels / 3, kwidth, kheight, kdepth, wcval);
 
             Quaternion.QuaternionFilter3D gw = Reference(x, y, w, kwidth, kheight, kdepth);
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), yval);
-            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels / 3 * 4, outchannels / 3, kwidth, kheight, kdepth), wval);
+            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
+            OverflowCheckedTensor y_tensor = new(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), yval);
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel3D(inchannels / 3 * 4, outchannels / 3, kwidth, kheight, kdepth), wval);
 
-            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels / 3 * 4, outchannels / 3, kwidth, kheight, kdepth));
+            OverflowCheckedTensor gw_tensor = new(Shape.Kernel3D(inchannels / 3 * 4, outchannels / 3, kwidth, kheight, kdepth));
 
-            TrivectorKernelProduct3D ope = new TrivectorKernelProduct3D(inwidth, inheight, indepth, inchannels, outchannels, kwidth, kheight, kdepth, transpose: false, batch);
+            TrivectorKernelProduct3D ope = new(inwidth, inheight, indepth, inchannels, outchannels, kwidth, kheight, kdepth, transpose: false, batch);
 
             ope.Execute(x_tensor, y_tensor, w_tensor, gw_tensor);
 
@@ -129,13 +129,13 @@ namespace TensorShaderTest.Operators.Trivector {
             int inwidth = 32, inheight = 32, indepth = 32, inchannels = 33, outchannels = 33, ksize = 3;
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1, outdepth = indepth - ksize + 1;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, inwidth, inheight, indepth));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth));
-            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels / 3 * 4, outchannels / 3, ksize, ksize, ksize));
+            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, inwidth, inheight, indepth));
+            OverflowCheckedTensor y_tensor = new(Shape.Map3D(outchannels, outwidth, outheight, outdepth));
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel3D(inchannels / 3 * 4, outchannels / 3, ksize, ksize, ksize));
 
-            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels / 3 * 4, outchannels / 3, ksize, ksize, ksize));
+            OverflowCheckedTensor gw_tensor = new(Shape.Kernel3D(inchannels / 3 * 4, outchannels / 3, ksize, ksize, ksize));
 
-            TrivectorKernelProduct3D ope = new TrivectorKernelProduct3D(inwidth, inheight, indepth, inchannels, outchannels, ksize, ksize, ksize);
+            TrivectorKernelProduct3D ope = new(inwidth, inheight, indepth, inchannels, outchannels, ksize, ksize, ksize);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/trivector_kernelproduct_3d.nvvp");
             Cuda.Profiler.Start();
@@ -153,7 +153,7 @@ namespace TensorShaderTest.Operators.Trivector {
                 throw new ArgumentException("mismatch shape");
             }
 
-            Quaternion.QuaternionFilter3D gw = new Quaternion.QuaternionFilter3D(inchannels, outchannels, kwidth, kheight, kdepth);
+            Quaternion.QuaternionFilter3D gw = new(inchannels, outchannels, kwidth, kheight, kdepth);
 
             for (int kx, ky, kz = 0; kz < kdepth; kz++) {
                 for (ky = 0; ky < kheight; ky++) {

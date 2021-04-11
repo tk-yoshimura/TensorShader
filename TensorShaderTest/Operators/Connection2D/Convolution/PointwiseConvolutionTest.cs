@@ -20,17 +20,17 @@ namespace TensorShaderTest.Operators.Connection2D {
                                 float[] xval = (new float[width * height * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                                 float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-                                Map2D x = new Map2D(inchannels, width, height, batch, xval);
-                                Filter2D w = new Filter2D(inchannels, outchannels, 1, 1, wval);
+                                Map2D x = new(inchannels, width, height, batch, xval);
+                                Filter2D w = new(inchannels, outchannels, 1, 1, wval);
 
                                 Map2D y = Reference(x, w);
 
-                                OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, width, height, batch), xval);
-                                OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels), wval);
+                                OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, width, height, batch), xval);
+                                OverflowCheckedTensor w_tensor = new(Shape.Kernel0D(inchannels, outchannels), wval);
 
-                                OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, width, height, batch));
+                                OverflowCheckedTensor y_tensor = new(Shape.Map2D(outchannels, width, height, batch));
 
-                                PointwiseConvolution ope = new PointwiseConvolution(width, height, inchannels, outchannels, batch);
+                                PointwiseConvolution ope = new(width, height, inchannels, outchannels, batch);
 
                                 ope.Execute(x_tensor, w_tensor, y_tensor);
 
@@ -56,7 +56,7 @@ namespace TensorShaderTest.Operators.Connection2D {
         public void LargeMapTest() {
             float max_err = 0;
 
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             int batch = 3;
             int inchannels = 49, outchannels = 50;
@@ -65,17 +65,17 @@ namespace TensorShaderTest.Operators.Connection2D {
             float[] xval = (new float[width * height * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
             float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
 
-            Map2D x = new Map2D(inchannels, width, height, batch, xval);
-            Filter2D w = new Filter2D(inchannels, outchannels, 1, 1, wval);
+            Map2D x = new(inchannels, width, height, batch, xval);
+            Filter2D w = new(inchannels, outchannels, 1, 1, wval);
 
             Map2D y = Reference(x, w);
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, width, height, batch), xval);
-            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels), wval);
+            OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, width, height, batch), xval);
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel0D(inchannels, outchannels), wval);
 
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, width, height, batch));
+            OverflowCheckedTensor y_tensor = new(Shape.Map2D(outchannels, width, height, batch));
 
-            PointwiseConvolution ope = new PointwiseConvolution(width, height, inchannels, outchannels, batch);
+            PointwiseConvolution ope = new(width, height, inchannels, outchannels, batch);
 
             ope.Execute(x_tensor, w_tensor, y_tensor);
 
@@ -96,12 +96,12 @@ namespace TensorShaderTest.Operators.Connection2D {
         public void SpeedTest() {
             int inwidth = 512, inheight = 512, inchannels = 31, outchannels = 63;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight));
-            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels));
+            OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, inwidth, inheight));
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel0D(inchannels, outchannels));
 
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, inwidth, inheight));
+            OverflowCheckedTensor y_tensor = new(Shape.Map2D(outchannels, inwidth, inheight));
 
-            PointwiseConvolution ope = new PointwiseConvolution(inwidth, inheight, inchannels, outchannels);
+            PointwiseConvolution ope = new(inwidth, inheight, inchannels, outchannels);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/ptwise_convolution_2d.nvvp");
             Cuda.Profiler.Start();
@@ -115,7 +115,7 @@ namespace TensorShaderTest.Operators.Connection2D {
             int inchannels = x.Channels, outchannels = w.OutChannels, batch = x.Batch;
             int inw = x.Width, inh = x.Height;
 
-            Map2D y = new Map2D(outchannels, inw, inh, batch);
+            Map2D y = new(outchannels, inw, inh, batch);
 
             for (int th = 0; th < batch; th++) {
                 for (int ix, iy = 0; iy < inh; iy++) {
@@ -143,8 +143,8 @@ namespace TensorShaderTest.Operators.Connection2D {
             float[] xval = (new float[batch * inwidth * inheight * inchannels]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[outchannels * inchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            Map2D x = new Map2D(inchannels, inwidth, inheight, batch, xval);
-            Filter2D w = new Filter2D(inchannels, outchannels, 1, 1, wval);
+            Map2D x = new(inchannels, inwidth, inheight, batch, xval);
+            Filter2D w = new(inchannels, outchannels, 1, 1, wval);
 
             Map2D y = Reference(x, w);
 

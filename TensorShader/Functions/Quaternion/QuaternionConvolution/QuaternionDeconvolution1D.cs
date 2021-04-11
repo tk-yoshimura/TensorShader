@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>四元数1次元逆畳み込み</summary>
         public static Tensor QuaternionDeconvolution1D(Tensor x, Tensor w, bool gradmode = false) {
             Functions.QuaternionConvolution.QuaternionDeconvolution1D function =
-                new Functions.QuaternionConvolution.QuaternionDeconvolution1D(x.Shape, w.Shape, gradmode);
+                new(x.Shape, w.Shape, gradmode);
 
-            Tensor y = new Tensor(function.OutShape);
+            Tensor y = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, w }, new Tensor[] { y });
 

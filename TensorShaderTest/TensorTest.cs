@@ -12,7 +12,7 @@ namespace TensorShaderTest {
         public void StateTest() {
             int channels = 12, batch = 4, length = channels * batch;
 
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             float[] v1 = (new float[length]).Select((_) => (float)random.NextDouble()).ToArray();
             float[] v2 = (new float[length]).Select((_) => (float)random.NextDouble()).ToArray();
@@ -66,7 +66,7 @@ namespace TensorShaderTest {
         public void ClearTest() {
             int channels = 12, batch = 4, length = channels * batch;
 
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             float[] v1 = (new float[length]).Select((_) => (float)random.NextDouble()).ToArray();
 
@@ -119,7 +119,7 @@ namespace TensorShaderTest {
         public void ZerosetTest() {
             int channels = 12, batch = 4, length = channels * batch;
 
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             float[] v1 = (new float[length]).Select((_) => (float)random.NextDouble()).ToArray();
 
@@ -150,7 +150,7 @@ namespace TensorShaderTest {
         public void CopyToTest() {
             int channels = 12, batch = 4, length = channels * batch;
 
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             float[] v1 = (new float[length]).Select((_) => (float)random.NextDouble()).ToArray();
 
@@ -199,7 +199,7 @@ namespace TensorShaderTest {
         public void RegionCopyToTest() {
             int ch1 = 2, ch2 = 3, batch = 4, length1 = ch1 * batch, length2 = ch2 * batch;
 
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             float[] v1 = (new float[length1]).Select((_) => (float)random.NextDouble()).ToArray();
             float[] v2 = (new float[length2]).Select((_) => (float)random.NextDouble()).ToArray();
@@ -298,7 +298,7 @@ namespace TensorShaderTest {
         public void CopyTest() {
             int channels = 12, batch = 4, length = channels * batch;
 
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             float[] v1 = (new float[length]).Select((_) => (float)random.NextDouble()).ToArray();
 
@@ -322,7 +322,7 @@ namespace TensorShaderTest {
 
         [TestMethod]
         public void OverflowTest() {
-            OverflowCheckedTensor tensor = new OverflowCheckedTensor(Shape.Vector(12));
+            OverflowCheckedTensor tensor = new(Shape.Vector(12));
 
             Operator overflow = new OverflowOperator(tensor.Shape);
 
@@ -362,7 +362,7 @@ namespace TensorShaderTest {
                     x[length] = 1;
                 }";
 
-                Kernel kernel = new Kernel(code, "add");
+                Kernel kernel = new(code, "add");
 
                 kernel.Execute((uint)outmap.Length, dynamic_shared_memory_bytes: 0, stream: null, outmap.Buffer, outmap.Length);
             }

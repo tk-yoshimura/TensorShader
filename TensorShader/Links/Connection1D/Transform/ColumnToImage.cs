@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>ColumnToImage変換</summary>
         public static Field ColumnToImage1D(Field x, int kwidth) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Connection1D.ColumnToImage(x, y, kwidth);
 
             link.Forward();
@@ -41,7 +41,7 @@ namespace TensorShader.Links.Connection1D {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

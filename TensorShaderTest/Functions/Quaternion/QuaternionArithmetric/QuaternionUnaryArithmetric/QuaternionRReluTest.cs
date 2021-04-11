@@ -10,7 +10,7 @@ namespace TensorShaderTest.Functions.QuaternionArithmetric {
         [TestMethod]
         public void ExecuteTest() {
             const int length = 256;
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
             int[] idxes = (new int[length]).Select((_, idx) => idx).ToArray();
 
@@ -23,7 +23,7 @@ namespace TensorShaderTest.Functions.QuaternionArithmetric {
                 float[] y = o.State.Value;
 
                 for (int i = 0; i < y.Length / 4; i++) {
-                    Quaternion c = new Quaternion(x1[i * 4 + 1], x1[i * 4 + 2], x1[i * 4 + 3], Math.Max(0, x1[i * 4]));
+                    Quaternion c = new(x1[i * 4 + 1], x1[i * 4 + 2], x1[i * 4 + 3], Math.Max(0, x1[i * 4]));
 
                     Assert.AreEqual(c.W, y[i * 4], 1e-6f, $"not equal {i}");
                     Assert.AreEqual(c.X, y[i * 4 + 1], 1e-6f, $"not equal {i}");

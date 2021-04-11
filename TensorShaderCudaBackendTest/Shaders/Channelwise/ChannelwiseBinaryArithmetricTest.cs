@@ -16,7 +16,7 @@ namespace TensorShaderCudaBackendTest.ShadersTest.ChannelwiseTest {
             foreach (uint vec_length in new int[] { 1, 3, 4, 5, 31, 32, 33, const_length - 2, const_length - 1, const_length, const_length + 1, const_length + 2 }) {
                 uint map_length = vec_length * 5;
 
-                Random random = new Random(1234);
+                Random random = new(1234);
 
                 float[] h_v = (new float[vec_length]).Select((_) => (float)random.NextDouble()).ToArray();
                 float[] h_x = (new float[map_length]).Select((_) => (float)random.NextDouble()).ToArray();
@@ -24,9 +24,9 @@ namespace TensorShaderCudaBackendTest.ShadersTest.ChannelwiseTest {
 
                 Shader shader = new ChannelwiseBinaryArithmetric("vecadd", "#y = #v + #x;", vec_length);
 
-                CudaArray<float> d_v = new CudaArray<float>(h_v);
-                CudaArray<float> d_x = new CudaArray<float>(h_x);
-                CudaArray<float> d_y = new CudaArray<float>(map_length);
+                CudaArray<float> d_v = new(h_v);
+                CudaArray<float> d_x = new(h_x);
+                CudaArray<float> d_y = new(map_length);
 
                 shader.Execute(stream: null, d_v, d_x, d_y, map_length);
 

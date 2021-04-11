@@ -65,7 +65,7 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
 
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
-            if (args == null || args.Length != 10) {
+            if (args is null || args.Length != 10) {
                 throw new ArgumentException(nameof(args));
             }
 

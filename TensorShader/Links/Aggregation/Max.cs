@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>最大値</summary>
         public static Field Max(Field x, int[] axes = null, bool keepdims = false) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Aggregation.Max(x, y, axes, keepdims);
 
             link.Forward();

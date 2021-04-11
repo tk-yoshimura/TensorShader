@@ -25,7 +25,7 @@ namespace TensorShaderTest.Links.Utility {
             flow.Execute();
 
             float[] gx1_actual = x1.GradState.Value;
-            Assert.IsTrue(x2.GradTensor == null);
+            Assert.IsTrue(x2.GradTensor is null);
 
             AssertError.Tolerance(gx1_expect, gx1_actual, 1e-7f, 1e-5f, $"not equal gx1");
         }

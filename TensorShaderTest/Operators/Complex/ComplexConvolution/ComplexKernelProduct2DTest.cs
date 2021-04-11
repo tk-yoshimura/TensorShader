@@ -10,7 +10,7 @@ namespace TensorShaderTest.Operators.Complex {
     public class ComplexKernelProduct2DTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             float max_err = 0;
 
@@ -32,17 +32,17 @@ namespace TensorShaderTest.Operators.Complex {
                                         System.Numerics.Complex[] ycval = (new System.Numerics.Complex[yval.Length / 2])
                                             .Select((_, idx) => new System.Numerics.Complex(yval[idx * 2], yval[idx * 2 + 1])).ToArray();
 
-                                        ComplexMap2D x = new ComplexMap2D(inchannels / 2, inwidth, inheight, batch, xcval);
-                                        ComplexMap2D y = new ComplexMap2D(outchannels / 2, outwidth, outheight, batch, ycval);
+                                        ComplexMap2D x = new(inchannels / 2, inwidth, inheight, batch, xcval);
+                                        ComplexMap2D y = new(outchannels / 2, outwidth, outheight, batch, ycval);
 
                                         ComplexFilter2D gw = Reference(x, y, kwidth, kheight);
 
-                                        OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
-                                        OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
+                                        OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
+                                        OverflowCheckedTensor y_tensor = new(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
 
-                                        OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels, outchannels / 2, kwidth, kheight));
+                                        OverflowCheckedTensor gw_tensor = new(Shape.Kernel2D(inchannels, outchannels / 2, kwidth, kheight));
 
-                                        ComplexKernelProduct2D ope = new ComplexKernelProduct2D(inwidth, inheight, inchannels, outchannels, kwidth, kheight, transpose: false, batch);
+                                        ComplexKernelProduct2D ope = new(inwidth, inheight, inchannels, outchannels, kwidth, kheight, transpose: false, batch);
 
                                         ope.Execute(x_tensor, y_tensor, gw_tensor);
 
@@ -69,7 +69,7 @@ namespace TensorShaderTest.Operators.Complex {
 
         [TestMethod]
         public void LargeMapTest() {
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             float max_err = 0;
 
@@ -88,17 +88,17 @@ namespace TensorShaderTest.Operators.Complex {
             System.Numerics.Complex[] ycval = (new System.Numerics.Complex[yval.Length / 2])
                 .Select((_, idx) => new System.Numerics.Complex(yval[idx * 2], yval[idx * 2 + 1])).ToArray();
 
-            ComplexMap2D x = new ComplexMap2D(inchannels / 2, inwidth, inheight, batch, xcval);
-            ComplexMap2D y = new ComplexMap2D(outchannels / 2, outwidth, outheight, batch, ycval);
+            ComplexMap2D x = new(inchannels / 2, inwidth, inheight, batch, xcval);
+            ComplexMap2D y = new(outchannels / 2, outwidth, outheight, batch, ycval);
 
             ComplexFilter2D gw = Reference(x, y, kwidth, kheight);
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
+            OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
+            OverflowCheckedTensor y_tensor = new(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
 
-            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels, outchannels / 2, kwidth, kheight));
+            OverflowCheckedTensor gw_tensor = new(Shape.Kernel2D(inchannels, outchannels / 2, kwidth, kheight));
 
-            ComplexKernelProduct2D ope = new ComplexKernelProduct2D(inwidth, inheight, inchannels, outchannels, kwidth, kheight, transpose: false, batch);
+            ComplexKernelProduct2D ope = new(inwidth, inheight, inchannels, outchannels, kwidth, kheight, transpose: false, batch);
 
             ope.Execute(x_tensor, y_tensor, gw_tensor);
 
@@ -120,12 +120,12 @@ namespace TensorShaderTest.Operators.Complex {
             int inwidth = 512, inheight = 512, inchannels = 32, outchannels = 32, ksize = 3;
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight));
+            OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, inwidth, inheight));
+            OverflowCheckedTensor y_tensor = new(Shape.Map2D(outchannels, outwidth, outheight));
 
-            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels, outchannels / 2, ksize, ksize));
+            OverflowCheckedTensor gw_tensor = new(Shape.Kernel2D(inchannels, outchannels / 2, ksize, ksize));
 
-            ComplexKernelProduct2D ope = new ComplexKernelProduct2D(inwidth, inheight, inchannels, outchannels, ksize, ksize);
+            ComplexKernelProduct2D ope = new(inwidth, inheight, inchannels, outchannels, ksize, ksize);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/complex_kernelproduct_2d.nvvp");
             Cuda.Profiler.Start();
@@ -143,7 +143,7 @@ namespace TensorShaderTest.Operators.Complex {
                 throw new ArgumentException("mismatch shape");
             }
 
-            ComplexFilter2D w = new ComplexFilter2D(inchannels, outchannels, kwidth, kheight);
+            ComplexFilter2D w = new(inchannels, outchannels, kwidth, kheight);
 
             Func<System.Numerics.Complex, System.Numerics.Complex, System.Numerics.Complex> mul_grad = (z1, z2) => {
                 return new System.Numerics.Complex(z1.Real * z2.Real + z1.Imaginary * z2.Imaginary, z1.Imaginary * z2.Real - z1.Real * z2.Imaginary);
@@ -182,8 +182,8 @@ namespace TensorShaderTest.Operators.Complex {
             System.Numerics.Complex[] ycval = (new System.Numerics.Complex[yval.Length / 2])
                 .Select((_, idx) => new System.Numerics.Complex(yval[idx * 2], yval[idx * 2 + 1])).ToArray();
 
-            ComplexMap2D x = new ComplexMap2D(inchannels / 2, inwidth, inheight, batch, xcval);
-            ComplexMap2D y = new ComplexMap2D(outchannels / 2, outwidth, outheight, batch, ycval);
+            ComplexMap2D x = new(inchannels / 2, inwidth, inheight, batch, xcval);
+            ComplexMap2D y = new(outchannels / 2, outwidth, outheight, batch, ycval);
 
             ComplexFilter2D gw = Reference(x, y, kwidth, kheight);
 

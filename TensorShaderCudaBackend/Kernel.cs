@@ -167,13 +167,13 @@ namespace TensorShaderCudaBackend {
             (uint x, uint y, uint z) grid =
                 ((indexes.x + block.x - 1) / block.x, (indexes.y + block.y - 1) / block.y, (indexes.z + block.z - 1) / block.z);
 
-            using (Arguments arguments = new Arguments(args)) {
+            using (Arguments arguments = new(args)) {
                 Nvcuda.LaunchKernel(
                     kernel,
                     grid.x, grid.y, grid.z,
                     block.x, block.y, block.z,
                     dynamic_shared_memory_bytes,
-                    stream != null ? stream.Ptr : IntPtr.Zero,
+                    stream is not null ? stream.Ptr : IntPtr.Zero,
                     arguments.Ptr, IntPtr.Zero
                 );
             }

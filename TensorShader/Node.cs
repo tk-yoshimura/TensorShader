@@ -91,7 +91,7 @@ namespace TensorShader {
         /// <param name="input_node">更新対象の入力ノード</param>
         /// <remarks>入力ノードのテンソルは割り当て済みである必要がある</remarks>
         public OutputNode Update(InputNode input_node) {
-            if (input_node.Tensor == null) {
+            if (input_node.Tensor is null) {
                 throw new ArgumentException("Input node tensor needs to be assigned.");
             }
 
@@ -115,7 +115,7 @@ namespace TensorShader {
         /// <param name="innodes">入力ノード</param>
         internal TensorNode(Shape shape, Tensor tensor = null, params Node[] innodes)
             : base(shape, innodes) {
-            if (tensor != null && tensor.Shape != shape) {
+            if (tensor is not null && tensor.Shape != shape) {
                 throw new ArgumentException(nameof(tensor));
             }
 
@@ -124,11 +124,11 @@ namespace TensorShader {
 
         /// <summary>テンソル対応付け</summary>
         internal void AssignTensor(Tensor tensor) {
-            if (tensor == null || tensor.Shape != Shape) {
+            if (tensor is null || tensor.Shape != Shape) {
                 throw new ArgumentException(nameof(tensor));
             }
 
-            if (this.Tensor != null) {
+            if (this.Tensor is not null) {
                 throw new InvalidOperationException();
             }
 
@@ -138,14 +138,14 @@ namespace TensorShader {
         /// <summary>テンソルの状態</summary>
         public NdimArray<float> State {
             set {
-                if (Tensor == null) {
+                if (Tensor is null) {
                     throw new InvalidOperationException("Tensor not assigned.");
                 }
 
                 Tensor.State = value;
             }
             get {
-                if (Tensor == null) {
+                if (Tensor is null) {
                     throw new InvalidOperationException("Tensor not assigned.");
                 }
 

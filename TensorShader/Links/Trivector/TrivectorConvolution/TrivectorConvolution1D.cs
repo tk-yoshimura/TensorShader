@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>3次元ベクトル1次元畳み込み</summary>
         public static Field TrivectorConvolution1D(Field x, Field w) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.TrivectorConvolution.TrivectorConvolution1D(x, w, y);
 
             link.Forward();
@@ -38,7 +38,7 @@ namespace TensorShader.Links.TrivectorConvolution {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

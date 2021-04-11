@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>空間次元をチャネル次元に展開</summary>
         public static Field SpaceToChannel1D(Field x, int scale) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Connection1D.SpaceToChannel(x, y, scale);
 
             link.Forward();
@@ -39,7 +39,7 @@ namespace TensorShader.Links.Connection1D {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

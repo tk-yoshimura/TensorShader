@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>Elu</summary>
         public static Field Elu(Field x, float alpha = 1) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.UnaryArithmetric.Elu(x, y, alpha);
 
             link.Forward();
@@ -34,7 +34,7 @@ namespace TensorShader.Links.UnaryArithmetric {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

@@ -21,7 +21,7 @@ namespace TensorShader.Links.Aggregation {
         /// <summary>コンストラクタ</summary>
         public Aggregation(Field infield, Field outfield, int[] axes = null, bool keepdims = false)
             : base(new Field[] { infield }, outfield) {
-            if (axes == null) {
+            if (axes is null) {
                 axes = (new int[infield.Shape.Ndim]).Select((_, idx) => idx).ToArray();
             }
 

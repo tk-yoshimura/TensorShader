@@ -19,7 +19,7 @@ namespace TensorShaderPreset.Image {
 
         /// <summary>X方向ソーベルフィルタ</summary>
         public static Field SobelX(Field x, float scale) {
-            VariableField w = new VariableField(
+            VariableField w = new(
                 KernelSobelX(x.Shape.Channels, scale),
                 name: "SobelX"
             );
@@ -41,7 +41,7 @@ namespace TensorShaderPreset.Image {
 
         /// <summary>Y方向ソーベルフィルタ</summary>
         public static Field SobelY(Field x, float scale) {
-            VariableField w = new VariableField(
+            VariableField w = new(
                 KernelSobelY(x.Shape.Channels, scale),
                 name: "SobelY"
             );

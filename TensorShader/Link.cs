@@ -28,7 +28,7 @@ namespace TensorShader {
 
             bool enable_backprob = infields.Select((field) => field.EnableBackprop).Any((b) => b);
 
-            if (outfield.OutLink != null) {
+            if (outfield.OutLink is not null) {
                 throw new ArgumentNullException(nameof(outfield));
             }
 

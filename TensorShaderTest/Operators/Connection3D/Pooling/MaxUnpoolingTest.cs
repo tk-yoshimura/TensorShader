@@ -12,7 +12,7 @@ namespace TensorShaderTest.Operators.Connection3D {
         public void ExecuteTest() {
             float max_err = 0;
 
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
             foreach (int batch in new int[] { 1, 2, 3 }) {
                 foreach (int channels in new int[] { 1, 2, 3, 5 }) {
@@ -25,20 +25,20 @@ namespace TensorShaderTest.Operators.Connection3D {
                                     float[] xval = (new float[inwidth * inheight * indepth * channels * batch]).Select((_) => (float)rd.NextDouble()).ToArray();
                                     float[] gyval = (new float[outwidth * outheight * outdepth * channels * batch]).Select((_) => (float)rd.NextDouble()).ToArray();
 
-                                    Map3D x = new Map3D(channels, inwidth, inheight, indepth, batch, xval);
-                                    Map3D gy = new Map3D(channels, outwidth, outheight, outdepth, batch, gyval);
+                                    Map3D x = new(channels, inwidth, inheight, indepth, batch, xval);
+                                    Map3D gy = new(channels, outwidth, outheight, outdepth, batch, gyval);
 
                                     Map3D gx = Reference(x, gy, stride);
 
-                                    OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, inwidth, inheight, indepth, batch), xval);
-                                    OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, outwidth, outheight, outdepth, batch));
-                                    OverflowCheckedTensor gy_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, outwidth, outheight, outdepth, batch), gyval);
-                                    OverflowCheckedTensor gx_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, inwidth, inheight, indepth, batch));
+                                    OverflowCheckedTensor x_tensor = new(Shape.Map3D(channels, inwidth, inheight, indepth, batch), xval);
+                                    OverflowCheckedTensor y_tensor = new(Shape.Map3D(channels, outwidth, outheight, outdepth, batch));
+                                    OverflowCheckedTensor gy_tensor = new(Shape.Map3D(channels, outwidth, outheight, outdepth, batch), gyval);
+                                    OverflowCheckedTensor gx_tensor = new(Shape.Map3D(channels, inwidth, inheight, indepth, batch));
 
-                                    MaxPooling ope_pool = new MaxPooling(inwidth, inheight, indepth, channels, stride, batch);
+                                    MaxPooling ope_pool = new(inwidth, inheight, indepth, channels, stride, batch);
                                     ope_pool.Execute(x_tensor, y_tensor);
 
-                                    MaxUnpooling ope_unpool = new MaxUnpooling(inwidth, inheight, indepth, channels, stride, batch);
+                                    MaxUnpooling ope_unpool = new(inwidth, inheight, indepth, channels, stride, batch);
                                     ope_unpool.Execute(gy_tensor, x_tensor, y_tensor, gx_tensor);
 
                                     float[] gx_expect = gx.ToArray();
@@ -71,8 +71,8 @@ namespace TensorShaderTest.Operators.Connection3D {
             int channels = x.Channels, batch = x.Batch;
             int inw = x.Width, inh = x.Height, ind = x.Depth, outw = inw / stride, outh = inh / stride, outd = ind / stride;
 
-            Map3D y = new Map3D(channels, outw, outh, outd, batch);
-            Map3D gx = new Map3D(channels, inw, inh, ind, batch);
+            Map3D y = new(channels, outw, outh, outd, batch);
+            Map3D gx = new(channels, inw, inh, ind, batch);
 
             for (int th = 0; th < batch; th++) {
                 for (int ox, oy, oz = 0; oz < outd; oz++) {
@@ -127,12 +127,12 @@ namespace TensorShaderTest.Operators.Connection3D {
             int inwidth = 64, inheight = 64, indepth = 64, channels = 32, stride = 2, batch = 4;
             int outwidth = inwidth / stride, outheight = inheight / stride, outdepth = inheight / stride;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, inwidth, inheight, indepth, batch));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, outwidth, outheight, outdepth, batch));
-            OverflowCheckedTensor gy_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, outwidth, outheight, outdepth, batch));
-            OverflowCheckedTensor gx_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, inwidth, inheight, indepth, batch));
+            OverflowCheckedTensor x_tensor = new(Shape.Map3D(channels, inwidth, inheight, indepth, batch));
+            OverflowCheckedTensor y_tensor = new(Shape.Map3D(channels, outwidth, outheight, outdepth, batch));
+            OverflowCheckedTensor gy_tensor = new(Shape.Map3D(channels, outwidth, outheight, outdepth, batch));
+            OverflowCheckedTensor gx_tensor = new(Shape.Map3D(channels, inwidth, inheight, indepth, batch));
 
-            MaxUnpooling ope = new MaxUnpooling(inwidth, inheight, indepth, channels, stride, batch);
+            MaxUnpooling ope = new(inwidth, inheight, indepth, channels, stride, batch);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/maxunpool_3d.nvvp");
             Cuda.Profiler.Start();

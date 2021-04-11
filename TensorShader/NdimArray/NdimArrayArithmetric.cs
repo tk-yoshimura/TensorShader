@@ -12,7 +12,7 @@ namespace TensorShader {
 
         /// <summary>単項マイナス</summary>
         public static NdimArray<T> operator -(NdimArray<T> a) {
-            NdimArray<T> c = new NdimArray<T>(a.Shape);
+            NdimArray<T> c = new(a.Shape);
 
             if (c.Value is int[]) {
                 int[] av = a.Value as int[], cv = c.Value as int[];
@@ -60,7 +60,7 @@ namespace TensorShader {
                 throw new ArgumentException(ExceptionMessage.Shape(a.Shape, b.Shape));
             }
 
-            NdimArray<T> c = new NdimArray<T>(a.Shape);
+            NdimArray<T> c = new(a.Shape);
 
             if (c.Value is int[]) {
                 int[] av = a.Value as int[], bv = b.Value as int[], cv = c.Value as int[];
@@ -108,7 +108,7 @@ namespace TensorShader {
                 throw new ArgumentException(ExceptionMessage.Shape(a.Shape, b.Shape));
             }
 
-            NdimArray<T> c = new NdimArray<T>(a.Shape);
+            NdimArray<T> c = new(a.Shape);
 
             if (c.Value is int[]) {
                 int[] av = a.Value as int[], bv = b.Value as int[], cv = c.Value as int[];
@@ -156,7 +156,7 @@ namespace TensorShader {
                 throw new ArgumentException(ExceptionMessage.Shape(a.Shape, b.Shape));
             }
 
-            NdimArray<T> c = new NdimArray<T>(a.Shape);
+            NdimArray<T> c = new(a.Shape);
 
             if (c.Value is int[]) {
                 int[] av = a.Value as int[], bv = b.Value as int[], cv = c.Value as int[];
@@ -204,7 +204,7 @@ namespace TensorShader {
                 throw new ArgumentException(ExceptionMessage.Shape(a.Shape, b.Shape));
             }
 
-            NdimArray<T> c = new NdimArray<T>(a.Shape);
+            NdimArray<T> c = new(a.Shape);
 
             if (c.Value is int[]) {
                 int[] av = a.Value as int[], bv = b.Value as int[], cv = c.Value as int[];
@@ -249,7 +249,7 @@ namespace TensorShader {
         /// <summary>加算</summary>
         public static NdimArray<T> operator +(NdimArray<T> a, T b) {
 
-            NdimArray<T> c = new NdimArray<T>(a.Shape);
+            NdimArray<T> c = new(a.Shape);
 
             if (c.Value is int[]) {
                 int[] av = a.Value as int[], cv = c.Value as int[];
@@ -303,7 +303,7 @@ namespace TensorShader {
         /// <summary>減算</summary>
         public static NdimArray<T> operator -(NdimArray<T> a, T b) {
 
-            NdimArray<T> c = new NdimArray<T>(a.Shape);
+            NdimArray<T> c = new(a.Shape);
 
             if (c.Value is int[]) {
                 int[] av = a.Value as int[], cv = c.Value as int[];
@@ -357,7 +357,7 @@ namespace TensorShader {
         /// <summary>乗算</summary>
         public static NdimArray<T> operator *(NdimArray<T> a, T b) {
 
-            NdimArray<T> c = new NdimArray<T>(a.Shape);
+            NdimArray<T> c = new(a.Shape);
 
             if (c.Value is int[]) {
                 int[] av = a.Value as int[], cv = c.Value as int[];
@@ -411,7 +411,7 @@ namespace TensorShader {
         /// <summary>除算</summary>
         public static NdimArray<T> operator /(NdimArray<T> a, T b) {
 
-            NdimArray<T> c = new NdimArray<T>(a.Shape);
+            NdimArray<T> c = new(a.Shape);
 
             if (c.Value is int[]) {
                 int[] av = a.Value as int[], cv = c.Value as int[];
@@ -460,7 +460,7 @@ namespace TensorShader {
         /// <summary>除算</summary>
         public static NdimArray<T> operator /(T a, NdimArray<T> b) {
 
-            NdimArray<T> c = new NdimArray<T>(b.Shape);
+            NdimArray<T> c = new(b.Shape);
 
             if (c.Value is int[]) {
                 int[] bv = b.Value as int[], cv = c.Value as int[];

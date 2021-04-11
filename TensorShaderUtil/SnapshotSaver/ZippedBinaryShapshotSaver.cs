@@ -9,7 +9,7 @@ namespace TensorShaderUtil.SnapshotSaver {
         public override Snapshot Load(Stream stream) {
             Snapshot snapshot = null;
 
-            using (DeflateStream deflate_stream = new DeflateStream(stream, CompressionMode.Decompress)) {
+            using (DeflateStream deflate_stream = new(stream, CompressionMode.Decompress)) {
                 snapshot = base.Load(deflate_stream);
             }
 
@@ -18,7 +18,7 @@ namespace TensorShaderUtil.SnapshotSaver {
 
         /// <summary>ファイル書き込み</summary>
         public override void Save(Stream stream, Snapshot snapshot) {
-            using (DeflateStream deflate_stream = new DeflateStream(stream, CompressionMode.Compress)) {
+            using (DeflateStream deflate_stream = new(stream, CompressionMode.Compress)) {
                 base.Save(deflate_stream, snapshot);
             }
         }

@@ -10,7 +10,7 @@ namespace TensorShaderTest.Operators.Trivector {
     public class TrivectorConvolution2DTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             float max_err = 0;
 
@@ -32,17 +32,17 @@ namespace TensorShaderTest.Operators.Trivector {
                                         Quaternion.Quaternion[] wcval = (new Quaternion.Quaternion[wval.Length / 4])
                                             .Select((_, idx) => new Quaternion.Quaternion(wval[idx * 4], wval[idx * 4 + 1], wval[idx * 4 + 2], wval[idx * 4 + 3])).ToArray();
 
-                                        TrivectorMap2D x = new TrivectorMap2D(inchannels / 3, inwidth, inheight, batch, xcval);
-                                        Quaternion.QuaternionFilter2D w = new Quaternion.QuaternionFilter2D(inchannels / 3, outchannels / 3, kwidth, kheight, wcval);
+                                        TrivectorMap2D x = new(inchannels / 3, inwidth, inheight, batch, xcval);
+                                        Quaternion.QuaternionFilter2D w = new(inchannels / 3, outchannels / 3, kwidth, kheight, wcval);
 
                                         TrivectorMap2D y = Reference(x, w, kwidth, kheight);
 
-                                        OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
-                                        OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels / 3 * 4, outchannels / 3, kwidth, kheight), wval);
+                                        OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
+                                        OverflowCheckedTensor w_tensor = new(Shape.Kernel2D(inchannels / 3 * 4, outchannels / 3, kwidth, kheight), wval);
 
-                                        OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight, batch));
+                                        OverflowCheckedTensor y_tensor = new(Shape.Map2D(outchannels, outwidth, outheight, batch));
 
-                                        TrivectorConvolution2D ope = new TrivectorConvolution2D(inwidth, inheight, inchannels, outchannels, kwidth, kheight, gradmode: false, batch);
+                                        TrivectorConvolution2D ope = new(inwidth, inheight, inchannels, outchannels, kwidth, kheight, gradmode: false, batch);
 
                                         ope.Execute(x_tensor, w_tensor, y_tensor);
 
@@ -68,7 +68,7 @@ namespace TensorShaderTest.Operators.Trivector {
 
         [TestMethod]
         public void LargeMapTest() {
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             float max_err = 0;
 
@@ -87,17 +87,17 @@ namespace TensorShaderTest.Operators.Trivector {
             Quaternion.Quaternion[] wcval = (new Quaternion.Quaternion[wval.Length / 4])
                 .Select((_, idx) => new Quaternion.Quaternion(wval[idx * 4], wval[idx * 4 + 1], wval[idx * 4 + 2], wval[idx * 4 + 3])).ToArray();
 
-            TrivectorMap2D x = new TrivectorMap2D(inchannels / 3, inwidth, inheight, batch, xcval);
-            Quaternion.QuaternionFilter2D w = new Quaternion.QuaternionFilter2D(inchannels / 3, outchannels / 3, kwidth, kheight, wcval);
+            TrivectorMap2D x = new(inchannels / 3, inwidth, inheight, batch, xcval);
+            Quaternion.QuaternionFilter2D w = new(inchannels / 3, outchannels / 3, kwidth, kheight, wcval);
 
             TrivectorMap2D y = Reference(x, w, kwidth, kheight);
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
-            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels / 3 * 4, outchannels / 3, kwidth, kheight), wval);
+            OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel2D(inchannels / 3 * 4, outchannels / 3, kwidth, kheight), wval);
 
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight, batch));
+            OverflowCheckedTensor y_tensor = new(Shape.Map2D(outchannels, outwidth, outheight, batch));
 
-            TrivectorConvolution2D ope = new TrivectorConvolution2D(inwidth, inheight, inchannels, outchannels, kwidth, kheight, gradmode: false, batch);
+            TrivectorConvolution2D ope = new(inwidth, inheight, inchannels, outchannels, kwidth, kheight, gradmode: false, batch);
 
             ope.Execute(x_tensor, w_tensor, y_tensor);
 
@@ -119,12 +119,12 @@ namespace TensorShaderTest.Operators.Trivector {
             int inwidth = 32, inheight = 32, inchannels = 33, outchannels = 33, ksize = 3;
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight));
-            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels / 3 * 4, outchannels / 3, ksize, ksize));
+            OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, inwidth, inheight));
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel2D(inchannels / 3 * 4, outchannels / 3, ksize, ksize));
 
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight));
+            OverflowCheckedTensor y_tensor = new(Shape.Map2D(outchannels, outwidth, outheight));
 
-            TrivectorConvolution2D ope = new TrivectorConvolution2D(inwidth, inheight, inchannels, outchannels, ksize, ksize);
+            TrivectorConvolution2D ope = new(inwidth, inheight, inchannels, outchannels, ksize, ksize);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/trivector_convolution_2d.nvvp");
             Cuda.Profiler.Start();
@@ -139,7 +139,7 @@ namespace TensorShaderTest.Operators.Trivector {
             int inw = x.Width, inh = x.Height;
             int outw = inw - kwidth + 1, outh = inh - kheight + 1;
 
-            TrivectorMap2D y = new TrivectorMap2D(outchannels, outw, outh, batch);
+            TrivectorMap2D y = new(outchannels, outw, outh, batch);
 
             for (int kx, ky = 0; ky < kheight; ky++) {
                 for (kx = 0; kx < kwidth; kx++) {
@@ -178,8 +178,8 @@ namespace TensorShaderTest.Operators.Trivector {
             Quaternion.Quaternion[] wcval = (new Quaternion.Quaternion[wval.Length / 4])
                 .Select((_, idx) => new Quaternion.Quaternion(wval[idx * 4], wval[idx * 4 + 1], wval[idx * 4 + 2], wval[idx * 4 + 3])).ToArray();
 
-            TrivectorMap2D x = new TrivectorMap2D(inchannels / 3, inwidth, inheight, batch, xcval);
-            Quaternion.QuaternionFilter2D w = new Quaternion.QuaternionFilter2D(inchannels / 3, outchannels / 3, kwidth, kheight, wcval);
+            TrivectorMap2D x = new(inchannels / 3, inwidth, inheight, batch, xcval);
+            Quaternion.QuaternionFilter2D w = new(inchannels / 3, outchannels / 3, kwidth, kheight, wcval);
 
             TrivectorMap2D y = Reference(x, w, kwidth, kheight);
 

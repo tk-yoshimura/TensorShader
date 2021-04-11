@@ -19,7 +19,7 @@ namespace TensorShader {
 
         /// <summary>テンソル形状の有効性をチェック</summary>
         public void CheckArgumentShapes(params Tensor[] tensors) {
-            if (arguments == null) {
+            if (arguments is null) {
                 throw new NotImplementedException();
             }
 

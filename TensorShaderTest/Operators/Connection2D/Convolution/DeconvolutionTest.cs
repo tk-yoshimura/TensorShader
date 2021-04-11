@@ -23,17 +23,17 @@ namespace TensorShaderTest.Operators.Connection2D {
                                     float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                                     float[] wval = (new float[kwidth * kheight * inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-                                    Map2D y = new Map2D(outchannels, outwidth, outheight, batch, yval);
-                                    Filter2D w = new Filter2D(inchannels, outchannels, kwidth, kheight, wval);
+                                    Map2D y = new(outchannels, outwidth, outheight, batch, yval);
+                                    Filter2D w = new(inchannels, outchannels, kwidth, kheight, wval);
 
                                     Map2D x = Reference(y, w, inwidth, inheight, kwidth, kheight);
 
-                                    OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
-                                    OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels, outchannels, kwidth, kheight), wval);
+                                    OverflowCheckedTensor y_tensor = new(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
+                                    OverflowCheckedTensor w_tensor = new(Shape.Kernel2D(inchannels, outchannels, kwidth, kheight), wval);
 
-                                    OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch));
+                                    OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, inwidth, inheight, batch));
 
-                                    Deconvolution ope = new Deconvolution(outwidth, outheight, outchannels, inchannels, kwidth, kheight, batch);
+                                    Deconvolution ope = new(outwidth, outheight, outchannels, inchannels, kwidth, kheight, batch);
 
                                     ope.Execute(y_tensor, w_tensor, x_tensor);
 
@@ -60,7 +60,7 @@ namespace TensorShaderTest.Operators.Connection2D {
         public void LargeMapTest() {
             float max_err = 0;
 
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             int batch = 3;
             int inchannels = 49, outchannels = 50;
@@ -71,17 +71,17 @@ namespace TensorShaderTest.Operators.Connection2D {
             float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
             float[] wval = (new float[kwidth * kheight * inchannels * outchannels]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
 
-            Map2D y = new Map2D(outchannels, outwidth, outheight, batch, yval);
-            Filter2D w = new Filter2D(inchannels, outchannels, kwidth, kheight, wval);
+            Map2D y = new(outchannels, outwidth, outheight, batch, yval);
+            Filter2D w = new(inchannels, outchannels, kwidth, kheight, wval);
 
             Map2D x = Reference(y, w, inwidth, inheight, kwidth, kheight);
 
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
-            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels, outchannels, kwidth, kheight), wval);
+            OverflowCheckedTensor y_tensor = new(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel2D(inchannels, outchannels, kwidth, kheight), wval);
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch));
+            OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, inwidth, inheight, batch));
 
-            Deconvolution ope = new Deconvolution(outwidth, outheight, outchannels, inchannels, kwidth, kheight, batch);
+            Deconvolution ope = new(outwidth, outheight, outchannels, inchannels, kwidth, kheight, batch);
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 
@@ -103,12 +103,12 @@ namespace TensorShaderTest.Operators.Connection2D {
             int inwidth = 512, inheight = 512, inchannels = 31, outchannels = 31, ksize = 3;
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1;
 
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight));
-            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels, outchannels, ksize, ksize));
+            OverflowCheckedTensor y_tensor = new(Shape.Map2D(outchannels, outwidth, outheight));
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel2D(inchannels, outchannels, ksize, ksize));
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight));
+            OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, inwidth, inheight));
 
-            Deconvolution ope = new Deconvolution(outwidth, outheight, outchannels, inchannels, ksize, ksize);
+            Deconvolution ope = new(outwidth, outheight, outchannels, inchannels, ksize, ksize);
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 
@@ -128,7 +128,7 @@ namespace TensorShaderTest.Operators.Connection2D {
                 throw new ArgumentException("mismatch shape");
             }
 
-            Map2D x = new Map2D(inchannels, inw, inh, batch);
+            Map2D x = new(inchannels, inw, inh, batch);
 
             for (int kx, ky = 0; ky < kheight; ky++) {
                 for (kx = 0; kx < kwidth; kx++) {
@@ -159,8 +159,8 @@ namespace TensorShaderTest.Operators.Connection2D {
             float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[kwidth * kheight * outchannels * inchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            Map2D y = new Map2D(outchannels, outwidth, outheight, batch, yval);
-            Filter2D w = new Filter2D(inchannels, outchannels, kwidth, kheight, wval);
+            Map2D y = new(outchannels, outwidth, outheight, batch, yval);
+            Filter2D w = new(inchannels, outchannels, kwidth, kheight, wval);
 
             Map2D x = Reference(y, w, inwidth, inheight, kwidth, kheight);
 

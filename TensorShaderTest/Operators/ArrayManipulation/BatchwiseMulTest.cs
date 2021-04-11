@@ -10,7 +10,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
     public class BatchwiseMulTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
             foreach (int batch in new int[] { 1, 2, 3, 4, 5 }) {
                 for (int i = 0; i < 4; i++) {
@@ -23,11 +23,11 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
                             Shape shape = Shape.Map1D(ch, length, batch);
 
-                            OverflowCheckedTensor v1 = new OverflowCheckedTensor(shape, x1);
-                            OverflowCheckedTensor v2 = new OverflowCheckedTensor(Shape.Vector(shape.Batch), x2);
-                            OverflowCheckedTensor v3 = new OverflowCheckedTensor(shape);
+                            OverflowCheckedTensor v1 = new(shape, x1);
+                            OverflowCheckedTensor v2 = new(Shape.Vector(shape.Batch), x2);
+                            OverflowCheckedTensor v3 = new(shape);
 
-                            BatchwiseMul ope = new BatchwiseMul(shape);
+                            BatchwiseMul ope = new(shape);
 
                             ope.Execute(v1, v2, v3);
 
@@ -52,11 +52,11 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
             Shape shape = Shape.Map1D(ch, length, batch);
 
-            OverflowCheckedTensor v1 = new OverflowCheckedTensor(shape);
-            OverflowCheckedTensor v2 = new OverflowCheckedTensor(Shape.Vector(batch));
-            OverflowCheckedTensor v3 = new OverflowCheckedTensor(shape);
+            OverflowCheckedTensor v1 = new(shape);
+            OverflowCheckedTensor v2 = new(Shape.Vector(batch));
+            OverflowCheckedTensor v3 = new(shape);
 
-            BatchwiseMul ope = new BatchwiseMul(shape);
+            BatchwiseMul ope = new(shape);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/batchwisemul.nvvp");
             Cuda.Profiler.Start();

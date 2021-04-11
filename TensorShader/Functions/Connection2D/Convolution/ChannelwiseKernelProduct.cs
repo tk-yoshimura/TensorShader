@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>チャネルごとの2次元カーネル積</summary>
         public static Tensor ChannelwiseKernelProduct2D(Tensor x, Tensor y, int kwidth, int kheight) {
             Functions.Connection2D.ChannelwiseKernelProduct function =
-                new Functions.Connection2D.ChannelwiseKernelProduct(x.Shape, y.Shape, kwidth, kheight);
+                new(x.Shape, y.Shape, kwidth, kheight);
 
-            Tensor w = new Tensor(function.OutShape);
+            Tensor w = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, y }, new Tensor[] { w });
 

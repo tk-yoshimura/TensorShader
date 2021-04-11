@@ -28,7 +28,7 @@ namespace TensorShader {
 
         /// <summary>更新</summary>
         public void Execute() {
-            if (Flow == null) {
+            if (Flow is null) {
                 Flow = UpdateFlow();
             }
 

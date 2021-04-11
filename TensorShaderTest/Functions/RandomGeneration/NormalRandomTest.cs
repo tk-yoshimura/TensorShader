@@ -12,7 +12,7 @@ namespace TensorShaderTest.Functions.RandomGeneration {
                 int channels = 32, width = 65536, length = channels * width;
 
                 Shape shape = Shape.Map0D(channels, width);
-                Random rd = new Random(1234);
+                Random rd = new(1234);
 
                 Tensor t = Tensor.NormalRandom(shape, rd);
 

@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>絶対誤差</summary>
         public static Field AbsoluteError(Field x, Field t) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Loss.AbsoluteError(x, t, y);
 
             link.Forward();
@@ -37,7 +37,7 @@ namespace TensorShader.Links.Loss {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

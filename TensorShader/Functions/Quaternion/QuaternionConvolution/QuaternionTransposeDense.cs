@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>四元数転置全結合</summary>
         public static Tensor QuaternionTransposeDense(Tensor x, Tensor w, bool gradmode = false) {
             Functions.QuaternionConvolution.QuaternionTransposeDense function =
-                new Functions.QuaternionConvolution.QuaternionTransposeDense(x.Shape, w.Shape, gradmode);
+                new(x.Shape, w.Shape, gradmode);
 
-            Tensor y = new Tensor(function.OutShape);
+            Tensor y = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, w }, new Tensor[] { y });
 

@@ -65,7 +65,7 @@ namespace TensorShaderCudaBackend.Shaders.Batchwise {
             if (UseConstMemory) {
                 CudaArray<float> v = args[0] as CudaArray<float>;
 
-                if (stream != null) {
+                if (stream is not null) {
                     Kernel.StoreConstMemoryAsync(stream, "v", v, Batches);
                 }
                 else {
@@ -80,7 +80,7 @@ namespace TensorShaderCudaBackend.Shaders.Batchwise {
 
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
-            if (args == null || args.Length != 4) {
+            if (args is null || args.Length != 4) {
                 throw new ArgumentException(nameof(args));
             }
 

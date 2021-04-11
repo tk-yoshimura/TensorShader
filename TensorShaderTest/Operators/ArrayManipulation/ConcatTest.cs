@@ -10,7 +10,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
     public class ConcatTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
             foreach (Shape outshape in new Shape[]{
                 new Shape(ShapeType.Map, 13),
@@ -49,9 +49,9 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
                             intensors[i] = new OverflowCheckedTensor(inshapes[i], xs[i]);
                         }
 
-                        OverflowCheckedTensor outtensor = new OverflowCheckedTensor(outshape);
+                        OverflowCheckedTensor outtensor = new(outshape);
 
-                        Concat ope = new Concat(inshapes, outshape, axis);
+                        Concat ope = new(inshapes, outshape, axis);
 
                         ope.Execute(intensors.Concat(new Tensor[] { outtensor }).ToArray());
 
@@ -88,22 +88,22 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
         [TestMethod]
         public void ReferenceTest() {
-            Shape outshape = new Shape(ShapeType.Map, 3, 7, 19, 5, 11);
-            Shape inshape1 = new Shape(ShapeType.Map, 3, 7, 6, 5, 11);
-            Shape inshape2 = new Shape(ShapeType.Map, 3, 7, 9, 5, 11);
-            Shape inshape3 = new Shape(ShapeType.Map, 3, 7, 4, 5, 11);
+            Shape outshape = new(ShapeType.Map, 3, 7, 19, 5, 11);
+            Shape inshape1 = new(ShapeType.Map, 3, 7, 6, 5, 11);
+            Shape inshape2 = new(ShapeType.Map, 3, 7, 9, 5, 11);
+            Shape inshape3 = new(ShapeType.Map, 3, 7, 4, 5, 11);
 
             float[] x1 = (new float[inshape1.Length]).Select((_, idx) => (float)idx % 3 + 2).ToArray();
             float[] x2 = (new float[inshape2.Length]).Select((_, idx) => (float)idx % 5 + 1).ToArray();
             float[] x3 = (new float[inshape3.Length]).Select((_, idx) => (float)idx % 7).ToArray();
 
-            OverflowCheckedTensor v1 = new OverflowCheckedTensor(inshape1, x1);
-            OverflowCheckedTensor v2 = new OverflowCheckedTensor(inshape2, x2);
-            OverflowCheckedTensor v3 = new OverflowCheckedTensor(inshape3, x3);
+            OverflowCheckedTensor v1 = new(inshape1, x1);
+            OverflowCheckedTensor v2 = new(inshape2, x2);
+            OverflowCheckedTensor v3 = new(inshape3, x3);
 
-            OverflowCheckedTensor vc = new OverflowCheckedTensor(outshape);
+            OverflowCheckedTensor vc = new(outshape);
 
-            Concat ope = new Concat(new Shape[] { v1.Shape, v2.Shape, v3.Shape }, vc.Shape, axis: 2);
+            Concat ope = new(new Shape[] { v1.Shape, v2.Shape, v3.Shape }, vc.Shape, axis: 2);
 
             ope.Execute(v1, v2, v3, vc);
 
@@ -113,120 +113,120 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
         [TestMethod]
         public void ExceptionTest() {
             Assert.ThrowsException<ArgumentException>(() => {
-                Shape outshape = new Shape(ShapeType.Map, 3, 7, 19, 5, 11);
-                Shape inshape1 = new Shape(ShapeType.Map, 3, 7, 6, 5, 11);
-                Shape inshape2 = new Shape(ShapeType.Map, 3, 7, 9, 5, 11);
-                Shape inshape3 = new Shape(ShapeType.Map, 3, 7, 5, 5, 11);
+                Shape outshape = new(ShapeType.Map, 3, 7, 19, 5, 11);
+                Shape inshape1 = new(ShapeType.Map, 3, 7, 6, 5, 11);
+                Shape inshape2 = new(ShapeType.Map, 3, 7, 9, 5, 11);
+                Shape inshape3 = new(ShapeType.Map, 3, 7, 5, 5, 11);
 
-                OverflowCheckedTensor v1 = new OverflowCheckedTensor(inshape1);
-                OverflowCheckedTensor v2 = new OverflowCheckedTensor(inshape2);
-                OverflowCheckedTensor v3 = new OverflowCheckedTensor(inshape3);
+                OverflowCheckedTensor v1 = new(inshape1);
+                OverflowCheckedTensor v2 = new(inshape2);
+                OverflowCheckedTensor v3 = new(inshape3);
 
-                OverflowCheckedTensor vc = new OverflowCheckedTensor(outshape);
+                OverflowCheckedTensor vc = new(outshape);
 
-                Concat ope = new Concat(new Shape[] { v1.Shape, v2.Shape, v3.Shape }, vc.Shape, axis: 2);
+                Concat ope = new(new Shape[] { v1.Shape, v2.Shape, v3.Shape }, vc.Shape, axis: 2);
             }
             );
 
             Assert.ThrowsException<ArgumentException>(() => {
-                Shape outshape = new Shape(ShapeType.Map, 3, 7, 19, 5, 11);
-                Shape inshape1 = new Shape(ShapeType.Map, 3, 7, 6, 5, 11);
-                Shape inshape2 = new Shape(ShapeType.Map, 3, 7, 9, 5, 11);
-                Shape inshape3 = new Shape(ShapeType.Map, 3, 7, 4, 5, 11);
+                Shape outshape = new(ShapeType.Map, 3, 7, 19, 5, 11);
+                Shape inshape1 = new(ShapeType.Map, 3, 7, 6, 5, 11);
+                Shape inshape2 = new(ShapeType.Map, 3, 7, 9, 5, 11);
+                Shape inshape3 = new(ShapeType.Map, 3, 7, 4, 5, 11);
 
-                OverflowCheckedTensor v1 = new OverflowCheckedTensor(inshape1);
-                OverflowCheckedTensor v2 = new OverflowCheckedTensor(inshape2);
-                OverflowCheckedTensor v3 = new OverflowCheckedTensor(inshape3);
+                OverflowCheckedTensor v1 = new(inshape1);
+                OverflowCheckedTensor v2 = new(inshape2);
+                OverflowCheckedTensor v3 = new(inshape3);
 
-                OverflowCheckedTensor vc = new OverflowCheckedTensor(outshape);
+                OverflowCheckedTensor vc = new(outshape);
 
-                Concat ope = new Concat(new Shape[] { v1.Shape, v2.Shape, v3.Shape }, vc.Shape, axis: 1);
+                Concat ope = new(new Shape[] { v1.Shape, v2.Shape, v3.Shape }, vc.Shape, axis: 1);
             }
             );
 
             Assert.ThrowsException<ArgumentException>(() => {
-                Shape outshape = new Shape(ShapeType.Map, 3, 7, 19, 5, 11);
-                Shape inshape1 = new Shape(ShapeType.Map, 3, 7, 6, 5, 11);
-                Shape inshape2 = new Shape(ShapeType.Map, 3, 6, 9, 5, 11);
-                Shape inshape3 = new Shape(ShapeType.Map, 3, 7, 4, 5, 11);
+                Shape outshape = new(ShapeType.Map, 3, 7, 19, 5, 11);
+                Shape inshape1 = new(ShapeType.Map, 3, 7, 6, 5, 11);
+                Shape inshape2 = new(ShapeType.Map, 3, 6, 9, 5, 11);
+                Shape inshape3 = new(ShapeType.Map, 3, 7, 4, 5, 11);
 
-                OverflowCheckedTensor v1 = new OverflowCheckedTensor(inshape1);
-                OverflowCheckedTensor v2 = new OverflowCheckedTensor(inshape2);
-                OverflowCheckedTensor v3 = new OverflowCheckedTensor(inshape3);
+                OverflowCheckedTensor v1 = new(inshape1);
+                OverflowCheckedTensor v2 = new(inshape2);
+                OverflowCheckedTensor v3 = new(inshape3);
 
-                OverflowCheckedTensor vc = new OverflowCheckedTensor(outshape);
+                OverflowCheckedTensor vc = new(outshape);
 
-                Concat ope = new Concat(new Shape[] { v1.Shape, v2.Shape, v3.Shape }, vc.Shape, axis: 2);
+                Concat ope = new(new Shape[] { v1.Shape, v2.Shape, v3.Shape }, vc.Shape, axis: 2);
             }
             );
 
             Assert.ThrowsException<ArgumentException>(() => {
-                Shape outshape = new Shape(ShapeType.Map, 3, 7, 19, 5, 11);
-                Shape inshape1 = new Shape(ShapeType.Map, 3, 7, 6, 5, 11);
-                Shape inshape2 = new Shape(ShapeType.Map, 3, 7, 9, 5, 11);
-                Shape inshape3 = new Shape(ShapeType.Map, 3, 7, 4, 5);
+                Shape outshape = new(ShapeType.Map, 3, 7, 19, 5, 11);
+                Shape inshape1 = new(ShapeType.Map, 3, 7, 6, 5, 11);
+                Shape inshape2 = new(ShapeType.Map, 3, 7, 9, 5, 11);
+                Shape inshape3 = new(ShapeType.Map, 3, 7, 4, 5);
 
-                OverflowCheckedTensor v1 = new OverflowCheckedTensor(inshape1);
-                OverflowCheckedTensor v2 = new OverflowCheckedTensor(inshape2);
-                OverflowCheckedTensor v3 = new OverflowCheckedTensor(inshape3);
+                OverflowCheckedTensor v1 = new(inshape1);
+                OverflowCheckedTensor v2 = new(inshape2);
+                OverflowCheckedTensor v3 = new(inshape3);
 
-                OverflowCheckedTensor vc = new OverflowCheckedTensor(outshape);
+                OverflowCheckedTensor vc = new(outshape);
 
-                Concat ope = new Concat(new Shape[] { v1.Shape, v2.Shape, v3.Shape }, vc.Shape, axis: 2);
+                Concat ope = new(new Shape[] { v1.Shape, v2.Shape, v3.Shape }, vc.Shape, axis: 2);
             }
             );
 
             Assert.ThrowsException<ArgumentException>(() => {
-                Shape outshape = new Shape(ShapeType.Map, 3, 7, 19, 5, 11, 12);
-                Shape inshape1 = new Shape(ShapeType.Map, 3, 7, 6, 5, 11);
-                Shape inshape2 = new Shape(ShapeType.Map, 3, 7, 9, 5, 11);
-                Shape inshape3 = new Shape(ShapeType.Map, 3, 7, 4, 5, 11);
+                Shape outshape = new(ShapeType.Map, 3, 7, 19, 5, 11, 12);
+                Shape inshape1 = new(ShapeType.Map, 3, 7, 6, 5, 11);
+                Shape inshape2 = new(ShapeType.Map, 3, 7, 9, 5, 11);
+                Shape inshape3 = new(ShapeType.Map, 3, 7, 4, 5, 11);
 
-                OverflowCheckedTensor v1 = new OverflowCheckedTensor(inshape1);
-                OverflowCheckedTensor v2 = new OverflowCheckedTensor(inshape2);
-                OverflowCheckedTensor v3 = new OverflowCheckedTensor(inshape3);
+                OverflowCheckedTensor v1 = new(inshape1);
+                OverflowCheckedTensor v2 = new(inshape2);
+                OverflowCheckedTensor v3 = new(inshape3);
 
-                OverflowCheckedTensor vc = new OverflowCheckedTensor(outshape);
+                OverflowCheckedTensor vc = new(outshape);
 
-                Concat ope = new Concat(new Shape[] { v1.Shape, v2.Shape, v3.Shape }, vc.Shape, axis: 5);
+                Concat ope = new(new Shape[] { v1.Shape, v2.Shape, v3.Shape }, vc.Shape, axis: 5);
             }
             );
 
             Assert.ThrowsException<ArgumentException>(() => {
-                Shape outshape = new Shape(ShapeType.Map, 3, 7, 19, 5, 11);
-                Shape inshape1 = new Shape(ShapeType.Map, 3, 7, 6, 5, 11);
-                Shape inshape2 = new Shape(ShapeType.Map, 3, 7, 9, 5, 11);
-                Shape inshape3 = new Shape(ShapeType.Map, 3, 7, 4, 5, 11);
+                Shape outshape = new(ShapeType.Map, 3, 7, 19, 5, 11);
+                Shape inshape1 = new(ShapeType.Map, 3, 7, 6, 5, 11);
+                Shape inshape2 = new(ShapeType.Map, 3, 7, 9, 5, 11);
+                Shape inshape3 = new(ShapeType.Map, 3, 7, 4, 5, 11);
 
-                OverflowCheckedTensor v1 = new OverflowCheckedTensor(inshape1);
-                OverflowCheckedTensor v2 = new OverflowCheckedTensor(inshape2);
-                OverflowCheckedTensor v3 = new OverflowCheckedTensor(inshape3);
+                OverflowCheckedTensor v1 = new(inshape1);
+                OverflowCheckedTensor v2 = new(inshape2);
+                OverflowCheckedTensor v3 = new(inshape3);
 
-                OverflowCheckedTensor vc = new OverflowCheckedTensor(outshape);
+                OverflowCheckedTensor vc = new(outshape);
 
-                Concat ope = new Concat(new Shape[] { v1.Shape, v2.Shape, v3.Shape }, vc.Shape, axis: 5);
+                Concat ope = new(new Shape[] { v1.Shape, v2.Shape, v3.Shape }, vc.Shape, axis: 5);
             }
             );
         }
 
         [TestMethod]
         public void SpeedTest() {
-            Shape outshape = new Shape(ShapeType.Map, 3, 7, 19, 5, 11);
-            Shape inshape1 = new Shape(ShapeType.Map, 3, 7, 6, 5, 11);
-            Shape inshape2 = new Shape(ShapeType.Map, 3, 7, 9, 5, 11);
-            Shape inshape3 = new Shape(ShapeType.Map, 3, 7, 4, 5, 11);
+            Shape outshape = new(ShapeType.Map, 3, 7, 19, 5, 11);
+            Shape inshape1 = new(ShapeType.Map, 3, 7, 6, 5, 11);
+            Shape inshape2 = new(ShapeType.Map, 3, 7, 9, 5, 11);
+            Shape inshape3 = new(ShapeType.Map, 3, 7, 4, 5, 11);
 
             float[] x1 = (new float[inshape1.Length]).Select((_, idx) => (float)idx % 3 + 2).ToArray();
             float[] x2 = (new float[inshape2.Length]).Select((_, idx) => (float)idx % 5 + 1).ToArray();
             float[] x3 = (new float[inshape3.Length]).Select((_, idx) => (float)idx % 7).ToArray();
 
-            OverflowCheckedTensor v1 = new OverflowCheckedTensor(inshape1, x1);
-            OverflowCheckedTensor v2 = new OverflowCheckedTensor(inshape2, x2);
-            OverflowCheckedTensor v3 = new OverflowCheckedTensor(inshape3, x3);
+            OverflowCheckedTensor v1 = new(inshape1, x1);
+            OverflowCheckedTensor v2 = new(inshape2, x2);
+            OverflowCheckedTensor v3 = new(inshape3, x3);
 
-            OverflowCheckedTensor vc = new OverflowCheckedTensor(outshape);
+            OverflowCheckedTensor vc = new(outshape);
 
-            Concat ope = new Concat(new Shape[] { v1.Shape, v2.Shape, v3.Shape }, vc.Shape, axis: 2);
+            Concat ope = new(new Shape[] { v1.Shape, v2.Shape, v3.Shape }, vc.Shape, axis: 2);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/concat.nvvp");
             Cuda.Profiler.Start();

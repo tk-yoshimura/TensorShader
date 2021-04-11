@@ -15,7 +15,7 @@ namespace TensorShader {
         internal static Tensor InsertChannel(Tensor x, int index, int channels) {
             Function function = new Functions.ArrayManipulation.InsertChannel(index, channels);
 
-            Tensor y = new Tensor(function.OutputShapes(x.Shape)[0]);
+            Tensor y = new(function.OutputShapes(x.Shape)[0]);
 
             function.Execute(new Tensor[] { x }, new Tensor[] { y });
 

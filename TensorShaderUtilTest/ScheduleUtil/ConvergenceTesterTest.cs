@@ -7,9 +7,9 @@ namespace TensorShaderUtilTest.ScheduleUtil {
     public class ConvergenceTesterTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random random = new Random(1234);
+            Random random = new(1234);
 
-            ConvergenceTester tester = new ConvergenceTester(32, 0.5);
+            ConvergenceTester tester = new(32, 0.5);
 
             for (int rs = 0; rs <= 100; rs += 10) {
                 Console.WriteLine($"rs: {rs}");
@@ -38,7 +38,7 @@ namespace TensorShaderUtilTest.ScheduleUtil {
 
         [TestMethod]
         public void TheoreticalTest() {
-            ConvergenceTester tester = new ConvergenceTester(32, 0.5);
+            ConvergenceTester tester = new(32, 0.5);
 
             for (int i = 0; i < 64; i++) {
                 tester.Next(i);

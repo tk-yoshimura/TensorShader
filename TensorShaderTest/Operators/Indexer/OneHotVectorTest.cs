@@ -9,16 +9,16 @@ namespace TensorShaderTest.Operators.Indexer {
     public class OneHotVectorTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
             foreach (int batch in new int[] { 1, 2, 3, 4, 8, 16, 32 }) {
                 for (int channels = 1; channels <= 1024; channels *= 2) {
                     float[] x1 = (new float[batch]).Select((_) => (float)rd.Next(channels)).ToArray();
 
-                    OverflowCheckedTensor v1 = new OverflowCheckedTensor(Shape.Vector(batch), x1);
-                    OverflowCheckedTensor v2 = new OverflowCheckedTensor(Shape.Map0D(channels, batch));
+                    OverflowCheckedTensor v1 = new(Shape.Vector(batch), x1);
+                    OverflowCheckedTensor v2 = new(Shape.Map0D(channels, batch));
 
-                    OneHotVector ope = new OneHotVector(channels, v1.Shape);
+                    OneHotVector ope = new(channels, v1.Shape);
 
                     ope.Execute(v1, v2);
 

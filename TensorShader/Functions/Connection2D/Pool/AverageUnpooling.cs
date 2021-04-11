@@ -4,7 +4,7 @@ namespace TensorShader {
     public abstract partial class VariableNode {
         /// <summary>2次元平均値逆プーリング</summary>
         public static VariableNode AverageUnpooling2D(VariableNode x, int stride, Shape outshape = null) {
-            if (outshape == null) {
+            if (outshape is null) {
                 int outwidth = x.Shape.Width * stride;
                 int outheight = x.Shape.Height * stride;
 
@@ -23,7 +23,7 @@ namespace TensorShader {
     public partial class Tensor {
         /// <summary>2次元平均値逆プーリング</summary>
         public static Tensor AverageUnpooling2D(Tensor x, int stride, Shape outshape = null) {
-            if (outshape == null) {
+            if (outshape is null) {
                 int outwidth = x.Shape.Width * stride;
                 int outheight = x.Shape.Height * stride;
 
@@ -33,7 +33,7 @@ namespace TensorShader {
             Function function =
                 new Functions.Connection2D.AverageUnpooling(outshape, stride);
 
-            Tensor y = new Tensor(function.OutputShapes(x.Shape)[0]);
+            Tensor y = new(function.OutputShapes(x.Shape)[0]);
 
             function.Execute(new Tensor[] { x }, new Tensor[] { y });
 

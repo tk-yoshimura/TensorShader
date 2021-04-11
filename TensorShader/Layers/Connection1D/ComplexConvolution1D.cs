@@ -64,7 +64,7 @@ namespace TensorShader.Layers {
 
             Field y = ComplexConvolution1D(x, W);
 
-            if (Bias != null) {
+            if (Bias is not null) {
                 y += Bias;
             }
 

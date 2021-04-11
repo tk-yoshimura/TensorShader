@@ -40,10 +40,10 @@ namespace TensorShaderTest.Links.Loss {
 
             flow.Execute();
 
-            Assert.IsTrue(loc.Grad != null);
-            Assert.IsTrue(conf.Grad != null);
-            Assert.IsTrue(gt.Grad == null);
-            Assert.IsTrue(label.Grad == null);
+            Assert.IsTrue(loc.Grad is not null);
+            Assert.IsTrue(conf.Grad is not null);
+            Assert.IsTrue(gt.Grad is null);
+            Assert.IsTrue(label.Grad is null);
 
             float[] locloss_actual = locloss.State.Value;
 

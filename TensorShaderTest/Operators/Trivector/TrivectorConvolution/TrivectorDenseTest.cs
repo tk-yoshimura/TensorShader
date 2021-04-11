@@ -10,7 +10,7 @@ namespace TensorShaderTest.Operators.Trivector {
     public class TrivectorDenseTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             float max_err = 0;
 
@@ -27,17 +27,17 @@ namespace TensorShaderTest.Operators.Trivector {
                         Quaternion.Quaternion[] wcval = (new Quaternion.Quaternion[wval.Length / 4])
                             .Select((_, idx) => new Quaternion.Quaternion(wval[idx * 4], wval[idx * 4 + 1], wval[idx * 4 + 2], wval[idx * 4 + 3])).ToArray();
 
-                        TrivectorMap0D x = new TrivectorMap0D(inchannels / 3, batch, xcval);
-                        Quaternion.QuaternionFilter0D w = new Quaternion.QuaternionFilter0D(inchannels / 3, outchannels / 3, wcval);
+                        TrivectorMap0D x = new(inchannels / 3, batch, xcval);
+                        Quaternion.QuaternionFilter0D w = new(inchannels / 3, outchannels / 3, wcval);
 
                         TrivectorMap0D y = Reference(x, w);
 
-                        OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map0D(inchannels, batch), xval);
-                        OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels / 3 * 4, outchannels / 3), wval);
+                        OverflowCheckedTensor x_tensor = new(Shape.Map0D(inchannels, batch), xval);
+                        OverflowCheckedTensor w_tensor = new(Shape.Kernel0D(inchannels / 3 * 4, outchannels / 3), wval);
 
-                        OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map0D(outchannels, batch));
+                        OverflowCheckedTensor y_tensor = new(Shape.Map0D(outchannels, batch));
 
-                        TrivectorDense ope = new TrivectorDense(inchannels, outchannels, gradmode: false, batch);
+                        TrivectorDense ope = new(inchannels, outchannels, gradmode: false, batch);
 
                         ope.Execute(x_tensor, w_tensor, y_tensor);
 
@@ -59,7 +59,7 @@ namespace TensorShaderTest.Operators.Trivector {
 
         [TestMethod]
         public void LargeMapTest() {
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             float max_err = 0;
 
@@ -75,17 +75,17 @@ namespace TensorShaderTest.Operators.Trivector {
             Quaternion.Quaternion[] wcval = (new Quaternion.Quaternion[wval.Length / 4])
                 .Select((_, idx) => new Quaternion.Quaternion(wval[idx * 4], wval[idx * 4 + 1], wval[idx * 4 + 2], wval[idx * 4 + 3])).ToArray();
 
-            TrivectorMap0D x = new TrivectorMap0D(inchannels / 3, batch, xcval);
-            Quaternion.QuaternionFilter0D w = new Quaternion.QuaternionFilter0D(inchannels / 3, outchannels / 3, wcval);
+            TrivectorMap0D x = new(inchannels / 3, batch, xcval);
+            Quaternion.QuaternionFilter0D w = new(inchannels / 3, outchannels / 3, wcval);
 
             TrivectorMap0D y = Reference(x, w);
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map0D(inchannels, batch), xval);
-            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels / 3 * 4, outchannels / 3), wval);
+            OverflowCheckedTensor x_tensor = new(Shape.Map0D(inchannels, batch), xval);
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel0D(inchannels / 3 * 4, outchannels / 3), wval);
 
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map0D(outchannels, batch));
+            OverflowCheckedTensor y_tensor = new(Shape.Map0D(outchannels, batch));
 
-            TrivectorDense ope = new TrivectorDense(inchannels, outchannels, gradmode: false, batch);
+            TrivectorDense ope = new(inchannels, outchannels, gradmode: false, batch);
 
             ope.Execute(x_tensor, w_tensor, y_tensor);
 
@@ -106,12 +106,12 @@ namespace TensorShaderTest.Operators.Trivector {
         public void SpeedTest() {
             int inchannels = 33, outchannels = 33;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map0D(inchannels));
-            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels / 3 * 4, outchannels / 3));
+            OverflowCheckedTensor x_tensor = new(Shape.Map0D(inchannels));
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel0D(inchannels / 3 * 4, outchannels / 3));
 
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map0D(outchannels));
+            OverflowCheckedTensor y_tensor = new(Shape.Map0D(outchannels));
 
-            TrivectorDense ope = new TrivectorDense(inchannels, outchannels);
+            TrivectorDense ope = new(inchannels, outchannels);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/trivector_dense.nvvp");
             Cuda.Profiler.Start();
@@ -124,7 +124,7 @@ namespace TensorShaderTest.Operators.Trivector {
         public static TrivectorMap0D Reference(TrivectorMap0D x, Quaternion.QuaternionFilter0D w) {
             int inchannels = x.Channels, outchannels = w.OutChannels, batch = x.Batch;
 
-            TrivectorMap0D y = new TrivectorMap0D(outchannels, batch);
+            TrivectorMap0D y = new(outchannels, batch);
 
             for (int th = 0; th < batch; th++) {
                 for (int outch = 0; outch < outchannels; outch++) {
@@ -154,8 +154,8 @@ namespace TensorShaderTest.Operators.Trivector {
             Quaternion.Quaternion[] wcval = (new Quaternion.Quaternion[wval.Length / 4])
                 .Select((_, idx) => new Quaternion.Quaternion(wval[idx * 4], wval[idx * 4 + 1], wval[idx * 4 + 2], wval[idx * 4 + 3])).ToArray();
 
-            TrivectorMap0D x = new TrivectorMap0D(inchannels / 3, batch, xcval);
-            Quaternion.QuaternionFilter0D w = new Quaternion.QuaternionFilter0D(inchannels / 3, outchannels / 3, wcval);
+            TrivectorMap0D x = new(inchannels / 3, batch, xcval);
+            Quaternion.QuaternionFilter0D w = new(inchannels / 3, outchannels / 3, wcval);
 
             TrivectorMap0D y = Reference(x, w);
 

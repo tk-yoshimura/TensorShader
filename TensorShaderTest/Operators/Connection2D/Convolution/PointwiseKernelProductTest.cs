@@ -20,17 +20,17 @@ namespace TensorShaderTest.Operators.Connection2D {
                                 float[] xval = (new float[width * height * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                                 float[] gyval = (new float[width * height * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-                                Map2D x = new Map2D(inchannels, width, height, batch, xval);
-                                Map2D gy = new Map2D(outchannels, width, height, batch, gyval);
+                                Map2D x = new(inchannels, width, height, batch, xval);
+                                Map2D gy = new(outchannels, width, height, batch, gyval);
 
                                 Filter2D gw = Reference(x, gy);
 
-                                OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, width, height, batch), xval);
-                                OverflowCheckedTensor gy_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, width, height, batch), gyval);
+                                OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, width, height, batch), xval);
+                                OverflowCheckedTensor gy_tensor = new(Shape.Map2D(outchannels, width, height, batch), gyval);
 
-                                OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels));
+                                OverflowCheckedTensor gw_tensor = new(Shape.Kernel0D(inchannels, outchannels));
 
-                                PointwiseKernelProduct ope = new PointwiseKernelProduct(width, height, inchannels, outchannels, batch);
+                                PointwiseKernelProduct ope = new(width, height, inchannels, outchannels, batch);
 
                                 ope.Execute(x_tensor, gy_tensor, gw_tensor);
 
@@ -57,7 +57,7 @@ namespace TensorShaderTest.Operators.Connection2D {
         public void LargeMapTest() {
             float max_err = 0;
 
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             int batch = 3;
             int inchannels = 49, outchannels = 50;
@@ -66,17 +66,17 @@ namespace TensorShaderTest.Operators.Connection2D {
             float[] xval = (new float[width * height * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
             float[] gyval = (new float[width * height * outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
 
-            Map2D x = new Map2D(inchannels, width, height, batch, xval);
-            Map2D gy = new Map2D(outchannels, width, height, batch, gyval);
+            Map2D x = new(inchannels, width, height, batch, xval);
+            Map2D gy = new(outchannels, width, height, batch, gyval);
 
             Filter2D gw = Reference(x, gy);
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, width, height, batch), xval);
-            OverflowCheckedTensor gy_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, width, height, batch), gyval);
+            OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, width, height, batch), xval);
+            OverflowCheckedTensor gy_tensor = new(Shape.Map2D(outchannels, width, height, batch), gyval);
 
-            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels));
+            OverflowCheckedTensor gw_tensor = new(Shape.Kernel0D(inchannels, outchannels));
 
-            PointwiseKernelProduct ope = new PointwiseKernelProduct(width, height, inchannels, outchannels, batch);
+            PointwiseKernelProduct ope = new(width, height, inchannels, outchannels, batch);
 
             ope.Execute(x_tensor, gy_tensor, gw_tensor);
 
@@ -97,12 +97,12 @@ namespace TensorShaderTest.Operators.Connection2D {
         public void SpeedTest() {
             int inwidth = 512, inheight = 512, inchannels = 32, outchannels = 63;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight));
-            OverflowCheckedTensor gy_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, inwidth, inheight));
+            OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, inwidth, inheight));
+            OverflowCheckedTensor gy_tensor = new(Shape.Map2D(outchannels, inwidth, inheight));
 
-            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels));
+            OverflowCheckedTensor gw_tensor = new(Shape.Kernel0D(inchannels, outchannels));
 
-            PointwiseKernelProduct ope = new PointwiseKernelProduct(inwidth, inheight, inchannels, outchannels);
+            PointwiseKernelProduct ope = new(inwidth, inheight, inchannels, outchannels);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/ptwise_kernelproduct_2d.nvvp");
             Cuda.Profiler.Start();
@@ -116,7 +116,7 @@ namespace TensorShaderTest.Operators.Connection2D {
             int inchannels = x.Channels, outchannels = gy.Channels, batch = x.Batch;
             int inw = x.Width, inh = x.Height;
 
-            Filter2D w = new Filter2D(inchannels, outchannels, 1, 1);
+            Filter2D w = new(inchannels, outchannels, 1, 1);
 
             for (int th = 0; th < batch; th++) {
                 for (int ix, iy = 0; iy < inh; iy++) {
@@ -140,8 +140,8 @@ namespace TensorShaderTest.Operators.Connection2D {
             float[] xval = (new float[inwidth * inheight * inchannels]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] gyval = (new float[inwidth * inheight * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            Map2D x = new Map2D(inchannels, inwidth, inheight, 1, xval);
-            Map2D gy = new Map2D(outchannels, inwidth, inheight, 1, gyval);
+            Map2D x = new(inchannels, inwidth, inheight, 1, xval);
+            Map2D gy = new(outchannels, inwidth, inheight, 1, gyval);
 
             Filter2D gw = Reference(x, gy);
 

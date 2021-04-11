@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>チャネル方向に切り出し</summary>
         public static Field ExtractChannel(Field x, int index, int channels = 1) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.ArrayManipulation.ExtractChannel(index, channels, x, y);
 
             link.Forward();
@@ -43,7 +43,7 @@ namespace TensorShader.Links.ArrayManipulation {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

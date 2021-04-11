@@ -2,7 +2,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>ラベル</summary>
         public static Field Label(Field x, string name) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Utility.Label(x, y, name);
 
             link.Forward();
@@ -39,7 +39,7 @@ namespace TensorShader.Links.Utility {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

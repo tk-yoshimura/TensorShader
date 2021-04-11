@@ -7,21 +7,21 @@ namespace MNIST {
     public static class Model {
         public static Field CNN(Field x, int classes) {
             Convolution2D conv1 =
-                new Convolution2D(
+                new(
                     inchannels: 1, outchannels: 4,
                     kwidth: 3, kheight: 3,
                     use_bias: true,
                     pad_mode: PaddingMode.Zero, label: "conv1");
 
             Convolution2D conv2 =
-                new Convolution2D(
+                new(
                     inchannels: 4, outchannels: 8,
                     kwidth: 3, kheight: 3,
                     use_bias: true,
                     pad_mode: PaddingMode.Zero, label: "conv2");
 
             Convolution2D conv3 =
-                new Convolution2D(
+                new(
                     inchannels: 8, outchannels: 16,
                     kwidth: 3, kheight: 3,
                     use_bias: true,
@@ -36,7 +36,7 @@ namespace MNIST {
             Field h5 = Relu(conv3.Forward(h4));
 
             Dense fc =
-                new Dense(
+                new(
                     inchannels: h5.Shape.DataSize, outchannels: classes,
                     use_bias: true, label: "fc");
 

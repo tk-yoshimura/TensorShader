@@ -9,7 +9,7 @@ namespace TensorShaderCudaBackend {
 
         /// <summary>Cuda配列リクエスト</summary>
         public static CudaArray<T> Request(Stream stream, int device_id, int index, ulong length) {
-            if (array_table == null) {
+            if (array_table is null) {
                 array_table = new Dictionary<(Stream stream, int device_id, int index), CudaArray<T>>();
             }
 

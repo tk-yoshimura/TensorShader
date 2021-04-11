@@ -64,7 +64,7 @@ namespace TensorShaderCudaBackend.Shaders.Randomize {
 
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
-            if (args == null || args.Length != 3 + ExParams) {
+            if (args is null || args.Length != 3 + ExParams) {
                 throw new ArgumentException(nameof(args));
             }
 
@@ -72,7 +72,7 @@ namespace TensorShaderCudaBackend.Shaders.Randomize {
                 throw new ArgumentException(nameof(length));
             }
 
-            if (!(args[2] is Random random) || random == null) {
+            if (!(args[2] is Random random) || random is null) {
                 throw new ArgumentException(nameof(random));
             }
 

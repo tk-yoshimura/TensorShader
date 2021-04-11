@@ -4,7 +4,7 @@ namespace TensorShaderCudaBackend {
 
     /// <summary>バッチ独立演算</summary>
     public static class Batchwise {
-        private readonly static Dictionary<string, Shader> shaders = new Dictionary<string, Shader>();
+        private readonly static Dictionary<string, Shader> shaders = new();
 
         /// <summary>乗算</summary>
         public static void Mul(uint vector_length, uint map_length,
@@ -20,7 +20,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 

@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>全象限対応逆正接関数</summary>
         public static Field Arctan2(Field y, Field x) {
-            Field theta = new Field();
+            Field theta = new();
             Link link = new Links.BinaryArithmetric.Arctan2(y, x, theta);
 
             link.Forward();
@@ -28,7 +28,7 @@ namespace TensorShader.Links.BinaryArithmetric {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

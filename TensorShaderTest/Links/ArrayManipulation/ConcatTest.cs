@@ -47,7 +47,7 @@ namespace TensorShaderTest.Links.ArrayManipulation {
 
         [TestMethod]
         public void ExecuteTest() {
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
             foreach (Shape outshape in new Shape[]{
                 new Shape(ShapeType.Map, 13),

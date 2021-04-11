@@ -72,7 +72,7 @@ namespace TensorShaderCudaBackend.Shaders.Transpose {
 
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
-            if (args == null || args.Length != 3) {
+            if (args is null || args.Length != 3) {
                 throw new ArgumentException(nameof(args));
             }
 

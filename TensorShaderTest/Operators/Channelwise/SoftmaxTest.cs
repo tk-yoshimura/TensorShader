@@ -9,16 +9,16 @@ namespace TensorShaderTest.Operators.Channelwise {
     public class SoftmaxTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
             foreach (int indexes in new int[] { 1, 2, 3, 4, 8, 16, 32 }) {
                 for (int channels = 1; channels <= 1024; channels *= 2) {
                     float[] x1 = (new float[channels * indexes]).Select((_) => (float)rd.NextDouble()).ToArray();
 
-                    OverflowCheckedTensor v1 = new OverflowCheckedTensor(Shape.Map0D(channels, indexes), x1);
-                    OverflowCheckedTensor v2 = new OverflowCheckedTensor(Shape.Map0D(channels, indexes));
+                    OverflowCheckedTensor v1 = new(Shape.Map0D(channels, indexes), x1);
+                    OverflowCheckedTensor v2 = new(Shape.Map0D(channels, indexes));
 
-                    Softmax ope = new Softmax(channels, Shape.Map0D(channels, indexes));
+                    Softmax ope = new(channels, Shape.Map0D(channels, indexes));
 
                     ope.Execute(v1, v2);
 

@@ -21,7 +21,7 @@ namespace TensorShader {
             while (!((int[])x.Shape).SequenceEqual((int[])shape)) {
                 Function function = new Functions.ArrayManipulation.Broadcast(x.Shape, shape);
 
-                Tensor y = new Tensor(shape);
+                Tensor y = new(shape);
 
                 function.Execute(new Tensor[] { x }, new Tensor[] { y });
 

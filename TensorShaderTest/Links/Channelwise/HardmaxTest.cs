@@ -34,7 +34,7 @@ namespace TensorShaderTest.Links.Channelwise {
 
             AssertError.Tolerance(y_expect, y_actual, 1e-7f, 1e-5f, $"not equal y");
 
-            Assert.IsTrue(x.Grad == null);
+            Assert.IsTrue(x.Grad is null);
         }
 
         readonly float[] y_expect = {

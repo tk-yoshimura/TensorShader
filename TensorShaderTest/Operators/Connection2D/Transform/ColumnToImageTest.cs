@@ -22,15 +22,15 @@ namespace TensorShaderTest.Operators.Connection2D {
 
                                     float[] xval = (new float[kwidth * kheight * outwidth * outheight * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-                                    Map2D x = new Map2D(kwidth * kheight * channels, outwidth, outheight, batch, xval);
+                                    Map2D x = new(kwidth * kheight * channels, outwidth, outheight, batch, xval);
 
                                     Map2D y = Reference(x, kwidth, kheight);
 
-                                    OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(new Shape(ShapeType.Column, kwidth * kheight, channels, outwidth, outheight, batch), xval);
+                                    OverflowCheckedTensor x_tensor = new(new Shape(ShapeType.Column, kwidth * kheight, channels, outwidth, outheight, batch), xval);
 
-                                    OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, inwidth, inheight, batch));
+                                    OverflowCheckedTensor y_tensor = new(Shape.Map2D(channels, inwidth, inheight, batch));
 
-                                    ColumnToImage ope = new ColumnToImage(outwidth, outheight, channels, kwidth, kheight, batch);
+                                    ColumnToImage ope = new(outwidth, outheight, channels, kwidth, kheight, batch);
 
                                     ope.Execute(x_tensor, y_tensor);
 
@@ -57,11 +57,11 @@ namespace TensorShaderTest.Operators.Connection2D {
             int inwidth = 512, inheight = 512, channels = 31, ksize = 3;
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(new Shape(ShapeType.Column, ksize * ksize, channels, outwidth, outheight, 1));
+            OverflowCheckedTensor x_tensor = new(new Shape(ShapeType.Column, ksize * ksize, channels, outwidth, outheight, 1));
 
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, inwidth, inheight));
+            OverflowCheckedTensor y_tensor = new(Shape.Map2D(channels, inwidth, inheight));
 
-            ColumnToImage ope = new ColumnToImage(outwidth, outheight, channels, ksize, ksize);
+            ColumnToImage ope = new(outwidth, outheight, channels, ksize, ksize);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/column_to_image_2d.nvvp");
             Cuda.Profiler.Start();
@@ -75,7 +75,7 @@ namespace TensorShaderTest.Operators.Connection2D {
             int channels = x.Channels / (kwidth * kheight), batch = x.Batch;
             int inw = x.Width, inh = x.Height, outw = inw + kwidth - 1, outh = inh + kheight - 1;
 
-            Map2D y = new Map2D(channels, outw, outh, batch);
+            Map2D y = new(channels, outw, outh, batch);
 
             for (int k = 0, kx, ky = 0; ky < kheight; ky++) {
                 for (kx = 0; kx < kwidth; k++, kx++) {

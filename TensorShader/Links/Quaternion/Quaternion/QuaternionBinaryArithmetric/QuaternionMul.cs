@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>四元数積</summary>
         public static Field QuaternionMul(Field x1, Field x2) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.QuaternionArithmetric.QuaternionMul(x1, x2, y);
 
             link.Forward();
@@ -28,7 +28,7 @@ namespace TensorShader.Links.QuaternionArithmetric {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

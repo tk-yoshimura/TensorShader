@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>全結合カーネル積</summary>
         public static Tensor KernelProductDense(Tensor x, Tensor y) {
             Functions.ConnectionDense.KernelProduct function =
-                new Functions.ConnectionDense.KernelProduct(x.Shape, y.Shape);
+                new(x.Shape, y.Shape);
 
-            Tensor w = new Tensor(function.OutShape);
+            Tensor w = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, y }, new Tensor[] { w });
 

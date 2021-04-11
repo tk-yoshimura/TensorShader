@@ -5,7 +5,7 @@ namespace TensorShader {
         /// <summary>ComplexRRelu</summary>
         /// <remarks>実部のみReluを適用</remarks>
         public static Field ComplexRRelu(Field x) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.ComplexArithmetric.ComplexRRelu(x, y);
 
             link.Forward();
@@ -29,7 +29,7 @@ namespace TensorShader.Links.ComplexArithmetric {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

@@ -4,7 +4,7 @@ namespace TensorShaderCudaBackend {
 
     /// <summary>集計</summary>
     public static class Aggregation {
-        private readonly static Dictionary<string, Shader> shaders = new Dictionary<string, Shader>();
+        private readonly static Dictionary<string, Shader> shaders = new();
 
         /// <summary>総和</summary>
         public static void Sum(uint src_stride, CudaArray<float> src, uint dst_stride, CudaArray<float> dst, uint slides, Stream stream = null) {
@@ -16,7 +16,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -33,7 +33,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -50,7 +50,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -67,7 +67,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 

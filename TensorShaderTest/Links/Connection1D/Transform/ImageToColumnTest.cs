@@ -22,7 +22,7 @@ namespace TensorShaderTest.Links.Connection1D {
 
             Field y1_expect = ImageToColumn1D(x1, kwidth);
 
-            List<Field> x2s = new List<Field>();
+            List<Field> x2s = new();
             for (int kx = 0; kx < kwidth; kx++) {
                 x2s.Add(
                     Reshape(

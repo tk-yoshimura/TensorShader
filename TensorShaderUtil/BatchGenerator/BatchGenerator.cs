@@ -22,7 +22,7 @@ namespace TensorShaderUtil.BatchGenerator {
 
         /// <summary>コンストラクタ</summary>
         public BatchGenerator(Shape data_shape, int num_batches) {
-            if (data_shape == null) {
+            if (data_shape is null) {
                 throw new ArgumentNullException(nameof(data_shape));
             }
             if (data_shape.Batch > 1) {

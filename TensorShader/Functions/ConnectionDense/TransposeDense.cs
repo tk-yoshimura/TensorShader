@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>転置全結合</summary>
         public static Tensor TransposeDense(Tensor x, Tensor w) {
             Functions.ConnectionDense.TransposeDense function =
-                new Functions.ConnectionDense.TransposeDense(x.Shape, w.Shape);
+                new(x.Shape, w.Shape);
 
-            Tensor y = new Tensor(function.OutShape);
+            Tensor y = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, w }, new Tensor[] { y });
 

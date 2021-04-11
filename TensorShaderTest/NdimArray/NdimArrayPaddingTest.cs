@@ -8,7 +8,7 @@ namespace TensorShaderTest.NdimArray {
     public class NdimArrayPaddingTest {
         [TestMethod]
         public void ZeroPaddingTest1() {
-            Shape shape = new Shape(ShapeType.Map, new int[] { 3, 4, 5, 6, 7 });
+            Shape shape = new(ShapeType.Map, new int[] { 3, 4, 5, 6, 7 });
             (int pa, int pb)[][] pads_list = new (int pa, int pb)[][]{
                 new (int pa, int pb)[] { (1, 2), (3, 4), (2, 2), (4, 3), (2, 1) },
                 new (int pa, int pb)[] { (0, 0), (3, 4), (2, 2), (4, 3), (2, 1) },
@@ -23,10 +23,10 @@ namespace TensorShaderTest.NdimArray {
             };
 
             foreach (var pads in pads_list) {
-                Random random = new Random();
+                Random random = new();
                 float[] v = (new float[shape.Length]).Select((v) => (float)random.NextDouble()).ToArray();
 
-                NdimArray<float> arr = new NdimArray<float>(shape, v);
+                NdimArray<float> arr = new(shape, v);
                 NdimArray<float> new_arr = NdimArray<float>.ZeroPadding(arr, pads);
 
                 CheckZeroPadding(shape, pads, arr, new_arr);
@@ -42,11 +42,11 @@ namespace TensorShaderTest.NdimArray {
             };
 
             foreach ((Shape shape, (int pa, int pb)[] pads) in tests) {
-                Random random = new Random();
+                Random random = new();
 
                 float[] v = (new float[shape.Length]).Select((v) => (float)random.NextDouble()).ToArray();
 
-                NdimArray<float> arr = new NdimArray<float>(shape, v);
+                NdimArray<float> arr = new(shape, v);
                 NdimArray<float> new_arr = NdimArray<float>.ZeroPaddingND(arr, pads);
 
                 (int, int)[] new_pads = (new (int, int)[] { (0, 0) }).Concat(pads).Concat(new (int, int)[] { (0, 0) }).ToArray();
@@ -57,7 +57,7 @@ namespace TensorShaderTest.NdimArray {
 
         [TestMethod]
         public void EdgePaddingTest1() {
-            Shape shape = new Shape(ShapeType.Map, new int[] { 3, 4, 5, 6, 7 });
+            Shape shape = new(ShapeType.Map, new int[] { 3, 4, 5, 6, 7 });
             (int pa, int pb)[][] pads_list = new (int pa, int pb)[][]{
                 new (int pa, int pb)[] { (1, 2), (3, 4), (2, 2), (4, 3), (2, 1) },
                 new (int pa, int pb)[] { (0, 0), (3, 4), (2, 2), (4, 3), (2, 1) },
@@ -72,10 +72,10 @@ namespace TensorShaderTest.NdimArray {
             };
 
             foreach (var pads in pads_list) {
-                Random random = new Random();
+                Random random = new();
                 float[] v = (new float[shape.Length]).Select((v) => (float)random.NextDouble()).ToArray();
 
-                NdimArray<float> arr = new NdimArray<float>(shape, v);
+                NdimArray<float> arr = new(shape, v);
                 NdimArray<float> new_arr = NdimArray<float>.EdgePadding(arr, pads);
 
                 CheckEdgePadding(shape, pads, arr, new_arr);
@@ -91,11 +91,11 @@ namespace TensorShaderTest.NdimArray {
             };
 
             foreach ((Shape shape, (int pa, int pb)[] pads) in tests) {
-                Random random = new Random();
+                Random random = new();
 
                 float[] v = (new float[shape.Length]).Select((v) => (float)random.NextDouble()).ToArray();
 
-                NdimArray<float> arr = new NdimArray<float>(shape, v);
+                NdimArray<float> arr = new(shape, v);
                 NdimArray<float> new_arr = NdimArray<float>.EdgePaddingND(arr, pads);
 
                 (int, int)[] new_pads = (new (int, int)[] { (0, 0) }).Concat(pads).Concat(new (int, int)[] { (0, 0) }).ToArray();

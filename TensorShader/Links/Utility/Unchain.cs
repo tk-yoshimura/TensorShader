@@ -2,7 +2,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>逆伝搬をブロック</summary>
         public static Field Unchain(Field x) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Utility.Unchain(x, y);
 
             link.Forward();

@@ -6,7 +6,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>ブロードキャスト</summary>
         public static Field Broadcast(Field x, Shape shape) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.ArrayManipulation.Broadcast(x, y, shape);
 
             link.Forward();
@@ -40,8 +40,8 @@ namespace TensorShader.Links.ArrayManipulation {
                 throw new ArgumentException(ExceptionMessage.Broadcast(infield.Shape, shape));
             }
 
-            List<int> axes_keepdims = new List<int>();
-            List<int> axes_abandondims = new List<int>();
+            List<int> axes_keepdims = new();
+            List<int> axes_abandondims = new();
 
             for (int i = 0; i < infield.Shape.Ndim; i++) {
                 if (infield.Shape[i] == 1 && shape[i] > 1) {
@@ -65,7 +65,7 @@ namespace TensorShader.Links.ArrayManipulation {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

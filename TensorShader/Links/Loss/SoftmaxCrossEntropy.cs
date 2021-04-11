@@ -5,7 +5,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>SoftmaxCrossEntropy</summary>
         public static Field SoftmaxCrossEntropy(Field x, Field t) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Loss.SoftmaxCrossEntropy(x, t, y);
 
             link.Forward();
@@ -46,7 +46,7 @@ namespace TensorShader.Links.Loss {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>最小値</summary>
         public static Field Min(Field x, int[] axes = null, bool keepdims = false) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Aggregation.Min(x, y, axes, keepdims);
 
             link.Forward();

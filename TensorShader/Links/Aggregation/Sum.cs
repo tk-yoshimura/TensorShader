@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>総和</summary>
         public static Field Sum(Field x, int[] axes = null, bool keepdims = false) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Aggregation.Sum(x, y, axes, keepdims);
 
             link.Forward();
@@ -33,7 +33,7 @@ namespace TensorShader.Links.Aggregation {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

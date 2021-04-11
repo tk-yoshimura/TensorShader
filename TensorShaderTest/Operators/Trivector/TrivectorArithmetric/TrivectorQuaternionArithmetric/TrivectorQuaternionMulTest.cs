@@ -9,7 +9,7 @@ namespace TensorShaderTest.Operators.Trivector {
     public class TrivectorQuaternionMulTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
             for (int i = 0; i < 64; i++) {
                 for (int length = i * 1020 - 6; length <= i * 1020 + 6; length += 3) {
@@ -21,11 +21,11 @@ namespace TensorShaderTest.Operators.Trivector {
                     Shape vecshape = Shape.Vector(length);
                     Shape quatshape = Shape.Vector(length / 3 * 4);
 
-                    OverflowCheckedTensor v1 = new OverflowCheckedTensor(vecshape, v);
-                    OverflowCheckedTensor v2 = new OverflowCheckedTensor(quatshape, q);
-                    OverflowCheckedTensor v3 = new OverflowCheckedTensor(vecshape);
+                    OverflowCheckedTensor v1 = new(vecshape, v);
+                    OverflowCheckedTensor v2 = new(quatshape, q);
+                    OverflowCheckedTensor v3 = new(vecshape);
 
-                    TrivectorQuaternionMul ope = new TrivectorQuaternionMul(vecshape);
+                    TrivectorQuaternionMul ope = new(vecshape);
 
                     ope.Execute(v1, v2, v3);
 

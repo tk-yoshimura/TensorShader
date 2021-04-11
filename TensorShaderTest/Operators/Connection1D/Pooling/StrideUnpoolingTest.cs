@@ -12,7 +12,7 @@ namespace TensorShaderTest.Operators.Connection1D {
         public void ExecuteTest() {
             float max_err = 0;
 
-            Random random = new Random();
+            Random random = new();
 
             foreach (int batch in new int[] { 1, 2, 3 }) {
                 foreach (int channels in new int[] { 1, 2, 3, 5 }) {
@@ -22,16 +22,16 @@ namespace TensorShaderTest.Operators.Connection1D {
 
                             float[] yval = (new float[outwidth * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-                            Map1D y = new Map1D(channels, outwidth, batch, yval);
+                            Map1D y = new(channels, outwidth, batch, yval);
 
                             Map1D x = Reference(y, inwidth, stride);
 
-                            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, inwidth, batch));
-                            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, outwidth, batch), yval);
+                            OverflowCheckedTensor x_tensor = new(Shape.Map1D(channels, inwidth, batch));
+                            OverflowCheckedTensor y_tensor = new(Shape.Map1D(channels, outwidth, batch), yval);
 
                             TensorShaderCudaBackend.Randomize.Uniform((uint)x_tensor.Length, x_tensor.Buffer, random);
 
-                            StrideUnpooling ope = new StrideUnpooling(inwidth, channels, stride, batch);
+                            StrideUnpooling ope = new(inwidth, channels, stride, batch);
 
                             ope.Execute(y_tensor, x_tensor);
 
@@ -56,7 +56,7 @@ namespace TensorShaderTest.Operators.Connection1D {
             int channels = y.Channels, batch = y.Batch;
             int inw = outw / stride;
 
-            Map1D x = new Map1D(channels, outw, batch);
+            Map1D x = new(channels, outw, batch);
 
             for (int th = 0; th < batch; th++) {
                 for (int ix = 0; ix < inw; ix++) {
@@ -76,10 +76,10 @@ namespace TensorShaderTest.Operators.Connection1D {
             int outwidth = 2048, channels = 1024, stride = 2, batch = 4;
             int inwidth = outwidth / stride;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, inwidth, batch));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, outwidth, batch));
+            OverflowCheckedTensor x_tensor = new(Shape.Map1D(channels, inwidth, batch));
+            OverflowCheckedTensor y_tensor = new(Shape.Map1D(channels, outwidth, batch));
 
-            StrideUnpooling ope = new StrideUnpooling(outwidth, channels, stride, batch);
+            StrideUnpooling ope = new(outwidth, channels, stride, batch);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/strideunpool_1d.nvvp");
             Cuda.Profiler.Start();

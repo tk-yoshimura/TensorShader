@@ -2,7 +2,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>加算</summary>
         public static Field Add(Field x, float c) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.UnaryArithmetric.Add(x, y, c);
 
             link.Forward();
@@ -12,7 +12,7 @@ namespace TensorShader {
 
         /// <summary>加算</summary>
         public static Field Add(float c, Field x) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.UnaryArithmetric.Add(x, y, c);
 
             link.Forward();
@@ -52,7 +52,7 @@ namespace TensorShader.Links.UnaryArithmetric {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

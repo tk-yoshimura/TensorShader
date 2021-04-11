@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>複素3次元逆畳み込み</summary>
         public static Tensor ComplexDeconvolution3D(Tensor x, Tensor w, bool gradmode = false) {
             Functions.ComplexConvolution.ComplexDeconvolution3D function =
-                new Functions.ComplexConvolution.ComplexDeconvolution3D(x.Shape, w.Shape, gradmode);
+                new(x.Shape, w.Shape, gradmode);
 
-            Tensor y = new Tensor(function.OutShape);
+            Tensor y = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, w }, new Tensor[] { y });
 

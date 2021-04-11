@@ -82,7 +82,7 @@ namespace TensorShaderCudaBackend.API {
 
         /// <summary>デバイスプロパティ</summary>
         public static DeviceProp DeviceProperty(int device_id) {
-            cudaDeviceProp prop = new cudaDeviceProp();
+            cudaDeviceProp prop = new();
 
             ErrorCode result = NativeMethods.cudaGetDeviceProperties(ref prop, device_id);
             if (result != ErrorCode.Success) {

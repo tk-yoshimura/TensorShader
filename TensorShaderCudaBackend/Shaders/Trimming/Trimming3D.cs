@@ -106,7 +106,7 @@ namespace TensorShaderCudaBackend.Shaders.Trimming {
 
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
-            if (args == null || args.Length != 6) {
+            if (args is null || args.Length != 6) {
                 throw new ArgumentException(nameof(args));
             }
 

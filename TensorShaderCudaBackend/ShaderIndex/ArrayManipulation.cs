@@ -4,7 +4,7 @@ namespace TensorShaderCudaBackend {
 
     /// <summary>配列操作</summary>
     public static class ArrayManipulation {
-        private readonly static Dictionary<string, Shader> shaders = new Dictionary<string, Shader>();
+        private readonly static Dictionary<string, Shader> shaders = new();
 
         /// <summary>初期化</summary>
         public static void Clear(uint length, float c, CudaArray<float> dst, Stream stream = null) {
@@ -16,7 +16,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -48,7 +48,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -66,7 +66,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -83,7 +83,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -114,7 +114,7 @@ namespace TensorShaderCudaBackend {
                     shader = shaders[key];
                 }
 
-                if (stream == null) {
+                if (stream is null) {
                     stream = Shader.DefaultStream;
                 }
 
@@ -140,7 +140,7 @@ namespace TensorShaderCudaBackend {
                     shader = shaders[key];
                 }
 
-                if (stream == null) {
+                if (stream is null) {
                     stream = Shader.DefaultStream;
                 }
 
@@ -176,13 +176,13 @@ namespace TensorShaderCudaBackend {
                     shader = shaders[key];
                 }
 
-                if (stream == null) {
+                if (stream is null) {
                     stream = Shader.DefaultStream;
                 }
 
                 shader.Execute(stream, src_value, dst_value, src_key, dst_key, stride, axislength, slides);
             }
-            else { 
+            else {
                 if (axislength <= Shaders.ArrayManipulation.SortWithKeyUseSharedMemory.MaxAxisLength) {
                     string key = "sortwithkey_nostride_use_shared_memory";
 
@@ -202,7 +202,7 @@ namespace TensorShaderCudaBackend {
                     shader = shaders[key];
                 }
 
-                if (stream == null) {
+                if (stream is null) {
                     stream = Shader.DefaultStream;
                 }
 
@@ -220,7 +220,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 

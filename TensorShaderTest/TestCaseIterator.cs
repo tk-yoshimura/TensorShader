@@ -13,7 +13,7 @@ namespace TensorShaderTest {
             if (times < 1) {
                 throw new ArgumentException(nameof(times));
             }
-            if (cases == null || cases.Length == 0 || cases.Any((i) => i.Length < 1)) {
+            if (cases is null || cases.Length == 0 || cases.Any((i) => i.Length < 1)) {
                 throw new ArgumentException(nameof(cases));
             }
 
@@ -25,7 +25,7 @@ namespace TensorShaderTest {
         }
 
         public IEnumerator<int[]> GetEnumerator() {
-            Random random = new Random(123);
+            Random random = new(123);
 
             int[] c = null;
 
@@ -35,7 +35,7 @@ namespace TensorShaderTest {
             }
             yield return c;
 
-            List<int[]> counts = new List<int[]>();
+            List<int[]> counts = new();
             foreach (int[] item in cases) {
                 counts.Add(new int[item.Length]);
             }

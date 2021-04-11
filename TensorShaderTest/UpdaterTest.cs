@@ -11,7 +11,7 @@ namespace TensorShaderTest {
             Tensor errtensor = -3;
 
             {
-                ParameterField ferr = new ParameterField(errtensor);
+                ParameterField ferr = new(errtensor);
 
                 (Flow flow, Parameters parameters) = Flow.Optimize(ferr);
                 parameters.AddUpdater((parameter) => new SGD(parameter, 0.1f));
@@ -38,8 +38,8 @@ namespace TensorShaderTest {
             Tensor outtensor = 2;
 
             {
-                ParameterField f1 = new ParameterField(intensor);
-                VariableField fo = new VariableField(outtensor);
+                ParameterField f1 = new(intensor);
+                VariableField fo = new(outtensor);
 
                 Field f2 = Abs(f1);
                 Field ferr = f2 - fo;
@@ -69,9 +69,9 @@ namespace TensorShaderTest {
             Tensor outtensor = -3;
 
             {
-                ParameterField f1 = new ParameterField(in1tensor);
-                ParameterField f2 = new ParameterField(in2tensor);
-                VariableField fo = new VariableField(outtensor);
+                ParameterField f1 = new(in1tensor);
+                ParameterField f2 = new(in2tensor);
+                VariableField fo = new(outtensor);
 
                 Field f3 = f1 + f2;
                 Field ferr = f3 - fo;
@@ -103,8 +103,8 @@ namespace TensorShaderTest {
             Tensor outtensor = -2;
 
             {
-                ParameterField f1 = new ParameterField(intensor);
-                VariableField fo = new VariableField(outtensor);
+                ParameterField f1 = new(intensor);
+                VariableField fo = new(outtensor);
 
                 (Field f2, Field f3) = (f1, -f1);
                 Field f4 = f2 * f3;
@@ -139,9 +139,9 @@ namespace TensorShaderTest {
             Tensor outtensor = -3;
 
             {
-                ParameterField f1 = new ParameterField(in1tensor);
-                ParameterField f2 = new ParameterField(in2tensor);
-                VariableField fo = new VariableField(outtensor);
+                ParameterField f1 = new(in1tensor);
+                ParameterField f2 = new(in2tensor);
+                VariableField fo = new(outtensor);
 
                 Field f3 = f1 + f2;
                 Field ferr = f3 - fo;

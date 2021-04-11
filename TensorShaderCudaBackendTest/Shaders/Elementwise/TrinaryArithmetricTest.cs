@@ -12,7 +12,7 @@ namespace TensorShaderCudaBackendTest.ShadersTest.ElementwiseTest {
         public void ExecuteTest() {
             const int length = 1024;
 
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             float[] h_x1 = (new float[length]).Select((_) => (float)random.NextDouble()).ToArray();
             float[] h_x2 = (new float[length]).Select((_) => (float)random.NextDouble()).ToArray();
@@ -24,7 +24,7 @@ namespace TensorShaderCudaBackendTest.ShadersTest.ElementwiseTest {
             CudaArray<float> d_x1 = h_x1;
             CudaArray<float> d_x2 = h_x2;
             CudaArray<float> d_x3 = h_x3;
-            CudaArray<float> d_y = new CudaArray<float>(length);
+            CudaArray<float> d_y = new(length);
 
             shader.Execute(stream: null, d_x1, d_x2, d_x3, d_y, (uint)length);
 

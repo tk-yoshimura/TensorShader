@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>外積</summary>
         public static Field TrivectorCross(Field v, Field u) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.QuaternionArithmetric.TrivectorCross(v, u, y);
 
             link.Forward();
@@ -28,7 +28,7 @@ namespace TensorShader.Links.QuaternionArithmetric {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

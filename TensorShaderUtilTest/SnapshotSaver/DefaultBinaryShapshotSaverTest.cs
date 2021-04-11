@@ -9,7 +9,7 @@ namespace TensorShaderUtilTest.SnapshotSaver {
     public class DefaultBinaryShapshotSaverTest {
         [TestMethod]
         public void ExecuteTest() {
-            Snapshot snapshot = new Snapshot();
+            Snapshot snapshot = new();
             snapshot.Append("item0", Shape.Vector(5), new float[] { 1f, 2f, 3f, 4f, 5f });
             snapshot.Append("item1", Shape.Map0D(2, 3), new float[] { 0f, 1f, 2f, 3f, 4f, 5f });
             snapshot.Append("item2", Shape.Map0D(3, 4), new float[] { 5f, 3f, 1f, 0f, 2f, 4f, 1f, 0f, 5f, 3f, 2f, 4f });
@@ -18,7 +18,7 @@ namespace TensorShaderUtilTest.SnapshotSaver {
 
             string[] items = new string[] { "item0", "item1", "item2", "item3", "item4" };
 
-            DefaultBinaryShapshotSaver saver = new DefaultBinaryShapshotSaver();
+            DefaultBinaryShapshotSaver saver = new();
 
             byte[] data = null;
 

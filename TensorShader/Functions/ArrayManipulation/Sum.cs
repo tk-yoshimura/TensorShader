@@ -30,7 +30,7 @@ namespace TensorShader {
 
             Function function = new Functions.ArrayManipulation.Sum(xs.Length);
 
-            Tensor y = new Tensor(function.OutputShapes(xs.Select((tensor) => tensor.Shape).ToArray())[0]);
+            Tensor y = new(function.OutputShapes(xs.Select((tensor) => tensor.Shape).ToArray())[0]);
 
             function.Execute(xs, new Tensor[] { y });
 

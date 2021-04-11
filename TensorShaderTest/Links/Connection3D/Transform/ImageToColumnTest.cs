@@ -22,7 +22,7 @@ namespace TensorShaderTest.Links.Connection3D {
 
             Field y1_expect = ImageToColumn3D(x1, kwidth, kheight, kdepth);
 
-            List<Field> x2s = new List<Field>();
+            List<Field> x2s = new();
             for (int kz = 0; kz < kdepth; kz++) {
                 for (int ky = 0; ky < kheight; ky++) {
                     for (int kx = 0; kx < kwidth; kx++) {

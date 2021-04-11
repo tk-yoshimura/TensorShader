@@ -18,7 +18,7 @@ namespace TensorShader {
         public static (Tensor key, Tensor value) SortWithKey(Tensor k, Tensor v, int axis) {
             Function function = new Functions.ArrayManipulation.SortWithKey(axis);
 
-            Tensor key = new Tensor(k.Shape), value = new Tensor(v.Shape);
+            Tensor key = new(k.Shape), value = new(v.Shape);
 
             function.Execute(new Tensor[] { k, v }, new Tensor[] { key, value });
 

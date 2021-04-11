@@ -5,7 +5,7 @@ namespace TensorShader {
         /// <summary>ソート</summary>
         /// <remarks>安定ソート</remarks>
         public static Field ArgSort(Field x, int axis) {
-            Field y = new Field();
+            Field y = new();
             VariableField index = Tensor.Index(x.Shape, axis);
 
             Link link = new Links.ArrayManipulation.ArgSort(x, index, y, axis);

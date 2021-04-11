@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>四元数全結合カーネル積</summary>
         public static Tensor QuaternionKernelProductDense(Tensor x, Tensor y, bool transpose = false) {
             Functions.QuaternionConvolution.QuaternionKernelProductDense function =
-                new Functions.QuaternionConvolution.QuaternionKernelProductDense(x.Shape, y.Shape, transpose);
+                new(x.Shape, y.Shape, transpose);
 
-            Tensor w = new Tensor(function.OutShape);
+            Tensor w = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, y }, new Tensor[] { w });
 

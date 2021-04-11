@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>QuaternionCast</summary>
         public static Field QuaternionCast(Field real, Field imag_i, Field imag_j, Field imag_k) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Quaternion.QuaternionCast(real, imag_i, imag_j, imag_k, y);
 
             link.Forward();
@@ -43,7 +43,7 @@ namespace TensorShader.Links.Quaternion {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

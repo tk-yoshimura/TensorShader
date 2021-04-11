@@ -8,7 +8,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
     public class IndexTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
             foreach (Shape shape in new Shape[]{
                    new Shape(ShapeType.Map, 16, 19, 23, 8, 1, 5, 6),
@@ -22,10 +22,10 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
                     float[] x1 = (new float[shape.Length]).Select((_, idx) => (float)(idx / stride % length)).ToArray();
 
-                    OverflowCheckedTensor tensor = new OverflowCheckedTensor(shape);
+                    OverflowCheckedTensor tensor = new(shape);
 
                     TensorShader.Operators.ArrayManipulation.Index ope
-                        = new TensorShader.Operators.ArrayManipulation.Index(shape, axis);
+                        = new(shape, axis);
 
                     ope.Execute(tensor);
 

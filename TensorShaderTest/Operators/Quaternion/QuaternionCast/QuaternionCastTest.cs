@@ -10,7 +10,7 @@ namespace TensorShaderTest.Operators.Quaternion {
     public class QuaternionCastTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
             for (int i = 0; i < 64; i++) {
                 for (int length = i * 1024 - 4; length <= i * 1024 + 4; length += 1) {
@@ -24,13 +24,13 @@ namespace TensorShaderTest.Operators.Quaternion {
                     Shape inshape = Shape.Vector(length);
                     Shape outshape = Shape.Vector(length * 4);
 
-                    OverflowCheckedTensor v1 = new OverflowCheckedTensor(inshape, x);
-                    OverflowCheckedTensor v2 = new OverflowCheckedTensor(inshape, y);
-                    OverflowCheckedTensor v3 = new OverflowCheckedTensor(inshape, z);
-                    OverflowCheckedTensor v4 = new OverflowCheckedTensor(inshape, w);
-                    OverflowCheckedTensor v5 = new OverflowCheckedTensor(outshape);
+                    OverflowCheckedTensor v1 = new(inshape, x);
+                    OverflowCheckedTensor v2 = new(inshape, y);
+                    OverflowCheckedTensor v3 = new(inshape, z);
+                    OverflowCheckedTensor v4 = new(inshape, w);
+                    OverflowCheckedTensor v5 = new(outshape);
 
-                    QuaternionCast ope = new QuaternionCast(inshape);
+                    QuaternionCast ope = new(inshape);
 
                     ope.Execute(v1, v2, v3, v4, v5);
 
@@ -58,13 +58,13 @@ namespace TensorShaderTest.Operators.Quaternion {
             Shape inshape = Shape.Vector(length);
             Shape outshape = Shape.Vector(length * 4);
 
-            OverflowCheckedTensor v1 = new OverflowCheckedTensor(inshape);
-            OverflowCheckedTensor v2 = new OverflowCheckedTensor(inshape);
-            OverflowCheckedTensor v3 = new OverflowCheckedTensor(inshape);
-            OverflowCheckedTensor v4 = new OverflowCheckedTensor(inshape);
-            OverflowCheckedTensor v5 = new OverflowCheckedTensor(outshape);
+            OverflowCheckedTensor v1 = new(inshape);
+            OverflowCheckedTensor v2 = new(inshape);
+            OverflowCheckedTensor v3 = new(inshape);
+            OverflowCheckedTensor v4 = new(inshape);
+            OverflowCheckedTensor v5 = new(outshape);
 
-            QuaternionCast ope = new QuaternionCast(inshape);
+            QuaternionCast ope = new(inshape);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/quaternion_cast.nvvp");
             Cuda.Profiler.Start();

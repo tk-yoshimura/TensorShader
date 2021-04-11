@@ -22,14 +22,14 @@ namespace TensorShaderTest.Operators.Connection3D {
 
                                     float[] xval = (new float[inwidth * inheight * indepth * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-                                    Map3D x = new Map3D(channels, inwidth, inheight, indepth, batch, xval);
+                                    Map3D x = new(channels, inwidth, inheight, indepth, batch, xval);
 
                                     Map3D y = Reference(x, lefttrim, righttrim, toptrim, bottomtrim, fronttrim, reartrim);
 
-                                    OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, inwidth, inheight, indepth, batch), xval);
-                                    OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, outwidth, outheight, outdepth, batch));
+                                    OverflowCheckedTensor x_tensor = new(Shape.Map3D(channels, inwidth, inheight, indepth, batch), xval);
+                                    OverflowCheckedTensor y_tensor = new(Shape.Map3D(channels, outwidth, outheight, outdepth, batch));
 
-                                    Trimming ope = new Trimming(inwidth, inheight, indepth, channels, lefttrim, righttrim, toptrim, bottomtrim, fronttrim, reartrim, batch);
+                                    Trimming ope = new(inwidth, inheight, indepth, channels, lefttrim, righttrim, toptrim, bottomtrim, fronttrim, reartrim, batch);
 
                                     ope.Execute(x_tensor, y_tensor);
 
@@ -57,7 +57,7 @@ namespace TensorShaderTest.Operators.Connection3D {
             int inw = x.Width, inh = x.Height, ind = x.Depth;
             int outw = inw - lefttrim - righttrim, outh = inh - toptrim - bottomtrim, outd = ind - fronttrim - reartrim;
 
-            Map3D y = new Map3D(channels, outw, outh, outd, batch);
+            Map3D y = new(channels, outw, outh, outd, batch);
 
             for (int th = 0; th < batch; th++) {
                 for (int ox, oy, oz = 0; oz < outd; oz++) {
@@ -80,10 +80,10 @@ namespace TensorShaderTest.Operators.Connection3D {
             int inwidth = 64, inheight = 64, indepth = 64, channels = 32, lefttrim = 1, righttrim = 1, toptrim = 1, bottomtrim = 1, fronttrim = 1, reartrim = 1, batch = 4;
             int outwidth = inwidth - lefttrim - righttrim, outheight = inheight - toptrim - bottomtrim, outdepth = indepth - fronttrim - reartrim;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, inwidth, inheight, indepth, batch));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, outwidth, outheight, outdepth, batch));
+            OverflowCheckedTensor x_tensor = new(Shape.Map3D(channels, inwidth, inheight, indepth, batch));
+            OverflowCheckedTensor y_tensor = new(Shape.Map3D(channels, outwidth, outheight, outdepth, batch));
 
-            Trimming ope = new Trimming(inwidth, inheight, indepth, channels, lefttrim, righttrim, toptrim, bottomtrim, fronttrim, reartrim, batch);
+            Trimming ope = new(inwidth, inheight, indepth, channels, lefttrim, righttrim, toptrim, bottomtrim, fronttrim, reartrim, batch);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/trimming_3d.nvvp");
             Cuda.Profiler.Start();

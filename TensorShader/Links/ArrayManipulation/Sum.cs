@@ -13,7 +13,7 @@ namespace TensorShader {
                 return xs[0] + xs[1];
             }
 
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.ArrayManipulation.Sum(xs, y);
 
             link.Forward();
@@ -43,7 +43,7 @@ namespace TensorShader.Links.ArrayManipulation {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

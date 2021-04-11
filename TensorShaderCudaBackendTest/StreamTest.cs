@@ -6,7 +6,7 @@ namespace TensorShaderCudaBackendTest {
     public class StreamTest {
         [TestMethod]
         public void CreateTest() {
-            Stream stream = new Stream();
+            Stream stream = new();
 
             Assert.IsTrue(stream.IsValid);
 

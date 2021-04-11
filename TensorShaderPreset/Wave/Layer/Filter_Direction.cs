@@ -113,12 +113,12 @@ namespace TensorShaderPreset.Wave {
         public static (Field ycos, Field ysin) HammingWindow(Field x, int ksize, double dt, double[] hz_list) {
             (NdimArray<float> cos, NdimArray<float> sin) = KernelHammingWindow(ksize, dt, hz_list);
 
-            VariableField cosw = new VariableField(
+            VariableField cosw = new(
                 cos,
                 name: $"CosHammingWindow"
             );
 
-            VariableField sinw = new VariableField(
+            VariableField sinw = new(
                 sin,
                 name: $"SinHammingWindow"
             );

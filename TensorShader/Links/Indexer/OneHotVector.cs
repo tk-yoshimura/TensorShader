@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>インデクスをOneHot特徴量に変換</summary>
         public static Field OneHotVector(Field x, int channels) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Indexer.OneHotVector(x, y, channels);
 
             link.Forward();

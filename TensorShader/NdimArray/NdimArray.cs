@@ -45,10 +45,10 @@ namespace TensorShader {
 
         /// <summary>コンストラクタ</summary>
         public NdimArray(Shape shape, T[] value, bool clone_value = true) {
-            if (value == null) {
+            if (value is null) {
                 throw new ArgumentNullException(nameof(value));
             }
-            if (shape == null) {
+            if (shape is null) {
                 throw new ArgumentNullException(nameof(shape));
             }
 
@@ -62,7 +62,7 @@ namespace TensorShader {
 
         /// <summary>コンストラクタ</summary>
         public NdimArray(Shape shape) {
-            if (shape == null) {
+            if (shape is null) {
                 throw new ArgumentNullException(nameof(shape));
             }
 
@@ -110,7 +110,7 @@ namespace TensorShader {
         /// <summary>連結</summary>
         /// <remarks>指定軸方向の要素数が1である必要がある</remarks>
         public static NdimArray<T> Join(int axis, params NdimArray<T>[] arrays) {
-            if (arrays == null || arrays.Length < 1) {
+            if (arrays is null || arrays.Length < 1) {
                 throw new ArgumentException(nameof(arrays));
             }
 
@@ -148,7 +148,7 @@ namespace TensorShader {
             int[] s = Shape;
             s[axis] = 1;
 
-            Shape shape = new Shape(Shape.Type, s);
+            Shape shape = new(Shape.Type, s);
 
             int size = shape.Length;
 
@@ -186,7 +186,7 @@ namespace TensorShader {
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
 
-                NdimArray<T> arr = new NdimArray<T>(Shape.DataShape);
+                NdimArray<T> arr = new(Shape.DataShape);
 
                 Array.Copy(Value, Shape.DataSize * index, arr.Value, 0, Shape.DataSize);
 
@@ -205,7 +205,7 @@ namespace TensorShader {
 
         /// <summary>バッチ方向に連結</summary>
         public static implicit operator NdimArray<T>(NdimArray<T>[] arrays) {
-            if (arrays == null || arrays.Length == 0) {
+            if (arrays is null || arrays.Length == 0) {
                 throw new ArgumentException(nameof(arrays));
             }
 

@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>チャネルごとの2次元畳み込み</summary>
         public static Field ChannelwiseConvolution2D(Field x, Field w) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Connection2D.ChannelwiseConvolution(x, w, y);
 
             link.Forward();
@@ -38,7 +38,7 @@ namespace TensorShader.Links.Connection2D {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

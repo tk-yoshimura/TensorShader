@@ -21,7 +21,7 @@ namespace TensorShader {
             Function function =
                 new Functions.Connection1D.NeighborZoom();
 
-            Tensor y = new Tensor(function.OutputShapes(x.Shape)[0]);
+            Tensor y = new(function.OutputShapes(x.Shape)[0]);
 
             function.Execute(new Tensor[] { x }, new Tensor[] { y });
 

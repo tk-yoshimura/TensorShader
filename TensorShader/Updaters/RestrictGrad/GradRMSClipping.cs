@@ -38,7 +38,7 @@ namespace TensorShader.Updaters.RestrictGrad {
         /// <summary>内部状態</summary>
         public override Dictionary<string, Tensor> States {
             get {
-                Dictionary<string, Tensor> table = new Dictionary<string, Tensor>(){
+                Dictionary<string, Tensor> table = new() {
                     { "limit", limit.Tensor },
                 };
 

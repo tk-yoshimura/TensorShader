@@ -77,7 +77,7 @@ namespace TensorShaderCudaBackend.API {
                 if (src_ptr == IntPtr.Zero) {
                     throw new ArgumentException(nameof(src_ptr));
                 }
-                if (dst == null || count + index > (ulong)dst.LongLength) {
+                if (dst is null || count + index > (ulong)dst.LongLength) {
                     throw new ArgumentException(nameof(dst));
                 }
 
@@ -95,7 +95,7 @@ namespace TensorShaderCudaBackend.API {
 
             /// <summary>ホストデバイス間メモリ領域コピー</summary>
             internal static void CopyHostToDevice<T>(T[] src, IntPtr dst_ptr, ulong count, ulong index = 0) where T : struct, IComparable {
-                if (src == null || count + index > (ulong)src.LongLength) {
+                if (src is null || count + index > (ulong)src.LongLength) {
                     throw new ArgumentException(nameof(src));
                 }
                 if (dst_ptr == IntPtr.Zero) {

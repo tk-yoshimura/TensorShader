@@ -5,7 +5,7 @@ namespace TensorShader {
         /// <summary>論理和</summary>
         /// <remarks>Lotfi A.Zadehのファジー論理和に相当</remarks>
         public static Field Or(Field x1, Field x2) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.LogicalArithmetric.Or(x1, x2, y);
 
             link.Forward();

@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>TrivectorCast</summary>
         public static Field TrivectorCast(Field x, Field y, Field z) {
-            Field v = new Field();
+            Field v = new();
             Link link = new Links.Trivector.TrivectorCast(x, y, z, v);
 
             link.Forward();
@@ -40,7 +40,7 @@ namespace TensorShader.Links.Trivector {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (V.Grad == null) {
+            if (V.Grad is null) {
                 return;
             }
 

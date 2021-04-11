@@ -9,7 +9,7 @@ namespace TensorShaderTest.Functions.BinaryArithmetric {
         [TestMethod]
         public void ExecuteTest() {
             const int length = 256;
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
             int[] idxes = (new int[length]).Select((_, idx) => idx).ToArray();
 

@@ -11,7 +11,7 @@ namespace TensorShaderCudaBackendTest {
         public void CreateTest() {
             for (uint length = 1; length < 100; length++) {
 
-                CudaArray<float> arr = new CudaArray<float>(length);
+                CudaArray<float> arr = new(length);
 
                 Assert.IsTrue(arr.IsValid);
                 Assert.AreEqual(Marshal.SizeOf(typeof(float)) * length, (int)arr.ByteSize);
@@ -25,7 +25,7 @@ namespace TensorShaderCudaBackendTest {
 
             for (uint length = 1; length < 100; length++) {
 
-                CudaArray<double> arr = new CudaArray<double>(length);
+                CudaArray<double> arr = new(length);
 
                 Assert.IsTrue(arr.IsValid);
                 Assert.AreEqual(Marshal.SizeOf(typeof(double)) * length, (int)arr.ByteSize);
@@ -44,7 +44,7 @@ namespace TensorShaderCudaBackendTest {
 
                 float[] v = new float[length];
 
-                CudaArray<float> arr = new CudaArray<float>(length, zeroset: false);
+                CudaArray<float> arr = new(length, zeroset: false);
 
                 arr.Read(v);
 
@@ -57,7 +57,7 @@ namespace TensorShaderCudaBackendTest {
 
                 double[] v = new double[length];
 
-                CudaArray<double> arr = new CudaArray<double>(length, zeroset: false);
+                CudaArray<double> arr = new(length, zeroset: false);
 
                 arr.Read(v);
 
@@ -74,8 +74,8 @@ namespace TensorShaderCudaBackendTest {
                 float[] v = (new float[length]).Select((_, idx) => (float)idx).ToArray();
                 float[] v2 = new float[length];
 
-                CudaArray<float> arr = new CudaArray<float>(length);
-                CudaArray<float> arr2 = new CudaArray<float>(length);
+                CudaArray<float> arr = new(length);
+                CudaArray<float> arr2 = new(length);
 
                 arr.Write(v);
 
@@ -91,8 +91,8 @@ namespace TensorShaderCudaBackendTest {
                 double[] v = (new double[length]).Select((_, idx) => (double)idx).ToArray();
                 double[] v2 = new double[length];
 
-                CudaArray<double> arr = new CudaArray<double>(length);
-                CudaArray<double> arr2 = new CudaArray<double>(length);
+                CudaArray<double> arr = new(length);
+                CudaArray<double> arr2 = new(length);
 
                 arr.Write(v);
 
@@ -106,15 +106,15 @@ namespace TensorShaderCudaBackendTest {
 
         [TestMethod]
         public void WriteReadAsyncTest() {
-            Stream stream = new Stream();
+            Stream stream = new();
 
             for (uint length = 1; length < 100; length++) {
 
                 float[] v = (new float[length]).Select((_, idx) => (float)idx).ToArray();
                 float[] v2 = new float[length];
 
-                CudaArray<float> arr = new CudaArray<float>(length);
-                CudaArray<float> arr2 = new CudaArray<float>(length);
+                CudaArray<float> arr = new(length);
+                CudaArray<float> arr2 = new(length);
 
                 arr.Write(v);
 
@@ -130,8 +130,8 @@ namespace TensorShaderCudaBackendTest {
                 double[] v = (new double[length]).Select((_, idx) => (double)idx).ToArray();
                 double[] v2 = new double[length];
 
-                CudaArray<double> arr = new CudaArray<double>(length);
-                CudaArray<double> arr2 = new CudaArray<double>(length);
+                CudaArray<double> arr = new(length);
+                CudaArray<double> arr2 = new(length);
 
                 arr.Write(v);
 
@@ -151,8 +151,8 @@ namespace TensorShaderCudaBackendTest {
                 float[] v2 = new float[length];
                 float[] v3 = (new float[length]).Select((_, idx) => idx < length - 1 ? (float)idx : 0).ToArray();
 
-                CudaArray<float> arr = new CudaArray<float>(length);
-                CudaArray<float> arr2 = new CudaArray<float>(length);
+                CudaArray<float> arr = new(length);
+                CudaArray<float> arr2 = new(length);
 
                 arr.Write(v, length - 1);
 
@@ -169,8 +169,8 @@ namespace TensorShaderCudaBackendTest {
                 double[] v2 = new double[length];
                 double[] v3 = (new double[length]).Select((_, idx) => idx < length - 1 ? (double)idx : 0).ToArray();
 
-                CudaArray<double> arr = new CudaArray<double>(length);
-                CudaArray<double> arr2 = new CudaArray<double>(length);
+                CudaArray<double> arr = new(length);
+                CudaArray<double> arr2 = new(length);
 
                 arr.Write(v, length - 1);
 
@@ -184,7 +184,7 @@ namespace TensorShaderCudaBackendTest {
 
         [TestMethod]
         public void RegionWriteReadAsyncTest() {
-            Stream stream = new Stream();
+            Stream stream = new();
 
             for (uint length = 1; length < 100; length++) {
 
@@ -192,8 +192,8 @@ namespace TensorShaderCudaBackendTest {
                 float[] v2 = new float[length];
                 float[] v3 = (new float[length]).Select((_, idx) => idx < length - 1 ? (float)idx : 0).ToArray();
 
-                CudaArray<float> arr = new CudaArray<float>(length);
-                CudaArray<float> arr2 = new CudaArray<float>(length);
+                CudaArray<float> arr = new(length);
+                CudaArray<float> arr2 = new(length);
 
                 arr.Write(v, length - 1);
 
@@ -210,8 +210,8 @@ namespace TensorShaderCudaBackendTest {
                 double[] v2 = new double[length];
                 double[] v3 = (new double[length]).Select((_, idx) => idx < length - 1 ? (double)idx : 0).ToArray();
 
-                CudaArray<double> arr = new CudaArray<double>(length);
-                CudaArray<double> arr2 = new CudaArray<double>(length);
+                CudaArray<double> arr = new(length);
+                CudaArray<double> arr2 = new(length);
 
                 arr.Write(v, length - 1);
 
@@ -233,7 +233,7 @@ namespace TensorShaderCudaBackendTest {
                             .Select((_, idx) => idx >= index && idx < (index + count) ? 0 : (float)idx)
                             .ToArray();
 
-                        CudaArray<float> arr = new CudaArray<float>(v);
+                        CudaArray<float> arr = new(v);
 
                         arr.Zeroset(index, count);
 
@@ -254,7 +254,7 @@ namespace TensorShaderCudaBackendTest {
 
                 float[] v5 = new float[length];
 
-                CudaArray<float> arr = new CudaArray<float>(length);
+                CudaArray<float> arr = new(length);
 
                 arr.Write(v, length);
                 arr.Zeroset();
@@ -280,7 +280,7 @@ namespace TensorShaderCudaBackendTest {
                             .Select((_, idx) => idx >= index && idx < (index + count) ? 0 : (double)idx)
                             .ToArray();
 
-                        CudaArray<double> arr = new CudaArray<double>(v);
+                        CudaArray<double> arr = new(v);
 
                         arr.Zeroset(index, count);
 
@@ -301,7 +301,7 @@ namespace TensorShaderCudaBackendTest {
 
                 double[] v5 = new double[length];
 
-                CudaArray<double> arr = new CudaArray<double>(length);
+                CudaArray<double> arr = new(length);
 
                 arr.Write(v, length);
                 arr.Zeroset();
@@ -322,7 +322,7 @@ namespace TensorShaderCudaBackendTest {
 
         [TestMethod]
         public void ZerosetAsyncTest() {
-            Stream stream = new Stream();
+            Stream stream = new();
 
             for (uint length = 1; length < 100; length++) {
                 for (uint index = 0; index < length; index++) {
@@ -332,7 +332,7 @@ namespace TensorShaderCudaBackendTest {
                             .Select((_, idx) => idx >= index && idx < (index + count) ? 0 : (float)idx)
                             .ToArray();
 
-                        CudaArray<float> arr = new CudaArray<float>(v);
+                        CudaArray<float> arr = new(v);
 
                         arr.ZerosetAsync(stream, index, count);
 
@@ -353,7 +353,7 @@ namespace TensorShaderCudaBackendTest {
 
                 float[] v5 = new float[length];
 
-                CudaArray<float> arr = new CudaArray<float>(length);
+                CudaArray<float> arr = new(length);
 
                 arr.Write(v, length);
                 arr.ZerosetAsync(stream);
@@ -379,7 +379,7 @@ namespace TensorShaderCudaBackendTest {
                             .Select((_, idx) => idx >= index && idx < (index + count) ? 0 : (double)idx)
                             .ToArray();
 
-                        CudaArray<double> arr = new CudaArray<double>(v);
+                        CudaArray<double> arr = new(v);
 
                         arr.ZerosetAsync(stream, index, count);
 
@@ -400,7 +400,7 @@ namespace TensorShaderCudaBackendTest {
 
                 double[] v5 = new double[length];
 
-                CudaArray<double> arr = new CudaArray<double>(length);
+                CudaArray<double> arr = new(length);
 
                 arr.Write(v, length);
                 arr.ZerosetAsync(stream);
@@ -432,8 +432,8 @@ namespace TensorShaderCudaBackendTest {
                                     .Select((_, idx) => idx >= dst_index && idx < (dst_index + count) ? v[idx - dst_index + src_index] : 0)
                                     .ToArray();
 
-                                CudaArray<float> arr_src = new CudaArray<float>(v);
-                                CudaArray<float> arr_dst = new CudaArray<float>(dst_length);
+                                CudaArray<float> arr_src = new(v);
+                                CudaArray<float> arr_dst = new(dst_length);
 
                                 CudaArray<float>.Copy(arr_src, src_index, arr_dst, dst_index, count);
 
@@ -457,8 +457,8 @@ namespace TensorShaderCudaBackendTest {
 
                 float[] v6 = new float[length];
 
-                CudaArray<float> arr = new CudaArray<float>(v);
-                CudaArray<float> arr2 = new CudaArray<float>(length);
+                CudaArray<float> arr = new(v);
+                CudaArray<float> arr2 = new(length);
 
                 arr2.Zeroset();
                 arr.CopyTo(arr2, arr.Length);
@@ -492,8 +492,8 @@ namespace TensorShaderCudaBackendTest {
                                     .Select((_, idx) => idx >= dst_index && idx < (dst_index + count) ? v[idx - dst_index + src_index] : 0)
                                     .ToArray();
 
-                                CudaArray<double> arr_src = new CudaArray<double>(v);
-                                CudaArray<double> arr_dst = new CudaArray<double>(dst_length);
+                                CudaArray<double> arr_src = new(v);
+                                CudaArray<double> arr_dst = new(dst_length);
 
                                 CudaArray<double>.Copy(arr_src, src_index, arr_dst, dst_index, count);
 
@@ -517,8 +517,8 @@ namespace TensorShaderCudaBackendTest {
 
                 double[] v6 = new double[length];
 
-                CudaArray<double> arr = new CudaArray<double>(v);
-                CudaArray<double> arr2 = new CudaArray<double>(length);
+                CudaArray<double> arr = new(v);
+                CudaArray<double> arr2 = new(length);
 
                 arr2.Zeroset();
                 arr.CopyTo(arr2, arr.Length);
@@ -544,7 +544,7 @@ namespace TensorShaderCudaBackendTest {
 
         [TestMethod]
         public void CopyAsyncTest() {
-            Stream stream = new Stream();
+            Stream stream = new();
 
             for (uint src_length = 1; src_length <= 16; src_length++) {
                 for (uint dst_length = 1; dst_length <= 16; dst_length++) {
@@ -557,8 +557,8 @@ namespace TensorShaderCudaBackendTest {
                                     .Select((_, idx) => idx >= dst_index && idx < (dst_index + count) ? v[idx - dst_index + src_index] : 0)
                                     .ToArray();
 
-                                CudaArray<float> arr_src = new CudaArray<float>(v);
-                                CudaArray<float> arr_dst = new CudaArray<float>(dst_length);
+                                CudaArray<float> arr_src = new(v);
+                                CudaArray<float> arr_dst = new(dst_length);
 
                                 CudaArray<float>.CopyAsync(stream, arr_src, src_index, arr_dst, dst_index, count);
 
@@ -582,8 +582,8 @@ namespace TensorShaderCudaBackendTest {
 
                 float[] v6 = new float[length];
 
-                CudaArray<float> arr = new CudaArray<float>(v);
-                CudaArray<float> arr2 = new CudaArray<float>(length);
+                CudaArray<float> arr = new(v);
+                CudaArray<float> arr2 = new(length);
 
                 arr2.Zeroset();
                 arr.CopyToAsync(stream, arr2, arr.Length);
@@ -617,8 +617,8 @@ namespace TensorShaderCudaBackendTest {
                                     .Select((_, idx) => idx >= dst_index && idx < (dst_index + count) ? v[idx - dst_index + src_index] : 0)
                                     .ToArray();
 
-                                CudaArray<double> arr_src = new CudaArray<double>(v);
-                                CudaArray<double> arr_dst = new CudaArray<double>(dst_length);
+                                CudaArray<double> arr_src = new(v);
+                                CudaArray<double> arr_dst = new(dst_length);
 
                                 CudaArray<double>.CopyAsync(stream, arr_src, src_index, arr_dst, dst_index, count);
 
@@ -642,8 +642,8 @@ namespace TensorShaderCudaBackendTest {
 
                 double[] v6 = new double[length];
 
-                CudaArray<double> arr = new CudaArray<double>(v);
-                CudaArray<double> arr2 = new CudaArray<double>(length);
+                CudaArray<double> arr = new(v);
+                CudaArray<double> arr2 = new(length);
 
                 arr2.Zeroset();
                 arr.CopyToAsync(stream, arr2, arr.Length);
@@ -673,7 +673,7 @@ namespace TensorShaderCudaBackendTest {
                 float[] v = (new float[src_length]).Select((_, idx) => (float)idx).ToArray();
 
                 for (uint dst_length = src_length; dst_length <= 16; dst_length++) {
-                    CudaArray<float> arr = new CudaArray<float>(dst_length);
+                    CudaArray<float> arr = new(dst_length);
 
                     for (uint src_index = 0; src_index < src_length; src_index++) {
                         for (uint dst_index = 0; dst_index < dst_length; dst_index++) {
@@ -701,7 +701,7 @@ namespace TensorShaderCudaBackendTest {
                 double[] v = (new double[src_length]).Select((_, idx) => (double)idx).ToArray();
 
                 for (uint dst_length = src_length; dst_length <= 16; dst_length++) {
-                    CudaArray<double> arr = new CudaArray<double>(dst_length);
+                    CudaArray<double> arr = new(dst_length);
 
                     for (uint src_index = 0; src_index < src_length; src_index++) {
                         for (uint dst_index = 0; dst_index < dst_length; dst_index++) {
@@ -727,19 +727,19 @@ namespace TensorShaderCudaBackendTest {
 
             Assert.ThrowsException<ArgumentException>(() => {
                 float[] v = (new float[16]).Select((_, idx) => (float)idx).ToArray();
-                CudaArray<float> arr = new CudaArray<float>(17);
+                CudaArray<float> arr = new(17);
                 arr.Write(2, v, 0, 16);
             });
 
             Assert.ThrowsException<ArgumentException>(() => {
                 float[] v = (new float[16]).Select((_, idx) => (float)idx).ToArray();
-                CudaArray<float> arr = new CudaArray<float>(17);
+                CudaArray<float> arr = new(17);
                 arr.Write(0, v, 2, 16);
             });
 
             Assert.ThrowsException<ArgumentException>(() => {
                 float[] v = (new float[16]).Select((_, idx) => (float)idx).ToArray();
-                CudaArray<float> arr = new CudaArray<float>(17);
+                CudaArray<float> arr = new(17);
                 arr.Write(1, v, 1, 16);
             });
         }
@@ -748,7 +748,7 @@ namespace TensorShaderCudaBackendTest {
         public void RegionReadTest() {
             for (uint src_length = 1; src_length <= 16; src_length++) {
                 float[] v = (new float[src_length]).Select((_, idx) => (float)idx).ToArray();
-                CudaArray<float> arr = new CudaArray<float>(v);
+                CudaArray<float> arr = new(v);
 
                 for (uint dst_length = src_length; dst_length <= 16; dst_length++) {
                     for (uint src_index = 0; src_index < src_length; src_index++) {
@@ -772,7 +772,7 @@ namespace TensorShaderCudaBackendTest {
 
             for (uint src_length = 1; src_length <= 16; src_length++) {
                 double[] v = (new double[src_length]).Select((_, idx) => (double)idx).ToArray();
-                CudaArray<double> arr = new CudaArray<double>(v);
+                CudaArray<double> arr = new(v);
 
                 for (uint dst_length = src_length; dst_length <= 16; dst_length++) {
                     for (uint src_index = 0; src_index < src_length; src_index++) {
@@ -796,21 +796,21 @@ namespace TensorShaderCudaBackendTest {
 
             Assert.ThrowsException<ArgumentException>(() => {
                 float[] v = (new float[16]).Select((_, idx) => (float)idx).ToArray();
-                CudaArray<float> arr = new CudaArray<float>(v);
+                CudaArray<float> arr = new(v);
                 float[] v2 = new float[17];
                 arr.Read(2, v2, 0, 16);
             });
 
             Assert.ThrowsException<ArgumentException>(() => {
                 float[] v = (new float[16]).Select((_, idx) => (float)idx).ToArray();
-                CudaArray<float> arr = new CudaArray<float>(v);
+                CudaArray<float> arr = new(v);
                 float[] v2 = new float[17];
                 arr.Read(0, v2, 2, 16);
             });
 
             Assert.ThrowsException<ArgumentException>(() => {
                 float[] v = (new float[16]).Select((_, idx) => (float)idx).ToArray();
-                CudaArray<float> arr = new CudaArray<float>(v);
+                CudaArray<float> arr = new(v);
                 float[] v2 = new float[17];
                 arr.Read(1, v2, 1, 16);
             });
@@ -819,7 +819,7 @@ namespace TensorShaderCudaBackendTest {
         [TestMethod]
         public void BadCreateTest() {
             Assert.ThrowsException<TypeInitializationException>(() => {
-                CudaArray<char> arr = new CudaArray<char>(32);
+                CudaArray<char> arr = new(32);
             });
         }
     }

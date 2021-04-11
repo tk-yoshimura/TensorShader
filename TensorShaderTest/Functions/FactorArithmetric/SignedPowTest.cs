@@ -9,7 +9,7 @@ namespace TensorShaderTest.Functions.FactorArithmetric {
         [TestMethod]
         public void ExecuteTest() {
             const int length = 256, ch = 8;
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
             int[] idxes = (new int[length * ch]).Select((_, idx) => idx).ToArray();
 

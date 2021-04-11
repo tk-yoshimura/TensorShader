@@ -10,7 +10,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
     public class SumTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
             for (int n = 1; n <= 8; n++) {
                 for (int i = 0; i < 32; i++) {
@@ -20,7 +20,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
                         Shape shape = Shape.Vector(length);
                         float[][] xs = new float[n][];
                         OverflowCheckedTensor[] vs = new OverflowCheckedTensor[n];
-                        OverflowCheckedTensor u = new OverflowCheckedTensor(shape);
+                        OverflowCheckedTensor u = new(shape);
 
                         for (int j = 0; j < n; j++) {
                             xs[j] = (new float[length]).Select((_) => (float)rd.NextDouble()).ToArray();
@@ -29,7 +29,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
 
 
-                        Sum ope = new Sum(shape, n);
+                        Sum ope = new(shape, n);
 
                         Cuda.Profiler.Start();
 

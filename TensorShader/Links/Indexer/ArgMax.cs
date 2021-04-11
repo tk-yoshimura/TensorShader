@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>次元ごとに最大インデクスを抽出</summary>
         public static Field ArgMax(Field x) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Indexer.ArgMax(x, y);
 
             link.Forward();

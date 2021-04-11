@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>3次元ベクトル2次元カーネル積</summary>
         public static Tensor TrivectorKernelProduct2D(Tensor x, Tensor y, Tensor q, int kwidth, int kheight, bool transpose = false) {
             Functions.TrivectorConvolution.TrivectorKernelProduct2D function =
-                new Functions.TrivectorConvolution.TrivectorKernelProduct2D(x.Shape, y.Shape, kwidth, kheight, transpose);
+                new(x.Shape, y.Shape, kwidth, kheight, transpose);
 
-            Tensor w = new Tensor(function.OutShape);
+            Tensor w = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, y, q }, new Tensor[] { w });
 

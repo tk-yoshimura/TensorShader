@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>チャネルごとの2次元逆畳み込み</summary>
         public static Tensor ChannelwiseDeconvolution2D(Tensor x, Tensor w) {
             Functions.Connection2D.ChannelwiseDeconvolution function =
-                new Functions.Connection2D.ChannelwiseDeconvolution(x.Shape, w.Shape);
+                new(x.Shape, w.Shape);
 
-            Tensor y = new Tensor(function.OutShape);
+            Tensor y = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, w }, new Tensor[] { y });
 

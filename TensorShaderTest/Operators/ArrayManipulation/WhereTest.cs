@@ -9,7 +9,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
     public class WhereTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
             for (int i = 0; i < 32; i++) {
                 for (int length = i * 1024 - 2; length <= i * 1024 + 2; length++) {
@@ -21,12 +21,12 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
                     Shape shape = Shape.Vector(length);
 
-                    OverflowCheckedTensor condition = new OverflowCheckedTensor(shape, c);
-                    OverflowCheckedTensor v1 = new OverflowCheckedTensor(shape, x1);
-                    OverflowCheckedTensor v2 = new OverflowCheckedTensor(shape, x2);
-                    OverflowCheckedTensor vret = new OverflowCheckedTensor(shape);
+                    OverflowCheckedTensor condition = new(shape, c);
+                    OverflowCheckedTensor v1 = new(shape, x1);
+                    OverflowCheckedTensor v2 = new(shape, x2);
+                    OverflowCheckedTensor vret = new(shape);
 
-                    Where ope = new Where(shape);
+                    Where ope = new(shape);
 
                     ope.Execute(condition, v1, v2, vret);
 

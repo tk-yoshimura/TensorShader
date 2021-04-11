@@ -92,7 +92,7 @@ namespace TensorShaderPreset.Image {
         /// <param name="ksize">フィルタサイズ</param>
         /// <param name="smoothness">フィルタの方向滑らかさ</param>
         public static Field Direction(Field x, int dirs, int ksize = 5, double smoothness = 0.5) {
-            VariableField w = new VariableField(
+            VariableField w = new(
                 KernelDirection(dirs, ksize, smoothness),
                 name: $"Direction{dirs}"
             );

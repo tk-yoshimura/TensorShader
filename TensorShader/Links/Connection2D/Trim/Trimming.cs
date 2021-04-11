@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>トリミング</summary>
         public static Field Trimming2D(Field x, int trim) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Connection2D.Trimming(x, y, trim);
 
             link.Forward();
@@ -14,7 +14,7 @@ namespace TensorShader {
 
         /// <summary>トリミング</summary>
         public static Field Trimming2D(Field x, int trim_left, int trim_right, int trim_top, int trim_bottom) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Connection2D.Trimming(x, y, trim_left, trim_right, trim_top, trim_bottom);
 
             link.Forward();
@@ -65,7 +65,7 @@ namespace TensorShader.Links.Connection2D {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

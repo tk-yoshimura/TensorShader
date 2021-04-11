@@ -10,7 +10,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
     public class SortTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
             foreach (Shape shape in new Shape[]{
                    new Shape(ShapeType.Map, 2, 512, 512, 6),
@@ -38,10 +38,10 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
                     float[] x1 = (new float[shape.Length]).Select((_, idx) => (float)(((idx * 4969 % 17 + 3) * (idx * 6577 % 13 + 5) + idx) % 8)).ToArray();
 
-                    OverflowCheckedTensor inval = new OverflowCheckedTensor(shape, x1);
-                    OverflowCheckedTensor outval = new OverflowCheckedTensor(shape);
+                    OverflowCheckedTensor inval = new(shape, x1);
+                    OverflowCheckedTensor outval = new(shape);
 
-                    Sort ope = new Sort(shape, axis);
+                    Sort ope = new(shape, axis);
 
                     ope.Execute(inval, outval);
 
@@ -67,14 +67,14 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
         [TestMethod]
         public void ReferenceTest() {
-            Shape shape = new Shape(ShapeType.Map, 3, 4, 2, 7, 8, 5);
+            Shape shape = new(ShapeType.Map, 3, 4, 2, 7, 8, 5);
             int length = shape.Length;
 
             float[] xval = (new float[length]).Select((_, idx) => (float)(((idx * 4969 % 17 + 3) * (idx * 6577 % 13 + 5) + idx) % 8)).ToArray();
-            OverflowCheckedTensor x = new OverflowCheckedTensor(shape, xval);
-            OverflowCheckedTensor y = new OverflowCheckedTensor(shape);
+            OverflowCheckedTensor x = new(shape, xval);
+            OverflowCheckedTensor y = new(shape);
 
-            Sort ope = new Sort(shape, axis: 3);
+            Sort ope = new(shape, axis: 3);
 
             ope.Execute(x, y);
 
@@ -89,10 +89,10 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
             int length = shape.Length, axislength = shape[0];
 
             float[] xval = (new float[length]).Select((_, idx) => (float)(((idx * 4969 % 17 + 3) * (idx * 6577 % 13 + 5) + idx) % 8)).ToArray();
-            OverflowCheckedTensor x = new OverflowCheckedTensor(shape, xval);
-            OverflowCheckedTensor y = new OverflowCheckedTensor(shape);
+            OverflowCheckedTensor x = new(shape, xval);
+            OverflowCheckedTensor y = new(shape);
 
-            Sort ope = new Sort(shape, axis: 0);
+            Sort ope = new(shape, axis: 0);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/sort_random.nvvp");
             Cuda.Profiler.Start();
@@ -118,10 +118,10 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
             int length = shape.Length, axislength = shape[0];
 
             float[] xval = (new float[length]).Select((_, idx) => (float)(((idx * 4969 % 17 + 3) * (idx * 6577 % 13 + 5) + idx) % 8)).ToArray();
-            OverflowCheckedTensor x = new OverflowCheckedTensor(shape, xval);
-            OverflowCheckedTensor y = new OverflowCheckedTensor(shape);
+            OverflowCheckedTensor x = new(shape, xval);
+            OverflowCheckedTensor y = new(shape);
 
-            Sort ope = new Sort(shape, axis: 0);
+            Sort ope = new(shape, axis: 0);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/sort_maxlength.nvvp");
             Cuda.Profiler.Start();
@@ -147,10 +147,10 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
             int length = shape.Length, axislength = shape[0];
 
             float[] xval = (new float[length]).Select((_, idx) => (float)(((idx * 4969 % 17 + 3) * (idx * 6577 % 13 + 5) + idx) % 8)).ToArray();
-            OverflowCheckedTensor x = new OverflowCheckedTensor(shape, xval);
-            OverflowCheckedTensor y = new OverflowCheckedTensor(shape);
+            OverflowCheckedTensor x = new(shape, xval);
+            OverflowCheckedTensor y = new(shape);
 
-            Sort ope = new Sort(shape, axis: 0);
+            Sort ope = new(shape, axis: 0);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/sort_overmaxlength.nvvp");
             Cuda.Profiler.Start();
@@ -176,10 +176,10 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
             int length = shape.Length, axislength = shape[0];
 
             float[] xval = (new float[length]).Select((_, idx) => (float)idx).Reverse().ToArray();
-            OverflowCheckedTensor x = new OverflowCheckedTensor(shape, xval);
-            OverflowCheckedTensor y = new OverflowCheckedTensor(shape);
+            OverflowCheckedTensor x = new(shape, xval);
+            OverflowCheckedTensor y = new(shape);
 
-            Sort ope = new Sort(shape, axis: 0);
+            Sort ope = new(shape, axis: 0);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/sort_reverse.nvvp");
             Cuda.Profiler.Start();

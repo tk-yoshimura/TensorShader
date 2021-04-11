@@ -17,7 +17,7 @@ namespace TensorShaderUtilTest.ParameterUtil {
 
             (Flow flow, Parameters parameters) = Flow.Optimize(s);
             parameters.AddUpdater((parameter) => new Adam(parameter, 1e-2f));
-            ParametersValue<float> adam_alpha = new ParametersValue<float>(parameters, "Adam.Alpha");
+            ParametersValue<float> adam_alpha = new(parameters, "Adam.Alpha");
 
             Adam adam1 = (Adam)p1.Updaters[0];
             Adam adam2 = (Adam)p2.Updaters[0];

@@ -10,9 +10,9 @@ namespace TensorShaderTest.NdimArray {
         public void CreateTest() {
             int[] value = new int[60];
 
-            NdimArray<int> array1 = new NdimArray<int>(Shape.Map2D(3, 4, 5, 1), value, clone_value: false);
-            NdimArray<int> array2 = new NdimArray<int>(Shape.Map2D(3, 4, 5, 1), value, clone_value: true);
-            NdimArray<int> array3 = new NdimArray<int>(Shape.Map2D(3, 4, 5, 1));
+            NdimArray<int> array1 = new(Shape.Map2D(3, 4, 5, 1), value, clone_value: false);
+            NdimArray<int> array2 = new(Shape.Map2D(3, 4, 5, 1), value, clone_value: true);
+            NdimArray<int> array3 = new(Shape.Map2D(3, 4, 5, 1));
 
             value[0] = 1;
             array1[1, 0, 0, 0] = 2;
@@ -36,11 +36,11 @@ namespace TensorShaderTest.NdimArray {
         [TestMethod]
         public void BadCreateTest() {
             Assert.ThrowsException<ArgumentException>(() => {
-                NdimArray<int> array = new NdimArray<int>(Shape.Map2D(3, 4, 5, 2), new int[60], clone_value: false);
+                NdimArray<int> array = new(Shape.Map2D(3, 4, 5, 2), new int[60], clone_value: false);
             });
 
             Assert.ThrowsException<ArgumentException>(() => {
-                NdimArray<int> array = new NdimArray<int>(Shape.Map2D(3, 4, 5, 1), new int[120], clone_value: false);
+                NdimArray<int> array = new(Shape.Map2D(3, 4, 5, 1), new int[120], clone_value: false);
             });
         }
 
@@ -48,7 +48,7 @@ namespace TensorShaderTest.NdimArray {
         public void IndexerTest() {
             int[] value = new int[60];
 
-            NdimArray<int> array = new NdimArray<int>(new Shape(ShapeType.Undefined, 3, 4, 5), value, clone_value: false);
+            NdimArray<int> array = new(new Shape(ShapeType.Undefined, 3, 4, 5), value, clone_value: false);
 
             array[0, 0, 0] = 1;
             array[2, 0, 0] = 2;
@@ -83,7 +83,7 @@ namespace TensorShaderTest.NdimArray {
 
         [TestMethod]
         public void BadIndexerTest() {
-            NdimArray<int> array = new NdimArray<int>(new Shape(ShapeType.Undefined, 3, 4, 5), new int[60]);
+            NdimArray<int> array = new(new Shape(ShapeType.Undefined, 3, 4, 5), new int[60]);
 
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => {
                 array[3, 3, 4] = 1;

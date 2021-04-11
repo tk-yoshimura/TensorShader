@@ -23,7 +23,7 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
             (Flow flow, Parameters parameters) = Flow.Optimize(loss);
             parameters.AddUpdater((parameter) => new Nadam(parameter, alpha: 0.1f));
 
-            List<float> losses = new List<float>(), xs = new List<float>(), ys = new List<float>();
+            List<float> losses = new(), xs = new(), ys = new();
 
             for (int i = 0; i < loops; i++) {
                 flow.Execute();
@@ -73,7 +73,7 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
 
             Snapshot snapshot = parameters.Save();
 
-            List<float> losses_first = new List<float>(), xs_first = new List<float>(), ys_first = new List<float>();
+            List<float> losses_first = new(), xs_first = new(), ys_first = new();
 
             for (int i = 0; i < loops; i++) {
                 flow.Execute();
@@ -89,7 +89,7 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
 
             parameters.InitializeUpdater();
 
-            List<float> losses_second = new List<float>(), xs_second = new List<float>(), ys_second = new List<float>();
+            List<float> losses_second = new(), xs_second = new(), ys_second = new();
 
             for (int i = 0; i < loops; i++) {
                 flow.Execute();
@@ -106,7 +106,7 @@ namespace TensorShaderTest.Updaters.OptimizeMethod {
 
             parameters.Load(snapshot);
 
-            List<float> losses_third = new List<float>(), xs_third = new List<float>(), ys_third = new List<float>();
+            List<float> losses_third = new(), xs_third = new(), ys_third = new();
 
             for (int i = 0; i < loops; i++) {
                 flow.Execute();

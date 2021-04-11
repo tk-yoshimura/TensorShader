@@ -10,42 +10,136 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
     public class BroadcastTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
-            List<Shape> shapes = new List<Shape> {
+            List<Shape> shapes = new() {
                 Shape.Scalar,
-                Shape.Vector(1), Shape.Vector(2),
-                Shape.Map0D(1, 1), Shape.Map0D(2, 1), Shape.Map0D(1, 3), Shape.Map0D(2, 3),
-                Shape.Map1D(1, 1, 1), Shape.Map1D(2, 1, 1), Shape.Map1D(1, 3, 1), Shape.Map1D(2, 3, 1),
-                Shape.Map1D(1, 1, 5), Shape.Map1D(2, 1, 5), Shape.Map1D(1, 3, 5), Shape.Map1D(2, 3, 5),
-                Shape.Map2D(1, 1, 1, 1), Shape.Map2D(2, 1, 1, 1), Shape.Map2D(1, 3, 1, 1), Shape.Map2D(2, 3, 1, 1),
-                Shape.Map2D(1, 1, 5, 1), Shape.Map2D(2, 1, 5, 1), Shape.Map2D(1, 3, 5, 1), Shape.Map2D(2, 3, 5, 1),
-                Shape.Map2D(1, 1, 1, 7), Shape.Map2D(2, 1, 1, 7), Shape.Map2D(1, 3, 1, 7), Shape.Map2D(2, 3, 1, 7),
-                Shape.Map2D(1, 1, 5, 7), Shape.Map2D(2, 1, 5, 7), Shape.Map2D(1, 3, 5, 7), Shape.Map2D(2, 3, 5, 7),
-                Shape.Map3D(1, 1, 1, 1, 1), Shape.Map3D(2, 1, 1, 1, 1), Shape.Map3D(1, 3, 1, 1, 1), Shape.Map3D(2, 3, 1, 1, 1),
-                Shape.Map3D(1, 1, 5, 1, 1), Shape.Map3D(2, 1, 5, 1, 1), Shape.Map3D(1, 3, 5, 1, 1), Shape.Map3D(2, 3, 5, 1, 1),
-                Shape.Map3D(1, 1, 1, 7, 1), Shape.Map3D(2, 1, 1, 7, 1), Shape.Map3D(1, 3, 1, 7, 1), Shape.Map3D(2, 3, 1, 7, 1),
-                Shape.Map3D(1, 1, 5, 7, 1), Shape.Map3D(2, 1, 5, 7, 1), Shape.Map3D(1, 3, 5, 7, 1), Shape.Map3D(2, 3, 5, 7, 1),
-                Shape.Map3D(1, 1, 1, 1, 9), Shape.Map3D(2, 1, 1, 1, 9), Shape.Map3D(1, 3, 1, 1, 9), Shape.Map3D(2, 3, 1, 1, 9),
-                Shape.Map3D(1, 1, 5, 1, 9), Shape.Map3D(2, 1, 5, 1, 9), Shape.Map3D(1, 3, 5, 1, 9), Shape.Map3D(2, 3, 5, 1, 9),
-                Shape.Map3D(1, 1, 1, 7, 9), Shape.Map3D(2, 1, 1, 7, 9), Shape.Map3D(1, 3, 1, 7, 9), Shape.Map3D(2, 3, 1, 7, 9),
-                Shape.Map3D(1, 1, 5, 7, 9), Shape.Map3D(2, 1, 5, 7, 9), Shape.Map3D(1, 3, 5, 7, 9), Shape.Map3D(2, 3, 5, 7, 9),
-                new Shape(ShapeType.Map, 1, 1, 1, 1, 1, 1), new Shape(ShapeType.Map, 2, 1, 1, 1, 1, 1), new Shape(ShapeType.Map, 1, 3, 1, 1, 1, 1), new Shape(ShapeType.Map, 2, 3, 1, 1, 1, 1),
-                new Shape(ShapeType.Map, 1, 1, 5, 1, 1, 1), new Shape(ShapeType.Map, 2, 1, 5, 1, 1, 1), new Shape(ShapeType.Map, 1, 3, 5, 1, 1, 1), new Shape(ShapeType.Map, 2, 3, 5, 1, 1, 1),
-                new Shape(ShapeType.Map, 1, 1, 1, 7, 1, 1), new Shape(ShapeType.Map, 2, 1, 1, 7, 1, 1), new Shape(ShapeType.Map, 1, 3, 1, 7, 1, 1), new Shape(ShapeType.Map, 2, 3, 1, 7, 1, 1),
-                new Shape(ShapeType.Map, 1, 1, 5, 7, 1, 1), new Shape(ShapeType.Map, 2, 1, 5, 7, 1, 1), new Shape(ShapeType.Map, 1, 3, 5, 7, 1, 1), new Shape(ShapeType.Map, 2, 3, 5, 7, 1, 1),
-                new Shape(ShapeType.Map, 1, 1, 1, 1, 9, 1), new Shape(ShapeType.Map, 2, 1, 1, 1, 9, 1), new Shape(ShapeType.Map, 1, 3, 1, 1, 9, 1), new Shape(ShapeType.Map, 2, 3, 1, 1, 9, 1),
-                new Shape(ShapeType.Map, 1, 1, 5, 1, 9, 1), new Shape(ShapeType.Map, 2, 1, 5, 1, 9, 1), new Shape(ShapeType.Map, 1, 3, 5, 1, 9, 1), new Shape(ShapeType.Map, 2, 3, 5, 1, 9, 1),
-                new Shape(ShapeType.Map, 1, 1, 1, 7, 9, 1), new Shape(ShapeType.Map, 2, 1, 1, 7, 9, 1), new Shape(ShapeType.Map, 1, 3, 1, 7, 9, 1), new Shape(ShapeType.Map, 2, 3, 1, 7, 9, 1),
-                new Shape(ShapeType.Map, 1, 1, 5, 7, 9, 1), new Shape(ShapeType.Map, 2, 1, 5, 7, 9, 1), new Shape(ShapeType.Map, 1, 3, 5, 7, 9, 1), new Shape(ShapeType.Map, 2, 3, 5, 7, 9, 1),
-                new Shape(ShapeType.Map, 1, 1, 1, 1, 1, 11), new Shape(ShapeType.Map, 2, 1, 1, 1, 1, 11), new Shape(ShapeType.Map, 1, 3, 1, 1, 1, 11), new Shape(ShapeType.Map, 2, 3, 1, 1, 1, 11),
-                new Shape(ShapeType.Map, 1, 1, 5, 1, 1, 11), new Shape(ShapeType.Map, 2, 1, 5, 1, 1, 11), new Shape(ShapeType.Map, 1, 3, 5, 1, 1, 11), new Shape(ShapeType.Map, 2, 3, 5, 1, 1, 11),
-                new Shape(ShapeType.Map, 1, 1, 1, 7, 1, 11), new Shape(ShapeType.Map, 2, 1, 1, 7, 1, 11), new Shape(ShapeType.Map, 1, 3, 1, 7, 1, 11), new Shape(ShapeType.Map, 2, 3, 1, 7, 1, 11),
-                new Shape(ShapeType.Map, 1, 1, 5, 7, 1, 11), new Shape(ShapeType.Map, 2, 1, 5, 7, 1, 11), new Shape(ShapeType.Map, 1, 3, 5, 7, 1, 11), new Shape(ShapeType.Map, 2, 3, 5, 7, 1, 11),
-                new Shape(ShapeType.Map, 1, 1, 1, 1, 9, 11), new Shape(ShapeType.Map, 2, 1, 1, 1, 9, 11), new Shape(ShapeType.Map, 1, 3, 1, 1, 9, 11), new Shape(ShapeType.Map, 2, 3, 1, 1, 9, 11),
-                new Shape(ShapeType.Map, 1, 1, 5, 1, 9, 11), new Shape(ShapeType.Map, 2, 1, 5, 1, 9, 11), new Shape(ShapeType.Map, 1, 3, 5, 1, 9, 11), new Shape(ShapeType.Map, 2, 3, 5, 1, 9, 11),
-                new Shape(ShapeType.Map, 1, 1, 1, 7, 9, 11), new Shape(ShapeType.Map, 2, 1, 1, 7, 9, 11), new Shape(ShapeType.Map, 1, 3, 1, 7, 9, 11), new Shape(ShapeType.Map, 2, 3, 1, 7, 9, 11),
-                new Shape(ShapeType.Map, 1, 1, 5, 7, 9, 11), new Shape(ShapeType.Map, 2, 1, 5, 7, 9, 11), new Shape(ShapeType.Map, 1, 3, 5, 7, 9, 11), new Shape(ShapeType.Map, 2, 3, 5, 7, 9, 11),
+                Shape.Vector(1),
+                Shape.Vector(2),
+                Shape.Map0D(1, 1),
+                Shape.Map0D(2, 1),
+                Shape.Map0D(1, 3),
+                Shape.Map0D(2, 3),
+                Shape.Map1D(1, 1, 1),
+                Shape.Map1D(2, 1, 1),
+                Shape.Map1D(1, 3, 1),
+                Shape.Map1D(2, 3, 1),
+                Shape.Map1D(1, 1, 5),
+                Shape.Map1D(2, 1, 5),
+                Shape.Map1D(1, 3, 5),
+                Shape.Map1D(2, 3, 5),
+                Shape.Map2D(1, 1, 1, 1),
+                Shape.Map2D(2, 1, 1, 1),
+                Shape.Map2D(1, 3, 1, 1),
+                Shape.Map2D(2, 3, 1, 1),
+                Shape.Map2D(1, 1, 5, 1),
+                Shape.Map2D(2, 1, 5, 1),
+                Shape.Map2D(1, 3, 5, 1),
+                Shape.Map2D(2, 3, 5, 1),
+                Shape.Map2D(1, 1, 1, 7),
+                Shape.Map2D(2, 1, 1, 7),
+                Shape.Map2D(1, 3, 1, 7),
+                Shape.Map2D(2, 3, 1, 7),
+                Shape.Map2D(1, 1, 5, 7),
+                Shape.Map2D(2, 1, 5, 7),
+                Shape.Map2D(1, 3, 5, 7),
+                Shape.Map2D(2, 3, 5, 7),
+                Shape.Map3D(1, 1, 1, 1, 1),
+                Shape.Map3D(2, 1, 1, 1, 1),
+                Shape.Map3D(1, 3, 1, 1, 1),
+                Shape.Map3D(2, 3, 1, 1, 1),
+                Shape.Map3D(1, 1, 5, 1, 1),
+                Shape.Map3D(2, 1, 5, 1, 1),
+                Shape.Map3D(1, 3, 5, 1, 1),
+                Shape.Map3D(2, 3, 5, 1, 1),
+                Shape.Map3D(1, 1, 1, 7, 1),
+                Shape.Map3D(2, 1, 1, 7, 1),
+                Shape.Map3D(1, 3, 1, 7, 1),
+                Shape.Map3D(2, 3, 1, 7, 1),
+                Shape.Map3D(1, 1, 5, 7, 1),
+                Shape.Map3D(2, 1, 5, 7, 1),
+                Shape.Map3D(1, 3, 5, 7, 1),
+                Shape.Map3D(2, 3, 5, 7, 1),
+                Shape.Map3D(1, 1, 1, 1, 9),
+                Shape.Map3D(2, 1, 1, 1, 9),
+                Shape.Map3D(1, 3, 1, 1, 9),
+                Shape.Map3D(2, 3, 1, 1, 9),
+                Shape.Map3D(1, 1, 5, 1, 9),
+                Shape.Map3D(2, 1, 5, 1, 9),
+                Shape.Map3D(1, 3, 5, 1, 9),
+                Shape.Map3D(2, 3, 5, 1, 9),
+                Shape.Map3D(1, 1, 1, 7, 9),
+                Shape.Map3D(2, 1, 1, 7, 9),
+                Shape.Map3D(1, 3, 1, 7, 9),
+                Shape.Map3D(2, 3, 1, 7, 9),
+                Shape.Map3D(1, 1, 5, 7, 9),
+                Shape.Map3D(2, 1, 5, 7, 9),
+                Shape.Map3D(1, 3, 5, 7, 9),
+                Shape.Map3D(2, 3, 5, 7, 9),
+                new Shape(ShapeType.Map, 1, 1, 1, 1, 1, 1),
+                new Shape(ShapeType.Map, 2, 1, 1, 1, 1, 1),
+                new Shape(ShapeType.Map, 1, 3, 1, 1, 1, 1),
+                new Shape(ShapeType.Map, 2, 3, 1, 1, 1, 1),
+                new Shape(ShapeType.Map, 1, 1, 5, 1, 1, 1),
+                new Shape(ShapeType.Map, 2, 1, 5, 1, 1, 1),
+                new Shape(ShapeType.Map, 1, 3, 5, 1, 1, 1),
+                new Shape(ShapeType.Map, 2, 3, 5, 1, 1, 1),
+                new Shape(ShapeType.Map, 1, 1, 1, 7, 1, 1),
+                new Shape(ShapeType.Map, 2, 1, 1, 7, 1, 1),
+                new Shape(ShapeType.Map, 1, 3, 1, 7, 1, 1),
+                new Shape(ShapeType.Map, 2, 3, 1, 7, 1, 1),
+                new Shape(ShapeType.Map, 1, 1, 5, 7, 1, 1),
+                new Shape(ShapeType.Map, 2, 1, 5, 7, 1, 1),
+                new Shape(ShapeType.Map, 1, 3, 5, 7, 1, 1),
+                new Shape(ShapeType.Map, 2, 3, 5, 7, 1, 1),
+                new Shape(ShapeType.Map, 1, 1, 1, 1, 9, 1),
+                new Shape(ShapeType.Map, 2, 1, 1, 1, 9, 1),
+                new Shape(ShapeType.Map, 1, 3, 1, 1, 9, 1),
+                new Shape(ShapeType.Map, 2, 3, 1, 1, 9, 1),
+                new Shape(ShapeType.Map, 1, 1, 5, 1, 9, 1),
+                new Shape(ShapeType.Map, 2, 1, 5, 1, 9, 1),
+                new Shape(ShapeType.Map, 1, 3, 5, 1, 9, 1),
+                new Shape(ShapeType.Map, 2, 3, 5, 1, 9, 1),
+                new Shape(ShapeType.Map, 1, 1, 1, 7, 9, 1),
+                new Shape(ShapeType.Map, 2, 1, 1, 7, 9, 1),
+                new Shape(ShapeType.Map, 1, 3, 1, 7, 9, 1),
+                new Shape(ShapeType.Map, 2, 3, 1, 7, 9, 1),
+                new Shape(ShapeType.Map, 1, 1, 5, 7, 9, 1),
+                new Shape(ShapeType.Map, 2, 1, 5, 7, 9, 1),
+                new Shape(ShapeType.Map, 1, 3, 5, 7, 9, 1),
+                new Shape(ShapeType.Map, 2, 3, 5, 7, 9, 1),
+                new Shape(ShapeType.Map, 1, 1, 1, 1, 1, 11),
+                new Shape(ShapeType.Map, 2, 1, 1, 1, 1, 11),
+                new Shape(ShapeType.Map, 1, 3, 1, 1, 1, 11),
+                new Shape(ShapeType.Map, 2, 3, 1, 1, 1, 11),
+                new Shape(ShapeType.Map, 1, 1, 5, 1, 1, 11),
+                new Shape(ShapeType.Map, 2, 1, 5, 1, 1, 11),
+                new Shape(ShapeType.Map, 1, 3, 5, 1, 1, 11),
+                new Shape(ShapeType.Map, 2, 3, 5, 1, 1, 11),
+                new Shape(ShapeType.Map, 1, 1, 1, 7, 1, 11),
+                new Shape(ShapeType.Map, 2, 1, 1, 7, 1, 11),
+                new Shape(ShapeType.Map, 1, 3, 1, 7, 1, 11),
+                new Shape(ShapeType.Map, 2, 3, 1, 7, 1, 11),
+                new Shape(ShapeType.Map, 1, 1, 5, 7, 1, 11),
+                new Shape(ShapeType.Map, 2, 1, 5, 7, 1, 11),
+                new Shape(ShapeType.Map, 1, 3, 5, 7, 1, 11),
+                new Shape(ShapeType.Map, 2, 3, 5, 7, 1, 11),
+                new Shape(ShapeType.Map, 1, 1, 1, 1, 9, 11),
+                new Shape(ShapeType.Map, 2, 1, 1, 1, 9, 11),
+                new Shape(ShapeType.Map, 1, 3, 1, 1, 9, 11),
+                new Shape(ShapeType.Map, 2, 3, 1, 1, 9, 11),
+                new Shape(ShapeType.Map, 1, 1, 5, 1, 9, 11),
+                new Shape(ShapeType.Map, 2, 1, 5, 1, 9, 11),
+                new Shape(ShapeType.Map, 1, 3, 5, 1, 9, 11),
+                new Shape(ShapeType.Map, 2, 3, 5, 1, 9, 11),
+                new Shape(ShapeType.Map, 1, 1, 1, 7, 9, 11),
+                new Shape(ShapeType.Map, 2, 1, 1, 7, 9, 11),
+                new Shape(ShapeType.Map, 1, 3, 1, 7, 9, 11),
+                new Shape(ShapeType.Map, 2, 3, 1, 7, 9, 11),
+                new Shape(ShapeType.Map, 1, 1, 5, 7, 9, 11),
+                new Shape(ShapeType.Map, 2, 1, 5, 7, 9, 11),
+                new Shape(ShapeType.Map, 1, 3, 5, 7, 9, 11),
+                new Shape(ShapeType.Map, 2, 3, 5, 7, 9, 11),
             };
 
             foreach (Shape inshape in shapes) {
@@ -71,8 +165,8 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
                         }
 
                         float[] x = (new float[inshape.Length]).Select((_) => (float)rd.NextDouble()).ToArray();
-                        OverflowCheckedTensor intensor = new OverflowCheckedTensor(inshape, x);
-                        OverflowCheckedTensor outtensor = new OverflowCheckedTensor(outshape);
+                        OverflowCheckedTensor intensor = new(inshape, x);
+                        OverflowCheckedTensor outtensor = new(outshape);
 
                         broadcast.Execute(intensor, outtensor);
 
@@ -110,15 +204,15 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
         [TestMethod]
         public void ReferenceTest() {
-            Shape inshape = new Shape(ShapeType.Map, 3, 5, 1, 1, 2);
-            Shape outshape = new Shape(ShapeType.Map, 3, 5, 2, 3, 2);
+            Shape inshape = new(ShapeType.Map, 3, 5, 1, 1, 2);
+            Shape outshape = new(ShapeType.Map, 3, 5, 2, 3, 2);
 
             float[] x = (new float[inshape.Length]).Select((_, idx) => (float)idx).ToArray();
 
-            OverflowCheckedTensor intensor = new OverflowCheckedTensor(inshape, x);
-            OverflowCheckedTensor outtensor = new OverflowCheckedTensor(outshape);
+            OverflowCheckedTensor intensor = new(inshape, x);
+            OverflowCheckedTensor outtensor = new(outshape);
 
-            Broadcast broadcast = new Broadcast(inshape, outshape);
+            Broadcast broadcast = new(inshape, outshape);
 
             broadcast.Execute(intensor, outtensor);
 

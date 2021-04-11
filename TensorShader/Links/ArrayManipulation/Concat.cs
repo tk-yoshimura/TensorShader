@@ -6,7 +6,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>結合</summary>
         public static Field Concat(int axis, params Field[] xs) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.ArrayManipulation.Concat(axis, xs, y);
 
             link.Forward();
@@ -42,7 +42,7 @@ namespace TensorShader.Links.ArrayManipulation {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null || !XS.Select((field) => field.EnableBackprop).Any((b) => b)) {
+            if (Y.Grad is null || !XS.Select((field) => field.EnableBackprop).Any((b) => b)) {
                 return;
             }
 

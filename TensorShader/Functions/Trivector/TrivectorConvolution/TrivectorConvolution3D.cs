@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>3次元ベクトル3次元畳み込み</summary>
         public static Tensor TrivectorConvolution3D(Tensor x, Tensor w, bool gradmode = false) {
             Functions.TrivectorConvolution.TrivectorConvolution3D function =
-                new Functions.TrivectorConvolution.TrivectorConvolution3D(x.Shape, w.Shape, gradmode);
+                new(x.Shape, w.Shape, gradmode);
 
-            Tensor y = new Tensor(function.OutShape);
+            Tensor y = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, w }, new Tensor[] { y });
 

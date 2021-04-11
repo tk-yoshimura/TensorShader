@@ -2,7 +2,7 @@ namespace TensorShader {
     public abstract partial class VariableNode {
         /// <summary>インデクス</summary>
         public static InputNode Index(Shape shape, int axis) {
-            Tensor y = new Tensor(shape);
+            Tensor y = new(shape);
 
             InputNode inputnode = y;
             inputnode.Initializer = new Initializers.Index(y, axis);
@@ -14,7 +14,7 @@ namespace TensorShader {
     public partial class Tensor {
         /// <summary>インデクス</summary>
         public static Tensor Index(Shape shape, int axis) {
-            Tensor y = new Tensor(shape);
+            Tensor y = new(shape);
 
             Operator ope = new Operators.ArrayManipulation.Index(shape, axis);
 

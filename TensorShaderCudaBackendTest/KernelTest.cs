@@ -19,7 +19,7 @@ namespace TensorShaderCudaBackendTest {
         [TestMethod]
         public void CreateTest() {
 
-            Kernel kernel = new Kernel(code, "add");
+            Kernel kernel = new(code, "add");
 
             Assert.IsTrue(kernel.IsValid);
 
@@ -47,7 +47,7 @@ namespace TensorShaderCudaBackendTest {
         [TestMethod]
         public void VectorAddTest() {
             const int length = 20000;
-            Random random = new Random(1324);
+            Random random = new(1324);
 
             float[] h_a = (new float[length]).Select((_) => (float)random.NextDouble()).ToArray();
             float[] h_b = (new float[length]).Select((_) => (float)random.NextDouble()).ToArray();
@@ -56,11 +56,11 @@ namespace TensorShaderCudaBackendTest {
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "vectoradd.nvvp");
             Cuda.Profiler.Start();
 
-            CudaArray<float> d_a = new CudaArray<float>(h_a);
-            CudaArray<float> d_b = new CudaArray<float>(h_b);
-            CudaArray<float> d_c = new CudaArray<float>(length);
+            CudaArray<float> d_a = new(h_a);
+            CudaArray<float> d_b = new(h_b);
+            CudaArray<float> d_c = new(length);
 
-            Kernel kernel = new Kernel(code, "add");
+            Kernel kernel = new(code, "add");
 
             kernel.Execute(length, dynamic_shared_memory_bytes: 0, stream: null, d_a, d_b, d_c, length); // d_a=a, d_b=b, d_c=a+b
             kernel.Execute(length, dynamic_shared_memory_bytes: 0, stream: null, d_c, d_b, d_a, length); // d_a=a+2b, d_b=b, d_c=a+b
@@ -78,22 +78,22 @@ namespace TensorShaderCudaBackendTest {
         [TestMethod]
         public void VectorAddAsyncTest() {
             const int length = 20000;
-            Random random = new Random(1324);
+            Random random = new(1324);
 
             float[] h_a = (new float[length]).Select((_) => (float)random.NextDouble()).ToArray();
             float[] h_b = (new float[length]).Select((_) => (float)random.NextDouble()).ToArray();
             float[] h_c = new float[length];
 
-            Kernel kernel = new Kernel(code, "add");
+            Kernel kernel = new(code, "add");
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "vectoraddasync.nvvp");
             Cuda.Profiler.Start();
 
-            CudaArray<float> d_a = new CudaArray<float>(h_a);
-            CudaArray<float> d_b = new CudaArray<float>(h_b);
-            CudaArray<float> d_c = new CudaArray<float>(length);
+            CudaArray<float> d_a = new(h_a);
+            CudaArray<float> d_b = new(h_b);
+            CudaArray<float> d_c = new(length);
 
-            Stream stream = new Stream();
+            Stream stream = new();
 
             kernel.Execute(length, dynamic_shared_memory_bytes: 0, stream, d_a, d_b, d_c, length); // d_a=a, d_b=b, d_c=a+b
             kernel.Execute(length, dynamic_shared_memory_bytes: 0, stream, d_c, d_b, d_a, length); // d_a=a+2b, d_b=b, d_c=a+b

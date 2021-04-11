@@ -46,7 +46,7 @@ namespace TensorShaderCudaBackend.Shaders.Elementwise {
 
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
-            if (args == null || args.Length != Constants + Arrays + 1) {
+            if (args is null || args.Length != Constants + Arrays + 1) {
                 throw new ArgumentException(nameof(args));
             }
 

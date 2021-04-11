@@ -8,7 +8,7 @@ namespace TensorShaderTest.Links.ArrayManipulation {
     public class FlipTest {
         [TestMethod]
         public void ReferenceTest() {
-            Shape shape = new Shape(ShapeType.Map, 3, 4, 2, 7, 8, 5);
+            Shape shape = new(ShapeType.Map, 3, 4, 2, 7, 8, 5);
             int length = shape.Length;
 
             float[] xval = (new float[length]).Select((_, idx) => (float)(((idx * 4969 % 17 + 3) * (idx * 6577 % 13 + 5) + idx) % 8)).ToArray();

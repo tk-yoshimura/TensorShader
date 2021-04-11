@@ -19,7 +19,7 @@ namespace TensorShader {
             Function function =
                 new Functions.Connection2D.MaxUnpooling(stride);
 
-            Tensor gy = new Tensor(function.OutputShapes(x.Shape)[0]);
+            Tensor gy = new(function.OutputShapes(x.Shape)[0]);
 
             function.Execute(new Tensor[] { gx, y, x }, new Tensor[] { gy });
 

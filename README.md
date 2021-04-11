@@ -11,7 +11,7 @@ I tried to create a deep learning library of **Define and Run** / **NHWC format*
 For regression problems: **High precision calculate** by FP32-FP32 arithmetic (1/8 error of FP32 arithmetic)
 
 ## Requirement
-.NET Standard 2.0
+.NET 5.0
 
 CUDA 10.* 11.*, Compute Capability 5.0+
 

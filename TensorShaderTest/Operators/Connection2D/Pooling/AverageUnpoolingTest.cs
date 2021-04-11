@@ -21,14 +21,14 @@ namespace TensorShaderTest.Operators.Connection2D {
 
                                 float[] yval = (new float[outwidth * outheight * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-                                Map2D y = new Map2D(channels, outwidth, outheight, batch, yval);
+                                Map2D y = new(channels, outwidth, outheight, batch, yval);
 
                                 Map2D x = Reference(y, inwidth, inheight, stride);
 
-                                OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, inwidth, inheight, batch));
-                                OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, outwidth, outheight, batch), yval);
+                                OverflowCheckedTensor x_tensor = new(Shape.Map2D(channels, inwidth, inheight, batch));
+                                OverflowCheckedTensor y_tensor = new(Shape.Map2D(channels, outwidth, outheight, batch), yval);
 
-                                AverageUnpooling ope = new AverageUnpooling(inwidth, inheight, channels, stride, batch);
+                                AverageUnpooling ope = new(inwidth, inheight, channels, stride, batch);
 
                                 ope.Execute(y_tensor, x_tensor);
 
@@ -54,7 +54,7 @@ namespace TensorShaderTest.Operators.Connection2D {
             int channels = y.Channels, batch = y.Batch;
             int inw = outw / stride, inh = outh / stride;
 
-            Map2D x = new Map2D(channels, outw, outh, batch);
+            Map2D x = new(channels, outw, outh, batch);
 
             for (int th = 0; th < batch; th++) {
                 for (int ox, oy = 0; oy < outh; oy++) {
@@ -83,10 +83,10 @@ namespace TensorShaderTest.Operators.Connection2D {
             int outwidth = 512, outheight = 512, channels = 32, stride = 2, batch = 4;
             int inwidth = outwidth / stride, inheight = outheight / stride;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, inwidth, inheight, batch));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, outwidth, outheight, batch));
+            OverflowCheckedTensor x_tensor = new(Shape.Map2D(channels, inwidth, inheight, batch));
+            OverflowCheckedTensor y_tensor = new(Shape.Map2D(channels, outwidth, outheight, batch));
 
-            AverageUnpooling ope = new AverageUnpooling(outwidth, outheight, channels, stride, batch);
+            AverageUnpooling ope = new(outwidth, outheight, channels, stride, batch);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/averageunpool_2d.nvvp");
             Cuda.Profiler.Start();

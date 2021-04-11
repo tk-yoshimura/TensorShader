@@ -4,7 +4,7 @@ namespace TensorShaderCudaBackend {
 
     /// <summary>チャネル独立演算</summary>
     public static class Channelwise {
-        private readonly static Dictionary<string, Shader> shaders = new Dictionary<string, Shader>();
+        private readonly static Dictionary<string, Shader> shaders = new();
 
         private static Shader BinaryArithmetric(string name, string func, uint channels) {
             string key = $"{name} {nameof(channels)}={channels}";
@@ -23,7 +23,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = BinaryArithmetric("add_cw", "#y = #v + #x;", vector_length);
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -37,7 +37,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = BinaryArithmetric("mul_cw", "#y = #v * #x;", vector_length);
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -51,7 +51,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = BinaryArithmetric("subl_cw", "#y = #v - #x;", vector_length);
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -65,7 +65,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = BinaryArithmetric("subr_cw", "#y = #x - #v;", vector_length);
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -79,7 +79,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = BinaryArithmetric("divl_cw", "#y = #v / #x;", vector_length);
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -93,7 +93,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = BinaryArithmetric("divr_cw", "#y = #x / #v;", vector_length);
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -111,7 +111,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -129,7 +129,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 

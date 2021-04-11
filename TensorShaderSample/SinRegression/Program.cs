@@ -11,7 +11,7 @@ namespace SinRegression {
             const float start = -2, end = +2;
             const int points = 101, loops = 10000;
 
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             NdimArray<float> xval = NdimArrayUtil.Linspace(start, end, points);
             NdimArray<float> tval = xval.Select((v) => (float)Math.Sin(v));
@@ -36,7 +36,7 @@ namespace SinRegression {
 
             (Flow flow, Parameters parameters) = Flow.Optimize(err);
             parameters.AddUpdater((parameter) => new Adam(parameter, 1e-2f));
-            ParametersValue<float> adam_alpha = new ParametersValue<float>(parameters, "Adam.Alpha");
+            ParametersValue<float> adam_alpha = new(parameters, "Adam.Alpha");
 
             for (int i = 0; i < loops; i++) {
                 flow.Execute();

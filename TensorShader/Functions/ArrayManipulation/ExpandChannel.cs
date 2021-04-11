@@ -15,7 +15,7 @@ namespace TensorShader {
         public static Tensor ExpandChannel(Tensor x, int expands) {
             Function function = new Functions.ArrayManipulation.ExpandChannel(x.Shape, expands);
 
-            Tensor y = new Tensor(function.OutputShapes(x.Shape)[0]);
+            Tensor y = new(function.OutputShapes(x.Shape)[0]);
 
             function.Execute(new Tensor[] { x }, new Tensor[] { y });
 

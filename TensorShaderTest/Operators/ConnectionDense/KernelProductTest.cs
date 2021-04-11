@@ -18,17 +18,17 @@ namespace TensorShaderTest.Operators.ConnectionDense {
                         float[] xval = (new float[inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                         float[] yval = (new float[outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-                        Map0D x = new Map0D(inchannels, batch, xval);
-                        Map0D y = new Map0D(outchannels, batch, yval);
+                        Map0D x = new(inchannels, batch, xval);
+                        Map0D y = new(outchannels, batch, yval);
 
                         Filter0D gw = Reference(x, y);
 
-                        OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map0D(inchannels, batch), xval);
-                        OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map0D(outchannels, batch), yval);
+                        OverflowCheckedTensor x_tensor = new(Shape.Map0D(inchannels, batch), xval);
+                        OverflowCheckedTensor y_tensor = new(Shape.Map0D(outchannels, batch), yval);
 
-                        OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels));
+                        OverflowCheckedTensor gw_tensor = new(Shape.Kernel0D(inchannels, outchannels));
 
-                        KernelProduct ope = new KernelProduct(inchannels, outchannels, batch);
+                        KernelProduct ope = new(inchannels, outchannels, batch);
 
                         ope.Execute(x_tensor, y_tensor, gw_tensor);
 
@@ -53,7 +53,7 @@ namespace TensorShaderTest.Operators.ConnectionDense {
         public void LargeMapTest() {
             float max_err = 0;
 
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             int batch = 3;
             int inchannels = 49, outchannels = 50;
@@ -61,17 +61,17 @@ namespace TensorShaderTest.Operators.ConnectionDense {
             float[] xval = (new float[inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
             float[] yval = (new float[outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
 
-            Map0D x = new Map0D(inchannels, batch, xval);
-            Map0D y = new Map0D(outchannels, batch, yval);
+            Map0D x = new(inchannels, batch, xval);
+            Map0D y = new(outchannels, batch, yval);
 
             Filter0D gw = Reference(x, y);
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map0D(inchannels, batch), xval);
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map0D(outchannels, batch), yval);
+            OverflowCheckedTensor x_tensor = new(Shape.Map0D(inchannels, batch), xval);
+            OverflowCheckedTensor y_tensor = new(Shape.Map0D(outchannels, batch), yval);
 
-            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels));
+            OverflowCheckedTensor gw_tensor = new(Shape.Kernel0D(inchannels, outchannels));
 
-            KernelProduct ope = new KernelProduct(inchannels, outchannels, batch);
+            KernelProduct ope = new(inchannels, outchannels, batch);
 
             ope.Execute(x_tensor, y_tensor, gw_tensor);
 
@@ -92,12 +92,12 @@ namespace TensorShaderTest.Operators.ConnectionDense {
         public void SpeedTest() {
             int inchannels = 1024, outchannels = 1024, batch = 4;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map0D(inchannels, batch));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map0D(outchannels, batch));
+            OverflowCheckedTensor x_tensor = new(Shape.Map0D(inchannels, batch));
+            OverflowCheckedTensor y_tensor = new(Shape.Map0D(outchannels, batch));
 
-            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels));
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel0D(inchannels, outchannels));
 
-            KernelProduct ope = new KernelProduct(inchannels, outchannels, batch);
+            KernelProduct ope = new(inchannels, outchannels, batch);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/kernelproduct_dense.nvvp");
             Cuda.Profiler.Start();
@@ -110,7 +110,7 @@ namespace TensorShaderTest.Operators.ConnectionDense {
         public static Filter0D Reference(Map0D x, Map0D y) {
             int inchannels = x.Channels, outchannels = y.Channels, batch = x.Batch;
 
-            Filter0D w = new Filter0D(inchannels, outchannels);
+            Filter0D w = new(inchannels, outchannels);
 
             for (int th = 0; th < batch; th++) {
                 for (int inch, outch = 0; outch < outchannels; outch++) {
@@ -130,8 +130,8 @@ namespace TensorShaderTest.Operators.ConnectionDense {
             float[] xval = (new float[batch * inchannels]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] yval = (new float[batch * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            Map0D x = new Map0D(inchannels, batch, xval);
-            Map0D y = new Map0D(outchannels, batch, yval);
+            Map0D x = new(inchannels, batch, xval);
+            Map0D y = new(outchannels, batch, yval);
 
             Filter0D gw = Reference(x, y);
 

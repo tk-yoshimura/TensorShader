@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>混同行列</summary>
         public static Field ConfusionMatrix(Field x, Field t) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Evaluation.Classify.ConfusionMatrix(x, t, y);
 
             link.Forward();

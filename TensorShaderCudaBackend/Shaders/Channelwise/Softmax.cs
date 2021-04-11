@@ -64,7 +64,7 @@ namespace TensorShaderCudaBackend.Shaders.Channelwise {
 
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
-            if (args == null || args.Length != 4) {
+            if (args is null || args.Length != 4) {
                 throw new ArgumentException(nameof(args));
             }
 

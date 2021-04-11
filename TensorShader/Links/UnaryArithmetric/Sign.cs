@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>符号</summary>
         public static Field Sign(Field x) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.UnaryArithmetric.Sign(x, y);
 
             link.Forward();

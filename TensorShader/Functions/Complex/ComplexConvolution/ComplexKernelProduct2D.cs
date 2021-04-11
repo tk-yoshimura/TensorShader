@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>複素2次元カーネル積</summary>
         public static Tensor ComplexKernelProduct2D(Tensor x, Tensor y, int kwidth, int kheight, bool transpose = false) {
             Functions.ComplexConvolution.ComplexKernelProduct2D function =
-                new Functions.ComplexConvolution.ComplexKernelProduct2D(x.Shape, y.Shape, kwidth, kheight, transpose);
+                new(x.Shape, y.Shape, kwidth, kheight, transpose);
 
-            Tensor w = new Tensor(function.OutShape);
+            Tensor w = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, y }, new Tensor[] { w });
 

@@ -9,7 +9,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
     public class FlipTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
             foreach (Shape shape in new Shape[]{
                    new Shape(ShapeType.Map, 16, 19, 23, 8, 1, 5, 6),
@@ -23,10 +23,10 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
                     float[] x = (new float[shape.Length]).Select((_, idx) => (float)(((idx * 4969 % 17 + 3) * (idx * 6577 % 13 + 5) + idx) % 8)).ToArray();
 
-                    OverflowCheckedTensor inval = new OverflowCheckedTensor(shape, x);
-                    OverflowCheckedTensor outval = new OverflowCheckedTensor(shape);
+                    OverflowCheckedTensor inval = new(shape, x);
+                    OverflowCheckedTensor outval = new(shape);
 
-                    Flip ope = new Flip(shape, axis);
+                    Flip ope = new(shape, axis);
 
                     ope.Execute(inval, outval);
 
@@ -52,14 +52,14 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
         [TestMethod]
         public void ReferenceTest() {
-            Shape shape = new Shape(ShapeType.Map, 3, 4, 2, 7, 8, 5);
+            Shape shape = new(ShapeType.Map, 3, 4, 2, 7, 8, 5);
             int length = shape.Length;
 
             float[] xval = (new float[length]).Select((_, idx) => (float)(((idx * 4969 % 17 + 3) * (idx * 6577 % 13 + 5) + idx) % 8)).ToArray();
-            OverflowCheckedTensor x = new OverflowCheckedTensor(shape, xval);
-            OverflowCheckedTensor y = new OverflowCheckedTensor(shape);
+            OverflowCheckedTensor x = new(shape, xval);
+            OverflowCheckedTensor y = new(shape);
 
-            Flip ope = new Flip(shape, axis: 3);
+            Flip ope = new(shape, axis: 3);
 
             ope.Execute(x, y);
 

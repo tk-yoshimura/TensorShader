@@ -4,7 +4,7 @@ namespace TensorShader {
     public abstract partial class VariableNode {
         /// <summary>ベルヌーイ分布に従う2値</summary>
         public static InputNode BinaryRandom(Shape shape, Random random, float prob) {
-            Tensor y = new Tensor(shape);
+            Tensor y = new(shape);
 
             InputNode inputnode = y;
             inputnode.Initializer = new Initializers.Binary(y, random, prob);
@@ -16,7 +16,7 @@ namespace TensorShader {
     public partial class Tensor {
         /// <summary>ベルヌーイ分布に従う2値</summary>
         public static Tensor BinaryRandom(Shape shape, Random random, float prob) {
-            Tensor y = new Tensor(shape);
+            Tensor y = new(shape);
 
             Operator ope = new Operators.RandomGeneration.BinaryRandom(shape, random, prob);
 

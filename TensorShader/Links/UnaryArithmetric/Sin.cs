@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>正弦関数</summary>
         public static Field Sin(Field x) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.UnaryArithmetric.Sin(x, y);
 
             link.Forward();
@@ -28,7 +28,7 @@ namespace TensorShader.Links.UnaryArithmetric {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

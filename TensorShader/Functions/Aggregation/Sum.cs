@@ -5,7 +5,7 @@ namespace TensorShader {
     public abstract partial class VariableNode {
         /// <summary>総和</summary>
         public static VariableNode Sum(VariableNode x, int[] axes = null, bool keepdims = false) {
-            if (axes == null) {
+            if (axes is null) {
                 axes = (new int[x.Shape.Ndim]).Select((_, dim) => dim).ToArray();
             }
 
@@ -34,7 +34,7 @@ namespace TensorShader {
     public partial class Tensor {
         /// <summary>総和</summary>
         public static Tensor Sum(Tensor x, int[] axes = null, bool keepdims = false) {
-            if (axes == null) {
+            if (axes is null) {
                 axes = (new int[x.Shape.Ndim]).Select((_, dim) => dim).ToArray();
             }
 
@@ -43,7 +43,7 @@ namespace TensorShader {
 
                 Function function = new Functions.Aggregation.Sum(axis);
 
-                Tensor y = new Tensor(function.OutputShapes(x.Shape)[0]);
+                Tensor y = new(function.OutputShapes(x.Shape)[0]);
 
                 function.Execute(new Tensor[] { x }, new Tensor[] { y });
 

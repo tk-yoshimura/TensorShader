@@ -5,7 +5,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>Softmax</summary>
         public static Field Softmax(Field x) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Channelwise.Softmax(x, y);
 
             link.Forward();
@@ -39,7 +39,7 @@ namespace TensorShader.Links.Channelwise {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

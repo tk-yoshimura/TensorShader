@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>ポイントごとの1次元逆畳み込み</summary>
         public static Tensor PointwiseDeconvolution1D(Tensor x, Tensor w) {
             Functions.Connection1D.PointwiseDeconvolution function =
-                new Functions.Connection1D.PointwiseDeconvolution(x.Shape, w.Shape);
+                new(x.Shape, w.Shape);
 
-            Tensor y = new Tensor(function.OutShape);
+            Tensor y = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, w }, new Tensor[] { y });
 

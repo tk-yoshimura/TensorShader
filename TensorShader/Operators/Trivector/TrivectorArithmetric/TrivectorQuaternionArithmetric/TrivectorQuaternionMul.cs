@@ -24,7 +24,7 @@ namespace TensorShader.Operators.TrivectorQuaternionArithmetric {
             int[] s = vectorshape;
             s[0] = s[0] / 3 * 4;
 
-            Shape quatshape = new Shape(vectorshape.Type, s);
+            Shape quatshape = new(vectorshape.Type, s);
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{
                 (ArgumentType.In, vectorshape),

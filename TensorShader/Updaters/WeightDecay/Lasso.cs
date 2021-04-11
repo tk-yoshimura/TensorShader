@@ -50,7 +50,7 @@ namespace TensorShader.Updaters.WeightDecay {
         /// <summary>内部状態</summary>
         public override Dictionary<string, Tensor> States {
             get {
-                Dictionary<string, Tensor> table = new Dictionary<string, Tensor>(){
+                Dictionary<string, Tensor> table = new() {
                     { "decay", decay.Tensor },
                 };
 

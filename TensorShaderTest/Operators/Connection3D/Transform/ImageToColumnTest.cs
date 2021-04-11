@@ -20,15 +20,15 @@ namespace TensorShaderTest.Operators.Connection3D {
 
                             float[] xval = (new float[inwidth * inheight * indepth * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-                            Map3D x = new Map3D(channels, inwidth, inheight, indepth, batch, xval);
+                            Map3D x = new(channels, inwidth, inheight, indepth, batch, xval);
 
                             Map3D y = Reference(x, kwidth, kheight, kdepth);
 
-                            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, inwidth, inheight, indepth, batch), xval);
+                            OverflowCheckedTensor x_tensor = new(Shape.Map3D(channels, inwidth, inheight, indepth, batch), xval);
 
-                            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(new Shape(ShapeType.Column, kwidth * kheight * kdepth, channels, outwidth, outheight, outdepth, batch));
+                            OverflowCheckedTensor y_tensor = new(new Shape(ShapeType.Column, kwidth * kheight * kdepth, channels, outwidth, outheight, outdepth, batch));
 
-                            ImageToColumn ope = new ImageToColumn(inwidth, inheight, indepth, channels, kwidth, kheight, kdepth, batch);
+                            ImageToColumn ope = new(inwidth, inheight, indepth, channels, kwidth, kheight, kdepth, batch);
 
                             ope.Execute(x_tensor, y_tensor);
 
@@ -53,11 +53,11 @@ namespace TensorShaderTest.Operators.Connection3D {
             int inwidth = 32, inheight = 32, indepth = 32, channels = 31, ksize = 3;
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1, outdepth = indepth - ksize + 1;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, inwidth, inheight, indepth));
+            OverflowCheckedTensor x_tensor = new(Shape.Map3D(channels, inwidth, inheight, indepth));
 
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(new Shape(ShapeType.Column, ksize * ksize * ksize, channels, outwidth, outheight, outdepth, 1));
+            OverflowCheckedTensor y_tensor = new(new Shape(ShapeType.Column, ksize * ksize * ksize, channels, outwidth, outheight, outdepth, 1));
 
-            ImageToColumn ope = new ImageToColumn(inwidth, inheight, indepth, channels, ksize, ksize, ksize);
+            ImageToColumn ope = new(inwidth, inheight, indepth, channels, ksize, ksize, ksize);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/image_to_column_3d.nvvp");
             Cuda.Profiler.Start();
@@ -72,7 +72,7 @@ namespace TensorShaderTest.Operators.Connection3D {
             int inw = x.Width, inh = x.Height, ind = x.Depth;
             int outw = inw - kwidth + 1, outh = inh - kheight + 1, outd = ind - kdepth + 1;
 
-            Map3D y = new Map3D(kwidth * kheight * kdepth * channels, outw, outh, outd, batch);
+            Map3D y = new(kwidth * kheight * kdepth * channels, outw, outh, outd, batch);
 
             for (int k = 0, kx, ky, kz = 0; kz < kdepth; kz++) {
                 for (ky = 0; ky < kheight; ky++) {

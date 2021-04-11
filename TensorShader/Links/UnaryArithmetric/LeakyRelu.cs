@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>LeakyRelu</summary>
         public static Field LeakyRelu(Field x, float slope) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.UnaryArithmetric.LeakyRelu(x, y, slope);
 
             link.Forward();
@@ -34,7 +34,7 @@ namespace TensorShader.Links.UnaryArithmetric {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

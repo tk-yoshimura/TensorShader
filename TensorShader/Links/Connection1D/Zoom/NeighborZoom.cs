@@ -5,7 +5,7 @@ namespace TensorShader {
         /// <summary>最近傍補間</summary>
         /// <remarks>倍率2固定</remarks>
         public static Field NeighborZoom1D(Field x) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Connection1D.NeighborZoom(x, y);
 
             link.Forward();
@@ -37,7 +37,7 @@ namespace TensorShader.Links.Connection1D {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

@@ -19,17 +19,17 @@ namespace TensorShaderTest.Operators.Connection1D {
                             float[] xval = (new float[width * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                             float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-                            Map1D x = new Map1D(inchannels, width, batch, xval);
-                            Filter1D w = new Filter1D(inchannels, outchannels, 1, wval);
+                            Map1D x = new(inchannels, width, batch, xval);
+                            Filter1D w = new(inchannels, outchannels, 1, wval);
 
                             Map1D y = Reference(x, w);
 
-                            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, width, batch), xval);
-                            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels), wval);
+                            OverflowCheckedTensor x_tensor = new(Shape.Map1D(inchannels, width, batch), xval);
+                            OverflowCheckedTensor w_tensor = new(Shape.Kernel0D(inchannels, outchannels), wval);
 
-                            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, width, batch));
+                            OverflowCheckedTensor y_tensor = new(Shape.Map1D(outchannels, width, batch));
 
-                            PointwiseConvolution ope = new PointwiseConvolution(width, inchannels, outchannels, batch);
+                            PointwiseConvolution ope = new(width, inchannels, outchannels, batch);
 
                             ope.Execute(x_tensor, w_tensor, y_tensor);
 
@@ -54,7 +54,7 @@ namespace TensorShaderTest.Operators.Connection1D {
         public void LargeMapTest() {
             float max_err = 0;
 
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             int batch = 3;
             int inchannels = 49, outchannels = 50;
@@ -63,17 +63,17 @@ namespace TensorShaderTest.Operators.Connection1D {
             float[] xval = (new float[width * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
             float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
 
-            Map1D x = new Map1D(inchannels, width, batch, xval);
-            Filter1D w = new Filter1D(inchannels, outchannels, 1, wval);
+            Map1D x = new(inchannels, width, batch, xval);
+            Filter1D w = new(inchannels, outchannels, 1, wval);
 
             Map1D y = Reference(x, w);
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, width, batch), xval);
-            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels), wval);
+            OverflowCheckedTensor x_tensor = new(Shape.Map1D(inchannels, width, batch), xval);
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel0D(inchannels, outchannels), wval);
 
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, width, batch));
+            OverflowCheckedTensor y_tensor = new(Shape.Map1D(outchannels, width, batch));
 
-            PointwiseConvolution ope = new PointwiseConvolution(width, inchannels, outchannels, batch);
+            PointwiseConvolution ope = new(width, inchannels, outchannels, batch);
 
             ope.Execute(x_tensor, w_tensor, y_tensor);
 
@@ -94,12 +94,12 @@ namespace TensorShaderTest.Operators.Connection1D {
         public void SpeedTest() {
             int inwidth = 512, inchannels = 31, outchannels = 63;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth));
-            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels));
+            OverflowCheckedTensor x_tensor = new(Shape.Map1D(inchannels, inwidth));
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel0D(inchannels, outchannels));
 
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, inwidth));
+            OverflowCheckedTensor y_tensor = new(Shape.Map1D(outchannels, inwidth));
 
-            PointwiseConvolution ope = new PointwiseConvolution(inwidth, inchannels, outchannels);
+            PointwiseConvolution ope = new(inwidth, inchannels, outchannels);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/ptwise_convolution_1d.nvvp");
             Cuda.Profiler.Start();
@@ -113,7 +113,7 @@ namespace TensorShaderTest.Operators.Connection1D {
             int inchannels = x.Channels, outchannels = w.OutChannels, batch = x.Batch;
             int inw = x.Width;
 
-            Map1D y = new Map1D(outchannels, inw, batch);
+            Map1D y = new(outchannels, inw, batch);
 
             for (int th = 0; th < batch; th++) {
                 for (int ix = 0; ix < inw; ix++) {
@@ -139,8 +139,8 @@ namespace TensorShaderTest.Operators.Connection1D {
             float[] xval = (new float[batch * inwidth * inchannels]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[outchannels * inchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            Map1D x = new Map1D(inchannels, inwidth, batch, xval);
-            Filter1D w = new Filter1D(inchannels, outchannels, 1, wval);
+            Map1D x = new(inchannels, inwidth, batch, xval);
+            Filter1D w = new(inchannels, outchannels, 1, wval);
 
             Map1D y = Reference(x, w);
 

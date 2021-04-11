@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>複素全結合カーネル積</summary>
         public static Tensor ComplexKernelProductDense(Tensor x, Tensor y, bool transpose = false) {
             Functions.ComplexConvolution.ComplexKernelProductDense function =
-                new Functions.ComplexConvolution.ComplexKernelProductDense(x.Shape, y.Shape, transpose);
+                new(x.Shape, y.Shape, transpose);
 
-            Tensor w = new Tensor(function.OutShape);
+            Tensor w = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, y }, new Tensor[] { w });
 

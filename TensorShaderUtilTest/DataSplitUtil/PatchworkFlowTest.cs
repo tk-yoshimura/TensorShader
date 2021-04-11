@@ -25,11 +25,11 @@ namespace TensorShaderUtilTest.DataSplitUtil {
 
             (Flow flow, _) = Flow.Inference(output);
 
-            PatchworkFlow patchwork = new PatchworkFlow(flow, input, output, new int[] { 4 });
+            PatchworkFlow patchwork = new(flow, input, output, new int[] { 4 });
 
             patchwork.ProgressEvent += Patchwork_ProgressEvent;
 
-            Random random = new Random();
+            Random random = new();
 
             foreach (Shape shape in shapes) {
                 NdimArray<float> inmap = (shape, (new float[shape.Length]).Select((_) => (float)random.Next(1, 16)).ToArray());
@@ -51,15 +51,15 @@ namespace TensorShaderUtilTest.DataSplitUtil {
             };
 
             VariableField input = Shape.Map1D(3, 32, 2);
-            StoreField output = NeighborZoom1D(input + 1);;
+            StoreField output = NeighborZoom1D(input + 1); ;
 
             (Flow flow, _) = Flow.Inference(output);
 
-            PatchworkFlow patchwork = new PatchworkFlow(flow, input, output, new int[] { 4 });
+            PatchworkFlow patchwork = new(flow, input, output, new int[] { 4 });
 
             patchwork.ProgressEvent += Patchwork_ProgressEvent;
 
-            Random random = new Random();
+            Random random = new();
 
             foreach (Shape shape in shapes) {
                 NdimArray<float> inmap = (shape, (new float[shape.Length]).Select((_) => (float)random.Next(1, 16)).ToArray());
@@ -91,11 +91,11 @@ namespace TensorShaderUtilTest.DataSplitUtil {
 
             (Flow flow, _) = Flow.Inference(output);
 
-            PatchworkFlow patchwork = new PatchworkFlow(flow, input, output, new int[] { 4 });
+            PatchworkFlow patchwork = new(flow, input, output, new int[] { 4 });
 
             patchwork.ProgressEvent += Patchwork_ProgressEvent;
 
-            Random random = new Random();
+            Random random = new();
 
             foreach (Shape shape in shapes) {
                 NdimArray<float> inmap = (shape, (new float[shape.Length]).Select((_) => (float)random.Next(1, 16)).ToArray());
@@ -105,7 +105,7 @@ namespace TensorShaderUtilTest.DataSplitUtil {
                     for (int x = 0; x < inmap.Width / 2; x++) {
                         for (int c = 0; c < outmap.Channels; c++) {
                             Assert.AreEqual(
-                                (inmap[c, 2 * x, th] + inmap[c, 2 * x + 1, th]) / 2 + 1, 
+                                (inmap[c, 2 * x, th] + inmap[c, 2 * x + 1, th]) / 2 + 1,
                                 outmap[c, x, th], $"{shape}, {c}, {x}, {th}"
                             );
                         }
@@ -130,11 +130,11 @@ namespace TensorShaderUtilTest.DataSplitUtil {
 
             (Flow flow, _) = Flow.Inference(output);
 
-            PatchworkFlow patchwork = new PatchworkFlow(flow, input, output, new int[] { 4 });
+            PatchworkFlow patchwork = new(flow, input, output, new int[] { 4 });
 
             patchwork.ProgressEvent += Patchwork_ProgressEvent;
 
-            Random random = new Random();
+            Random random = new();
 
             foreach (Shape shape in shapes) {
                 NdimArray<float> inmap = (shape, (new float[shape.Length]).Select((_) => (float)random.Next(1, 16)).ToArray());
@@ -144,7 +144,7 @@ namespace TensorShaderUtilTest.DataSplitUtil {
                     for (int x = 0; x < inmap.Width / 3; x++) {
                         for (int c = 0; c < outmap.Channels; c++) {
                             Assert.AreEqual(
-                                (inmap[c, 3 * x, th] + inmap[c, 3 * x + 1, th] + inmap[c, 3 * x + 2, th]) / 3 + 1, 
+                                (inmap[c, 3 * x, th] + inmap[c, 3 * x + 1, th] + inmap[c, 3 * x + 2, th]) / 3 + 1,
                                 outmap[c, x, th], 1e-4f, $"{shape}, {c}, {x}, {th}"
                             );
                         }
@@ -166,10 +166,10 @@ namespace TensorShaderUtilTest.DataSplitUtil {
             StoreField output = Convolution1D(EdgePadding1D(input, 1), kernel);
 
             (Flow flow, _) = Flow.Inference(output);
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             {
-                PatchworkFlow patchwork = new PatchworkFlow(flow, input, output, 1);
+                PatchworkFlow patchwork = new(flow, input, output, 1);
 
                 patchwork.ProgressEvent += Patchwork_ProgressEvent;
 
@@ -187,7 +187,7 @@ namespace TensorShaderUtilTest.DataSplitUtil {
             }
 
             {
-                PatchworkFlow patchwork = new PatchworkFlow(flow, input, output, 0);
+                PatchworkFlow patchwork = new(flow, input, output, 0);
 
                 patchwork.ProgressEvent += Patchwork_ProgressEvent;
 
@@ -222,11 +222,11 @@ namespace TensorShaderUtilTest.DataSplitUtil {
 
             (Flow flow, _) = Flow.Inference(output);
 
-            PatchworkFlow patchwork = new PatchworkFlow(flow, input, output, new int[] { 4, 3 });
+            PatchworkFlow patchwork = new(flow, input, output, new int[] { 4, 3 });
 
             patchwork.ProgressEvent += Patchwork_ProgressEvent;
 
-            Random random = new Random();
+            Random random = new();
 
             foreach (Shape shape in shapes) {
                 NdimArray<float> inmap = (shape, (new float[shape.Length]).Select((_) => (float)random.Next(1, 16)).ToArray());
@@ -253,18 +253,18 @@ namespace TensorShaderUtilTest.DataSplitUtil {
 
             (Flow flow, _) = Flow.Inference(output);
 
-            PatchworkFlow patchwork = new PatchworkFlow(flow, input, output, new int[] { 4, 3 });
+            PatchworkFlow patchwork = new(flow, input, output, new int[] { 4, 3 });
 
             patchwork.ProgressEvent += Patchwork_ProgressEvent;
 
-            Random random = new Random();
+            Random random = new();
 
             foreach (Shape shape in shapes) {
                 NdimArray<float> inmap = (shape, (new float[shape.Length]).Select((_) => (float)random.Next(1, 16)).ToArray());
                 NdimArray<float> outmap = patchwork.Execute(inmap);
 
                 for (int th = 0; th < outmap.Batch; th++) {
-                    for (int y = 0; y < outmap.Height; y++) { 
+                    for (int y = 0; y < outmap.Height; y++) {
                         for (int x = 0; x < outmap.Width; x++) {
                             for (int c = 0; c < outmap.Channels; c++) {
                                 Assert.AreEqual(inmap[c, x / 2, y / 2, th] + 1, outmap[c, x, y, th], $"{shape}, {c}, {x}, {y}, {th}");
@@ -292,22 +292,22 @@ namespace TensorShaderUtilTest.DataSplitUtil {
 
             (Flow flow, _) = Flow.Inference(output);
 
-            PatchworkFlow patchwork = new PatchworkFlow(flow, input, output, new int[] { 4, 3 });
+            PatchworkFlow patchwork = new(flow, input, output, new int[] { 4, 3 });
 
             patchwork.ProgressEvent += Patchwork_ProgressEvent;
 
-            Random random = new Random();
+            Random random = new();
 
             foreach (Shape shape in shapes) {
                 NdimArray<float> inmap = (shape, (new float[shape.Length]).Select((_) => (float)random.Next(1, 16)).ToArray());
                 NdimArray<float> outmap = patchwork.Execute(inmap);
 
                 for (int th = 0; th < outmap.Batch; th++) {
-                    for (int y = 0; y < inmap.Height / 2; y++) { 
+                    for (int y = 0; y < inmap.Height / 2; y++) {
                         for (int x = 0; x < inmap.Width / 2; x++) {
                             for (int c = 0; c < outmap.Channels; c++) {
                                 Assert.AreEqual(
-                                    (inmap[c, 2 * x, 2 * y, th] + inmap[c, 2 * x + 1, 2 * y, th] + inmap[c, 2 * x, 2 * y + 1, th] + inmap[c, 2 * x + 1, 2 * y + 1, th]) / 4 + 1, 
+                                    (inmap[c, 2 * x, 2 * y, th] + inmap[c, 2 * x + 1, 2 * y, th] + inmap[c, 2 * x, 2 * y + 1, th] + inmap[c, 2 * x + 1, 2 * y + 1, th]) / 4 + 1,
                                     outmap[c, x, y, th], $"{shape}, {c}, {x}, {y}, {th}"
                                 );
                             }
@@ -334,24 +334,24 @@ namespace TensorShaderUtilTest.DataSplitUtil {
 
             (Flow flow, _) = Flow.Inference(output);
 
-            PatchworkFlow patchwork = new PatchworkFlow(flow, input, output, new int[] { 4, 3 });
+            PatchworkFlow patchwork = new(flow, input, output, new int[] { 4, 3 });
 
             patchwork.ProgressEvent += Patchwork_ProgressEvent;
 
-            Random random = new Random();
+            Random random = new();
 
             foreach (Shape shape in shapes) {
                 NdimArray<float> inmap = (shape, (new float[shape.Length]).Select((_) => (float)random.Next(1, 16)).ToArray());
                 NdimArray<float> outmap = patchwork.Execute(inmap);
 
                 for (int th = 0; th < outmap.Batch; th++) {
-                    for (int y = 0; y < inmap.Height / 3; y++) { 
+                    for (int y = 0; y < inmap.Height / 3; y++) {
                         for (int x = 0; x < inmap.Width / 3; x++) {
                             for (int c = 0; c < outmap.Channels; c++) {
                                 Assert.AreEqual(
-                                    (inmap[c, 3 * x, 3 * y, th] + inmap[c, 3 * x + 1, 3 * y, th] + inmap[c, 3 * x + 2, 3 * y, th] + 
-                                     inmap[c, 3 * x, 3 * y + 1, th] + inmap[c, 3 * x + 1, 3 * y + 1, th] + inmap[c, 3 * x + 2, 3 * y + 1, th] + 
-                                     inmap[c, 3 * x, 3 * y + 2, th] + inmap[c, 3 * x + 1, 3 * y + 2, th] + inmap[c, 3 * x + 2, 3 * y + 2, th]) / 9 + 1, 
+                                    (inmap[c, 3 * x, 3 * y, th] + inmap[c, 3 * x + 1, 3 * y, th] + inmap[c, 3 * x + 2, 3 * y, th] +
+                                     inmap[c, 3 * x, 3 * y + 1, th] + inmap[c, 3 * x + 1, 3 * y + 1, th] + inmap[c, 3 * x + 2, 3 * y + 1, th] +
+                                     inmap[c, 3 * x, 3 * y + 2, th] + inmap[c, 3 * x + 1, 3 * y + 2, th] + inmap[c, 3 * x + 2, 3 * y + 2, th]) / 9 + 1,
                                     outmap[c, x, y, th], 1e-4f, $"{shape}, {c}, {x}, {y}, {th}"
                                 );
                             }
@@ -375,10 +375,10 @@ namespace TensorShaderUtilTest.DataSplitUtil {
             StoreField output = Convolution2D(EdgePadding2D(input, 1), kernel);
 
             (Flow flow, _) = Flow.Inference(output);
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             {
-                PatchworkFlow patchwork = new PatchworkFlow(flow, input, output, 1);
+                PatchworkFlow patchwork = new(flow, input, output, 1);
 
                 patchwork.ProgressEvent += Patchwork_ProgressEvent;
 
@@ -396,7 +396,7 @@ namespace TensorShaderUtilTest.DataSplitUtil {
             }
 
             {
-                PatchworkFlow patchwork = new PatchworkFlow(flow, input, output, 0);
+                PatchworkFlow patchwork = new(flow, input, output, 0);
 
                 patchwork.ProgressEvent += Patchwork_ProgressEvent;
 
@@ -431,11 +431,11 @@ namespace TensorShaderUtilTest.DataSplitUtil {
 
             (Flow flow, _) = Flow.Inference(output);
 
-            PatchworkFlow patchwork = new PatchworkFlow(flow, input, output, new int[] { 4, 3, 2 });
+            PatchworkFlow patchwork = new(flow, input, output, new int[] { 4, 3, 2 });
 
             patchwork.ProgressEvent += Patchwork_ProgressEvent;
 
-            Random random = new Random();
+            Random random = new();
 
             foreach (Shape shape in shapes) {
                 NdimArray<float> inmap = (shape, (new float[shape.Length]).Select((_) => (float)random.Next(1, 16)).ToArray());
@@ -462,11 +462,11 @@ namespace TensorShaderUtilTest.DataSplitUtil {
 
             (Flow flow, _) = Flow.Inference(output);
 
-            PatchworkFlow patchwork = new PatchworkFlow(flow, input, output, new int[] { 4, 3, 2 });
+            PatchworkFlow patchwork = new(flow, input, output, new int[] { 4, 3, 2 });
 
             patchwork.ProgressEvent += Patchwork_ProgressEvent;
 
-            Random random = new Random();
+            Random random = new();
 
             foreach (Shape shape in shapes) {
                 NdimArray<float> inmap = (shape, (new float[shape.Length]).Select((_) => (float)random.Next(1, 16)).ToArray());
@@ -503,11 +503,11 @@ namespace TensorShaderUtilTest.DataSplitUtil {
 
             (Flow flow, _) = Flow.Inference(output);
 
-            PatchworkFlow patchwork = new PatchworkFlow(flow, input, output, new int[] { 4, 3, 2 });
+            PatchworkFlow patchwork = new(flow, input, output, new int[] { 4, 3, 2 });
 
             patchwork.ProgressEvent += Patchwork_ProgressEvent;
 
-            Random random = new Random();
+            Random random = new();
 
             foreach (Shape shape in shapes) {
                 NdimArray<float> inmap = (shape, (new float[shape.Length]).Select((_) => (float)random.Next(1, 16)).ToArray());
@@ -519,9 +519,9 @@ namespace TensorShaderUtilTest.DataSplitUtil {
                             for (int x = 0; x < inmap.Width / 2; x++) {
                                 for (int c = 0; c < outmap.Channels; c++) {
                                     Assert.AreEqual(
-                                        (inmap[c, 2 * x, 2 * y, 2 * z, th] + inmap[c, 2 * x + 1, 2 * y, 2 * z, th] + 
-                                         inmap[c, 2 * x, 2 * y + 1, 2 * z, th] + inmap[c, 2 * x + 1, 2 * y + 1, 2 * z, th] + 
-                                         inmap[c, 2 * x, 2 * y, 2 * z + 1, th] + inmap[c, 2 * x + 1, 2 * y, 2 * z + 1, th] + 
+                                        (inmap[c, 2 * x, 2 * y, 2 * z, th] + inmap[c, 2 * x + 1, 2 * y, 2 * z, th] +
+                                         inmap[c, 2 * x, 2 * y + 1, 2 * z, th] + inmap[c, 2 * x + 1, 2 * y + 1, 2 * z, th] +
+                                         inmap[c, 2 * x, 2 * y, 2 * z + 1, th] + inmap[c, 2 * x + 1, 2 * y, 2 * z + 1, th] +
                                          inmap[c, 2 * x, 2 * y + 1, 2 * z + 1, th] + inmap[c, 2 * x + 1, 2 * y + 1, 2 * z + 1, th]) / 8 + 1,
                                         outmap[c, x, y, z, th], $"{shape}, {c}, {x}, {y}, {z}, {th}"
                                     );
@@ -550,11 +550,11 @@ namespace TensorShaderUtilTest.DataSplitUtil {
 
             (Flow flow, _) = Flow.Inference(output);
 
-            PatchworkFlow patchwork = new PatchworkFlow(flow, input, output, new int[] { 4, 3, 2 });
+            PatchworkFlow patchwork = new(flow, input, output, new int[] { 4, 3, 2 });
 
             patchwork.ProgressEvent += Patchwork_ProgressEvent;
 
-            Random random = new Random();
+            Random random = new();
 
             foreach (Shape shape in shapes) {
                 NdimArray<float> inmap = (shape, (new float[shape.Length]).Select((_) => (float)random.Next(1, 16)).ToArray());
@@ -568,10 +568,10 @@ namespace TensorShaderUtilTest.DataSplitUtil {
                                     Assert.AreEqual(
                                         (inmap[c, 3 * x, 3 * y, 3 * z, th] + inmap[c, 3 * x + 1, 3 * y, 3 * z, th] + inmap[c, 3 * x + 2, 3 * y, 3 * z, th] +
                                          inmap[c, 3 * x, 3 * y + 1, 3 * z, th] + inmap[c, 3 * x + 1, 3 * y + 1, 3 * z, th] + inmap[c, 3 * x + 2, 3 * y + 1, 3 * z, th] +
-                                         inmap[c, 3 * x, 3 * y + 2, 3 * z, th] + inmap[c, 3 * x + 1, 3 * y + 2, 3 * z, th] + inmap[c, 3 * x + 2, 3 * y + 2, 3 * z, th] + 
+                                         inmap[c, 3 * x, 3 * y + 2, 3 * z, th] + inmap[c, 3 * x + 1, 3 * y + 2, 3 * z, th] + inmap[c, 3 * x + 2, 3 * y + 2, 3 * z, th] +
                                          inmap[c, 3 * x, 3 * y, 3 * z + 1, th] + inmap[c, 3 * x + 1, 3 * y, 3 * z + 1, th] + inmap[c, 3 * x + 2, 3 * y, 3 * z + 1, th] +
                                          inmap[c, 3 * x, 3 * y + 1, 3 * z + 1, th] + inmap[c, 3 * x + 1, 3 * y + 1, 3 * z + 1, th] + inmap[c, 3 * x + 2, 3 * y + 1, 3 * z + 1, th] +
-                                         inmap[c, 3 * x, 3 * y + 2, 3 * z + 1, th] + inmap[c, 3 * x + 1, 3 * y + 2, 3 * z + 1, th] + inmap[c, 3 * x + 2, 3 * y + 2, 3 * z + 1, th] + 
+                                         inmap[c, 3 * x, 3 * y + 2, 3 * z + 1, th] + inmap[c, 3 * x + 1, 3 * y + 2, 3 * z + 1, th] + inmap[c, 3 * x + 2, 3 * y + 2, 3 * z + 1, th] +
                                          inmap[c, 3 * x, 3 * y, 3 * z + 2, th] + inmap[c, 3 * x + 1, 3 * y, 3 * z + 2, th] + inmap[c, 3 * x + 2, 3 * y, 3 * z + 2, th] +
                                          inmap[c, 3 * x, 3 * y + 1, 3 * z + 2, th] + inmap[c, 3 * x + 1, 3 * y + 1, 3 * z + 2, th] + inmap[c, 3 * x + 2, 3 * y + 1, 3 * z + 2, th] +
                                          inmap[c, 3 * x, 3 * y + 2, 3 * z + 2, th] + inmap[c, 3 * x + 1, 3 * y + 2, 3 * z + 2, th] + inmap[c, 3 * x + 2, 3 * y + 2, 3 * z + 2, th]) / 27 + 1,
@@ -599,10 +599,10 @@ namespace TensorShaderUtilTest.DataSplitUtil {
             StoreField output = Convolution3D(EdgePadding3D(input, 1), kernel);
 
             (Flow flow, _) = Flow.Inference(output);
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             {
-                PatchworkFlow patchwork = new PatchworkFlow(flow, input, output, 1);
+                PatchworkFlow patchwork = new(flow, input, output, 1);
 
                 patchwork.ProgressEvent += Patchwork_ProgressEvent;
 
@@ -620,7 +620,7 @@ namespace TensorShaderUtilTest.DataSplitUtil {
             }
 
             {
-                PatchworkFlow patchwork = new PatchworkFlow(flow, input, output, 0);
+                PatchworkFlow patchwork = new(flow, input, output, 0);
 
                 patchwork.ProgressEvent += Patchwork_ProgressEvent;
 

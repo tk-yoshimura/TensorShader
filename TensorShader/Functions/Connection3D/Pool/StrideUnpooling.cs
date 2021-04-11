@@ -4,7 +4,7 @@ namespace TensorShader {
     public abstract partial class VariableNode {
         /// <summary>3次元ストライド逆プーリング</summary>
         public static VariableNode StrideUnpooling3D(VariableNode x, int stride, Shape outshape = null) {
-            if (outshape == null) {
+            if (outshape is null) {
                 int outwidth = x.Shape.Width * stride;
                 int outheight = x.Shape.Height * stride;
                 int outdepth = x.Shape.Depth * stride;
@@ -24,7 +24,7 @@ namespace TensorShader {
     public partial class Tensor {
         /// <summary>3次元ストライド逆プーリング</summary>
         public static Tensor StrideUnpooling3D(Tensor x, int stride, Shape outshape = null) {
-            if (outshape == null) {
+            if (outshape is null) {
                 int outwidth = x.Shape.Width * stride;
                 int outheight = x.Shape.Height * stride;
                 int outdepth = x.Shape.Depth * stride;
@@ -35,7 +35,7 @@ namespace TensorShader {
             Function function =
                 new Functions.Connection3D.StrideUnpooling(outshape, stride);
 
-            Tensor y = new Tensor(function.OutputShapes(x.Shape)[0]);
+            Tensor y = new(function.OutputShapes(x.Shape)[0]);
 
             function.Execute(new Tensor[] { x }, new Tensor[] { y });
 

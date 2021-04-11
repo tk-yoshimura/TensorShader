@@ -21,8 +21,8 @@ namespace TensorShaderCudaBackend {
 
                 int length = args.Length;
 
-                List<GCHandle> handle_list = new List<GCHandle>();
-                List<long> ptr_list = new List<long>();
+                List<GCHandle> handle_list = new();
+                List<long> ptr_list = new();
 
                 foreach (object obj in args) {
                     GCHandle handle;
@@ -52,7 +52,7 @@ namespace TensorShaderCudaBackend {
                     Marshal.FreeHGlobal(Ptr);
                     Ptr = IntPtr.Zero;
                 }
-                if (HandleList != null) {
+                if (HandleList is not null) {
                     foreach (GCHandle handle in HandleList) {
                         handle.Free();
                     }

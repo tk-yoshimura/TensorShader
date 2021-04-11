@@ -5,7 +5,7 @@ namespace TensorShader {
         /// <summary>論理積</summary>
         /// <remarks>Lotfi A.Zadehのファジー論理積に相当</remarks>
         public static Field And(Field x1, Field x2) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.LogicalArithmetric.And(x1, x2, y);
 
             link.Forward();

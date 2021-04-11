@@ -19,17 +19,17 @@ namespace TensorShaderTest.Operators.Connection3D {
                             float[] xval = (new float[width * height * depth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                             float[] gyval = (new float[width * height * depth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-                            Map3D x = new Map3D(inchannels, width, height, depth, batch, xval);
-                            Map3D gy = new Map3D(outchannels, width, height, depth, batch, gyval);
+                            Map3D x = new(inchannels, width, height, depth, batch, xval);
+                            Map3D gy = new(outchannels, width, height, depth, batch, gyval);
 
                             Filter3D gw = Reference(x, gy);
 
-                            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, width, height, depth, batch), xval);
-                            OverflowCheckedTensor gy_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, width, height, depth, batch), gyval);
+                            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, width, height, depth, batch), xval);
+                            OverflowCheckedTensor gy_tensor = new(Shape.Map3D(outchannels, width, height, depth, batch), gyval);
 
-                            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels));
+                            OverflowCheckedTensor gw_tensor = new(Shape.Kernel0D(inchannels, outchannels));
 
-                            PointwiseKernelProduct ope = new PointwiseKernelProduct(width, height, depth, inchannels, outchannels, batch);
+                            PointwiseKernelProduct ope = new(width, height, depth, inchannels, outchannels, batch);
 
                             ope.Execute(x_tensor, gy_tensor, gw_tensor);
 
@@ -54,7 +54,7 @@ namespace TensorShaderTest.Operators.Connection3D {
         public void LargeMapTest() {
             float max_err = 0;
 
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             int batch = 3;
             int inchannels = 49, outchannels = 50;
@@ -63,17 +63,17 @@ namespace TensorShaderTest.Operators.Connection3D {
             float[] xval = (new float[width * height * depth * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
             float[] gyval = (new float[width * height * depth * outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
 
-            Map3D x = new Map3D(inchannels, width, height, depth, batch, xval);
-            Map3D gy = new Map3D(outchannels, width, height, depth, batch, gyval);
+            Map3D x = new(inchannels, width, height, depth, batch, xval);
+            Map3D gy = new(outchannels, width, height, depth, batch, gyval);
 
             Filter3D gw = Reference(x, gy);
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, width, height, depth, batch), xval);
-            OverflowCheckedTensor gy_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, width, height, depth, batch), gyval);
+            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, width, height, depth, batch), xval);
+            OverflowCheckedTensor gy_tensor = new(Shape.Map3D(outchannels, width, height, depth, batch), gyval);
 
-            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels));
+            OverflowCheckedTensor gw_tensor = new(Shape.Kernel0D(inchannels, outchannels));
 
-            PointwiseKernelProduct ope = new PointwiseKernelProduct(width, height, depth, inchannels, outchannels, batch);
+            PointwiseKernelProduct ope = new(width, height, depth, inchannels, outchannels, batch);
 
             ope.Execute(x_tensor, gy_tensor, gw_tensor);
 
@@ -94,12 +94,12 @@ namespace TensorShaderTest.Operators.Connection3D {
         public void SpeedTest() {
             int width = 64, height = 64, depth = 64, inchannels = 32, outchannels = 32;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, width, height, depth));
-            OverflowCheckedTensor gy_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, width, height, depth));
+            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, width, height, depth));
+            OverflowCheckedTensor gy_tensor = new(Shape.Map3D(outchannels, width, height, depth));
 
-            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels));
+            OverflowCheckedTensor gw_tensor = new(Shape.Kernel0D(inchannels, outchannels));
 
-            PointwiseKernelProduct ope = new PointwiseKernelProduct(width, height, depth, inchannels, outchannels);
+            PointwiseKernelProduct ope = new(width, height, depth, inchannels, outchannels);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/ptwise_kernelproduct_3d.nvvp");
             Cuda.Profiler.Start();
@@ -113,7 +113,7 @@ namespace TensorShaderTest.Operators.Connection3D {
             int inchannels = x.Channels, outchannels = gy.Channels, batch = x.Batch;
             int inw = x.Width, inh = x.Height, ind = x.Depth;
 
-            Filter3D w = new Filter3D(inchannels, outchannels, 1, 1, 1);
+            Filter3D w = new(inchannels, outchannels, 1, 1, 1);
 
             for (int th = 0; th < batch; th++) {
                 for (int ix, iy, iz = 0; iz < ind; iz++) {
@@ -139,8 +139,8 @@ namespace TensorShaderTest.Operators.Connection3D {
             float[] xval = (new float[width * height * depth * inchannels]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] gyval = (new float[width * height * depth * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            Map3D x = new Map3D(inchannels, width, height, depth, 1, xval);
-            Map3D gy = new Map3D(outchannels, width, height, depth, 1, gyval);
+            Map3D x = new(inchannels, width, height, depth, 1, xval);
+            Map3D gy = new(outchannels, width, height, depth, 1, gyval);
 
             Filter3D gw = Reference(x, gy);
 

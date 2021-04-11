@@ -22,17 +22,17 @@ namespace TensorShaderTest.Operators.Connection1D {
                                 float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                                 float[] wval = (new float[kwidth * inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-                                Map1D y = new Map1D(outchannels, outwidth, batch, yval);
-                                Filter1D w = new Filter1D(inchannels, outchannels, kwidth, wval);
+                                Map1D y = new(outchannels, outwidth, batch, yval);
+                                Filter1D w = new(inchannels, outchannels, kwidth, wval);
 
                                 Map1D x = Reference(y, w, inwidth, kwidth);
 
-                                OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth, batch), yval);
-                                OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels, outchannels, kwidth), wval);
+                                OverflowCheckedTensor y_tensor = new(Shape.Map1D(outchannels, outwidth, batch), yval);
+                                OverflowCheckedTensor w_tensor = new(Shape.Kernel1D(inchannels, outchannels, kwidth), wval);
 
-                                OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth, batch));
+                                OverflowCheckedTensor x_tensor = new(Shape.Map1D(inchannels, inwidth, batch));
 
-                                Deconvolution ope = new Deconvolution(outwidth, outchannels, inchannels, kwidth, batch);
+                                Deconvolution ope = new(outwidth, outchannels, inchannels, kwidth, batch);
 
                                 ope.Execute(y_tensor, w_tensor, x_tensor);
 
@@ -58,7 +58,7 @@ namespace TensorShaderTest.Operators.Connection1D {
         public void LargeMapTest() {
             float max_err = 0;
 
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             int batch = 3;
             int inchannels = 49, outchannels = 50;
@@ -69,17 +69,17 @@ namespace TensorShaderTest.Operators.Connection1D {
             float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
             float[] wval = (new float[kwidth * inchannels * outchannels]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
 
-            Map1D y = new Map1D(outchannels, outwidth, batch, yval);
-            Filter1D w = new Filter1D(inchannels, outchannels, kwidth, wval);
+            Map1D y = new(outchannels, outwidth, batch, yval);
+            Filter1D w = new(inchannels, outchannels, kwidth, wval);
 
             Map1D x = Reference(y, w, inwidth, kwidth);
 
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth, batch), yval);
-            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels, outchannels, kwidth), wval);
+            OverflowCheckedTensor y_tensor = new(Shape.Map1D(outchannels, outwidth, batch), yval);
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel1D(inchannels, outchannels, kwidth), wval);
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth, batch));
+            OverflowCheckedTensor x_tensor = new(Shape.Map1D(inchannels, inwidth, batch));
 
-            Deconvolution ope = new Deconvolution(outwidth, outchannels, inchannels, kwidth, batch);
+            Deconvolution ope = new(outwidth, outchannels, inchannels, kwidth, batch);
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 
@@ -101,12 +101,12 @@ namespace TensorShaderTest.Operators.Connection1D {
             int inwidth = 512, inchannels = 31, outchannels = 31, ksize = 3;
             int outwidth = inwidth - ksize + 1;
 
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth));
-            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel1D(inchannels, outchannels, ksize));
+            OverflowCheckedTensor y_tensor = new(Shape.Map1D(outchannels, outwidth));
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel1D(inchannels, outchannels, ksize));
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth));
+            OverflowCheckedTensor x_tensor = new(Shape.Map1D(inchannels, inwidth));
 
-            Deconvolution ope = new Deconvolution(outwidth, outchannels, inchannels, ksize);
+            Deconvolution ope = new(outwidth, outchannels, inchannels, ksize);
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 
@@ -126,7 +126,7 @@ namespace TensorShaderTest.Operators.Connection1D {
                 throw new ArgumentException("mismatch shape");
             }
 
-            Map1D x = new Map1D(inchannels, inw, batch);
+            Map1D x = new(inchannels, inw, batch);
 
             for (int kx = 0; kx < kwidth; kx++) {
                 for (int th = 0; th < batch; th++) {
@@ -154,8 +154,8 @@ namespace TensorShaderTest.Operators.Connection1D {
             float[] yval = (new float[outwidth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[kwidth * outchannels * inchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            Map1D y = new Map1D(outchannels, outwidth, batch, yval);
-            Filter1D w = new Filter1D(inchannels, outchannels, kwidth, wval);
+            Map1D y = new(outchannels, outwidth, batch, yval);
+            Filter1D w = new(inchannels, outchannels, kwidth, wval);
 
             Map1D x = Reference(y, w, inwidth, kwidth);
 

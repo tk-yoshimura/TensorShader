@@ -9,7 +9,7 @@ namespace TensorShaderTest.Operators.Trivector {
     public class TrivectorBinaryArithmetricTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
             for (int i = 0; i < 64; i++) {
                 for (int length = i * 1020 - 6; length <= i * 1020 + 6; length += 3) {
@@ -21,11 +21,11 @@ namespace TensorShaderTest.Operators.Trivector {
                     Shape inshape = Shape.Vector(length);
                     Shape outshape = Shape.Vector(length);
 
-                    OverflowCheckedTensor v1 = new OverflowCheckedTensor(inshape, x);
-                    OverflowCheckedTensor v2 = new OverflowCheckedTensor(inshape, y);
-                    OverflowCheckedTensor v3 = new OverflowCheckedTensor(outshape);
+                    OverflowCheckedTensor v1 = new(inshape, x);
+                    OverflowCheckedTensor v2 = new(inshape, y);
+                    OverflowCheckedTensor v3 = new(outshape);
 
-                    TrivectorCross ope = new TrivectorCross(inshape);
+                    TrivectorCross ope = new(inshape);
 
                     ope.Execute(v1, v2, v3);
 

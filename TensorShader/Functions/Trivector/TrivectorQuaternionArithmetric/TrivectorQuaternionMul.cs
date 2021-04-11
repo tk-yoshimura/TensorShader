@@ -15,7 +15,7 @@ namespace TensorShader {
         public static Tensor TrivectorQuaternionMul(Tensor v, Tensor q) {
             Function function = new Functions.TrivectorArithmetric.TrivectorQuaternionMul();
 
-            Tensor u = new Tensor(v.Shape);
+            Tensor u = new(v.Shape);
 
             function.Execute(new Tensor[] { v, q }, new Tensor[] { u });
 

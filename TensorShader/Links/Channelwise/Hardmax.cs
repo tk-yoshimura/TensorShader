@@ -5,7 +5,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>Hardmax</summary>
         public static Field Hardmax(Field x) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Channelwise.Hardmax(x, y);
 
             link.Forward();

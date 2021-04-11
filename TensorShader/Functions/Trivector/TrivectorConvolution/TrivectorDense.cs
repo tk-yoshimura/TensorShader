@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>3次元ベクトル全結合</summary>
         public static Tensor TrivectorDense(Tensor x, Tensor w, bool gradmode = false) {
             Functions.TrivectorConvolution.TrivectorDense function =
-                new Functions.TrivectorConvolution.TrivectorDense(x.Shape, w.Shape, gradmode);
+                new(x.Shape, w.Shape, gradmode);
 
-            Tensor y = new Tensor(function.OutShape);
+            Tensor y = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, w }, new Tensor[] { y });
 

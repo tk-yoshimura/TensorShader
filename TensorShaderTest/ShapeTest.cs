@@ -281,22 +281,22 @@ namespace TensorShaderTest {
         [TestMethod]
         public void BadCreateTest() {
             Assert.ThrowsException<ArgumentException>(
-                () => { Shape shape = new Shape(ShapeType.Map, new int[] { 2, 4, -1, 3 }); },
+                () => { Shape shape = new(ShapeType.Map, new int[] { 2, 4, -1, 3 }); },
                 "non positive"
             );
 
             Assert.ThrowsException<ArgumentOutOfRangeException>(
-                () => { Shape shape = new Shape(ShapeType.Map, new int[] { 256, 256, 256, 64 }); },
+                () => { Shape shape = new(ShapeType.Map, new int[] { 256, 256, 256, 64 }); },
                 "too large"
             );
 
             Assert.ThrowsException<ArgumentException>(
-                () => { Shape shape = new Shape(ShapeType.Scalar, new int[] { 4 }); },
+                () => { Shape shape = new(ShapeType.Scalar, new int[] { 4 }); },
                 "scalar"
             );
 
             Assert.ThrowsException<ArgumentException>(
-                () => { Shape shape = new Shape(ShapeType.Vector, new int[] { 4, 4 }); },
+                () => { Shape shape = new(ShapeType.Vector, new int[] { 4, 4 }); },
                 "vector"
             );
         }

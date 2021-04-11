@@ -177,7 +177,7 @@ namespace TensorShader {
         }
 
         /// <summary>スカラー</summary>
-        public static Shape Scalar => new Shape(ShapeType.Scalar);
+        public static Shape Scalar => new(ShapeType.Scalar);
 
         /// <summary>ベクター</summary>
         public static Shape Vector(int channels) {
@@ -260,7 +260,7 @@ namespace TensorShader {
 
         /// <summary>等価か判定</summary>
         public override bool Equals(object obj) {
-            if (obj == null || !(obj is Shape)) return false;
+            if (obj is null || !(obj is Shape)) return false;
 
             Shape obj_shape = (Shape)obj;
 

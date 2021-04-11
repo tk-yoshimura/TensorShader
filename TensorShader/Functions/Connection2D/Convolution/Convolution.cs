@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>2次元畳み込み</summary>
         public static Tensor Convolution2D(Tensor x, Tensor w) {
             Functions.Connection2D.Convolution function =
-                new Functions.Connection2D.Convolution(x.Shape, w.Shape);
+                new(x.Shape, w.Shape);
 
-            Tensor y = new Tensor(function.OutShape);
+            Tensor y = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, w }, new Tensor[] { y });
 

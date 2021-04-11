@@ -22,14 +22,14 @@ namespace TensorShaderTest.Operators.Connection3D {
 
                                     float[] xval = (new float[inwidth * inheight * inchannels * indepth * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-                                    Map3D x = new Map3D(inchannels, inwidth, inheight, indepth, batch, xval);
+                                    Map3D x = new(inchannels, inwidth, inheight, indepth, batch, xval);
 
                                     Map3D y = Reference(x, scale);
 
-                                    OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
-                                    OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch));
+                                    OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
+                                    OverflowCheckedTensor y_tensor = new(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch));
 
-                                    ChannelToSpace ope = new ChannelToSpace(inwidth, inheight, indepth, inchannels, scale, batch);
+                                    ChannelToSpace ope = new(inwidth, inheight, indepth, inchannels, scale, batch);
 
                                     ope.Execute(x_tensor, y_tensor);
 
@@ -57,10 +57,10 @@ namespace TensorShaderTest.Operators.Connection3D {
             int inwidth = 64, inheight = 64, indepth = 64, inchannels = 32, scale = 2;
             int outwidth = inwidth * scale, outheight = inheight * scale, outdepth = indepth * scale, outchannels = inchannels / (scale * scale * scale);
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, inwidth, inheight, indepth));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth));
+            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, inwidth, inheight, indepth));
+            OverflowCheckedTensor y_tensor = new(Shape.Map3D(outchannels, outwidth, outheight, outdepth));
 
-            ChannelToSpace ope = new ChannelToSpace(inwidth, inheight, indepth, inchannels, scale);
+            ChannelToSpace ope = new(inwidth, inheight, indepth, inchannels, scale);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/channel_to_space_3d.nvvp");
             Cuda.Profiler.Start();
@@ -79,7 +79,7 @@ namespace TensorShaderTest.Operators.Connection3D {
             int inw = x.Width, inh = x.Height, ind = x.Depth, outw = inw * scale, outh = inh * scale, outd = ind * scale;
             int outchannels = inchannels / (scale * scale * scale);
 
-            Map3D y = new Map3D(outchannels, outw, outh, outd, batch);
+            Map3D y = new(outchannels, outw, outh, outd, batch);
 
             for (int th = 0; th < batch; th++) {
                 for (int ix, iy, iz = 0; iz < ind; iz++) {
@@ -114,7 +114,7 @@ namespace TensorShaderTest.Operators.Connection3D {
 
             float[] xval = (new float[inwidth * inheight * indepth * inchannels]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-            Map3D x = new Map3D(inchannels, inwidth, inheight, indepth, 1, xval);
+            Map3D x = new(inchannels, inwidth, inheight, indepth, 1, xval);
 
             Map3D y = Reference(x, scale);
 

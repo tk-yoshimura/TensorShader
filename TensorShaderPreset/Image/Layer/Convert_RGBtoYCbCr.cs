@@ -24,7 +24,7 @@ namespace TensorShaderPreset.Image {
 
         /// <summary>RGB->YCbCr(ITU-R BT.601)</summary>
         public static Field RGBtoYCbCr(Field x) {
-            VariableField w = new VariableField(KernelRGBtoYCbCr, name: "RGBtoYCbCr");
+            VariableField w = new(KernelRGBtoYCbCr, name: "RGBtoYCbCr");
 
             return PointwiseConvolution2D(x, w);
         }
@@ -48,7 +48,7 @@ namespace TensorShaderPreset.Image {
 
         /// <summary>YCbCr->RGB(ITU-R BT.601)</summary>
         public static Field YCbCrtoRGB(Field x) {
-            VariableField w = new VariableField(KernelYCbCrtoRGB, name: "YCbCrtoRGB");
+            VariableField w = new(KernelYCbCrtoRGB, name: "YCbCrtoRGB");
 
             return PointwiseConvolution2D(x, w);
         }

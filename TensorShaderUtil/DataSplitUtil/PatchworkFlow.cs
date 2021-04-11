@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using TensorShader;
 
 namespace TensorShaderUtil.DataSplitUtil {
@@ -19,7 +19,7 @@ namespace TensorShaderUtil.DataSplitUtil {
 
         /// <summary>ブロック計算完了時イベント</summary>
         public event ProgressEventHandler ProgressEvent;
-        
+
         /// <summary>コンストラクタ</summary>
         /// <param name="flow">計算フロー</param>
         /// <param name="input">入力フィールド</param>
@@ -27,7 +27,7 @@ namespace TensorShaderUtil.DataSplitUtil {
         /// <param name="margin">出力フィールドへのブロック展開時に切り捨てられるマージン</param>
         /// <remarks>入出力フィールドのマップサイズは整数比である必要がある</remarks>
         public PatchworkFlow(Flow flow, VariableField input, StoreField output, int[] margin) {
-            if (margin == null || margin.Length < 1 || margin.Any((m) => m < 0)) {
+            if (margin is null || margin.Length < 1 || margin.Any((m) => m < 0)) {
                 throw new ArgumentException(nameof(margin));
             }
             if (input.Shape.Type != ShapeType.Map || output.Shape.Type != ShapeType.Map) {
@@ -70,7 +70,7 @@ namespace TensorShaderUtil.DataSplitUtil {
                     margin[i] = (margin[i] + s - 1) / s * s;
                 }
 
-                if (inmapshape[i] <= margin[i] * 2) { 
+                if (inmapshape[i] <= margin[i] * 2) {
                     throw new ArgumentException(nameof(margin));
                 }
             }
@@ -113,7 +113,7 @@ namespace TensorShaderUtil.DataSplitUtil {
                     enable_pad = true;
                 }
 
-                if ((r > 1) && (s % r != 0)) { 
+                if ((r > 1) && (s % r != 0)) {
                     s -= s % r;
                 }
 
@@ -124,7 +124,7 @@ namespace TensorShaderUtil.DataSplitUtil {
                 inmap = NdimArray<float>.EdgePaddingND(inmap, pads);
             }
 
-            Shape shape = new Shape(
+            Shape shape = new(
                 ShapeType.Map,
                     (new int[] { inmap.Channels }).Concat(
                     ((int[])inmap.Shape).Skip(1).Take(ndim).Select(
@@ -166,7 +166,7 @@ namespace TensorShaderUtil.DataSplitUtil {
 
             int n = inxcoords.Blocks;
 
-            for (int i = 0, x = 0; x < inxcoords.Blocks; x++, i++) { 
+            for (int i = 0, x = 0; x < inxcoords.Blocks; x++, i++) {
                 int patch_ix = inxcoords.PatchCoords[x], patch_iw = inxcoords.PatchSizes[x], block_ix = inxcoords.BlockCoords[x];
                 int patch_ox = RemapCoord(patch_ix, inmap.Width, outmap.Width);
                 int patch_ow = RemapCoord(patch_iw, inmap.Width, outmap.Width);
@@ -177,7 +177,7 @@ namespace TensorShaderUtil.DataSplitUtil {
                 flow.Execute();
                 NdimArray<float> outblock = output.State;
 
-                NdimArray<float>.RegionCopy1D(outblock, outmap, 
+                NdimArray<float>.RegionCopy1D(outblock, outmap,
                     patch_ox - block_ox, patch_ox, patch_ow);
 
                 ProgressEvent?.Invoke(i + 1, n);
@@ -196,7 +196,7 @@ namespace TensorShaderUtil.DataSplitUtil {
                 int patch_oh = RemapCoord(patch_ih, inmap.Height, outmap.Height);
                 int block_oy = RemapCoord(block_iy, inmap.Height, outmap.Height);
 
-                for (int x = 0; x < inxcoords.Blocks; x++, i++) { 
+                for (int x = 0; x < inxcoords.Blocks; x++, i++) {
                     int patch_ix = inxcoords.PatchCoords[x], patch_iw = inxcoords.PatchSizes[x], block_ix = inxcoords.BlockCoords[x];
                     int patch_ox = RemapCoord(patch_ix, inmap.Width, outmap.Width);
                     int patch_ow = RemapCoord(patch_iw, inmap.Width, outmap.Width);
@@ -207,8 +207,8 @@ namespace TensorShaderUtil.DataSplitUtil {
                     flow.Execute();
                     NdimArray<float> outblock = output.State;
 
-                    NdimArray<float>.RegionCopy2D(outblock, outmap, 
-                        patch_ox - block_ox, patch_ox, patch_ow, 
+                    NdimArray<float>.RegionCopy2D(outblock, outmap,
+                        patch_ox - block_ox, patch_ox, patch_ow,
                         patch_oy - block_oy, patch_oy, patch_oh);
 
                     ProgressEvent?.Invoke(i + 1, n);

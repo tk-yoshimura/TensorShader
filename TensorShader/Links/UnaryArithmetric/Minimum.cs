@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>最小値</summary>
         public static Field Minimum(Field x, float c) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.UnaryArithmetric.Minimum(x, y, c);
 
             link.Forward();
@@ -34,7 +34,7 @@ namespace TensorShader.Links.UnaryArithmetric {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

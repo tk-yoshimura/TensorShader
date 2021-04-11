@@ -13,7 +13,7 @@ namespace TensorShaderTest {
             Tensor intensor = 1;
 
             {
-                ParameterField f1 = new ParameterField(intensor);
+                ParameterField f1 = new(intensor);
 
                 (Flow flow, List<ParameterField> parameters) = Flow.Optimize(f1);
 
@@ -29,7 +29,7 @@ namespace TensorShaderTest {
             }
 
             {
-                VariableField f1 = new VariableField(intensor);
+                VariableField f1 = new(intensor);
 
                 (Flow flow, List<ParameterField> parameters) = Flow.Optimize(f1);
 
@@ -44,7 +44,7 @@ namespace TensorShaderTest {
             }
 
             {
-                ParameterField f1 = new ParameterField(intensor);
+                ParameterField f1 = new(intensor);
                 StoreField n1 = f1;
 
                 (Flow flow, _) = Flow.Inference(n1);
@@ -75,7 +75,7 @@ namespace TensorShaderTest {
             }
 
             {
-                ParameterField f1 = new ParameterField(intensor);
+                ParameterField f1 = new(intensor);
 
                 (Flow optimize_flow, List<ParameterField> parameters) = Flow.Optimize(f1);
 
@@ -108,7 +108,7 @@ namespace TensorShaderTest {
             }
 
             {
-                VariableField f1 = new VariableField(intensor);
+                VariableField f1 = new(intensor);
 
                 (Flow optimize_flow, List<ParameterField> parameters) = Flow.Optimize(f1);
 
@@ -140,7 +140,7 @@ namespace TensorShaderTest {
             }
 
             {
-                ParameterField f1 = new ParameterField(intensor);
+                ParameterField f1 = new(intensor);
                 StoreField n1 = f1;
 
                 (Flow inference_flow, _) = Flow.Inference(n1);
@@ -172,7 +172,7 @@ namespace TensorShaderTest {
             }
 
             {
-                VariableField f1 = new VariableField(intensor);
+                VariableField f1 = new(intensor);
                 StoreField n1 = f1;
 
                 (Flow inference_flow, _) = Flow.Inference(n1);
@@ -209,7 +209,7 @@ namespace TensorShaderTest {
             Tensor outtensor = 2;
 
             {
-                ParameterField f1 = new ParameterField(intensor);
+                ParameterField f1 = new(intensor);
                 VariableField fo = outtensor;
 
                 Field f2 = Abs(f1);
@@ -231,7 +231,7 @@ namespace TensorShaderTest {
             }
 
             {
-                ParameterField f1 = new ParameterField(intensor);
+                ParameterField f1 = new(intensor);
 
                 Field f3 = Abs(f1);
                 StoreField n3 = f3;
@@ -251,7 +251,7 @@ namespace TensorShaderTest {
             }
 
             {
-                ParameterField f1 = new ParameterField(intensor);
+                ParameterField f1 = new(intensor);
                 VariableField fo = outtensor;
 
                 Field f2 = Abs(f1);
@@ -292,7 +292,7 @@ namespace TensorShaderTest {
             }
 
             {
-                ParameterField f1 = new ParameterField(intensor);
+                ParameterField f1 = new(intensor);
                 VariableField fo = outtensor;
 
                 Field f2 = Abs(f1);
@@ -340,9 +340,9 @@ namespace TensorShaderTest {
             Tensor outtensor = -3;
 
             {
-                ParameterField f1 = new ParameterField(in1tensor);
-                ParameterField f2 = new ParameterField(in2tensor);
-                VariableField fo = new VariableField(outtensor);
+                ParameterField f1 = new(in1tensor);
+                ParameterField f2 = new(in2tensor);
+                VariableField fo = new(outtensor);
 
                 Field f3 = f1 + f2;
                 Field ferr = f3 - fo;
@@ -365,9 +365,9 @@ namespace TensorShaderTest {
             }
 
             {
-                ParameterField f1 = new ParameterField(in1tensor);
-                VariableField f2 = new VariableField(in2tensor);
-                VariableField fo = new VariableField(outtensor);
+                ParameterField f1 = new(in1tensor);
+                VariableField f2 = new(in2tensor);
+                VariableField fo = new(outtensor);
 
                 Field f3 = f1 + f2;
                 Field ferr = f3 - fo;
@@ -390,8 +390,8 @@ namespace TensorShaderTest {
             }
 
             {
-                ParameterField f1 = new ParameterField(in1tensor);
-                VariableField f2 = new VariableField(in2tensor);
+                ParameterField f1 = new(in1tensor);
+                VariableField f2 = new(in2tensor);
 
                 Field f3 = f1 + f2;
                 StoreField n3 = f3;
@@ -412,9 +412,9 @@ namespace TensorShaderTest {
             }
 
             {
-                ParameterField f1 = new ParameterField(in1tensor);
-                VariableField f2 = new VariableField(in2tensor);
-                VariableField fo = new VariableField(outtensor);
+                ParameterField f1 = new(in1tensor);
+                VariableField f2 = new(in2tensor);
+                VariableField fo = new(outtensor);
 
                 Field f3 = f1 + f2;
                 Field ferr = f3 - fo;
@@ -457,9 +457,9 @@ namespace TensorShaderTest {
             }
 
             {
-                ParameterField f1 = new ParameterField(in1tensor);
-                VariableField f2 = new VariableField(in2tensor);
-                VariableField fo = new VariableField(outtensor);
+                ParameterField f1 = new(in1tensor);
+                VariableField f2 = new(in2tensor);
+                VariableField fo = new(outtensor);
 
                 Field f3 = f1 + f2;
                 Field ferr = f3 - fo;
@@ -508,8 +508,8 @@ namespace TensorShaderTest {
             Tensor outtensor = 2;
 
             {
-                ParameterField f1 = new ParameterField(intensor);
-                VariableField fo = new VariableField(outtensor);
+                ParameterField f1 = new(intensor);
+                VariableField fo = new(outtensor);
 
                 Field f2 = Abs(f1);
                 Field ferr1 = f2 - fo;
@@ -533,8 +533,8 @@ namespace TensorShaderTest {
             }
 
             {
-                ParameterField f1 = new ParameterField(intensor);
-                VariableField fo = new VariableField(outtensor);
+                ParameterField f1 = new(intensor);
+                VariableField fo = new(outtensor);
 
                 Field f2 = Abs(f1);
                 Field ferr1 = f2 - fo;
@@ -558,7 +558,7 @@ namespace TensorShaderTest {
             }
 
             {
-                ParameterField f1 = new ParameterField(intensor);
+                ParameterField f1 = new(intensor);
 
                 Field f2 = Abs(f1);
                 Field f3 = f2 * f2;
@@ -582,7 +582,7 @@ namespace TensorShaderTest {
             }
 
             {
-                ParameterField f1 = new ParameterField(intensor);
+                ParameterField f1 = new(intensor);
 
                 Field f2 = Abs(f1);
                 Field f3 = f2 * f2;
@@ -606,8 +606,8 @@ namespace TensorShaderTest {
             }
 
             {
-                ParameterField f1 = new ParameterField(intensor);
-                VariableField fo = new VariableField(outtensor);
+                ParameterField f1 = new(intensor);
+                VariableField fo = new(outtensor);
 
                 Field f2 = Abs(f1);
                 Field ferr1 = f2 - fo;
@@ -653,8 +653,8 @@ namespace TensorShaderTest {
             }
 
             {
-                ParameterField f1 = new ParameterField(intensor);
-                VariableField fo = new VariableField(outtensor);
+                ParameterField f1 = new(intensor);
+                VariableField fo = new(outtensor);
 
                 Field f2 = Abs(f1);
                 Field ferr1 = f2 - fo;
@@ -706,8 +706,8 @@ namespace TensorShaderTest {
             Tensor outtensor = 2;
 
             {
-                ParameterField f1 = new ParameterField(intensor);
-                ParameterField fo = new ParameterField(outtensor);
+                ParameterField f1 = new(intensor);
+                ParameterField fo = new(outtensor);
 
                 Field f2 = Abs(f1);
                 Field ferr1 = f2 - fo;
@@ -744,14 +744,14 @@ namespace TensorShaderTest {
             Tensor outtensor3 = 8;
 
             {
-                ParameterField fi1 = new ParameterField(intensor1);
-                VariableField fo1 = new VariableField(outtensor1);
+                ParameterField fi1 = new(intensor1);
+                VariableField fo1 = new(outtensor1);
 
-                ParameterField fi2 = new ParameterField(intensor2);
-                VariableField fo2 = new VariableField(outtensor2);
+                ParameterField fi2 = new(intensor2);
+                VariableField fo2 = new(outtensor2);
 
-                ParameterField fi3 = new ParameterField(intensor3);
-                VariableField fo3 = new VariableField(outtensor3);
+                ParameterField fi3 = new(intensor3);
+                VariableField fo3 = new(outtensor3);
 
                 Field ferr1 = fo1 - Abs(fi1);
                 Field ferr2 = fo2 - Abs(fi2);
@@ -778,14 +778,14 @@ namespace TensorShaderTest {
             }
 
             {
-                VariableField fi1 = new VariableField(intensor1);
-                VariableField fo1 = new VariableField(outtensor1);
+                VariableField fi1 = new(intensor1);
+                VariableField fo1 = new(outtensor1);
 
-                VariableField fi2 = new VariableField(intensor2);
-                VariableField fo2 = new VariableField(outtensor2);
+                VariableField fi2 = new(intensor2);
+                VariableField fo2 = new(outtensor2);
 
-                VariableField fi3 = new VariableField(intensor3);
-                VariableField fo3 = new VariableField(outtensor3);
+                VariableField fi3 = new(intensor3);
+                VariableField fo3 = new(outtensor3);
 
                 StoreField n1 = fo1 - Abs(fi1);
                 StoreField n2 = fo2 - Abs(fi2);
@@ -807,14 +807,14 @@ namespace TensorShaderTest {
             }
 
             {
-                ParameterField fi1 = new ParameterField(intensor1);
-                VariableField fo1 = new VariableField(outtensor1);
+                ParameterField fi1 = new(intensor1);
+                VariableField fo1 = new(outtensor1);
 
-                ParameterField fi2 = new ParameterField(intensor2);
-                VariableField fo2 = new VariableField(outtensor2);
+                ParameterField fi2 = new(intensor2);
+                VariableField fo2 = new(outtensor2);
 
-                ParameterField fi3 = new ParameterField(intensor3);
-                VariableField fo3 = new VariableField(outtensor3);
+                ParameterField fi3 = new(intensor3);
+                VariableField fo3 = new(outtensor3);
 
                 Field ferr1 = fo1 - Abs(fi1);
                 Field ferr2 = fo2 - Abs(fi2);
@@ -864,8 +864,8 @@ namespace TensorShaderTest {
             Tensor outtensor = -2;
 
             {
-                ParameterField f1 = new ParameterField(intensor);
-                VariableField fo = new VariableField(outtensor);
+                ParameterField f1 = new(intensor);
+                VariableField fo = new(outtensor);
 
                 (Field f2, Field f3) = (f1, -f1);
                 Field f4 = f2 * f3;
@@ -887,7 +887,7 @@ namespace TensorShaderTest {
             }
 
             {
-                ParameterField f1 = new ParameterField(intensor);
+                ParameterField f1 = new(intensor);
 
                 (Field f2, Field f3) = (f1, -f1);
                 Field f4 = f2 * f3;
@@ -909,8 +909,8 @@ namespace TensorShaderTest {
             }
 
             {
-                ParameterField f1 = new ParameterField(intensor);
-                VariableField fo = new VariableField(outtensor);
+                ParameterField f1 = new(intensor);
+                VariableField fo = new(outtensor);
 
                 (Field f2, Field f3) = (f1, -f1);
                 Field f4 = f2 * f3;
@@ -1530,10 +1530,10 @@ namespace TensorShaderTest {
             Tensor outtensor = -3;
 
             {
-                ParameterField f1 = new ParameterField(in1tensor);
-                VariableField f2 = new VariableField(in2tensor);
-                VariableField f4 = new VariableField(in2tensor);
-                VariableField fo = new VariableField(outtensor);
+                ParameterField f1 = new(in1tensor);
+                VariableField f2 = new(in2tensor);
+                VariableField f4 = new(in2tensor);
+                VariableField fo = new(outtensor);
 
                 Field f3 = f1 + f2;
                 Field ferr = f3 - fo;
@@ -1562,10 +1562,10 @@ namespace TensorShaderTest {
             }
 
             {
-                ParameterField f1 = new ParameterField(in1tensor);
-                VariableField f2 = new VariableField(in2tensor);
-                VariableField f4 = new VariableField(in2tensor);
-                VariableField fo = new VariableField(outtensor);
+                ParameterField f1 = new(in1tensor);
+                VariableField f2 = new(in2tensor);
+                VariableField f4 = new(in2tensor);
+                VariableField fo = new(outtensor);
 
                 Field f3 = f1 + f2;
                 Field ferr = f3 - fo;
@@ -1600,8 +1600,8 @@ namespace TensorShaderTest {
             Tensor outtensor = 2;
 
             {
-                ParameterField f1 = new ParameterField(intensor);
-                VariableField fo = new VariableField(outtensor);
+                ParameterField f1 = new(intensor);
+                VariableField fo = new(outtensor);
 
                 Field f2 = Abs(f1);
                 Field ferr1 = f2 - fo;
@@ -1615,8 +1615,8 @@ namespace TensorShaderTest {
             }
 
             {
-                ParameterField f1 = new ParameterField(intensor);
-                VariableField fo = new VariableField(outtensor);
+                ParameterField f1 = new(intensor);
+                VariableField fo = new(outtensor);
 
                 Field f2 = Abs(f1);
 
@@ -1628,8 +1628,8 @@ namespace TensorShaderTest {
             }
 
             {
-                ParameterField f1 = new ParameterField(intensor);
-                VariableField fo = new VariableField(outtensor);
+                ParameterField f1 = new(intensor);
+                VariableField fo = new(outtensor);
 
                 Field f2 = Abs(f1);
 

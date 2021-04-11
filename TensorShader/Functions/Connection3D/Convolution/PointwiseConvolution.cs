@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>ポイントごとの3次元畳み込み</summary>
         public static Tensor PointwiseConvolution3D(Tensor x, Tensor w) {
             Functions.Connection3D.PointwiseConvolution function =
-                new Functions.Connection3D.PointwiseConvolution(x.Shape, w.Shape);
+                new(x.Shape, w.Shape);
 
-            Tensor y = new Tensor(function.OutShape);
+            Tensor y = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, w }, new Tensor[] { y });
 

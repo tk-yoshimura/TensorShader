@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>べき関数</summary>
         public static Field Pow(Field x, Field alpha) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.FactorArithmetric.Pow(x, alpha, y);
 
             link.Forward();
@@ -28,7 +28,7 @@ namespace TensorShader.Links.FactorArithmetric {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

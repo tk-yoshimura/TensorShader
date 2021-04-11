@@ -16,7 +16,7 @@ namespace TensorShaderUtil.ArrayIO {
                 throw new ArgumentOutOfRangeException(nameof(skip_rows));
             }
 
-            List<string> vals = new List<string>();
+            List<string> vals = new();
 
             using (var stream = new StreamReader(filepath)) {
                 for (int i = 0; i < skip_rows; i++) {
@@ -50,7 +50,7 @@ namespace TensorShaderUtil.ArrayIO {
                 throw new ArgumentOutOfRangeException(nameof(skip_cols));
             }
 
-            List<string> vals = new List<string>();
+            List<string> vals = new();
             int rows = 0, cols = 0;
 
             using (var stream = new StreamReader(filepath)) {

@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>ComplexCast</summary>
         public static Field ComplexCast(Field real, Field imag) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Complex.ComplexCast(real, imag, y);
 
             link.Forward();
@@ -37,7 +37,7 @@ namespace TensorShader.Links.Complex {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

@@ -15,7 +15,7 @@ namespace TensorShader {
 
             Shape y_shape = function.OutputShapes(x.Shape)[0];
 
-            Tensor y = new Tensor(y_shape);
+            Tensor y = new(y_shape);
 
             function.Execute(new Tensor[] { x }, new Tensor[] { y });
 

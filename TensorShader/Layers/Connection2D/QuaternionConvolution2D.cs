@@ -68,7 +68,7 @@ namespace TensorShader.Layers {
 
             Field y = QuaternionConvolution2D(x, W);
 
-            if (Bias != null) {
+            if (Bias is not null) {
                 y += Bias;
             }
 

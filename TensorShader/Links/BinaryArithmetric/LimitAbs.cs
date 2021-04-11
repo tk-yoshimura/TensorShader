@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>絶対値制限</summary>
         public static Field LimitAbs(Field x, Field range) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.BinaryArithmetric.LimitAbs(x, range, y);
 
             link.Forward();
@@ -28,7 +28,7 @@ namespace TensorShader.Links.BinaryArithmetric {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

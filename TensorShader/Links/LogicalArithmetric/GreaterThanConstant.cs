@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>大なり</summary>
         public static Field GreaterThan(Field x, float c) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.LogicalArithmetric.GreaterThanConstant(x, y, c);
 
             link.Forward();

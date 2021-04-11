@@ -46,10 +46,10 @@ namespace TensorShader {
         /// <param name="shape">形状</param>
         /// <param name="value">初期値(任意指定)</param>
         internal Tensor(Shape shape, float[] value = null) {
-            if (shape == null) {
+            if (shape is null) {
                 throw new ArgumentException(nameof(shape));
             }
-            if (value != null && value.Length < shape.Length) {
+            if (value is not null && value.Length < shape.Length) {
                 throw new ArgumentException(ExceptionMessage.Argument($"{value}.Length", value.Length, shape.Length));
             }
 
@@ -61,10 +61,10 @@ namespace TensorShader {
         /// <param name="shape">形状</param>
         /// <param name="array">バッファ</param>
         protected internal Tensor(Shape shape, CudaArray<float> array) {
-            if (shape == null) {
+            if (shape is null) {
                 throw new ArgumentException(nameof(shape));
             }
-            if (array == null) {
+            if (array is null) {
                 throw new ArgumentNullException(nameof(array));
             }
             if ((int)array.Length < shape.Length) {
@@ -148,13 +148,13 @@ namespace TensorShader {
         /// <summary>コピー</summary>
         public virtual Tensor Copy() {
             if (this is OverflowCheckedTensor) {
-                OverflowCheckedTensor tensor = new OverflowCheckedTensor(Shape);
+                OverflowCheckedTensor tensor = new(Shape);
                 CopyTo(tensor);
 
                 return tensor;
             }
             else {
-                Tensor tensor = new Tensor(Shape);
+                Tensor tensor = new(Shape);
                 CopyTo(tensor);
 
                 return tensor;
@@ -163,7 +163,7 @@ namespace TensorShader {
 
         /// <summary>定数</summary>
         public static Tensor Constant(Shape shape, float val) {
-            Tensor tensor = new Tensor(shape);
+            Tensor tensor = new(shape);
             tensor.Clear(val);
 
             return tensor;
@@ -179,7 +179,7 @@ namespace TensorShader {
     /// <summary>領域外アクセスチェック有効テンソル</summary>
     /// <remarks>デバック用</remarks>
     internal class OverflowCheckedTensor : Tensor {
-        private static readonly Random random = new Random();
+        private static readonly Random random = new();
 
         private const int canary_length = 32;
         private readonly float[] canary;
@@ -189,10 +189,10 @@ namespace TensorShader {
         /// <param name="value">初期値(任意指定)</param>
         internal OverflowCheckedTensor(Shape shape, float[] value = null)
             : base(shape, new float[shape.Length + canary_length]) {
-            if (shape == null) {
+            if (shape is null) {
                 throw new ArgumentException(nameof(shape));
             }
-            if (value != null) {
+            if (value is not null) {
                 if (value.Length != shape.Length) {
                     throw new ArgumentException(ExceptionMessage.Argument($"{value}.Length", value.Length, shape.Length));
                 }

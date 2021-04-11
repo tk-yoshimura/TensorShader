@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>符号付き平方根</summary>
         public static Field SignedSqrt(Field x) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.UnaryArithmetric.SignedSqrt(x, y);
 
             link.Forward();
@@ -28,7 +28,7 @@ namespace TensorShader.Links.UnaryArithmetric {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

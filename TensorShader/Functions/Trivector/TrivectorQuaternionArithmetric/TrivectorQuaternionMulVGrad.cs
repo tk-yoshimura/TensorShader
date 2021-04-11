@@ -15,7 +15,7 @@ namespace TensorShader {
         internal static Tensor TrivectorQuaternionMulVGrad(Tensor v, Tensor q) {
             Function function = new Functions.TrivectorArithmetric.TrivectorQuaternionMulVGrad();
 
-            Tensor u = new Tensor(v.Shape);
+            Tensor u = new(v.Shape);
 
             function.Execute(new Tensor[] { v, q }, new Tensor[] { u });
 

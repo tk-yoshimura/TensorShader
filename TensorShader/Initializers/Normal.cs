@@ -33,7 +33,7 @@ namespace TensorShader.Initializers {
         public override void Execute() {
             generator.Execute(Tensor);
 
-            if (flow != null) {
+            if (flow is not null) {
                 flow.Execute();
             }
         }

@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>正答率</summary>
         public static Field Accuracy(Field x, Field t) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Evaluation.Classify.Accuracy(x, t, y);
 
             link.Forward();

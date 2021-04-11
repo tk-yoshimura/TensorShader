@@ -45,7 +45,7 @@ namespace TensorShader.Layers {
         public Field Forward(Field x) {
             Field y = PointwiseConvolution1D(x, W);
 
-            if (Bias != null) {
+            if (Bias is not null) {
                 y += Bias;
             }
 

@@ -24,14 +24,14 @@ namespace TensorShaderTest.Operators.Connection2D {
 
                                             float[] xval = (new float[inwidth * inheight * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-                                            Map2D x = new Map2D(channels, inwidth, inheight, batch, xval);
+                                            Map2D x = new(channels, inwidth, inheight, batch, xval);
 
                                             Map2D y = Reference(x, lefttrim, righttrim, toptrim, bottomtrim);
 
-                                            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, inwidth, inheight, batch), xval);
-                                            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, outwidth, outheight, batch));
+                                            OverflowCheckedTensor x_tensor = new(Shape.Map2D(channels, inwidth, inheight, batch), xval);
+                                            OverflowCheckedTensor y_tensor = new(Shape.Map2D(channels, outwidth, outheight, batch));
 
-                                            Trimming ope = new Trimming(inwidth, inheight, channels, lefttrim, righttrim, toptrim, bottomtrim, batch);
+                                            Trimming ope = new(inwidth, inheight, channels, lefttrim, righttrim, toptrim, bottomtrim, batch);
 
                                             ope.Execute(x_tensor, y_tensor);
 
@@ -60,7 +60,7 @@ namespace TensorShaderTest.Operators.Connection2D {
             int channels = x.Channels, batch = x.Batch;
             int inw = x.Width, inh = x.Height, outw = inw - lefttrim - righttrim, outh = inh - toptrim - bottomtrim;
 
-            Map2D y = new Map2D(channels, outw, outh, batch);
+            Map2D y = new(channels, outw, outh, batch);
 
             for (int th = 0; th < batch; th++) {
                 for (int ox, oy = 0; oy < outh; oy++) {
@@ -81,10 +81,10 @@ namespace TensorShaderTest.Operators.Connection2D {
             int inwidth = 512, inheight = 512, channels = 32, lefttrim = 1, righttrim = 1, toptrim = 1, bottomtrim = 1, batch = 4;
             int outwidth = inwidth - lefttrim - righttrim, outheight = inheight - toptrim - bottomtrim;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, inwidth, inheight, batch));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, outwidth, outheight, batch));
+            OverflowCheckedTensor x_tensor = new(Shape.Map2D(channels, inwidth, inheight, batch));
+            OverflowCheckedTensor y_tensor = new(Shape.Map2D(channels, outwidth, outheight, batch));
 
-            Trimming ope = new Trimming(inwidth, inheight, channels, lefttrim, righttrim, toptrim, bottomtrim, batch);
+            Trimming ope = new(inwidth, inheight, channels, lefttrim, righttrim, toptrim, bottomtrim, batch);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/trimming_2d.nvvp");
             Cuda.Profiler.Start();

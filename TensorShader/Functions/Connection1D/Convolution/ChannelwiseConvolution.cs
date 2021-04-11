@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>チャネルごとの1次元畳み込み</summary>
         public static Tensor ChannelwiseConvolution1D(Tensor x, Tensor w) {
             Functions.Connection1D.ChannelwiseConvolution function =
-                new Functions.Connection1D.ChannelwiseConvolution(x.Shape, w.Shape);
+                new(x.Shape, w.Shape);
 
-            Tensor y = new Tensor(function.OutShape);
+            Tensor y = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, w }, new Tensor[] { y });
 

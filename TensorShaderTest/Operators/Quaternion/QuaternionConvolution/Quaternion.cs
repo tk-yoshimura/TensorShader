@@ -64,11 +64,11 @@ namespace TensorShaderTest.Operators.Quaternion {
     public class QuaternionTest {
         [TestMethod]
         public void AddTest() {
-            System.Numerics.Quaternion sq1 = new System.Numerics.Quaternion(2, 3, 4, 1);
-            System.Numerics.Quaternion sq2 = new System.Numerics.Quaternion(7, 6, 5, 8);
+            System.Numerics.Quaternion sq1 = new(2, 3, 4, 1);
+            System.Numerics.Quaternion sq2 = new(7, 6, 5, 8);
 
-            Quaternion q1 = new Quaternion(sq1.W, sq1.X, sq1.Y, sq1.Z);
-            Quaternion q2 = new Quaternion(sq2.W, sq2.X, sq2.Y, sq2.Z);
+            Quaternion q1 = new(sq1.W, sq1.X, sq1.Y, sq1.Z);
+            Quaternion q2 = new(sq2.W, sq2.X, sq2.Y, sq2.Z);
 
             System.Numerics.Quaternion sq_add = sq1 + sq2;
             Quaternion q_add = q1 + q2;
@@ -81,11 +81,11 @@ namespace TensorShaderTest.Operators.Quaternion {
 
         [TestMethod]
         public void MulTest() {
-            System.Numerics.Quaternion sq1 = new System.Numerics.Quaternion(2, 3, 4, 1);
-            System.Numerics.Quaternion sq2 = new System.Numerics.Quaternion(7, 6, 5, 8);
+            System.Numerics.Quaternion sq1 = new(2, 3, 4, 1);
+            System.Numerics.Quaternion sq2 = new(7, 6, 5, 8);
 
-            Quaternion q1 = new Quaternion(sq1.W, sq1.X, sq1.Y, sq1.Z);
-            Quaternion q2 = new Quaternion(sq2.W, sq2.X, sq2.Y, sq2.Z);
+            Quaternion q1 = new(sq1.W, sq1.X, sq1.Y, sq1.Z);
+            Quaternion q2 = new(sq2.W, sq2.X, sq2.Y, sq2.Z);
 
             System.Numerics.Quaternion sq_mul = sq1 * sq2;
             Quaternion q_mul = q1 * q2;

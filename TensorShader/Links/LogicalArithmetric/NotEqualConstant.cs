@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>ノットイコール</summary>
         public static Field NotEqual(Field x, float c) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.LogicalArithmetric.NotEqualConstant(x, y, c);
 
             link.Forward();

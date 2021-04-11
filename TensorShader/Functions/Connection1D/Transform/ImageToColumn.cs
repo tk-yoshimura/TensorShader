@@ -19,7 +19,7 @@ namespace TensorShader {
             Function function =
                 new Functions.Connection1D.ImageToColumn(kwidth);
 
-            Tensor y = new Tensor(function.OutputShapes(x.Shape)[0]);
+            Tensor y = new(function.OutputShapes(x.Shape)[0]);
 
             function.Execute(new Tensor[] { x }, new Tensor[] { y });
 
@@ -50,7 +50,7 @@ namespace TensorShader.Functions.Connection1D {
 
             int outwidth = inshape.Width - KernelWidth + 1;
 
-            Shape outshape = new Shape(
+            Shape outshape = new(
                 ShapeType.Column,
                 KernelWidth,
                 inshape.Channels,

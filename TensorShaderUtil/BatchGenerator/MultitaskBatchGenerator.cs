@@ -18,17 +18,17 @@ namespace TensorShaderUtil.BatchGenerator {
         /// <param name="indexes">バッチのデータインデクス</param>
         /// <remarks>indexesをnullにした場合、GenerateDataのindexを0として呼び出される</remarks>
         public override sealed void Request(int[] indexes = null) {
-            if (indexes != null && indexes.Length != NumBatches) {
+            if (indexes is not null && indexes.Length != NumBatches) {
                 throw new ArgumentException(nameof(indexes));
             }
 
-            if (tasks != null) {
+            if (tasks is not null) {
                 Task.WaitAll(tasks);
             }
 
             tasks = Enumerable.Range(0, NumBatches)
                 .Select(
-                    (i) => Task.Run(() => GenerateToInsert(this, i, indexes != null ? indexes[i] : 0))
+                    (i) => Task.Run(() => GenerateToInsert(this, i, indexes is not null ? indexes[i] : 0))
                 ).ToArray();
 
             Requested = true;
@@ -36,7 +36,7 @@ namespace TensorShaderUtil.BatchGenerator {
 
         /// <summary>バッチを受け取る</summary>
         public override sealed NdimArray<float> Receive() {
-            if (!Requested || tasks == null) {
+            if (!Requested || tasks is null) {
                 throw new InvalidOperationException();
             }
 

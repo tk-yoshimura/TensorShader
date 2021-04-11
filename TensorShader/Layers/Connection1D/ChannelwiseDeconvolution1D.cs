@@ -53,7 +53,7 @@ namespace TensorShader.Layers {
         public Field Forward(Field x) {
             Field y = ChannelwiseDeconvolution1D(x, W);
 
-            if (Bias != null) {
+            if (Bias is not null) {
                 y += Bias;
             }
 

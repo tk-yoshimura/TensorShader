@@ -20,14 +20,14 @@ namespace TensorShaderTest.Operators.Connection1D {
 
                             float[] xval = (new float[inwidth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-                            Map1D x = new Map1D(inchannels, inwidth, batch, xval);
+                            Map1D x = new(inchannels, inwidth, batch, xval);
 
                             Map1D y = Reference(x, scale);
 
-                            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth, batch), xval);
-                            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth, batch));
+                            OverflowCheckedTensor x_tensor = new(Shape.Map1D(inchannels, inwidth, batch), xval);
+                            OverflowCheckedTensor y_tensor = new(Shape.Map1D(outchannels, outwidth, batch));
 
-                            ChannelToSpace ope = new ChannelToSpace(inwidth, inchannels, scale, batch);
+                            ChannelToSpace ope = new(inwidth, inchannels, scale, batch);
 
                             ope.Execute(x_tensor, y_tensor);
 
@@ -53,10 +53,10 @@ namespace TensorShaderTest.Operators.Connection1D {
             int inwidth = 512, inchannels = 32, scale = 2;
             int outwidth = inwidth * scale, outchannels = inchannels / scale;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(inchannels, inwidth));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(outchannels, outwidth));
+            OverflowCheckedTensor x_tensor = new(Shape.Map1D(inchannels, inwidth));
+            OverflowCheckedTensor y_tensor = new(Shape.Map1D(outchannels, outwidth));
 
-            ChannelToSpace ope = new ChannelToSpace(inwidth, inchannels, scale);
+            ChannelToSpace ope = new(inwidth, inchannels, scale);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/channel_to_space_1d.nvvp");
             Cuda.Profiler.Start();
@@ -75,7 +75,7 @@ namespace TensorShaderTest.Operators.Connection1D {
             int inw = x.Width, outw = inw * scale;
             int outchannels = inchannels / scale;
 
-            Map1D y = new Map1D(outchannels, outw, batch);
+            Map1D y = new(outchannels, outw, batch);
 
             for (int th = 0; th < batch; th++) {
                 for (int ix = 0; ix < inw; ix++) {
@@ -101,7 +101,7 @@ namespace TensorShaderTest.Operators.Connection1D {
 
             float[] xval = (new float[inwidth * inchannels]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-            Map1D x = new Map1D(inchannels, inwidth, 1, xval);
+            Map1D x = new(inchannels, inwidth, 1, xval);
 
             Map1D y = Reference(x, scale);
 

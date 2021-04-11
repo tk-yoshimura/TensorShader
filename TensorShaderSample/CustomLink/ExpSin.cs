@@ -8,7 +8,7 @@ namespace CustomLink {
     public static class CustomUnaryArithmetric {
         /// <summary>カスタム1項演算</summary>
         public static Field ExpSin(Field x) {
-            Field y = new Field();
+            Field y = new();
             Link link = new ExpSin(x, y);
 
             link.Forward();
@@ -31,7 +31,7 @@ namespace CustomLink {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

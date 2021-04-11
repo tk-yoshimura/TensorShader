@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>3次元エッジパディング</summary>
         public static Field EdgePadding3D(Field x, int pad) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Connection3D.EdgePadding(x, y, pad);
 
             link.Forward();
@@ -14,7 +14,7 @@ namespace TensorShader {
 
         /// <summary>3次元エッジパディング</summary>
         public static Field EdgePadding3D(Field x, int pad_left, int pad_right, int pad_top, int pad_bottom, int pad_front, int pad_rear) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Connection3D.EdgePadding(x, y, pad_left, pad_right, pad_top, pad_bottom, pad_front, pad_rear);
 
             link.Forward();
@@ -73,7 +73,7 @@ namespace TensorShader.Links.Connection3D {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

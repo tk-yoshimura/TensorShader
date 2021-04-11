@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>四元数1次元カーネル積</summary>
         public static Tensor QuaternionKernelProduct1D(Tensor x, Tensor y, int kwidth, bool transpose = false) {
             Functions.QuaternionConvolution.QuaternionKernelProduct1D function =
-                new Functions.QuaternionConvolution.QuaternionKernelProduct1D(x.Shape, y.Shape, kwidth, transpose);
+                new(x.Shape, y.Shape, kwidth, transpose);
 
-            Tensor w = new Tensor(function.OutShape);
+            Tensor w = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, y }, new Tensor[] { w });
 

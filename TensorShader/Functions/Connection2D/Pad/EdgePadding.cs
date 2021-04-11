@@ -27,7 +27,7 @@ namespace TensorShader {
             Function function =
                 new Functions.Connection2D.EdgePadding(pad);
 
-            Tensor y = new Tensor(function.OutputShapes(x.Shape)[0]);
+            Tensor y = new(function.OutputShapes(x.Shape)[0]);
 
             function.Execute(new Tensor[] { x }, new Tensor[] { y });
 
@@ -39,7 +39,7 @@ namespace TensorShader {
             Function function =
                 new Functions.Connection2D.EdgePadding(pad_left, pad_right, pad_top, pad_bottom);
 
-            Tensor y = new Tensor(function.OutputShapes(x.Shape)[0]);
+            Tensor y = new(function.OutputShapes(x.Shape)[0]);
 
             function.Execute(new Tensor[] { x }, new Tensor[] { y });
 

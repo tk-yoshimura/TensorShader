@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>大なりイコール</summary>
         public static Field GreaterThanOrEqual(Field x1, Field x2) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.LogicalArithmetric.GreaterThanOrEqual(x1, x2, y);
 
             link.Forward();

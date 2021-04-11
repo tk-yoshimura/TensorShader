@@ -22,9 +22,9 @@ namespace MNIST {
             MnistDownloader.Download(dirpath_dataset);
 
             Console.WriteLine("Setup loader...");
-            Random random = new Random(1234);
+            Random random = new(1234);
 
-            MnistLoader loader = new MnistLoader(dirpath_dataset, num_batches: 1000);
+            MnistLoader loader = new(dirpath_dataset, num_batches: 1000);
             Iterator train_iterator = new ShuffleIterator(loader.NumBatches, loader.CountTrainDatas, random);
             Iterator test_iterator = new ShuffleIterator(loader.NumBatches, loader.CountTestDatas, random);
 
@@ -90,7 +90,7 @@ namespace MNIST {
         }
 
         static void Train(Iterator train_iterator, MnistLoader loader, VariableField x, VariableField t, Flow trainflow, Parameters parameters) {
-            Stopwatch sw = new Stopwatch();
+            Stopwatch sw = new();
 
             sw.Start();
 
@@ -112,7 +112,7 @@ namespace MNIST {
         static void Test(Iterator test_iterator, MnistLoader loader, VariableField x, VariableField t, Flow testflow, StoreField matches) {
             float sum_matches = 0;
 
-            Stopwatch sw = new Stopwatch();
+            Stopwatch sw = new();
 
             sw.Start();
 

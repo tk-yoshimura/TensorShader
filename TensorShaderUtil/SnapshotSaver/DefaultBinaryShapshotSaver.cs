@@ -14,7 +14,7 @@ namespace TensorShaderUtil.SnapshotSaver {
 
         /// <summary>ファイル読み込み</summary>
         public override Snapshot Load(Stream stream) {
-            Snapshot snapshot = new Snapshot();
+            Snapshot snapshot = new();
 
             byte[] data = null;
 

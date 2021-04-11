@@ -72,7 +72,7 @@ namespace TensorShader.Layers {
 
             Field y = Convolution3D(x, W);
 
-            if (Bias != null) {
+            if (Bias is not null) {
                 y += Bias;
             }
 

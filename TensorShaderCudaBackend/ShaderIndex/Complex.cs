@@ -4,7 +4,7 @@ namespace TensorShaderCudaBackend {
 
     /// <summary>複素数</summary>
     public static class Complex {
-        private readonly static Dictionary<string, Shader> shaders = new Dictionary<string, Shader>();
+        private readonly static Dictionary<string, Shader> shaders = new();
 
         private static Shader UnaryArithmetric(string name, string func) {
             if (!shaders.ContainsKey(name)) {
@@ -30,7 +30,7 @@ namespace TensorShaderCudaBackend {
                 "#y.y = #x1.x * #x2.y + #x1.y * #x2.x;"
             );
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -45,7 +45,7 @@ namespace TensorShaderCudaBackend {
                 "#y.y = #x1.y * #x2.x - #x1.x * #x2.y;"
             );
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -60,7 +60,7 @@ namespace TensorShaderCudaBackend {
                 "#y.y = #x.y;"
             );
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -75,7 +75,7 @@ namespace TensorShaderCudaBackend {
                 "#y.y = #x1.y;"
             );
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -89,7 +89,7 @@ namespace TensorShaderCudaBackend {
                 "#y = #x.x >= 0.0 && #x.y >= 0.0 ? #x : ctor_float2(0.0, 0.0);"
             );
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -103,7 +103,7 @@ namespace TensorShaderCudaBackend {
                 "#y = #x2.x >= 0.0 && #x2.y >= 0.0 ? #x1 : ctor_float2(0.0, 0.0);"
             );
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -118,7 +118,7 @@ namespace TensorShaderCudaBackend {
                 "#y.y = -#x.y;"
             );
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -133,7 +133,7 @@ namespace TensorShaderCudaBackend {
                 "#y.y = ldexpf(#x.x * #x.y, 1);"
             );
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -148,7 +148,7 @@ namespace TensorShaderCudaBackend {
                 "#y.y = ldexpf(#x1.y * #x2.x - #x1.x * #x2.y, 1);"
             );
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -165,7 +165,7 @@ namespace TensorShaderCudaBackend {
                 "#y.y = #x.y * s;"
             );
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -184,7 +184,7 @@ namespace TensorShaderCudaBackend {
                 "#y.y = (#x1.y * (ldexpf(sx2y, 1) + norm_norm_p1) + ldexpf(#x2.y * x12x, 1)) * inv_squa_norm_p1;"
             );
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -201,7 +201,7 @@ namespace TensorShaderCudaBackend {
                 "#y.y = #x.y * s;"
             );
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -220,7 +220,7 @@ namespace TensorShaderCudaBackend {
                 "#y.y = (#x1.y * (length_length_p1 - sx2y) - #x2.y * x12x) * inv_length_squa_length_p1;"
             );
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -237,7 +237,7 @@ namespace TensorShaderCudaBackend {
                 "#y.y = #x.y * s;"
             );
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -256,7 +256,7 @@ namespace TensorShaderCudaBackend {
                 "#y.y = (#x1.y * sx2x - #x2.y * x12x) * inv_cube_length;"
             );
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -273,7 +273,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -290,7 +290,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -307,7 +307,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -324,7 +324,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -341,7 +341,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -364,7 +364,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -387,7 +387,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -410,7 +410,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -434,7 +434,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -458,7 +458,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -482,7 +482,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -506,7 +506,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -530,7 +530,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -554,7 +554,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -578,7 +578,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -602,7 +602,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 
@@ -626,7 +626,7 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream == null) {
+            if (stream is null) {
                 stream = Shader.DefaultStream;
             }
 

@@ -8,7 +8,7 @@ namespace TensorShaderTest.NdimArray {
     public class NdimArrayTrimmingTest {
         [TestMethod]
         public void TrimmingTest1() {
-            Shape shape = new Shape(ShapeType.Map, new int[] { 5, 9, 7, 8, 9 });
+            Shape shape = new(ShapeType.Map, new int[] { 5, 9, 7, 8, 9 });
             (int ta, int tb)[][] trims_list = new (int ta, int tb)[][]{
                 new (int ta, int tb)[] { (1, 2), (3, 4), (2, 2), (4, 3), (2, 1) },
                 new (int ta, int tb)[] { (0, 0), (3, 4), (2, 2), (4, 3), (2, 1) },
@@ -23,11 +23,11 @@ namespace TensorShaderTest.NdimArray {
             };
 
             foreach (var trims in trims_list) {
-                Random random = new Random();
+                Random random = new();
 
                 float[] v = (new float[shape.Length]).Select((v) => (float)random.NextDouble()).ToArray();
 
-                NdimArray<float> arr = new NdimArray<float>(shape, v);
+                NdimArray<float> arr = new(shape, v);
                 NdimArray<float> new_arr = NdimArray<float>.Trimming(arr, trims);
 
                 CheckTrimming(trims, arr, new_arr);
@@ -43,11 +43,11 @@ namespace TensorShaderTest.NdimArray {
             };
 
             foreach ((Shape shape, (int ta, int tb)[] trims) in tests) {
-                Random random = new Random();
+                Random random = new();
 
                 float[] v = (new float[shape.Length]).Select((v) => (float)random.NextDouble()).ToArray();
 
-                NdimArray<float> arr = new NdimArray<float>(shape, v);
+                NdimArray<float> arr = new(shape, v);
                 NdimArray<float> new_arr = NdimArray<float>.TrimmingND(arr, trims);
 
                 (int, int)[] new_trims = (new (int, int)[] { (0, 0) }).Concat(trims).Concat(new (int, int)[] { (0, 0) }).ToArray();
@@ -67,11 +67,11 @@ namespace TensorShaderTest.NdimArray {
             };
 
             foreach ((Shape shape, (int offset, int count)[] range, (int ta, int tb)[] trims) in tests) {
-                Random random = new Random();
+                Random random = new();
 
                 float[] v = (new float[shape.Length]).Select((v) => (float)random.NextDouble()).ToArray();
 
-                NdimArray<float> arr = new NdimArray<float>(shape, v);
+                NdimArray<float> arr = new(shape, v);
                 NdimArray<float> new_arr = NdimArray<float>.SliceND(arr, range);
 
                 (int, int)[] new_trims = (new (int, int)[] { (0, 0) }).Concat(range).Concat(new (int, int)[] { (0, 0) }).ToArray();

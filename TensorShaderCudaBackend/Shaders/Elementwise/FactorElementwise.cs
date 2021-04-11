@@ -44,7 +44,7 @@ namespace TensorShaderCudaBackend.Shaders.Elementwise {
             if (Factors == 1) {
                 CudaArray<float> c = args[0] as CudaArray<float>;
 
-                if (stream != null) {
+                if (stream is not null) {
                     Kernel.StoreConstMemoryAsync(stream, "c", c, 1);
                 }
                 else {
@@ -55,7 +55,7 @@ namespace TensorShaderCudaBackend.Shaders.Elementwise {
                 for (int i = 0; i < Factors; i++) {
                     CudaArray<float> c = args[i] as CudaArray<float>;
 
-                    if (stream != null) {
+                    if (stream is not null) {
                         Kernel.StoreConstMemoryAsync(stream, $"c{i + 1}", c, 1);
                     }
                     else {
@@ -71,7 +71,7 @@ namespace TensorShaderCudaBackend.Shaders.Elementwise {
 
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
-            if (args == null || args.Length != Factors + Arrays + 1) {
+            if (args is null || args.Length != Factors + Arrays + 1) {
                 throw new ArgumentException(nameof(args));
             }
 

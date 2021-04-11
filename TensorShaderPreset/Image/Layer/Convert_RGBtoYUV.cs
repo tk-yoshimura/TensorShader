@@ -21,7 +21,7 @@ namespace TensorShaderPreset.Image {
 
         /// <summary>RGB->YUV(PAL, SECAM)</summary>
         public static Field RGBtoYUV(Field x) {
-            VariableField w = new VariableField(KernelRGBtoYUV, name: "RGBtoYUV");
+            VariableField w = new(KernelRGBtoYUV, name: "RGBtoYUV");
 
             return PointwiseConvolution2D(x, w);
         }
@@ -42,7 +42,7 @@ namespace TensorShaderPreset.Image {
 
         /// <summary>YUV->RGB(PAL, SECAM)</summary>
         public static Field YUVtoRGB(Field x) {
-            VariableField w = new VariableField(KernelYUVtoRGB, name: "YUVtoRGB");
+            VariableField w = new(KernelYUVtoRGB, name: "YUVtoRGB");
 
             return PointwiseConvolution2D(x, w);
         }

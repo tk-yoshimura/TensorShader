@@ -22,17 +22,17 @@ namespace TensorShaderTest.Operators.Connection3D {
                             float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                             float[] wval = (new float[kwidth * kheight * kdepth * inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-                            Map3D x = new Map3D(inchannels, inwidth, inheight, indepth, batch, xval);
-                            Filter3D w = new Filter3D(inchannels, outchannels, kwidth, kheight, kdepth, wval);
+                            Map3D x = new(inchannels, inwidth, inheight, indepth, batch, xval);
+                            Filter3D w = new(inchannels, outchannels, kwidth, kheight, kdepth, wval);
 
                             Map3D y = Reference(x, w, kwidth, kheight, kdepth);
 
-                            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
-                            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels, outchannels, kwidth, kheight, kdepth), wval);
+                            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
+                            OverflowCheckedTensor w_tensor = new(Shape.Kernel3D(inchannels, outchannels, kwidth, kheight, kdepth), wval);
 
-                            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch));
+                            OverflowCheckedTensor y_tensor = new(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch));
 
-                            Convolution ope = new Convolution(inwidth, inheight, indepth, inchannels, outchannels, kwidth, kheight, kdepth, batch);
+                            Convolution ope = new(inwidth, inheight, indepth, inchannels, outchannels, kwidth, kheight, kdepth, batch);
 
                             ope.Execute(x_tensor, w_tensor, y_tensor);
 
@@ -57,7 +57,7 @@ namespace TensorShaderTest.Operators.Connection3D {
         public void LargeMapTest() {
             float max_err = 0;
 
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             int batch = 3;
             int inchannels = 49, outchannels = 50;
@@ -68,17 +68,17 @@ namespace TensorShaderTest.Operators.Connection3D {
             float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
             float[] wval = (new float[kwidth * kheight * kdepth * inchannels * outchannels]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
 
-            Map3D x = new Map3D(inchannels, inwidth, inheight, indepth, batch, xval);
-            Filter3D w = new Filter3D(inchannels, outchannels, kwidth, kheight, kdepth, wval);
+            Map3D x = new(inchannels, inwidth, inheight, indepth, batch, xval);
+            Filter3D w = new(inchannels, outchannels, kwidth, kheight, kdepth, wval);
 
             Map3D y = Reference(x, w, kwidth, kheight, kdepth);
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
-            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels, outchannels, kwidth, kheight, kdepth), wval);
+            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel3D(inchannels, outchannels, kwidth, kheight, kdepth), wval);
 
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch));
+            OverflowCheckedTensor y_tensor = new(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch));
 
-            Convolution ope = new Convolution(inwidth, inheight, indepth, inchannels, outchannels, kwidth, kheight, kdepth, batch);
+            Convolution ope = new(inwidth, inheight, indepth, inchannels, outchannels, kwidth, kheight, kdepth, batch);
 
             ope.Execute(x_tensor, w_tensor, y_tensor);
 
@@ -100,12 +100,12 @@ namespace TensorShaderTest.Operators.Connection3D {
             int inwidth = 64, inheight = 64, indepth = 64, inchannels = 31, outchannels = 31, ksize = 3;
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1, outdepth = indepth - ksize + 1;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, inwidth, inheight, indepth));
-            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels, outchannels, ksize, ksize, ksize));
+            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, inwidth, inheight, indepth));
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel3D(inchannels, outchannels, ksize, ksize, ksize));
 
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth));
+            OverflowCheckedTensor y_tensor = new(Shape.Map3D(outchannels, outwidth, outheight, outdepth));
 
-            Convolution ope = new Convolution(inwidth, inheight, indepth, inchannels, outchannels, ksize, ksize, ksize);
+            Convolution ope = new(inwidth, inheight, indepth, inchannels, outchannels, ksize, ksize, ksize);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/convolution_3d.nvvp");
             Cuda.Profiler.Start();
@@ -120,7 +120,7 @@ namespace TensorShaderTest.Operators.Connection3D {
             int inw = x.Width, inh = x.Height, ind = x.Depth;
             int outw = inw - kwidth + 1, outh = inh - kheight + 1, outd = ind - kdepth + 1;
 
-            Map3D y = new Map3D(outchannels, outw, outh, outd, batch);
+            Map3D y = new(outchannels, outw, outh, outd, batch);
 
             for (int kx, ky, kz = 0; kz < kdepth; kz++) {
                 for (ky = 0; ky < kheight; ky++) {
@@ -157,8 +157,8 @@ namespace TensorShaderTest.Operators.Connection3D {
             float[] xval = (new float[batch * inwidth * inheight * indepth * inchannels]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[kwidth * kheight * kdepth * outchannels * inchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            Map3D x = new Map3D(inchannels, inwidth, inheight, indepth, batch, xval);
-            Filter3D w = new Filter3D(inchannels, outchannels, kwidth, kheight, kdepth, wval);
+            Map3D x = new(inchannels, inwidth, inheight, indepth, batch, xval);
+            Filter3D w = new(inchannels, outchannels, kwidth, kheight, kdepth, wval);
 
             Map3D y = Reference(x, w, kwidth, kheight, kdepth);
 

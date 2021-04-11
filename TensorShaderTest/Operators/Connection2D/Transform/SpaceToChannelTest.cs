@@ -21,14 +21,14 @@ namespace TensorShaderTest.Operators.Connection2D {
 
                                 float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-                                Map2D x = new Map2D(inchannels, inwidth, inheight, batch, xval);
+                                Map2D x = new(inchannels, inwidth, inheight, batch, xval);
 
                                 Map2D y = Reference(x, scale);
 
-                                OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
-                                OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight, batch));
+                                OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
+                                OverflowCheckedTensor y_tensor = new(Shape.Map2D(outchannels, outwidth, outheight, batch));
 
-                                SpaceToChannel ope = new SpaceToChannel(inwidth, inheight, inchannels, scale, batch);
+                                SpaceToChannel ope = new(inwidth, inheight, inchannels, scale, batch);
 
                                 ope.Execute(x_tensor, y_tensor);
 
@@ -55,10 +55,10 @@ namespace TensorShaderTest.Operators.Connection2D {
             int inwidth = 512, inheight = 512, inchannels = 32, scale = 2;
             int outwidth = inwidth / scale, outheight = inheight / scale, outchannels = inchannels * scale * scale;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight));
+            OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, inwidth, inheight));
+            OverflowCheckedTensor y_tensor = new(Shape.Map2D(outchannels, outwidth, outheight));
 
-            SpaceToChannel ope = new SpaceToChannel(inwidth, inheight, inchannels, scale);
+            SpaceToChannel ope = new(inwidth, inheight, inchannels, scale);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/space_to_channel_2d.nvvp");
             Cuda.Profiler.Start();
@@ -77,7 +77,7 @@ namespace TensorShaderTest.Operators.Connection2D {
             int outw = inw / scale, outh = inh / scale;
             int outchannels = inchannels * scale * scale;
 
-            Map2D y = new Map2D(outchannels, outw, outh, batch);
+            Map2D y = new(outchannels, outw, outh, batch);
 
             for (int th = 0; th < batch; th++) {
                 for (int ox, oy = 0; oy < outh; oy++) {
@@ -106,7 +106,7 @@ namespace TensorShaderTest.Operators.Connection2D {
 
             float[] xval = (new float[inwidth * inheight * inchannels]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-            Map2D x = new Map2D(inchannels, inwidth, inheight, 1, xval);
+            Map2D x = new(inchannels, inwidth, inheight, 1, xval);
 
             Map2D y = Reference(ChannelToSpaceTest.Reference(x, scale), scale);
 

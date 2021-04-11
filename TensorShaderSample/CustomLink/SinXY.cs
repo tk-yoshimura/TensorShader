@@ -8,7 +8,7 @@ namespace CustomLink {
     public static class CustomBinaryArithmetric {
         /// <summary>カスタム2項演算</summary>
         public static Field SinXY(Field x1, Field x2) {
-            Field y = new Field();
+            Field y = new();
             Link link = new SinXY(x1, x2, y);
 
             link.Forward();
@@ -31,7 +31,7 @@ namespace CustomLink {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

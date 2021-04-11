@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>複素3次元畳み込み</summary>
         public static Field ComplexConvolution3D(Field x, Field w) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.ComplexConvolution.ComplexConvolution3D(x, w, y);
 
             link.Forward();
@@ -38,7 +38,7 @@ namespace TensorShader.Links.ComplexConvolution {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

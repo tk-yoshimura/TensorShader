@@ -8,7 +8,7 @@ namespace TensorShader {
         /// https://www.techrxiv.org/articles/Yamatani_Activation_Edge_Homogeneous_Response_Super_Resolution_Neural_Network/11861187
         /// </remarks>
         public static Field Yamatani(Field x1, Field x2, float slope) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.BinaryArithmetric.Yamatani(x1, x2, y, slope);
 
             link.Forward();
@@ -38,7 +38,7 @@ namespace TensorShader.Links.BinaryArithmetric {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

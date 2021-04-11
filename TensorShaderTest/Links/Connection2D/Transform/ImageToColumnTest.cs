@@ -22,7 +22,7 @@ namespace TensorShaderTest.Links.Connection2D {
 
             Field y1_expect = ImageToColumn2D(x1, kwidth, kheight);
 
-            List<Field> x2s = new List<Field>();
+            List<Field> x2s = new();
             for (int ky = 0; ky < kheight; ky++) {
                 for (int kx = 0; kx < kwidth; kx++) {
                     x2s.Add(

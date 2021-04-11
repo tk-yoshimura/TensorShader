@@ -7,8 +7,8 @@ namespace TensorShaderUtilTest.Iterator {
     public class RepeatIteratorTest {
         [TestMethod]
         public void ExecuteTest1() {
-            RepeatIterator iterator = new RepeatIterator(50, 101);
-            RepeatIterator iterator_skip = new RepeatIterator(50, 101);
+            RepeatIterator iterator = new(50, 101);
+            RepeatIterator iterator_skip = new(50, 101);
 
             int[] indexes1 = iterator.Next();
             int[] indexes2 = iterator.Next();
@@ -43,8 +43,8 @@ namespace TensorShaderUtilTest.Iterator {
 
         [TestMethod]
         public void ExecuteTest2() {
-            RepeatIterator iterator = new RepeatIterator(50, 100);
-            RepeatIterator iterator_skip = new RepeatIterator(50, 100);
+            RepeatIterator iterator = new(50, 100);
+            RepeatIterator iterator_skip = new(50, 100);
 
             int[] indexes1 = iterator.Next();
             int[] indexes2 = iterator.Next();
@@ -79,7 +79,7 @@ namespace TensorShaderUtilTest.Iterator {
 
         [TestMethod]
         public void ExecuteTest3() {
-            RepeatIterator iterator = new RepeatIterator(1, 4);
+            RepeatIterator iterator = new(1, 4);
 
             iterator.IncreasedEpoch += (iter) => { Console.WriteLine($"Epoch {iter.Epoch}"); };
             iterator.IncreasedIteration += (iter) => { Console.WriteLine($"Iteration {iter.Iteration}"); };

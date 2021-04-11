@@ -19,7 +19,7 @@ namespace TensorShaderPreset.Image {
 
         /// <summary>X方向微分フィルタ</summary>
         public static Field DiffX(Field x, float scale) {
-            VariableField w = new VariableField(
+            VariableField w = new(
                 KernelDiffX(x.Shape.Channels, scale),
                 name: "DiffX"
             );
@@ -41,7 +41,7 @@ namespace TensorShaderPreset.Image {
 
         /// <summary>Y方向微分フィルタ</summary>
         public static Field DiffY(Field x, float scale) {
-            VariableField w = new VariableField(
+            VariableField w = new(
                 KernelDiffY(x.Shape.Channels, scale),
                 name: "DiffY"
             );

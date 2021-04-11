@@ -15,7 +15,7 @@ namespace TensorShader {
         internal static Tensor TrivectorQuaternionMulQGrad(Tensor v, Tensor u, Tensor q) {
             Function function = new Functions.TrivectorArithmetric.TrivectorQuaternionMulQGrad();
 
-            Tensor p = new Tensor(q.Shape);
+            Tensor p = new(q.Shape);
 
             function.Execute(new Tensor[] { v, u, q }, new Tensor[] { p });
 

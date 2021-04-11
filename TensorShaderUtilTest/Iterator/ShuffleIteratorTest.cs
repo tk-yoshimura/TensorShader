@@ -7,8 +7,8 @@ namespace TensorShaderUtilTest.Iterator {
     public class ShuffleIteratorTest {
         [TestMethod]
         public void ExecuteTest1() {
-            ShuffleIterator iterator = new ShuffleIterator(50, 101, new Random(123));
-            ShuffleIterator iterator_skip = new ShuffleIterator(50, 101, new Random(123));
+            ShuffleIterator iterator = new(50, 101, new Random(123));
+            ShuffleIterator iterator_skip = new(50, 101, new Random(123));
 
             int[] indexes1 = iterator.Next();
             int[] indexes2 = iterator.Next();
@@ -43,8 +43,8 @@ namespace TensorShaderUtilTest.Iterator {
 
         [TestMethod]
         public void ExecuteTest2() {
-            ShuffleIterator iterator = new ShuffleIterator(50, 100, new Random(123));
-            ShuffleIterator iterator_skip = new ShuffleIterator(50, 100, new Random(123));
+            ShuffleIterator iterator = new(50, 100, new Random(123));
+            ShuffleIterator iterator_skip = new(50, 100, new Random(123));
 
             int[] indexes1 = iterator.Next();
             int[] indexes2 = iterator.Next();
@@ -79,7 +79,7 @@ namespace TensorShaderUtilTest.Iterator {
 
         [TestMethod]
         public void ExecuteTest3() {
-            ShuffleIterator iterator = new ShuffleIterator(1, 4, new Random(123));
+            ShuffleIterator iterator = new(1, 4, new Random(123));
 
             iterator.IncreasedEpoch += (iter) => { Console.WriteLine($"Epoch {iter.Epoch}"); };
             iterator.IncreasedIteration += (iter) => { Console.WriteLine($"Iteration {iter.Iteration}"); };

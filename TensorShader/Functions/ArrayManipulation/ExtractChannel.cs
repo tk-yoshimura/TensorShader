@@ -15,7 +15,7 @@ namespace TensorShader {
         public static Tensor ExtractChannel(Tensor x, int index, int channels = 1) {
             Function function = new Functions.ArrayManipulation.ExtractChannel(index, channels);
 
-            Tensor y = new Tensor(function.OutputShapes(x.Shape)[0]);
+            Tensor y = new(function.OutputShapes(x.Shape)[0]);
 
             function.Execute(new Tensor[] { x }, new Tensor[] { y });
 

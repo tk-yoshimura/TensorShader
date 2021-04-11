@@ -22,14 +22,14 @@ namespace TensorShaderTest.Operators.Connection2D {
 
                             float[] xval = (new float[inwidth * inheight * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-                            Map2D x = new Map2D(channels, inwidth, inheight, batch, xval);
+                            Map2D x = new(channels, inwidth, inheight, batch, xval);
 
                             Map2D y = Reference(x, scale);
 
-                            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, inwidth, inheight, batch), xval);
-                            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, outwidth, outheight, batch));
+                            OverflowCheckedTensor x_tensor = new(Shape.Map2D(channels, inwidth, inheight, batch), xval);
+                            OverflowCheckedTensor y_tensor = new(Shape.Map2D(channels, outwidth, outheight, batch));
 
-                            NeighborZoom ope = new NeighborZoom(inwidth, inheight, channels, batch);
+                            NeighborZoom ope = new(inwidth, inheight, channels, batch);
 
                             ope.Execute(x_tensor, y_tensor);
 
@@ -55,10 +55,10 @@ namespace TensorShaderTest.Operators.Connection2D {
             int inwidth = 512, inheight = 512, channels = 32, scale = 2;
             int outwidth = inwidth * scale, outheight = inheight * scale;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, inwidth, inheight));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(channels, outwidth, outheight));
+            OverflowCheckedTensor x_tensor = new(Shape.Map2D(channels, inwidth, inheight));
+            OverflowCheckedTensor y_tensor = new(Shape.Map2D(channels, outwidth, outheight));
 
-            NeighborZoom ope = new NeighborZoom(inwidth, inheight, channels);
+            NeighborZoom ope = new(inwidth, inheight, channels);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/neighborzoom_2d.nvvp");
             Cuda.Profiler.Start();
@@ -72,7 +72,7 @@ namespace TensorShaderTest.Operators.Connection2D {
             int inw = x.Width, inh = x.Height, channels = x.Channels, batch = x.Batch;
 
             int outw = inw * scale, outh = inh * scale;
-            Map2D y = new Map2D(channels, outw, outh, batch);
+            Map2D y = new(channels, outw, outh, batch);
 
             for (int th = 0; th < batch; th++) {
                 for (int ox, oy = 0; oy < outh; oy++) {

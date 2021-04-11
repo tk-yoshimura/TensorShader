@@ -15,7 +15,7 @@ namespace TensorShader {
         public static Tensor Sort(Tensor x, int axis) {
             Function function = new Functions.ArrayManipulation.Sort(axis);
 
-            Tensor y = new Tensor(x.Shape);
+            Tensor y = new(x.Shape);
 
             function.Execute(new Tensor[] { x }, new Tensor[] { y });
 

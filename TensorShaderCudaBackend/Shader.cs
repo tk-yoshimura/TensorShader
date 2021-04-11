@@ -23,7 +23,7 @@
         /// <summary>デフォルトストリーム</summary>
         public static Stream DefaultStream {
             get {
-                if (stream == null) {
+                if (stream is null) {
                     stream = new Stream();
                 }
 

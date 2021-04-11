@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>3次元ベクトル正規化</summary>
         public static Field TrivectorNormalize(Field x) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.TrivectorArithmetric.TrivectorNormalize(x, y);
 
             link.Forward();
@@ -28,7 +28,7 @@ namespace TensorShader.Links.TrivectorArithmetric {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

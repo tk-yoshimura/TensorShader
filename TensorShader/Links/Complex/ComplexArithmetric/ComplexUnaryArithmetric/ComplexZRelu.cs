@@ -5,7 +5,7 @@ namespace TensorShader {
         /// <summary>ComplexZRelu</summary>
         /// <remarks>ガウス平面第1象限以外を0とする</remarks>
         public static Field ComplexZRelu(Field x) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.ComplexArithmetric.ComplexZRelu(x, y);
 
             link.Forward();
@@ -29,7 +29,7 @@ namespace TensorShader.Links.ComplexArithmetric {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

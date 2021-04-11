@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>1次元ゼロパディング</summary>
         public static Field ZeroPadding1D(Field x, int pad) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Connection1D.ZeroPadding(x, y, pad);
 
             link.Forward();
@@ -14,7 +14,7 @@ namespace TensorShader {
 
         /// <summary>1次元ゼロパディング</summary>
         public static Field ZeroPadding1D(Field x, int pad_left, int pad_right) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Connection1D.ZeroPadding(x, y, pad_left, pad_right);
 
             link.Forward();
@@ -57,7 +57,7 @@ namespace TensorShader.Links.Connection1D {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

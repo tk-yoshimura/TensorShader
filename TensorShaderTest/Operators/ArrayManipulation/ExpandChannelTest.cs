@@ -9,7 +9,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
     public class ExpandChannelTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
             foreach (int expands in new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 10, 15, 20, 25, 30 }) {
                 for (int i = 0; i < 4; i++) {
@@ -19,10 +19,10 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
                         float[] x = (new float[length]).Select((_) => (float)rd.NextDouble()).ToArray();
 
-                        OverflowCheckedTensor v1 = new OverflowCheckedTensor(Shape.Vector(length), x);
-                        OverflowCheckedTensor v2 = new OverflowCheckedTensor(Shape.Vector(expands * length));
+                        OverflowCheckedTensor v1 = new(Shape.Vector(length), x);
+                        OverflowCheckedTensor v2 = new(Shape.Vector(expands * length));
 
-                        ExpandChannel ope = new ExpandChannel(v1.Shape, expands);
+                        ExpandChannel ope = new(v1.Shape, expands);
 
                         ope.Execute(v1, v2);
 

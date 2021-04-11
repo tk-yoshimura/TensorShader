@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>否定</summary>
         public static Field Not(Field x) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.LogicalArithmetric.Not(x, y);
 
             link.Forward();

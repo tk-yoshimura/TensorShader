@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>単位ステップ関数</summary>
         public static Field Step(Field x) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.UnaryArithmetric.Step(x, y);
 
             link.Forward();

@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>ポイントごとの3次元カーネル積</summary>
         public static Tensor PointwiseKernelProduct3D(Tensor x, Tensor y) {
             Functions.Connection3D.PointwiseKernelProduct function =
-                new Functions.Connection3D.PointwiseKernelProduct(x.Shape, y.Shape);
+                new(x.Shape, y.Shape);
 
-            Tensor w = new Tensor(function.OutShape);
+            Tensor w = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, y }, new Tensor[] { w });
 

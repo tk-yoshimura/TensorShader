@@ -158,7 +158,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution {
 
         /// <summary>引数チェック</summary>
         protected override void CheckArgument(params object[] args) {
-            if (args == null || args.Length != 7) {
+            if (args is null || args.Length != 7) {
                 throw new ArgumentException(nameof(args));
             }
 

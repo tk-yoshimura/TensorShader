@@ -5,7 +5,7 @@ namespace TensorShader {
         /// <summary>2次元線形補間</summary>
         /// <remarks>倍率2固定</remarks>
         public static Field LinearZoom2D(Field x) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Connection2D.LinearZoom(x, y);
 
             link.Forward();
@@ -37,7 +37,7 @@ namespace TensorShader.Links.Connection2D {
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 

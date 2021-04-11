@@ -17,7 +17,7 @@ namespace CustomLink {
         static void TestSinXY() {
             const int points = 32;
 
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             float[] xval = (new float[points]).Select((_) => (float)(random.NextDouble() * 2 - 1)).ToArray();
             float[] yval = (new float[points]).Select((_) => (float)(random.NextDouble() * 2 - 1)).ToArray();
@@ -86,7 +86,7 @@ namespace CustomLink {
         static void TestExpSin() {
             const int points = 32;
 
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             float[] xval = (new float[points]).Select((_) => (float)(random.NextDouble() * 2 - 1)).ToArray();
             float[] tval = (new float[points]).Select((_) => (float)(random.NextDouble() * 2 - 1)).ToArray();

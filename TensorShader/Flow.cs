@@ -60,7 +60,7 @@ namespace TensorShader {
         /// <summary>コンストラクタ</summary>
         /// <param name="nodes">ノードリスト</param>
         protected internal Flow(List<Node> nodes) {
-            if (nodes == null) {
+            if (nodes is null) {
                 throw new ArgumentException(nameof(nodes));
             }
 
@@ -112,15 +112,15 @@ namespace TensorShader {
         internal static List<Node> ExecutionOrderSort(IEnumerable<InputNode> innodes, List<Node> tracenodes = null) {
             List<Tensor> input_tensors =
                 innodes
-                .Where((node) => node.Tensor != null)
+                .Where((node) => node.Tensor is not null)
                 .Select((node) => node.Tensor)
                 .ToList();
 
-            Stack<Node> nodestack = new Stack<Node>(innodes.Reverse().Select((node) => node as Node));
-            Dictionary<Node, List<Node>> innodes_table = new Dictionary<Node, List<Node>>();
-            List<OutputNode> shared_tensor_output_nodes = new List<OutputNode>();
+            Stack<Node> nodestack = new(innodes.Reverse().Select((node) => node as Node));
+            Dictionary<Node, List<Node>> innodes_table = new();
+            List<OutputNode> shared_tensor_output_nodes = new();
 
-            List<Node> visited_nodes = new List<Node>();
+            List<Node> visited_nodes = new();
 
             // 始端入力ノードから深さ優先探索
             while (nodestack.Count > 0) {
@@ -142,7 +142,7 @@ namespace TensorShader {
 
                 foreach (var outnode in outnodes) {
                     // フローに関与するノードに含まれていない場合はスキップ
-                    if (tracenodes != null && !tracenodes.Contains(outnode)) {
+                    if (tracenodes is not null && !tracenodes.Contains(outnode)) {
                         continue;
                     }
 
@@ -157,7 +157,7 @@ namespace TensorShader {
                     // 始端入力ノードが受け取られる前に上書きされるのを防ぐ
                     if (outnode is OutputNode) {
                         Tensor outtensor = (outnode as OutputNode).Tensor;
-                        if (outtensor != null && input_tensors.Contains(outtensor)) {
+                        if (outtensor is not null && input_tensors.Contains(outtensor)) {
                             shared_tensor_output_nodes.Add(outnode as OutputNode);
                             continue;
                         }
@@ -188,7 +188,7 @@ namespace TensorShader {
             // 出力ノードのテンソルが重複しているなら例外を送出
             IEnumerable<Tensor> output_tensors = visited_nodes
                 .OfType<OutputNode>()
-                .Where((node) => node.Tensor != null)
+                .Where((node) => node.Tensor is not null)
                 .Select((node) => node.Tensor);
 
             if (output_tensors.IsDuplicated()) {
@@ -206,8 +206,8 @@ namespace TensorShader {
         /// <summary>出力ノードからバックトレース</summary>
         /// <param name="outnodes">出力ノード</param>
         internal static (List<Node> nodes, List<InputNode> innodes) BackTrace(params OutputNode[] outnodes) {
-            Stack<Node> nodestack = new Stack<Node>(outnodes.Reverse().Select((node) => node as Node));
-            List<Node> visited_nodes = new List<Node>();
+            Stack<Node> nodestack = new(outnodes.Reverse().Select((node) => node as Node));
+            List<Node> visited_nodes = new();
 
             while (nodestack.Count > 0) {
                 // 探索ノードをポップ
@@ -236,7 +236,7 @@ namespace TensorShader {
                 = nodes
                 .OfType<InputNode>()
                 .Select((node) => node.Tensor)
-                .Where((tensor) => tensor != null)
+                .Where((tensor) => tensor is not null)
                 .ToList();
 
             (int begin, int end) lifespan(VariableNode node) {
@@ -247,7 +247,7 @@ namespace TensorShader {
 
                 // 出力ノードの生存期間は入力ノードとテンソルを共有している限り無制限
                 if (node is OutputNode outputnode) {
-                    if (outputnode.Tensor == null || !input_tensors.Contains(outputnode.Tensor)) {
+                    if (outputnode.Tensor is null || !input_tensors.Contains(outputnode.Tensor)) {
                         return (nodes.IndexOf(node), int.MaxValue);
                     }
                     else {
@@ -284,7 +284,7 @@ namespace TensorShader {
                 var lifespan = node_lifespan.Value;
 
                 //すでに割り当てられているならばスキップ
-                if (node is TensorNode tensornode && tensornode.Tensor != null) {
+                if (node is TensorNode tensornode && tensornode.Tensor is not null) {
                     tensor_table.Add(node, tensornode.Tensor);
                     continue;
                 }
@@ -341,9 +341,9 @@ namespace TensorShader {
 
         /// <summary>到達可能なリンクおよびフィールドを列挙</summary>
         public static (List<Field> fields, List<Link> links) EnumerateReachableFields(bool forward, bool backward, params Field[] fields) {
-            List<Link> reachable_links = new List<Link>();
-            List<Field> reachable_fields = new List<Field>(fields.Distinct());
-            Stack<Field> stack = new Stack<Field>(fields);
+            List<Link> reachable_links = new();
+            List<Field> reachable_fields = new(fields.Distinct());
+            Stack<Field> stack = new(fields);
 
             while (stack.Count > 0) {
                 Field field = stack.Pop();
@@ -355,7 +355,7 @@ namespace TensorShader {
                             reachable_links.Add(link);
                         }
 
-                        if (link.OutField != null && !reachable_fields.Contains(link.OutField)) {
+                        if (link.OutField is not null && !reachable_fields.Contains(link.OutField)) {
                             stack.Push(link.OutField);
                             reachable_fields.Add(link.OutField);
                         }
@@ -363,7 +363,7 @@ namespace TensorShader {
                 }
                 //探索フィールドを出力とするリンクを探索
                 if (backward) {
-                    if (field.OutLink != null) {
+                    if (field.OutLink is not null) {
                         if (!reachable_links.Contains(field.OutLink)) {
                             reachable_links.Add(field.OutLink);
                         }
@@ -411,13 +411,13 @@ namespace TensorShader {
             List<ParameterField> parameters = backward_reachable_fields.OfType<ParameterField>().ToList();
 
             // 逆伝搬実行
-            Stack<Field> backward_stack = new Stack<Field>(error_fields);
-            Dictionary<Field, List<Link>> outlinks_table = new Dictionary<Field, List<Link>>();
+            Stack<Field> backward_stack = new(error_fields);
+            Dictionary<Field, List<Link>> outlinks_table = new();
 
             while (backward_stack.Count > 0) {
                 Field field = backward_stack.Pop();
 
-                if (field.OutLink != null) {
+                if (field.OutLink is not null) {
                     field.OutLink.Backward();
 
                     // 探索フィールドを出力したリンクの順伝搬時の入力フィールドを検索
@@ -484,7 +484,7 @@ namespace TensorShader {
         public void Execute() {
             foreach (var node in nodes) {
                 if (node is InputNode inputnode) {
-                    if (inputnode.Initializer != null) {
+                    if (inputnode.Initializer is not null) {
                         inputnode.Initializer.Execute();
                     }
                 }

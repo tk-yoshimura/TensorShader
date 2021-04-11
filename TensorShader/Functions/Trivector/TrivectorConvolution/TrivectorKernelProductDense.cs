@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>3次元ベクトル全結合カーネル積</summary>
         public static Tensor TrivectorKernelProductDense(Tensor x, Tensor y, Tensor q, bool transpose = false) {
             Functions.TrivectorConvolution.TrivectorKernelProductDense function =
-                new Functions.TrivectorConvolution.TrivectorKernelProductDense(x.Shape, y.Shape, transpose);
+                new(x.Shape, y.Shape, transpose);
 
-            Tensor w = new Tensor(function.OutShape);
+            Tensor w = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, y, q }, new Tensor[] { w });
 

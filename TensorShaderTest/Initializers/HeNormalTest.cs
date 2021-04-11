@@ -10,12 +10,12 @@ namespace TensorShaderTest.Initializers {
     public class HeNormalTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             const int batches = 1000, tests = 8;
 
             foreach (int num in new int[] { 32, 64, 128, 256 }) {
-                List<float> variance_list = new List<float>();
+                List<float> variance_list = new();
 
                 for (int i = 0; i < tests; i++) {
                     Tensor x = Tensor.NormalRandom(Shape.Map0D(num, batches), random);

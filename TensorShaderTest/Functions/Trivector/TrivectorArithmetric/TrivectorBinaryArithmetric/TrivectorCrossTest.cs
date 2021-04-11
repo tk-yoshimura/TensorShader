@@ -10,7 +10,7 @@ namespace TensorShaderTest.Functions.TrivectorArithmetric {
         [TestMethod]
         public void ExecuteTest() {
             const int length = 255;
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
             int[] idxes = (new int[length]).Select((_, idx) => idx).ToArray();
 
@@ -25,8 +25,8 @@ namespace TensorShaderTest.Functions.TrivectorArithmetric {
                 float[] y = o.State.Value;
 
                 for (int i = 0; i < y.Length / 3; i++) {
-                    Vector3 v = new Vector3(x1[i * 3], x1[i * 3 + 1], x1[i * 3 + 2]);
-                    Vector3 u = new Vector3(x2[i * 3], x2[i * 3 + 1], x2[i * 3 + 2]);
+                    Vector3 v = new(x1[i * 3], x1[i * 3 + 1], x1[i * 3 + 2]);
+                    Vector3 u = new(x2[i * 3], x2[i * 3 + 1], x2[i * 3 + 2]);
                     Vector3 w = Vector3.Cross(v, u);
 
                     Assert.AreEqual(w.X, y[i * 3], 1e-6f, $"not equal {i * 3}");
@@ -42,7 +42,7 @@ namespace TensorShaderTest.Functions.TrivectorArithmetric {
                 float[] y = o.State.Value;
 
                 for (int i = 0; i < y.Length / 3; i++) {
-                    Vector3 v = new Vector3(x1[i * 3], x1[i * 3 + 1], x1[i * 3 + 2]);
+                    Vector3 v = new(x1[i * 3], x1[i * 3 + 1], x1[i * 3 + 2]);
                     Vector3 w = Vector3.Cross(v, v);
 
                     Assert.AreEqual(w.X, y[i * 3], 1e-6f, $"not equal {i * 3}");

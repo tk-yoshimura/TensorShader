@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>クラスごとの正答数</summary>
         public static Field Matches(Field x, Field t) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.Evaluation.Classify.Matches(x, t, y);
 
             link.Forward();

@@ -12,7 +12,7 @@ namespace TensorShaderTest.Operators.Connection3D {
         public void ExecuteTest() {
             float max_err = 0;
 
-            Random random = new Random();
+            Random random = new();
 
             foreach (int batch in new int[] { 1, 2, 3 }) {
                 foreach (int channels in new int[] { 1, 2, 3, 5 }) {
@@ -24,16 +24,16 @@ namespace TensorShaderTest.Operators.Connection3D {
 
                                     float[] yval = (new float[outwidth * outheight * outdepth * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-                                    Map3D y = new Map3D(channels, outwidth, outheight, outdepth, batch, yval);
+                                    Map3D y = new(channels, outwidth, outheight, outdepth, batch, yval);
 
                                     Map3D x = Reference(y, inwidth, inheight, indepth, stride);
 
-                                    OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, inwidth, inheight, indepth, batch));
-                                    OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, outwidth, outheight, outdepth, batch), yval);
+                                    OverflowCheckedTensor x_tensor = new(Shape.Map3D(channels, inwidth, inheight, indepth, batch));
+                                    OverflowCheckedTensor y_tensor = new(Shape.Map3D(channels, outwidth, outheight, outdepth, batch), yval);
 
                                     TensorShaderCudaBackend.Randomize.Uniform((uint)x_tensor.Length, x_tensor.Buffer, random);
 
-                                    StrideUnpooling ope = new StrideUnpooling(inwidth, inheight, indepth, channels, stride, batch);
+                                    StrideUnpooling ope = new(inwidth, inheight, indepth, channels, stride, batch);
 
                                     ope.Execute(y_tensor, x_tensor);
 
@@ -60,7 +60,7 @@ namespace TensorShaderTest.Operators.Connection3D {
             int channels = y.Channels, batch = y.Batch;
             int inw = outw / stride, inh = outh / stride, ind = outd / stride;
 
-            Map3D x = new Map3D(channels, outw, outh, outd, batch);
+            Map3D x = new(channels, outw, outh, outd, batch);
 
             for (int th = 0; th < batch; th++) {
                 for (int ix, iy, iz = 0; iz < ind; iz++) {
@@ -84,10 +84,10 @@ namespace TensorShaderTest.Operators.Connection3D {
             int outwidth = 64, outheight = 64, outdepth = 64, channels = 32, stride = 2, batch = 4;
             int inwidth = outwidth / stride, inheight = outheight / stride, indepth = outdepth / stride;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, inwidth, inheight, indepth, batch));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(channels, outwidth, outheight, outdepth, batch));
+            OverflowCheckedTensor x_tensor = new(Shape.Map3D(channels, inwidth, inheight, indepth, batch));
+            OverflowCheckedTensor y_tensor = new(Shape.Map3D(channels, outwidth, outheight, outdepth, batch));
 
-            StrideUnpooling ope = new StrideUnpooling(outwidth, outheight, outdepth, channels, stride, batch);
+            StrideUnpooling ope = new(outwidth, outheight, outdepth, channels, stride, batch);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/strideunpool_3d.nvvp");
             Cuda.Profiler.Start();

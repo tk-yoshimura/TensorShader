@@ -15,7 +15,7 @@ namespace TensorShader {
         public static Tensor Reshape(Tensor x, Shape shape) {
             Function function = new Functions.ArrayManipulation.Reshape(shape);
 
-            Tensor y = new Tensor(shape);
+            Tensor y = new(shape);
 
             function.Execute(new Tensor[] { x }, new Tensor[] { y });
 

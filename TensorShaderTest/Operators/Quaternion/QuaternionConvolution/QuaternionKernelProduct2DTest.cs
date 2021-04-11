@@ -10,7 +10,7 @@ namespace TensorShaderTest.Operators.Quaternion {
     public class QuaternionKernelProduct2DTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             float max_err = 0;
 
@@ -32,17 +32,17 @@ namespace TensorShaderTest.Operators.Quaternion {
                                         Quaternion[] ycval = (new Quaternion[yval.Length / 4])
                                             .Select((_, idx) => new Quaternion(yval[idx * 4], yval[idx * 4 + 1], yval[idx * 4 + 2], yval[idx * 4 + 3])).ToArray();
 
-                                        QuaternionMap2D x = new QuaternionMap2D(inchannels / 4, inwidth, inheight, batch, xcval);
-                                        QuaternionMap2D y = new QuaternionMap2D(outchannels / 4, outwidth, outheight, batch, ycval);
+                                        QuaternionMap2D x = new(inchannels / 4, inwidth, inheight, batch, xcval);
+                                        QuaternionMap2D y = new(outchannels / 4, outwidth, outheight, batch, ycval);
 
                                         QuaternionFilter2D gw = Reference(x, y, kwidth, kheight);
 
-                                        OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
-                                        OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
+                                        OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
+                                        OverflowCheckedTensor y_tensor = new(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
 
-                                        OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels, outchannels / 4, kwidth, kheight));
+                                        OverflowCheckedTensor gw_tensor = new(Shape.Kernel2D(inchannels, outchannels / 4, kwidth, kheight));
 
-                                        QuaternionKernelProduct2D ope = new QuaternionKernelProduct2D(inwidth, inheight, inchannels, outchannels, kwidth, kheight, transpose: false, batch);
+                                        QuaternionKernelProduct2D ope = new(inwidth, inheight, inchannels, outchannels, kwidth, kheight, transpose: false, batch);
 
                                         ope.Execute(x_tensor, y_tensor, gw_tensor);
 
@@ -69,7 +69,7 @@ namespace TensorShaderTest.Operators.Quaternion {
 
         [TestMethod]
         public void LargeMapTest() {
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             float max_err = 0;
 
@@ -88,17 +88,17 @@ namespace TensorShaderTest.Operators.Quaternion {
             Quaternion[] ycval = (new Quaternion[yval.Length / 4])
                 .Select((_, idx) => new Quaternion(yval[idx * 4], yval[idx * 4 + 1], yval[idx * 4 + 2], yval[idx * 4 + 3])).ToArray();
 
-            QuaternionMap2D x = new QuaternionMap2D(inchannels / 4, inwidth, inheight, batch, xcval);
-            QuaternionMap2D y = new QuaternionMap2D(outchannels / 4, outwidth, outheight, batch, ycval);
+            QuaternionMap2D x = new(inchannels / 4, inwidth, inheight, batch, xcval);
+            QuaternionMap2D y = new(outchannels / 4, outwidth, outheight, batch, ycval);
 
             QuaternionFilter2D gw = Reference(x, y, kwidth, kheight);
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
+            OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
+            OverflowCheckedTensor y_tensor = new(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
 
-            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels, outchannels / 4, kwidth, kheight));
+            OverflowCheckedTensor gw_tensor = new(Shape.Kernel2D(inchannels, outchannels / 4, kwidth, kheight));
 
-            QuaternionKernelProduct2D ope = new QuaternionKernelProduct2D(inwidth, inheight, inchannels, outchannels, kwidth, kheight, transpose: false, batch);
+            QuaternionKernelProduct2D ope = new(inwidth, inheight, inchannels, outchannels, kwidth, kheight, transpose: false, batch);
 
             ope.Execute(x_tensor, y_tensor, gw_tensor);
 
@@ -120,12 +120,12 @@ namespace TensorShaderTest.Operators.Quaternion {
             int inwidth = 512, inheight = 512, inchannels = 32, outchannels = 32, ksize = 3;
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map2D(inchannels, inwidth, inheight));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map2D(outchannels, outwidth, outheight));
+            OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, inwidth, inheight));
+            OverflowCheckedTensor y_tensor = new(Shape.Map2D(outchannels, outwidth, outheight));
 
-            OverflowCheckedTensor gw_tensor = new OverflowCheckedTensor(Shape.Kernel2D(inchannels, outchannels / 4, ksize, ksize));
+            OverflowCheckedTensor gw_tensor = new(Shape.Kernel2D(inchannels, outchannels / 4, ksize, ksize));
 
-            QuaternionKernelProduct2D ope = new QuaternionKernelProduct2D(inwidth, inheight, inchannels, outchannels, ksize, ksize);
+            QuaternionKernelProduct2D ope = new(inwidth, inheight, inchannels, outchannels, ksize, ksize);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/quaternion_kernelproduct_2d.nvvp");
             Cuda.Profiler.Start();
@@ -143,7 +143,7 @@ namespace TensorShaderTest.Operators.Quaternion {
                 throw new ArgumentException("mismatch shape");
             }
 
-            QuaternionFilter2D w = new QuaternionFilter2D(inchannels, outchannels, kwidth, kheight);
+            QuaternionFilter2D w = new(inchannels, outchannels, kwidth, kheight);
 
             for (int kx, ky = 0; ky < kheight; ky++) {
                 for (kx = 0; kx < kwidth; kx++) {
@@ -178,8 +178,8 @@ namespace TensorShaderTest.Operators.Quaternion {
             Quaternion[] ycval = (new Quaternion[yval.Length / 4])
                 .Select((_, idx) => new Quaternion(yval[idx * 4], yval[idx * 4 + 1], yval[idx * 4 + 2], yval[idx * 4 + 3])).ToArray();
 
-            QuaternionMap2D x = new QuaternionMap2D(inchannels / 4, inwidth, inheight, batch, xcval);
-            QuaternionMap2D y = new QuaternionMap2D(outchannels / 4, outwidth, outheight, batch, ycval);
+            QuaternionMap2D x = new(inchannels / 4, inwidth, inheight, batch, xcval);
+            QuaternionMap2D y = new(outchannels / 4, outwidth, outheight, batch, ycval);
 
             QuaternionFilter2D gw = Reference(x, y, kwidth, kheight);
 

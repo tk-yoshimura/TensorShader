@@ -17,9 +17,9 @@ namespace TensorShader {
         /// <summary>1次元カーネル積</summary>
         public static Tensor KernelProduct1D(Tensor x, Tensor y, int kwidth) {
             Functions.Connection1D.KernelProduct function =
-                new Functions.Connection1D.KernelProduct(x.Shape, y.Shape, kwidth);
+                new(x.Shape, y.Shape, kwidth);
 
-            Tensor w = new Tensor(function.OutShape);
+            Tensor w = new(function.OutShape);
 
             function.Execute(new Tensor[] { x, y }, new Tensor[] { w });
 

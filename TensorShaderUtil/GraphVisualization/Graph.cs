@@ -39,13 +39,13 @@ namespace TensorShaderUtil.GraphVisualization {
         /// <summary>出力フィールドから構築</summary>
         /// <param name="outputs">出力フィールドリスト</param>
         public static (Node[] nodes, Edge[] edges) Build(params Field[] outputs) {
-            Dictionary<Field, Node> visited_field = new Dictionary<Field, Node>();
-            Dictionary<Link, Node> visited_link = new Dictionary<Link, Node>();
-            List<Edge> edges = new List<Edge>();
+            Dictionary<Field, Node> visited_field = new();
+            Dictionary<Link, Node> visited_link = new();
+            List<Edge> edges = new();
 
             int id = 0;
 
-            Stack<Field> stack = new Stack<Field>(outputs);
+            Stack<Field> stack = new(outputs);
             foreach (Field field in outputs) {
                 visited_field.Add(field, new Node() { ID = id++, Name = field.Name, Type = NodeType.Field });
             }
@@ -55,7 +55,7 @@ namespace TensorShaderUtil.GraphVisualization {
 
                 Link link = field_current.OutLink;
 
-                if (link == null) {
+                if (link is null) {
                     continue;
                 }
 

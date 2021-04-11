@@ -8,7 +8,7 @@ namespace TensorShaderTest.Functions.Aggregation {
     public class AverageTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
             int length = 6, ch = 4, batch = 3, width = 4, height = 5;
 

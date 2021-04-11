@@ -49,7 +49,7 @@ namespace TensorShader.Layers {
 
             Field y = Dense(x, W);
 
-            if (Bias != null) {
+            if (Bias is not null) {
                 y += Bias;
             }
 

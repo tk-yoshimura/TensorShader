@@ -19,17 +19,17 @@ namespace TensorShaderTest.Operators.Connection3D {
                             float[] yval = (new float[width * height * depth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
                             float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-                            Map3D y = new Map3D(outchannels, width, height, depth, batch, yval);
-                            Filter3D w = new Filter3D(inchannels, outchannels, 1, 1, 1, wval);
+                            Map3D y = new(outchannels, width, height, depth, batch, yval);
+                            Filter3D w = new(inchannels, outchannels, 1, 1, 1, wval);
 
                             Map3D x = Reference(y, w);
 
-                            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, width, height, depth, batch), yval);
-                            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels), wval);
+                            OverflowCheckedTensor y_tensor = new(Shape.Map3D(outchannels, width, height, depth, batch), yval);
+                            OverflowCheckedTensor w_tensor = new(Shape.Kernel0D(inchannels, outchannels), wval);
 
-                            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, width, height, depth, batch));
+                            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, width, height, depth, batch));
 
-                            PointwiseDeconvolution ope = new PointwiseDeconvolution(width, height, depth, outchannels, inchannels, batch);
+                            PointwiseDeconvolution ope = new(width, height, depth, outchannels, inchannels, batch);
 
                             ope.Execute(y_tensor, w_tensor, x_tensor);
 
@@ -54,7 +54,7 @@ namespace TensorShaderTest.Operators.Connection3D {
         public void LargeMapTest() {
             float max_err = 0;
 
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             int batch = 3;
             int inchannels = 49, outchannels = 50;
@@ -63,17 +63,17 @@ namespace TensorShaderTest.Operators.Connection3D {
             float[] yval = (new float[width * height * depth * outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
             float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => idx * (float)random.NextDouble() * 1e-2f).ToArray();
 
-            Map3D y = new Map3D(outchannels, width, height, depth, batch, yval);
-            Filter3D w = new Filter3D(inchannels, outchannels, 1, 1, 1, wval);
+            Map3D y = new(outchannels, width, height, depth, batch, yval);
+            Filter3D w = new(inchannels, outchannels, 1, 1, 1, wval);
 
             Map3D x = Reference(y, w);
 
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, width, height, depth, batch), yval);
-            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels), wval);
+            OverflowCheckedTensor y_tensor = new(Shape.Map3D(outchannels, width, height, depth, batch), yval);
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel0D(inchannels, outchannels), wval);
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, width, height, depth, batch));
+            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, width, height, depth, batch));
 
-            PointwiseDeconvolution ope = new PointwiseDeconvolution(width, height, depth, outchannels, inchannels, batch);
+            PointwiseDeconvolution ope = new(width, height, depth, outchannels, inchannels, batch);
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 
@@ -94,12 +94,12 @@ namespace TensorShaderTest.Operators.Connection3D {
         public void SpeedTest() {
             int width = 64, height = 64, depth = 64, inchannels = 31, outchannels = 31;
 
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, width, height, depth));
-            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel0D(inchannels, outchannels));
+            OverflowCheckedTensor y_tensor = new(Shape.Map3D(outchannels, width, height, depth));
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel0D(inchannels, outchannels));
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, width, height, depth));
+            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, width, height, depth));
 
-            PointwiseDeconvolution ope = new PointwiseDeconvolution(width, height, depth, outchannels, inchannels);
+            PointwiseDeconvolution ope = new(width, height, depth, outchannels, inchannels);
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 
@@ -115,7 +115,7 @@ namespace TensorShaderTest.Operators.Connection3D {
             int inchannels = w.InChannels, outchannels = w.OutChannels, batch = y.Batch;
             int inw = y.Width, inh = y.Height, ind = y.Depth;
 
-            Map3D x = new Map3D(inchannels, inw, inh, ind, batch);
+            Map3D x = new(inchannels, inw, inh, ind, batch);
 
             for (int th = 0; th < batch; th++) {
                 for (int ix, iy, iz = 0; iz < ind; iz++) {
@@ -143,8 +143,8 @@ namespace TensorShaderTest.Operators.Connection3D {
             float[] yval = (new float[inwidth * inheight * indepth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
             float[] wval = (new float[outchannels * inchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
 
-            Map3D y = new Map3D(outchannels, inwidth, inheight, indepth, batch, yval);
-            Filter3D w = new Filter3D(inchannels, outchannels, 1, 1, 1, wval);
+            Map3D y = new(outchannels, inwidth, inheight, indepth, batch, yval);
+            Filter3D w = new(inchannels, outchannels, 1, 1, 1, wval);
 
             Map3D x = Reference(y, w);
 

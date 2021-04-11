@@ -4,7 +4,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>小なりイコール</summary>
         public static Field LessThanOrEqual(Field x, float c) {
-            Field y = new Field();
+            Field y = new();
             Link link = new Links.LogicalArithmetric.LessThanOrEqualConstant(x, y, c);
 
             link.Forward();

@@ -8,8 +8,8 @@ namespace TensorShaderTest.NdimArray {
     public class NdimArrayRegionCopyTest {
         [TestMethod]
         public void RegionCopyTest1() {
-            Shape src_shape = new Shape(ShapeType.Map, new int[] { 3, 4, 3, 5, 6 });
-            Shape dst_shape = new Shape(ShapeType.Map, new int[] { 5, 9, 7, 8, 9 });
+            Shape src_shape = new(ShapeType.Map, new int[] { 3, 4, 3, 5, 6 });
+            Shape dst_shape = new(ShapeType.Map, new int[] { 5, 9, 7, 8, 9 });
             int[][] ps_list = new int[][]{
                 new int[] { 1, 0, 0, 0, 0 },
                 new int[] { 0, 1, 0, 0, 0 },
@@ -23,13 +23,13 @@ namespace TensorShaderTest.NdimArray {
             };
 
             foreach (var ps in ps_list) {
-                Random random = new Random();
+                Random random = new();
 
                 float[] src_v = (new float[src_shape.Length]).Select((v) => (float)random.NextDouble()).ToArray();
                 float[] dst_v = (new float[dst_shape.Length]).Select((v) => -(float)random.NextDouble()).ToArray();
 
-                NdimArray<float> src_arr = new NdimArray<float>(src_shape, src_v);
-                NdimArray<float> dst_arr = new NdimArray<float>(dst_shape, dst_v);
+                NdimArray<float> src_arr = new(src_shape, src_v);
+                NdimArray<float> dst_arr = new(dst_shape, dst_v);
                 NdimArray<float> ret_arr = dst_arr.Copy();
 
                 NdimArray<float>.RegionCopy(src_arr, ret_arr, ps);
@@ -40,7 +40,7 @@ namespace TensorShaderTest.NdimArray {
 
         [TestMethod]
         public void RegionCopyTest2() {
-            Shape src_shape = new Shape(ShapeType.Map, new int[] { 3, 4, 3, 5, 6 });
+            Shape src_shape = new(ShapeType.Map, new int[] { 3, 4, 3, 5, 6 });
             (Shape dst_shape, int[] ps)[] tests = new (Shape dst_shape, int[] ps)[] {
                 (new Shape(ShapeType.Map, new int[] { 3, 5, 4, 6, 7 }), new int[] { 0, 1, 0, 0, 0 }),
                 (new Shape(ShapeType.Map, new int[] { 3, 5, 4, 6, 7 }), new int[] { 0, 0, 1, 0, 0 }),
@@ -62,13 +62,13 @@ namespace TensorShaderTest.NdimArray {
             };
 
             foreach ((Shape dst_shape, int[] ps) in tests) {
-                Random random = new Random();
+                Random random = new();
 
                 float[] src_v = (new float[src_shape.Length]).Select((v) => (float)random.NextDouble()).ToArray();
                 float[] dst_v = (new float[dst_shape.Length]).Select((v) => -(float)random.NextDouble()).ToArray();
 
-                NdimArray<float> src_arr = new NdimArray<float>(src_shape, src_v);
-                NdimArray<float> dst_arr = new NdimArray<float>(dst_shape, dst_v);
+                NdimArray<float> src_arr = new(src_shape, src_v);
+                NdimArray<float> dst_arr = new(dst_shape, dst_v);
                 NdimArray<float> ret_arr = dst_arr.Copy();
 
                 NdimArray<float>.RegionCopy(src_arr, ret_arr, ps);
@@ -94,13 +94,13 @@ namespace TensorShaderTest.NdimArray {
             };
 
             foreach ((Shape src_shape, Shape dst_shape, int[] ps) in tests) {
-                Random random = new Random();
+                Random random = new();
 
                 float[] src_v = (new float[src_shape.Length]).Select((v) => (float)random.NextDouble()).ToArray();
                 float[] dst_v = (new float[dst_shape.Length]).Select((v) => -(float)random.NextDouble()).ToArray();
 
-                NdimArray<float> src_arr = new NdimArray<float>(src_shape, src_v);
-                NdimArray<float> dst_arr = new NdimArray<float>(dst_shape, dst_v);
+                NdimArray<float> src_arr = new(src_shape, src_v);
+                NdimArray<float> dst_arr = new(dst_shape, dst_v);
                 NdimArray<float> ret_arr = dst_arr.Copy();
 
                 NdimArray<float>.RegionCopyND(src_arr, ret_arr, ps);
@@ -133,13 +133,13 @@ namespace TensorShaderTest.NdimArray {
             };
 
             foreach ((Shape src_shape, Shape dst_shape, (int src_offset, int dst_offset, int count)[] region) in tests) {
-                Random random = new Random();
+                Random random = new();
 
                 float[] src_v = (new float[src_shape.Length]).Select((v) => (float)random.NextDouble()).ToArray();
                 float[] dst_v = (new float[dst_shape.Length]).Select((v) => -(float)random.NextDouble()).ToArray();
 
-                NdimArray<float> src_arr = new NdimArray<float>(src_shape, src_v);
-                NdimArray<float> dst_arr = new NdimArray<float>(dst_shape, dst_v);
+                NdimArray<float> src_arr = new(src_shape, src_v);
+                NdimArray<float> dst_arr = new(dst_shape, dst_v);
                 NdimArray<float> ret_arr = dst_arr.Copy();
 
                 NdimArray<float>.RegionCopyND(src_arr, ret_arr, region);
@@ -152,7 +152,7 @@ namespace TensorShaderTest.NdimArray {
 
         [TestMethod]
         public void BadRegionCopyTest() {
-            Shape src_shape = new Shape(ShapeType.Map, new int[] { 3, 4, 3, 5, 6 });
+            Shape src_shape = new(ShapeType.Map, new int[] { 3, 4, 3, 5, 6 });
             (Shape dst_shape, int[] ps)[] tests = new (Shape dst_shape, int[] ps)[] {
                 (new Shape(ShapeType.Map, new int[] { 3, 5, 4, 6, 7 }), new int[] { 0, 2, 0, 0, 0 }),
                 (new Shape(ShapeType.Map, new int[] { 3, 5, 4, 6, 7 }), new int[] { 0, 0, 2, 0, 0 }),
@@ -182,13 +182,13 @@ namespace TensorShaderTest.NdimArray {
             foreach ((Shape dst_shape, int[] ps) in tests) {
                 Assert.ThrowsException<ArgumentException>(
                     () => {
-                        Random random = new Random();
+                        Random random = new();
 
                         float[] src_v = (new float[src_shape.Length]).Select((v) => (float)random.NextDouble()).ToArray();
                         float[] dst_v = (new float[dst_shape.Length]).Select((v) => -(float)random.NextDouble()).ToArray();
 
-                        NdimArray<float> src_arr = new NdimArray<float>(src_shape, src_v);
-                        NdimArray<float> dst_arr = new NdimArray<float>(dst_shape, dst_v);
+                        NdimArray<float> src_arr = new(src_shape, src_v);
+                        NdimArray<float> dst_arr = new(dst_shape, dst_v);
                         NdimArray<float> ret_arr = dst_arr.Copy();
 
                         NdimArray<float>.RegionCopy(src_arr, ret_arr, ps);

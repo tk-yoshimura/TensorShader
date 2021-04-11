@@ -16,7 +16,7 @@ namespace TensorShader {
         public static Tensor Concat(int axis, params Tensor[] xs) {
             Function function = new Functions.ArrayManipulation.Concat(xs.Length, axis);
 
-            Tensor y = new Tensor(function.OutputShapes(xs.Select((tensor) => tensor.Shape).ToArray())[0]);
+            Tensor y = new(function.OutputShapes(xs.Select((tensor) => tensor.Shape).ToArray())[0]);
 
             function.Execute(xs, new Tensor[] { y });
 
@@ -47,7 +47,7 @@ namespace TensorShader.Functions.ArrayManipulation {
             int[] s = inshapes[0];
             s[Axis] = axislength;
 
-            Shape outshape = new Shape(inshapes[0].Type, s);
+            Shape outshape = new(inshapes[0].Type, s);
 
             return new Shape[] { outshape };
         }

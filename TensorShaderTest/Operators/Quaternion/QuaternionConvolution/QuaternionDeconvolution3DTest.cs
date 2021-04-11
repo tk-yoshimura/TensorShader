@@ -10,7 +10,7 @@ namespace TensorShaderTest.Operators.Quaternion {
     public class QuaternionDeconvolution3DTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             float max_err = 0;
 
@@ -30,17 +30,17 @@ namespace TensorShaderTest.Operators.Quaternion {
                             Quaternion[] wcval = (new Quaternion[wval.Length / 4])
                                 .Select((_, idx) => new Quaternion(wval[idx * 4], wval[idx * 4 + 1], wval[idx * 4 + 2], wval[idx * 4 + 3])).ToArray();
 
-                            QuaternionMap3D y = new QuaternionMap3D(outchannels / 4, outwidth, outheight, outdepth, batch, ycval);
-                            QuaternionFilter3D w = new QuaternionFilter3D(inchannels / 4, outchannels / 4, kwidth, kheight, kdepth, wcval);
+                            QuaternionMap3D y = new(outchannels / 4, outwidth, outheight, outdepth, batch, ycval);
+                            QuaternionFilter3D w = new(inchannels / 4, outchannels / 4, kwidth, kheight, kdepth, wcval);
 
                             QuaternionMap3D x = Reference(y, w, inwidth, inheight, indepth, kwidth, kheight, kdepth);
 
-                            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), yval);
-                            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels, outchannels / 4, kwidth, kheight, kdepth), wval);
+                            OverflowCheckedTensor y_tensor = new(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), yval);
+                            OverflowCheckedTensor w_tensor = new(Shape.Kernel3D(inchannels, outchannels / 4, kwidth, kheight, kdepth), wval);
 
-                            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch));
+                            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch));
 
-                            QuaternionDeconvolution3D ope = new QuaternionDeconvolution3D(outwidth, outheight, outdepth, outchannels, inchannels, kwidth, kheight, kdepth, gradmode: false, batch);
+                            QuaternionDeconvolution3D ope = new(outwidth, outheight, outdepth, outchannels, inchannels, kwidth, kheight, kdepth, gradmode: false, batch);
 
                             ope.Execute(y_tensor, w_tensor, x_tensor);
 
@@ -63,7 +63,7 @@ namespace TensorShaderTest.Operators.Quaternion {
 
         [TestMethod]
         public void LargeMapTest() {
-            Random random = new Random(1234);
+            Random random = new(1234);
 
             float max_err = 0;
 
@@ -82,17 +82,17 @@ namespace TensorShaderTest.Operators.Quaternion {
             Quaternion[] wcval = (new Quaternion[wval.Length / 4])
                 .Select((_, idx) => new Quaternion(wval[idx * 4], wval[idx * 4 + 1], wval[idx * 4 + 2], wval[idx * 4 + 3])).ToArray();
 
-            QuaternionMap3D y = new QuaternionMap3D(outchannels / 4, outwidth, outheight, outdepth, batch, ycval);
-            QuaternionFilter3D w = new QuaternionFilter3D(inchannels / 4, outchannels / 4, kwidth, kheight, kdepth, wcval);
+            QuaternionMap3D y = new(outchannels / 4, outwidth, outheight, outdepth, batch, ycval);
+            QuaternionFilter3D w = new(inchannels / 4, outchannels / 4, kwidth, kheight, kdepth, wcval);
 
             QuaternionMap3D x = Reference(y, w, inwidth, inheight, indepth, kwidth, kheight, kdepth);
 
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), yval);
-            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels, outchannels / 4, kwidth, kheight, kdepth), wval);
+            OverflowCheckedTensor y_tensor = new(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), yval);
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel3D(inchannels, outchannels / 4, kwidth, kheight, kdepth), wval);
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch));
+            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch));
 
-            QuaternionDeconvolution3D ope = new QuaternionDeconvolution3D(outwidth, outheight, outdepth, outchannels, inchannels, kwidth, kheight, kdepth, gradmode: false, batch);
+            QuaternionDeconvolution3D ope = new(outwidth, outheight, outdepth, outchannels, inchannels, kwidth, kheight, kdepth, gradmode: false, batch);
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 
@@ -114,12 +114,12 @@ namespace TensorShaderTest.Operators.Quaternion {
             int inwidth = 32, inheight = 32, indepth = 32, inchannels = 32, outchannels = 32, ksize = 3;
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1, outdepth = indepth - ksize + 1;
 
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map3D(outchannels, outwidth, outheight, outdepth));
-            OverflowCheckedTensor w_tensor = new OverflowCheckedTensor(Shape.Kernel3D(inchannels, outchannels / 4, ksize, ksize, ksize));
+            OverflowCheckedTensor y_tensor = new(Shape.Map3D(outchannels, outwidth, outheight, outdepth));
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel3D(inchannels, outchannels / 4, ksize, ksize, ksize));
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map3D(inchannels, inwidth, inheight, indepth));
+            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, inwidth, inheight, indepth));
 
-            QuaternionDeconvolution3D ope = new QuaternionDeconvolution3D(outwidth, outheight, outdepth, outchannels, inchannels, ksize, ksize, ksize);
+            QuaternionDeconvolution3D ope = new(outwidth, outheight, outdepth, outchannels, inchannels, ksize, ksize, ksize);
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 
@@ -139,7 +139,7 @@ namespace TensorShaderTest.Operators.Quaternion {
                 throw new ArgumentException("mismatch shape");
             }
 
-            QuaternionMap3D x = new QuaternionMap3D(inchannels, inw, inh, ind, batch);
+            QuaternionMap3D x = new(inchannels, inw, inh, ind, batch);
 
             for (int kx, ky, kz = 0; kz < kdepth; kz++) {
                 for (ky = 0; ky < kheight; ky++) {
@@ -180,8 +180,8 @@ namespace TensorShaderTest.Operators.Quaternion {
             Quaternion[] wcval = (new Quaternion[wval.Length / 4])
                 .Select((_, idx) => new Quaternion(wval[idx * 4], wval[idx * 4 + 1], wval[idx * 4 + 2], wval[idx * 4 + 3])).ToArray();
 
-            QuaternionMap3D y = new QuaternionMap3D(outchannels / 4, outwidth, outheight, outdepth, batch, ycval);
-            QuaternionFilter3D w = new QuaternionFilter3D(inchannels / 4, outchannels / 4, kwidth, kheight, kdepth, wcval);
+            QuaternionMap3D y = new(outchannels / 4, outwidth, outheight, outdepth, batch, ycval);
+            QuaternionFilter3D w = new(inchannels / 4, outchannels / 4, kwidth, kheight, kdepth, wcval);
 
             QuaternionMap3D x = Reference(y, w, inwidth, inheight, indepth, kwidth, kheight, kdepth);
 

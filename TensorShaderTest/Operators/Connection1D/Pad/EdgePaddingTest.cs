@@ -21,14 +21,14 @@ namespace TensorShaderTest.Operators.Connection1D {
 
                                 float[] xval = (new float[inwidth * channels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
 
-                                Map1D x = new Map1D(channels, inwidth, batch, xval);
+                                Map1D x = new(channels, inwidth, batch, xval);
 
                                 Map1D y = Reference(x, leftpad, rightpad);
 
-                                OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, inwidth, batch), xval);
-                                OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, outwidth, batch));
+                                OverflowCheckedTensor x_tensor = new(Shape.Map1D(channels, inwidth, batch), xval);
+                                OverflowCheckedTensor y_tensor = new(Shape.Map1D(channels, outwidth, batch));
 
-                                EdgePadding ope = new EdgePadding(inwidth, channels, leftpad, rightpad, batch);
+                                EdgePadding ope = new(inwidth, channels, leftpad, rightpad, batch);
 
                                 ope.Execute(x_tensor, y_tensor);
 
@@ -54,7 +54,7 @@ namespace TensorShaderTest.Operators.Connection1D {
             int channels = x.Channels, batch = x.Batch;
             int inw = x.Width, outw = inw + leftpad + rightpad;
 
-            Map1D y = new Map1D(channels, outw, batch);
+            Map1D y = new(channels, outw, batch);
 
             for (int th = 0; th < batch; th++) {
                 for (int ox = 0; ox < outw; ox++) {
@@ -74,10 +74,10 @@ namespace TensorShaderTest.Operators.Connection1D {
             int inwidth = 2048, channels = 1024, leftpad = 2, rightpad = 3, batch = 4;
             int outwidth = inwidth + leftpad + rightpad;
 
-            OverflowCheckedTensor x_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, inwidth, batch));
-            OverflowCheckedTensor y_tensor = new OverflowCheckedTensor(Shape.Map1D(channels, outwidth, batch));
+            OverflowCheckedTensor x_tensor = new(Shape.Map1D(channels, inwidth, batch));
+            OverflowCheckedTensor y_tensor = new(Shape.Map1D(channels, outwidth, batch));
 
-            EdgePadding ope = new EdgePadding(inwidth, channels, leftpad, rightpad, batch);
+            EdgePadding ope = new(inwidth, channels, leftpad, rightpad, batch);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/edgepadding_1d.nvvp");
             Cuda.Profiler.Start();

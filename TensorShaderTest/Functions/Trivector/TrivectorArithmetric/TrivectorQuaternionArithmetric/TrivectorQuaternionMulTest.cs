@@ -11,7 +11,7 @@ namespace TensorShaderTest.Functions.TrivectorArithmetric {
         [TestMethod]
         public void ExecuteTest() {
             const int length = 255;
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
             int[] idxes = (new int[length]).Select((_, idx) => idx).ToArray();
 
@@ -26,8 +26,8 @@ namespace TensorShaderTest.Functions.TrivectorArithmetric {
                 float[] y = o.State.Value;
 
                 for (int i = 0; i < y.Length / 3; i++) {
-                    Quaternion v = new Quaternion(new Vector3(x1[i * 3], x1[i * 3 + 1], x1[i * 3 + 2]), 0);
-                    Quaternion q = new Quaternion(x2[i * 4 + 1], x2[i * 4 + 2], x2[i * 4 + 3], x2[i * 4]);
+                    Quaternion v = new(new Vector3(x1[i * 3], x1[i * 3 + 1], x1[i * 3 + 2]), 0);
+                    Quaternion q = new(x2[i * 4 + 1], x2[i * 4 + 2], x2[i * 4 + 3], x2[i * 4]);
                     Quaternion p = q * v * Quaternion.Conjugate(q);
 
                     Assert.AreEqual(p.X, y[i * 3], 1e-6f, $"not equal {i * 3}");
@@ -48,8 +48,8 @@ namespace TensorShaderTest.Functions.TrivectorArithmetric {
                 float[] y = o.State.Value;
 
                 for (int i = 0; i < y.Length / 3; i++) {
-                    Quaternion v = new Quaternion(new Vector3(x1[i * 3], x1[i * 3 + 1], x1[i * 3 + 2]), 0);
-                    Quaternion q = new Quaternion(x2[i * 4 + 1], x2[i * 4 + 2], x2[i * 4 + 3], x2[i * 4]);
+                    Quaternion v = new(new Vector3(x1[i * 3], x1[i * 3 + 1], x1[i * 3 + 2]), 0);
+                    Quaternion q = new(x2[i * 4 + 1], x2[i * 4 + 2], x2[i * 4 + 3], x2[i * 4]);
                     Quaternion p = q * v * Quaternion.Conjugate(q);
 
                     Assert.AreEqual(p.X, y[i * 3], 1e-6f, $"not equal {i * 3}");

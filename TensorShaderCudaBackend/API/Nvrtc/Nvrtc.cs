@@ -43,7 +43,7 @@ namespace TensorShaderCudaBackend.API {
                         throw new CudaException(result);
                     }
 
-                    StringBuilder log = new StringBuilder((int)log_size + 8);
+                    StringBuilder log = new((int)log_size + 8);
                     result = NativeMethods.nvrtcGetProgramLog(prog, log);
                     if (result != ResultCode.Success) {
                         throw new CudaException(result);
@@ -58,7 +58,7 @@ namespace TensorShaderCudaBackend.API {
                     throw new CudaException(result);
                 }
 
-                StringBuilder ptx = new StringBuilder((int)ptx_size + 8);
+                StringBuilder ptx = new((int)ptx_size + 8);
                 result = NativeMethods.nvrtcGetPTX(prog, ptx);
                 if (result != ResultCode.Success) {
                     throw new CudaException(result);

@@ -9,7 +9,7 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
     public class ExtractChannelTest {
         [TestMethod]
         public void ExecuteTest() {
-            Random rd = new Random(1234);
+            Random rd = new(1234);
 
             foreach (int inch in new int[] { 11, 13 }) {
                 foreach (int outch in new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }) {
@@ -21,10 +21,10 @@ namespace TensorShaderTest.Operators.ArrayManipulation {
 
                                 float[] x = (new float[length * inch]).Select((_) => (float)rd.NextDouble()).ToArray();
 
-                                OverflowCheckedTensor v1 = new OverflowCheckedTensor(Shape.Map1D(inch, length), x);
-                                OverflowCheckedTensor v2 = new OverflowCheckedTensor(Shape.Map1D(outch, length));
+                                OverflowCheckedTensor v1 = new(Shape.Map1D(inch, length), x);
+                                OverflowCheckedTensor v2 = new(Shape.Map1D(outch, length));
 
-                                ExtractChannel ope = new ExtractChannel(v1.Shape, idx_ch, v2.Shape);
+                                ExtractChannel ope = new(v1.Shape, idx_ch, v2.Shape);
 
                                 ope.Execute(v1, v2);
 

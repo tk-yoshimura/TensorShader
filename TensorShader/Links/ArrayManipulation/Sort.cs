@@ -5,7 +5,7 @@ namespace TensorShader {
     public partial class Field {
         /// <summary>ソート</summary>
         public static Field Sort(Field x, int axis) {
-            Field y = new Field();
+            Field y = new();
             Link link;
 
             if (x.EnableBackprop) {
@@ -56,13 +56,13 @@ namespace TensorShader.Links.ArrayManipulation {
             (VariableNode key, VariableNode value) = SortWithKey(X.Value, Index.Value, Axis);
 
             this.index_sorted = value;
-                
+
             Y.AssignValue(key);
         }
 
         /// <summary>逆伝搬</summary>
         public override void Backward() {
-            if (Y.Grad == null) {
+            if (Y.Grad is null) {
                 return;
             }
 
@@ -102,7 +102,7 @@ namespace TensorShader.Links.ArrayManipulation {
         /// <summary>順伝搬</summary>
         public override void Forward() {
             VariableNode y = Sort(X.Value, Axis);
-    
+
             Y.AssignValue(y);
         }
 

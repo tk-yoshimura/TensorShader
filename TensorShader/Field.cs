@@ -35,7 +35,7 @@ namespace TensorShader {
         public Link OutLink { set; get; }
 
         /// <summary>始端ノードか否か</summary>
-        public bool IsInitiate => OutLink == null;
+        public bool IsInitiate => OutLink is null;
 
         /// <summary>終端ノードか否か</summary>
         public bool IsTerminate => InLinks.Count <= 0;
@@ -48,14 +48,14 @@ namespace TensorShader {
 
         /// <summary>値</summary>
         public Tensor ValueTensor
-            => (Value != null && (Value is TensorNode tensornode)) ? tensornode.Tensor : null;
+            => (Value is not null && (Value is TensorNode tensornode)) ? tensornode.Tensor : null;
 
         /// <summary>値を設定する</summary>
         public void AssignValue(VariableNode value) {
-            if (Value != null) {
+            if (Value is not null) {
                 throw new InvalidOperationException("Node is already assigned.");
             }
-            if (value == null) {
+            if (value is null) {
                 throw new ArgumentNullException(nameof(value));
             }
 
@@ -64,7 +64,7 @@ namespace TensorShader {
 
         /// <summary>勾配を追加する</summary>
         public void AddGrad(VariableNode grad) {
-            if (grad == null) {
+            if (grad is null) {
                 throw new ArgumentNullException(nameof(grad));
             }
 
@@ -72,7 +72,7 @@ namespace TensorShader {
                 throw new ArgumentException(ExceptionMessage.Shape(grad.Shape, Shape));
             }
 
-            if (grad != null && grad is OutputNode) {
+            if (grad is not null && grad is OutputNode) {
                 throw new InvalidOperationException("Node is terminated.");
             }
 
@@ -85,11 +85,11 @@ namespace TensorShader {
                 return;
             }
 
-            if (grad != null && grad is OutputNode) {
+            if (grad is not null && grad is OutputNode) {
                 throw new InvalidOperationException("Node is terminated.");
             }
 
-            if (grad == null) {
+            if (grad is null) {
                 if (untreated_grads.Count == 1) {
                     grad = untreated_grads.First();
                 }
@@ -113,7 +113,7 @@ namespace TensorShader {
         internal void ConfirmGrad() {
             AddUntreatedGrads();
 
-            if (grad == null) {
+            if (grad is null) {
                 return;
             }
             grad = new OutputNode(grad);
@@ -139,7 +139,7 @@ namespace TensorShader {
 
         /// <summary>コンストラクタ</summary>
         public VariableField(InputNode node) {
-            if (node == null) {
+            if (node is null) {
                 throw new ArgumentNullException(nameof(node));
             }
 
@@ -211,7 +211,7 @@ namespace TensorShader {
 
         /// <summary>勾配</summary>
         public Tensor GradTensor
-            => (Grad != null && (Grad is TensorNode tensornode)) ? tensornode.Tensor : null;
+            => (Grad is not null && (Grad is TensorNode tensornode)) ? tensornode.Tensor : null;
 
         /// <summary>更新</summary>
         public void Update() {
@@ -222,7 +222,7 @@ namespace TensorShader {
 
         /// <summary>更新則を追加</summary>
         public void AddUpdater(Updater updater) {
-            if (Grad == null) {
+            if (Grad is null) {
                 if (Name == string.Empty) {
                     throw new InvalidOperationException($"Parameter field for which grad can't be defined.");
                 }
