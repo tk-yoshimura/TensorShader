@@ -2,28 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-// アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
-// 制御されます。アセンブリに関連付けられている情報を変更するには、
-// これらの属性値を変更してください。
-
-#if CUDA_10_0
-[assembly: AssemblyTitle("TensorShaderCudaBackend For Windows CUDA10.0")]
-#elif CUDA_10_1
-[assembly: AssemblyTitle("TensorShaderCudaBackend For Windows CUDA10.1")]
-#elif CUDA_10_2
-[assembly: AssemblyTitle("TensorShaderCudaBackend For Windows CUDA10.2")]
-#elif CUDA_11_0
-[assembly: AssemblyTitle("TensorShaderCudaBackend For Windows CUDA11.0")]
-#elif CUDA_11_1
-[assembly: AssemblyTitle("TensorShaderCudaBackend For Windows CUDA11.1")]
-#elif PLATFORM_LINUX
-[assembly: AssemblyTitle("TensorShaderCudaBackend For Linux (notice: experiment)")]
-#elif PLATFORM_MAC
-[assembly: AssemblyTitle("TensorShaderCudaBackend For MacOS (notice: experiment)")]
-#else
-[assembly: AssemblyTitle("TensorShaderCudaBackend For Windows CUDA10.1")]
-#endif
-
+[assembly: AssemblyTitle("TensorShaderCudaBackend")]
 [assembly: AssemblyDescription("Cuda Kernel Implementations")]
 
 #if DEBUG
@@ -38,24 +17,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-// ComVisible を false に設定すると、このアセンブリ内の型は COM コンポーネントから
-// 参照できなくなります。COM からこのアセンブリ内の型にアクセスする必要がある場合は、
-// その型の ComVisible 属性を true に設定してください。
 [assembly: ComVisible(false)]
 
-// このプロジェクトが COM に公開される場合、次の GUID が typelib の ID になります
 [assembly: Guid("d0343c7a-36a5-4f87-89d9-c0bff56721f7")]
 
-// アセンブリのバージョン情報は、以下の 4 つの値で構成されています:
-//
-//      メジャー バージョン
-//      マイナー バージョン
-//      ビルド番号
-//      リビジョン
-//
-// すべての値を指定するか、次を使用してビルド番号とリビジョン番号を既定に設定できます
-// 既定値にすることができます:
-// [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("5.1.5.*")]
+[assembly: AssemblyVersion("5.2.0.*")]
 
 [assembly: InternalsVisibleTo("TensorShaderCudaBackendTest")]

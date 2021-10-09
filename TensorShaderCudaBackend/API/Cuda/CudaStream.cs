@@ -9,7 +9,7 @@ namespace TensorShaderCudaBackend.API {
             /// <summary>ストリーム作成</summary>
             internal static IntPtr Create() {
                 IntPtr stream = IntPtr.Zero;
-                ErrorCode result = NativeMethods.cudaStreamCreate(ref stream);
+                ErrorCode result = NativeMethods.CudaStreamCreate.AsDelegate().Invoke(ref stream);
                 if (result != ErrorCode.Success) {
                     throw new CudaException(result);
                 }
@@ -23,7 +23,7 @@ namespace TensorShaderCudaBackend.API {
                     return;
                 }
 
-                ErrorCode result = NativeMethods.cudaStreamDestroy(stream);
+                ErrorCode result = NativeMethods.CudaStreamDestroy.AsDelegate().Invoke(stream);
                 if (result != ErrorCode.Success) {
                     throw new CudaException(result);
                 }
@@ -33,7 +33,7 @@ namespace TensorShaderCudaBackend.API {
 
             /// <summary>同期</summary>
             internal static void Synchronize(IntPtr stream) {
-                ErrorCode result = NativeMethods.cudaStreamSynchronize(stream);
+                ErrorCode result = NativeMethods.CudaStreamSynchronize.AsDelegate().Invoke(stream);
                 if (result != ErrorCode.Success) {
                     throw new CudaException(result);
                 }

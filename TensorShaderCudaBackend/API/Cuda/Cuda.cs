@@ -22,7 +22,7 @@ namespace TensorShaderCudaBackend.API {
 
                 int device_id = 0;
 
-                ErrorCode result = NativeMethods.cudaGetDevice(ref device_id);
+                ErrorCode result = NativeMethods.CudaGetDevice.AsDelegate().Invoke(ref device_id);
                 if (result != ErrorCode.Success) {
                     throw new CudaException(result);
                 }
@@ -35,7 +35,7 @@ namespace TensorShaderCudaBackend.API {
                     return;
                 }
 
-                ErrorCode result = NativeMethods.cudaSetDevice(value);
+                ErrorCode result = NativeMethods.CudaSetDevice.AsDelegate().Invoke(value);
                 if (result != ErrorCode.Success) {
                     throw new CudaException(result);
                 }
@@ -50,7 +50,7 @@ namespace TensorShaderCudaBackend.API {
             get {
                 int count = 0;
 
-                ErrorCode result = NativeMethods.cudaGetDeviceCount(ref count);
+                ErrorCode result = NativeMethods.CudaGetDeviceCount.AsDelegate().Invoke(ref count);
                 if (result != ErrorCode.Success) {
                     throw new CudaException(result);
                 }
@@ -64,7 +64,7 @@ namespace TensorShaderCudaBackend.API {
             get {
                 uint flags = 0;
 
-                ErrorCode result = NativeMethods.cudaGetDeviceFlags(ref flags);
+                ErrorCode result = NativeMethods.CudaGetDeviceFlags.AsDelegate().Invoke(ref flags);
                 if (result != ErrorCode.Success) {
                     throw new CudaException(result);
                 }
@@ -73,7 +73,7 @@ namespace TensorShaderCudaBackend.API {
             }
 
             set {
-                ErrorCode result = NativeMethods.cudaSetDeviceFlags(value);
+                ErrorCode result = NativeMethods.CudaSetDeviceFlags.AsDelegate().Invoke(value);
                 if (result != ErrorCode.Success) {
                     throw new CudaException(result);
                 }
@@ -84,7 +84,7 @@ namespace TensorShaderCudaBackend.API {
         public static DeviceProp DeviceProperty(int device_id) {
             cudaDeviceProp prop = new();
 
-            ErrorCode result = NativeMethods.cudaGetDeviceProperties(ref prop, device_id);
+            ErrorCode result = NativeMethods.CudaGetDeviceProperties.AsDelegate().Invoke(ref prop, device_id);
             if (result != ErrorCode.Success) {
                 throw new CudaException(result);
             }
@@ -97,7 +97,7 @@ namespace TensorShaderCudaBackend.API {
             get {
                 int version = 0;
 
-                ErrorCode result = NativeMethods.cudaDriverGetVersion(ref version);
+                ErrorCode result = NativeMethods.CudaDriverGetVersion.AsDelegate().Invoke(ref version);
                 if (result != ErrorCode.Success) {
                     throw new CudaException(result);
                 }
@@ -111,7 +111,7 @@ namespace TensorShaderCudaBackend.API {
             get {
                 int version = 0;
 
-                ErrorCode result = NativeMethods.cudaRuntimeGetVersion(ref version);
+                ErrorCode result = NativeMethods.CudaRuntimeGetVersion.AsDelegate().Invoke(ref version);
                 if (result != ErrorCode.Success) {
                     throw new CudaException(result);
                 }
@@ -125,7 +125,7 @@ namespace TensorShaderCudaBackend.API {
             get {
                 long total = 0, free = 0;
 
-                ErrorCode result = NativeMethods.cudaMemGetInfo(ref free, ref total);
+                ErrorCode result = NativeMethods.CudaMemGetInfo.AsDelegate().Invoke(ref free, ref total);
                 if (result != ErrorCode.Success) {
                     throw new CudaException(result);
                 }
@@ -139,7 +139,7 @@ namespace TensorShaderCudaBackend.API {
             get {
                 long total = 0, free = 0;
 
-                ErrorCode result = NativeMethods.cudaMemGetInfo(ref free, ref total);
+                ErrorCode result = NativeMethods.CudaMemGetInfo.AsDelegate().Invoke(ref free, ref total);
                 if (result != ErrorCode.Success) {
                     throw new CudaException(result);
                 }
@@ -150,7 +150,7 @@ namespace TensorShaderCudaBackend.API {
 
         /// <summary>実行中のカーネル終了まで待機</summary>
         public static void Synchronize() {
-            ErrorCode result = NativeMethods.cudaDeviceSynchronize();
+            ErrorCode result = NativeMethods.CudaDeviceSynchronize.AsDelegate().Invoke();
             if (result != ErrorCode.Success) {
                 throw new CudaException(result);
             }
@@ -158,7 +158,7 @@ namespace TensorShaderCudaBackend.API {
 
         /// <summary>デバイスをリセット</summary>
         public static void Reset() {
-            ErrorCode result = NativeMethods.cudaDeviceReset();
+            ErrorCode result = NativeMethods.CudaDeviceReset.AsDelegate().Invoke();
             if (result != ErrorCode.Success) {
                 throw new CudaException(result);
             }
@@ -166,8 +166,15 @@ namespace TensorShaderCudaBackend.API {
 
         /// <summary>エラーコードメッセージ</summary>
         internal static string GetErrorString(ErrorCode error) {
-            IntPtr ptr = NativeMethods.cudaGetErrorString(error);
-            return Marshal.PtrToStringAnsi(ptr);
+            IntPtr ptr = NativeMethods.CudaGetErrorString.AsDelegate().Invoke(error);
+
+            string str = string.Empty;
+            if (ptr != IntPtr.Zero) {
+                str = Marshal.PtrToStringAnsi(ptr);
+                Marshal.FreeHGlobal(ptr);
+            }
+
+            return str;
         }
     }
 }

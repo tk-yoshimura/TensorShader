@@ -11,7 +11,7 @@
       <HintPath>..\..\dll\Release\TensorShader.dll</HintPath>
     </Reference>
     <Reference Include="TensorShaderCudaBackend">
-      <HintPath>..\..\dll\Release_Cuda_10_1\TensorShaderCudaBackend.dll</HintPath>
+      <HintPath>..\..\dll\Release\TensorShaderCudaBackend.dll</HintPath>
     </Reference>
     <Reference Include="TensorShaderUtil">
       <HintPath>..\..\dll\Release\TensorShaderUtil.dll</HintPath>

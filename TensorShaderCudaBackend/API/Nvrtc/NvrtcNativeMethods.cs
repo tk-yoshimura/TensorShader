@@ -1,46 +1,35 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using TensorShaderCudaBackend.Dll;
 
 namespace TensorShaderCudaBackend.API {
     using nvrtcResult = Nvrtc.ResultCode;
 
     public static partial class Nvrtc {
 
-#pragma warning disable IDE1006 // 命名スタイル
+#pragma warning disable IDE1006
         private static class NativeMethods {
 
-#if CUDA_10_0
-            const string DllName = "nvrtc64_100_0.dll";
-#elif CUDA_10_1
-            const string DllName = "nvrtc64_101_0.dll";
-#elif CUDA_10_2
-            const string DllName = "nvrtc64_102_0.dll";
-#elif CUDA_11_0
-            const string DllName = "nvrtc64_110_0.dll";
-#elif CUDA_11_1
-            const string DllName = "nvrtc64_111_0.dll";
-#elif PLATFORM_LINUX
-            const string DllName = "libnvrtc.so";
-#elif PLATFORM_MAC
-            const string DllName = "libnvrtc.dylib";
-#else
-            const string DllName = "nvrtc64_101_0.dll";
-#endif
+            static readonly NativeDll dll = CudaDll.Nvrtc;
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern nvrtcResult nvrtcVersion(ref int major, ref int minor);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate nvrtcResult nvrtcVersion(ref int major, ref int minor);
+            public static NativeMethod<nvrtcVersion> NvrtcVersion { get; }
+                = new NativeMethod<nvrtcVersion>(dll, nameof(nvrtcVersion));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern nvrtcResult nvrtcCompileProgram(
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public delegate nvrtcResult nvrtcCompileProgram(
                 IntPtr prog,
                 int numOptions,
                 [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr, SizeParamIndex = 1)]
                 string[] options
             );
+            public static NativeMethod<nvrtcCompileProgram> NvrtcCompileProgram { get; }
+                = new NativeMethod<nvrtcCompileProgram>(dll, nameof(nvrtcCompileProgram));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern nvrtcResult nvrtcCreateProgram(
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public delegate nvrtcResult nvrtcCreateProgram(
                 ref IntPtr prog,
                 string src,
                 string name,
@@ -50,25 +39,39 @@ namespace TensorShaderCudaBackend.API {
                 [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr, SizeParamIndex = 1)]
                 string[] includeNames
             );
+            public static NativeMethod<nvrtcCreateProgram> NvrtcCreateProgram { get; }
+                = new NativeMethod<nvrtcCreateProgram>(dll, nameof(nvrtcCreateProgram));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern nvrtcResult nvrtcDestroyProgram(ref IntPtr prog);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate nvrtcResult nvrtcDestroyProgram(ref IntPtr prog);
+            public static NativeMethod<nvrtcDestroyProgram> NvrtcDestroyProgram { get; }
+                = new NativeMethod<nvrtcDestroyProgram>(dll, nameof(nvrtcDestroyProgram));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern nvrtcResult nvrtcGetPTX(IntPtr prog, StringBuilder ptx);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public delegate nvrtcResult nvrtcGetPTX(IntPtr prog, StringBuilder ptx);
+            public static NativeMethod<nvrtcGetPTX> NvrtcGetPTX { get; }
+                = new NativeMethod<nvrtcGetPTX>(dll, nameof(nvrtcGetPTX));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern nvrtcResult nvrtcGetPTXSize(IntPtr prog, ref long ptxSizeRet);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate nvrtcResult nvrtcGetPTXSize(IntPtr prog, ref long ptxSizeRet);
+            public static NativeMethod<nvrtcGetPTXSize> NvrtcGetPTXSize { get; }
+                = new NativeMethod<nvrtcGetPTXSize>(dll, nameof(nvrtcGetPTXSize));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern nvrtcResult nvrtcGetProgramLog(IntPtr prog, StringBuilder log);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public delegate nvrtcResult nvrtcGetProgramLog(IntPtr prog, StringBuilder log);
+            public static NativeMethod<nvrtcGetProgramLog> NvrtcGetProgramLog { get; }
+                = new NativeMethod<nvrtcGetProgramLog>(dll, nameof(nvrtcGetProgramLog));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern nvrtcResult nvrtcGetProgramLogSize(IntPtr prog, ref long logSizeRet);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate nvrtcResult nvrtcGetProgramLogSize(IntPtr prog, ref long logSizeRet);
+            public static NativeMethod<nvrtcGetProgramLogSize> NvrtcGetProgramLogSize { get; }
+                = new NativeMethod<nvrtcGetProgramLogSize>(dll, nameof(nvrtcGetProgramLogSize));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr nvrtcGetErrorString(nvrtcResult result);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate IntPtr nvrtcGetErrorString(nvrtcResult result);
+            public static NativeMethod<nvrtcGetErrorString> NvrtcGetErrorString { get; }
+                = new NativeMethod<nvrtcGetErrorString>(dll, nameof(nvrtcGetErrorString));
         }
-#pragma warning restore IDE1006 // 命名スタイル
+#pragma warning restore IDE1006
     }
 }

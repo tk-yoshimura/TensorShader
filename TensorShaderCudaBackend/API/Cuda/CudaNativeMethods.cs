@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
+using TensorShaderCudaBackend.Dll;
+
 namespace TensorShaderCudaBackend.API {
     using cudaDeviceProp = Cuda.DeviceProp;
     using cudaError_t = Cuda.ErrorCode;
@@ -8,99 +10,131 @@ namespace TensorShaderCudaBackend.API {
 
     public static partial class Cuda {
 
-#pragma warning disable IDE1006 // 命名スタイル
+#pragma warning disable IDE1006
         private static class NativeMethods {
 
-#if CUDA_10_0
-            const string DllName = "cudart64_100.dll";
-#elif CUDA_10_1
-            const string DllName = "cudart64_101.dll";
-#elif CUDA_10_2
-            const string DllName = "cudart64_102.dll";
-#elif CUDA_11_0
-            const string DllName = "cudart64_110.dll";
-#elif CUDA_11_1
-            const string DllName = "cudart64_111.dll";
-#elif PLATFORM_LINUX
-            const string DllName = "libcudart.so";
-#elif PLATFORM_MAC
-            const string DllName = "libcudart.dylib";
-#else
-            const string DllName = "cudart64_101.dll";
-#endif
+            static readonly NativeDll dll = CudaDll.Cuda;
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern cudaError_t cudaDeviceReset();
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate cudaError_t cudaDeviceReset();
+            public static NativeMethod<cudaDeviceReset> CudaDeviceReset { get; }
+                = new NativeMethod<cudaDeviceReset>(dll, nameof(cudaDeviceReset));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern cudaError_t cudaDeviceSynchronize();
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate cudaError_t cudaDeviceSynchronize();
+            public static NativeMethod<cudaDeviceSynchronize> CudaDeviceSynchronize { get; }
+                = new NativeMethod<cudaDeviceSynchronize>(dll, nameof(cudaDeviceSynchronize));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern cudaError_t cudaSetDevice(int device);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate cudaError_t cudaSetDevice(int device);
+            public static NativeMethod<cudaSetDevice> CudaSetDevice { get; }
+                = new NativeMethod<cudaSetDevice>(dll, nameof(cudaSetDevice));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern cudaError_t cudaGetDevice(ref int device);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate cudaError_t cudaGetDevice(ref int device);
+            public static NativeMethod<cudaGetDevice> CudaGetDevice { get; }
+                = new NativeMethod<cudaGetDevice>(dll, nameof(cudaGetDevice));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern cudaError_t cudaGetDeviceCount(ref int count);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate cudaError_t cudaGetDeviceCount(ref int count);
+            public static NativeMethod<cudaGetDeviceCount> CudaGetDeviceCount { get; }
+                = new NativeMethod<cudaGetDeviceCount>(dll, nameof(cudaGetDeviceCount));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern cudaError_t cudaSetDeviceFlags(uint flags);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate cudaError_t cudaSetDeviceFlags(uint flags);
+            public static NativeMethod<cudaSetDeviceFlags> CudaSetDeviceFlags { get; }
+                = new NativeMethod<cudaSetDeviceFlags>(dll, nameof(cudaSetDeviceFlags));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern cudaError_t cudaGetDeviceFlags(ref uint flags);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate cudaError_t cudaGetDeviceFlags(ref uint flags);
+            public static NativeMethod<cudaGetDeviceFlags> CudaGetDeviceFlags { get; }
+                = new NativeMethod<cudaGetDeviceFlags>(dll, nameof(cudaGetDeviceFlags));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern cudaError_t cudaGetDeviceProperties(ref cudaDeviceProp prop, int device);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate cudaError_t cudaGetDeviceProperties(ref cudaDeviceProp prop, int device);
+            public static NativeMethod<cudaGetDeviceProperties> CudaGetDeviceProperties { get; }
+                = new NativeMethod<cudaGetDeviceProperties>(dll, nameof(cudaGetDeviceProperties));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern cudaError_t cudaFree(IntPtr devPtr);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate cudaError_t cudaFree(IntPtr devPtr);
+            public static NativeMethod<cudaFree> CudaFree { get; }
+                = new NativeMethod<cudaFree>(dll, nameof(cudaFree));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern cudaError_t cudaMalloc(ref IntPtr devPtr, size_t size);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate cudaError_t cudaMalloc(ref IntPtr devPtr, size_t size);
+            public static NativeMethod<cudaMalloc> CudaMalloc { get; }
+                = new NativeMethod<cudaMalloc>(dll, nameof(cudaMalloc));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern cudaError_t cudaMemcpy(IntPtr dst, IntPtr src, size_t count, cudaMemcpyKind kind);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate cudaError_t cudaMemcpy(IntPtr dst, IntPtr src, size_t count, cudaMemcpyKind kind);
+            public static NativeMethod<cudaMemcpy> CudaMemcpy { get; }
+                = new NativeMethod<cudaMemcpy>(dll, nameof(cudaMemcpy));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern cudaError_t cudaMemcpyAsync(IntPtr dst, IntPtr src, size_t count, cudaMemcpyKind kind, IntPtr stream);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate cudaError_t cudaMemcpyAsync(IntPtr dst, IntPtr src, size_t count, cudaMemcpyKind kind, IntPtr stream);
+            public static NativeMethod<cudaMemcpyAsync> CudaMemcpyAsync { get; }
+                = new NativeMethod<cudaMemcpyAsync>(dll, nameof(cudaMemcpyAsync));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern cudaError_t cudaMemset(IntPtr devPtr, int value, size_t count);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate cudaError_t cudaMemset(IntPtr devPtr, int value, size_t count);
+            public static NativeMethod<cudaMemset> CudaMemset { get; }
+                = new NativeMethod<cudaMemset>(dll, nameof(cudaMemset));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern cudaError_t cudaMemsetAsync(IntPtr devPtr, int value, size_t count, IntPtr stream);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate cudaError_t cudaMemsetAsync(IntPtr devPtr, int value, size_t count, IntPtr stream);
+            public static NativeMethod<cudaMemsetAsync> CudaMemsetAsync { get; }
+                = new NativeMethod<cudaMemsetAsync>(dll, nameof(cudaMemsetAsync));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern cudaError_t cudaDriverGetVersion(ref int driverVersion);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate cudaError_t cudaDriverGetVersion(ref int driverVersion);
+            public static NativeMethod<cudaDriverGetVersion> CudaDriverGetVersion { get; }
+                = new NativeMethod<cudaDriverGetVersion>(dll, nameof(cudaDriverGetVersion));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern cudaError_t cudaRuntimeGetVersion(ref int runtimeVersion);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate cudaError_t cudaRuntimeGetVersion(ref int runtimeVersion);
+            public static NativeMethod<cudaRuntimeGetVersion> CudaRuntimeGetVersion { get; }
+                = new NativeMethod<cudaRuntimeGetVersion>(dll, nameof(cudaRuntimeGetVersion));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern cudaError_t cudaStreamCreate(ref IntPtr pStream);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate cudaError_t cudaStreamCreate(ref IntPtr pStream);
+            public static NativeMethod<cudaStreamCreate> CudaStreamCreate { get; }
+                = new NativeMethod<cudaStreamCreate>(dll, nameof(cudaStreamCreate));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern cudaError_t cudaStreamDestroy(IntPtr stream);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate cudaError_t cudaStreamDestroy(IntPtr stream);
+            public static NativeMethod<cudaStreamDestroy> CudaStreamDestroy { get; }
+                = new NativeMethod<cudaStreamDestroy>(dll, nameof(cudaStreamDestroy));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern cudaError_t cudaStreamSynchronize(IntPtr stream);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate cudaError_t cudaStreamSynchronize(IntPtr stream);
+            public static NativeMethod<cudaStreamSynchronize> CudaStreamSynchronize { get; }
+                = new NativeMethod<cudaStreamSynchronize>(dll, nameof(cudaStreamSynchronize));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern cudaError_t cudaMemGetInfo(ref size_t free, ref size_t total);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate cudaError_t cudaMemGetInfo(ref size_t free, ref size_t total);
+            public static NativeMethod<cudaMemGetInfo> CudaMemGetInfo { get; }
+                = new NativeMethod<cudaMemGetInfo>(dll, nameof(cudaMemGetInfo));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern cudaError_t cudaProfilerInitialize(string configFile, string outputFile, cudaOutputMode outputMode);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public delegate cudaError_t cudaProfilerInitialize(string configFile, string outputFile, cudaOutputMode outputMode);
+            public static NativeMethod<cudaProfilerInitialize> CudaProfilerInitialize { get; }
+                = new NativeMethod<cudaProfilerInitialize>(dll, nameof(cudaProfilerInitialize));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern cudaError_t cudaProfilerStart();
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate cudaError_t cudaProfilerStart();
+            public static NativeMethod<cudaProfilerStart> CudaProfilerStart { get; }
+                = new NativeMethod<cudaProfilerStart>(dll, nameof(cudaProfilerStart));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern cudaError_t cudaProfilerStop();
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate cudaError_t cudaProfilerStop();
+            public static NativeMethod<cudaProfilerStop> CudaProfilerStop { get; }
+                = new NativeMethod<cudaProfilerStop>(dll, nameof(cudaProfilerStop));
 
-            [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr cudaGetErrorString(cudaError_t error);
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            public delegate IntPtr cudaGetErrorString(cudaError_t error);
+            public static NativeMethod<cudaGetErrorString> CudaGetErrorString { get; }
+                = new NativeMethod<cudaGetErrorString>(dll, nameof(cudaGetErrorString));
         }
-#pragma warning restore IDE1006 // 命名スタイル
+#pragma warning restore IDE1006
     }
 }

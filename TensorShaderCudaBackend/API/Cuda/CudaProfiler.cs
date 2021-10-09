@@ -21,7 +21,9 @@ namespace TensorShaderCudaBackend.API {
                     Directory.CreateDirectory(output_dirpath);
                 }
 
-                ErrorCode result = NativeMethods.cudaProfilerInitialize(config_filepath, output_filepath, cudaOutputMode.cudaCSV);
+                ErrorCode result = NativeMethods.CudaProfilerInitialize.AsDelegate().Invoke(
+                    config_filepath, output_filepath, cudaOutputMode.cudaCSV
+                );
                 if (result != ErrorCode.Success) {
                     throw new CudaException(result);
                 }
@@ -29,7 +31,7 @@ namespace TensorShaderCudaBackend.API {
 
             /// <summary>計測開始</summary>
             public static void Start() {
-                ErrorCode result = NativeMethods.cudaProfilerStart();
+                ErrorCode result = NativeMethods.CudaProfilerStart.AsDelegate().Invoke();
                 if (result != ErrorCode.Success) {
                     throw new CudaException(result);
                 }
@@ -37,7 +39,7 @@ namespace TensorShaderCudaBackend.API {
 
             /// <summary>計測終了</summary>
             public static void Stop() {
-                ErrorCode result = NativeMethods.cudaProfilerStop();
+                ErrorCode result = NativeMethods.CudaProfilerStop.AsDelegate().Invoke();
                 if (result != ErrorCode.Success) {
                     throw new CudaException(result);
                 }

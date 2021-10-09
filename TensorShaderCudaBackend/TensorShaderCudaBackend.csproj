@@ -5,13 +5,13 @@
     <Platforms>x64</Platforms>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Deterministic>false</Deterministic>
-    <Configurations>Debug;Release;Release_Cuda_10_0;Release_Cuda_10_1;Release_Cuda_10_2;Release_Cuda_11_0;Release_Cuda_11_1;Release_Linux;Release_Mac</Configurations>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DocumentationFile>bin\x64\Debug\net5.0\TensorShaderCudaBackend.xml</DocumentationFile>
-    <DefineConstants>TRACE;DEBUG;PLATFORM_WINDOWS</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
@@ -19,76 +19,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DocumentationFile>bin\x64\Release\net5.0\TensorShaderCudaBackend.xml</DocumentationFile>
-    <DefineConstants>TRACE;PLATFORM_WINDOWS</DefineConstants>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Cuda_10_0|x64'">
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DocumentationFile>bin\x64\Release_Cuda_10_0\net5.0\TensorShaderCudaBackend.xml</DocumentationFile>
-    <DefineConstants>TRACE;PLATFORM_WINDOWS;CUDA_10_0</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Cuda_10_1|x64'">
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DocumentationFile>bin\x64\Release_Cuda_10_1\net5.0\TensorShaderCudaBackend.xml</DocumentationFile>
-    <DefineConstants>TRACE;PLATFORM_WINDOWS;CUDA_10_1</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Cuda_10_2|x64'">
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DocumentationFile>bin\x64\Release_Cuda_10_2\net5.0\TensorShaderCudaBackend.xml</DocumentationFile>
-    <DefineConstants>TRACE;PLATFORM_WINDOWS;CUDA_10_2</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Cuda_11_0|x64'">
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DocumentationFile>bin\x64\Release_Cuda_11_0\net5.0\TensorShaderCudaBackend.xml</DocumentationFile>
-    <DefineConstants>TRACE;PLATFORM_WINDOWS;CUDA_11_0</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Cuda_11_1|x64'">
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DocumentationFile>bin\x64\Release_Cuda_11_1\net5.0\TensorShaderCudaBackend.xml</DocumentationFile>
-    <DefineConstants>TRACE;PLATFORM_WINDOWS;CUDA_11_1</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Linux|x64'">
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DocumentationFile>bin\x64\Release_Linux\net5.0\TensorShaderCudaBackend.xml</DocumentationFile>
-    <DefineConstants>TRACE;PLATFORM_LINUX</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Mac|x64'">
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DocumentationFile>bin\x64\Release_Mac\net5.0\TensorShaderCudaBackend.xml</DocumentationFile>
-    <DefineConstants>TRACE;PLATFORM_MAC</DefineConstants>
-    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if &quot;$(ConfigurationName)&quot; == &quot;Release&quot; (&#xD;&#xA;  exit&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;if &quot;$(ConfigurationName)&quot; == &quot;Debug&quot; (&#xD;&#xA;  exit&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;md &quot;$(SolutionDir)dll\$(ConfigurationName)&quot; &gt; NUL 2&gt;&amp;1&#xD;&#xA;copy  $(TargetPath)  $(SolutionDir)dll\$(ConfigurationName)\$(TargetFileName) /y&#xD;&#xA;copy  $(TargetDir)$(TargetName).xml $(SolutionDir)dll\$(ConfigurationName)\$(TargetName).xml /y" />
+    <Exec Command="if &quot;$(ConfigurationName)&quot; == &quot;Debug&quot; (&#xD;&#xA;  exit&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;md &quot;$(SolutionDir)dll\$(ConfigurationName)&quot; &gt; NUL 2&gt;&amp;1&#xD;&#xA;copy  $(TargetPath)  $(SolutionDir)dll\$(ConfigurationName)\$(TargetFileName) /y&#xD;&#xA;copy  $(TargetDir)$(TargetName).xml $(SolutionDir)dll\$(ConfigurationName)\$(TargetName).xml /y" />
   </Target>
 
 </Project>

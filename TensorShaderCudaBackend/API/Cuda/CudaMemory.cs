@@ -18,7 +18,7 @@ namespace TensorShaderCudaBackend.API {
 
                 long bytesize = (long)((ulong)Marshal.SizeOf(typeof(T)) * count);
 
-                ErrorCode result = NativeMethods.cudaMalloc(ref ptr, bytesize);
+                ErrorCode result = NativeMethods.CudaMalloc.AsDelegate().Invoke(ref ptr, bytesize);
                 if (result == ErrorCode.ErrorMemoryAllocation) {
                     GC.Collect();
                     GC.WaitForPendingFinalizers();
@@ -27,7 +27,7 @@ namespace TensorShaderCudaBackend.API {
                     Trace.WriteLine($"[{typeof(Memory).Name}.{MethodBase.GetCurrentMethod().Name}] Called finalizers");
 #endif
 
-                    result = NativeMethods.cudaMalloc(ref ptr, bytesize);
+                    result = NativeMethods.CudaMalloc.AsDelegate().Invoke(ref ptr, bytesize);
                 }
                 if (result != ErrorCode.Success) {
                     throw new CudaException(result);
@@ -42,7 +42,7 @@ namespace TensorShaderCudaBackend.API {
                     return;
                 }
 
-                ErrorCode result = NativeMethods.cudaFree(ptr);
+                ErrorCode result = NativeMethods.CudaFree.AsDelegate().Invoke(ptr);
                 ptr = IntPtr.Zero;
 
                 if (result != ErrorCode.Success) {
@@ -61,7 +61,7 @@ namespace TensorShaderCudaBackend.API {
                         throw new ArgumentException(nameof(dst_ptr));
                     }
 
-                    ErrorCode result = NativeMethods.cudaMemcpy(dst_ptr, src_ptr, count, kind);
+                    ErrorCode result = NativeMethods.CudaMemcpy.AsDelegate().Invoke(dst_ptr, src_ptr, count, kind);
                     if (result != ErrorCode.Success) {
                         throw new CudaException(result);
                     }
@@ -142,7 +142,7 @@ namespace TensorShaderCudaBackend.API {
                         throw new ArgumentException(nameof(stream));
                     }
 
-                    ErrorCode result = NativeMethods.cudaMemcpyAsync(dst_ptr, src_ptr, count, kind, stream);
+                    ErrorCode result = NativeMethods.CudaMemcpyAsync.AsDelegate().Invoke(dst_ptr, src_ptr, count, kind, stream);
                     if (result != ErrorCode.Success) {
                         throw new CudaException(result);
                     }
@@ -175,7 +175,7 @@ namespace TensorShaderCudaBackend.API {
 
                 long bytesize = (long)((ulong)Marshal.SizeOf(typeof(T)) * count);
 
-                ErrorCode result = NativeMethods.cudaMemset(ptr, 0, bytesize);
+                ErrorCode result = NativeMethods.CudaMemset.AsDelegate().Invoke(ptr, 0, bytesize);
                 if (result != ErrorCode.Success) {
                     throw new CudaException(result);
                 }
@@ -192,7 +192,7 @@ namespace TensorShaderCudaBackend.API {
 
                 long bytesize = (long)((ulong)Marshal.SizeOf(typeof(T)) * count);
 
-                ErrorCode result = NativeMethods.cudaMemsetAsync(ptr, 0, bytesize, stream);
+                ErrorCode result = NativeMethods.CudaMemsetAsync.AsDelegate().Invoke(ptr, 0, bytesize, stream);
                 if (result != ErrorCode.Success) {
                     throw new CudaException(result);
                 }

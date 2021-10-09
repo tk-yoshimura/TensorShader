@@ -10,7 +10,7 @@ namespace TensorShaderCudaBackend.API {
 
         /// <summary>ドライバの初期化</summary>
         public static void InitDriver() {
-            ResultCode result = NativeMethods.cuInit(0);
+            ResultCode result = NativeMethods.CuInit.AsDelegate().Invoke(0);
             if (result != ResultCode.Success) {
                 throw new CudaException(result);
             }
@@ -31,7 +31,7 @@ namespace TensorShaderCudaBackend.API {
 
             IntPtr module = IntPtr.Zero;
 
-            ResultCode result = NativeMethods.cuModuleLoadData(ref module, ptx);
+            ResultCode result = NativeMethods.CuModuleLoadData.AsDelegate().Invoke(ref module, ptx);
             if (result != ResultCode.Success) {
                 throw new CudaException(result);
             }
@@ -45,7 +45,7 @@ namespace TensorShaderCudaBackend.API {
                 return;
             }
 
-            ResultCode result = NativeMethods.cuModuleUnload(module);
+            ResultCode result = NativeMethods.CuModuleUnload.AsDelegate().Invoke(module);
             if (result != ResultCode.Success) {
                 throw new CudaException(result);
             }
@@ -57,7 +57,7 @@ namespace TensorShaderCudaBackend.API {
         internal static IntPtr GetKernel(IntPtr module, string entrypoint) {
             IntPtr kernel = IntPtr.Zero;
 
-            ResultCode result = NativeMethods.cuModuleGetFunction(ref kernel, module, entrypoint);
+            ResultCode result = NativeMethods.CuModuleGetFunction.AsDelegate().Invoke(ref kernel, module, entrypoint);
             if (result != ResultCode.Success) {
                 throw new CudaException(result);
             }
@@ -70,7 +70,7 @@ namespace TensorShaderCudaBackend.API {
             IntPtr ptr = IntPtr.Zero;
             Int64 size = 0;
 
-            ResultCode result = NativeMethods.cuModuleGetGlobal_v2(ref ptr, ref size, module, name);
+            ResultCode result = NativeMethods.CuModuleGetGlobal_v2.AsDelegate().Invoke(ref ptr, ref size, module, name);
             if (result != ResultCode.Success) {
                 throw new CudaException(result);
             }
@@ -80,7 +80,7 @@ namespace TensorShaderCudaBackend.API {
 
         /// <summary>共有メモリ/L1キャッシュ配分比を変更</summary>
         internal static void SetCacheConfig(FuncCache func_cache) {
-            ResultCode result = NativeMethods.cuCtxSetCacheConfig(func_cache);
+            ResultCode result = NativeMethods.CuCtxSetCacheConfig.AsDelegate().Invoke(func_cache);
             if (result != ResultCode.Success) {
                 throw new CudaException(result);
             }
@@ -88,7 +88,7 @@ namespace TensorShaderCudaBackend.API {
 
         /// <summary>カーネルを実行</summary>
         internal static void LaunchKernel(IntPtr kernel, uint grid_dimx, uint grid_dimy, uint grid_dimz, uint block_dimx, uint block_dimy, uint block_dimz, uint dynamic_shared_memory_bytes, IntPtr stream, IntPtr kernel_params, IntPtr extra) {
-            ResultCode result = NativeMethods.cuLaunchKernel(
+            ResultCode result = NativeMethods.CuLaunchKernel.AsDelegate().Invoke(
                 kernel,
                 grid_dimx, grid_dimy, grid_dimz, block_dimx, block_dimy, block_dimz,
                 dynamic_shared_memory_bytes, stream, kernel_params, extra
@@ -101,9 +101,15 @@ namespace TensorShaderCudaBackend.API {
         /// <summary>エラーコードメッセージ</summary>
         internal static string GetErrorString(ResultCode error) {
             IntPtr ptr = IntPtr.Zero;
-            NativeMethods.cuGetErrorString(error, ref ptr);
+            NativeMethods.CuGetErrorString.AsDelegate().Invoke(error, ref ptr);
 
-            return Marshal.PtrToStringAnsi(ptr);
+            string str = string.Empty;
+            if (ptr != IntPtr.Zero) {
+                str = Marshal.PtrToStringAnsi(ptr);
+                Marshal.FreeHGlobal(ptr);
+            }
+
+            return str;
         }
     }
 }

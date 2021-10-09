@@ -12,7 +12,7 @@ namespace TensorShaderCudaBackend.API {
             get {
                 int major = 0, minor = 0;
 
-                ResultCode result = NativeMethods.nvrtcVersion(ref major, ref minor);
+                ResultCode result = NativeMethods.NvrtcVersion.AsDelegate().Invoke(ref major, ref minor);
                 if (result != ResultCode.Success) {
                     throw new CudaException(result);
                 }
@@ -28,38 +28,38 @@ namespace TensorShaderCudaBackend.API {
 
             code = $"extern \"C\" {{ {code} }}";
 
-            result = NativeMethods.nvrtcCreateProgram(ref prog, code, entrypoint, 0, null, null);
+            result = NativeMethods.NvrtcCreateProgram.AsDelegate().Invoke(ref prog, code, entrypoint, 0, null, null);
             if (result != ResultCode.Success) {
                 throw new CudaException(result);
             }
 
             try {
-                result = NativeMethods.nvrtcCompileProgram(prog, options.Length, options);
+                result = NativeMethods.NvrtcCompileProgram.AsDelegate().Invoke(prog, options.Length, options);
                 if (result != ResultCode.Success) {
                     long log_size = 0;
 
-                    result = NativeMethods.nvrtcGetProgramLogSize(prog, ref log_size);
+                    result = NativeMethods.NvrtcGetProgramLogSize.AsDelegate().Invoke(prog, ref log_size);
                     if (result != ResultCode.Success) {
                         throw new CudaException(result);
                     }
 
                     StringBuilder log = new((int)log_size + 8);
-                    result = NativeMethods.nvrtcGetProgramLog(prog, log);
+                    result = NativeMethods.NvrtcGetProgramLog.AsDelegate().Invoke(prog, log);
                     if (result != ResultCode.Success) {
                         throw new CudaException(result);
                     }
 
-                    throw new CudaException($"Failure compile : {log.ToString()}");
+                    throw new CudaException($"Failure compile : {log}");
                 }
 
                 long ptx_size = 0;
-                result = NativeMethods.nvrtcGetPTXSize(prog, ref ptx_size);
+                result = NativeMethods.NvrtcGetPTXSize.AsDelegate().Invoke(prog, ref ptx_size);
                 if (result != ResultCode.Success) {
                     throw new CudaException(result);
                 }
 
                 StringBuilder ptx = new((int)ptx_size + 8);
-                result = NativeMethods.nvrtcGetPTX(prog, ptx);
+                result = NativeMethods.NvrtcGetPTX.AsDelegate().Invoke(prog, ptx);
                 if (result != ResultCode.Success) {
                     throw new CudaException(result);
                 }
@@ -70,14 +70,21 @@ namespace TensorShaderCudaBackend.API {
                 throw;
             }
             finally {
-                NativeMethods.nvrtcDestroyProgram(ref prog);
+                NativeMethods.NvrtcDestroyProgram.AsDelegate().Invoke(ref prog);
             }
         }
 
         /// <summary>エラーコードメッセージ</summary>
         internal static string GetErrorString(ResultCode result) {
-            IntPtr ptr = NativeMethods.nvrtcGetErrorString(result);
-            return Marshal.PtrToStringAnsi(ptr);
+            IntPtr ptr = NativeMethods.NvrtcGetErrorString.AsDelegate().Invoke(result);
+
+            string str = string.Empty;
+            if (ptr != IntPtr.Zero) {
+                str = Marshal.PtrToStringAnsi(ptr);
+                Marshal.FreeHGlobal(ptr);
+            }
+
+            return str;
         }
     }
 }
