@@ -10,22 +10,22 @@ namespace TensorShaderCudaBackend.Dll {
 
         static CudaDll() {
             foreach (string libname in NvcudaLibraryNames) {
-                if (NativeDll.Exists(libname)) {
-                    Nvcuda = new NativeDll(libname);
+                if (NativeDll.Exists(libname, out NativeDll lib)) {
+                    Nvcuda = lib;
                     break;
                 }
             }
 
             foreach (string libname in CudaLibraryNames) {
-                if (NativeDll.Exists(libname)) {
-                    Cuda = new NativeDll(libname);
+                if (NativeDll.Exists(libname, out NativeDll lib)) {
+                    Cuda = lib;
                     break;
                 }
             }
 
             foreach (string libname in NvrtcLibraryNames) {
-                if (NativeDll.Exists(libname)) {
-                    Nvrtc = new NativeDll(libname);
+                if (NativeDll.Exists(libname, out NativeDll lib)) {
+                    Nvrtc = lib;
                     break;
                 }
             }
