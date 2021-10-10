@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace TensorShaderCudaBackend.Dll {
@@ -15,6 +16,9 @@ namespace TensorShaderCudaBackend.Dll {
                     break;
                 }
             }
+            if (Nvcuda is not null) { 
+                Trace.WriteLine($"[{typeof(CudaDll).Name}] {Nvcuda} loaded.");
+            }
 
             foreach (string libname in CudaLibraryNames) {
                 if (NativeDll.Exists(libname, out NativeDll lib)) {
@@ -22,12 +26,18 @@ namespace TensorShaderCudaBackend.Dll {
                     break;
                 }
             }
+            if (Cuda is not null) { 
+                Trace.WriteLine($"[{typeof(CudaDll).Name}] {Cuda} loaded.");
+            }
 
             foreach (string libname in NvrtcLibraryNames) {
                 if (NativeDll.Exists(libname, out NativeDll lib)) {
                     Nvrtc = lib;
                     break;
                 }
+            }
+            if (Nvrtc is not null) { 
+                Trace.WriteLine($"[{typeof(CudaDll).Name}] {Nvrtc} loaded.");
             }
 
             if (Nvcuda is null || Cuda is null || Nvrtc is null) {
