@@ -1,6 +1,8 @@
-﻿namespace TensorShaderCudaBackend.API {
+﻿using System;
+
+namespace TensorShaderCudaBackend.API {
     public static partial class Nvrtc {
-        internal enum ResultCode {
+        internal enum ResultCode: Int32 {
             Success = 0,
             FailureOutOfMemory = 1,
             FailureProgramCreation = 2,

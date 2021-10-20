@@ -8,6 +8,7 @@ namespace TensorShaderCudaBackend.Dll {
         public static NativeDll Cuda { get; private set; } = null;
         public static NativeDll Nvcuda { get; private set; } = null;
         public static NativeDll Nvrtc { get; private set; } = null;
+        public static NativeDll Cudnn { get; private set; } = null;
 
         static CudaDll() {
             foreach (string libname in NvcudaLibraryNames) {
