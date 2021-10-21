@@ -44,6 +44,16 @@ namespace TensorShaderCudaBackend.Dll {
             if (Nvcuda is null || Cuda is null || Nvrtc is null) {
                 throw new DllNotFoundException("Not found cuda library. (major version=10,11)");
             }
+
+            foreach (string libname in CudnnLibraryNames) {
+                if (NativeDll.Exists(libname, out NativeDll lib)) {
+                    Cudnn = lib;
+                    break;
+                }
+            }
+            if (Cudnn is not null) { 
+                Trace.WriteLine($"[{typeof(CudaDll).Name}] {Cudnn} loaded.");
+            }
         }
 
         static IEnumerable<(int major, int minor)> VersionList {
@@ -124,6 +134,37 @@ namespace TensorShaderCudaBackend.Dll {
                     }
 
                     yield return "libnvrtc.dylib";
+                }
+                else {
+                    throw new NotSupportedException(RuntimeInformation.OSDescription);
+                }
+            }
+        }
+
+        static IEnumerable<string> CudnnLibraryNames {
+            get {
+                int[] cudnn_versions = new int[]{ 8, 7 };
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                    foreach (int version in cudnn_versions) {
+                        yield return $"cudnn64_{version}.dll";
+                    }
+
+                    yield return "cudnn64.dll";
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
+                    foreach (int version in cudnn_versions) {
+                        yield return $"libcudnn.so.{version}";
+                    }
+
+                    yield return "libcudnn.so";
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
+                    foreach (int version in cudnn_versions) {
+                        yield return $"libcudnn.{version}.dylib";
+                    }
+
+                    yield return "cudnn.dylib";
                 }
                 else {
                     throw new NotSupportedException(RuntimeInformation.OSDescription);

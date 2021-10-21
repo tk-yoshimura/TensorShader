@@ -171,7 +171,6 @@ namespace TensorShaderCudaBackend.API {
             string str = string.Empty;
             if (ptr != IntPtr.Zero) {
                 str = Marshal.PtrToStringAnsi(ptr);
-                Marshal.FreeHGlobal(ptr);
             }
 
             return str;

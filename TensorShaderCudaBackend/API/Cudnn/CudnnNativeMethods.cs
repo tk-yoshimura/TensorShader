@@ -5,8 +5,8 @@ using TensorShaderCudaBackend.Dll;
 
 namespace TensorShaderCudaBackend.API {
     using cudnnStatus_t = Cudnn.Status;
-    using cudnnTensorFormat_t = Cudnn.TensorFormat;
-    using cudnnDataType_t = Cudnn.DataType;
+    using cudnnTensorFormat_t = TensorShaderCudaBackend.Cudnn.TensorFormat;
+    using cudnnDataType_t = TensorShaderCudaBackend.Cudnn.DataType;
     using cudnnConvolutionMode_t = Cudnn.ConvolutionMode;
     using cudnnConvolutionFwdAlgo_t = Cudnn.ConvolutionFwdAlgo;
     using cudnnConvolutionFwdPreference_t = Cudnn.ConvolutionFwdPreference;

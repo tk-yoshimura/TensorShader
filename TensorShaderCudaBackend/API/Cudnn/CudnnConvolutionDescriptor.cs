@@ -37,11 +37,12 @@ namespace TensorShaderCudaBackend.API {
             }
 
             /// <summary>設定</summary>
-            internal static void SetConvolution2d(IntPtr desc, DataType dtype, 
+            internal static void SetConvolution2d(
+                IntPtr desc, TensorShaderCudaBackend.Cudnn.DataType dtype, 
                 (int h, int w) pad, (int y, int x) stride, (int y, int x) dilation) {
 
                 Status status = NativeMethods.CudnnSetConvolution2dDescriptor.AsDelegate().Invoke(
-                    desc, pad.h, pad.w, stride.y, stride.x, dilation.y, dilation.x, ConvolutionMode.Convolution, dtype
+                    desc, pad.h, pad.w, stride.y, stride.x, dilation.y, dilation.x, ConvolutionMode.CrossCorrelation, dtype
                 );
                 if (status != Status.Success) {
                     throw new CudaException(status);
@@ -49,7 +50,8 @@ namespace TensorShaderCudaBackend.API {
             }
 
             /// <summary>設定</summary>
-            internal static void SetConvolution3d(IntPtr desc, DataType dtype, 
+            internal static void SetConvolution3d(
+                IntPtr desc, TensorShaderCudaBackend.Cudnn.DataType dtype, 
                 (int d, int h, int w) pad, (int z, int y, int x) stride, (int z, int y, int x) dilation) {
 
                 int[] pads = new int[] { pad.d, pad.h, pad.w };
@@ -60,13 +62,13 @@ namespace TensorShaderCudaBackend.API {
                 GCHandle pinned_strides_handle = GCHandle.Alloc(strides, GCHandleType.Pinned);
                 GCHandle pinned_dilations_handle = GCHandle.Alloc(dilations, GCHandleType.Pinned);
 
-                IntPtr pads_ptr = GCHandle.ToIntPtr(pinned_pads_handle);
-                IntPtr strides_ptr = GCHandle.ToIntPtr(pinned_strides_handle);
-                IntPtr dilations_ptr = GCHandle.ToIntPtr(pinned_dilations_handle);
+                IntPtr pads_ptr = pinned_pads_handle.AddrOfPinnedObject();
+                IntPtr strides_ptr = pinned_strides_handle.AddrOfPinnedObject();
+                IntPtr dilations_ptr = pinned_dilations_handle.AddrOfPinnedObject();
 
                 try {
                     Status status = NativeMethods.CudnnSetConvolutionNdDescriptor.AsDelegate().Invoke(
-                        desc, 3, pads_ptr, strides_ptr, dilations_ptr, ConvolutionMode.Convolution, dtype 
+                        desc, 3, pads_ptr, strides_ptr, dilations_ptr, ConvolutionMode.CrossCorrelation, dtype 
                     );
                     if (status != Status.Success) {
                         throw new CudaException(status);

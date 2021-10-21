@@ -9,7 +9,7 @@ namespace TensorShaderCudaBackend.API {
             /// <summary>作成</summary>
             internal static IntPtr Create() {
                 if (!Exists) {
-                    return IntPtr.Zero;
+                    throw new CudaException("Cudnn library not found.");
                 }
 
                 IntPtr handle = IntPtr.Zero;
