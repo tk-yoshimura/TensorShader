@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace TensorShaderCudaBackend.Cudnn {
 
     /// <summary>コントローラ</summary>
-    public class Controller: IDisposable {
+    public class CudnnController: IDisposable {
         private IntPtr handle;
         private IntPtr workspace;
         private readonly Int64 workspace_size_limit;
@@ -15,7 +15,7 @@ namespace TensorShaderCudaBackend.Cudnn {
         /// ワークスペース最大サイズ[Bytes] 
         /// デフォルト: 16MBytes
         /// </param>
-        public Controller(Stream stream, Int64 workspace_size_limit = 0x1000000) {
+        public CudnnController(Stream stream, Int64 workspace_size_limit = 0x1000000) {
             if (workspace_size_limit <= 0) {
                 throw new ArgumentOutOfRangeException(nameof(workspace_size_limit));
             }
@@ -127,7 +127,7 @@ namespace TensorShaderCudaBackend.Cudnn {
         }
 
         /// <summary>ファイナライザ</summary>
-        ~Controller() {
+        ~CudnnController() {
             Dispose();
         }
     }
