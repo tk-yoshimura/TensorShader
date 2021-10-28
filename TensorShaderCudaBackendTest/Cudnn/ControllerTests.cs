@@ -100,7 +100,7 @@ namespace TensorShaderCudaBackendTest {
             warr.Read(ws);
 
             for (int i = 0; i < n * ic * ih * iw; i++) {
-                Assert.IsTrue(dxs[i] % 3f == 0f);
+                Assert.IsTrue(dxs[i] % kh == 0f);
             }
             Assert.AreEqual(0f, dxs[n * ic * ih * iw]);
 
@@ -238,7 +238,7 @@ namespace TensorShaderCudaBackendTest {
             warr.Read(ws);
 
             for (int i = 0; i < n * ic * id * ih * iw; i++) {
-                Assert.IsTrue(dxs[i] % 3f == 0f);
+                Assert.IsTrue(dxs[i] % kh == 0f);
             }
             Assert.AreEqual(0f, dxs[n * ic * id * ih * iw]);
 

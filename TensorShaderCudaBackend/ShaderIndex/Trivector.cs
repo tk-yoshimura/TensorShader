@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace TensorShaderCudaBackend {
 
@@ -335,10 +336,16 @@ namespace TensorShaderCudaBackend {
 
             string key = $"trivector_convolution_dense " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                         $"{nameof(gradmode)}={gradmode}";
+                         $"{nameof(gradmode)}={gradmode} " + 
+                         $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
-                shaders.Add(key, new Shaders.Trivector.Convolution.Dense(inchannels, outchannels, gradmode));
+                if (Environment.Precision == Environment.PrecisionMode.Float) {
+                    throw new NotImplementedException();
+                }
+                else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
+                    shaders.Add(key, new Shaders.Trivector.Convolution.FloatFloatPrecision.Dense(inchannels, outchannels, gradmode));
+                }
             }
 
             Shader shader = shaders[key];
@@ -358,10 +365,16 @@ namespace TensorShaderCudaBackend {
 
             string key = $"trivector_transpose_dense " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                         $"{nameof(gradmode)}={gradmode}";
+                         $"{nameof(gradmode)}={gradmode} " + 
+                         $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
-                shaders.Add(key, new Shaders.Trivector.Convolution.TransposeDense(inchannels, outchannels, gradmode));
+                if (Environment.Precision == Environment.PrecisionMode.Float) {
+                    throw new NotImplementedException();
+                }
+                else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
+                    shaders.Add(key, new Shaders.Trivector.Convolution.FloatFloatPrecision.TransposeDense(inchannels, outchannels, gradmode));
+                }
             }
 
             Shader shader = shaders[key];
@@ -381,10 +394,16 @@ namespace TensorShaderCudaBackend {
 
             string key = $"trivector_kernelproduct_dense " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                         $"{nameof(transpose)}={transpose}";
+                         $"{nameof(transpose)}={transpose} " + 
+                         $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
-                shaders.Add(key, new Shaders.Trivector.Convolution.KernelProductDense(inchannels, outchannels, transpose));
+                if (Environment.Precision == Environment.PrecisionMode.Float) {
+                    throw new NotImplementedException();
+                }
+                else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
+                    shaders.Add(key, new Shaders.Trivector.Convolution.FloatFloatPrecision.KernelProductDense(inchannels, outchannels, transpose));
+                }
             }
 
             Shader shader = shaders[key];
@@ -405,10 +424,16 @@ namespace TensorShaderCudaBackend {
             string key = $"trivector_convolution_1d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"{nameof(kwidth)}={kwidth} " +
-                         $"{nameof(gradmode)}={gradmode}";
+                         $"{nameof(gradmode)}={gradmode} " + 
+                         $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
-                shaders.Add(key, new Shaders.Trivector.Convolution.Convolution1D(inchannels, outchannels, kwidth, gradmode));
+                if (Environment.Precision == Environment.PrecisionMode.Float) {
+                    throw new NotImplementedException();
+                }
+                else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
+                    shaders.Add(key, new Shaders.Trivector.Convolution.FloatFloatPrecision.Convolution1D(inchannels, outchannels, kwidth, gradmode));
+                }
             }
 
             Shader shader = shaders[key];
@@ -429,10 +454,16 @@ namespace TensorShaderCudaBackend {
             string key = $"trivector_deconvolution_1d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"{nameof(kwidth)}={kwidth} " +
-                         $"{nameof(gradmode)}={gradmode}";
+                         $"{nameof(gradmode)}={gradmode} " + 
+                         $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
-                shaders.Add(key, new Shaders.Trivector.Convolution.Deconvolution1D(inchannels, outchannels, kwidth, gradmode));
+                if (Environment.Precision == Environment.PrecisionMode.Float) {
+                    throw new NotImplementedException();
+                }
+                else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
+                    shaders.Add(key, new Shaders.Trivector.Convolution.FloatFloatPrecision.Deconvolution1D(inchannels, outchannels, kwidth, gradmode));
+                }
             }
 
             Shader shader = shaders[key];
@@ -453,10 +484,16 @@ namespace TensorShaderCudaBackend {
             string key = $"trivector_kernelproduct_1d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"{nameof(kwidth)}={kwidth} " +
-                         $"{nameof(transpose)}={transpose}";
+                         $"{nameof(transpose)}={transpose} " + 
+                         $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
-                shaders.Add(key, new Shaders.Trivector.Convolution.KernelProduct1D(inchannels, outchannels, kwidth, transpose));
+                if (Environment.Precision == Environment.PrecisionMode.Float) {
+                    throw new NotImplementedException();
+                }
+                else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
+                    shaders.Add(key, new Shaders.Trivector.Convolution.FloatFloatPrecision.KernelProduct1D(inchannels, outchannels, kwidth, transpose));
+                }
             }
 
             Shader shader = shaders[key];
@@ -477,10 +514,16 @@ namespace TensorShaderCudaBackend {
             string key = $"trivector_convolution_2d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
-                         $"{nameof(gradmode)}={gradmode}";
+                         $"{nameof(gradmode)}={gradmode} " + 
+                         $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
-                shaders.Add(key, new Shaders.Trivector.Convolution.Convolution2D(inchannels, outchannels, kwidth, kheight, gradmode));
+                if (Environment.Precision == Environment.PrecisionMode.Float) {
+                    throw new NotImplementedException();
+                }
+                else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
+                    shaders.Add(key, new Shaders.Trivector.Convolution.FloatFloatPrecision.Convolution2D(inchannels, outchannels, kwidth, kheight, gradmode));
+                }
             }
 
             Shader shader = shaders[key];
@@ -501,10 +544,16 @@ namespace TensorShaderCudaBackend {
             string key = $"trivector_deconvolution_2d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
-                         $"{nameof(gradmode)}={gradmode}";
+                         $"{nameof(gradmode)}={gradmode} " + 
+                         $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
-                shaders.Add(key, new Shaders.Trivector.Convolution.Deconvolution2D(inchannels, outchannels, kwidth, kheight, gradmode));
+                if (Environment.Precision == Environment.PrecisionMode.Float) {
+                    throw new NotImplementedException();
+                }
+                else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
+                    shaders.Add(key, new Shaders.Trivector.Convolution.FloatFloatPrecision.Deconvolution2D(inchannels, outchannels, kwidth, kheight, gradmode));
+                }
             }
 
             Shader shader = shaders[key];
@@ -525,10 +574,16 @@ namespace TensorShaderCudaBackend {
             string key = $"trivector_kernelproduct_2d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
-                         $"{nameof(transpose)}={transpose}";
+                         $"{nameof(transpose)}={transpose} " + 
+                         $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
-                shaders.Add(key, new Shaders.Trivector.Convolution.KernelProduct2D(inchannels, outchannels, kwidth, kheight, transpose));
+                if (Environment.Precision == Environment.PrecisionMode.Float) {
+                    throw new NotImplementedException();
+                }
+                else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
+                    shaders.Add(key, new Shaders.Trivector.Convolution.FloatFloatPrecision.KernelProduct2D(inchannels, outchannels, kwidth, kheight, transpose));
+                }
             }
 
             Shader shader = shaders[key];
@@ -549,10 +604,16 @@ namespace TensorShaderCudaBackend {
             string key = $"trivector_convolution_3d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
-                         $"{nameof(gradmode)}={gradmode}";
+                         $"{nameof(gradmode)}={gradmode} " + 
+                         $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
-                shaders.Add(key, new Shaders.Trivector.Convolution.Convolution3D(inchannels, outchannels, kwidth, kheight, kdepth, gradmode));
+                if (Environment.Precision == Environment.PrecisionMode.Float) {
+                    throw new NotImplementedException();
+                }
+                else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
+                    shaders.Add(key, new Shaders.Trivector.Convolution.FloatFloatPrecision.Convolution3D(inchannels, outchannels, kwidth, kheight, kdepth, gradmode));
+                }
             }
 
             Shader shader = shaders[key];
@@ -573,10 +634,16 @@ namespace TensorShaderCudaBackend {
             string key = $"trivector_deconvolution_3d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
-                         $"{nameof(gradmode)}={gradmode}";
+                         $"{nameof(gradmode)}={gradmode} " + 
+                         $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
-                shaders.Add(key, new Shaders.Trivector.Convolution.Deconvolution3D(inchannels, outchannels, kwidth, kheight, kdepth, gradmode));
+                if (Environment.Precision == Environment.PrecisionMode.Float) {
+                    throw new NotImplementedException();
+                }
+                else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
+                    shaders.Add(key, new Shaders.Trivector.Convolution.FloatFloatPrecision.Deconvolution3D(inchannels, outchannels, kwidth, kheight, kdepth, gradmode));
+                }
             }
 
             Shader shader = shaders[key];
@@ -597,10 +664,16 @@ namespace TensorShaderCudaBackend {
             string key = $"trivector_kernelproduct_3d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
-                         $"{nameof(transpose)}={transpose}";
+                         $"{nameof(transpose)}={transpose} " + 
+                         $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
-                shaders.Add(key, new Shaders.Trivector.Convolution.KernelProduct3D(inchannels, outchannels, kwidth, kheight, kdepth, transpose));
+                if (Environment.Precision == Environment.PrecisionMode.Float) {
+                    throw new NotImplementedException();
+                }
+                else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
+                    shaders.Add(key, new Shaders.Trivector.Convolution.FloatFloatPrecision.KernelProduct3D(inchannels, outchannels, kwidth, kheight, kdepth, transpose));
+                }
             }
 
             Shader shader = shaders[key];
