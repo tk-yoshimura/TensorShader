@@ -169,7 +169,10 @@ namespace TensorShaderTest.Operators.Complex {
         }
 
         [TestMethod]
-        public void SpeedTest() {
+        public void SpeedFPTest() {
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+
             int inwidth = 32, inheight = 32, indepth = 32, inchannels = 32, outchannels = 32, ksize = 3;
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1, outdepth = indepth - ksize + 1;
 
@@ -182,7 +185,32 @@ namespace TensorShaderTest.Operators.Complex {
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 
-            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/complex_deconvolution_3d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/complex_deconvolution_3d_fp.nvvp");
+            Cuda.Profiler.Start();
+
+            ope.Execute(y_tensor, w_tensor, x_tensor);
+
+            Cuda.Profiler.Stop();
+        }
+
+        [TestMethod]
+        public void SpeedFFPTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
+            int inwidth = 32, inheight = 32, indepth = 32, inchannels = 32, outchannels = 32, ksize = 3;
+            int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1, outdepth = indepth - ksize + 1;
+
+            OverflowCheckedTensor y_tensor = new(Shape.Map3D(outchannels, outwidth, outheight, outdepth));
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel3D(inchannels, outchannels / 2, ksize, ksize, ksize));
+
+            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, inwidth, inheight, indepth));
+
+            ComplexDeconvolution3D ope = new(outwidth, outheight, outdepth, outchannels, inchannels, ksize, ksize, ksize);
+
+            ope.Execute(y_tensor, w_tensor, x_tensor);
+
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/complex_deconvolution_3d_ffp.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(y_tensor, w_tensor, x_tensor);

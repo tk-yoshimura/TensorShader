@@ -142,7 +142,10 @@ namespace TensorShaderTest.Operators.Connection3D {
         }
 
         [TestMethod]
-        public void SpeedTest() {
+        public void SpeedFPTest() {
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+
             int width = 64, height = 64, depth = 64, inchannels = 32, outchannels = 32;
 
             OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, width, height, depth));
@@ -152,7 +155,29 @@ namespace TensorShaderTest.Operators.Connection3D {
 
             PointwiseKernelProduct ope = new(width, height, depth, inchannels, outchannels);
 
-            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/ptwise_kernelproduct_3d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/ptwise_kernelproduct_3d_fp.nvvp");
+            Cuda.Profiler.Start();
+
+            ope.Execute(x_tensor, gy_tensor, gw_tensor);
+
+            Cuda.Profiler.Stop();
+        }
+
+        [TestMethod]
+        public void SpeedFFPTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
+            int width = 64, height = 64, depth = 64, inchannels = 32, outchannels = 32;
+
+            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, width, height, depth));
+            OverflowCheckedTensor gy_tensor = new(Shape.Map3D(outchannels, width, height, depth));
+
+            OverflowCheckedTensor gw_tensor = new(Shape.Kernel0D(inchannels, outchannels));
+
+            PointwiseKernelProduct ope = new(width, height, depth, inchannels, outchannels);
+
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/ptwise_kernelproduct_3d_ffp.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, gy_tensor, gw_tensor);

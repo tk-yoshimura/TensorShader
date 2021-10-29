@@ -156,7 +156,10 @@ namespace TensorShaderTest.Operators.Connection2D {
         }
 
         [TestMethod]
-        public void SpeedTest() {
+        public void SpeedFPTest() {
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+
             int inwidth = 512, inheight = 512, inchannels = 31, outchannels = 31, ksize = 3;
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1;
 
@@ -169,7 +172,32 @@ namespace TensorShaderTest.Operators.Connection2D {
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 
-            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/deconvolution_2d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/deconvolution_2d_fp.nvvp");
+            Cuda.Profiler.Start();
+
+            ope.Execute(y_tensor, w_tensor, x_tensor);
+
+            Cuda.Profiler.Stop();
+        }
+
+        [TestMethod]
+        public void SpeedFFPTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
+            int inwidth = 512, inheight = 512, inchannels = 31, outchannels = 31, ksize = 3;
+            int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1;
+
+            OverflowCheckedTensor y_tensor = new(Shape.Map2D(outchannels, outwidth, outheight));
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel2D(inchannels, outchannels, ksize, ksize));
+
+            OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, inwidth, inheight));
+
+            Deconvolution ope = new(outwidth, outheight, outchannels, inchannels, ksize, ksize);
+
+            ope.Execute(y_tensor, w_tensor, x_tensor);
+
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/deconvolution_2d_ffp.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(y_tensor, w_tensor, x_tensor);

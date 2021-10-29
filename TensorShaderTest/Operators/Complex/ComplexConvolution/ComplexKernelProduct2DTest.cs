@@ -184,7 +184,10 @@ namespace TensorShaderTest.Operators.Complex {
         }
 
         [TestMethod]
-        public void SpeedTest() {
+        public void SpeedFPTest() {
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+
             int inwidth = 512, inheight = 512, inchannels = 32, outchannels = 32, ksize = 3;
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1;
 
@@ -195,7 +198,30 @@ namespace TensorShaderTest.Operators.Complex {
 
             ComplexKernelProduct2D ope = new(inwidth, inheight, inchannels, outchannels, ksize, ksize);
 
-            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/complex_kernelproduct_2d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/complex_kernelproduct_2d_fp.nvvp");
+            Cuda.Profiler.Start();
+
+            ope.Execute(x_tensor, y_tensor, gw_tensor);
+
+            Cuda.Profiler.Stop();
+        }
+
+        [TestMethod]
+        public void SpeedFFPTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
+            int inwidth = 512, inheight = 512, inchannels = 32, outchannels = 32, ksize = 3;
+            int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1;
+
+            OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, inwidth, inheight));
+            OverflowCheckedTensor y_tensor = new(Shape.Map2D(outchannels, outwidth, outheight));
+
+            OverflowCheckedTensor gw_tensor = new(Shape.Kernel2D(inchannels, outchannels / 2, ksize, ksize));
+
+            ComplexKernelProduct2D ope = new(inwidth, inheight, inchannels, outchannels, ksize, ksize);
+
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/complex_kernelproduct_2d_ffp.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor, gw_tensor);

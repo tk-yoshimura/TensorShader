@@ -182,7 +182,10 @@ namespace TensorShaderTest.Operators.Trivector {
         }
 
         [TestMethod]
-        public void SpeedTest() {
+        public void SpeedFPTest() {
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+
             int inwidth = 32, inheight = 32, inchannels = 33, outchannels = 33, ksize = 3;
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1;
 
@@ -195,7 +198,32 @@ namespace TensorShaderTest.Operators.Trivector {
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 
-            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/trivector_deconvolution_2d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/trivector_deconvolution_2d_fp.nvvp");
+            Cuda.Profiler.Start();
+
+            ope.Execute(y_tensor, w_tensor, x_tensor);
+
+            Cuda.Profiler.Stop();
+        }
+
+        [TestMethod]
+        public void SpeedFFPTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
+            int inwidth = 32, inheight = 32, inchannels = 33, outchannels = 33, ksize = 3;
+            int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1;
+
+            OverflowCheckedTensor y_tensor = new(Shape.Map2D(outchannels, outwidth, outheight));
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel2D(inchannels / 3 * 4, outchannels / 3, ksize, ksize));
+
+            OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, inwidth, inheight));
+
+            TrivectorDeconvolution2D ope = new(outwidth, outheight, outchannels, inchannels, ksize, ksize);
+
+            ope.Execute(y_tensor, w_tensor, x_tensor);
+
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/trivector_deconvolution_2d_ffp.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(y_tensor, w_tensor, x_tensor);

@@ -161,7 +161,10 @@ namespace TensorShaderTest.Operators.Quaternion {
         }
 
         [TestMethod]
-        public void SpeedTest() {
+        public void SpeedFPTest() {
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+
             int inchannels = 32, outchannels = 32;
 
             OverflowCheckedTensor x_tensor = new(Shape.Map0D(inchannels));
@@ -171,7 +174,29 @@ namespace TensorShaderTest.Operators.Quaternion {
 
             QuaternionDense ope = new(inchannels, outchannels);
 
-            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/quaternion_dense.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/quaternion_dense_fp.nvvp");
+            Cuda.Profiler.Start();
+
+            ope.Execute(x_tensor, w_tensor, y_tensor);
+
+            Cuda.Profiler.Stop();
+        }
+
+        [TestMethod]
+        public void SpeedFFPTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
+            int inchannels = 32, outchannels = 32;
+
+            OverflowCheckedTensor x_tensor = new(Shape.Map0D(inchannels));
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel0D(inchannels, outchannels / 4));
+
+            OverflowCheckedTensor y_tensor = new(Shape.Map0D(outchannels));
+
+            QuaternionDense ope = new(inchannels, outchannels);
+
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/quaternion_dense_ffp.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, w_tensor, y_tensor);

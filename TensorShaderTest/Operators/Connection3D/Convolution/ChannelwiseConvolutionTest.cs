@@ -148,7 +148,10 @@ namespace TensorShaderTest.Operators.Connection3D {
         }
 
         [TestMethod]
-        public void SpeedTest() {
+        public void SpeedFPTest() {
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+
             int inwidth = 64, inheight = 64, indepth = 64, channels = 31, ksize = 3;
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1, outdepth = indepth - ksize + 1;
 
@@ -159,7 +162,30 @@ namespace TensorShaderTest.Operators.Connection3D {
 
             ChannelwiseConvolution ope = new(inwidth, inheight, indepth, channels, ksize, ksize, ksize);
 
-            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/chwise_convolution_3d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/chwise_convolution_3d_fp.nvvp");
+            Cuda.Profiler.Start();
+
+            ope.Execute(x_tensor, w_tensor, y_tensor);
+
+            Cuda.Profiler.Stop();
+        }
+
+        [TestMethod]
+        public void SpeedFFPTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
+            int inwidth = 64, inheight = 64, indepth = 64, channels = 31, ksize = 3;
+            int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1, outdepth = indepth - ksize + 1;
+
+            OverflowCheckedTensor x_tensor = new(Shape.Map3D(channels, inwidth, inheight, indepth));
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel3D(channels, 1, ksize, ksize, ksize));
+
+            OverflowCheckedTensor y_tensor = new(Shape.Map3D(channels, outwidth, outheight, outdepth));
+
+            ChannelwiseConvolution ope = new(inwidth, inheight, indepth, channels, ksize, ksize, ksize);
+
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/chwise_convolution_3d_ffp.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, w_tensor, y_tensor);

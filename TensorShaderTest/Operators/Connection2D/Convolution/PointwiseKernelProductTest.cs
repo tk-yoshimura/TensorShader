@@ -148,7 +148,10 @@ namespace TensorShaderTest.Operators.Connection2D {
         }
 
         [TestMethod]
-        public void SpeedTest() {
+        public void SpeedFPTest() {
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+
             int inwidth = 512, inheight = 512, inchannels = 32, outchannels = 63;
 
             OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, inwidth, inheight));
@@ -158,7 +161,29 @@ namespace TensorShaderTest.Operators.Connection2D {
 
             PointwiseKernelProduct ope = new(inwidth, inheight, inchannels, outchannels);
 
-            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/ptwise_kernelproduct_2d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/ptwise_kernelproduct_2d_fp.nvvp");
+            Cuda.Profiler.Start();
+
+            ope.Execute(x_tensor, gy_tensor, gw_tensor);
+
+            Cuda.Profiler.Stop();
+        }
+
+        [TestMethod]
+        public void SpeedFFPTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
+            int inwidth = 512, inheight = 512, inchannels = 32, outchannels = 63;
+
+            OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, inwidth, inheight));
+            OverflowCheckedTensor gy_tensor = new(Shape.Map2D(outchannels, inwidth, inheight));
+
+            OverflowCheckedTensor gw_tensor = new(Shape.Kernel0D(inchannels, outchannels));
+
+            PointwiseKernelProduct ope = new(inwidth, inheight, inchannels, outchannels);
+
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/ptwise_kernelproduct_2d_ffp.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, gy_tensor, gw_tensor);

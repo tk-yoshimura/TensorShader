@@ -150,7 +150,10 @@ namespace TensorShaderTest.Operators.Connection3D {
         }
 
         [TestMethod]
-        public void SpeedTest() {
+        public void SpeedFPTest() {
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+
             int inwidth = 64, inheight = 64, indepth = 64, inchannels = 32, outchannels = 32, ksize = 3;
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1, outdepth = indepth - ksize + 1;
 
@@ -161,7 +164,30 @@ namespace TensorShaderTest.Operators.Connection3D {
 
             KernelProduct ope = new(inwidth, inheight, indepth, inchannels, outchannels, ksize, ksize, ksize);
 
-            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/kernelproduct_3d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/kernelproduct_3d_fp.nvvp");
+            Cuda.Profiler.Start();
+
+            ope.Execute(x_tensor, gy_tensor, gw_tensor);
+
+            Cuda.Profiler.Stop();
+        }
+
+        [TestMethod]
+        public void SpeedFFPTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
+            int inwidth = 64, inheight = 64, indepth = 64, inchannels = 32, outchannels = 32, ksize = 3;
+            int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1, outdepth = indepth - ksize + 1;
+
+            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, inwidth, inheight, indepth));
+            OverflowCheckedTensor gy_tensor = new(Shape.Map3D(outchannels, outwidth, outheight, outdepth));
+
+            OverflowCheckedTensor gw_tensor = new(Shape.Kernel3D(inchannels, outchannels, ksize, ksize, ksize));
+
+            KernelProduct ope = new(inwidth, inheight, indepth, inchannels, outchannels, ksize, ksize, ksize);
+
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/kernelproduct_3d_ffp.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, gy_tensor, gw_tensor);

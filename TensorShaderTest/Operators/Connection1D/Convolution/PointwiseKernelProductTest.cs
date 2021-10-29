@@ -144,7 +144,10 @@ namespace TensorShaderTest.Operators.Connection1D {
         }
 
         [TestMethod]
-        public void SpeedTest() {
+        public void SpeedFPTest() {
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+
             int inwidth = 512, inchannels = 32, outchannels = 63;
 
             OverflowCheckedTensor x_tensor = new(Shape.Map1D(inchannels, inwidth));
@@ -154,7 +157,29 @@ namespace TensorShaderTest.Operators.Connection1D {
 
             PointwiseKernelProduct ope = new(inwidth, inchannels, outchannels);
 
-            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/ptwise_kernelproduct_1d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/ptwise_kernelproduct_1d_fp.nvvp");
+            Cuda.Profiler.Start();
+
+            ope.Execute(x_tensor, gy_tensor, gw_tensor);
+
+            Cuda.Profiler.Stop();
+        }
+
+        [TestMethod]
+        public void SpeedFFPTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
+            int inwidth = 512, inchannels = 32, outchannels = 63;
+
+            OverflowCheckedTensor x_tensor = new(Shape.Map1D(inchannels, inwidth));
+            OverflowCheckedTensor gy_tensor = new(Shape.Map1D(outchannels, inwidth));
+
+            OverflowCheckedTensor gw_tensor = new(Shape.Kernel0D(inchannels, outchannels));
+
+            PointwiseKernelProduct ope = new(inwidth, inchannels, outchannels);
+
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/ptwise_kernelproduct_1d_ffp.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, gy_tensor, gw_tensor);

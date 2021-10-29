@@ -142,7 +142,10 @@ namespace TensorShaderTest.Operators.Connection3D {
         }
 
         [TestMethod]
-        public void SpeedTest() {
+        public void SpeedFPTest() {
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+
             int width = 64, height = 64, depth = 64, inchannels = 31, outchannels = 31;
 
             OverflowCheckedTensor y_tensor = new(Shape.Map3D(outchannels, width, height, depth));
@@ -154,7 +157,31 @@ namespace TensorShaderTest.Operators.Connection3D {
 
             ope.Execute(y_tensor, w_tensor, x_tensor);
 
-            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/ptwise_deconvolution_3d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/ptwise_deconvolution_3d_fp.nvvp");
+            Cuda.Profiler.Start();
+
+            ope.Execute(y_tensor, w_tensor, x_tensor);
+
+            Cuda.Profiler.Stop();
+        }
+
+        [TestMethod]
+        public void SpeedFFPTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
+            int width = 64, height = 64, depth = 64, inchannels = 31, outchannels = 31;
+
+            OverflowCheckedTensor y_tensor = new(Shape.Map3D(outchannels, width, height, depth));
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel0D(inchannels, outchannels));
+
+            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, width, height, depth));
+
+            PointwiseDeconvolution ope = new(width, height, depth, outchannels, inchannels);
+
+            ope.Execute(y_tensor, w_tensor, x_tensor);
+
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/ptwise_deconvolution_3d_ffp.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(y_tensor, w_tensor, x_tensor);

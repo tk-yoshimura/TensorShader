@@ -170,7 +170,10 @@ namespace TensorShaderTest.Operators.Quaternion {
         }
 
         [TestMethod]
-        public void SpeedTest() {
+        public void SpeedFPTest() {
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+
             int inwidth = 32, inheight = 32, indepth = 32, inchannels = 32, outchannels = 32, ksize = 3;
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1, outdepth = indepth - ksize + 1;
 
@@ -181,7 +184,30 @@ namespace TensorShaderTest.Operators.Quaternion {
 
             QuaternionConvolution3D ope = new(inwidth, inheight, indepth, inchannels, outchannels, ksize, ksize, ksize);
 
-            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/quaternion_convolution_3d.nvvp");
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/quaternion_convolution_3d_fp.nvvp");
+            Cuda.Profiler.Start();
+
+            ope.Execute(x_tensor, w_tensor, y_tensor);
+
+            Cuda.Profiler.Stop();
+        }
+
+        [TestMethod]
+        public void SpeedFFPTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
+            int inwidth = 32, inheight = 32, indepth = 32, inchannels = 32, outchannels = 32, ksize = 3;
+            int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1, outdepth = indepth - ksize + 1;
+
+            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, inwidth, inheight, indepth));
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel3D(inchannels, outchannels / 4, ksize, ksize, ksize));
+
+            OverflowCheckedTensor y_tensor = new(Shape.Map3D(outchannels, outwidth, outheight, outdepth));
+
+            QuaternionConvolution3D ope = new(inwidth, inheight, indepth, inchannels, outchannels, ksize, ksize, ksize);
+
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/quaternion_convolution_3d_ffp.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, w_tensor, y_tensor);
