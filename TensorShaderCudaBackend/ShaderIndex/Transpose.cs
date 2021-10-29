@@ -68,5 +68,26 @@ namespace TensorShaderCudaBackend {
 
             shader.Execute(stream, inmap, outmap, pts);
         }
+
+        /// <summary>ブロックごとに転置</summary>
+        public static void BlockTranspose(uint block, uint n, uint m,
+                                          CudaArray<float> inmap, CudaArray<float> outmap,
+                                          Stream stream = null) {
+
+            string key = $"block_transpose " +
+                         $"{nameof(block)}={block} {nameof(n)}={n} {nameof(m)}={m}";
+
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.Transpose.BlockTranspose(block, n, m));
+            }
+
+            Shader shader = shaders[key];
+
+            if (stream is null) {
+                stream = Shader.DefaultStream;
+            }
+
+            shader.Execute(stream, inmap, outmap);
+        }
     }
 }

@@ -17,8 +17,8 @@ namespace TensorShaderCudaBackend {
         private const string undefined_enum = 
             "Undefined enum value.";
 
-        private static bool cudnn_enabled = CudnnExists;
-        private static PrecisionMode precision = PrecisionMode.Float;
+        private static bool cudnn_enabled = false;
+        private static PrecisionMode precision = PrecisionMode.FloatFloat;
 
         /// <summary>Cudnn libraryが存在するか</summary>
         public static bool CudnnExists => API.Cudnn.Exists;
