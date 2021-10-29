@@ -10,13 +10,15 @@ I tried to create a deep learning library of **Define and Run** / **NHWC format*
 
 For regression problems: **High precision calculate** by FP32-FP32 arithmetic (1/8 error of FP32 arithmetic)
 
-## Requirement
-.NET 5.0
-
-CUDA 10.* 11.*, Compute Capability 5.0+
+## Requirement  
+.NET 5.0  
+CUDA 10+, Compute Capability 5.0+  
 
 validated: Windows
 experiment: Linux, MacOS
+
+## Recommended to Install  
+CUDNN 7+ (See MNIST sample to enable.)
 
 ## Usage
 [Sample](https://github.com/tk-yoshimura/TensorShader/tree/master/TensorShaderSample)
@@ -88,11 +90,6 @@ See also...
 ## Author
 
 [tk-yoshimura](https://github.com/tk-yoshimura)
-
-## Future Work
-- Single Shot MultiBox Detector Sample
-- Variational Auto Encoder Sample
-- Transpose
 
 ## Troubleshooting
 Can't load Cuda dll!
