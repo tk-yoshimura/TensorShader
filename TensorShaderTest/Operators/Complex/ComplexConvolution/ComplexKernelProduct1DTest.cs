@@ -66,6 +66,7 @@ namespace TensorShaderTest.Operators.Complex {
             Console.WriteLine($"maxerr:{max_err}");
         }
 
+        [TestMethod]
         public void ExecuteFFPTest() {
             TensorShaderCudaBackend.Environment.CudnnEnabled = false;
             TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
