@@ -21,6 +21,6 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("e6d7e72c-eb7a-4697-9b1a-3e87ba76323a")]
 
-[assembly: AssemblyVersion("5.2.0.*")]
+[assembly: AssemblyVersion("5.3.0.*")]
 
 [assembly: InternalsVisibleTo("TensorShaderTest")]

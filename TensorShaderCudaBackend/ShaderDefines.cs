@@ -58,14 +58,6 @@ namespace TensorShaderCudaBackend {
                 float4 t; t.x = x; t.y = y; t.z = z; t.w = w; return t;
             }}";
 
-            /// <summary>原子性保証加算</summary>
-            public static string AtomicAdd =>
-            $@"
-            static __inline__ __device__ void floatfloat_atomicadd(float *ptr, float hi, float lo){{
-                float tmp = atomicAdd(ptr, hi);
-                atomicAdd(ptr + 1, lo - (((tmp + hi) - tmp) - hi));
-            }}";
-
             /// <summary>シェアードメモリへ格納</summary>
             public static string StoreFloatSharedMemory(uint elemsize, uint elements, uint threads) {
                 string elem = elemsize > 1 ? $"float{elemsize}" : "float";
@@ -126,6 +118,238 @@ namespace TensorShaderCudaBackend {
                 }
             }
 
+            /// <summary>Float精度</summary>
+            public static class Float {
+                /// <summary>Float融合積和演算</summary>
+                public static string Fma =>
+                $@"
+                static __inline__ __device__ void float_fma(float &y, float val_x, float val_y){{
+                    y = fmaf(val_x, val_y, y);
+                }}";
+
+                /// <summary>Float融合積差演算</summary>
+                public static string Fms =>
+                $@"
+                static __inline__ __device__ void float_fms(float &y, float val_x, float val_y){{
+                    y = fmaf(-val_x, val_y, y);
+                }}";
+
+                /// <summary>原子性保証加算</summary>
+                public static string AtomicAdd =>
+                $@"
+                static __inline__ __device__ void float_atomicadd(float *ptr, float v){{
+                    atomicAdd(ptr, v);
+                }}";
+
+                /// <summary>複素数</summary>
+                public static class Complex {
+                    /// <summary>カーネル積</summary>
+                    public static string KernelProd =>
+                    $@"
+                    static __inline__ __device__ void complex_kernelprod(float2 &y, float2 x1, float2 x2){{
+                        float_fma(y.x, x1.x, x2.x);
+                        float_fma(y.x, x1.y, x2.y);
+
+                        float_fms(y.y, x1.y, x2.x);
+                        float_fma(y.y, x1.x, x2.y);
+                    }}";
+
+                    /// <summary>積</summary>
+                    public static string Mul =>
+                    $@"
+                    static __inline__ __device__ void complex_mul(float2 &y, float2 x1, float2 x2){{
+                        float_fma(y.x, x1.x, x2.x);
+                        float_fms(y.x, x1.y, x2.y);
+
+                        float_fma(y.y, x1.x, x2.y);
+                        float_fma(y.y, x1.y, x2.x);
+                    }}";
+
+                    /// <summary>積勾配</summary>
+                    public static string MulGrad =>
+                    $@"
+                    static __inline__ __device__ void complex_mulgrad(float2 &y, float2 x1, float2 x2){{
+                        float_fma(y.x, x1.x, x2.x);
+                        float_fma(y.x, x1.y, x2.y);
+
+                        float_fma(y.y, x1.y, x2.x);
+                        float_fms(y.y, x1.x, x2.y);
+                    }}";
+
+                    /// <summary>原子性保証加算</summary>
+                    public static string AtomicAdd =>
+                    $@"
+                    static __inline__ __device__ void float_atomicadd(float2 *ptr, float2 v){{
+                        float *ptr_float = (float*)ptr;
+
+                        atomicAdd(ptr_float, v.x);
+                        atomicAdd(ptr_float + 1, v.y);
+                    }}";
+                }
+
+                /// <summary>四元数</summary>
+                public static class Quaternion {
+                    /// <summary>カーネル積</summary>
+                    public static string KernelProd =>
+                    $@"
+                    static __inline__ __device__ void quaternion_kernelprod(float4 &y, float4 x1, float4 x2){{
+                        float_fma(y.x, x1.x, x2.x);
+                        float_fma(y.x, x1.y, x2.y);
+                        float_fma(y.x, x1.z, x2.z);
+                        float_fma(y.x, x1.w, x2.w);
+                        
+                        float_fma(y.y, x1.x, x2.y);
+                        float_fms(y.y, x1.y, x2.x);
+                        float_fms(y.y, x1.z, x2.w);
+                        float_fma(y.y, x1.w, x2.z);
+
+                        float_fma(y.z, x1.x, x2.z);
+                        float_fma(y.z, x1.y, x2.w);
+                        float_fms(y.z, x1.z, x2.x);
+                        float_fms(y.z, x1.w, x2.y);
+
+                        float_fma(y.w, x1.x, x2.w);
+                        float_fms(y.w, x1.y, x2.z);
+                        float_fma(y.w, x1.z, x2.y);
+                        float_fms(y.w, x1.w, x2.x);
+                    }}";
+
+                    /// <summary>積</summary>
+                    public static string Mul =>
+                    $@"
+                    static __inline__ __device__ void quaternion_mul(float4 &y, float4 x1, float4 x2){{
+                        float_fma(y.x, x1.x, x2.x);
+                        float_fms(y.x, x1.y, x2.y);
+                        float_fms(y.x, x1.z, x2.z);
+                        float_fms(y.x, x1.w, x2.w);
+
+                        float_fma(y.y, x1.x, x2.y);
+                        float_fma(y.y, x1.y, x2.x);
+                        float_fma(y.y, x1.z, x2.w);
+                        float_fms(y.y, x1.w, x2.z);
+
+                        float_fma(y.z, x1.x, x2.z);
+                        float_fms(y.z, x1.y, x2.w);
+                        float_fma(y.z, x1.z, x2.x);
+                        float_fma(y.z, x1.w, x2.y);
+
+                        float_fma(y.w, x1.x, x2.w);
+                        float_fma(y.w, x1.y, x2.z);
+                        float_fms(y.w, x1.z, x2.y);
+                        float_fma(y.w, x1.w, x2.x);
+                    }}";
+
+                    /// <summary>積勾配</summary>
+                    public static string MulGrad =>
+                    $@"
+                    static __inline__ __device__ void quaternion_mulgrad(float4 &y, float4 x1, float4 x2){{
+                        float_fma(y.x, x1.x, x2.x);
+                        float_fma(y.x, x1.y, x2.y);
+                        float_fma(y.x, x1.z, x2.z);
+                        float_fma(y.x, x1.w, x2.w);
+
+                        float_fms(y.y, x1.x, x2.y);
+                        float_fma(y.y, x1.y, x2.x);
+                        float_fms(y.y, x1.z, x2.w);
+                        float_fma(y.y, x1.w, x2.z);
+
+                        float_fms(y.z, x1.x, x2.z);
+                        float_fma(y.z, x1.y, x2.w);
+                        float_fma(y.z, x1.z, x2.x);
+                        float_fms(y.z, x1.w, x2.y);
+
+                        float_fms(y.w, x1.x, x2.w);
+                        float_fms(y.w, x1.y, x2.z);
+                        float_fma(y.w, x1.z, x2.y);
+                        float_fma(y.w, x1.w, x2.x);
+                    }}";
+
+                    /// <summary>原子性保証加算</summary>
+                    public static string AtomicAdd =>
+                    $@"
+                    static __inline__ __device__ void float_atomicadd(float4 *ptr, float4 v){{
+                        float *ptr_float = (float*)ptr;
+
+                        atomicAdd(ptr_float, v.x);
+                        atomicAdd(ptr_float + 1, v.y);
+                        atomicAdd(ptr_float + 2, v.z);
+                        atomicAdd(ptr_float + 3, v.w);
+                    }}";
+                }
+
+                /// <summary>3次元ベクトル</summary>
+                public static class Trivector {
+                    /// <summary>カーネル積</summary>
+                    public static string KernelProd =>
+                    $@"
+                    static __inline__ __device__ void trivector_quaternion_kernelprod(float4 &y, float3 v, float3 u, float4 q){{
+                        float vxqx = v.x * q.x, vxqy = v.x * q.y, vxqz = v.x * q.z, vxqw = v.x * q.w;
+                        float vyqx = v.y * q.x, vyqy = v.y * q.y, vyqz = v.y * q.z, vyqw = v.y * q.w;
+                        float vzqx = v.z * q.x, vzqy = v.z * q.y, vzqz = v.z * q.z, vzqw = v.z * q.w;
+
+                        float_fma(y.x, u.x, (vzqz + vxqx - vyqw));
+                        float_fma(y.x, u.y, (vxqw + vyqx - vzqy));
+                        float_fma(y.x, u.z, (vyqy + vzqx - vxqz));
+                        
+                        float_fma(y.y, u.x, (vzqw + vxqy + vyqz));
+                        float_fma(y.y, u.y, (vxqz - vyqy - vzqx));
+                        float_fma(y.y, u.z, (vyqx - vzqy + vxqw));
+                        
+                        float_fma(y.z, u.x, (vzqx - vxqz + vyqy));
+                        float_fma(y.z, u.y, (vxqy + vyqz + vzqw));
+                        float_fma(y.z, u.z, (vyqw - vzqz - vxqx));
+                        
+                        float_fma(y.w, u.x, (vzqy - vxqw - vyqx));
+                        float_fma(y.w, u.y, (vxqx - vyqw + vzqz));
+                        float_fma(y.w, u.z, (vyqz + vzqw + vxqy));
+                    }}";
+
+                    /// <summary>積</summary>
+                    public static string Mul =>
+                    $@"
+                    static __inline__ __device__ void trivector_quaternion_mul(float3 &y, float3 v, float4 q){{
+                        float sx = q.x * q.x, sy = q.y * q.y, sz = q.z * q.z, sw = q.w * q.w;
+                        float mx = q.y * q.z, my = q.z * q.w, mz = q.w * q.y;
+                        float nx = q.x * q.y, ny = q.x * q.z, nz = q.x * q.w;
+                        float vx2 = ldexpf(v.x, 1), vy2 = ldexpf(v.y, 1), vz2 = ldexpf(v.z, 1);
+
+                        float_fma(y.x, v.x, (sx + sy - sz - sw));
+                        float_fma(y.x, vy2, (mx - nz));
+                        float_fma(y.x, vz2, (mz + ny));
+
+                        float_fma(y.y, v.y, (sx - sy + sz - sw));
+                        float_fma(y.y, vz2, (my - nx));
+                        float_fma(y.y, vx2, (mx + nz));
+
+                        float_fma(y.z, v.z, (sx - sy - sz + sw));
+                        float_fma(y.z, vx2, (mz - ny));
+                        float_fma(y.z, vy2, (my + nx));
+                    }}";
+
+                    /// <summary>積勾配</summary>
+                    public static string MulGrad =>
+                    $@"
+                    static __inline__ __device__ void trivector_quaternion_mulgrad(float3 &y, float3 v, float4 q){{
+                        float sx = q.x * q.x, sy = q.y * q.y, sz = q.z * q.z, sw = q.w * q.w;
+                        float mx = q.y * q.z, my = q.z * q.w, mz = q.w * q.y;
+                        float nx = q.x * q.y, ny = q.x * q.z, nz = q.x * q.w;
+                        float vx2 = ldexpf(v.x, 1), vy2 = ldexpf(v.y, 1), vz2 = ldexpf(v.z, 1);
+
+                        float_fma(y.x, v.x, (sx + sy - sz - sw));
+                        float_fma(y.x, vy2, (mx + nz));
+                        float_fma(y.x, vz2, (mz - ny));
+
+                        float_fma(y.y, v.y, (sx - sy + sz - sw));
+                        float_fma(y.y, vz2, (my + nx));
+                        float_fma(y.y, vx2, (mx - nz));
+
+                        float_fma(y.z, v.z, (sx - sy - sz + sw));
+                        float_fma(y.z, vx2, (mz + ny));
+                        float_fma(y.z, vy2, (my - nx));
+                    }}";
+                }
+            }
+
             /// <summary>FloatFloat精度</summary>
             public static class FloatFloat {
 
@@ -172,6 +396,14 @@ namespace TensorShaderCudaBackend {
                     float tmp = hi;
                     hi += val_hi;
                     lo += val_lo + (val_hi - (hi - tmp));
+                }}";
+
+                /// <summary>原子性保証加算</summary>
+                public static string AtomicAdd =>
+                $@"
+                static __inline__ __device__ void floatfloat_atomicadd(float *ptr, float hi, float lo){{
+                    float tmp = atomicAdd(ptr, hi);
+                    atomicAdd(ptr + 1, lo - (((tmp + hi) - tmp) - hi));
                 }}";
 
                 /// <summary>複素数</summary>

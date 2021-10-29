@@ -51,7 +51,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution.FloatFloatPrecision {
             string code = $@"
 
             {Defines.FloatFloat.Fma}
-            {Defines.AtomicAdd}
+            {Defines.FloatFloat.AtomicAdd}
 
             __global__ void chwise_kernelproduct_3d(const float* __restrict__ inmap, const float* __restrict__ outmap, float* __restrict__ filter,
                                                     unsigned int oy_offset, unsigned int oz,

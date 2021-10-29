@@ -39,7 +39,7 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
 
             string code = $@"
 
-            {Defines.FloatFloatAdd}
+            {Defines.FloatFloat.Add}
 
             __global__ void column_to_image_3d(const float* __restrict__ inmap, float* __restrict__ outmap,
                                                unsigned int oz,

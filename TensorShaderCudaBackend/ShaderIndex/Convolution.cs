@@ -19,7 +19,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.Dense(inchannels, outchannels));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.Dense(inchannels, outchannels));
@@ -47,7 +47,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.TransposeDense(inchannels, outchannels));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.TransposeDense(inchannels, outchannels));
@@ -75,7 +75,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.KernelProductDense(inchannels, outchannels));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.KernelProductDense(inchannels, outchannels));
@@ -104,7 +104,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.Convolution1D(inchannels, outchannels, kwidth));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.Convolution1D(inchannels, outchannels, kwidth));
@@ -133,7 +133,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.Deconvolution1D(inchannels, outchannels, kwidth));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.Deconvolution1D(inchannels, outchannels, kwidth));
@@ -162,7 +162,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.KernelProduct1D(inchannels, outchannels, kwidth));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.KernelProduct1D(inchannels, outchannels, kwidth));
@@ -191,7 +191,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.Convolution2D(inchannels, outchannels, kwidth, kheight));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.Convolution2D(inchannels, outchannels, kwidth, kheight));
@@ -220,7 +220,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.Deconvolution2D(inchannels, outchannels, kwidth, kheight));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.Deconvolution2D(inchannels, outchannels, kwidth, kheight));
@@ -249,7 +249,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.KernelProduct2D(inchannels, outchannels, kwidth, kheight));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.KernelProduct2D(inchannels, outchannels, kwidth, kheight));
@@ -278,7 +278,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.Convolution3D(inchannels, outchannels, kwidth, kheight, kdepth));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.Convolution3D(inchannels, outchannels, kwidth, kheight, kdepth));
@@ -307,7 +307,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.Deconvolution3D(inchannels, outchannels, kwidth, kheight, kdepth));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.Deconvolution3D(inchannels, outchannels, kwidth, kheight, kdepth));
@@ -336,7 +336,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.KernelProduct3D(inchannels, outchannels, kwidth, kheight, kdepth));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.KernelProduct3D(inchannels, outchannels, kwidth, kheight, kdepth));
@@ -365,7 +365,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.ChannelwiseConvolution1D(channels, kwidth));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.ChannelwiseConvolution1D(channels, kwidth));
@@ -394,7 +394,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.ChannelwiseDeconvolution1D(channels, kwidth));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.ChannelwiseDeconvolution1D(channels, kwidth));
@@ -423,7 +423,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.ChannelwiseKernelProduct1D(channels, kwidth));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.ChannelwiseKernelProduct1D(channels, kwidth));
@@ -452,7 +452,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.ChannelwiseConvolution2D(channels, kwidth, kheight));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.ChannelwiseConvolution2D(channels, kwidth, kheight));
@@ -481,7 +481,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.ChannelwiseDeconvolution2D(channels, kwidth, kheight));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.ChannelwiseDeconvolution2D(channels, kwidth, kheight));
@@ -510,7 +510,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.ChannelwiseKernelProduct2D(channels, kwidth, kheight));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.ChannelwiseKernelProduct2D(channels, kwidth, kheight));
@@ -539,7 +539,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.ChannelwiseConvolution3D(channels, kwidth, kheight, kdepth));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.ChannelwiseConvolution3D(channels, kwidth, kheight, kdepth));
@@ -568,7 +568,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.ChannelwiseDeconvolution3D(channels, kwidth, kheight, kdepth));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.ChannelwiseDeconvolution3D(channels, kwidth, kheight, kdepth));
@@ -597,7 +597,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.ChannelwiseKernelProduct3D(channels, kwidth, kheight, kdepth));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.ChannelwiseKernelProduct3D(channels, kwidth, kheight, kdepth));
@@ -625,7 +625,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.PointwiseConvolution(inchannels, outchannels));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.PointwiseConvolution(inchannels, outchannels));
@@ -653,7 +653,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.PointwiseDeconvolution(inchannels, outchannels));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.PointwiseDeconvolution(inchannels, outchannels));
@@ -681,7 +681,7 @@ namespace TensorShaderCudaBackend {
 
             if (!shaders.ContainsKey(key)) {
                 if (Environment.Precision == Environment.PrecisionMode.Float) {
-                    throw new NotImplementedException();
+                    shaders.Add(key, new Shaders.Convolution.FloatPrecision.PointwiseKernelProduct(inchannels, outchannels));
                 }
                 else if (Environment.Precision == Environment.PrecisionMode.FloatFloat) {
                     shaders.Add(key, new Shaders.Convolution.FloatFloatPrecision.PointwiseKernelProduct(inchannels, outchannels));
