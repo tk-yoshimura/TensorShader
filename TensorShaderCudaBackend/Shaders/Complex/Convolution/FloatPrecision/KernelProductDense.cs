@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 
-using static TensorShaderCudaBackend.ArrayManipulation;
-
 namespace TensorShaderCudaBackend.Shaders.Complex.Convolution.FloatPrecision {
 
     /// <summary>カーネル積</summary>

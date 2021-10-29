@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace TensorShaderCudaBackend.Cudnn {
 
     /// <summary>コントローラ</summary>
-    public class CudnnController: IDisposable {
+    public class CudnnController : IDisposable {
         private IntPtr handle;
         private IntPtr workspace;
         private readonly Int64 workspace_size_limit;
@@ -32,14 +32,14 @@ namespace TensorShaderCudaBackend.Cudnn {
 
         /// <summary>畳み込み順伝搬</summary>
         public void ConvolutionForward(
-            CudaArray<float> x, TensorDescriptor x_desc, 
+            CudaArray<float> x, TensorDescriptor x_desc,
             CudaArray<float> w, FilterDescriptor w_desc,
             ConvolutionDescriptor conv_desc,
             CudaArray<float> y, TensorDescriptor y_desc,
-            float alpha = 1f, float beta = 0f){
+            float alpha = 1f, float beta = 0f) {
 
             API.Cudnn.ConvolutionFwdAlgo algo = API.Cudnn.Convolution.Forward.Algorithm(
-                handle, x_desc.Ptr, w_desc.Ptr, conv_desc.Ptr, y_desc.Ptr, 
+                handle, x_desc.Ptr, w_desc.Ptr, conv_desc.Ptr, y_desc.Ptr,
                 API.Cudnn.ConvolutionFwdPreference.SpecifyWorkspaceLimit, workspace_size_limit);
 
             float[] a = new float[] { alpha }, b = new float[] { beta };
@@ -63,14 +63,14 @@ namespace TensorShaderCudaBackend.Cudnn {
 
         /// <summary>畳み込み逆伝搬(特徴マップ)</summary>
         public void ConvolutionBackwardData(
-            CudaArray<float> w, FilterDescriptor w_desc, 
+            CudaArray<float> w, FilterDescriptor w_desc,
             CudaArray<float> dy, TensorDescriptor dy_desc,
             ConvolutionDescriptor conv_desc,
             CudaArray<float> dx, TensorDescriptor dx_desc,
-            float alpha = 1f, float beta = 0f){
+            float alpha = 1f, float beta = 0f) {
 
             API.Cudnn.ConvolutionBwdDataAlgo algo = API.Cudnn.Convolution.BackwardData.Algorithm(
-                handle, w_desc.Ptr, dy_desc.Ptr, conv_desc.Ptr, dx_desc.Ptr, 
+                handle, w_desc.Ptr, dy_desc.Ptr, conv_desc.Ptr, dx_desc.Ptr,
                 API.Cudnn.ConvolutionBwdDataPreference.SpecifyWorkspaceLimit, workspace_size_limit);
 
             float[] a = new float[] { alpha }, b = new float[] { beta };
@@ -94,14 +94,14 @@ namespace TensorShaderCudaBackend.Cudnn {
 
         /// <summary>畳み込み逆伝搬(フィルタ)</summary>
         public void ConvolutionBackwardFilter(
-            CudaArray<float> x, TensorDescriptor x_desc, 
+            CudaArray<float> x, TensorDescriptor x_desc,
             CudaArray<float> dy, TensorDescriptor dy_desc,
             ConvolutionDescriptor conv_desc,
             CudaArray<float> dw, FilterDescriptor dw_desc,
-            float alpha = 1f, float beta = 0f){
+            float alpha = 1f, float beta = 0f) {
 
             API.Cudnn.ConvolutionBwdFilterAlgo algo = API.Cudnn.Convolution.BackwardFilter.Algorithm(
-                handle, x_desc.Ptr, dy_desc.Ptr, conv_desc.Ptr, dw_desc.Ptr, 
+                handle, x_desc.Ptr, dy_desc.Ptr, conv_desc.Ptr, dw_desc.Ptr,
                 API.Cudnn.ConvolutionBwdFilterPreference.SpecifyWorkspaceLimit, workspace_size_limit);
 
             float[] a = new float[] { alpha }, b = new float[] { beta };

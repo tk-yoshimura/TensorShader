@@ -17,7 +17,7 @@ namespace TensorShaderCudaBackend.Dll {
                     break;
                 }
             }
-            if (Nvcuda is not null) { 
+            if (Nvcuda is not null) {
                 Trace.WriteLine($"[{typeof(CudaDll).Name}] {Nvcuda} loaded.");
             }
 
@@ -27,7 +27,7 @@ namespace TensorShaderCudaBackend.Dll {
                     break;
                 }
             }
-            if (Cuda is not null) { 
+            if (Cuda is not null) {
                 Trace.WriteLine($"[{typeof(CudaDll).Name}] {Cuda} loaded.");
             }
 
@@ -37,7 +37,7 @@ namespace TensorShaderCudaBackend.Dll {
                     break;
                 }
             }
-            if (Nvrtc is not null) { 
+            if (Nvrtc is not null) {
                 Trace.WriteLine($"[{typeof(CudaDll).Name}] {Nvrtc} loaded.");
             }
 
@@ -51,7 +51,7 @@ namespace TensorShaderCudaBackend.Dll {
                     break;
                 }
             }
-            if (Cudnn is not null) { 
+            if (Cudnn is not null) {
                 Trace.WriteLine($"[{typeof(CudaDll).Name}] {Cudnn} loaded.");
             }
         }
@@ -143,7 +143,7 @@ namespace TensorShaderCudaBackend.Dll {
 
         static IEnumerable<string> CudnnLibraryNames {
             get {
-                int[] cudnn_versions = new int[]{ 8, 7 };
+                int[] cudnn_versions = new int[] { 8, 7 };
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
                     foreach (int version in cudnn_versions) {

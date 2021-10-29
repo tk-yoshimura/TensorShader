@@ -2,7 +2,7 @@
 
 namespace TensorShaderCudaBackend.API {
     public static partial class Cuda {
-        internal enum ErrorCode: Int32 {
+        internal enum ErrorCode : Int32 {
             Success = 0,
             ErrorInvalidValue = 1,
             ErrorMemoryAllocation = 2,

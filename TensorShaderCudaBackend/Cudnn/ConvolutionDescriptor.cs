@@ -3,7 +3,7 @@
 namespace TensorShaderCudaBackend.Cudnn {
 
     /// <summary>畳み込みパラメータ</summary>
-    public class ConvolutionDescriptor: IDisposable {
+    public class ConvolutionDescriptor : IDisposable {
         private IntPtr ptr;
 
         internal IntPtr Ptr {
@@ -18,7 +18,7 @@ namespace TensorShaderCudaBackend.Cudnn {
 
         /// <summary>2D畳み込み</summary>
         public ConvolutionDescriptor(
-            DataType dtype, 
+            DataType dtype,
             (int h, int w) pad, (int y, int x) stride, (int y, int x) dilation) {
 
             ptr = API.Cudnn.ConvolutionDescriptor.Create();
@@ -27,7 +27,7 @@ namespace TensorShaderCudaBackend.Cudnn {
 
         /// <summary>3D畳み込み</summary>
         public ConvolutionDescriptor(
-            DataType dtype, 
+            DataType dtype,
             (int d, int h, int w) pad, (int z, int y, int x) stride, (int z, int y, int x) dilation) {
 
             ptr = API.Cudnn.ConvolutionDescriptor.Create();

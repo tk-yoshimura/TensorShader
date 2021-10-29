@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 namespace TensorShaderCudaBackend.API {
     public static partial class Cudnn {
@@ -17,7 +16,7 @@ namespace TensorShaderCudaBackend.API {
                     ConvolutionFwdPreference preference, Int64 memoryLimitInBytes) {
 
                     ConvolutionFwdAlgo algo = ConvolutionFwdAlgo.ImplicitGemm;
-                    
+
                     Status status = NativeMethods.CudnnGetConvolutionForwardAlgorithm.AsDelegate().Invoke(
                         handle, xDesc, wDesc, convDesc, yDesc, preference, memoryLimitInBytes, ref algo
                     );
@@ -80,7 +79,7 @@ namespace TensorShaderCudaBackend.API {
                     Int64 memoryLimitInBytes) {
 
                     ConvolutionBwdDataAlgo algo = ConvolutionBwdDataAlgo.Algo0;
-                    
+
                     Status status = NativeMethods.CudnnGetConvolutionBackwardDataAlgorithm.AsDelegate().Invoke(
                         handle, wDesc, dyDesc, convDesc, dxDesc, preference, memoryLimitInBytes, ref algo
                     );
@@ -143,7 +142,7 @@ namespace TensorShaderCudaBackend.API {
                     Int64 memoryLimitInBytes) {
 
                     ConvolutionBwdFilterAlgo algo = ConvolutionBwdFilterAlgo.Algo0;
-                    
+
                     Status status = NativeMethods.CudnnGetConvolutionBackwardFilterAlgorithm.AsDelegate().Invoke(
                         handle, xDesc, dyDesc, convDesc, dwDesc, preference, memoryLimitInBytes, ref algo
                     );
@@ -187,7 +186,7 @@ namespace TensorShaderCudaBackend.API {
 
                     Status status = NativeMethods.CudnnConvolutionBackwardFilter.AsDelegate().Invoke(
                         handle, alpha, xDesc, x, dyDesc, dy, convDesc,
-                        algo, workSpace,workSpaceSizeInBytes, beta, dwDesc, dw
+                        algo, workSpace, workSpaceSizeInBytes, beta, dwDesc, dw
                     );
                     if (status != Status.Success) {
                         throw new CudaException(status);

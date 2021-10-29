@@ -1,11 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Linq;
 using TensorShaderCudaBackend;
 using TensorShaderCudaBackend.Cudnn;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TensorShaderCudaBackendTest {
     [TestClass()]
@@ -32,7 +29,7 @@ namespace TensorShaderCudaBackendTest {
             const int oh = ih - kh + 1, ow = iw - kw + 1;
 
             float[] xs = (new float[n * ic * ih * iw]).Select((_) => 1f).ToArray();
-            float[] ys =  new float[n * oc * oh * ow + 1];
+            float[] ys = new float[n * oc * oh * ow + 1];
             float[] ws = (new float[oc * ic * kh * kw]).Select((_) => 1f).ToArray();
 
             CudaArray<float> xarr = new(xs);
@@ -94,7 +91,7 @@ namespace TensorShaderCudaBackendTest {
 
             CudnnController controller = new(new Stream());
             controller.ConvolutionBackwardData(warr, wdesc, dyarr, dydesc, convdesc, dxarr, dxdesc);
-            
+
             dxarr.Read(dxs);
             dyarr.Read(dys);
             warr.Read(ws);
@@ -119,7 +116,7 @@ namespace TensorShaderCudaBackendTest {
                 Console.WriteLine("test was skipped. Cudnn library not exists.");
                 Assert.Inconclusive();
             }
-            
+
             const int n = 4, oc = 3, ic = 2, ih = 8, iw = 6, kh = 3, kw = 5;
             const int oh = ih - kh + 1, ow = iw - kw + 1;
 
@@ -140,7 +137,7 @@ namespace TensorShaderCudaBackendTest {
 
             CudnnController controller = new(new Stream());
             controller.ConvolutionBackwardFilter(xarr, xdesc, dyarr, dydesc, convdesc, dwarr, dwdesc);
-            
+
             xarr.Read(xs);
             dyarr.Read(dys);
             dwarr.Read(dws);
@@ -170,7 +167,7 @@ namespace TensorShaderCudaBackendTest {
             const int od = id - kd + 1, oh = ih - kh + 1, ow = iw - kw + 1;
 
             float[] xs = (new float[n * ic * id * ih * iw]).Select((_) => 1f).ToArray();
-            float[] ys =  new float[n * oc * od * oh * ow + 1];
+            float[] ys = new float[n * oc * od * oh * ow + 1];
             float[] ws = (new float[oc * ic * kd * kh * kw]).Select((_) => 1f).ToArray();
 
             CudaArray<float> xarr = new(xs);
@@ -232,7 +229,7 @@ namespace TensorShaderCudaBackendTest {
 
             CudnnController controller = new(new Stream());
             controller.ConvolutionBackwardData(warr, wdesc, dyarr, dydesc, convdesc, dxarr, dxdesc);
-            
+
             dxarr.Read(dxs);
             dyarr.Read(dys);
             warr.Read(ws);
@@ -278,7 +275,7 @@ namespace TensorShaderCudaBackendTest {
 
             CudnnController controller = new(new Stream());
             controller.ConvolutionBackwardFilter(xarr, xdesc, dyarr, dydesc, convdesc, dwarr, dwdesc);
-            
+
             xarr.Read(xs);
             dyarr.Read(dys);
             dwarr.Read(dws);

@@ -112,7 +112,7 @@ namespace TensorShaderTest.Operators.Connection2D {
 
         [TestMethod]
         public void ExecuteCudnnTest() {
-            if (!TensorShaderCudaBackend.Environment.CudnnExists) { 
+            if (!TensorShaderCudaBackend.Environment.CudnnExists) {
                 Console.WriteLine("test was skipped. Cudnn library not exists.");
                 Assert.Inconclusive();
             }
@@ -263,7 +263,7 @@ namespace TensorShaderTest.Operators.Connection2D {
 
         [TestMethod]
         public void SpeedCudnnTest() {
-            if (!TensorShaderCudaBackend.Environment.CudnnExists) { 
+            if (!TensorShaderCudaBackend.Environment.CudnnExists) {
                 Console.WriteLine("test was skipped. Cudnn library not exists.");
                 Assert.Inconclusive();
             }

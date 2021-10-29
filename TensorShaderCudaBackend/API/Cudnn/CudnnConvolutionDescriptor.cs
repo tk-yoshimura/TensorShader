@@ -38,7 +38,7 @@ namespace TensorShaderCudaBackend.API {
 
             /// <summary>設定</summary>
             internal static void SetConvolution2d(
-                IntPtr desc, TensorShaderCudaBackend.Cudnn.DataType dtype, 
+                IntPtr desc, TensorShaderCudaBackend.Cudnn.DataType dtype,
                 (int h, int w) pad, (int y, int x) stride, (int y, int x) dilation) {
 
                 Status status = NativeMethods.CudnnSetConvolution2dDescriptor.AsDelegate().Invoke(
@@ -51,13 +51,13 @@ namespace TensorShaderCudaBackend.API {
 
             /// <summary>設定</summary>
             internal static void SetConvolution3d(
-                IntPtr desc, TensorShaderCudaBackend.Cudnn.DataType dtype, 
+                IntPtr desc, TensorShaderCudaBackend.Cudnn.DataType dtype,
                 (int d, int h, int w) pad, (int z, int y, int x) stride, (int z, int y, int x) dilation) {
 
                 int[] pads = new int[] { pad.d, pad.h, pad.w };
                 int[] strides = new int[] { stride.z, stride.y, stride.x };
                 int[] dilations = new int[] { dilation.z, dilation.y, dilation.x };
-                
+
                 GCHandle pinned_pads_handle = GCHandle.Alloc(pads, GCHandleType.Pinned);
                 GCHandle pinned_strides_handle = GCHandle.Alloc(strides, GCHandleType.Pinned);
                 GCHandle pinned_dilations_handle = GCHandle.Alloc(dilations, GCHandleType.Pinned);
@@ -68,7 +68,7 @@ namespace TensorShaderCudaBackend.API {
 
                 try {
                     Status status = NativeMethods.CudnnSetConvolutionNdDescriptor.AsDelegate().Invoke(
-                        desc, 3, pads_ptr, strides_ptr, dilations_ptr, ConvolutionMode.CrossCorrelation, dtype 
+                        desc, 3, pads_ptr, strides_ptr, dilations_ptr, ConvolutionMode.CrossCorrelation, dtype
                     );
                     if (status != Status.Success) {
                         throw new CudaException(status);

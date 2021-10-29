@@ -185,7 +185,7 @@ namespace TensorShaderTest.Operators.Complex {
         public void SpeedFPTest() {
             TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
             TensorShaderCudaBackend.Environment.CudnnEnabled = false;
-            
+
             int inwidth = 512, inheight = 512, inchannels = 32, outchannels = 32, ksize = 3;
             int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1;
 

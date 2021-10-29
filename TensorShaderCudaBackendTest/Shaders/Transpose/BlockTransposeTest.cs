@@ -49,11 +49,11 @@ namespace TensorShaderCudaBackendTest.ShadersTest.TransposeTest {
                     for (int j = 0; j < m; j++) {
                         float expected = block * (k + n * j);
 
-                        for (int i = 0; i < block; i++, idx++) { 
+                        for (int i = 0; i < block; i++, idx++) {
                             Assert.AreEqual(expected, h_y[idx]);
                             expected++;
                         }
-                    }    
+                    }
                 }
 
                 Assert.IsTrue(float.IsNaN(h_y[length]));

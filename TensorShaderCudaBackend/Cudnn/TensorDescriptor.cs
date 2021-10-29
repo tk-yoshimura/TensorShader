@@ -3,7 +3,7 @@
 namespace TensorShaderCudaBackend.Cudnn {
 
     /// <summary>テンソルパラメータ</summary>
-    public class TensorDescriptor: IDisposable {
+    public class TensorDescriptor : IDisposable {
         private IntPtr ptr;
 
         internal IntPtr Ptr {

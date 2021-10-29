@@ -38,9 +38,9 @@ namespace TensorShaderCudaBackend.API {
 
             /// <summary>設定</summary>
             internal static void Set4d(
-                IntPtr desc, 
-                TensorShaderCudaBackend.Cudnn.TensorFormat format, 
-                TensorShaderCudaBackend.Cudnn.DataType dtype, 
+                IntPtr desc,
+                TensorShaderCudaBackend.Cudnn.TensorFormat format,
+                TensorShaderCudaBackend.Cudnn.DataType dtype,
                 int k, int c, int h, int w) {
 
                 Status status = NativeMethods.CudnnSetFilter4dDescriptor.AsDelegate().Invoke(
@@ -53,13 +53,13 @@ namespace TensorShaderCudaBackend.API {
 
             /// <summary>設定</summary>
             internal static void Set5d(
-                IntPtr desc, 
-                TensorShaderCudaBackend.Cudnn.TensorFormat format, 
-                TensorShaderCudaBackend.Cudnn.DataType dtype, 
+                IntPtr desc,
+                TensorShaderCudaBackend.Cudnn.TensorFormat format,
+                TensorShaderCudaBackend.Cudnn.DataType dtype,
                 int k, int c, int d, int h, int w) {
 
                 int[] dims = new int[] { k, c, d, h, w };
-                
+
                 GCHandle pinned_handle = GCHandle.Alloc(dims, GCHandleType.Pinned);
                 IntPtr dims_ptr = pinned_handle.AddrOfPinnedObject();
 

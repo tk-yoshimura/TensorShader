@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace TensorShaderCudaBackend {
 
     /// <summary>畳み込み</summary>
     public static class Convolution {
-        private static Dictionary<Stream, Cudnn.CudnnController> controllers = new();
+        private static readonly Dictionary<Stream, Cudnn.CudnnController> controllers = new();
         private readonly static Dictionary<string, Shader> shaders = new();
 
         /// <summary>全結合</summary>
@@ -15,7 +14,7 @@ namespace TensorShaderCudaBackend {
                                  Stream stream = null) {
 
             string key = $"dense " +
-                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " + 
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -43,7 +42,7 @@ namespace TensorShaderCudaBackend {
                                           Stream stream = null) {
 
             string key = $"transpose_dense " +
-                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " + 
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -71,7 +70,7 @@ namespace TensorShaderCudaBackend {
                                               Stream stream = null) {
 
             string key = $"kernelproduct_dense " +
-                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " + 
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -100,7 +99,7 @@ namespace TensorShaderCudaBackend {
 
             string key = $"convolution_1d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                         $"{nameof(kwidth)}={kwidth} " + 
+                         $"{nameof(kwidth)}={kwidth} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -129,7 +128,7 @@ namespace TensorShaderCudaBackend {
 
             string key = $"deconvolution_1d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                         $"{nameof(kwidth)}={kwidth} " + 
+                         $"{nameof(kwidth)}={kwidth} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -158,7 +157,7 @@ namespace TensorShaderCudaBackend {
 
             string key = $"kernelproduct_1d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                         $"{nameof(kwidth)}={kwidth} " + 
+                         $"{nameof(kwidth)}={kwidth} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -184,7 +183,7 @@ namespace TensorShaderCudaBackend {
                                          uint batch, uint kwidth, uint kheight,
                                          CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                          Stream stream = null) {
-                        
+
             if (stream is null) {
                 stream = Shader.DefaultStream;
             }
@@ -206,7 +205,7 @@ namespace TensorShaderCudaBackend {
 
             string key = $"convolution_2d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " + 
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -250,7 +249,7 @@ namespace TensorShaderCudaBackend {
 
             string key = $"deconvolution_2d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " + 
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -294,7 +293,7 @@ namespace TensorShaderCudaBackend {
 
             string key = $"kernelproduct_2d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " + 
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -319,7 +318,7 @@ namespace TensorShaderCudaBackend {
 
             string key = $"convolution_3d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " + 
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -348,7 +347,7 @@ namespace TensorShaderCudaBackend {
 
             string key = $"deconvolution_3d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " + 
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -377,7 +376,7 @@ namespace TensorShaderCudaBackend {
 
             string key = $"kernelproduct_3d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " + 
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -406,7 +405,7 @@ namespace TensorShaderCudaBackend {
 
             string key = $"chwise_convolution_1d " +
                          $"{nameof(channels)}={channels} " +
-                         $"{nameof(kwidth)}={kwidth} " + 
+                         $"{nameof(kwidth)}={kwidth} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -435,7 +434,7 @@ namespace TensorShaderCudaBackend {
 
             string key = $"chwise_deconvolution_1d " +
                          $"{nameof(channels)}={channels} " +
-                         $"{nameof(kwidth)}={kwidth} " + 
+                         $"{nameof(kwidth)}={kwidth} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -464,7 +463,7 @@ namespace TensorShaderCudaBackend {
 
             string key = $"chwise_kernelproduct_1d " +
                          $"{nameof(channels)}={channels} " +
-                         $"{nameof(kwidth)}={kwidth} " + 
+                         $"{nameof(kwidth)}={kwidth} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -493,7 +492,7 @@ namespace TensorShaderCudaBackend {
 
             string key = $"chwise_convolution_2d " +
                          $"{nameof(channels)}={channels} " +
-                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " + 
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -522,7 +521,7 @@ namespace TensorShaderCudaBackend {
 
             string key = $"chwise_deconvolution_2d " +
                          $"{nameof(channels)}={channels} " +
-                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " + 
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -551,7 +550,7 @@ namespace TensorShaderCudaBackend {
 
             string key = $"chwise_kernelproduct_2d " +
                          $"{nameof(channels)}={channels} " +
-                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " + 
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -580,7 +579,7 @@ namespace TensorShaderCudaBackend {
 
             string key = $"chwise_convolution_3d " +
                          $"{nameof(channels)}={channels} " +
-                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " + 
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -609,7 +608,7 @@ namespace TensorShaderCudaBackend {
 
             string key = $"chwise_deconvolution_3d " +
                          $"{nameof(channels)}={channels} " +
-                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " + 
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -638,7 +637,7 @@ namespace TensorShaderCudaBackend {
 
             string key = $"chwise_kernelproduct_3d " +
                          $"{nameof(channels)}={channels} " +
-                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " + 
+                         $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -666,7 +665,7 @@ namespace TensorShaderCudaBackend {
                                                 Stream stream = null) {
 
             string key = $"ptwise_convolution " +
-                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " + 
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -694,7 +693,7 @@ namespace TensorShaderCudaBackend {
                                                   Stream stream = null) {
 
             string key = $"ptwise_deconvolution " +
-                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " + 
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -722,7 +721,7 @@ namespace TensorShaderCudaBackend {
                                                   Stream stream = null) {
 
             string key = $"ptwise_kernelproduct " +
-                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " + 
+                         $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {

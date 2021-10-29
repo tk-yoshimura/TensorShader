@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace TensorShaderCudaBackend {
 
@@ -423,7 +422,7 @@ namespace TensorShaderCudaBackend {
 
             string key = $"quaternion_dense " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                         $"{nameof(gradmode)}={gradmode} " + 
+                         $"{nameof(gradmode)}={gradmode} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -452,7 +451,7 @@ namespace TensorShaderCudaBackend {
 
             string key = $"quaternion_transpose_dense " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                         $"{nameof(gradmode)}={gradmode} " + 
+                         $"{nameof(gradmode)}={gradmode} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -481,7 +480,7 @@ namespace TensorShaderCudaBackend {
 
             string key = $"quaternion_kernelproduct_dense " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
-                         $"{nameof(transpose)}={transpose} " + 
+                         $"{nameof(transpose)}={transpose} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -511,7 +510,7 @@ namespace TensorShaderCudaBackend {
             string key = $"quaternion_convolution_1d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"{nameof(kwidth)}={kwidth} " +
-                         $"{nameof(gradmode)}={gradmode} " + 
+                         $"{nameof(gradmode)}={gradmode} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -541,7 +540,7 @@ namespace TensorShaderCudaBackend {
             string key = $"quaternion_deconvolution_1d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"{nameof(kwidth)}={kwidth} " +
-                         $"{nameof(gradmode)}={gradmode} " + 
+                         $"{nameof(gradmode)}={gradmode} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -571,7 +570,7 @@ namespace TensorShaderCudaBackend {
             string key = $"quaternion_kernelproduct_1d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"{nameof(kwidth)}={kwidth} " +
-                         $"{nameof(transpose)}={transpose} " + 
+                         $"{nameof(transpose)}={transpose} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -601,7 +600,7 @@ namespace TensorShaderCudaBackend {
             string key = $"quaternion_convolution_2d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
-                         $"{nameof(gradmode)}={gradmode} " + 
+                         $"{nameof(gradmode)}={gradmode} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -631,7 +630,7 @@ namespace TensorShaderCudaBackend {
             string key = $"quaternion_deconvolution_2d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
-                         $"{nameof(gradmode)}={gradmode} " + 
+                         $"{nameof(gradmode)}={gradmode} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -661,7 +660,7 @@ namespace TensorShaderCudaBackend {
             string key = $"quaternion_kernelproduct_2d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} " +
-                         $"{nameof(transpose)}={transpose} " + 
+                         $"{nameof(transpose)}={transpose} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -691,7 +690,7 @@ namespace TensorShaderCudaBackend {
             string key = $"quaternion_convolution_3d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
-                         $"{nameof(gradmode)}={gradmode} " + 
+                         $"{nameof(gradmode)}={gradmode} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -721,7 +720,7 @@ namespace TensorShaderCudaBackend {
             string key = $"quaternion_deconvolution_3d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
-                         $"{nameof(gradmode)}={gradmode} " + 
+                         $"{nameof(gradmode)}={gradmode} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {
@@ -751,7 +750,7 @@ namespace TensorShaderCudaBackend {
             string key = $"quaternion_kernelproduct_3d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"{nameof(kwidth)}={kwidth} {nameof(kheight)}={kheight} {nameof(kdepth)}={kdepth} " +
-                         $"{nameof(transpose)}={transpose} " + 
+                         $"{nameof(transpose)}={transpose} " +
                          $"precision={Environment.Precision}";
 
             if (!shaders.ContainsKey(key)) {

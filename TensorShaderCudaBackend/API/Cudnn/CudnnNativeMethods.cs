@@ -4,17 +4,16 @@ using System.Runtime.InteropServices;
 using TensorShaderCudaBackend.Dll;
 
 namespace TensorShaderCudaBackend.API {
-    using cudnnStatus_t = Cudnn.Status;
-    using cudnnTensorFormat_t = TensorShaderCudaBackend.Cudnn.TensorFormat;
-    using cudnnDataType_t = TensorShaderCudaBackend.Cudnn.DataType;
-    using cudnnConvolutionMode_t = Cudnn.ConvolutionMode;
-    using cudnnConvolutionFwdAlgo_t = Cudnn.ConvolutionFwdAlgo;
-    using cudnnConvolutionFwdPreference_t = Cudnn.ConvolutionFwdPreference;
-    using cudnnConvolutionBwdFilterAlgo_t = Cudnn.ConvolutionBwdFilterAlgo;
-    using cudnnConvolutionBwdFilterPreference_t = Cudnn.ConvolutionBwdFilterPreference;
     using cudnnConvolutionBwdDataAlgo_t = Cudnn.ConvolutionBwdDataAlgo;
     using cudnnConvolutionBwdDataPreference_t = Cudnn.ConvolutionBwdDataPreference;
-
+    using cudnnConvolutionBwdFilterAlgo_t = Cudnn.ConvolutionBwdFilterAlgo;
+    using cudnnConvolutionBwdFilterPreference_t = Cudnn.ConvolutionBwdFilterPreference;
+    using cudnnConvolutionFwdAlgo_t = Cudnn.ConvolutionFwdAlgo;
+    using cudnnConvolutionFwdPreference_t = Cudnn.ConvolutionFwdPreference;
+    using cudnnConvolutionMode_t = Cudnn.ConvolutionMode;
+    using cudnnDataType_t = TensorShaderCudaBackend.Cudnn.DataType;
+    using cudnnStatus_t = Cudnn.Status;
+    using cudnnTensorFormat_t = TensorShaderCudaBackend.Cudnn.TensorFormat;
     using size_t = Int64;
 
     public static partial class Cudnn {
@@ -104,8 +103,8 @@ namespace TensorShaderCudaBackend.API {
             [UnmanagedFunctionPointer(CallingConvention.StdCall)]
             public delegate cudnnStatus_t cudnnSetConvolution2dDescriptor(
                 IntPtr convDesc,
-                int pad_h, int pad_w,          
-                int stride_u, int stride_v,    
+                int pad_h, int pad_w,
+                int stride_u, int stride_v,
                 int dilation_h, int dilation_w,
                 cudnnConvolutionMode_t mode,
                 cudnnDataType_t computeType
@@ -120,7 +119,7 @@ namespace TensorShaderCudaBackend.API {
                 IntPtr padA, IntPtr filterStrideA, IntPtr dilationA,
                 cudnnConvolutionMode_t mode,
                 cudnnDataType_t computeType
-            ); 
+            );
             public static NativeMethod<cudnnSetConvolutionNdDescriptor> CudnnSetConvolutionNdDescriptor { get; }
                 = new NativeMethod<cudnnSetConvolutionNdDescriptor>(dll, nameof(cudnnSetConvolutionNdDescriptor));
 

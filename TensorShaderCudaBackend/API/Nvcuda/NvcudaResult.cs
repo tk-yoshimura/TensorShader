@@ -2,7 +2,7 @@
 
 namespace TensorShaderCudaBackend.API {
     public static partial class Nvcuda {
-        internal enum ResultCode: Int32 {
+        internal enum ResultCode : Int32 {
             Success = 0,
             ErrorInvalidValue = 1,
             ErrorOutOfMemory = 2,
