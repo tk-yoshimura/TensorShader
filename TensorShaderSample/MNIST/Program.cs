@@ -12,8 +12,15 @@ using TensorShaderUtil.SnapshotSaver;
 using static TensorShader.Field;
 
 namespace MNIST {
+    using BackendEnvironment = TensorShaderCudaBackend.Environment;
+
     class Program {
         static void Main() {
+            if (BackendEnvironment.CudnnExists) {
+                BackendEnvironment.Precision = BackendEnvironment.PrecisionMode.Float;
+                BackendEnvironment.CudnnEnabled = true;
+            }
+
             const string dirpath_dataset = "mnist_dataset";
             const string dirpath_result = "result";
             const int classes = 10;
