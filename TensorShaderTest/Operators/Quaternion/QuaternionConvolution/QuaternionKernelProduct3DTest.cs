@@ -9,7 +9,67 @@ namespace TensorShaderTest.Operators.Quaternion {
     [TestClass]
     public class QuaternionKernelProduct3DTest {
         [TestMethod]
-        public void ExecuteTest() {
+        public void ExecuteFPTest() {
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+
+            Random random = new(1234);
+
+            float max_err = 0;
+
+            foreach (int batch in new int[] { 1, 2 }) {
+                foreach ((int inchannels, int outchannels) in new (int, int)[] { (4, 4), (4, 8), (8, 4), (8, 20), (20, 32), (32, 8), (32, 36), (36, 36) }) {
+                    foreach ((int kwidth, int kheight, int kdepth) in new (int, int, int)[] { (1, 1, 1), (3, 3, 3), (5, 5, 5), (1, 3, 5), (3, 5, 1), (5, 1, 3) }) {
+                        foreach ((int inwidth, int inheight, int indepth) in new (int, int, int)[] { (kwidth, kheight, kdepth), (kwidth * 2, kheight * 2, kdepth * 2), (13, 13, 13), (17, 17, 17), (19, 19, 19), (17, 19, 13), (13, 17, 19), (19, 13, 17) }) {
+
+                            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;
+
+                            float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+                            float[] yval = (new float[outwidth * outheight * outdepth * outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+                            Quaternion[] xcval = (new Quaternion[xval.Length / 4])
+                                .Select((_, idx) => new Quaternion(xval[idx * 4], xval[idx * 4 + 1], xval[idx * 4 + 2], xval[idx * 4 + 3])).ToArray();
+
+                            Quaternion[] ycval = (new Quaternion[yval.Length / 4])
+                                .Select((_, idx) => new Quaternion(yval[idx * 4], yval[idx * 4 + 1], yval[idx * 4 + 2], yval[idx * 4 + 3])).ToArray();
+
+                            QuaternionMap3D x = new(inchannels / 4, inwidth, inheight, indepth, batch, xcval);
+                            QuaternionMap3D y = new(outchannels / 4, outwidth, outheight, outdepth, batch, ycval);
+
+                            QuaternionFilter3D gw = Reference(x, y, kwidth, kheight, kdepth);
+
+                            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
+                            OverflowCheckedTensor y_tensor = new(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), yval);
+
+                            OverflowCheckedTensor gw_tensor = new(Shape.Kernel3D(inchannels, outchannels / 4, kwidth, kheight, kdepth));
+
+                            QuaternionKernelProduct3D ope = new(inwidth, inheight, indepth, inchannels, outchannels, kwidth, kheight, kdepth, transpose: false, batch);
+
+                            ope.Execute(x_tensor, y_tensor, gw_tensor);
+
+                            float[] gw_expect = gw.ToArray();
+                            float[] gw_actual = gw_tensor.State.Value;
+
+                            CollectionAssert.AreEqual(xval, x_tensor.State.Value);
+                            CollectionAssert.AreEqual(yval, y_tensor.State.Value);
+
+                            AssertError.Tolerance(gw_expect, gw_actual, 1e-6f, 1e-4f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
+
+                            Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
+
+                        }
+                    }
+                }
+            }
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
+        public void ExecuteFFPTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
             Random random = new(1234);
 
             float max_err = 0;
@@ -64,6 +124,9 @@ namespace TensorShaderTest.Operators.Quaternion {
 
         [TestMethod]
         public void LargeMapTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
             Random random = new(1234);
 
             float max_err = 0;

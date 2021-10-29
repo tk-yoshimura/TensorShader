@@ -9,7 +9,62 @@ namespace TensorShaderTest.Operators.Complex {
     [TestClass]
     public class ComplexDenseTest {
         [TestMethod]
-        public void ExecuteTest() {
+        public void ExecuteFPTest() {
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+
+            Random random = new(1234);
+
+            float max_err = 0;
+
+            foreach (int batch in new int[] { 1, 2 }) {
+                foreach (int inchannels in new int[] { 2, 4, 10, 20, 32, 34 }) {
+                    foreach (int outchannels in new int[] { 2, 4, 10, 20, 32, 34 }) {
+
+                        float[] xval = (new float[inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+                        float[] wval = (new float[inchannels * outchannels / 2]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+                        System.Numerics.Complex[] xcval = (new System.Numerics.Complex[xval.Length / 2])
+                            .Select((_, idx) => new System.Numerics.Complex(xval[idx * 2], xval[idx * 2 + 1])).ToArray();
+
+                        System.Numerics.Complex[] wcval = (new System.Numerics.Complex[wval.Length / 2])
+                            .Select((_, idx) => new System.Numerics.Complex(wval[idx * 2], wval[idx * 2 + 1])).ToArray();
+
+                        ComplexMap0D x = new(inchannels / 2, batch, xcval);
+                        ComplexFilter0D w = new(inchannels / 2, outchannels / 2, wcval);
+
+                        ComplexMap0D y = Reference(x, w);
+
+                        OverflowCheckedTensor x_tensor = new(Shape.Map0D(inchannels, batch), xval);
+                        OverflowCheckedTensor w_tensor = new(Shape.Kernel0D(inchannels, outchannels / 2), wval);
+
+                        OverflowCheckedTensor y_tensor = new(Shape.Map0D(outchannels, batch));
+
+                        ComplexDense ope = new(inchannels, outchannels, gradmode: false, batch);
+
+                        ope.Execute(x_tensor, w_tensor, y_tensor);
+
+                        float[] y_expect = y.ToArray();
+                        float[] y_actual = y_tensor.State.Value;
+
+                        CollectionAssert.AreEqual(xval, x_tensor.State.Value);
+                        CollectionAssert.AreEqual(wval, w_tensor.State.Value);
+
+                        AssertError.Tolerance(y_expect, y_actual, 1e-6f, 1e-4f, ref max_err, $"mismatch value {inchannels},{outchannels},{batch}");
+
+                        Console.WriteLine($"pass: {inchannels},{outchannels},{batch}");
+                    }
+                }
+            }
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
+        public void ExecuteFFPTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
             Random random = new(1234);
 
             float max_err = 0;
@@ -59,6 +114,9 @@ namespace TensorShaderTest.Operators.Complex {
 
         [TestMethod]
         public void LargeMapTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
             Random random = new(1234);
 
             float max_err = 0;

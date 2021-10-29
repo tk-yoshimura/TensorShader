@@ -9,7 +9,53 @@ namespace TensorShaderTest.Operators.ConnectionDense {
     [TestClass]
     public class DenseTest {
         [TestMethod]
-        public void ExecuteTest() {
+        public void ExecuteFPTest() {
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+
+            float max_err = 0;
+
+            foreach (int batch in new int[] { 1, 2 }) {
+                foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 32, 33 }) {
+                    foreach (int outchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 32, 33 }) {
+                        float[] xval = (new float[inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+                        float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+
+                        Map0D x = new(inchannels, batch, xval);
+                        Filter0D w = new(inchannels, outchannels, wval);
+
+                        Map0D y = Reference(x, w);
+
+                        OverflowCheckedTensor x_tensor = new(Shape.Map0D(inchannels, batch), xval);
+                        OverflowCheckedTensor w_tensor = new(Shape.Kernel0D(inchannels, outchannels), wval);
+
+                        OverflowCheckedTensor y_tensor = new(Shape.Map0D(outchannels, batch));
+
+                        Dense ope = new(inchannels, outchannels, batch);
+
+                        ope.Execute(x_tensor, w_tensor, y_tensor);
+
+                        float[] y_expect = y.ToArray();
+                        float[] y_actual = y_tensor.State.Value;
+
+                        CollectionAssert.AreEqual(xval, x_tensor.State.Value);
+                        CollectionAssert.AreEqual(wval, w_tensor.State.Value);
+
+                        AssertError.Tolerance(y_expect, y_actual, 1e-6f, 1e-4f, ref max_err, $"mismatch value {inchannels},{outchannels},{batch}");
+
+                        Console.WriteLine($"pass: {inchannels},{outchannels},{batch}");
+                    }
+                }
+            }
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
+        public void ExecuteFFPTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
             float max_err = 0;
 
             foreach (int batch in new int[] { 1, 2 }) {
@@ -50,6 +96,9 @@ namespace TensorShaderTest.Operators.ConnectionDense {
 
         [TestMethod]
         public void LargeMapTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
             float max_err = 0;
 
             Random random = new(1234);

@@ -9,7 +9,70 @@ namespace TensorShaderTest.Operators.Trivector {
     [TestClass]
     public class TrivectorKernelProductDenseTest {
         [TestMethod]
-        public void ExecuteTest() {
+        public void ExecuteFPTest() {
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+
+            Random random = new(1234);
+
+            float max_err = 0;
+
+            foreach (int batch in new int[] { 1, 2 }) {
+                foreach (int inchannels in new int[] { 3, 6, 9, 15, 21, 33 }) {
+                    foreach (int outchannels in new int[] { 3, 6, 9, 15, 21, 33 }) {
+
+                        float[] xval = (new float[inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+                        float[] yval = (new float[outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+                        float[] wval = (new float[inchannels * outchannels / 9 * 4]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+                        Trivector[] xcval = (new Trivector[xval.Length / 3])
+                            .Select((_, idx) => new Trivector(xval[idx * 3], xval[idx * 3 + 1], xval[idx * 3 + 2])).ToArray();
+
+                        Trivector[] ycval = (new Trivector[yval.Length / 3])
+                            .Select((_, idx) => new Trivector(yval[idx * 3], yval[idx * 3 + 1], yval[idx * 3 + 2])).ToArray();
+
+                        Quaternion.Quaternion[] wcval = (new Quaternion.Quaternion[wval.Length / 4])
+                            .Select((_, idx) => new Quaternion.Quaternion(wval[idx * 4], wval[idx * 4 + 1], wval[idx * 4 + 2], wval[idx * 4 + 3])).ToArray();
+
+                        TrivectorMap0D x = new(inchannels / 3, batch, xcval);
+                        TrivectorMap0D y = new(outchannels / 3, batch, ycval);
+                        Quaternion.QuaternionFilter0D w = new(inchannels / 3, outchannels / 3, wcval);
+
+                        Quaternion.QuaternionFilter0D gw = Reference(x, y, w);
+
+                        OverflowCheckedTensor x_tensor = new(Shape.Map0D(inchannels, batch), xval);
+                        OverflowCheckedTensor y_tensor = new(Shape.Map0D(outchannels, batch), yval);
+                        OverflowCheckedTensor w_tensor = new(Shape.Kernel0D(inchannels / 3 * 4, outchannels / 3), wval);
+
+                        OverflowCheckedTensor gw_tensor = new(Shape.Kernel0D(inchannels / 3 * 4, outchannels / 3));
+
+                        TrivectorKernelProductDense ope = new(inchannels, outchannels, transpose: false, batch);
+
+                        ope.Execute(x_tensor, y_tensor, w_tensor, gw_tensor);
+
+                        float[] gw_expect = gw.ToArray();
+                        float[] gw_actual = gw_tensor.State.Value;
+
+                        CollectionAssert.AreEqual(xval, x_tensor.State.Value);
+                        CollectionAssert.AreEqual(yval, y_tensor.State.Value);
+                        CollectionAssert.AreEqual(wval, w_tensor.State.Value);
+
+                        AssertError.Tolerance(gw_expect, gw_actual, 1e-6f, 1e-4f, ref max_err, $"mismatch value {inchannels},{outchannels},{batch}");
+
+                        Console.WriteLine($"pass: {inchannels},{outchannels},{batch}");
+
+                    }
+                }
+            }
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
+        public void ExecuteFFPTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
             Random random = new(1234);
 
             float max_err = 0;
@@ -67,6 +130,9 @@ namespace TensorShaderTest.Operators.Trivector {
 
         [TestMethod]
         public void LargeMapTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
             Random random = new(1234);
 
             float max_err = 0;

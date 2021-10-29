@@ -9,7 +9,79 @@ namespace TensorShaderTest.Operators.Trivector {
     [TestClass]
     public class TrivectorKernelProduct2DTest {
         [TestMethod]
-        public void ExecuteTest() {
+        public void ExecuteFPTest() {
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+
+            Random random = new(1234);
+
+            float max_err = 0;
+
+            foreach (int batch in new int[] { 1, 2 }) {
+                foreach (int inchannels in new int[] { 3, 6, 9, 15, 21, 33 }) {
+                    foreach (int outchannels in new int[] { 3, 6, 9, 15, 21, 33 }) {
+                        foreach (int kheight in new int[] { 1, 3, 5 }) {
+                            foreach (int kwidth in new int[] { 1, 3, 5 }) {
+                                foreach (int inwidth in new int[] { kwidth, kwidth * 2, 8, 9, 13, 17, 25 }) {
+                                    foreach (int inheight in new int[] { kheight, kheight * 2, 8, 9, 13, 17, 25 }) {
+                                        int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1;
+
+                                        float[] xval = (new float[inwidth * inheight * inchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+                                        float[] yval = (new float[outwidth * outheight * outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+                                        float[] wval = (new float[kwidth * kheight * inchannels * outchannels / 9 * 4]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+                                        Trivector[] xcval = (new Trivector[xval.Length / 3])
+                                            .Select((_, idx) => new Trivector(xval[idx * 3], xval[idx * 3 + 1], xval[idx * 3 + 2])).ToArray();
+
+                                        Trivector[] ycval = (new Trivector[yval.Length / 3])
+                                            .Select((_, idx) => new Trivector(yval[idx * 3], yval[idx * 3 + 1], yval[idx * 3 + 2])).ToArray();
+
+                                        Quaternion.Quaternion[] wcval = (new Quaternion.Quaternion[wval.Length / 4])
+                                            .Select((_, idx) => new Quaternion.Quaternion(wval[idx * 4], wval[idx * 4 + 1], wval[idx * 4 + 2], wval[idx * 4 + 3])).ToArray();
+
+                                        TrivectorMap2D x = new(inchannels / 3, inwidth, inheight, batch, xcval);
+                                        TrivectorMap2D y = new(outchannels / 3, outwidth, outheight, batch, ycval);
+                                        Quaternion.QuaternionFilter2D w = new(inchannels / 3, outchannels / 3, kwidth, kheight, wcval);
+
+                                        Quaternion.QuaternionFilter2D gw = Reference(x, y, w, kwidth, kheight);
+
+                                        OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, inwidth, inheight, batch), xval);
+                                        OverflowCheckedTensor y_tensor = new(Shape.Map2D(outchannels, outwidth, outheight, batch), yval);
+                                        OverflowCheckedTensor w_tensor = new(Shape.Kernel2D(inchannels / 3 * 4, outchannels / 3, kwidth, kheight), wval);
+
+                                        OverflowCheckedTensor gw_tensor = new(Shape.Kernel2D(inchannels / 3 * 4, outchannels / 3, kwidth, kheight));
+
+                                        TrivectorKernelProduct2D ope = new(inwidth, inheight, inchannels, outchannels, kwidth, kheight, transpose: false, batch);
+
+                                        ope.Execute(x_tensor, y_tensor, w_tensor, gw_tensor);
+
+                                        float[] gw_expect = gw.ToArray();
+                                        float[] gw_actual = gw_tensor.State.Value;
+
+                                        CollectionAssert.AreEqual(xval, x_tensor.State.Value);
+                                        CollectionAssert.AreEqual(yval, y_tensor.State.Value);
+                                        CollectionAssert.AreEqual(wval, w_tensor.State.Value);
+
+                                        AssertError.Tolerance(gw_expect, gw_actual, 1e-6f, 1e-4f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
+
+                                        Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{inwidth},{inheight},{batch}");
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
+        public void ExecuteFFPTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
             Random random = new(1234);
 
             float max_err = 0;
@@ -76,6 +148,9 @@ namespace TensorShaderTest.Operators.Trivector {
 
         [TestMethod]
         public void LargeMapTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
             Random random = new(1234);
 
             float max_err = 0;

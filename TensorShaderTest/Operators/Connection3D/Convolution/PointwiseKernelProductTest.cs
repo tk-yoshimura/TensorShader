@@ -9,7 +9,55 @@ namespace TensorShaderTest.Operators.Connection3D {
     [TestClass]
     public class PointwiseKernelProductTest {
         [TestMethod]
-        public void ExecuteTest() {
+        public void ExecuteFPTest() {
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+
+            float max_err = 0;
+
+            foreach (int batch in new int[] { 1, 2 }) {
+                foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20 }) {
+                    foreach (int outchannels in new int[] { 7, 13 }) {
+                        foreach ((int width, int height, int depth) in new (int, int, int)[] { (13, 13, 13), (17, 17, 17), (19, 19, 19), (17, 19, 13), (13, 17, 19), (19, 13, 17) }) {
+                            float[] xval = (new float[width * height * depth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+                            float[] gyval = (new float[width * height * depth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+
+                            Map3D x = new(inchannels, width, height, depth, batch, xval);
+                            Map3D gy = new(outchannels, width, height, depth, batch, gyval);
+
+                            Filter3D gw = Reference(x, gy);
+
+                            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, width, height, depth, batch), xval);
+                            OverflowCheckedTensor gy_tensor = new(Shape.Map3D(outchannels, width, height, depth, batch), gyval);
+
+                            OverflowCheckedTensor gw_tensor = new(Shape.Kernel0D(inchannels, outchannels));
+
+                            PointwiseKernelProduct ope = new(width, height, depth, inchannels, outchannels, batch);
+
+                            ope.Execute(x_tensor, gy_tensor, gw_tensor);
+
+                            float[] gw_expect = gw.ToArray();
+                            float[] gw_actual = gw_tensor.State.Value;
+
+                            CollectionAssert.AreEqual(xval, x_tensor.State.Value);
+                            CollectionAssert.AreEqual(gyval, gy_tensor.State.Value);
+
+                            AssertError.Tolerance(gw_expect, gw_actual, 1e-6f, 1e-4f, ref max_err, $"mismatch value {inchannels},{outchannels},{width},{height},{depth},{batch}");
+
+                            Console.WriteLine($"pass: {inchannels},{outchannels},{width},{height},{depth},{batch}");
+                        }
+                    }
+                }
+            }
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
+        public void ExecuteFFPTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
             float max_err = 0;
 
             foreach (int batch in new int[] { 1, 2 }) {
@@ -52,6 +100,9 @@ namespace TensorShaderTest.Operators.Connection3D {
 
         [TestMethod]
         public void LargeMapTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
             float max_err = 0;
 
             Random random = new(1234);

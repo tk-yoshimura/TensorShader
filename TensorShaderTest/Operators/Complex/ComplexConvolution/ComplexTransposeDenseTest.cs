@@ -9,7 +9,62 @@ namespace TensorShaderTest.Operators.Complex {
     [TestClass]
     public class ComplexTransposeDenseTest {
         [TestMethod]
-        public void ExecuteTest() {
+        public void ExecuteFPTest() {
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+
+            Random random = new(1234);
+
+            float max_err = 0;
+
+            foreach (int batch in new int[] { 1, 2 }) {
+                foreach (int inchannels in new int[] { 2, 4, 10, 20, 32, 34 }) {
+                    foreach (int outchannels in new int[] { 2, 4, 10, 20, 32, 34 }) {
+
+                        float[] yval = (new float[outchannels * batch]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+                        float[] wval = (new float[inchannels * outchannels / 2]).Select((_, idx) => (float)random.NextDouble() * 1e-2f).ToArray();
+
+                        System.Numerics.Complex[] ycval = (new System.Numerics.Complex[yval.Length / 2])
+                            .Select((_, idx) => new System.Numerics.Complex(yval[idx * 2], yval[idx * 2 + 1])).ToArray();
+
+                        System.Numerics.Complex[] wcval = (new System.Numerics.Complex[wval.Length / 2])
+                            .Select((_, idx) => new System.Numerics.Complex(wval[idx * 2], wval[idx * 2 + 1])).ToArray();
+
+                        ComplexMap0D y = new(outchannels / 2, batch, ycval);
+                        ComplexFilter0D w = new(inchannels / 2, outchannels / 2, wcval);
+
+                        ComplexMap0D x = Reference(y, w);
+
+                        OverflowCheckedTensor y_tensor = new(Shape.Map0D(outchannels, batch), yval);
+                        OverflowCheckedTensor w_tensor = new(Shape.Kernel0D(inchannels, outchannels / 2), wval);
+
+                        OverflowCheckedTensor x_tensor = new(Shape.Map0D(inchannels, batch));
+
+                        ComplexTransposeDense ope = new(outchannels, inchannels, gradmode: false, batch);
+
+                        ope.Execute(y_tensor, w_tensor, x_tensor);
+
+                        float[] x_expect = x.ToArray();
+                        float[] x_actual = x_tensor.State.Value;
+
+                        CollectionAssert.AreEqual(yval, y_tensor.State.Value);
+                        CollectionAssert.AreEqual(wval, w_tensor.State.Value);
+
+                        AssertError.Tolerance(x_expect, x_actual, 1e-6f, 1e-4f, ref max_err, $"mismatch value {inchannels},{outchannels},{batch}");
+
+                        Console.WriteLine($"pass: {inchannels},{outchannels},{batch}");
+                    }
+                }
+            }
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
+        public void ExecuteFFPTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
             Random random = new(1234);
 
             float max_err = 0;
@@ -59,6 +114,9 @@ namespace TensorShaderTest.Operators.Complex {
 
         [TestMethod]
         public void LargeMapTest() {
+            TensorShaderCudaBackend.Environment.CudnnEnabled = false;
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
+
             Random random = new(1234);
 
             float max_err = 0;
