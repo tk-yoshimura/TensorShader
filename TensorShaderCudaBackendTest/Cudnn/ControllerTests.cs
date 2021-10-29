@@ -14,7 +14,7 @@ namespace TensorShaderCudaBackendTest {
         public void ControllerTest() {
             if (!TensorShaderCudaBackend.Environment.CudnnExists) {
                 Console.WriteLine("test was skipped. Cudnn library not exists.");
-                return;
+                Assert.Inconclusive();
             }
 
             CudnnController controller = new(new Stream());
@@ -25,7 +25,7 @@ namespace TensorShaderCudaBackendTest {
         public void ConvolutionForward2DTest() {
             if (!TensorShaderCudaBackend.Environment.CudnnExists) {
                 Console.WriteLine("test was skipped. Cudnn library not exists.");
-                return;
+                Assert.Inconclusive();
             }
 
             const int n = 4, oc = 3, ic = 2, ih = 8, iw = 6, kh = 3, kw = 5;
@@ -71,7 +71,7 @@ namespace TensorShaderCudaBackendTest {
         public void ConvolutionBackwardData2DTest() {
             if (!TensorShaderCudaBackend.Environment.CudnnExists) {
                 Console.WriteLine("test was skipped. Cudnn library not exists.");
-                return;
+                Assert.Inconclusive();
             }
 
             const int n = 4, oc = 3, ic = 2, ih = 8, iw = 6, kh = 3, kw = 5;
@@ -117,7 +117,7 @@ namespace TensorShaderCudaBackendTest {
         public void ConvolutionBackwardFilter2DTest() {
             if (!TensorShaderCudaBackend.Environment.CudnnExists) {
                 Console.WriteLine("test was skipped. Cudnn library not exists.");
-                return;
+                Assert.Inconclusive();
             }
             
             const int n = 4, oc = 3, ic = 2, ih = 8, iw = 6, kh = 3, kw = 5;
@@ -163,7 +163,7 @@ namespace TensorShaderCudaBackendTest {
         public void ConvolutionForward3DTest() {
             if (!TensorShaderCudaBackend.Environment.CudnnExists) {
                 Console.WriteLine("test was skipped. Cudnn library not exists.");
-                return;
+                Assert.Inconclusive();
             }
 
             const int n = 4, oc = 3, ic = 2, id = 9, ih = 8, iw = 6, kd = 7, kh = 3, kw = 5;
@@ -209,7 +209,7 @@ namespace TensorShaderCudaBackendTest {
         public void ConvolutionBackwardData3DTest() {
             if (!TensorShaderCudaBackend.Environment.CudnnExists) {
                 Console.WriteLine("test was skipped. Cudnn library not exists.");
-                return;
+                Assert.Inconclusive();
             }
 
             const int n = 4, oc = 3, ic = 2, id = 9, ih = 8, iw = 6, kd = 7, kh = 3, kw = 5;
@@ -255,7 +255,7 @@ namespace TensorShaderCudaBackendTest {
         public void ConvolutionBackwardFilter3DTest() {
             if (!TensorShaderCudaBackend.Environment.CudnnExists) {
                 Console.WriteLine("test was skipped. Cudnn library not exists.");
-                return;
+                Assert.Inconclusive();
             }
 
             const int n = 4, oc = 3, ic = 2, id = 9, ih = 8, iw = 6, kd = 7, kh = 3, kw = 5;

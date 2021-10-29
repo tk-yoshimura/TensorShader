@@ -9,6 +9,9 @@ namespace TensorShaderCudaBackend.Cudnn {
         private IntPtr workspace;
         private readonly Int64 workspace_size_limit;
 
+        /// <summary>実行ストリーム</summary>
+        public Stream Stream { private set; get; }
+
         /// <summary>コンストラクタ</summary>
         /// <param name="stream">実行ストリーム</param>
         /// <param name="workspace_size_limit">
@@ -24,6 +27,7 @@ namespace TensorShaderCudaBackend.Cudnn {
             API.Cudnn.Handle.SetStream(handle, stream.Ptr);
             workspace = API.Cuda.Memory.Allocate<byte>((ulong)workspace_size_limit);
             this.workspace_size_limit = workspace_size_limit;
+            this.Stream = stream;
         }
 
         /// <summary>畳み込み順伝搬</summary>
