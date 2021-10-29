@@ -34,7 +34,10 @@ namespace TensorShaderCudaBackend.Shaders.Convolution.FloatFloatPrecision {
 
             string code = $@"
 
-            {Defines.FloatFloat.AtomicAdd}
+            static __inline__ __device__ void floatfloat_kahanadd(float *ptr, float val){{
+                float tmp = atomicAdd(ptr, val);
+                atomicAdd(ptr + 1, (val - ((tmp + val) - tmp)));
+            }}
 
             __global__ void kernelproduct_dense(const float* __restrict__ inmap, const float* __restrict__ outmap, float* __restrict__ filter) {{
 
@@ -66,7 +69,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution.FloatFloatPrecision {
                     float u = us[tidx];
                     float v = vs[tidy];
 
-                    floatfloat_atomicadd(filter, u * v);
+                    floatfloat_kahanadd(filter, u * v);
 
                 { (InChannels % BlockSize.x != 0 ? "}" : "") }
                 { (OutChannels % BlockSize.y != 0 ? "}" : "") }
