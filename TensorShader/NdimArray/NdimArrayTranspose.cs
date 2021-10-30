@@ -42,7 +42,7 @@ namespace TensorShader {
         }
 
         private static NdimArray<T> Transpose(NdimArray<T> arr, params int[] axis) {
-            if (arr.Ndim != axis.Length) { 
+            if (arr.Ndim != axis.Length) {
                 throw new ArgumentException(ExceptionMessage.ShapeElements(arr.Shape, ("Ndim==", axis.Length)));
             }
 
@@ -105,7 +105,7 @@ namespace TensorShader {
 
                             (int block, int n, int m, int s) = compute_stride(axis_length, axis_index1, axis_index2);
                             vs = Transpose(vs, block, n, m, s);
-                            (axis, axis_length) = update_axis(axis, axis_length, axis_index1, axis_index2); 
+                            (axis, axis_length) = update_axis(axis, axis_length, axis_index1, axis_index2);
 
                         }
                     }
@@ -118,7 +118,7 @@ namespace TensorShader {
         private static T[] Transpose(T[] vs, int block, int n, int m, int s) {
             int length = checked(block * n * m * s);
 
-            if (vs.Length != length) { 
+            if (vs.Length != length) {
                 throw new ArgumentException($"{nameof(vs)}.Length");
             }
 
@@ -134,7 +134,7 @@ namespace TensorShader {
                     }
                 }
             }
-            else { 
+            else {
                 for (int k = 0, src_idx = 0; k < s; k++) {
                     for (int j = 0; j < m; j++) {
                         for (int i = 0; i < n; i++, src_idx++) {
