@@ -42,6 +42,9 @@ namespace TensorShaderUtil.DataSplitUtil {
             if (input.Shape.Ndim != output.Shape.Ndim) {
                 throw new ArgumentException(ExceptionMessage.Argument("Ndim", output.Shape.Ndim, input.Shape.Ndim));
             }
+            if (input.Shape.Batch != output.Shape.Batch) {
+                throw new ArgumentException(ExceptionMessage.Argument($"{nameof(output)}.Batch", $"=={nameof(input)}.Batch"));
+            }
 
             int ndim = input.Shape.Ndim - 2;
             if (splicing_edges.Length != ndim) {
