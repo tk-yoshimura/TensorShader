@@ -71,8 +71,10 @@ namespace MNIST {
                 .InitializeTensor((tensor) => new Zero(tensor));
 
             Console.WriteLine("Set params updater...");
-            parameters.AddUpdater((parameter) => new Nadam(parameter, alpha: 0.01f));
-            parameters.AddUpdater((parameter) => new Ridge(parameter, decay: 1e-4f));
+            parameters.AddUpdaters((parameter) => new Updater[]{
+                new Nadam(parameter, alpha: 0.01f),
+                new Ridge(parameter, decay: 1e-4f)
+            });
 
             Console.WriteLine("Training...");
             Train(train_iterator, loader, x, t, trainflow, parameters);

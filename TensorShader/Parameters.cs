@@ -60,6 +60,20 @@ namespace TensorShader {
             return this;
         }
 
+        /// <summary>更新則を追加</summary>
+        /// <returns>メゾットチェーン可</returns>
+        public Parameters AddUpdaters(Func<ParameterField, IEnumerable<Updater>> gen_updater) {
+            if (parameter_fields.Count <= 0) {
+                throw new InvalidOperationException(ExceptionMessage.EmptyList());
+            }
+
+            foreach (ParameterField parameter_field in parameter_fields) {
+                parameter_field.AddUpdaters(gen_updater(parameter_field));
+            }
+
+            return this;
+        }
+
         /// <summary>更新則を初期化</summary>
         public void InitializeUpdater() {
             if (parameter_fields.Count <= 0) {

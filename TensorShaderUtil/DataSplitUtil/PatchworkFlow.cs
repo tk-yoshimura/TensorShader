@@ -15,7 +15,7 @@ namespace TensorShaderUtil.DataSplitUtil {
         private readonly VariableField input;
         private readonly StoreField output;
         private readonly int ndim;
-        private readonly IReadOnlyList<int> inmapshape, outmapshape, margin;
+        private readonly IReadOnlyList<int> inmapshape, outmapshape, splicing_edges;
 
         /// <summary>ブロック計算完了時イベント</summary>
         public event ProgressEventHandler ProgressEvent;
@@ -24,11 +24,11 @@ namespace TensorShaderUtil.DataSplitUtil {
         /// <param name="flow">計算フロー</param>
         /// <param name="input">入力フィールド</param>
         /// <param name="output">出力フィールド</param>
-        /// <param name="margin">出力フィールドへのブロック展開時に切り捨てられるマージン</param>
+        /// <param name="splicing_edges">出力フィールドへのブロック展開時に切り捨てられるエッジの幅</param>
         /// <remarks>入出力フィールドのマップサイズは整数比である必要がある</remarks>
-        public PatchworkFlow(Flow flow, VariableField input, StoreField output, int[] margin) {
-            if (margin is null || margin.Length < 1 || margin.Any((m) => m < 0)) {
-                throw new ArgumentException(nameof(margin));
+        public PatchworkFlow(Flow flow, VariableField input, StoreField output, int[] splicing_edges) {
+            if (splicing_edges.Any((m) => m < 0)) {
+                throw new ArgumentException(ExceptionMessage.Argument(nameof(splicing_edges), ">=0"));
             }
             if (input.Shape.Type != ShapeType.Map || output.Shape.Type != ShapeType.Map) {
                 throw new ArgumentException(ExceptionMessage.Argument("Type", ShapeType.Map));
@@ -44,8 +44,8 @@ namespace TensorShaderUtil.DataSplitUtil {
             }
 
             int ndim = input.Shape.Ndim - 2;
-            if (margin.Length != ndim) {
-                throw new ArgumentException(ExceptionMessage.Argument($"{nameof(margin)}.Length", ndim));
+            if (splicing_edges.Length != ndim) {
+                throw new ArgumentException(ExceptionMessage.Argument($"{nameof(splicing_edges)}.Length", ndim));
             }
 
             int[] inmapshape = ((int[])input.Shape).Skip(1).Take(ndim).ToArray();
@@ -67,11 +67,11 @@ namespace TensorShaderUtil.DataSplitUtil {
             for (int i = 0; i < ndim; i++) {
                 if (inmapshape[i] > outmapshape[i]) {
                     int s = inmapshape[i] / outmapshape[i];
-                    margin[i] = (margin[i] + s - 1) / s * s;
+                    splicing_edges[i] = (splicing_edges[i] + s - 1) / s * s;
                 }
 
-                if (inmapshape[i] <= margin[i] * 2) {
-                    throw new ArgumentException(nameof(margin));
+                if (inmapshape[i] <= splicing_edges[i] * 2) {
+                    throw new ArgumentException(ExceptionMessage.Argument(nameof(splicing_edges), $"*2 < {nameof(inmapshape)}"));
                 }
             }
 
@@ -81,17 +81,17 @@ namespace TensorShaderUtil.DataSplitUtil {
             this.ndim = ndim;
             this.inmapshape = inmapshape;
             this.outmapshape = outmapshape;
-            this.margin = margin;
+            this.splicing_edges = splicing_edges;
         }
 
         /// <summary>コンストラクタ</summary>
         /// <param name="flow">計算フロー</param>
         /// <param name="input">入力フィールド</param>
         /// <param name="output">出力フィールド</param>
-        /// <param name="margin">出力フィールドへのブロック展開時に切り捨てられるマージン</param>
+        /// <param name="splicing_edges">出力フィールドへのブロック展開時に切り捨てられるエッジの幅</param>
         /// <remarks>入出力フィールドのマップサイズは整数比である必要がある</remarks>
-        public PatchworkFlow(Flow flow, VariableField input, StoreField output, int margin)
-            : this(flow, input, output, Enumerable.Repeat(margin, input.Shape.Ndim - 2).ToArray()) { }
+        public PatchworkFlow(Flow flow, VariableField input, StoreField output, int splicing_edges)
+            : this(flow, input, output, Enumerable.Repeat(splicing_edges, input.Shape.Ndim - 2).ToArray()) { }
 
         /// <summary>計算実行</summary>
         /// <param name="inmap">入力マップ</param>
@@ -117,7 +117,7 @@ namespace TensorShaderUtil.DataSplitUtil {
                     s -= s % r;
                 }
 
-                incoords[i] = new PatchworkCoord(Math.Max(s, inmapshape[i]), inmapshape[i], margin[i]);
+                incoords[i] = new PatchworkCoord(Math.Max(s, inmapshape[i]), inmapshape[i], splicing_edges[i]);
             }
 
             if (enable_pad) {
@@ -126,11 +126,11 @@ namespace TensorShaderUtil.DataSplitUtil {
 
             Shape shape = new(
                 ShapeType.Map,
-                    (new int[] { inmap.Channels }).Concat(
+                    (new int[] { output.Shape.Channels }).Concat(
                     ((int[])inmap.Shape).Skip(1).Take(ndim).Select(
                         (s, i) => RemapCoord(s, inmapshape[i], outmapshape[i]))
                     ).Concat(
-                    new int[] { inmap.Batch }
+                    new int[] { output.Shape.Batch }
                     ).ToArray()
                 );
 

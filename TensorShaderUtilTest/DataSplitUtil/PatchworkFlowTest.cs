@@ -206,6 +206,43 @@ namespace TensorShaderUtilTest.DataSplitUtil {
         }
 
         [TestMethod]
+        public void Execute1Dc2Test() {
+            Shape[] shapes = new Shape[]{
+                Shape.Map1D(3, 29, 2),
+                Shape.Map1D(3, 30, 2),
+                Shape.Map1D(3, 32, 2),
+                Shape.Map1D(3, 59, 2),
+                Shape.Map1D(3, 64, 2),
+                Shape.Map1D(3, 96, 2),
+            };
+
+            VariableField input = Shape.Map1D(3, 32, 2);
+            StoreField output = Concat(Axis.Map1D.Channels, input, -input);
+
+            (Flow flow, _) = Flow.Inference(output);
+
+            PatchworkFlow patchwork = new(flow, input, output, new int[] { 4 });
+
+            patchwork.ProgressEvent += Patchwork_ProgressEvent;
+
+            Random random = new();
+
+            foreach (Shape shape in shapes) {
+                NdimArray<float> inmap = (shape, (new float[shape.Length]).Select((_) => (float)random.Next(1, 16)).ToArray());
+                NdimArray<float> outmap = patchwork.Execute(inmap);
+
+                float[] vi = inmap.Value, vo = outmap.Value;
+
+                int inch = shape.Channels, outch = output.Shape.Channels;
+
+                for (int i = 0; i < vi.Length; i++) {
+                    Assert.AreEqual(vi[i], vo[(i / inch) * outch + i % inch]);
+                    Assert.AreEqual(-vi[i], vo[(i / inch) * outch + i % inch + inch]);
+                }
+            }
+        }
+
+        [TestMethod]
         public void Execute2DTest() {
             Shape[] shapes = new Shape[]{
                 Shape.Map2D(3, 29,  41, 2),
@@ -410,6 +447,44 @@ namespace TensorShaderUtilTest.DataSplitUtil {
                         NdimArray<float>.Slice2D(inmap_padded, 2, inmap.Width, 2, inmap.Height);
 
                     CollectionAssert.AreNotEqual(diff.Value, outmap.Value);
+                }
+            }
+        }
+
+        [TestMethod]
+        public void Execute2Dc2Test() {
+            Shape[] shapes = new Shape[]{
+                Shape.Map2D(3, 29,  41, 2),
+                Shape.Map2D(3, 30,  42, 2),
+                Shape.Map2D(3, 32,  64, 2),
+                Shape.Map2D(3, 59, 128, 2),
+                Shape.Map2D(3, 64, 128, 2),
+                Shape.Map2D(3, 96, 128, 2),
+                Shape.Map2D(3, 96,  42, 2),
+            };
+
+            VariableField input = Shape.Map2D(3, 30, 60, 2);
+            StoreField output = Concat(Axis.Map2D.Channels, input, -input);
+
+            (Flow flow, _) = Flow.Inference(output);
+
+            PatchworkFlow patchwork = new(flow, input, output, new int[] { 4, 3 });
+
+            patchwork.ProgressEvent += Patchwork_ProgressEvent;
+
+            Random random = new();
+
+            foreach (Shape shape in shapes) {
+                NdimArray<float> inmap = (shape, (new float[shape.Length]).Select((_) => (float)random.Next(1, 16)).ToArray());
+                NdimArray<float> outmap = patchwork.Execute(inmap);
+
+                float[] vi = inmap.Value, vo = outmap.Value;
+
+                int inch = shape.Channels, outch = output.Shape.Channels;
+
+                for (int i = 0; i < vi.Length; i++) {
+                    Assert.AreEqual(vi[i], vo[(i / inch) * outch + i % inch]);
+                    Assert.AreEqual(-vi[i], vo[(i / inch) * outch + i % inch + inch]);
                 }
             }
         }
@@ -634,6 +709,44 @@ namespace TensorShaderUtilTest.DataSplitUtil {
                         NdimArray<float>.Slice3D(inmap_padded, 2, inmap.Width, 2, inmap.Height, 2, inmap.Depth);
 
                     CollectionAssert.AreNotEqual(diff.Value, outmap.Value);
+                }
+            }
+        }
+
+        [TestMethod]
+        public void Execute3Dc2Test() {
+            Shape[] shapes = new Shape[]{
+                Shape.Map3D(3, 14, 20, 15, 2),
+                Shape.Map3D(3, 15, 21, 16, 2),
+                Shape.Map3D(3, 15, 30, 18, 2),
+                Shape.Map3D(3, 29, 64, 24, 2),
+                Shape.Map3D(3, 32, 64, 24, 2),
+                Shape.Map3D(3, 48, 64, 20, 2),
+                Shape.Map3D(3, 48, 21, 10, 2),
+            };
+
+            VariableField input = Shape.Map3D(3, 15, 30, 18, 2);
+            StoreField output = Concat(Axis.Map3D.Channels, input, -input);
+
+            (Flow flow, _) = Flow.Inference(output);
+
+            PatchworkFlow patchwork = new(flow, input, output, new int[] { 4, 3, 2 });
+
+            patchwork.ProgressEvent += Patchwork_ProgressEvent;
+
+            Random random = new();
+
+            foreach (Shape shape in shapes) {
+                NdimArray<float> inmap = (shape, (new float[shape.Length]).Select((_) => (float)random.Next(1, 16)).ToArray());
+                NdimArray<float> outmap = patchwork.Execute(inmap);
+
+                float[] vi = inmap.Value, vo = outmap.Value;
+
+                int inch = shape.Channels, outch = output.Shape.Channels;
+
+                for (int i = 0; i < vi.Length; i++) {
+                    Assert.AreEqual(vi[i], vo[(i / inch) * outch + i % inch]);
+                    Assert.AreEqual(-vi[i], vo[(i / inch) * outch + i % inch + inch]);
                 }
             }
         }

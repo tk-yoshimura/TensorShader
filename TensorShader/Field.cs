@@ -238,6 +238,13 @@ namespace TensorShader {
             Updaters.Add(updater);
         }
 
+        /// <summary>更新則を追加</summary>
+        public void AddUpdaters(IEnumerable<Updater> updaters) {
+            foreach (Updater updater in updaters) {
+                AddUpdater(updater);
+            }
+        }
+
         /// <summary>初期化</summary>
         public void Initialize(Func<Tensor, Initializer> initializer) {
             initializer(this.ValueTensor).Execute();
