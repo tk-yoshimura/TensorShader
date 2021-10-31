@@ -226,5 +226,22 @@ namespace TensorShaderCudaBackend {
 
             shader.Execute(stream, src, dst, n);
         }
+
+        /// <summary>領域加算</summary>
+        public static void RegionAdd(uint n, uint src_index, uint dst_index, CudaArray<float> src, CudaArray<float> dst, Stream stream = null) {
+            string key = "region_add";
+
+            if (!shaders.ContainsKey(key)) {
+                shaders.Add(key, new Shaders.ArrayManipulation.RegionAdd());
+            }
+
+            Shader shader = shaders[key];
+
+            if (stream is null) {
+                stream = Shader.DefaultStream;
+            }
+
+            shader.Execute(stream, src, dst, n, src_index, dst_index);
+        }
     }
 }

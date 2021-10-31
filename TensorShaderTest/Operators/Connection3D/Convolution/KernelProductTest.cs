@@ -105,6 +105,59 @@ namespace TensorShaderTest.Operators.Connection3D {
         }
 
         [TestMethod]
+        public void ExecuteCudnnTest() {
+            if (!TensorShaderCudaBackend.Environment.CudnnExists) {
+                Console.WriteLine("test was skipped. Cudnn library not exists.");
+                Assert.Inconclusive();
+            }
+
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = true;
+
+            float max_err = 0;
+
+            foreach (int batch in new int[] { 1, 2 }) {
+                foreach ((int inchannels, int outchannels) in new (int, int)[] { (1, 1), (2, 1), (1, 2), (2, 3), (3, 1), (3, 4), (4, 5), (5, 3), (5, 10), (10, 15), (15, 5), (15, 20), (20, 32), (32, 15), (32, 33), (33, 33) }) {
+                    foreach ((int kwidth, int kheight, int kdepth) in new (int, int, int)[] { (1, 1, 1), (3, 3, 3), (5, 5, 5), (1, 3, 5), (3, 5, 1), (5, 1, 3) }) {
+                        foreach ((int inwidth, int inheight, int indepth) in new (int, int, int)[] { (kwidth, kheight, kdepth), (kwidth * 2, kheight * 2, kdepth * 2), (13, 13, 13), (17, 17, 17), (19, 19, 19), (17, 19, 13), (13, 17, 19), (19, 13, 17) }) {
+
+                            int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;
+
+                            float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+                            float[] gyval = (new float[outwidth * outheight * outdepth * outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+
+                            Map3D x = new(inchannels, inwidth, inheight, indepth, batch, xval);
+                            Map3D gy = new(outchannels, outwidth, outheight, outdepth, batch, gyval);
+
+                            Filter3D gw = Reference(x, gy, kwidth, kheight, kdepth);
+
+                            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, inwidth, inheight, indepth, batch), xval);
+                            OverflowCheckedTensor gy_tensor = new(Shape.Map3D(outchannels, outwidth, outheight, outdepth, batch), gyval);
+
+                            OverflowCheckedTensor gw_tensor = new(Shape.Kernel3D(inchannels, outchannels, kwidth, kheight, kdepth));
+
+                            KernelProduct ope = new(inwidth, inheight, indepth, inchannels, outchannels, kwidth, kheight, kdepth, batch);
+
+                            ope.Execute(x_tensor, gy_tensor, gw_tensor);
+
+                            float[] gw_expect = gw.ToArray();
+                            float[] gw_actual = gw_tensor.State.Value;
+
+                            CollectionAssert.AreEqual(xval, x_tensor.State.Value);
+                            CollectionAssert.AreEqual(gyval, gy_tensor.State.Value);
+
+                            AssertError.Tolerance(gw_expect, gw_actual, 1e-6f, 1e-4f, ref max_err, $"mismatch value {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
+
+                            Console.WriteLine($"pass: {inchannels},{outchannels},{kwidth},{kheight},{kdepth},{inwidth},{inheight},{indepth},{batch}");
+                        }
+                    }
+                }
+            }
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
         public void LargeMapTest() {
             TensorShaderCudaBackend.Environment.CudnnEnabled = false;
             TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
@@ -188,6 +241,36 @@ namespace TensorShaderTest.Operators.Connection3D {
             KernelProduct ope = new(inwidth, inheight, indepth, inchannels, outchannels, ksize, ksize, ksize);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/kernelproduct_3d_ffp.nvvp");
+            Cuda.Profiler.Start();
+
+            ope.Execute(x_tensor, gy_tensor, gw_tensor);
+
+            Cuda.Profiler.Stop();
+        }
+
+        [TestMethod]
+        public void SpeedCudnnTest() {
+            if (!TensorShaderCudaBackend.Environment.CudnnExists) {
+                Console.WriteLine("test was skipped. Cudnn library not exists.");
+                Assert.Inconclusive();
+            }
+
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = true;
+
+            int inwidth = 64, inheight = 64, indepth = 64, inchannels = 32, outchannels = 32, ksize = 3;
+            int outwidth = inwidth - ksize + 1, outheight = inheight - ksize + 1, outdepth = indepth - ksize + 1;
+
+            OverflowCheckedTensor x_tensor = new(Shape.Map3D(inchannels, inwidth, inheight, indepth));
+            OverflowCheckedTensor gy_tensor = new(Shape.Map3D(outchannels, outwidth, outheight, outdepth));
+
+            OverflowCheckedTensor gw_tensor = new(Shape.Kernel3D(inchannels, outchannels, ksize, ksize, ksize));
+
+            KernelProduct ope = new(inwidth, inheight, indepth, inchannels, outchannels, ksize, ksize, ksize);
+
+            ope.Execute(x_tensor, gy_tensor, gw_tensor);
+
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/kernelproduct_3d_cudnn.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, gy_tensor, gw_tensor);
