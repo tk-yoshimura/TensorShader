@@ -97,6 +97,55 @@ namespace TensorShaderTest.Operators.ConnectionDense {
         }
 
         [TestMethod]
+        public void ExecuteCudnnTest() {
+            if (!TensorShaderCudaBackend.Environment.CudnnExists) {
+                Console.WriteLine("test was skipped. Cudnn library not exists.");
+                Assert.Inconclusive();
+            }
+
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = true;
+
+            float max_err = 0;
+
+            foreach (int batch in new int[] { 1, 2 }) {
+                foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 32, 33 }) {
+                    foreach (int outchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 32, 33 }) {
+                        float[] xval = (new float[inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+                        float[] yval = (new float[outchannels * batch]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+
+                        Map0D x = new(inchannels, batch, xval);
+                        Map0D y = new(outchannels, batch, yval);
+
+                        Filter0D gw = Reference(x, y);
+
+                        OverflowCheckedTensor x_tensor = new(Shape.Map0D(inchannels, batch), xval);
+                        OverflowCheckedTensor y_tensor = new(Shape.Map0D(outchannels, batch), yval);
+
+                        OverflowCheckedTensor gw_tensor = new(Shape.Kernel0D(inchannels, outchannels));
+
+                        KernelProduct ope = new(inchannels, outchannels, batch);
+
+                        ope.Execute(x_tensor, y_tensor, gw_tensor);
+
+                        float[] gw_expect = gw.ToArray();
+                        float[] gw_actual = gw_tensor.State.Value;
+
+                        CollectionAssert.AreEqual(xval, x_tensor.State.Value);
+                        CollectionAssert.AreEqual(yval, y_tensor.State.Value);
+
+                        AssertError.Tolerance(gw_expect, gw_actual, 1e-6f, 1e-4f, ref max_err, $"mismatch value {inchannels},{outchannels},{batch}");
+
+                        Console.WriteLine($"pass: {inchannels},{outchannels},{batch}");
+
+                    }
+                }
+            }
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
         public void LargeMapTest() {
             TensorShaderCudaBackend.Environment.CudnnEnabled = false;
             TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
@@ -175,6 +224,35 @@ namespace TensorShaderTest.Operators.ConnectionDense {
             KernelProduct ope = new(inchannels, outchannels, batch);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/kernelproduct_dense_ffp.nvvp");
+            Cuda.Profiler.Start();
+
+            ope.Execute(x_tensor, y_tensor, w_tensor);
+
+            Cuda.Profiler.Stop();
+        }
+
+        [TestMethod]
+        public void SpeedCudnnTest() {
+            if (!TensorShaderCudaBackend.Environment.CudnnExists) {
+                Console.WriteLine("test was skipped. Cudnn library not exists.");
+                Assert.Inconclusive();
+            }
+
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = true;
+
+            int inchannels = 1024, outchannels = 1024, batch = 4;
+
+            OverflowCheckedTensor x_tensor = new(Shape.Map0D(inchannels, batch));
+            OverflowCheckedTensor y_tensor = new(Shape.Map0D(outchannels, batch));
+
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel0D(inchannels, outchannels));
+
+            KernelProduct ope = new(inchannels, outchannels, batch);
+
+            ope.Execute(x_tensor, y_tensor, w_tensor);
+
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/kernelproduct_dense_cudnn.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, y_tensor, w_tensor);
