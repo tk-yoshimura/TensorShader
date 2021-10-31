@@ -97,6 +97,25 @@ namespace TensorShaderCudaBackend {
                                          CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                          Stream stream = null) {
 
+            if (stream is null) {
+                stream = Shader.DefaultStream;
+            }
+
+            if (Environment.CudnnEnabled) {
+                if (!controllers.ContainsKey(stream)) {
+                    Cudnn.CudnnController controller = new(stream);
+                    controllers.Add(stream, controller);
+                }
+
+                Shader cudnn_shader = new Shaders.Convolution.CudnnImplement.Convolution1D(controllers[stream]);
+                cudnn_shader.Execute(
+                    stream, inmap, outmap, kernel,
+                    inchannels, outchannels, kwidth, inwidth, batch
+                );
+
+                return;
+            }
+
             string key = $"convolution_1d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
                          $"{nameof(kwidth)}={kwidth} " +
@@ -113,10 +132,6 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream is null) {
-                stream = Shader.DefaultStream;
-            }
-
             shader.Execute(stream, inmap, outmap, kernel, inwidth, batch);
         }
 
@@ -125,6 +140,25 @@ namespace TensorShaderCudaBackend {
                                            uint batch, uint kwidth,
                                            CudaArray<float> inmap, CudaArray<float> kernel, CudaArray<float> outmap,
                                            Stream stream = null) {
+
+            if (stream is null) {
+                stream = Shader.DefaultStream;
+            }
+
+            if (Environment.CudnnEnabled) {
+                if (!controllers.ContainsKey(stream)) {
+                    Cudnn.CudnnController controller = new(stream);
+                    controllers.Add(stream, controller);
+                }
+
+                Shader cudnn_shader = new Shaders.Convolution.CudnnImplement.Deconvolution1D(controllers[stream]);
+                cudnn_shader.Execute(
+                    stream, inmap, outmap, kernel,
+                    inchannels, outchannels, kwidth, inwidth, batch
+                );
+
+                return;
+            }
 
             string key = $"deconvolution_1d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
@@ -142,10 +176,6 @@ namespace TensorShaderCudaBackend {
 
             Shader shader = shaders[key];
 
-            if (stream is null) {
-                stream = Shader.DefaultStream;
-            }
-
             shader.Execute(stream, inmap, outmap, kernel, inwidth, batch);
         }
 
@@ -154,6 +184,25 @@ namespace TensorShaderCudaBackend {
                                            uint batch, uint kwidth,
                                            CudaArray<float> inmap, CudaArray<float> outmap, CudaArray<float> kernel,
                                            Stream stream = null) {
+
+            if (stream is null) {
+                stream = Shader.DefaultStream;
+            }
+
+            if (Environment.CudnnEnabled) {
+                if (!controllers.ContainsKey(stream)) {
+                    Cudnn.CudnnController controller = new(stream);
+                    controllers.Add(stream, controller);
+                }
+
+                Shader cudnn_shader = new Shaders.Convolution.CudnnImplement.KernelProduct1D(controllers[stream]);
+                cudnn_shader.Execute(
+                    stream, inmap, outmap, kernel,
+                    inchannels, outchannels, kwidth, inwidth, batch
+                );
+
+                return;
+            }
 
             string key = $"kernelproduct_1d " +
                          $"{nameof(inchannels)}={inchannels} {nameof(outchannels)}={outchannels} " +
@@ -170,10 +219,6 @@ namespace TensorShaderCudaBackend {
             }
 
             Shader shader = shaders[key];
-
-            if (stream is null) {
-                stream = Shader.DefaultStream;
-            }
 
             shader.Execute(stream, inmap, outmap, kernel, inwidth, batch);
         }
