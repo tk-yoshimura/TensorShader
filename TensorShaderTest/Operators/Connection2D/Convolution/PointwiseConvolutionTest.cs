@@ -103,6 +103,58 @@ namespace TensorShaderTest.Operators.Connection2D {
         }
 
         [TestMethod]
+        public void ExecuteCudnnTest() {
+            if (!TensorShaderCudaBackend.Environment.CudnnExists) {
+                Console.WriteLine("test was skipped. Cudnn library not exists.");
+                Assert.Inconclusive();
+            }
+
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = true;
+
+            float max_err = 0;
+
+            foreach (int batch in new int[] { 1, 2 }) {
+                foreach (int inchannels in new int[] { 1, 2, 3, 4, 5, 10, 15, 20 }) {
+                    foreach (int outchannels in new int[] { 7, 13 }) {
+                        foreach (int height in new int[] { 8, 9, 19, 23 }) {
+                            foreach (int width in new int[] { 8, 9, 13, 17 }) {
+                                float[] xval = (new float[width * height * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
+                                float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+
+                                Map2D x = new(inchannels, width, height, batch, xval);
+                                Filter2D w = new(inchannels, outchannels, 1, 1, wval);
+
+                                Map2D y = Reference(x, w);
+
+                                OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, width, height, batch), xval);
+                                OverflowCheckedTensor w_tensor = new(Shape.Kernel0D(inchannels, outchannels), wval);
+
+                                OverflowCheckedTensor y_tensor = new(Shape.Map2D(outchannels, width, height, batch));
+
+                                PointwiseConvolution ope = new(width, height, inchannels, outchannels, batch);
+
+                                ope.Execute(x_tensor, w_tensor, y_tensor);
+
+                                float[] y_expect = y.ToArray();
+                                float[] y_actual = y_tensor.State.Value;
+
+                                CollectionAssert.AreEqual(xval, x_tensor.State.Value);
+                                CollectionAssert.AreEqual(wval, w_tensor.State.Value);
+
+                                AssertError.Tolerance(y_expect, y_actual, 1e-6f, 1e-4f, ref max_err, $"mismatch value {inchannels},{outchannels},{width},{height},{batch}");
+
+                                Console.WriteLine($"pass: {inchannels},{outchannels},{width},{height},{batch}");
+                            }
+                        }
+                    }
+                }
+            }
+
+            Console.WriteLine($"maxerr:{max_err}");
+        }
+
+        [TestMethod]
         public void LargeMapTest() {
             TensorShaderCudaBackend.Environment.CudnnEnabled = false;
             TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.FloatFloat;
@@ -182,6 +234,33 @@ namespace TensorShaderTest.Operators.Connection2D {
             PointwiseConvolution ope = new(inwidth, inheight, inchannels, outchannels);
 
             Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/ptwise_convolution_2d_ffp.nvvp");
+            Cuda.Profiler.Start();
+
+            ope.Execute(x_tensor, w_tensor, y_tensor);
+
+            Cuda.Profiler.Stop();
+        }
+
+        [TestMethod]
+        public void SpeedCudnnTest() {
+            if (!TensorShaderCudaBackend.Environment.CudnnExists) {
+                Console.WriteLine("test was skipped. Cudnn library not exists.");
+                Assert.Inconclusive();
+            }
+
+            TensorShaderCudaBackend.Environment.Precision = TensorShaderCudaBackend.Environment.PrecisionMode.Float;
+            TensorShaderCudaBackend.Environment.CudnnEnabled = true;
+
+            int inwidth = 512, inheight = 512, inchannels = 31, outchannels = 63;
+
+            OverflowCheckedTensor x_tensor = new(Shape.Map2D(inchannels, inwidth, inheight));
+            OverflowCheckedTensor w_tensor = new(Shape.Kernel0D(inchannels, outchannels));
+
+            OverflowCheckedTensor y_tensor = new(Shape.Map2D(outchannels, inwidth, inheight));
+
+            PointwiseConvolution ope = new(inwidth, inheight, inchannels, outchannels);
+
+            Cuda.Profiler.Initialize("../../../../profiler.nvsetting", "../../nvprofiles/ptwise_convolution_2d_cudnn.nvvp");
             Cuda.Profiler.Start();
 
             ope.Execute(x_tensor, w_tensor, y_tensor);
