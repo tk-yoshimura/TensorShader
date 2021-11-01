@@ -23,7 +23,7 @@ namespace TensorShaderTest.Operators.Connection3D {
                             int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;
 
                             float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                            float[] wval = (new float[kwidth * kheight * kdepth * inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+                            float[] wval = (new float[kwidth * kheight * kdepth * inchannels * outchannels]).Select((_, idx) => (idx + 1) * 1e-3f).Reverse().ToArray();
 
                             Map3D x = new(inchannels, inwidth, inheight, indepth, batch, xval);
                             Filter3D w = new(inchannels, outchannels, kwidth, kheight, kdepth, wval);
@@ -71,7 +71,7 @@ namespace TensorShaderTest.Operators.Connection3D {
                             int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;
 
                             float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                            float[] wval = (new float[kwidth * kheight * kdepth * inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+                            float[] wval = (new float[kwidth * kheight * kdepth * inchannels * outchannels]).Select((_, idx) => (idx + 1) * 1e-3f).Reverse().ToArray();
 
                             Map3D x = new(inchannels, inwidth, inheight, indepth, batch, xval);
                             Filter3D w = new(inchannels, outchannels, kwidth, kheight, kdepth, wval);
@@ -124,7 +124,7 @@ namespace TensorShaderTest.Operators.Connection3D {
                             int outwidth = inwidth - kwidth + 1, outheight = inheight - kheight + 1, outdepth = indepth - kdepth + 1;
 
                             float[] xval = (new float[inwidth * inheight * indepth * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                            float[] wval = (new float[kwidth * kheight * kdepth * inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+                            float[] wval = (new float[kwidth * kheight * kdepth * inchannels * outchannels]).Select((_, idx) => (idx + 1) * 1e-3f).Reverse().ToArray();
 
                             Map3D x = new(inchannels, inwidth, inheight, indepth, batch, xval);
                             Filter3D w = new(inchannels, outchannels, kwidth, kheight, kdepth, wval);

@@ -20,7 +20,7 @@ namespace TensorShaderTest.Operators.Connection1D {
                     foreach (int outchannels in new int[] { 7, 13 }) {
                         foreach (int width in new int[] { 8, 9, 13, 17 }) {
                             float[] xval = (new float[width * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                            float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+                            float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => (idx + 1) * 1e-3f).Reverse().ToArray();
 
                             Map1D x = new(inchannels, width, batch, xval);
                             Filter1D w = new(inchannels, outchannels, 1, wval);
@@ -65,7 +65,7 @@ namespace TensorShaderTest.Operators.Connection1D {
                     foreach (int outchannels in new int[] { 7, 13 }) {
                         foreach (int width in new int[] { 8, 9, 13, 17 }) {
                             float[] xval = (new float[width * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                            float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+                            float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => (idx + 1) * 1e-3f).Reverse().ToArray();
 
                             Map1D x = new(inchannels, width, batch, xval);
                             Filter1D w = new(inchannels, outchannels, 1, wval);
@@ -115,7 +115,7 @@ namespace TensorShaderTest.Operators.Connection1D {
                     foreach (int outchannels in new int[] { 7, 13 }) {
                         foreach (int width in new int[] { 8, 9, 13, 17 }) {
                             float[] xval = (new float[width * inchannels * batch]).Select((_, idx) => idx * 1e-3f).ToArray();
-                            float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => idx * 1e-3f).Reverse().ToArray();
+                            float[] wval = (new float[inchannels * outchannels]).Select((_, idx) => (idx + 1) * 1e-3f).Reverse().ToArray();
 
                             Map1D x = new(inchannels, width, batch, xval);
                             Filter1D w = new(inchannels, outchannels, 1, wval);
