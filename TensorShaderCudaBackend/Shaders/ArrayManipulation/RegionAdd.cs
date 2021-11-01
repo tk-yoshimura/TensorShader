@@ -2,7 +2,7 @@
 using System.Linq;
 
 namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
-    
+
     /// <summary>領域加算</summary>
     public sealed class RegionAdd : Shader {
         /// <summary>識別子</summary>
@@ -37,7 +37,7 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
             uint dst_index = (args[4] as uint?).Value;
 
             Kernel.Execute(
-                n, dynamic_shared_memory_bytes: 0, stream, 
+                n, dynamic_shared_memory_bytes: 0, stream,
                 inmap.ElementPtr(src_index),
                 outmap.ElementPtr(dst_index),
                 n

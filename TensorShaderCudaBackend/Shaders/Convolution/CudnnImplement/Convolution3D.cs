@@ -77,15 +77,15 @@ namespace TensorShaderCudaBackend.Shaders.Convolution.CudnnImplement {
 
             for (uint depth_index = 0; depth_index < kdepth; depth_index++) {
                 filter.CopyToAsync(
-                    stream, 
-                    slice_filter_length * depth_index, 
-                    slice_filter, 
-                    0u, 
+                    stream,
+                    slice_filter_length * depth_index,
+                    slice_filter,
+                    0u,
                     slice_filter_length
-                ); 
+                );
 
                 BlockTranspose(inchannels, outchannels, kwidth * kheight, slice_filter, transpose_filter, stream);
-                
+
                 for (uint th = 0; th < batches; th++) {
                     inmap.CopyToAsync(
                         stream,

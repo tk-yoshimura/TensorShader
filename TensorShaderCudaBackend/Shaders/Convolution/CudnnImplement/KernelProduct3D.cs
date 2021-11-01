@@ -85,7 +85,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution.CudnnImplement {
                 }
 
                 controller.ConvolutionBackwardFilter(slice_inmap, indesc, outmap, outdesc, convdesc, transpose_filter, filterdesc);
-                
+
                 BlockTranspose(inchannels, kwidth * kheight, outchannels, transpose_filter, slice_filter, stream);
 
                 slice_filter.CopyToAsync(stream,
