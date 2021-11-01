@@ -34,7 +34,7 @@ namespace TensorShaderCudaBackend {
                         handle = GCHandle.Alloc(obj, GCHandleType.Pinned);
                     }
                     else {
-                        throw new ArgumentException(nameof(args));
+                        throw new ArgumentException(null, nameof(args));
                     }
 
                     handle_list.Add(handle);

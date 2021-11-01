@@ -15,7 +15,7 @@ namespace TensorShaderUtil {
         /// <returns>ファイルパス及び連番</returns>
         public static IEnumerable<(string path, long num)> EnumrateSerialFiles(string directory_path, string filename_pattern) {
             if (!filename_pattern.Contains('*') || filename_pattern.IndexOf('*', filename_pattern.IndexOf('*') + 1) >= 0) {
-                throw new ArgumentException(nameof(filename_pattern));
+                throw new ArgumentException(null, nameof(filename_pattern));
             }
 
             var regex = new Regex($"^{filename_pattern.Replace("*", "(?<num>\\d+)")}$");

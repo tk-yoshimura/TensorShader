@@ -17,7 +17,7 @@ namespace TensorShader.Operators.Connection1D {
         /// <summary>コンストラクタ</summary>
         public ImageToColumn(int inwidth, int channels, int kwidth, int batch = 1) {
             if (kwidth < 1 || kwidth % 2 != 1) {
-                throw new ArgumentException(nameof(kwidth));
+                throw new ArgumentException(null, nameof(kwidth));
             }
 
             int outwidth = inwidth - kwidth + 1;

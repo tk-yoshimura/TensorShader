@@ -18,7 +18,7 @@ namespace TensorShader {
         /// <summary>スナップショットにテンソルの状態を追加</summary>
         public void Append(string key, Tensor tensor) {
             if (table.ContainsKey(key)) {
-                throw new ArgumentException(nameof(key));
+                throw new ArgumentException(null, nameof(key));
             }
 
             table.Add(key, tensor);
@@ -27,7 +27,7 @@ namespace TensorShader {
         /// <summary>スナップショットにfloat配列を追加</summary>
         public void Append(string key, Shape shape, float[] state) {
             if (table.ContainsKey(key)) {
-                throw new ArgumentException(nameof(key));
+                throw new ArgumentException(null, nameof(key));
             }
 
             table.Add(key, (shape, (float[])state.Clone()));

@@ -19,7 +19,7 @@ namespace TensorShaderUtil.BatchGenerator {
         /// <remarks>indexesをnullにした場合、GenerateDataのindexを0として呼び出される</remarks>
         public override sealed void Request(int[] indexes = null) {
             if (indexes is not null && indexes.Length != NumBatches) {
-                throw new ArgumentException(nameof(indexes));
+                throw new ArgumentException(null, nameof(indexes));
             }
 
             if (tasks is not null) {

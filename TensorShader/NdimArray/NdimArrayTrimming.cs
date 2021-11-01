@@ -16,7 +16,7 @@ namespace TensorShader {
                 (int ta, int tb) = trims[i];
 
                 if (ta < 0 || tb < 0 || (ta + tb) >= arr.Shape[i]) {
-                    throw new ArgumentException(nameof(trims));
+                    throw new ArgumentException(null, nameof(trims));
                 }
             }
 

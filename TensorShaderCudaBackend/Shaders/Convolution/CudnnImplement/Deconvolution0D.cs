@@ -20,7 +20,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution.CudnnImplement {
             CheckArgument(args);
 
             if (controller.Stream != stream) {
-                throw new ArgumentException(nameof(stream));
+                throw new ArgumentException(null, nameof(stream));
             }
 
             CudaArray<float> inmap = args[0] as CudaArray<float>;
@@ -56,30 +56,30 @@ namespace TensorShaderCudaBackend.Shaders.Convolution.CudnnImplement {
         /// <summary>引数チェック</summary>
         protected override void CheckArgument(params object[] args) {
             if (args is null || args.Length != 6) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[3] is uint inchannels) || !Limits.CheckChannels(inchannels)) {
+            if (args[3] is not uint inchannels || !Limits.CheckChannels(inchannels)) {
                 throw new ArgumentException(nameof(inchannels));
             }
 
-            if (!(args[4] is uint outchannels) || !Limits.CheckChannels(outchannels)) {
+            if (args[4] is not uint outchannels || !Limits.CheckChannels(outchannels)) {
                 throw new ArgumentException(nameof(outchannels));
             }
 
-            if (!(args[5] is uint pts) || pts < 1) {
+            if (args[5] is not uint pts || pts < 1) {
                 throw new ArgumentException(nameof(pts));
             }
 
-            if (!(args[0] is CudaArray<float> inmap) || inmap.Length < inchannels * pts) {
+            if (args[0] is not CudaArray<float> inmap || inmap.Length < inchannels * pts) {
                 throw new ArgumentException(nameof(inmap));
             }
 
-            if (!(args[1] is CudaArray<float> outmap) || outmap.Length < outchannels * pts) {
+            if (args[1] is not CudaArray<float> outmap || outmap.Length < outchannels * pts) {
                 throw new ArgumentException(nameof(outmap));
             }
 
-            if (!(args[2] is CudaArray<float> filter) || filter.Length < inchannels * outchannels) {
+            if (args[2] is not CudaArray<float> filter || filter.Length < inchannels * outchannels) {
                 throw new ArgumentException(nameof(filter));
             }
         }

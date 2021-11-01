@@ -61,7 +61,7 @@ namespace TensorShader {
         /// <param name="nodes">ノードリスト</param>
         protected internal Flow(List<Node> nodes) {
             if (nodes is null) {
-                throw new ArgumentException(nameof(nodes));
+                throw new ArgumentException(null, nameof(nodes));
             }
 
             this.nodes = nodes;
@@ -83,7 +83,7 @@ namespace TensorShader {
         /// <param name="innodes">入力ノードリスト</param>
         public static Flow FromInputs(params InputNode[] innodes) {
             if (innodes.Length < 1 || innodes.IsDuplicated()) {
-                throw new ArgumentException(nameof(innodes));
+                throw new ArgumentException(null, nameof(innodes));
             }
 
             List<Node> nodes = ExecutionOrderSort(innodes);
@@ -95,7 +95,7 @@ namespace TensorShader {
         /// <param name="outnodes">出力ノードリスト</param>
         public static Flow FromOutputs(params OutputNode[] outnodes) {
             if (outnodes.Length < 1 || outnodes.IsDuplicated()) {
-                throw new ArgumentException(nameof(outnodes));
+                throw new ArgumentException(null, nameof(outnodes));
             }
 
             (List<Node> tracenodes, List<InputNode> innodes) = BackTrace(outnodes);
@@ -386,7 +386,7 @@ namespace TensorShader {
         /// <returns>計算フローと最適化対象のパラメータ</returns>
         public static (Flow flow, Parameters parameters) Optimize(params Field[] error_fields) {
             if (error_fields.Length < 1) {
-                throw new ArgumentException(nameof(error_fields));
+                throw new ArgumentException(null, nameof(error_fields));
             }
 
             if (error_fields.IsDuplicated()) {

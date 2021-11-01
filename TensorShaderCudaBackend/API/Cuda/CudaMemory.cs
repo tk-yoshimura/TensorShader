@@ -55,10 +55,10 @@ namespace TensorShaderCudaBackend.API {
             private static void Copy(IntPtr src_ptr, IntPtr dst_ptr, size_t count, cudaMemcpyKind kind) {
                 try {
                     if (src_ptr == IntPtr.Zero) {
-                        throw new ArgumentException(nameof(src_ptr));
+                        throw new ArgumentException(null, nameof(src_ptr));
                     }
                     if (dst_ptr == IntPtr.Zero) {
-                        throw new ArgumentException(nameof(dst_ptr));
+                        throw new ArgumentException(null, nameof(dst_ptr));
                     }
 
                     ErrorCode result = NativeMethods.CudaMemcpy.AsDelegate().Invoke(dst_ptr, src_ptr, count, kind);
@@ -75,10 +75,10 @@ namespace TensorShaderCudaBackend.API {
             /// <summary>ホストデバイス間メモリ領域コピー</summary>
             internal static void CopyDeviceToHost<T>(IntPtr src_ptr, T[] dst, ulong count, ulong index = 0) where T : struct, IComparable {
                 if (src_ptr == IntPtr.Zero) {
-                    throw new ArgumentException(nameof(src_ptr));
+                    throw new ArgumentException(null, nameof(src_ptr));
                 }
                 if (dst is null || count + index > (ulong)dst.LongLength) {
-                    throw new ArgumentException(nameof(dst));
+                    throw new ArgumentException(null, nameof(dst));
                 }
 
                 long bytesize = (long)((ulong)Marshal.SizeOf(typeof(T)) * count);
@@ -96,10 +96,10 @@ namespace TensorShaderCudaBackend.API {
             /// <summary>ホストデバイス間メモリ領域コピー</summary>
             internal static void CopyHostToDevice<T>(T[] src, IntPtr dst_ptr, ulong count, ulong index = 0) where T : struct, IComparable {
                 if (src is null || count + index > (ulong)src.LongLength) {
-                    throw new ArgumentException(nameof(src));
+                    throw new ArgumentException(null, nameof(src));
                 }
                 if (dst_ptr == IntPtr.Zero) {
-                    throw new ArgumentException(nameof(dst_ptr));
+                    throw new ArgumentException(null, nameof(dst_ptr));
                 }
 
                 long bytesize = (long)((ulong)Marshal.SizeOf(typeof(T)) * count);
@@ -117,10 +117,10 @@ namespace TensorShaderCudaBackend.API {
             /// <summary>デバイス間メモリ領域コピー</summary>
             internal static void CopyDeviceToDevice<T>(IntPtr src_ptr, IntPtr dst_ptr, ulong count) where T : struct, IComparable {
                 if (src_ptr == IntPtr.Zero) {
-                    throw new ArgumentException(nameof(src_ptr));
+                    throw new ArgumentException(null, nameof(src_ptr));
                 }
                 if (dst_ptr == IntPtr.Zero) {
-                    throw new ArgumentException(nameof(dst_ptr));
+                    throw new ArgumentException(null, nameof(dst_ptr));
                 }
 
                 long bytesize = (long)((ulong)Marshal.SizeOf(typeof(T)) * count);
@@ -133,13 +133,13 @@ namespace TensorShaderCudaBackend.API {
             private static void CopyAsync(IntPtr src_ptr, IntPtr dst_ptr, size_t count, cudaMemcpyKind kind, IntPtr stream) {
                 try {
                     if (src_ptr == IntPtr.Zero) {
-                        throw new ArgumentException(nameof(src_ptr));
+                        throw new ArgumentException(null, nameof(src_ptr));
                     }
                     if (dst_ptr == IntPtr.Zero) {
-                        throw new ArgumentException(nameof(dst_ptr));
+                        throw new ArgumentException(null, nameof(dst_ptr));
                     }
                     if (stream == IntPtr.Zero) {
-                        throw new ArgumentException(nameof(stream));
+                        throw new ArgumentException(null, nameof(stream));
                     }
 
                     ErrorCode result = NativeMethods.CudaMemcpyAsync.AsDelegate().Invoke(dst_ptr, src_ptr, count, kind, stream);
@@ -156,10 +156,10 @@ namespace TensorShaderCudaBackend.API {
             /// <summary>非同期デバイス間メモリ領域コピー</summary>
             internal static void CopyDeviceToDeviceAsync<T>(IntPtr src_ptr, IntPtr dst_ptr, ulong count, IntPtr stream) where T : struct, IComparable {
                 if (src_ptr == IntPtr.Zero) {
-                    throw new ArgumentException(nameof(src_ptr));
+                    throw new ArgumentException(null, nameof(src_ptr));
                 }
                 if (dst_ptr == IntPtr.Zero) {
-                    throw new ArgumentException(nameof(dst_ptr));
+                    throw new ArgumentException(null, nameof(dst_ptr));
                 }
 
                 long bytesize = (long)((ulong)Marshal.SizeOf(typeof(T)) * count);
@@ -170,7 +170,7 @@ namespace TensorShaderCudaBackend.API {
             /// <summary>デバイスメモリゼロクリア</summary>
             internal static void Zeroset<T>(IntPtr ptr, ulong count) where T : struct, IComparable {
                 if (ptr == IntPtr.Zero) {
-                    throw new ArgumentException(nameof(ptr));
+                    throw new ArgumentException(null, nameof(ptr));
                 }
 
                 long bytesize = (long)((ulong)Marshal.SizeOf(typeof(T)) * count);
@@ -184,10 +184,10 @@ namespace TensorShaderCudaBackend.API {
             /// <summary>非同期デバイスメモリゼロクリア</summary>
             internal static void ZerosetAsync<T>(IntPtr ptr, ulong count, IntPtr stream) where T : struct, IComparable {
                 if (ptr == IntPtr.Zero) {
-                    throw new ArgumentException(nameof(ptr));
+                    throw new ArgumentException(null, nameof(ptr));
                 }
                 if (stream == IntPtr.Zero) {
-                    throw new ArgumentException(nameof(stream));
+                    throw new ArgumentException(null, nameof(stream));
                 }
 
                 long bytesize = (long)((ulong)Marshal.SizeOf(typeof(T)) * count);

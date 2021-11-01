@@ -25,7 +25,7 @@ namespace TensorShader {
         /// <summary>コンストラクタ</summary>
         public Layer(string label) {
             if (label is null || label == string.Empty) {
-                throw new ArgumentException(nameof(label));
+                throw new ArgumentException(null, nameof(label));
             }
 
             this.Label = label;

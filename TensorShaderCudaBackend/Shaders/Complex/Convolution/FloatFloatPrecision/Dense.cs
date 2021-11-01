@@ -112,22 +112,22 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution.FloatFloatPrecisio
         /// <summary>引数チェック</summary>
         protected override void CheckArgument(params object[] args) {
             if (args is null || args.Length != 4) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[3] is uint batches) || !Limits.CheckBatches(batches)) {
+            if (args[3] is not uint batches || !Limits.CheckBatches(batches)) {
                 throw new ArgumentException(nameof(batches));
             }
 
-            if (!(args[0] is CudaArray<float> inmap) || inmap.Length < InChannels * batches * 2) {
+            if (args[0] is not CudaArray<float> inmap || inmap.Length < InChannels * batches * 2) {
                 throw new ArgumentException(nameof(inmap));
             }
 
-            if (!(args[1] is CudaArray<float> outmap) || outmap.Length < OutChannels * batches * 2) {
+            if (args[1] is not CudaArray<float> outmap || outmap.Length < OutChannels * batches * 2) {
                 throw new ArgumentException(nameof(outmap));
             }
 
-            if (!(args[2] is CudaArray<float> filter) || filter.Length < InChannels * OutChannels * 2) {
+            if (args[2] is not CudaArray<float> filter || filter.Length < InChannels * OutChannels * 2) {
                 throw new ArgumentException(nameof(filter));
             }
         }

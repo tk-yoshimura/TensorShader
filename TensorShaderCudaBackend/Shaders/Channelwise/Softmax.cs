@@ -16,7 +16,7 @@ namespace TensorShaderCudaBackend.Shaders.Channelwise {
         /// <param name="channels">チャネル数</param>
         public Softmax(uint channels) {
             if (channels < 1) {
-                throw new ArgumentException(nameof(channels));
+                throw new ArgumentException(null, nameof(channels));
             }
 
             this.Channels = channels;
@@ -65,22 +65,22 @@ namespace TensorShaderCudaBackend.Shaders.Channelwise {
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
             if (args is null || args.Length != 4) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[2] is uint length)) {
+            if (args[2] is not uint length) {
                 throw new ArgumentException(nameof(length));
             }
 
-            if (!(args[3] is uint indexes) || length != indexes * Channels) {
+            if (args[3] is not uint indexes || length != indexes * Channels) {
                 throw new ArgumentException(nameof(indexes));
             }
 
-            if (!(args[0] is CudaArray<float> x) || x.Length < length) {
+            if (args[0] is not CudaArray<float> x || x.Length < length) {
                 throw new ArgumentException(nameof(x));
             }
 
-            if (!(args[1] is CudaArray<float> y) || y.Length < length) {
+            if (args[1] is not CudaArray<float> y || y.Length < length) {
                 throw new ArgumentException(nameof(y));
             }
         }

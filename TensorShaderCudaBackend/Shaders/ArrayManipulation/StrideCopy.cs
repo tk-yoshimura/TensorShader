@@ -18,11 +18,11 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         /// <summary>コンストラクタ</summary>
         public StrideCopy(uint stride, uint index) {
             if (stride < 1) {
-                throw new ArgumentException(nameof(stride));
+                throw new ArgumentException(null, nameof(stride));
             }
 
             if (index >= stride) {
-                throw new ArgumentException(nameof(index));
+                throw new ArgumentException(null, nameof(index));
             }
 
             this.Stride = stride;
@@ -59,20 +59,20 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
             if (args is null || args.Length != 3) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[2] is uint length) || length % Stride != 0) {
+            if (args[2] is not uint length || length % Stride != 0) {
                 throw new ArgumentException(nameof(length));
             }
 
             uint n = length / Stride;
 
-            if (!(args[0] is CudaArray<float> xarr) || xarr.Length < n) {
+            if (args[0] is not CudaArray<float> xarr || xarr.Length < n) {
                 throw new ArgumentException(nameof(xarr));
             }
 
-            if (!(args[1] is CudaArray<float> yarr) || yarr.Length < length) {
+            if (args[1] is not CudaArray<float> yarr || yarr.Length < length) {
                 throw new ArgumentException(nameof(yarr));
             }
         }

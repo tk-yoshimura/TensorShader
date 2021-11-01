@@ -101,7 +101,7 @@ namespace TensorShader {
         /// <summary>形状変更</summary>
         public NdimArray<T> Reshape(Shape shape, bool clone_value = true) {
             if (shape.Length != Shape.Length) {
-                throw new ArgumentException(nameof(shape));
+                throw new ArgumentException(null, nameof(shape));
             }
 
             return new NdimArray<T>(shape, Value, clone_value);
@@ -111,14 +111,14 @@ namespace TensorShader {
         /// <remarks>指定軸方向の要素数が1である必要がある</remarks>
         public static NdimArray<T> Join(int axis, params NdimArray<T>[] arrays) {
             if (arrays is null || arrays.Length < 1) {
-                throw new ArgumentException(nameof(arrays));
+                throw new ArgumentException(null, nameof(arrays));
             }
 
             Shape shape = arrays[0].Shape;
 
             foreach (NdimArray<T> array in arrays) {
                 if (array.Shape[axis] != 1 || array.Shape != shape) {
-                    throw new ArgumentException(nameof(arrays));
+                    throw new ArgumentException(null, nameof(arrays));
                 }
             }
 
@@ -176,7 +176,7 @@ namespace TensorShader {
                 }
 
                 if (Shape.DataShape != value.Shape.DataShape || value.Shape.Batch != 1) {
-                    throw new ArgumentException(nameof(value));
+                    throw new ArgumentException(null, nameof(value));
                 }
 
                 Array.Copy(value.Value, 0, Value, Shape.DataSize * index, Shape.DataSize);
@@ -206,7 +206,7 @@ namespace TensorShader {
         /// <summary>バッチ方向に連結</summary>
         public static implicit operator NdimArray<T>(NdimArray<T>[] arrays) {
             if (arrays is null || arrays.Length == 0) {
-                throw new ArgumentException(nameof(arrays));
+                throw new ArgumentException(null, nameof(arrays));
             }
 
             Shape shape = arrays.First().Shape;

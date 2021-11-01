@@ -86,40 +86,40 @@ namespace TensorShaderCudaBackend.Shaders.Pool {
         /// <summary>引数チェック</summary>
         protected override void CheckArgument(params object[] args) {
             if (args is null || args.Length != 8) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[4] is uint outwidth) || !Limits.CheckWidth(outwidth, Stride)) {
+            if (args[4] is not uint outwidth || !Limits.CheckWidth(outwidth, Stride)) {
                 throw new ArgumentException(nameof(outwidth));
             }
 
-            if (!(args[5] is uint outheight) || !Limits.CheckHeight(outheight, Stride)) {
+            if (args[5] is not uint outheight || !Limits.CheckHeight(outheight, Stride)) {
                 throw new ArgumentException(nameof(outheight));
             }
 
-            if (!(args[6] is uint outdepth) || !Limits.CheckDepth(outdepth, Stride)) {
+            if (args[6] is not uint outdepth || !Limits.CheckDepth(outdepth, Stride)) {
                 throw new ArgumentException(nameof(outdepth));
             }
 
-            if (!(args[7] is uint batches) || !Limits.CheckBatches(batches)) {
+            if (args[7] is not uint batches || !Limits.CheckBatches(batches)) {
                 throw new ArgumentException(nameof(batches));
             }
 
             uint inwidth = outwidth / Stride, inheight = outheight / Stride, indepth = outdepth / Stride;
 
-            if (!(args[0] is CudaArray<float> ingrad) || ingrad.Length < Channels * inwidth * inheight * indepth * batches) {
+            if (args[0] is not CudaArray<float> ingrad || ingrad.Length < Channels * inwidth * inheight * indepth * batches) {
                 throw new ArgumentException(nameof(ingrad));
             }
 
-            if (!(args[1] is CudaArray<float> inpool) || inpool.Length < Channels * inwidth * inheight * indepth * batches) {
+            if (args[1] is not CudaArray<float> inpool || inpool.Length < Channels * inwidth * inheight * indepth * batches) {
                 throw new ArgumentException(nameof(inpool));
             }
 
-            if (!(args[2] is CudaArray<float> inmap) || inmap.Length < Channels * outwidth * outheight * outdepth * batches) {
+            if (args[2] is not CudaArray<float> inmap || inmap.Length < Channels * outwidth * outheight * outdepth * batches) {
                 throw new ArgumentException(nameof(inmap));
             }
 
-            if (!(args[3] is CudaArray<float> outmap) || outmap.Length < Channels * outwidth * outheight * outdepth * batches) {
+            if (args[3] is not CudaArray<float> outmap || outmap.Length < Channels * outwidth * outheight * outdepth * batches) {
                 throw new ArgumentException(nameof(outmap));
             }
         }

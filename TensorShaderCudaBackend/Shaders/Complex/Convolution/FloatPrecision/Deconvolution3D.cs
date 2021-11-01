@@ -169,22 +169,22 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution.FloatPrecision {
         /// <summary>引数チェック</summary>
         protected override void CheckArgument(params object[] args) {
             if (args is null || args.Length != 7) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[3] is uint inwidth) || !Limits.CheckWidth(inwidth)) {
+            if (args[3] is not uint inwidth || !Limits.CheckWidth(inwidth)) {
                 throw new ArgumentException(nameof(inwidth));
             }
 
-            if (!(args[4] is uint inheight) || !Limits.CheckHeight(inheight)) {
+            if (args[4] is not uint inheight || !Limits.CheckHeight(inheight)) {
                 throw new ArgumentException(nameof(inheight));
             }
 
-            if (!(args[5] is uint indepth) || !Limits.CheckDepth(indepth)) {
+            if (args[5] is not uint indepth || !Limits.CheckDepth(indepth)) {
                 throw new ArgumentException(nameof(indepth));
             }
 
-            if (!(args[6] is uint batches) || !Limits.CheckBatches(batches)) {
+            if (args[6] is not uint batches || !Limits.CheckBatches(batches)) {
                 throw new ArgumentException(nameof(batches));
             }
 
@@ -192,15 +192,15 @@ namespace TensorShaderCudaBackend.Shaders.Complex.Convolution.FloatPrecision {
             uint outheight = inheight + KernelHeight - 1;
             uint outdepth = indepth + KernelDepth - 1;
 
-            if (!(args[0] is CudaArray<float> inmap) || inmap.Length < InChannels * inwidth * inheight * indepth * batches * 2) {
+            if (args[0] is not CudaArray<float> inmap || inmap.Length < InChannels * inwidth * inheight * indepth * batches * 2) {
                 throw new ArgumentException(nameof(inmap));
             }
 
-            if (!(args[1] is CudaArray<float> outmap) || outmap.Length < OutChannels * outwidth * outheight * outdepth * batches * 2) {
+            if (args[1] is not CudaArray<float> outmap || outmap.Length < OutChannels * outwidth * outheight * outdepth * batches * 2) {
                 throw new ArgumentException(nameof(outmap));
             }
 
-            if (!(args[2] is CudaArray<float> filter) || filter.Length < InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * 2) {
+            if (args[2] is not CudaArray<float> filter || filter.Length < InChannels * OutChannels * KernelWidth * KernelHeight * KernelDepth * 2) {
                 throw new ArgumentException(nameof(filter));
             }
         }

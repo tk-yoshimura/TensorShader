@@ -59,22 +59,22 @@ namespace TensorShaderCudaBackend.Shaders.Indexer {
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
             if (args is null || args.Length != 4) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[2] is uint stride) || stride < 1) {
+            if (args[2] is not uint stride || stride < 1) {
                 throw new ArgumentException(nameof(stride));
             }
 
-            if (!(args[3] is uint axislength) || axislength < 1) {
+            if (args[3] is not uint axislength || axislength < 1) {
                 throw new ArgumentException(nameof(axislength));
             }
 
-            if (!(args[1] is uint length) || length % (stride * axislength) != 0) {
+            if (args[1] is not uint length || length % (stride * axislength) != 0) {
                 throw new ArgumentException(nameof(length));
             }
 
-            if (!(args[0] is CudaArray<float> y) || y.Length < length) {
+            if (args[0] is not CudaArray<float> y || y.Length < length) {
                 throw new ArgumentException(nameof(y));
             }
         }

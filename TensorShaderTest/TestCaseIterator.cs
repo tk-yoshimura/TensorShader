@@ -11,10 +11,10 @@ namespace TensorShaderTest {
 
         public TestCaseIterator(int times, params int[][] cases) {
             if (times < 1) {
-                throw new ArgumentException(nameof(times));
+                throw new ArgumentException(null, nameof(times));
             }
             if (cases is null || cases.Length == 0 || cases.Any((i) => i.Length < 1)) {
-                throw new ArgumentException(nameof(cases));
+                throw new ArgumentException(null, nameof(cases));
             }
 
             this.cases = new List<int[]>();

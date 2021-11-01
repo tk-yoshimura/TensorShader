@@ -37,14 +37,14 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
             if (args is null || args.Length != 3) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[2] is uint length)) {
+            if (args[2] is not uint length) {
                 throw new ArgumentException(nameof(length));
             }
 
-            if (!(args[0] is CudaArray<float> arr) || arr.Length < length) {
+            if (args[0] is not CudaArray<float> arr || arr.Length < length) {
                 throw new ArgumentException(nameof(arr));
             }
 

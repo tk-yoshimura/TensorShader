@@ -65,7 +65,7 @@ namespace TensorShader.Functions.Connection3D {
             }
 
             if (stride < 2) {
-                throw new ArgumentException(nameof(stride));
+                throw new ArgumentException(null, nameof(stride));
             }
 
             this.Stride = stride;

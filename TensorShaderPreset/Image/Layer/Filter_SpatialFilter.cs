@@ -9,7 +9,7 @@ namespace TensorShaderPreset.Image {
         /// <summary>空間フィルタ</summary>
         public static NdimArray<float> KernelSpatialFilter(int inchannels, int kwidth, int kheight, float[] kernel) {
             if (kwidth * kheight != kernel.Length) {
-                throw new ArgumentException(nameof(kernel));
+                throw new ArgumentException(null, nameof(kernel));
             }
 
             float[] wval = new float[inchannels * kernel.Length];

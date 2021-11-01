@@ -71,7 +71,7 @@ namespace TensorShaderTest.Operators.Connection2D {
         public static Map2D Reference(Map2D x, int scale) {
             int inw = x.Width, inh = x.Height, inchannels = x.Channels, batch = x.Batch;
             if (inw % scale != 0 || inh % scale != 0) {
-                throw new ArgumentException(nameof(scale));
+                throw new ArgumentException(null, nameof(scale));
             }
 
             int outw = inw / scale, outh = inh / scale;

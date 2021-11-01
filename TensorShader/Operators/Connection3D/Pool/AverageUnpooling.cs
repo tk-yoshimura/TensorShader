@@ -16,7 +16,7 @@ namespace TensorShader.Operators.Connection3D {
         /// <summary>コンストラクタ</summary>
         public AverageUnpooling(int outwidth, int outheight, int outdepth, int channels, int stride, int batch = 1) {
             if (stride < 2) {
-                throw new ArgumentException(nameof(stride));
+                throw new ArgumentException(null, nameof(stride));
             }
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{

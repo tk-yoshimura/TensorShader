@@ -49,7 +49,7 @@ namespace TensorShader {
             int[] axis_sorted = axis.OrderBy((i) => i).ToArray();
             for (int i = 0; i < arr.Ndim; i++) {
                 if (axis_sorted[i] != i) {
-                    throw new ArgumentException(nameof(axis));
+                    throw new ArgumentException(null, nameof(axis));
                 }
             }
 

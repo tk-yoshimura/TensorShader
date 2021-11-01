@@ -24,10 +24,10 @@ namespace TensorShaderCudaBackend.Shaders.Elementwise {
         /// <param name="name">関数名</param>
         public ConstantElementwise(int constants, int arrays, string name) {
             if (constants < 1) {
-                throw new ArgumentException(nameof(constants));
+                throw new ArgumentException(null, nameof(constants));
             }
             if (arrays < 1) {
-                throw new ArgumentException(nameof(arrays));
+                throw new ArgumentException(null, nameof(arrays));
             }
 
             this.Constants = constants;
@@ -47,10 +47,10 @@ namespace TensorShaderCudaBackend.Shaders.Elementwise {
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
             if (args is null || args.Length != Constants + Arrays + 1) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[Constants + Arrays] is uint length)) {
+            if (args[Constants + Arrays] is not uint length) {
                 throw new ArgumentException(nameof(length));
             }
 
@@ -61,7 +61,7 @@ namespace TensorShaderCudaBackend.Shaders.Elementwise {
             }
 
             for (int i = Constants; i < Constants + Arrays; i++) {
-                if (!(args[i] is CudaArray<float> arr) || arr.Length < length) {
+                if (args[i] is not CudaArray<float> arr || arr.Length < length) {
                     throw new ArgumentException($"{nameof(arr)}[{i}]");
                 }
             }

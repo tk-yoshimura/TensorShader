@@ -27,7 +27,7 @@ namespace TensorShaderCudaBackend.Shaders.Randomize {
         /// <summary>コンストラクタ</summary>
         public Randomize(int exparams = 0) {
             if (exparams < 0) {
-                throw new ArgumentException(nameof(exparams));
+                throw new ArgumentException(null, nameof(exparams));
             }
 
             this.ExParams = exparams;
@@ -65,18 +65,18 @@ namespace TensorShaderCudaBackend.Shaders.Randomize {
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
             if (args is null || args.Length != 3 + ExParams) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[1] is uint length)) {
+            if (args[1] is not uint length) {
                 throw new ArgumentException(nameof(length));
             }
 
-            if (!(args[2] is Random random) || random is null) {
+            if (args[2] is not Random random || random is null) {
                 throw new ArgumentException(nameof(random));
             }
 
-            if (!(args[0] is CudaArray<float> arr) || arr.Length < length) {
+            if (args[0] is not CudaArray<float> arr || arr.Length < length) {
                 throw new ArgumentException(nameof(arr));
             }
         }

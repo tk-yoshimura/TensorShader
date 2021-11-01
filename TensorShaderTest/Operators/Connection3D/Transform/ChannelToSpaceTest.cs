@@ -73,7 +73,7 @@ namespace TensorShaderTest.Operators.Connection3D {
         public static Map3D Reference(Map3D x, int scale) {
             int inchannels = x.Channels, batch = x.Batch;
             if (inchannels % (scale * scale * scale) != 0) {
-                throw new ArgumentException(nameof(scale));
+                throw new ArgumentException(null, nameof(scale));
             }
 
             int inw = x.Width, inh = x.Height, ind = x.Depth, outw = inw * scale, outh = inh * scale, outd = ind * scale;

@@ -189,36 +189,36 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
             if (args is null || args.Length != 7) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[4] is uint stride) || stride < 1) {
+            if (args[4] is not uint stride || stride < 1) {
                 throw new ArgumentException(nameof(stride));
             }
 
-            if (!(args[5] is uint axislength) || axislength < 1) {
+            if (args[5] is not uint axislength || axislength < 1) {
                 throw new ArgumentException(nameof(axislength));
             }
 
-            if (!(args[6] is uint slides) || slides < 0) {
+            if (args[6] is not uint slides || slides < 0) {
                 throw new ArgumentException(nameof(slides));
             }
 
             uint length = stride * axislength * slides;
 
-            if (!(args[0] is CudaArray<float> inmap) || inmap.Length < length) {
+            if (args[0] is not CudaArray<float> inmap || inmap.Length < length) {
                 throw new ArgumentException(nameof(inmap));
             }
 
-            if (!(args[1] is CudaArray<float> outmap) || outmap.Length < length) {
+            if (args[1] is not CudaArray<float> outmap || outmap.Length < length) {
                 throw new ArgumentException(nameof(outmap));
             }
 
-            if (!(args[2] is CudaArray<float> inkey) || inkey.Length < length) {
+            if (args[2] is not CudaArray<float> inkey || inkey.Length < length) {
                 throw new ArgumentException(nameof(inkey));
             }
 
-            if (!(args[3] is CudaArray<float> outkey) || outkey.Length < length) {
+            if (args[3] is not CudaArray<float> outkey || outkey.Length < length) {
                 throw new ArgumentException(nameof(outkey));
             }
         }

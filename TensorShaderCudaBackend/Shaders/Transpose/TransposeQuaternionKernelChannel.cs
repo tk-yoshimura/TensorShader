@@ -73,20 +73,20 @@ namespace TensorShaderCudaBackend.Shaders.Transpose {
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
             if (args is null || args.Length != 3) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[2] is uint pts) || pts < 1) {
+            if (args[2] is not uint pts || pts < 1) {
                 throw new ArgumentException(nameof(pts));
             }
 
             uint length = InChannels * OutChannels * pts * 4;
 
-            if (!(args[0] is CudaArray<float> inmap) || inmap.Length < length) {
+            if (args[0] is not CudaArray<float> inmap || inmap.Length < length) {
                 throw new ArgumentException(nameof(inmap));
             }
 
-            if (!(args[1] is CudaArray<float> outmap) || outmap.Length < length) {
+            if (args[1] is not CudaArray<float> outmap || outmap.Length < length) {
                 throw new ArgumentException(nameof(outmap));
             }
         }

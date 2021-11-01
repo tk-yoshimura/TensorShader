@@ -20,10 +20,10 @@ namespace TensorShaderCudaBackend.Shaders.Pool {
         /// <param name="stride">ストライド</param>
         public Pool1D(uint channels, uint stride) {
             if (!Limits.CheckChannels(channels)) {
-                throw new ArgumentException(nameof(channels));
+                throw new ArgumentException(null, nameof(channels));
             }
             if (stride < 2) {
-                throw new ArgumentException(nameof(stride));
+                throw new ArgumentException(null, nameof(stride));
             }
 
             this.Channels = channels;
@@ -56,24 +56,24 @@ namespace TensorShaderCudaBackend.Shaders.Pool {
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
             if (args is null || args.Length != 4) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[2] is uint inwidth) || !Limits.CheckWidth(inwidth, Stride)) {
+            if (args[2] is not uint inwidth || !Limits.CheckWidth(inwidth, Stride)) {
                 throw new ArgumentException(nameof(inwidth));
             }
 
-            if (!(args[3] is uint batches) || !Limits.CheckBatches(batches)) {
+            if (args[3] is not uint batches || !Limits.CheckBatches(batches)) {
                 throw new ArgumentException(nameof(batches));
             }
 
             uint outwidth = inwidth / Stride;
 
-            if (!(args[0] is CudaArray<float> inmap) || inmap.Length < Channels * inwidth * batches) {
+            if (args[0] is not CudaArray<float> inmap || inmap.Length < Channels * inwidth * batches) {
                 throw new ArgumentException(nameof(inmap));
             }
 
-            if (!(args[1] is CudaArray<float> outmap) || outmap.Length < Channels * outwidth * batches) {
+            if (args[1] is not CudaArray<float> outmap || outmap.Length < Channels * outwidth * batches) {
                 throw new ArgumentException(nameof(outmap));
             }
         }

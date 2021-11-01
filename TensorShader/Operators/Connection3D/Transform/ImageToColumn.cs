@@ -25,13 +25,13 @@ namespace TensorShader.Operators.Connection3D {
         /// <summary>コンストラクタ</summary>
         public ImageToColumn(int inwidth, int inheight, int indepth, int channels, int kwidth, int kheight, int kdepth, int batch = 1) {
             if (kwidth < 1 || kwidth % 2 != 1) {
-                throw new ArgumentException(nameof(kwidth));
+                throw new ArgumentException(null, nameof(kwidth));
             }
             if (kheight < 1 || kheight % 2 != 1) {
-                throw new ArgumentException(nameof(kheight));
+                throw new ArgumentException(null, nameof(kheight));
             }
             if (kdepth < 1 || kdepth % 2 != 1) {
-                throw new ArgumentException(nameof(kdepth));
+                throw new ArgumentException(null, nameof(kdepth));
             }
 
             int outwidth = inwidth - kwidth + 1;

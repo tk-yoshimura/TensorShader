@@ -20,10 +20,10 @@ namespace TensorShaderCudaBackend.Shaders.Pool {
         /// <param name="stride">ストライド</param>
         public Unpool3D(uint channels, uint stride) {
             if (!Limits.CheckChannels(channels)) {
-                throw new ArgumentException(nameof(channels));
+                throw new ArgumentException(null, nameof(channels));
             }
             if (stride < 2) {
-                throw new ArgumentException(nameof(stride));
+                throw new ArgumentException(null, nameof(stride));
             }
 
             this.Channels = channels;
@@ -65,22 +65,22 @@ namespace TensorShaderCudaBackend.Shaders.Pool {
         /// <summary>引数チェック</summary>
         protected override void CheckArgument(params object[] args) {
             if (args is null || args.Length != 6) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[2] is uint outwidth) || !Limits.CheckWidth(outwidth, Stride)) {
+            if (args[2] is not uint outwidth || !Limits.CheckWidth(outwidth, Stride)) {
                 throw new ArgumentException(nameof(outwidth));
             }
 
-            if (!(args[3] is uint outheight) || !Limits.CheckHeight(outheight, Stride)) {
+            if (args[3] is not uint outheight || !Limits.CheckHeight(outheight, Stride)) {
                 throw new ArgumentException(nameof(outheight));
             }
 
-            if (!(args[4] is uint outdepth) || !Limits.CheckDepth(outdepth, Stride)) {
+            if (args[4] is not uint outdepth || !Limits.CheckDepth(outdepth, Stride)) {
                 throw new ArgumentException(nameof(outdepth));
             }
 
-            if (!(args[5] is uint batches) || !Limits.CheckBatches(batches)) {
+            if (args[5] is not uint batches || !Limits.CheckBatches(batches)) {
                 throw new ArgumentException(nameof(batches));
             }
 
@@ -88,11 +88,11 @@ namespace TensorShaderCudaBackend.Shaders.Pool {
             uint inheight = outheight / Stride;
             uint indepth = outdepth / Stride;
 
-            if (!(args[0] is CudaArray<float> inmap) || inmap.Length < Channels * inwidth * inheight * indepth * batches) {
+            if (args[0] is not CudaArray<float> inmap || inmap.Length < Channels * inwidth * inheight * indepth * batches) {
                 throw new ArgumentException(nameof(inmap));
             }
 
-            if (!(args[1] is CudaArray<float> outmap) || outmap.Length < Channels * outwidth * outheight * outdepth * batches) {
+            if (args[1] is not CudaArray<float> outmap || outmap.Length < Channels * outwidth * outheight * outdepth * batches) {
                 throw new ArgumentException(nameof(outmap));
             }
         }

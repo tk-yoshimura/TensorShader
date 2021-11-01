@@ -13,7 +13,7 @@ namespace TensorShader.Operators.ArrayManipulation {
         /// <summary>コンストラクタ</summary>
         public BatchIndexer(Shape shape, int index) {
             if (shape.Ndim < 2 || shape.Type != ShapeType.Map) {
-                throw new ArgumentException(nameof(shape));
+                throw new ArgumentException(null, nameof(shape));
             }
 
             if (index < 0 || index >= shape.Batch) {

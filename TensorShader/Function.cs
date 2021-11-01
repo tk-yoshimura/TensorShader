@@ -38,10 +38,10 @@ namespace TensorShader {
         /// <summary>変数の有効性をチェック</summary>
         public void CheckArgumentsCount(Tensor[] intensors, Tensor[] outtensors) {
             if (intensors is null || intensors.Length != Inputs || intensors.Any((tensor) => tensor is null)) {
-                throw new ArgumentException(nameof(intensors));
+                throw new ArgumentException(null, nameof(intensors));
             }
             if (outtensors is null || outtensors.Length != Outputs || outtensors.Any((tensor) => tensor is null)) {
-                throw new ArgumentException(nameof(outtensors));
+                throw new ArgumentException(null, nameof(outtensors));
             }
         }
 

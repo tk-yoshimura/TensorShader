@@ -24,10 +24,10 @@ namespace TensorShaderCudaBackend.Shaders.Elementwise {
         /// <param name="name">関数名</param>
         public FactorElementwise(int factors, int arrays, string name) {
             if (factors < 1) {
-                throw new ArgumentException(nameof(factors));
+                throw new ArgumentException(null, nameof(factors));
             }
             if (arrays < 1) {
-                throw new ArgumentException(nameof(arrays));
+                throw new ArgumentException(null, nameof(arrays));
             }
 
             this.Factors = factors;
@@ -72,21 +72,21 @@ namespace TensorShaderCudaBackend.Shaders.Elementwise {
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
             if (args is null || args.Length != Factors + Arrays + 1) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[Factors + Arrays] is uint length)) {
+            if (args[Factors + Arrays] is not uint length) {
                 throw new ArgumentException(nameof(length));
             }
 
             for (int i = 0; i < Factors; i++) {
-                if (!(args[i] is CudaArray<float> arr) || arr.Length < 1) {
+                if (args[i] is not CudaArray<float> arr || arr.Length < 1) {
                     throw new ArgumentException($"{nameof(arr)}[{i}]");
                 }
             }
 
             for (int i = Factors; i < Factors + Arrays; i++) {
-                if (!(args[i] is CudaArray<float> arr) || arr.Length < length) {
+                if (args[i] is not CudaArray<float> arr || arr.Length < length) {
                     throw new ArgumentException($"{nameof(arr)}[{i}]");
                 }
             }

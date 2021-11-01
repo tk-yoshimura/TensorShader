@@ -19,7 +19,7 @@ namespace TensorShaderCudaBackend.Shaders.Batchwise {
         /// <param name="batches">バッチ数</param>
         public BatchwiseMul(uint batches) {
             if (batches < 1) {
-                throw new ArgumentException(nameof(batches));
+                throw new ArgumentException(null, nameof(batches));
             }
 
             this.Batches = batches;
@@ -81,22 +81,22 @@ namespace TensorShaderCudaBackend.Shaders.Batchwise {
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
             if (args is null || args.Length != 4) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[3] is uint map_stride)) {
+            if (args[3] is not uint map_stride) {
                 throw new ArgumentException(nameof(map_stride));
             }
 
-            if (!(args[0] is CudaArray<float> vectorarr) || vectorarr.Length < Batches) {
+            if (args[0] is not CudaArray<float> vectorarr || vectorarr.Length < Batches) {
                 throw new ArgumentException(nameof(vectorarr));
             }
 
-            if (!(args[1] is CudaArray<float> inmaparr) || inmaparr.Length < (ulong)map_stride * Batches) {
+            if (args[1] is not CudaArray<float> inmaparr || inmaparr.Length < (ulong)map_stride * Batches) {
                 throw new ArgumentException(nameof(inmaparr));
             }
 
-            if (!(args[2] is CudaArray<float> outmaparr) || outmaparr.Length < (ulong)map_stride * Batches) {
+            if (args[2] is not CudaArray<float> outmaparr || outmaparr.Length < (ulong)map_stride * Batches) {
                 throw new ArgumentException(nameof(outmaparr));
             }
         }

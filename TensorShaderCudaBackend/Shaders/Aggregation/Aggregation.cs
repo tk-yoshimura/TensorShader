@@ -18,11 +18,11 @@ namespace TensorShaderCudaBackend.Shaders.Aggregation {
         /// <summary>コンストラクタ</summary>
         protected Aggregation(uint shared_memory_lines) {
             if (shared_memory_lines < 1) {
-                throw new ArgumentException(nameof(shared_memory_lines));
+                throw new ArgumentException(null, nameof(shared_memory_lines));
             }
 
             if (Kernel.MaxBlockSize > API.Cuda.CurrectDeviceProperty.SharedMemoryBytesPerBlock / shared_memory_lines / sizeof(float)) {
-                throw new ArgumentException(nameof(shared_memory_lines));
+                throw new ArgumentException(null, nameof(shared_memory_lines));
             }
 
             this.SharedMemoryLines = shared_memory_lines;
@@ -72,29 +72,29 @@ namespace TensorShaderCudaBackend.Shaders.Aggregation {
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
             if (args is null || args.Length != 5) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[2] is uint inmap_stride) || inmap_stride < 1) {
+            if (args[2] is not uint inmap_stride || inmap_stride < 1) {
                 throw new ArgumentException(nameof(inmap_stride));
             }
 
-            if (!(args[3] is uint outmap_stride) || outmap_stride < 1 || inmap_stride % outmap_stride != 0) {
+            if (args[3] is not uint outmap_stride || outmap_stride < 1 || inmap_stride % outmap_stride != 0) {
                 throw new ArgumentException(nameof(outmap_stride));
             }
 
-            if (!(args[4] is uint slides)) {
+            if (args[4] is not uint slides) {
                 throw new ArgumentException(nameof(slides));
             }
 
             uint inmap_length = inmap_stride * slides;
             uint outmap_length = outmap_stride * slides;
 
-            if (!(args[0] is CudaArray<float> inmap) || inmap.Length < inmap_length) {
+            if (args[0] is not CudaArray<float> inmap || inmap.Length < inmap_length) {
                 throw new ArgumentException(nameof(inmap));
             }
 
-            if (!(args[1] is CudaArray<float> outmap) || outmap.Length < outmap_length) {
+            if (args[1] is not CudaArray<float> outmap || outmap.Length < outmap_length) {
                 throw new ArgumentException(nameof(outmap));
             }
         }

@@ -17,7 +17,7 @@ namespace TensorShader.Operators.ArrayManipulation {
             }
 
             if (expands < 1) {
-                throw new ArgumentException(nameof(expands));
+                throw new ArgumentException(null, nameof(expands));
             }
 
             int[] s = shape;

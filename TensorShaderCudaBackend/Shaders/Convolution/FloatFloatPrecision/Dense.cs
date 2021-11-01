@@ -24,10 +24,10 @@ namespace TensorShaderCudaBackend.Shaders.Convolution.FloatFloatPrecision {
         /// <summary>コンストラクタ</summary>
         public Dense(uint inchannels, uint outchannels) {
             if (inchannels < 1 || inchannels > Limits.Channels) {
-                throw new ArgumentException(nameof(inchannels));
+                throw new ArgumentException(null, nameof(inchannels));
             }
             if (outchannels < 1 || outchannels > Limits.Channels) {
-                throw new ArgumentException(nameof(outchannels));
+                throw new ArgumentException(null, nameof(outchannels));
             }
 
             this.InChannels = inchannels;
@@ -105,22 +105,22 @@ namespace TensorShaderCudaBackend.Shaders.Convolution.FloatFloatPrecision {
         /// <summary>引数チェック</summary>
         protected override void CheckArgument(params object[] args) {
             if (args is null || args.Length != 4) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[3] is uint batches) || !Limits.CheckBatches(batches)) {
+            if (args[3] is not uint batches || !Limits.CheckBatches(batches)) {
                 throw new ArgumentException(nameof(batches));
             }
 
-            if (!(args[0] is CudaArray<float> inmap) || inmap.Length < InChannels * batches) {
+            if (args[0] is not CudaArray<float> inmap || inmap.Length < InChannels * batches) {
                 throw new ArgumentException(nameof(inmap));
             }
 
-            if (!(args[1] is CudaArray<float> outmap) || outmap.Length < OutChannels * batches) {
+            if (args[1] is not CudaArray<float> outmap || outmap.Length < OutChannels * batches) {
                 throw new ArgumentException(nameof(outmap));
             }
 
-            if (!(args[2] is CudaArray<float> filter) || filter.Length < InChannels * OutChannels) {
+            if (args[2] is not CudaArray<float> filter || filter.Length < InChannels * OutChannels) {
                 throw new ArgumentException(nameof(filter));
             }
         }

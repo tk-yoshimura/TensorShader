@@ -38,18 +38,18 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         /// <summary>引数チェック</summary>
         protected override void CheckArgument(params object[] args) {
             if (args is null || args.Length != 3) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[2] is uint n) || n < 1) {
+            if (args[2] is not uint n || n < 1) {
                 throw new ArgumentException(nameof(n));
             }
 
-            if (!(args[0] is CudaArray<float> inmap) || inmap.Length < n * 2) {
+            if (args[0] is not CudaArray<float> inmap || inmap.Length < n * 2) {
                 throw new ArgumentException(nameof(inmap));
             }
 
-            if (!(args[1] is CudaArray<float> outmap) || outmap.Length < n) {
+            if (args[1] is not CudaArray<float> outmap || outmap.Length < n) {
                 throw new ArgumentException(nameof(outmap));
             }
         }

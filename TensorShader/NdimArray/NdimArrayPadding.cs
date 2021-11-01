@@ -14,7 +14,7 @@ namespace TensorShader {
 
             foreach ((int pa, int pb) in pads) {
                 if (pa < 0 || pb < 0) {
-                    throw new ArgumentException(nameof(pads));
+                    throw new ArgumentException(null, nameof(pads));
                 }
             }
 
@@ -50,7 +50,7 @@ namespace TensorShader {
 
             foreach ((int pa, int pb) in pads) {
                 if (pa < 0 || pb < 0) {
-                    throw new ArgumentException(nameof(pads));
+                    throw new ArgumentException(null, nameof(pads));
                 }
             }
 

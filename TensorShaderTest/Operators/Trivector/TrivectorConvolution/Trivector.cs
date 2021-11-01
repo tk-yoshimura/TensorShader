@@ -24,7 +24,7 @@ namespace TensorShaderTest.Operators.Trivector {
                 else if (index == 2) {
                     return Z;
                 }
-                throw new ArgumentException(nameof(index));
+                throw new ArgumentException(null, nameof(index));
             }
         }
 

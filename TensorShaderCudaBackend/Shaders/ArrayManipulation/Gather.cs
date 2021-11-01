@@ -15,7 +15,7 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         /// <summary>コンストラクタ</summary>
         public Gather(uint arrays) {
             if (arrays < 2) {
-                throw new ArgumentException(nameof(arrays));
+                throw new ArgumentException(null, nameof(arrays));
             }
 
             this.Arrays = arrays;
@@ -52,22 +52,22 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
             if (args is null || args.Length != Arrays + 2) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[Arrays + 1] is uint length) || length % Arrays != 0) {
+            if (args[Arrays + 1] is not uint length || length % Arrays != 0) {
                 throw new ArgumentException(nameof(length));
             }
 
             uint n = length / Arrays;
 
             for (uint i = 0; i < Arrays; i++) {
-                if (!(args[i] is CudaArray<float> xarr) || xarr.Length < n) {
+                if (args[i] is not CudaArray<float> xarr || xarr.Length < n) {
                     throw new ArgumentException($"{nameof(xarr)}[{i}]");
                 }
             }
 
-            if (!(args[Arrays] is CudaArray<float> yarr) || yarr.Length < length) {
+            if (args[Arrays] is not CudaArray<float> yarr || yarr.Length < length) {
                 throw new ArgumentException(nameof(yarr));
             }
         }

@@ -116,7 +116,7 @@ namespace TensorShader {
         internal TensorNode(Shape shape, Tensor tensor = null, params Node[] innodes)
             : base(shape, innodes) {
             if (tensor is not null && tensor.Shape != shape) {
-                throw new ArgumentException(nameof(tensor));
+                throw new ArgumentException(null, nameof(tensor));
             }
 
             this.Tensor = tensor;
@@ -125,7 +125,7 @@ namespace TensorShader {
         /// <summary>テンソル対応付け</summary>
         internal void AssignTensor(Tensor tensor) {
             if (tensor is null || tensor.Shape != Shape) {
-                throw new ArgumentException(nameof(tensor));
+                throw new ArgumentException(null, nameof(tensor));
             }
 
             if (this.Tensor is not null) {
@@ -227,15 +227,15 @@ namespace TensorShader {
         public FunctionNode(Function function, VariableNode[] innodes, VariableNode[] outnodes)
             : base(innodes, outnodes) {
             if (function.Inputs != innodes.Length || function.Outputs != outnodes.Length) {
-                throw new ArgumentException(nameof(function));
+                throw new ArgumentException(null, nameof(function));
             }
 
             if (innodes.Any((node) => node is OutputNode)) {
-                throw new ArgumentException(nameof(innodes));
+                throw new ArgumentException(null, nameof(innodes));
             }
 
             if (outnodes.Any((node) => node is InputNode)) {
-                throw new ArgumentException(nameof(outnodes));
+                throw new ArgumentException(null, nameof(outnodes));
             }
 
             this.Function = function;

@@ -152,10 +152,10 @@ namespace TensorShader {
             }
 
             if (type == ShapeType.Scalar && shape.Length > 0) {
-                throw new ArgumentException(nameof(type));
+                throw new ArgumentException(null, nameof(type));
             }
             if (type == ShapeType.Vector && shape.Length > 1) {
-                throw new ArgumentException(nameof(type));
+                throw new ArgumentException(null, nameof(type));
             }
 
             if (shape.Length == 1) {
@@ -211,7 +211,7 @@ namespace TensorShader {
         /// <summary>1次元フィルタ</summary>
         public static Shape Kernel1D(int inchannels, int outchannels, int width) {
             if (width < 1 || width % 2 != 1) {
-                throw new ArgumentException(nameof(width));
+                throw new ArgumentException(null, nameof(width));
             }
 
             return new Shape(ShapeType.Kernel, inchannels, outchannels, width);

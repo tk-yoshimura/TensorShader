@@ -16,7 +16,7 @@ namespace TensorShader.Operators.Connection2D {
         /// <summary>コンストラクタ</summary>
         protected Zoom(string funcname, int inwidth, int inheight, int channels, int scale, int batch = 1) {
             if (scale < 2) {
-                throw new ArgumentException(nameof(scale));
+                throw new ArgumentException(null, nameof(scale));
             }
 
             this.arguments = new List<(ArgumentType type, Shape shape)>{

@@ -26,13 +26,13 @@ namespace TensorShaderUtil.BatchGenerator {
                 throw new ArgumentNullException(nameof(data_shape));
             }
             if (data_shape.Batch > 1) {
-                throw new ArgumentException(nameof(data_shape));
+                throw new ArgumentException(null, nameof(data_shape));
             }
             if (!(new ShapeType[] { ShapeType.Scalar, ShapeType.Vector, ShapeType.Map }.Contains(data_shape.Type))) {
-                throw new ArgumentException(nameof(data_shape));
+                throw new ArgumentException(null, nameof(data_shape));
             }
             if (num_batches < 1) {
-                throw new ArgumentException(nameof(num_batches));
+                throw new ArgumentException(null, nameof(num_batches));
             }
 
             this.DataShape = data_shape;

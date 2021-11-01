@@ -18,10 +18,10 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         /// <summary>コンストラクタ</summary>
         public Scatter(uint arrays, uint index) {
             if (arrays < 2) {
-                throw new ArgumentException(nameof(arrays));
+                throw new ArgumentException(null, nameof(arrays));
             }
             if (index >= arrays) {
-                throw new ArgumentException(nameof(index));
+                throw new ArgumentException(null, nameof(index));
             }
 
             this.Arrays = arrays;
@@ -56,20 +56,20 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
             if (args is null || args.Length != 3) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[2] is uint length) || length % Arrays != 0) {
+            if (args[2] is not uint length || length % Arrays != 0) {
                 throw new ArgumentException(nameof(length));
             }
 
             uint n = length / Arrays;
 
-            if (!(args[0] is CudaArray<float> xarr) || xarr.Length < length) {
+            if (args[0] is not CudaArray<float> xarr || xarr.Length < length) {
                 throw new ArgumentException(nameof(xarr));
             }
 
-            if (!(args[1] is CudaArray<float> yarr) || yarr.Length < n) {
+            if (args[1] is not CudaArray<float> yarr || yarr.Length < n) {
                 throw new ArgumentException(nameof(yarr));
             }
         }

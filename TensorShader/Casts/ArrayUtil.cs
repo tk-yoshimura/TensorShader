@@ -259,7 +259,7 @@ namespace TensorShader {
         /// <summary>2次元配列化</summary>
         public static T[,] To2DArray<T>(this T[] vs, (int, int) length) where T : struct, IComparable {
             if (vs.Length != length.Item1 * length.Item2) {
-                throw new ArgumentException(nameof(length));
+                throw new ArgumentException(null, nameof(length));
             }
 
             T[,] us = new T[length.Item2, length.Item1];
@@ -271,7 +271,7 @@ namespace TensorShader {
         /// <summary>1次元配列配列化</summary>
         public static T[][] To1DArrays<T>(this T[] vs, int length, int batch) where T : struct, IComparable {
             if (vs.Length != length * batch) {
-                throw new ArgumentException(nameof(length));
+                throw new ArgumentException(null, nameof(length));
             }
 
             T[][] us = (new T[batch][]).Select((_) => new T[length]).ToArray();
@@ -286,7 +286,7 @@ namespace TensorShader {
         /// <summary>3次元配列化</summary>
         public static T[,,] To3DArray<T>(this T[] vs, (int, int, int) length) where T : struct, IComparable {
             if (vs.Length != length.Item1 * length.Item2 * length.Item3) {
-                throw new ArgumentException(nameof(length));
+                throw new ArgumentException(null, nameof(length));
             }
 
             T[,,] us = new T[length.Item3, length.Item2, length.Item1];
@@ -298,7 +298,7 @@ namespace TensorShader {
         /// <summary>2次元配列配列化</summary>
         public static T[][,] To2DArrays<T>(this T[] vs, (int, int) length, int batch) where T : struct, IComparable {
             if (vs.Length != length.Item1 * length.Item2 * batch) {
-                throw new ArgumentException(nameof(length));
+                throw new ArgumentException(null, nameof(length));
             }
 
             T[][,] us = (new T[batch][,]).Select((_) => new T[length.Item2, length.Item1]).ToArray();
@@ -313,7 +313,7 @@ namespace TensorShader {
         /// <summary>4次元配列化</summary>
         public static T[,,,] To4DArray<T>(this T[] vs, (int, int, int, int) length) where T : struct, IComparable {
             if (vs.Length != length.Item1 * length.Item2 * length.Item3 * length.Item4) {
-                throw new ArgumentException(nameof(length));
+                throw new ArgumentException(null, nameof(length));
             }
 
             T[,,,] us = new T[length.Item4, length.Item3, length.Item2, length.Item1];
@@ -325,7 +325,7 @@ namespace TensorShader {
         /// <summary>3次元配列配列化</summary>
         public static T[][,,] To3DArrays<T>(this T[] vs, (int, int, int) length, int batch) where T : struct, IComparable {
             if (vs.Length != length.Item1 * length.Item2 * length.Item3 * batch) {
-                throw new ArgumentException(nameof(length));
+                throw new ArgumentException(null, nameof(length));
             }
 
             T[][,,] us = (new T[batch][,,]).Select((_) => new T[length.Item3, length.Item2, length.Item1]).ToArray();
@@ -340,7 +340,7 @@ namespace TensorShader {
         /// <summary>5次元配列化</summary>
         public static T[,,,,] To5DArray<T>(this T[] vs, (int, int, int, int, int) length) where T : struct, IComparable {
             if (vs.Length != length.Item1 * length.Item2 * length.Item3 * length.Item4 * length.Item5) {
-                throw new ArgumentException(nameof(length));
+                throw new ArgumentException(null, nameof(length));
             }
 
             T[,,,,] us = new T[length.Item5, length.Item4, length.Item3, length.Item2, length.Item1];
@@ -352,7 +352,7 @@ namespace TensorShader {
         /// <summary>4次元配列配列化</summary>
         public static T[][,,,] To4DArrays<T>(this T[] vs, (int, int, int, int) length, int batch) where T : struct, IComparable {
             if (vs.Length != length.Item1 * length.Item2 * length.Item3 * length.Item4 * batch) {
-                throw new ArgumentException(nameof(length));
+                throw new ArgumentException(null, nameof(length));
             }
 
             T[][,,,] us = (new T[batch][,,,]).Select((_) => new T[length.Item4, length.Item3, length.Item2, length.Item1]).ToArray();

@@ -17,7 +17,7 @@ namespace TensorShaderTest.Operators.ConnectionDense {
             int length = checked(inchannels * outchannels);
 
             if (!(val is null) && val.Length != length) {
-                throw new ArgumentException(nameof(val));
+                throw new ArgumentException(null, nameof(val));
             }
 
             this.val = (val is null) ? new double[length] : val.Select((v) => (double)v).ToArray();

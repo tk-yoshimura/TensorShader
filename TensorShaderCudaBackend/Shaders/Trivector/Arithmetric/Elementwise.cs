@@ -20,7 +20,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Arithmetric {
         /// <param name="name">関数名</param>
         public Elementwise(int arrays, string name) {
             if (arrays < 1) {
-                throw new ArgumentException(nameof(arrays));
+                throw new ArgumentException(null, nameof(arrays));
             }
 
             this.Arrays = arrays;
@@ -42,15 +42,15 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Arithmetric {
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
             if (args is null || args.Length != Arrays + 1) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[Arrays] is uint length) || length % 3 != 0) {
+            if (args[Arrays] is not uint length || length % 3 != 0) {
                 throw new ArgumentException(nameof(length));
             }
 
             for (int i = 0; i < Arrays; i++) {
-                if (!(args[i] is CudaArray<float> arr) || arr.Length < length) {
+                if (args[i] is not CudaArray<float> arr || arr.Length < length) {
                     throw new ArgumentException($"{nameof(arr)}[{i}]");
                 }
             }

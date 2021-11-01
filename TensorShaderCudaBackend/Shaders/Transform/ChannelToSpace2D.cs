@@ -22,10 +22,10 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
         /// <summary>コンストラクタ</summary>
         public ChannelToSpace2D(uint scale, uint outchannels) {
             if (!Limits.CheckChannels(outchannels)) {
-                throw new ArgumentException(nameof(outchannels));
+                throw new ArgumentException(null, nameof(outchannels));
             }
             if (scale < 2) {
-                throw new ArgumentException(nameof(scale));
+                throw new ArgumentException(null, nameof(scale));
             }
 
             this.InChannels = outchannels * scale * scale;
@@ -80,28 +80,28 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
             if (args is null || args.Length != 5) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[2] is uint inwidth) || !Limits.CheckWidth(inwidth)) {
+            if (args[2] is not uint inwidth || !Limits.CheckWidth(inwidth)) {
                 throw new ArgumentException(nameof(inwidth));
             }
 
-            if (!(args[3] is uint inheight) || !Limits.CheckHeight(inheight)) {
+            if (args[3] is not uint inheight || !Limits.CheckHeight(inheight)) {
                 throw new ArgumentException(nameof(inheight));
             }
 
-            if (!(args[4] is uint batches) || !Limits.CheckBatches(batches)) {
+            if (args[4] is not uint batches || !Limits.CheckBatches(batches)) {
                 throw new ArgumentException(nameof(batches));
             }
 
             uint length = batches * InChannels * inwidth * inheight;
 
-            if (!(args[0] is CudaArray<float> inmap) || inmap.Length < length) {
+            if (args[0] is not CudaArray<float> inmap || inmap.Length < length) {
                 throw new ArgumentException(nameof(inmap));
             }
 
-            if (!(args[1] is CudaArray<float> outmap) || outmap.Length < length) {
+            if (args[1] is not CudaArray<float> outmap || outmap.Length < length) {
                 throw new ArgumentException(nameof(outmap));
             }
         }

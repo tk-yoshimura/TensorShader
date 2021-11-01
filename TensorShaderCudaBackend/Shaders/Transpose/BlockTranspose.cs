@@ -24,7 +24,7 @@ namespace TensorShaderCudaBackend.Shaders.Transpose {
         /// <summary>コンストラクタ</summary>
         public BlockTranspose(uint block, uint n, uint m) {
             if (!Limits.CheckChannels(block)) {
-                throw new ArgumentException(nameof(block));
+                throw new ArgumentException(null, nameof(block));
             }
 
             this.Block = block;
@@ -76,16 +76,16 @@ namespace TensorShaderCudaBackend.Shaders.Transpose {
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
             if (args is null || args.Length != 2) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
             uint length = Block * N * M;
 
-            if (!(args[0] is CudaArray<float> inmap) || inmap.Length < length) {
+            if (args[0] is not CudaArray<float> inmap || inmap.Length < length) {
                 throw new ArgumentException(nameof(inmap));
             }
 
-            if (!(args[1] is CudaArray<float> outmap) || outmap.Length < length) {
+            if (args[1] is not CudaArray<float> outmap || outmap.Length < length) {
                 throw new ArgumentException(nameof(outmap));
             }
         }

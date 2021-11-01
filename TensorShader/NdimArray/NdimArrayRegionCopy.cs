@@ -22,7 +22,7 @@ namespace TensorShader {
                 int p = ps[i];
 
                 if (p < 0 || p + src_arr.Shape[i] > dst_arr.Shape[i]) {
-                    throw new ArgumentException(nameof(ps));
+                    throw new ArgumentException(null, nameof(ps));
                 }
             }
 

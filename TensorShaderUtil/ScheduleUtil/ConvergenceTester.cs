@@ -26,10 +26,10 @@ namespace TensorShaderUtil.ScheduleUtil {
         /// <param name="threshold">標本相関係数しきい値</param>
         public ConvergenceTester(int length, double threshold) {
             if (length < 2) {
-                throw new ArgumentException(nameof(length));
+                throw new ArgumentException(null, nameof(length));
             }
             if (threshold <= 0 || !(threshold < 1)) {
-                throw new ArgumentException(nameof(threshold));
+                throw new ArgumentException(null, nameof(threshold));
             }
 
             this.losses = new double[length];

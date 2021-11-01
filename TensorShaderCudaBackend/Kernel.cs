@@ -183,7 +183,7 @@ namespace TensorShaderCudaBackend {
         /// <remarks>常に2の冪数</remarks>
         public static uint DefaultBlockSize(uint indexes) {
             if (indexes < 1) {
-                throw new ArgumentException(nameof(indexes));
+                throw new ArgumentException(null, nameof(indexes));
             }
 
             const double occupancy = 0.8; /*スレッドの稼働率下限*/
@@ -231,7 +231,7 @@ namespace TensorShaderCudaBackend {
         /// <remarks>常に2の冪数</remarks>
         public static (uint x, uint y) MinimizeGridsBlockSize((uint x, uint y) indexes) {
             if (indexes.x < 1 || indexes.y < 1) {
-                throw new ArgumentException(nameof(indexes));
+                throw new ArgumentException(null, nameof(indexes));
             }
 
             uint block_x = 1, block_y = 1;

@@ -135,7 +135,7 @@ namespace TensorShaderCudaBackend {
         /// <summary>GPUメモリへ書き込み</summary>
         public void Write(T[] array, ulong count) {
             if (count > Length) {
-                throw new ArgumentException(nameof(count));
+                throw new ArgumentException(null, nameof(count));
             }
 
             Cuda.Memory.CopyHostToDevice(array, ptr, count);
@@ -144,7 +144,7 @@ namespace TensorShaderCudaBackend {
         /// <summary>GPUメモリから読み込み</summary>
         public void Read(T[] array, ulong count) {
             if (count > Length) {
-                throw new ArgumentException(nameof(count));
+                throw new ArgumentException(null, nameof(count));
             }
 
             Cuda.Memory.CopyDeviceToHost(ptr, array, count);

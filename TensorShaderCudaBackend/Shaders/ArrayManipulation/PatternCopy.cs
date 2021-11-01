@@ -66,49 +66,49 @@ namespace TensorShaderCudaBackend.Shaders.ArrayManipulation {
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
             if (args is null || args.Length != 10) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[2] is uint inmap_offset)) {
+            if (args[2] is not uint inmap_offset) {
                 throw new ArgumentException(nameof(inmap_offset));
             }
 
-            if (!(args[4] is uint outmap_offset)) {
+            if (args[4] is not uint outmap_offset) {
                 throw new ArgumentException(nameof(outmap_offset));
             }
 
-            if (!(args[8] is uint copy_length) || copy_length < 1) {
+            if (args[8] is not uint copy_length || copy_length < 1) {
                 throw new ArgumentException(nameof(copy_length));
             }
 
-            if (!(args[6] is uint inmap_stride) || inmap_stride < copy_length) {
+            if (args[6] is not uint inmap_stride || inmap_stride < copy_length) {
                 throw new ArgumentException(nameof(inmap_stride));
             }
 
-            if (!(args[7] is uint outmap_stride) || outmap_stride < copy_length) {
+            if (args[7] is not uint outmap_stride || outmap_stride < copy_length) {
                 throw new ArgumentException(nameof(outmap_stride));
             }
 
-            if (!(args[3] is uint inmap_index) || inmap_index + copy_length > inmap_stride) {
+            if (args[3] is not uint inmap_index || inmap_index + copy_length > inmap_stride) {
                 throw new ArgumentException(nameof(inmap_index));
             }
 
-            if (!(args[5] is uint outmap_index) || outmap_index + copy_length > outmap_stride) {
+            if (args[5] is not uint outmap_index || outmap_index + copy_length > outmap_stride) {
                 throw new ArgumentException(nameof(outmap_index));
             }
 
-            if (!(args[9] is uint slides)) {
+            if (args[9] is not uint slides) {
                 throw new ArgumentException(nameof(slides));
             }
 
             uint inmap_length = inmap_offset + inmap_stride * slides;
             uint outmap_length = outmap_offset + outmap_stride * slides;
 
-            if (!(args[0] is CudaArray<float> inmap) || inmap.Length < inmap_length) {
+            if (args[0] is not CudaArray<float> inmap || inmap.Length < inmap_length) {
                 throw new ArgumentException(nameof(inmap));
             }
 
-            if (!(args[1] is CudaArray<float> outmap) || outmap.Length < outmap_length) {
+            if (args[1] is not CudaArray<float> outmap || outmap.Length < outmap_length) {
                 throw new ArgumentException(nameof(outmap));
             }
         }

@@ -27,10 +27,10 @@ namespace TensorShaderCudaBackend.Shaders.Channelwise {
         /// <param name="name">関数名</param>
         public Channelwise(uint channels, int map_arrays, string name) {
             if (channels < 1) {
-                throw new ArgumentException(nameof(channels));
+                throw new ArgumentException(null, nameof(channels));
             }
             if (map_arrays < 1) {
-                throw new ArgumentException(nameof(map_arrays));
+                throw new ArgumentException(null, nameof(map_arrays));
             }
 
             this.Channels = channels;
@@ -64,20 +64,20 @@ namespace TensorShaderCudaBackend.Shaders.Channelwise {
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
             if (args is null || args.Length != MapArrays + 2) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[MapArrays + 1] is uint length) || length < 0) {
+            if (args[MapArrays + 1] is not uint length || length < 0) {
                 throw new ArgumentException(nameof(length));
             }
 
 
-            if (!(args[0] is CudaArray<float> vectorarr) || vectorarr.Length < Channels) {
+            if (args[0] is not CudaArray<float> vectorarr || vectorarr.Length < Channels) {
                 throw new ArgumentException(nameof(vectorarr));
             }
 
             for (int i = 1; i < MapArrays + 1; i++) {
-                if (!(args[i] is CudaArray<float> arr) || arr.Length < length) {
+                if (args[i] is not CudaArray<float> arr || arr.Length < length) {
                     throw new ArgumentException($"{nameof(arr)}[{i}]");
                 }
             }

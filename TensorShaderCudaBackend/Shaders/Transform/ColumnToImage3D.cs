@@ -26,7 +26,7 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
         /// <summary>コンストラクタ</summary>
         public ColumnToImage3D(uint channels, uint kwidth, uint kheight, uint kdepth) {
             if (!Limits.CheckChannels(channels)) {
-                throw new ArgumentException($"{nameof(channels)}");
+                throw new ArgumentException(null, $"{nameof(channels)}");
             }
             if (!Limits.CheckKernelSize(kwidth, kheight, kdepth)) {
                 throw new ArgumentException($"{nameof(kwidth)}, {nameof(kheight)}, {nameof(kdepth)}");
@@ -120,22 +120,22 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
         /// <summary>引数チェック</summary>
         protected override void CheckArgument(params object[] args) {
             if (args is null || args.Length != 6) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[2] is uint inwidth) || !Limits.CheckWidth(inwidth)) {
+            if (args[2] is not uint inwidth || !Limits.CheckWidth(inwidth)) {
                 throw new ArgumentException(nameof(inwidth));
             }
 
-            if (!(args[3] is uint inheight) || !Limits.CheckHeight(inheight)) {
+            if (args[3] is not uint inheight || !Limits.CheckHeight(inheight)) {
                 throw new ArgumentException(nameof(inheight));
             }
 
-            if (!(args[4] is uint indepth) || !Limits.CheckDepth(indepth)) {
+            if (args[4] is not uint indepth || !Limits.CheckDepth(indepth)) {
                 throw new ArgumentException(nameof(indepth));
             }
 
-            if (!(args[5] is uint batches) || !Limits.CheckBatches(batches)) {
+            if (args[5] is not uint batches || !Limits.CheckBatches(batches)) {
                 throw new ArgumentException(nameof(batches));
             }
 
@@ -143,13 +143,13 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
             uint outheight = inheight + KernelHeight - 1;
             uint outdepth = indepth + KernelDepth - 1;
 
-            if (!(args[0] is CudaArray<float> inmap)
+            if (args[0] is not CudaArray<float> inmap
                 || inmap.Length < KernelWidth * KernelHeight * KernelDepth * Channels * inwidth * inheight * indepth * batches) {
 
                 throw new ArgumentException(nameof(inmap));
             }
 
-            if (!(args[1] is CudaArray<float> outmap) || outmap.Length < Channels * outwidth * outheight * outdepth * batches) {
+            if (args[1] is not CudaArray<float> outmap || outmap.Length < Channels * outwidth * outheight * outdepth * batches) {
 
                 throw new ArgumentException(nameof(outmap));
             }

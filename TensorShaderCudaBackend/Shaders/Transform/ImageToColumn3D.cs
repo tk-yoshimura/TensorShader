@@ -26,7 +26,7 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
         /// <summary>コンストラクタ</summary>
         public ImageToColumn3D(uint channels, uint kwidth, uint kheight, uint kdepth) {
             if (!Limits.CheckChannels(channels)) {
-                throw new ArgumentException($"{nameof(channels)}");
+                throw new ArgumentException(null, $"{nameof(channels)}");
             }
             if (!Limits.CheckKernelSize(kwidth, kheight, kdepth)) {
                 throw new ArgumentException($"{nameof(kwidth)}, {nameof(kheight)}, {nameof(kdepth)}");
@@ -101,22 +101,22 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
         /// <summary>引数チェック</summary>
         protected override void CheckArgument(params object[] args) {
             if (args is null || args.Length != 6) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[2] is uint inwidth) || !Limits.CheckWidth(inwidth, KernelWidth)) {
+            if (args[2] is not uint inwidth || !Limits.CheckWidth(inwidth, KernelWidth)) {
                 throw new ArgumentException(nameof(inwidth));
             }
 
-            if (!(args[3] is uint inheight) || !Limits.CheckHeight(inheight, KernelHeight)) {
+            if (args[3] is not uint inheight || !Limits.CheckHeight(inheight, KernelHeight)) {
                 throw new ArgumentException(nameof(inheight));
             }
 
-            if (!(args[4] is uint indepth) || !Limits.CheckDepth(indepth, KernelDepth)) {
+            if (args[4] is not uint indepth || !Limits.CheckDepth(indepth, KernelDepth)) {
                 throw new ArgumentException(nameof(inheight));
             }
 
-            if (!(args[5] is uint batches) || !Limits.CheckBatches(batches)) {
+            if (args[5] is not uint batches || !Limits.CheckBatches(batches)) {
                 throw new ArgumentException(nameof(batches));
             }
 
@@ -124,11 +124,11 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
             uint outheight = inheight + 1 - KernelHeight;
             uint outdepth = indepth + 1 - KernelDepth;
 
-            if (!(args[0] is CudaArray<float> inmap) || inmap.Length < Channels * inwidth * inheight * indepth * batches) {
+            if (args[0] is not CudaArray<float> inmap || inmap.Length < Channels * inwidth * inheight * indepth * batches) {
                 throw new ArgumentException(nameof(inmap));
             }
 
-            if (!(args[1] is CudaArray<float> outmap)
+            if (args[1] is not CudaArray<float> outmap
                 || outmap.Length < KernelWidth * KernelHeight * Channels * outwidth * outheight * outdepth * batches) {
 
                 throw new ArgumentException(nameof(outmap));

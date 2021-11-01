@@ -22,7 +22,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution.CudnnImplement {
             CheckArgument(args);
 
             if (controller.Stream != stream) {
-                throw new ArgumentException(nameof(stream));
+                throw new ArgumentException(null, nameof(stream));
             }
 
             CudaArray<float> inmap = args[0] as CudaArray<float>;
@@ -71,49 +71,49 @@ namespace TensorShaderCudaBackend.Shaders.Convolution.CudnnImplement {
         /// <summary>引数チェック</summary>
         protected override void CheckArgument(params object[] args) {
             if (args is null || args.Length != 10) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[3] is uint inchannels) || !Limits.CheckChannels(inchannels)) {
+            if (args[3] is not uint inchannels || !Limits.CheckChannels(inchannels)) {
                 throw new ArgumentException(nameof(inchannels));
             }
 
-            if (!(args[4] is uint outchannels) || !Limits.CheckChannels(outchannels)) {
+            if (args[4] is not uint outchannels || !Limits.CheckChannels(outchannels)) {
                 throw new ArgumentException(nameof(outchannels));
             }
 
-            if (!(args[5] is uint kwidth) || !Limits.CheckKernelSize(kwidth)) {
+            if (args[5] is not uint kwidth || !Limits.CheckKernelSize(kwidth)) {
                 throw new ArgumentException(nameof(kwidth));
             }
 
-            if (!(args[6] is uint kheight) || !Limits.CheckKernelSize(kheight)) {
+            if (args[6] is not uint kheight || !Limits.CheckKernelSize(kheight)) {
                 throw new ArgumentException(nameof(kheight));
             }
 
-            if (!(args[7] is uint inwidth) || !Limits.CheckWidth(inwidth)) {
+            if (args[7] is not uint inwidth || !Limits.CheckWidth(inwidth)) {
                 throw new ArgumentException(nameof(inwidth));
             }
 
-            if (!(args[8] is uint inheight) || !Limits.CheckHeight(inheight)) {
+            if (args[8] is not uint inheight || !Limits.CheckHeight(inheight)) {
                 throw new ArgumentException(nameof(inheight));
             }
 
-            if (!(args[9] is uint batches) || !Limits.CheckBatches(batches)) {
+            if (args[9] is not uint batches || !Limits.CheckBatches(batches)) {
                 throw new ArgumentException(nameof(batches));
             }
 
             uint outwidth = inwidth + kwidth - 1;
             uint outheight = inheight + kheight - 1;
 
-            if (!(args[0] is CudaArray<float> inmap) || inmap.Length < inchannels * inwidth * inheight * batches) {
+            if (args[0] is not CudaArray<float> inmap || inmap.Length < inchannels * inwidth * inheight * batches) {
                 throw new ArgumentException(nameof(inmap));
             }
 
-            if (!(args[1] is CudaArray<float> outmap) || outmap.Length < outchannels * outwidth * outheight * batches) {
+            if (args[1] is not CudaArray<float> outmap || outmap.Length < outchannels * outwidth * outheight * batches) {
                 throw new ArgumentException(nameof(outmap));
             }
 
-            if (!(args[2] is CudaArray<float> filter) || filter.Length < inchannels * outchannels * kwidth * kheight) {
+            if (args[2] is not CudaArray<float> filter || filter.Length < inchannels * outchannels * kwidth * kheight) {
                 throw new ArgumentException(nameof(filter));
             }
         }

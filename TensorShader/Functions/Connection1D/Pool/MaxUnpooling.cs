@@ -39,7 +39,7 @@ namespace TensorShader.Functions.Connection1D {
             : base(inputs: 3, outputs: 1, allow_resubstitution: false) {
 
             if (stride < 2) {
-                throw new ArgumentException(nameof(stride));
+                throw new ArgumentException(null, nameof(stride));
             }
 
             this.Stride = stride;

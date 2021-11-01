@@ -59,28 +59,28 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Arithmetric {
         /// <summary>引数チェック</summary>
         protected override sealed void CheckArgument(params object[] args) {
             if (args is null || args.Length != 5) {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentException(null, nameof(args));
             }
 
-            if (!(args[4] is uint vector_length) || vector_length % 3 != 0) {
+            if (args[4] is not uint vector_length || vector_length % 3 != 0) {
                 throw new ArgumentException(nameof(vector_length));
             }
 
             uint quaternion_length = vector_length / 3 * 4;
 
-            if (!(args[0] is CudaArray<float> varr) || varr.Length < vector_length) {
+            if (args[0] is not CudaArray<float> varr || varr.Length < vector_length) {
                 throw new ArgumentException(nameof(varr));
             }
 
-            if (!(args[1] is CudaArray<float> uarr) || uarr.Length < vector_length) {
+            if (args[1] is not CudaArray<float> uarr || uarr.Length < vector_length) {
                 throw new ArgumentException(nameof(uarr));
             }
 
-            if (!(args[2] is CudaArray<float> qarr) || qarr.Length < quaternion_length) {
+            if (args[2] is not CudaArray<float> qarr || qarr.Length < quaternion_length) {
                 throw new ArgumentException(nameof(qarr));
             }
 
-            if (!(args[3] is CudaArray<float> parr) || parr.Length < quaternion_length) {
+            if (args[3] is not CudaArray<float> parr || parr.Length < quaternion_length) {
                 throw new ArgumentException(nameof(parr));
             }
         }

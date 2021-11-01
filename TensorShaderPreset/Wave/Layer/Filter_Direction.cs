@@ -11,7 +11,7 @@ namespace TensorShaderPreset.Wave {
         /// <summary>ハミング窓の有効周波数範囲</summary>
         public static (double hz_min, double hz_max) HammingWindowRange(int ksize, double dt) {
             if ((ksize & 1) != 1 || ksize < 9) {
-                throw new ArgumentException(nameof(ksize));
+                throw new ArgumentException(null, nameof(ksize));
             }
             if (!(dt > 0)) {
                 throw new ArgumentOutOfRangeException(nameof(dt));
@@ -30,7 +30,7 @@ namespace TensorShaderPreset.Wave {
         /// <returns>余弦波、正弦波</returns>
         public static (NdimArray<float> cos, NdimArray<float> sin) KernelHammingWindow(int ksize, double dt, double hz) {
             if ((ksize & 1) != 1) {
-                throw new ArgumentException(nameof(ksize));
+                throw new ArgumentException(null, nameof(ksize));
             }
             if (!(dt > 0)) {
                 throw new ArgumentOutOfRangeException(nameof(dt));

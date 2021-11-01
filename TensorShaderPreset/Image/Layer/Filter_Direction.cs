@@ -40,7 +40,7 @@ namespace TensorShaderPreset.Image {
         /// <param name="smoothness">フィルタの方向滑らかさ</param>
         public static NdimArray<float> KernelDirection(int dirs, int ksize = 5, double smoothness = 0.5) {
             if (dirs < 4 || dirs > 256 || (dirs & (dirs - 1)) != 0) {
-                throw new ArgumentException(nameof(dirs));
+                throw new ArgumentException(null, nameof(dirs));
             }
 
             (double[] c, double[] s) cossindir(int divdirs) {

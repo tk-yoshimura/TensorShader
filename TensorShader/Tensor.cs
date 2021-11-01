@@ -47,7 +47,7 @@ namespace TensorShader {
         /// <param name="value">初期値(任意指定)</param>
         internal Tensor(Shape shape, float[] value = null) {
             if (shape is null) {
-                throw new ArgumentException(nameof(shape));
+                throw new ArgumentException(null, nameof(shape));
             }
             if (value is not null && value.Length < shape.Length) {
                 throw new ArgumentException(ExceptionMessage.Argument($"{value}.Length", value.Length, shape.Length));
@@ -62,7 +62,7 @@ namespace TensorShader {
         /// <param name="array">バッファ</param>
         protected internal Tensor(Shape shape, CudaArray<float> array) {
             if (shape is null) {
-                throw new ArgumentException(nameof(shape));
+                throw new ArgumentException(null, nameof(shape));
             }
             if (array is null) {
                 throw new ArgumentNullException(nameof(array));
@@ -134,7 +134,7 @@ namespace TensorShader {
         /// <summary>形状変更</summary>
         public void Reshape(Shape shape) {
             if (Length != shape.Length) {
-                throw new ArgumentException(nameof(shape));
+                throw new ArgumentException(null, nameof(shape));
             }
 
             this.Shape = shape;
@@ -190,7 +190,7 @@ namespace TensorShader {
         internal OverflowCheckedTensor(Shape shape, float[] value = null)
             : base(shape, new float[shape.Length + canary_length]) {
             if (shape is null) {
-                throw new ArgumentException(nameof(shape));
+                throw new ArgumentException(null, nameof(shape));
             }
             if (value is not null) {
                 if (value.Length != shape.Length) {

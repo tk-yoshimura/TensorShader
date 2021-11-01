@@ -13,7 +13,7 @@ namespace TensorShader.Operators.ArrayManipulation {
         /// <summary>コンストラクタ</summary>
         public Sum(Shape shape, int num) {
             if (num < 1) {
-                throw new ArgumentException(nameof(num));
+                throw new ArgumentException(null, nameof(num));
             }
 
             this.arguments = new List<(ArgumentType type, Shape shape)>();

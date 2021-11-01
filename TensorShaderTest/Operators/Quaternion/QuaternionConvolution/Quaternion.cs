@@ -29,7 +29,7 @@ namespace TensorShaderTest.Operators.Quaternion {
                 else if (index == 3) {
                     return K;
                 }
-                throw new ArgumentException(nameof(index));
+                throw new ArgumentException(null, nameof(index));
             }
         }
 

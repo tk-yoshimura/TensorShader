@@ -18,7 +18,7 @@ namespace TensorShaderTest.Operators.Connection1D {
             int length = checked(inchannels * outchannels * kwidth);
 
             if (!(val is null) && val.Length != length) {
-                throw new ArgumentException(nameof(val));
+                throw new ArgumentException(null, nameof(val));
             }
 
             this.val = (val is null) ? new double[length] : val.Select((v) => (double)v).ToArray();

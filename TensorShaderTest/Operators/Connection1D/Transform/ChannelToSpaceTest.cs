@@ -69,7 +69,7 @@ namespace TensorShaderTest.Operators.Connection1D {
         public static Map1D Reference(Map1D x, int scale) {
             int inchannels = x.Channels, batch = x.Batch;
             if (inchannels % scale != 0) {
-                throw new ArgumentException(nameof(scale));
+                throw new ArgumentException(null, nameof(scale));
             }
 
             int inw = x.Width, outw = inw * scale;
