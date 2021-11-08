@@ -24,11 +24,11 @@ namespace TensorShaderCudaBackend.API {
                             handle, xDesc, wDesc, convDesc, yDesc, preference, memoryLimitInBytes, ref algo
                         );
                     }
-                    else if (Dll.CudaDll.CudnnVersion == 8){
+                    else if (Dll.CudaDll.CudnnVersion == 8) {
                         ConvolutionFwdAlgoPerf[] prefs = new ConvolutionFwdAlgoPerf[1];
                         GCHandle pinned_handle = GCHandle.Alloc(prefs, GCHandleType.Pinned);
                         int count = 0;
-                        
+
                         try {
                             IntPtr prefs_ptr = pinned_handle.AddrOfPinnedObject();
 

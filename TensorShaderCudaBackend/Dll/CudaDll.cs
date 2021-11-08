@@ -10,8 +10,7 @@ namespace TensorShaderCudaBackend.Dll {
         public static NativeDll Nvrtc { get; private set; } = null;
         public static NativeDll Cudnn { get; private set; } = null;
 
-        public static (NativeDll ops_infer, NativeDll ops_train, NativeDll cnn_infer, NativeDll cnn_train) CudnnSubset
-            { get; private set; } = (null, null, null, null);
+        public static (NativeDll ops_infer, NativeDll ops_train, NativeDll cnn_infer, NativeDll cnn_train) CudnnSubset { get; private set; } = (null, null, null, null);
 
         public static int CudnnVersion { get; private set; } = 0;
 

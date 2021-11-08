@@ -303,7 +303,7 @@ namespace TensorShaderCudaBackend.API {
                     IntPtr handle,
                     IntPtr xDesc, IntPtr x,
                     IntPtr wDesc, IntPtr w,
-                    IntPtr convDesc, 
+                    IntPtr convDesc,
                     IntPtr yDesc, IntPtr y,
                     int requestedAlgoCount,
                     ref int returnedAlgoCount,

@@ -18,7 +18,7 @@ namespace TensorShaderCudaBackend.API {
                 if (Dll.CudaDll.CudnnVersion == 7) {
                     status = NativeMethods.Version7.CudnnCreate.AsDelegate().Invoke(ref handle);
                 }
-                else if(Dll.CudaDll.CudnnVersion == 8) {
+                else if (Dll.CudaDll.CudnnVersion == 8) {
                     status = NativeMethods.Version8.CudnnCreate.AsDelegate().Invoke(ref handle);
                 }
                 if (status != Status.Success) {

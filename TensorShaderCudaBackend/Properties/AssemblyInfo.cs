@@ -21,6 +21,6 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("d0343c7a-36a5-4f87-89d9-c0bff56721f7")]
 
-[assembly: AssemblyVersion("5.5.0.*")]
+[assembly: AssemblyVersion("5.5.1.*")]
 
 [assembly: InternalsVisibleTo("TensorShaderCudaBackendTest")]
