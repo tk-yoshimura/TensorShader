@@ -39,8 +39,8 @@ namespace TensorShaderCudaBackend.Cudnn {
             float alpha = 1f, float beta = 0f) {
 
             API.Cudnn.ConvolutionFwdAlgo algo = API.Cudnn.Convolution.Forward.Algorithm(
-                handle, x_desc.Ptr, w_desc.Ptr, conv_desc.Ptr, y_desc.Ptr,
-                API.Cudnn.ConvolutionFwdPreference.SpecifyWorkspaceLimit, workspace_size_limit);
+                handle, x_desc.Ptr, x.Ptr, w_desc.Ptr, w.Ptr, conv_desc.Ptr, y_desc.Ptr, y.Ptr,
+                API.Cudnn.ConvolutionFwdPreference.SpecifyWorkspaceLimit, workspace, workspace_size_limit);
 
             float[] a = new float[] { alpha }, b = new float[] { beta };
             GCHandle pinned_a_handle = GCHandle.Alloc(a, GCHandleType.Pinned);
@@ -70,8 +70,8 @@ namespace TensorShaderCudaBackend.Cudnn {
             float alpha = 1f, float beta = 0f) {
 
             API.Cudnn.ConvolutionBwdDataAlgo algo = API.Cudnn.Convolution.BackwardData.Algorithm(
-                handle, w_desc.Ptr, dy_desc.Ptr, conv_desc.Ptr, dx_desc.Ptr,
-                API.Cudnn.ConvolutionBwdDataPreference.SpecifyWorkspaceLimit, workspace_size_limit);
+                handle, w_desc.Ptr, w.Ptr, dy_desc.Ptr, dy.Ptr, conv_desc.Ptr, dx_desc.Ptr, dx.Ptr,
+                API.Cudnn.ConvolutionBwdDataPreference.SpecifyWorkspaceLimit, workspace, workspace_size_limit);
 
             float[] a = new float[] { alpha }, b = new float[] { beta };
             GCHandle pinned_a_handle = GCHandle.Alloc(a, GCHandleType.Pinned);
@@ -101,8 +101,8 @@ namespace TensorShaderCudaBackend.Cudnn {
             float alpha = 1f, float beta = 0f) {
 
             API.Cudnn.ConvolutionBwdFilterAlgo algo = API.Cudnn.Convolution.BackwardFilter.Algorithm(
-                handle, x_desc.Ptr, dy_desc.Ptr, conv_desc.Ptr, dw_desc.Ptr,
-                API.Cudnn.ConvolutionBwdFilterPreference.SpecifyWorkspaceLimit, workspace_size_limit);
+                handle, x_desc.Ptr, x.Ptr, dy_desc.Ptr, dy.Ptr, conv_desc.Ptr, dw_desc.Ptr, dw.Ptr,
+                API.Cudnn.ConvolutionBwdFilterPreference.SpecifyWorkspaceLimit, workspace, workspace_size_limit);
 
             float[] a = new float[] { alpha }, b = new float[] { beta };
             GCHandle pinned_a_handle = GCHandle.Alloc(a, GCHandleType.Pinned);

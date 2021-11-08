@@ -1,12 +1,12 @@
 ﻿namespace TensorShaderCudaBackend.API {
     public static partial class Cudnn {
-        internal enum ConvolutionFwdPreference {
+        internal enum ConvolutionFwdPreference: int {
             NoWorkspace = 0,
             PreferFastest = 1,
             SpecifyWorkspaceLimit = 2,
         }
 
-        internal enum ConvolutionFwdAlgo {
+        internal enum ConvolutionFwdAlgo: int {
             ImplicitGemm = 0,
             ImplicitPrecompGemm = 1,
             Gemm = 2,
@@ -18,13 +18,13 @@
             Count = 8
         }
 
-        internal enum ConvolutionBwdFilterPreference {
+        internal enum ConvolutionBwdFilterPreference: int {
             NoWorkspace = 0,
             PreferFastest = 1,
             SpecifyWorkspaceLimit = 2,
         }
 
-        internal enum ConvolutionBwdFilterAlgo {
+        internal enum ConvolutionBwdFilterAlgo: int {
             Algo0 = 0,
             Algo1 = 1,
             Fft = 2,
@@ -35,13 +35,13 @@
             Count = 7
         }
 
-        internal enum ConvolutionBwdDataPreference {
+        internal enum ConvolutionBwdDataPreference: int {
             NoWorkspace = 0,
             PreferFastest = 1,
             SpecifyWorkspaceLimit = 2,
         }
 
-        internal enum ConvolutionBwdDataAlgo {
+        internal enum ConvolutionBwdDataAlgo: int {
             Algo0 = 0,
             Algo1 = 1,
             Fft = 2,
@@ -51,9 +51,21 @@
             Count = 6
         }
 
-        internal enum ConvolutionMode {
+        internal enum ConvolutionMode: int {
             Convolution = 0,
             CrossCorrelation = 1
+        }
+
+        internal enum Determinism: int {
+            NonDeterministic = 0,
+            Deterministic = 1,
+        }
+
+        internal enum MathType: int {
+            DefaultMath = 0,
+            TensorOpMath = 1,
+            TensorOpMathArrowConversion = 2,
+            FmaMath = 3,
         }
     }
 }

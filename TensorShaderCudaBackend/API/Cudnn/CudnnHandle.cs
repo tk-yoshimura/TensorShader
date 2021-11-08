@@ -13,7 +13,14 @@ namespace TensorShaderCudaBackend.API {
                 }
 
                 IntPtr handle = IntPtr.Zero;
-                Status status = NativeMethods.CudnnCreate.AsDelegate().Invoke(ref handle);
+                Status status = Status.NotInitialized;
+
+                if (Dll.CudaDll.CudnnVersion == 7) {
+                    status = NativeMethods.Version7.CudnnCreate.AsDelegate().Invoke(ref handle);
+                }
+                else if(Dll.CudaDll.CudnnVersion == 8) {
+                    status = NativeMethods.Version8.CudnnCreate.AsDelegate().Invoke(ref handle);
+                }
                 if (status != Status.Success) {
                     throw new CudaException(status);
                 }
@@ -27,7 +34,15 @@ namespace TensorShaderCudaBackend.API {
                     return;
                 }
 
-                Status status = NativeMethods.CudnnDestroy.AsDelegate().Invoke(handle);
+                Status status = Status.NotInitialized;
+
+                if (Dll.CudaDll.CudnnVersion == 7) {
+                    status = NativeMethods.Version7.CudnnDestroy.AsDelegate().Invoke(handle);
+                }
+                else if (Dll.CudaDll.CudnnVersion == 8) {
+                    status = NativeMethods.Version8.CudnnDestroy.AsDelegate().Invoke(handle);
+                }
+
                 if (status != Status.Success) {
                     throw new CudaException(status);
                 }
@@ -37,7 +52,15 @@ namespace TensorShaderCudaBackend.API {
 
             /// <summary>ストリーム割当</summary>
             internal static void SetStream(IntPtr handle, IntPtr stream) {
-                Status status = NativeMethods.CudnnSetStream.AsDelegate().Invoke(handle, stream);
+                Status status = Status.NotInitialized;
+
+                if (Dll.CudaDll.CudnnVersion == 7) {
+                    status = NativeMethods.Version7.CudnnSetStream.AsDelegate().Invoke(handle, stream);
+                }
+                else if (Dll.CudaDll.CudnnVersion == 8) {
+                    status = NativeMethods.Version8.CudnnSetStream.AsDelegate().Invoke(handle, stream);
+                }
+
                 if (status != Status.Success) {
                     throw new CudaException(status);
                 }

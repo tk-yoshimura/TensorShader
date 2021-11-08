@@ -14,7 +14,15 @@ namespace TensorShaderCudaBackend.API {
                 }
 
                 IntPtr desc = IntPtr.Zero;
-                Status status = NativeMethods.CudnnCreateFilterDescriptor.AsDelegate().Invoke(ref desc);
+                Status status = Status.NotInitialized;
+
+                if (Dll.CudaDll.CudnnVersion == 7) {
+                    status = NativeMethods.Version7.CudnnCreateFilterDescriptor.AsDelegate().Invoke(ref desc);
+                }
+                else if (Dll.CudaDll.CudnnVersion == 8) {
+                    status = NativeMethods.Version8.CudnnCreateFilterDescriptor.AsDelegate().Invoke(ref desc);
+                }
+
                 if (status != Status.Success) {
                     throw new CudaException(status);
                 }
@@ -28,7 +36,15 @@ namespace TensorShaderCudaBackend.API {
                     return;
                 }
 
-                Status status = NativeMethods.CudnnDestroyFilterDescriptor.AsDelegate().Invoke(desc);
+                Status status = Status.NotInitialized;
+
+                if (Dll.CudaDll.CudnnVersion == 7) {
+                    status = NativeMethods.Version7.CudnnDestroyFilterDescriptor.AsDelegate().Invoke(desc);
+                }
+                else if (Dll.CudaDll.CudnnVersion == 8) {
+                    status = NativeMethods.Version8.CudnnDestroyFilterDescriptor.AsDelegate().Invoke(desc);
+                }
+
                 if (status != Status.Success) {
                     throw new CudaException(status);
                 }
@@ -43,36 +59,21 @@ namespace TensorShaderCudaBackend.API {
                 TensorShaderCudaBackend.Cudnn.DataType dtype,
                 int k, int c, int h, int w) {
 
-                Status status = NativeMethods.CudnnSetFilter4dDescriptor.AsDelegate().Invoke(
-                    desc, dtype, format, k, c, h, w
-                );
+                Status status = Status.NotInitialized;
+
+                if (Dll.CudaDll.CudnnVersion == 7) {
+                    status = NativeMethods.Version7.CudnnSetFilter4dDescriptor.AsDelegate().Invoke(
+                        desc, dtype, format, k, c, h, w
+                    );
+                }
+                else if (Dll.CudaDll.CudnnVersion == 8) {
+                    status = NativeMethods.Version8.CudnnSetFilter4dDescriptor.AsDelegate().Invoke(
+                        desc, dtype, format, k, c, h, w
+                    );
+                }
+
                 if (status != Status.Success) {
                     throw new CudaException(status);
-                }
-            }
-
-            /// <summary>設定</summary>
-            internal static void Set5d(
-                IntPtr desc,
-                TensorShaderCudaBackend.Cudnn.TensorFormat format,
-                TensorShaderCudaBackend.Cudnn.DataType dtype,
-                int k, int c, int d, int h, int w) {
-
-                int[] dims = new int[] { k, c, d, h, w };
-
-                GCHandle pinned_handle = GCHandle.Alloc(dims, GCHandleType.Pinned);
-                IntPtr dims_ptr = pinned_handle.AddrOfPinnedObject();
-
-                try {
-                    Status status = NativeMethods.CudnnSetFilterNdDescriptor.AsDelegate().Invoke(
-                        desc, dtype, format, 5, dims_ptr
-                    );
-                    if (status != Status.Success) {
-                        throw new CudaException(status);
-                    }
-                }
-                finally {
-                    pinned_handle.Free();
                 }
             }
         }

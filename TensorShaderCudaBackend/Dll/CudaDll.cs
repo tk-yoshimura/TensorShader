@@ -10,6 +10,11 @@ namespace TensorShaderCudaBackend.Dll {
         public static NativeDll Nvrtc { get; private set; } = null;
         public static NativeDll Cudnn { get; private set; } = null;
 
+        public static (NativeDll ops_infer, NativeDll ops_train, NativeDll cnn_infer, NativeDll cnn_train) CudnnSubset
+            { get; private set; } = (null, null, null, null);
+
+        public static int CudnnVersion { get; private set; } = 0;
+
         static CudaDll() {
             foreach (string libname in NvcudaLibraryNames) {
                 if (NativeDll.Exists(libname, out NativeDll lib)) {
@@ -45,13 +50,27 @@ namespace TensorShaderCudaBackend.Dll {
                 throw new DllNotFoundException("Not found cuda library. (major version=10,11)");
             }
 
-            foreach (string libname in CudnnLibraryNames) {
+            foreach ((int version, string libname) in CudnnLibraryNames) {
                 if (NativeDll.Exists(libname, out NativeDll lib)) {
                     Cudnn = lib;
+                    CudnnVersion = version;
                     break;
                 }
             }
             if (Cudnn is not null) {
+                if (CudnnVersion >= 8) {
+                    (string ops_infer, string ops_train, string cnn_infer, string cnn_train) = CudnnSubsetLibraryNames(CudnnVersion);
+
+                    if (NativeDll.Exists(ops_infer, out NativeDll ops_infer_lib) && NativeDll.Exists(ops_train, out NativeDll ops_train_lib) &&
+                        NativeDll.Exists(cnn_infer, out NativeDll cnn_infer_lib) && NativeDll.Exists(cnn_train, out NativeDll cnn_train_lib)) {
+
+                        CudnnSubset = (ops_infer_lib, ops_train_lib, cnn_infer_lib, cnn_train_lib);
+                    }
+                    else {
+                        throw new DllNotFoundException("Not found cudnn subset library. (major version=8)");
+                    }
+                }
+
                 Trace.WriteLine($"[{typeof(CudaDll).Name}] {Cudnn} loaded.");
             }
         }
@@ -141,34 +160,46 @@ namespace TensorShaderCudaBackend.Dll {
             }
         }
 
-        static IEnumerable<string> CudnnLibraryNames {
+        static IEnumerable<(int version, string libname)> CudnnLibraryNames {
             get {
                 int[] cudnn_versions = new int[] { 8, 7 };
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
                     foreach (int version in cudnn_versions) {
-                        yield return $"cudnn64_{version}.dll";
+                        yield return (version, $"cudnn64_{version}.dll");
                     }
-
-                    yield return "cudnn64.dll";
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
                     foreach (int version in cudnn_versions) {
-                        yield return $"libcudnn.so.{version}";
+                        yield return (version, $"libcudnn.so.{version}");
                     }
-
-                    yield return "libcudnn.so";
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
                     foreach (int version in cudnn_versions) {
-                        yield return $"libcudnn.{version}.dylib";
+                        yield return (version, $"libcudnn.{version}.dylib");
                     }
-
-                    yield return "cudnn.dylib";
                 }
                 else {
                     throw new NotSupportedException(RuntimeInformation.OSDescription);
                 }
+            }
+        }
+
+        static (string ops_infer, string ops_train, string cnn_infer, string cnn_train) CudnnSubsetLibraryNames(int version) {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                return ($"cudnn_ops_infer64_{version}.dll", $"cudnn_ops_train64_{version}.dll",
+                        $"cudnn_cnn_infer64_{version}.dll", $"cudnn_cnn_train64_{version}.dll");
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
+                return ($"libcudnn_ops_infer.so.{version}", $"libcudnn_ops_train.so.{version}",
+                        $"libcudnn_cnn_infer.so.{version}", $"libcudnn_cnn_train.so.{version}");
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
+                return ($"libcudnn_ops_infer.{version}.dylib", $"libcudnn_ops_train.{version}.dylib",
+                        $"libcudnn_cnn_infer.{version}.dylib", $"libcudnn_cnn_train.{version}.dylib");
+            }
+            else {
+                throw new NotSupportedException(RuntimeInformation.OSDescription);
             }
         }
     }

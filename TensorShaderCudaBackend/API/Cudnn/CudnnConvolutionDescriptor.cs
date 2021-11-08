@@ -14,7 +14,15 @@ namespace TensorShaderCudaBackend.API {
                 }
 
                 IntPtr desc = IntPtr.Zero;
-                Status status = NativeMethods.CudnnCreateConvolutionDescriptor.AsDelegate().Invoke(ref desc);
+                Status status = Status.NotInitialized;
+
+                if (Dll.CudaDll.CudnnVersion == 7) {
+                    status = NativeMethods.Version7.CudnnCreateConvolutionDescriptor.AsDelegate().Invoke(ref desc);
+                }
+                else if (Dll.CudaDll.CudnnVersion == 8) {
+                    status = NativeMethods.Version8.CudnnCreateConvolutionDescriptor.AsDelegate().Invoke(ref desc);
+                }
+
                 if (status != Status.Success) {
                     throw new CudaException(status);
                 }
@@ -28,7 +36,15 @@ namespace TensorShaderCudaBackend.API {
                     return;
                 }
 
-                Status status = NativeMethods.CudnnDestroyConvolutionDescriptor.AsDelegate().Invoke(desc);
+                Status status = Status.NotInitialized;
+
+                if (Dll.CudaDll.CudnnVersion == 7) {
+                    status = NativeMethods.Version7.CudnnDestroyConvolutionDescriptor.AsDelegate().Invoke(desc);
+                }
+                else if (Dll.CudaDll.CudnnVersion == 8) {
+                    status = NativeMethods.Version8.CudnnDestroyConvolutionDescriptor.AsDelegate().Invoke(desc);
+                }
+
                 if (status != Status.Success) {
                     throw new CudaException(status);
                 }
@@ -41,43 +57,21 @@ namespace TensorShaderCudaBackend.API {
                 IntPtr desc, TensorShaderCudaBackend.Cudnn.DataType dtype,
                 (int h, int w) pad, (int y, int x) stride, (int y, int x) dilation) {
 
-                Status status = NativeMethods.CudnnSetConvolution2dDescriptor.AsDelegate().Invoke(
-                    desc, pad.h, pad.w, stride.y, stride.x, dilation.y, dilation.x, ConvolutionMode.CrossCorrelation, dtype
-                );
+                Status status = Status.NotInitialized;
+
+                if (Dll.CudaDll.CudnnVersion == 7) {
+                    status = NativeMethods.Version7.CudnnSetConvolution2dDescriptor.AsDelegate().Invoke(
+                        desc, pad.h, pad.w, stride.y, stride.x, dilation.y, dilation.x, ConvolutionMode.CrossCorrelation, dtype
+                    );
+                }
+                else if (Dll.CudaDll.CudnnVersion == 8) {
+                    status = NativeMethods.Version8.CudnnSetConvolution2dDescriptor.AsDelegate().Invoke(
+                        desc, pad.h, pad.w, stride.y, stride.x, dilation.y, dilation.x, ConvolutionMode.CrossCorrelation, dtype
+                    );
+                }
+
                 if (status != Status.Success) {
                     throw new CudaException(status);
-                }
-            }
-
-            /// <summary>設定</summary>
-            internal static void SetConvolution3d(
-                IntPtr desc, TensorShaderCudaBackend.Cudnn.DataType dtype,
-                (int d, int h, int w) pad, (int z, int y, int x) stride, (int z, int y, int x) dilation) {
-
-                int[] pads = new int[] { pad.d, pad.h, pad.w };
-                int[] strides = new int[] { stride.z, stride.y, stride.x };
-                int[] dilations = new int[] { dilation.z, dilation.y, dilation.x };
-
-                GCHandle pinned_pads_handle = GCHandle.Alloc(pads, GCHandleType.Pinned);
-                GCHandle pinned_strides_handle = GCHandle.Alloc(strides, GCHandleType.Pinned);
-                GCHandle pinned_dilations_handle = GCHandle.Alloc(dilations, GCHandleType.Pinned);
-
-                IntPtr pads_ptr = pinned_pads_handle.AddrOfPinnedObject();
-                IntPtr strides_ptr = pinned_strides_handle.AddrOfPinnedObject();
-                IntPtr dilations_ptr = pinned_dilations_handle.AddrOfPinnedObject();
-
-                try {
-                    Status status = NativeMethods.CudnnSetConvolutionNdDescriptor.AsDelegate().Invoke(
-                        desc, 3, pads_ptr, strides_ptr, dilations_ptr, ConvolutionMode.CrossCorrelation, dtype
-                    );
-                    if (status != Status.Success) {
-                        throw new CudaException(status);
-                    }
-                }
-                finally {
-                    pinned_pads_handle.Free();
-                    pinned_strides_handle.Free();
-                    pinned_dilations_handle.Free();
                 }
             }
         }

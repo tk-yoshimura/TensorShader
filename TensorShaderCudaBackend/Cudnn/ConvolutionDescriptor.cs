@@ -25,15 +25,6 @@ namespace TensorShaderCudaBackend.Cudnn {
             API.Cudnn.ConvolutionDescriptor.SetConvolution2d(ptr, dtype, pad, stride, dilation);
         }
 
-        /// <summary>3D畳み込み</summary>
-        public ConvolutionDescriptor(
-            DataType dtype,
-            (int d, int h, int w) pad, (int z, int y, int x) stride, (int z, int y, int x) dilation) {
-
-            ptr = API.Cudnn.ConvolutionDescriptor.Create();
-            API.Cudnn.ConvolutionDescriptor.SetConvolution3d(ptr, dtype, pad, stride, dilation);
-        }
-
         /// <summary>破棄</summary>
         public void Dispose() {
             API.Cudnn.ConvolutionDescriptor.Destroy(ref ptr);

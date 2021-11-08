@@ -12,6 +12,8 @@ namespace TensorShaderCudaBackend.Cudnn {
         Uint8 = 6,
         Uint8x4 = 7,
         Int8x32 = 8,
+        BFloat16 = 9,
+        Int64 = 10,
     }
 #pragma warning restore CS1591
 }

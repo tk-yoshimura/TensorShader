@@ -16,7 +16,8 @@ namespace TensorShaderCudaBackend.API {
             LicenseError = 10,
             RuntimePrerequisiteMissing = 11,
             RuntimeInProgress = 12,
-            RuntimeFpOverflow = 13
+            RuntimeFpOverflow = 13,
+            VersionMismatch = 14,
         }
     }
 }
