@@ -46,12 +46,12 @@ namespace TensorShaderCudaBackend.Cudnn {
             TensorDescriptor x_desc,
             FilterDescriptor w_desc,
             ConvolutionDescriptor conv_desc,
-            TensorDescriptor y_desc, 
+            TensorDescriptor y_desc,
             Int64 workspace_limit_bytes = Int64.MaxValue) {
 
             ConvolutionFwdAlgoPerf[] prefs = API.Cudnn.Convolution.Forward.EnumAlgorithm(
-                handle, x_desc.Ptr, w_desc.Ptr, conv_desc.Ptr, y_desc.Ptr, 
-                Enum.GetValues<ConvolutionFwdAlgo>().Length, 
+                handle, x_desc.Ptr, w_desc.Ptr, conv_desc.Ptr, y_desc.Ptr,
+                Enum.GetValues<ConvolutionFwdAlgo>().Length,
                 workspace_limit_bytes
             );
 
@@ -71,7 +71,7 @@ namespace TensorShaderCudaBackend.Cudnn {
                 handle, x_desc.Ptr, w_desc.Ptr, conv_desc.Ptr, y_desc.Ptr, algo
             );
             if (workspace_size > WorkspaceLimit) {
-                ConvolutionFwdAlgoPerf[] prefs = 
+                ConvolutionFwdAlgoPerf[] prefs =
                     EnumConvolutionForwardAlgorithm(x_desc, w_desc, conv_desc, y_desc, WorkspaceLimit);
 
                 if (prefs.Length < 1) {
@@ -109,11 +109,11 @@ namespace TensorShaderCudaBackend.Cudnn {
             FilterDescriptor w_desc,
             TensorDescriptor dy_desc,
             ConvolutionDescriptor conv_desc,
-            TensorDescriptor dx_desc, 
+            TensorDescriptor dx_desc,
             Int64 workspace_limit_bytes = Int64.MaxValue) {
 
             ConvolutionBwdDataAlgoPerf[] prefs = API.Cudnn.Convolution.BackwardData.EnumAlgorithm(
-                handle, w_desc.Ptr, dy_desc.Ptr, conv_desc.Ptr, dx_desc.Ptr, 
+                handle, w_desc.Ptr, dy_desc.Ptr, conv_desc.Ptr, dx_desc.Ptr,
                 Enum.GetValues<ConvolutionBwdDataAlgo>().Length,
                 workspace_limit_bytes
             );
@@ -134,7 +134,7 @@ namespace TensorShaderCudaBackend.Cudnn {
                 handle, w_desc.Ptr, dy_desc.Ptr, conv_desc.Ptr, dx_desc.Ptr, algo
             );
             if (workspace_size > WorkspaceLimit) {
-                ConvolutionBwdDataAlgoPerf[] prefs = 
+                ConvolutionBwdDataAlgoPerf[] prefs =
                     EnumConvolutionBackwardDataAlgorithm(w_desc, dy_desc, conv_desc, dx_desc, WorkspaceLimit);
 
                 if (prefs.Length < 1) {
@@ -172,11 +172,11 @@ namespace TensorShaderCudaBackend.Cudnn {
             TensorDescriptor x_desc,
             TensorDescriptor dy_desc,
             ConvolutionDescriptor conv_desc,
-            FilterDescriptor dw_desc, 
+            FilterDescriptor dw_desc,
             Int64 workspace_limit_bytes = Int64.MaxValue) {
 
             ConvolutionBwdFilterAlgoPerf[] prefs = API.Cudnn.Convolution.BackwardFilter.EnumAlgorithm(
-                handle, x_desc.Ptr, dy_desc.Ptr, conv_desc.Ptr, dw_desc.Ptr, 
+                handle, x_desc.Ptr, dy_desc.Ptr, conv_desc.Ptr, dw_desc.Ptr,
                 Enum.GetValues<ConvolutionBwdFilterAlgo>().Length,
                 workspace_limit_bytes
             );
@@ -197,7 +197,7 @@ namespace TensorShaderCudaBackend.Cudnn {
                 handle, x_desc.Ptr, dy_desc.Ptr, conv_desc.Ptr, dw_desc.Ptr, algo
             );
             if (workspace_size > WorkspaceLimit) {
-                ConvolutionBwdFilterAlgoPerf[] prefs = 
+                ConvolutionBwdFilterAlgoPerf[] prefs =
                     EnumConvolutionBackwardFilterAlgorithm(x_desc, dy_desc, conv_desc, dw_desc, WorkspaceLimit);
 
                 if (prefs.Length < 1) {

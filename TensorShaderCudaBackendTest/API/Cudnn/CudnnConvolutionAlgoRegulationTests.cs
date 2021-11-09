@@ -54,7 +54,7 @@ namespace TensorShaderCudaBackendTest.APITest {
             controller.ConvolutionForward(xarr, xdesc, warr, wdesc, convdesc, yarr, ydesc, algo);
         }
 
-        
+
         [TestMethod()]
         public void BackwardDataAlgoRegulationTest() {
             if (!TensorShaderCudaBackend.Environment.CudnnExists) {

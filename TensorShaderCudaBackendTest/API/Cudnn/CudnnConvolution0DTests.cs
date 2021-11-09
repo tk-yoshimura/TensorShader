@@ -53,7 +53,7 @@ namespace TensorShaderCudaBackendTest.APITest {
             yarr.Read(ys);
             warr.Read(ws);
 
-            for (int i = 0; i < n * ic ; i++) {
+            for (int i = 0; i < n * ic; i++) {
                 Assert.AreEqual(1f, xs[i]);
             }
 
