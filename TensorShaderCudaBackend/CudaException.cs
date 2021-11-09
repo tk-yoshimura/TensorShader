@@ -20,7 +20,7 @@ namespace TensorShaderCudaBackend {
         internal CudaException(Nvrtc.ResultCode code)
             : base(Nvrtc.GetErrorString(code)) { }
 
-        internal CudaException(API.Cudnn.Status code)
+        internal CudaException(Cudnn.Status code)
             : base(API.Cudnn.GetErrorString(code)) { }
     }
 }

@@ -50,7 +50,10 @@ namespace TensorShaderCudaBackend.Shaders.Convolution.CudnnImplement {
                 Cudnn.DataType.Float, pad: (0, 0), stride: (1, 1), dilation: (1, 1)
             );
 
-            controller.ConvolutionBackwardData(filter, filterdesc, inmap, indesc, convdesc, outmap, outdesc);
+            controller.ConvolutionBackwardData(
+                filter, filterdesc, inmap, indesc, convdesc, outmap, outdesc, 
+                Cudnn.ConvolutionBwdDataAlgo.Algo0
+            );
         }
 
         /// <summary>引数チェック</summary>

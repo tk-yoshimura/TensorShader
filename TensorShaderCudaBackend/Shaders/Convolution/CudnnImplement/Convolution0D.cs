@@ -51,7 +51,10 @@ namespace TensorShaderCudaBackend.Shaders.Convolution.CudnnImplement {
                 Cudnn.DataType.Float, pad: (0, 0), stride: (1, 1), dilation: (1, 1)
             );
 
-            controller.ConvolutionForward(inmap, indesc, filter, filterdesc, convdesc, outmap, outdesc);
+            controller.ConvolutionForward(
+                inmap, indesc, filter, filterdesc, convdesc, outmap, outdesc, 
+                Cudnn.ConvolutionFwdAlgo.ImplicitPrecompGemm
+            );
         }
 
         /// <summary>引数チェック</summary>

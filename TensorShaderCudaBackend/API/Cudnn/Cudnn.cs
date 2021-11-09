@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using TensorShaderCudaBackend.Cudnn;
 
 namespace TensorShaderCudaBackend.API {
     /// <summary>Cudnn API</summary>
@@ -14,14 +15,7 @@ namespace TensorShaderCudaBackend.API {
                 return "CUDNN not exists.";
             }
 
-            IntPtr ptr = IntPtr.Zero;
-
-            if (Dll.CudaDll.CudnnVersion == 7) {
-                ptr = NativeMethods.Version7.CudnnGetErrorString.AsDelegate().Invoke(status);
-            }
-            else if (Dll.CudaDll.CudnnVersion == 8) {
-                ptr = NativeMethods.Version8.CudnnGetErrorString.AsDelegate().Invoke(status);
-            }
+            IntPtr ptr = NativeMethods.CudnnGetErrorString.AsDelegate().Invoke(status);
 
             string str = string.Empty;
             if (ptr != IntPtr.Zero) {

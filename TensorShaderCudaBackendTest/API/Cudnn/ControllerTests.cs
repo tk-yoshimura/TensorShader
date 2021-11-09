@@ -4,7 +4,7 @@ using System.Linq;
 using TensorShaderCudaBackend;
 using TensorShaderCudaBackend.Cudnn;
 
-namespace TensorShaderCudaBackendTest {
+namespace TensorShaderCudaBackendTest.APITest {
     [TestClass()]
     public class CudnnControllerTests {
         [TestMethod()]
@@ -47,7 +47,18 @@ namespace TensorShaderCudaBackendTest {
             ConvolutionDescriptor convdesc = new(DataType.Float, (0, 0), (1, 1), (1, 1));
 
             CudnnController controller = new(new Stream());
-            controller.ConvolutionForward(xarr, xdesc, warr, wdesc, convdesc, yarr, ydesc);
+
+            ConvolutionFwdAlgoPerf[] prefs = controller.GetConvolutionForwardAlgorithm(xdesc, wdesc, convdesc, ydesc);
+            Console.WriteLine($"algos: {prefs.Length}");
+            foreach (var pref in prefs) {
+                Console.WriteLine(pref.algo);
+                Console.WriteLine($"  asssumed time : {pref.time}");
+                Console.WriteLine($"  workspace : {pref.memory}");
+                Console.WriteLine($"  math_type : {pref.math_type}");
+                Console.WriteLine($"  determinism : {pref.determinism}");
+            }
+
+            controller.ConvolutionForward(xarr, xdesc, warr, wdesc, convdesc, yarr, ydesc, prefs[0].algo);
 
             xarr.Read(xs);
             yarr.Read(ys);
@@ -96,7 +107,18 @@ namespace TensorShaderCudaBackendTest {
             ConvolutionDescriptor convdesc = new(DataType.Float, (0, 0), (1, 1), (1, 1));
 
             CudnnController controller = new(new Stream());
-            controller.ConvolutionBackwardData(warr, wdesc, dyarr, dydesc, convdesc, dxarr, dxdesc);
+
+            ConvolutionBwdDataAlgoPerf[] prefs = controller.GetConvolutionBackwardDataAlgorithm(wdesc, dydesc, convdesc, dxdesc);
+            Console.WriteLine($"algos: {prefs.Length}");
+            foreach (var pref in prefs) {
+                Console.WriteLine(pref.algo);
+                Console.WriteLine($"  asssumed time : {pref.time}");
+                Console.WriteLine($"  workspace : {pref.memory}");
+                Console.WriteLine($"  math_type : {pref.math_type}");
+                Console.WriteLine($"  determinism : {pref.determinism}");
+            }
+
+            controller.ConvolutionBackwardData(warr, wdesc, dyarr, dydesc, convdesc, dxarr, dxdesc, prefs[0].algo);
 
             dxarr.Read(dxs);
             dyarr.Read(dys);
@@ -145,7 +167,18 @@ namespace TensorShaderCudaBackendTest {
             ConvolutionDescriptor convdesc = new(DataType.Float, (0, 0), (1, 1), (1, 1));
 
             CudnnController controller = new(new Stream());
-            controller.ConvolutionBackwardFilter(xarr, xdesc, dyarr, dydesc, convdesc, dwarr, dwdesc);
+
+            ConvolutionBwdFilterAlgoPerf[] prefs = controller.GetConvolutionBackwardFilterAlgorithm(xdesc, dydesc, convdesc, dwdesc);
+            Console.WriteLine($"algos: {prefs.Length}");
+            foreach (var pref in prefs) {
+                Console.WriteLine(pref.algo);
+                Console.WriteLine($"  asssumed time : {pref.time}");
+                Console.WriteLine($"  workspace : {pref.memory}");
+                Console.WriteLine($"  math_type : {pref.math_type}");
+                Console.WriteLine($"  determinism : {pref.determinism}");
+            }
+
+            controller.ConvolutionBackwardFilter(xarr, xdesc, dyarr, dydesc, convdesc, dwarr, dwdesc, prefs[0].algo);
 
             xarr.Read(xs);
             dyarr.Read(dys);

@@ -60,7 +60,10 @@ namespace TensorShaderCudaBackend.Shaders.Convolution.CudnnImplement {
             CudaArray<float> transpose_filter =
                 WorkspaceReserver<float>.Request(stream, filter.DeviceID, index: 0, inchannels * outchannels * kwidth);
 
-            controller.ConvolutionBackwardFilter(inmap, indesc, outmap, outdesc, convdesc, transpose_filter, filterdesc);
+            controller.ConvolutionBackwardFilter(
+                inmap, indesc, outmap, outdesc, convdesc, transpose_filter, filterdesc, 
+                Cudnn.ConvolutionBwdFilterAlgo.Algo0
+            );
 
             BlockTranspose(inchannels, kwidth, outchannels, transpose_filter, filter, stream);
         }

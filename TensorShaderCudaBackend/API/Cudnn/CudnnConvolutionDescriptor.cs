@@ -1,4 +1,5 @@
 ﻿using System;
+using TensorShaderCudaBackend.Cudnn;
 
 namespace TensorShaderCudaBackend.API {
     public static partial class Cudnn {
@@ -13,15 +14,8 @@ namespace TensorShaderCudaBackend.API {
                 }
 
                 IntPtr desc = IntPtr.Zero;
-                Status status = Status.NotInitialized;
 
-                if (Dll.CudaDll.CudnnVersion == 7) {
-                    status = NativeMethods.Version7.CudnnCreateConvolutionDescriptor.AsDelegate().Invoke(ref desc);
-                }
-                else if (Dll.CudaDll.CudnnVersion == 8) {
-                    status = NativeMethods.Version8.CudnnCreateConvolutionDescriptor.AsDelegate().Invoke(ref desc);
-                }
-
+                Status status = NativeMethods.CudnnCreateConvolutionDescriptor.AsDelegate().Invoke(ref desc);
                 if (status != Status.Success) {
                     throw new CudaException(status);
                 }
@@ -35,15 +29,7 @@ namespace TensorShaderCudaBackend.API {
                     return;
                 }
 
-                Status status = Status.NotInitialized;
-
-                if (Dll.CudaDll.CudnnVersion == 7) {
-                    status = NativeMethods.Version7.CudnnDestroyConvolutionDescriptor.AsDelegate().Invoke(desc);
-                }
-                else if (Dll.CudaDll.CudnnVersion == 8) {
-                    status = NativeMethods.Version8.CudnnDestroyConvolutionDescriptor.AsDelegate().Invoke(desc);
-                }
-
+                Status status = NativeMethods.CudnnDestroyConvolutionDescriptor.AsDelegate().Invoke(desc);                
                 if (status != Status.Success) {
                     throw new CudaException(status);
                 }
@@ -56,19 +42,9 @@ namespace TensorShaderCudaBackend.API {
                 IntPtr desc, TensorShaderCudaBackend.Cudnn.DataType dtype,
                 (int h, int w) pad, (int y, int x) stride, (int y, int x) dilation) {
 
-                Status status = Status.NotInitialized;
-
-                if (Dll.CudaDll.CudnnVersion == 7) {
-                    status = NativeMethods.Version7.CudnnSetConvolution2dDescriptor.AsDelegate().Invoke(
-                        desc, pad.h, pad.w, stride.y, stride.x, dilation.y, dilation.x, ConvolutionMode.CrossCorrelation, dtype
-                    );
-                }
-                else if (Dll.CudaDll.CudnnVersion == 8) {
-                    status = NativeMethods.Version8.CudnnSetConvolution2dDescriptor.AsDelegate().Invoke(
-                        desc, pad.h, pad.w, stride.y, stride.x, dilation.y, dilation.x, ConvolutionMode.CrossCorrelation, dtype
-                    );
-                }
-
+                Status status = NativeMethods.CudnnSetConvolution2dDescriptor.AsDelegate().Invoke(
+                    desc, pad.h, pad.w, stride.y, stride.x, dilation.y, dilation.x, TensorShaderCudaBackend.Cudnn.ConvolutionMode.CrossCorrelation, dtype
+                );
                 if (status != Status.Success) {
                     throw new CudaException(status);
                 }

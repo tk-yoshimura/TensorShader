@@ -1,4 +1,5 @@
 ﻿using System;
+using TensorShaderCudaBackend.Cudnn;
 
 namespace TensorShaderCudaBackend.API {
     public static partial class Cudnn {
@@ -13,15 +14,8 @@ namespace TensorShaderCudaBackend.API {
                 }
 
                 IntPtr desc = IntPtr.Zero;
-                Status status = Status.NotInitialized;
 
-                if (Dll.CudaDll.CudnnVersion == 7) {
-                    status = NativeMethods.Version7.CudnnCreateFilterDescriptor.AsDelegate().Invoke(ref desc);
-                }
-                else if (Dll.CudaDll.CudnnVersion == 8) {
-                    status = NativeMethods.Version8.CudnnCreateFilterDescriptor.AsDelegate().Invoke(ref desc);
-                }
-
+                Status status = NativeMethods.CudnnCreateFilterDescriptor.AsDelegate().Invoke(ref desc);
                 if (status != Status.Success) {
                     throw new CudaException(status);
                 }
@@ -35,15 +29,7 @@ namespace TensorShaderCudaBackend.API {
                     return;
                 }
 
-                Status status = Status.NotInitialized;
-
-                if (Dll.CudaDll.CudnnVersion == 7) {
-                    status = NativeMethods.Version7.CudnnDestroyFilterDescriptor.AsDelegate().Invoke(desc);
-                }
-                else if (Dll.CudaDll.CudnnVersion == 8) {
-                    status = NativeMethods.Version8.CudnnDestroyFilterDescriptor.AsDelegate().Invoke(desc);
-                }
-
+                Status status = NativeMethods.CudnnDestroyFilterDescriptor.AsDelegate().Invoke(desc);
                 if (status != Status.Success) {
                     throw new CudaException(status);
                 }
@@ -58,19 +44,9 @@ namespace TensorShaderCudaBackend.API {
                 TensorShaderCudaBackend.Cudnn.DataType dtype,
                 int k, int c, int h, int w) {
 
-                Status status = Status.NotInitialized;
-
-                if (Dll.CudaDll.CudnnVersion == 7) {
-                    status = NativeMethods.Version7.CudnnSetFilter4dDescriptor.AsDelegate().Invoke(
-                        desc, dtype, format, k, c, h, w
-                    );
-                }
-                else if (Dll.CudaDll.CudnnVersion == 8) {
-                    status = NativeMethods.Version8.CudnnSetFilter4dDescriptor.AsDelegate().Invoke(
-                        desc, dtype, format, k, c, h, w
-                    );
-                }
-
+                Status status = NativeMethods.CudnnSetFilter4dDescriptor.AsDelegate().Invoke(
+                    desc, dtype, format, k, c, h, w
+                );
                 if (status != Status.Success) {
                     throw new CudaException(status);
                 }

@@ -65,7 +65,10 @@ namespace TensorShaderCudaBackend.Shaders.Convolution.CudnnImplement {
 
             BlockTranspose(inchannels, outchannels, kwidth * kheight, filter, transpose_filter, stream);
 
-            controller.ConvolutionForward(inmap, indesc, transpose_filter, filterdesc, convdesc, outmap, outdesc);
+            controller.ConvolutionForward(
+                inmap, indesc, transpose_filter, filterdesc, convdesc, outmap, outdesc, 
+                Cudnn.ConvolutionFwdAlgo.ImplicitPrecompGemm
+            );
         }
 
         /// <summary>引数チェック</summary>
