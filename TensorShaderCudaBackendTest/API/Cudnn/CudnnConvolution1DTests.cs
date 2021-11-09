@@ -38,7 +38,7 @@ namespace TensorShaderCudaBackendTest.APITest {
 
             CudnnController controller = new(new Stream());
 
-            ConvolutionFwdAlgoPerf[] prefs = controller.GetConvolutionForwardAlgorithm(xdesc, wdesc, convdesc, ydesc);
+            ConvolutionFwdAlgoPerf[] prefs = controller.EnumConvolutionForwardAlgorithm(xdesc, wdesc, convdesc, ydesc);
             Console.WriteLine($"algos: {prefs.Length}");
             foreach (var pref in prefs) {
                 Console.WriteLine(pref.algo);
@@ -99,7 +99,7 @@ namespace TensorShaderCudaBackendTest.APITest {
 
             CudnnController controller = new(new Stream());
 
-            ConvolutionBwdDataAlgoPerf[] prefs = controller.GetConvolutionBackwardDataAlgorithm(wdesc, dydesc, convdesc, dxdesc);
+            ConvolutionBwdDataAlgoPerf[] prefs = controller.EnumConvolutionBackwardDataAlgorithm(wdesc, dydesc, convdesc, dxdesc);
             Console.WriteLine($"algos: {prefs.Length}");
             foreach (var pref in prefs) {
                 Console.WriteLine(pref.algo);
@@ -160,7 +160,7 @@ namespace TensorShaderCudaBackendTest.APITest {
 
             CudnnController controller = new(new Stream());
 
-            ConvolutionBwdFilterAlgoPerf[] prefs = controller.GetConvolutionBackwardFilterAlgorithm(xdesc, dydesc, convdesc, dwdesc);
+            ConvolutionBwdFilterAlgoPerf[] prefs = controller.EnumConvolutionBackwardFilterAlgorithm(xdesc, dydesc, convdesc, dwdesc);
             Console.WriteLine($"algos: {prefs.Length}");
             foreach (var pref in prefs) {
                 Console.WriteLine(pref.algo);
@@ -221,7 +221,7 @@ namespace TensorShaderCudaBackendTest.APITest {
 
             CudnnController controller = new(new Stream());
 
-            ConvolutionFwdAlgoPerf[] prefs = controller.GetConvolutionForwardAlgorithm(xdesc, wdesc, convdesc, ydesc);
+            ConvolutionFwdAlgoPerf[] prefs = controller.EnumConvolutionForwardAlgorithm(xdesc, wdesc, convdesc, ydesc);
             Console.WriteLine($"algos: {prefs.Length}");
             foreach (var pref in prefs) {
                 Console.WriteLine(pref.algo);
@@ -282,7 +282,7 @@ namespace TensorShaderCudaBackendTest.APITest {
 
             CudnnController controller = new(new Stream());
 
-            ConvolutionBwdDataAlgoPerf[] prefs = controller.GetConvolutionBackwardDataAlgorithm(wdesc, dydesc, convdesc, dxdesc);
+            ConvolutionBwdDataAlgoPerf[] prefs = controller.EnumConvolutionBackwardDataAlgorithm(wdesc, dydesc, convdesc, dxdesc);
             Console.WriteLine($"algos: {prefs.Length}");
             foreach (var pref in prefs) {
                 Console.WriteLine(pref.algo);
@@ -343,7 +343,7 @@ namespace TensorShaderCudaBackendTest.APITest {
 
             CudnnController controller = new(new Stream());
 
-            ConvolutionBwdFilterAlgoPerf[] prefs = controller.GetConvolutionBackwardFilterAlgorithm(xdesc, dydesc, convdesc, dwdesc);
+            ConvolutionBwdFilterAlgoPerf[] prefs = controller.EnumConvolutionBackwardFilterAlgorithm(xdesc, dydesc, convdesc, dwdesc);
             Console.WriteLine($"algos: {prefs.Length}");
             foreach (var pref in prefs) {
                 Console.WriteLine(pref.algo);

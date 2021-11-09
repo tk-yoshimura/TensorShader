@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using TensorShaderCudaBackend.Cudnn;
 
@@ -14,7 +15,7 @@ namespace TensorShaderCudaBackend.API {
                 /// <summary>アルゴリズム</summary>
                 internal static ConvolutionFwdAlgoPerf[] EnumAlgorithm(
                     IntPtr handle,
-                    IntPtr xDesc, IntPtr wDesc, IntPtr convDesc, IntPtr yDesc, int algo_requests) {
+                    IntPtr xDesc, IntPtr wDesc, IntPtr convDesc, IntPtr yDesc, int algo_requests, Int64 workspace_limit_bytes) {
 
                     ConvolutionFwdAlgoPerf[] prefs = new ConvolutionFwdAlgoPerf[algo_requests];
                     GCHandle pinned_handle = GCHandle.Alloc(prefs, GCHandleType.Pinned);
@@ -34,7 +35,12 @@ namespace TensorShaderCudaBackend.API {
                         pinned_handle.Free();
                     }
 
-                    return prefs[..count];
+                    prefs = prefs
+                        .Take(count)
+                        .Where((pref) => pref.status == Status.Success && pref.memory <= workspace_limit_bytes)
+                        .ToArray();
+
+                    return prefs;
                 }
 
                 /// <summary>ワークスペースサイズ算出</summary>
@@ -85,7 +91,7 @@ namespace TensorShaderCudaBackend.API {
                 /// <summary>アルゴリズム</summary>
                 internal static ConvolutionBwdDataAlgoPerf[] EnumAlgorithm(
                     IntPtr handle,
-                    IntPtr wDesc, IntPtr dyDesc, IntPtr convDesc, IntPtr dxDesc, int algo_requests) {
+                    IntPtr wDesc, IntPtr dyDesc, IntPtr convDesc, IntPtr dxDesc, int algo_requests, Int64 workspace_limit_bytes) {
 
                     ConvolutionBwdDataAlgoPerf[] prefs = new ConvolutionBwdDataAlgoPerf[algo_requests];
                     GCHandle pinned_handle = GCHandle.Alloc(prefs, GCHandleType.Pinned);
@@ -105,7 +111,12 @@ namespace TensorShaderCudaBackend.API {
                         pinned_handle.Free();
                     }
 
-                    return prefs[..count];
+                    prefs = prefs
+                        .Take(count)
+                        .Where((pref) => pref.status == Status.Success && pref.memory <= workspace_limit_bytes)
+                        .ToArray();
+
+                    return prefs;
                 }
 
                 /// <summary>ワークスペースサイズ算出</summary>
@@ -155,7 +166,7 @@ namespace TensorShaderCudaBackend.API {
                 /// <summary>アルゴリズム</summary>
                 internal static ConvolutionBwdFilterAlgoPerf[] EnumAlgorithm(
                     IntPtr handle,
-                    IntPtr xDesc, IntPtr dyDesc, IntPtr convDesc, IntPtr dwDesc, int algo_requests) {
+                    IntPtr xDesc, IntPtr dyDesc, IntPtr convDesc, IntPtr dwDesc, int algo_requests, Int64 workspace_limit_bytes) {
 
                     ConvolutionBwdFilterAlgoPerf[] prefs = new ConvolutionBwdFilterAlgoPerf[algo_requests];
                     GCHandle pinned_handle = GCHandle.Alloc(prefs, GCHandleType.Pinned);
@@ -175,7 +186,12 @@ namespace TensorShaderCudaBackend.API {
                         pinned_handle.Free();
                     }
 
-                    return prefs[..count];
+                    prefs = prefs
+                        .Take(count)
+                        .Where((pref) => pref.status == Status.Success && pref.memory <= workspace_limit_bytes)
+                        .ToArray();
+
+                    return prefs;
                 }
 
                 /// <summary>ワークスペースサイズ算出</summary>
