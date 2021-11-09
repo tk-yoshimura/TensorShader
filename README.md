@@ -18,7 +18,7 @@ validated: Windows
 experiment: Linux, MacOS
 
 ## Recommended to Install  
-CUDNN 7+ (See MNIST sample to enable.)
+CUDNN 7,8 (See MNIST sample to enable.)
 
 ## Usage
 [Sample](https://github.com/tk-yoshimura/TensorShader/tree/master/TensorShaderSample)
