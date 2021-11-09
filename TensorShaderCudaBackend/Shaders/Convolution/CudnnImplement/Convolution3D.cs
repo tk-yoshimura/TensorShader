@@ -97,8 +97,8 @@ namespace TensorShaderCudaBackend.Shaders.Convolution.CudnnImplement {
                 }
 
                 controller.ConvolutionForward(
-                    slice_inmap, indesc, transpose_filter, filterdesc, convdesc, outmap, outdesc, 
-                    Cudnn.ConvolutionFwdAlgo.ImplicitPrecompGemm, 
+                    slice_inmap, indesc, transpose_filter, filterdesc, convdesc, outmap, outdesc,
+                    Cudnn.ConvolutionFwdAlgo.ImplicitPrecompGemm,
                     beta: 1
                 );
             }

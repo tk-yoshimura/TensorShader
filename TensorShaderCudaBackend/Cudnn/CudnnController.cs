@@ -27,7 +27,7 @@ namespace TensorShaderCudaBackend.Cudnn {
             TensorDescriptor x_desc,
             FilterDescriptor w_desc,
             ConvolutionDescriptor conv_desc,
-            TensorDescriptor y_desc){
+            TensorDescriptor y_desc) {
 
             ConvolutionFwdAlgoPerf[] prefs = API.Cudnn.Convolution.Forward.EnumAlgorithm(
                 handle, x_desc.Ptr, w_desc.Ptr, conv_desc.Ptr, y_desc.Ptr, Enum.GetValues<ConvolutionFwdAlgo>().Length
@@ -74,7 +74,7 @@ namespace TensorShaderCudaBackend.Cudnn {
             FilterDescriptor w_desc,
             TensorDescriptor dy_desc,
             ConvolutionDescriptor conv_desc,
-            TensorDescriptor dx_desc){
+            TensorDescriptor dx_desc) {
 
             ConvolutionBwdDataAlgoPerf[] prefs = API.Cudnn.Convolution.BackwardData.EnumAlgorithm(
                 handle, w_desc.Ptr, dy_desc.Ptr, conv_desc.Ptr, dx_desc.Ptr, Enum.GetValues<ConvolutionBwdDataAlgo>().Length
@@ -121,7 +121,7 @@ namespace TensorShaderCudaBackend.Cudnn {
             TensorDescriptor x_desc,
             TensorDescriptor dy_desc,
             ConvolutionDescriptor conv_desc,
-            FilterDescriptor dw_desc){
+            FilterDescriptor dw_desc) {
 
             ConvolutionBwdFilterAlgoPerf[] prefs = API.Cudnn.Convolution.BackwardFilter.EnumAlgorithm(
                 handle, x_desc.Ptr, dy_desc.Ptr, conv_desc.Ptr, dw_desc.Ptr, Enum.GetValues<ConvolutionBwdFilterAlgo>().Length
@@ -168,12 +168,12 @@ namespace TensorShaderCudaBackend.Cudnn {
                 return;
             }
 
-            if (workspace != IntPtr.Zero) { 
+            if (workspace != IntPtr.Zero) {
                 API.Cuda.Memory.Free(ref workspace);
             }
 
             workspace = API.Cuda.Memory.Allocate<byte>((ulong)new_workspace_size);
-            workspace_size = new_workspace_size; 
+            workspace_size = new_workspace_size;
         }
 
         /// <summary>破棄</summary>

@@ -24,7 +24,7 @@ namespace TensorShaderCudaBackend.API {
                 (CudaDll.CudnnVersion == 7) ? new NativeMethod<cudnnCreate>(CudaDll.Cudnn, nameof(cudnnCreate)) :
                 (CudaDll.CudnnVersion == 8) ? new NativeMethod<cudnnCreate>(CudaDll.CudnnSubset.ops_infer, nameof(cudnnCreate)) :
                 throw new NotImplementedException();
-                
+
             [UnmanagedFunctionPointer(CallingConvention.StdCall)]
             public delegate cudnnStatus_t cudnnDestroy(IntPtr handle);
             public static NativeMethod<cudnnDestroy> CudnnDestroy { get; } =

@@ -51,7 +51,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution.CudnnImplement {
             );
 
             controller.ConvolutionBackwardFilter(
-                inmap, indesc, outmap, outdesc, convdesc, filter, filterdesc, 
+                inmap, indesc, outmap, outdesc, convdesc, filter, filterdesc,
                 Cudnn.ConvolutionBwdFilterAlgo.Algo0
             );
         }

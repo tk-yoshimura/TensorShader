@@ -64,7 +64,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution.CudnnImplement {
                 WorkspaceReserver<float>.Request(stream, filter.DeviceID, index: 0, inchannels * outchannels * kwidth * kheight);
 
             controller.ConvolutionBackwardFilter(
-                inmap, indesc, outmap, outdesc, convdesc, transpose_filter, filterdesc, 
+                inmap, indesc, outmap, outdesc, convdesc, transpose_filter, filterdesc,
                 Cudnn.ConvolutionBwdFilterAlgo.Algo0
             );
 

@@ -29,7 +29,7 @@ namespace TensorShaderCudaBackend.API {
                     return;
                 }
 
-                Status status = NativeMethods.CudnnDestroyConvolutionDescriptor.AsDelegate().Invoke(desc);                
+                Status status = NativeMethods.CudnnDestroyConvolutionDescriptor.AsDelegate().Invoke(desc);
                 if (status != Status.Success) {
                     throw new CudaException(status);
                 }
