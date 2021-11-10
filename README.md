@@ -80,6 +80,7 @@ See also...
 
 ## Install
 [Download DLL](https://github.com/tk-yoshimura/TensorShader/releases)
+[Download Nuget package](https://www.nuget.org/packages/tyoshimura.tensorshader/)
 
 - To install, just import the DLL.
 - This library does not change the environment at all.

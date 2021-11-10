@@ -54,4 +54,4 @@ nuget.exe
 /**/*.nupkg
 
 # Safelist
-!icon.png
+!images/icon.png
