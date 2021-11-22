@@ -109,7 +109,7 @@ namespace TensorShader {
         /// <param name="innodes">入力ノードリスト</param>
         /// <param name="tracenodes">フロー関連ノード</param>
         /// <remarks>フロー関連ノードがnullであるなら入力ノードから到達できるノードをフロー関連ノードとする</remarks>
-        internal static List<Node> ExecutionOrderSort(IEnumerable<InputNode> innodes, List<Node> tracenodes = null) {
+        internal static List<Node> ExecutionOrderSort(IReadOnlyList<InputNode> innodes, List<Node> tracenodes = null) {
             List<Tensor> input_tensors =
                 innodes
                 .Where((node) => node.Tensor is not null)

@@ -6,14 +6,14 @@ using System.Reflection;
 namespace TensorShader {
     /// <summary>パラメータコンテナ</summary>
     public class Parameters {
-        private readonly List<ParameterField> parameter_fields;
+        private readonly IReadOnlyList<ParameterField> parameter_fields;
 
         /// <summary>パラメータ数</summary>
         public int Count => parameter_fields.Count;
 
         /// <summary>コンストラクタ</summary>
-        public Parameters(IEnumerable<ParameterField> parameter_fields) {
-            this.parameter_fields = new List<ParameterField>(parameter_fields);
+        public Parameters(IReadOnlyList<ParameterField> parameter_fields) {
+            this.parameter_fields = parameter_fields;
         }
 
         /// <summary>リストからキャスト</summary>
@@ -28,22 +28,22 @@ namespace TensorShader {
 
         /// <summary>和集合</summary>
         public static Parameters operator +(Parameters p1, Parameters p2) {
-            return new Parameters(p1.parameter_fields.Union(p2.parameter_fields));
+            return new Parameters(p1.parameter_fields.Union(p2.parameter_fields).ToList());
         }
 
         /// <summary>積集合</summary>
         public static Parameters operator *(Parameters p1, Parameters p2) {
-            return new Parameters(p1.parameter_fields.Intersect(p2.parameter_fields));
+            return new Parameters(p1.parameter_fields.Intersect(p2.parameter_fields).ToList());
         }
 
         /// <summary>差集合</summary>
         public static Parameters operator -(Parameters p1, Parameters p2) {
-            return new Parameters(p1.parameter_fields.Except(p2.parameter_fields));
+            return new Parameters(p1.parameter_fields.Except(p2.parameter_fields).ToList());
         }
 
         /// <summary>条件抜き出し</summary>
         public Parameters Where(Func<ParameterField, bool> predicate) {
-            return new Parameters(parameter_fields.Where(predicate));
+            return new Parameters(parameter_fields.Where(predicate).ToList());
         }
 
         /// <summary>更新則を追加</summary>
@@ -62,7 +62,7 @@ namespace TensorShader {
 
         /// <summary>更新則を追加</summary>
         /// <returns>メゾットチェーン可</returns>
-        public Parameters AddUpdaters(Func<ParameterField, IEnumerable<Updater>> gen_updater) {
+        public Parameters AddUpdaters(Func<ParameterField, IReadOnlyList<Updater>> gen_updater) {
             if (parameter_fields.Count <= 0) {
                 throw new InvalidOperationException(ExceptionMessage.EmptyList());
             }

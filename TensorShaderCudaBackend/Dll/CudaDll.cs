@@ -74,113 +74,133 @@ namespace TensorShaderCudaBackend.Dll {
             }
         }
 
-        static IEnumerable<(int major, int minor)> VersionList {
+        static IReadOnlyList<(int major, int minor)> VersionList {
             get {
+                List<(int major, int minor)> versions = new();
+
                 for (int major = 11; major >= 10; major--) {
                     for (int minor = 9; minor >= 0; minor--) {
-                        yield return (major, minor);
+                        versions.Add((major, minor));
                     }
                 }
+
+                return versions;
             }
         }
 
-        static IEnumerable<string> NvcudaLibraryNames {
+        static IReadOnlyList<string> NvcudaLibraryNames {
             get {
+                List<string> libnames = new();
+
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
-                    yield return "nvcuda.dll";
+                    libnames.Add("nvcuda.dll");
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
-                    yield return "libcuda.so";
+                    libnames.Add("libcuda.so");
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
-                    yield return "libcuda.dylib";
+                    libnames.Add("libcuda.dylib");
                 }
                 else {
                     throw new NotSupportedException(RuntimeInformation.OSDescription);
                 }
+
+                return libnames;
             }
         }
 
-        static IEnumerable<string> CudaLibraryNames {
+        static IReadOnlyList<string> CudaLibraryNames {
             get {
+                List<string> libnames = new();
+
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
                     foreach ((int major, int minor) in VersionList) {
-                        yield return $"cudart64_{major}{minor}.dll";
+                        libnames.Add($"cudart64_{major}{minor}.dll");
                     }
 
-                    yield return "cudart64.dll";
+                    libnames.Add("cudart64.dll");
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
                     foreach ((int major, int minor) in VersionList) {
-                        yield return $"libcudart.so.{major}.{minor}";
+                        libnames.Add($"libcudart.so.{major}.{minor}");
                     }
 
-                    yield return "libcudart.so";
+                    libnames.Add("libcudart.so");
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
                     foreach ((int major, int minor) in VersionList) {
-                        yield return $"libcudart.{major}.{minor}.dylib";
+                        libnames.Add($"libcudart.{major}.{minor}.dylib");
                     }
 
-                    yield return "libcudart.dylib";
+                    libnames.Add("libcudart.dylib");
                 }
                 else {
                     throw new NotSupportedException(RuntimeInformation.OSDescription);
                 }
+
+                return libnames;
             }
         }
 
-        static IEnumerable<string> NvrtcLibraryNames {
+        static IReadOnlyList<string> NvrtcLibraryNames {
             get {
+                List<string> libnames = new();
+
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
                     foreach ((int major, int minor) in VersionList) {
-                        yield return $"nvrtc64_{major}{minor}_0.dll";
+                        libnames.Add($"nvrtc64_{major}{minor}_0.dll");
                     }
 
-                    yield return "nvrtc64.dll";
+                    libnames.Add("nvrtc64.dll");
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
                     foreach ((int major, int minor) in VersionList) {
-                        yield return $"libnvrtc.so.{major}.{minor}";
+                        libnames.Add($"libnvrtc.so.{major}.{minor}");
                     }
 
-                    yield return "libnvrtc.so";
+                    libnames.Add("libnvrtc.so");
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
                     foreach ((int major, int minor) in VersionList) {
-                        yield return $"libnvrtc.{major}.{minor}.dylib";
+                        libnames.Add($"libnvrtc.{major}.{minor}.dylib");
                     }
 
-                    yield return "libnvrtc.dylib";
+                    libnames.Add("libnvrtc.dylib");
                 }
                 else {
                     throw new NotSupportedException(RuntimeInformation.OSDescription);
                 }
+
+                return libnames;
             }
         }
 
-        static IEnumerable<(int version, string libname)> CudnnLibraryNames {
+        static IReadOnlyList<(int version, string libname)> CudnnLibraryNames {
             get {
+                List<(int version, string libname)> libnames = new();
+
                 int[] cudnn_versions = new int[] { 8, 7 };
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
                     foreach (int version in cudnn_versions) {
-                        yield return (version, $"cudnn64_{version}.dll");
+                        libnames.Add((version, $"cudnn64_{version}.dll"));
                     }
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
                     foreach (int version in cudnn_versions) {
-                        yield return (version, $"libcudnn.so.{version}");
+                        libnames.Add((version, $"libcudnn.so.{version}"));
                     }
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
                     foreach (int version in cudnn_versions) {
-                        yield return (version, $"libcudnn.{version}.dylib");
+                        libnames.Add((version, $"libcudnn.{version}.dylib"));
                     }
                 }
                 else {
                     throw new NotSupportedException(RuntimeInformation.OSDescription);
                 }
+
+                return libnames;
             }
         }
 

@@ -239,7 +239,7 @@ namespace TensorShader {
         }
 
         /// <summary>更新則を追加</summary>
-        public void AddUpdaters(IEnumerable<Updater> updaters) {
+        public void AddUpdaters(IReadOnlyList<Updater> updaters) {
             foreach (Updater updater in updaters) {
                 AddUpdater(updater);
             }

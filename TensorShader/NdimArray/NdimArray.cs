@@ -195,11 +195,15 @@ namespace TensorShader {
         }
 
         /// <summary>データリスト</summary>
-        public IEnumerable<(int index, NdimArray<T> data)> DataList {
+        public (int index, NdimArray<T> data)[] DataList {
             get {
+                (int index, NdimArray<T> data)[] datas = new (int index, NdimArray<T> data)[Batch];
+
                 for (int i = 0; i < Batch; i++) {
-                    yield return (i, this[i]);
+                    datas[i] = (i, this[i]);
                 }
+
+                return datas;
             }
         }
 

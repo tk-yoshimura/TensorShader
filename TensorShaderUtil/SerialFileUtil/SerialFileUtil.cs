@@ -13,7 +13,7 @@ namespace TensorShaderUtil {
         /// <param name="directory_path">ディレクトリパス</param>
         /// <param name="filename_pattern">ファイル名パターン e.g. ( test*.txt )</param>
         /// <returns>ファイルパス及び連番</returns>
-        public static IEnumerable<(string path, long num)> EnumrateSerialFiles(string directory_path, string filename_pattern) {
+        public static IReadOnlyList<(string path, long num)> EnumrateSerialFiles(string directory_path, string filename_pattern) {
             if (!filename_pattern.Contains('*') || filename_pattern.IndexOf('*', filename_pattern.IndexOf('*') + 1) >= 0) {
                 throw new ArgumentException(null, nameof(filename_pattern));
             }
@@ -31,7 +31,7 @@ namespace TensorShaderUtil {
                 return (filepath, num: long.MinValue);
             }).Where((item) => item.num != long.MinValue);
 
-            return filepaths_serials;
+            return filepaths_serials.ToList();
         }
 
         /// <summary>最大の連番ファイルを返す</summary>
