@@ -28,24 +28,21 @@ namespace TensorShaderCudaBackend.Shaders.Channelwise {
                     return;
                 }}
 
-                int inmap_idx = idx * {Channels};
+                x += idx * {Channels};
+                y += idx * {Channels};
 
-                float vmax = x[inmap_idx];
+                float vmax = x[0];
                 int vmax_i = 0;
 
                 for(int i = 1; i < {Channels}; i++){{
-                    inmap_idx++;
-
-                    float v = x[inmap_idx];
+                    float v = x[i];
                     if(v > vmax){{
                         vmax = v;
                         vmax_i = i;
                     }}
                 }}
 
-                int outmap_idx = vmax_i + idx * {Channels};
-
-                y[outmap_idx] = 1;
+                y[vmax_i] = 1;
             }}";
 
             this.Kernel = new Kernel(code, "hardmax");

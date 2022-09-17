@@ -28,18 +28,25 @@ namespace TensorShaderCudaBackend.Shaders.Channelwise {
                     return;
                 }}
 
-                float vsum = 0;
+                x += idx * {Channels};
+                y += idx * {Channels};
 
-                for(int i = 0, map_idx = idx * {Channels}; i < {Channels}; i++, map_idx++){{
-                    float v = expf(x[map_idx]);
-                    y[map_idx] = v;
+                float vsum = 0, xmax = x[0];
+                
+                for(int i = 1; i < {Channels}; i++){{
+                    xmax = fmaxf(xmax, x[i]);
+                }}
+
+                for(int i = 0; i < {Channels}; i++){{
+                    float v = expf(x[i] - xmax);
+                    y[i] = v;
                     vsum += v;
                 }}
 
                 float vscale = 1 / vsum;
 
-                for(int i = 0, map_idx = idx * {Channels}; i < {Channels}; i++, map_idx++){{
-                    y[map_idx] *= vscale;
+                for(int i = 0; i < {Channels}; i++){{
+                    y[i] *= vscale;
                 }}
             }}";
 
