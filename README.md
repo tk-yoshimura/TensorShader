@@ -4,17 +4,17 @@
 **Deep Learning .NET library, For Regression.**
 
 ## Description
-I tried to create a deep learning library of **Define and Run** / **NHWC format** from scratch.
+Deep learning library of **Define and Run** / **NHWC format**
 
 **Supports High-Dimensional Convolution Neural Networks.** (Complex, Quaternion, Vector3D)
 
 For regression problems: **High precision calculate** by FP32-FP32 arithmetic (1/8 error of FP32 arithmetic)
 
 ## Requirement  
-.NET 5.0  
+.NET 6.0  
 CUDA 10+, Compute Capability 5.0+  
 
-validated: Windows
+validated: Windows  
 experiment: Linux, MacOS
 
 ## Recommended to Install  
