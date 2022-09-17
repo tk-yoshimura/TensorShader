@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyCompany("T.Yoshimura")]
 [assembly: AssemblyProduct("TensorShader")]
-[assembly: AssemblyCopyright("Copyright © T.Yoshimura 2019-2021")]
+[assembly: AssemblyCopyright("Copyright © T.Yoshimura 2019-2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -21,6 +21,6 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("e6d7e72c-eb7a-4697-9b1a-3e87ba76323a")]
 
-[assembly: AssemblyVersion("5.5.3.*")]
+[assembly: AssemblyVersion("5.6.0.*")]
 
 [assembly: InternalsVisibleTo("TensorShaderTest")]

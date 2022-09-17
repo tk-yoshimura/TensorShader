@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyCompany("T.Yoshimura")]
 [assembly: AssemblyProduct("TensorShaderCudaBackend")]
-[assembly: AssemblyCopyright("Copyright © T.Yoshimura 2019-2021")]
+[assembly: AssemblyCopyright("Copyright © T.Yoshimura 2019-2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -21,6 +21,6 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("d0343c7a-36a5-4f87-89d9-c0bff56721f7")]
 
-[assembly: AssemblyVersion("5.5.3.*")]
+[assembly: AssemblyVersion("5.6.0.*")]
 
 [assembly: InternalsVisibleTo("TensorShaderCudaBackendTest")]
