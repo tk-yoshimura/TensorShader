@@ -79,7 +79,7 @@ See also...
 - [Layers](https://github.com/tk-yoshimura/TensorShader/tree/master/TensorShader/Layers)
 
 ## Install
-[Download DLL](https://github.com/tk-yoshimura/TensorShader/releases)
+[Download DLL](https://github.com/tk-yoshimura/TensorShader/releases)  
 [Download Nuget package](https://www.nuget.org/packages/tyoshimura.tensorshader/)
 
 - To install, just import the DLL.
