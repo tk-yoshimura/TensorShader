@@ -1,10 +1,10 @@
 using System;
 using System.IO;
-using System.Net;
+using System.Net.Http;
 
 namespace MNIST {
     public static class MnistDownloader {
-        public static void Download(string dirpath_dataset) {
+        public static async void Download(string dirpath_dataset) {
             if (!Directory.Exists(dirpath_dataset)) {
                 Directory.CreateDirectory(dirpath_dataset);
             }
@@ -20,7 +20,7 @@ namespace MNIST {
                 "t10k-labels-idx1-ubyte.gz"
             };
 
-            using (var wc = new WebClient()) {
+            using (var client = new HttpClient()) {
                 foreach (string filename in filenames) {
                     string filepath = $"{dirpath_dataset}/{filename}";
                     string filepath_temp = $"{dirpath_dataset}/{filename}.download";
@@ -30,7 +30,12 @@ namespace MNIST {
                     }
 
                     if (!File.Exists(filepath)) {
-                        wc.DownloadFile($"{url}{filename}", filepath_temp);
+                        using HttpResponseMessage res = await client.GetAsync($"{url}{filename}");
+                        using (Stream stream = await res.Content.ReadAsStreamAsync()) {
+                            using FileStream fs = new(filepath_temp, FileMode.CreateNew);
+                            stream.CopyTo(fs);
+                        }
+
                         File.Move(filepath_temp, filepath);
                     }
                 }

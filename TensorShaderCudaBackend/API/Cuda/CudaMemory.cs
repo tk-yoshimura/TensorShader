@@ -51,7 +51,6 @@ namespace TensorShaderCudaBackend.API {
             }
 
             /// <summary>ホストデバイス間メモリ領域コピー</summary>
-            [HandleProcessCorruptedStateExceptions]
             private static void Copy(IntPtr src_ptr, IntPtr dst_ptr, size_t count, cudaMemcpyKind kind) {
                 try {
                     if (src_ptr == IntPtr.Zero) {
@@ -129,7 +128,6 @@ namespace TensorShaderCudaBackend.API {
             }
 
             /// <summary>非同期ホストデバイス間メモリ領域コピー</summary>
-            [HandleProcessCorruptedStateExceptions]
             private static void CopyAsync(IntPtr src_ptr, IntPtr dst_ptr, size_t count, cudaMemcpyKind kind, IntPtr stream) {
                 try {
                     if (src_ptr == IntPtr.Zero) {
