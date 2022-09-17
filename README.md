@@ -4,7 +4,7 @@
 **Deep Learning .NET library, For Regression.**
 
 ## Description
-Deep learning library of **Define and Run** / **NHWC format**
+**Define and Run** / **NHWC format** Deep learning library
 
 **Supports High-Dimensional Convolution Neural Networks.** (Complex, Quaternion, Vector3D)
 
