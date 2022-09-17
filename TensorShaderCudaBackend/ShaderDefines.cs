@@ -358,8 +358,8 @@ namespace TensorShaderCudaBackend {
                 $@"
                 static __inline__ __device__ void floatfloat_add(float &hi, float &lo, float val){{
                     float tmp = hi;
-                    hi += val;
-                    lo += val - (hi - tmp);
+                    hi = (hi + lo) + val;
+                    lo += (tmp - hi) + val;
                 }}";
 
                 /// <summary>FloatFloat減算</summary>
@@ -367,8 +367,8 @@ namespace TensorShaderCudaBackend {
                 $@"
                 static __inline__ __device__ void floatfloat_sub(float &hi, float &lo, float val){{
                     float tmp = hi;
-                    hi -= val;
-                    lo -= val + (hi - tmp);
+                    hi = (hi + lo) - val;
+                    lo -= (hi - tmp) + val;
                 }}";
 
                 /// <summary>FloatFloat融合積和演算</summary>
@@ -376,7 +376,7 @@ namespace TensorShaderCudaBackend {
                 $@"
                 static __inline__ __device__ void floatfloat_fma(float &hi, float &lo, float val_x, float val_y){{
                     float tmp = hi;
-                    hi = fmaf(val_x, val_y, hi);
+                    hi = fmaf(val_x, val_y, hi + lo);
                     lo += fmaf(val_x, val_y, tmp - hi);
                 }}";
 
@@ -385,7 +385,7 @@ namespace TensorShaderCudaBackend {
                 $@"
                 static __inline__ __device__ void floatfloat_fms(float &hi, float &lo, float val_x, float val_y){{
                     float tmp = hi;
-                    hi = fmaf(-val_x, val_y, hi);
+                    hi = fmaf(-val_x, val_y, hi + lo);
                     lo -= fmaf(val_x, val_y, hi - tmp);
                 }}";
 
@@ -394,15 +394,15 @@ namespace TensorShaderCudaBackend {
                 $@"
                 static __inline__ __device__ void floatfloat_hilo_add(float &hi, float &lo, float val_hi, float val_lo){{
                     float tmp = hi;
-                    hi += val_hi;
-                    lo += val_lo + (val_hi - (hi - tmp));
+                    hi = (hi + lo) + val_hi;
+                    lo += ((tmp - hi) + val_hi) + val_lo;
                 }}";
 
                 /// <summary>原子性保証加算</summary>
                 public static string AtomicAdd =>
                 $@"
                 static __inline__ __device__ void floatfloat_atomicadd(float *ptr, float hi, float lo){{
-                    float tmp = atomicAdd(ptr, hi);
+                    float tmp = atomicAdd(ptr, hi + lo);
                     atomicAdd(ptr + 1, lo - (((tmp + hi) - tmp) - hi));
                 }}";
 
@@ -465,9 +465,9 @@ namespace TensorShaderCudaBackend {
                     static __inline__ __device__ void floatfloat_atomicadd(float2 *ptr, float2 hi, float2 lo){{
                         float *ptr_float = (float*)ptr;
 
-                        float tmpx = atomicAdd(ptr_float, hi.x);
+                        float tmpx = atomicAdd(ptr_float, hi.x + lo.x);
                         atomicAdd(ptr_float + 1, lo.x - (((tmpx + hi.x) - tmpx) - hi.x));
-                        float tmpy = atomicAdd(ptr_float + 2, hi.y);
+                        float tmpy = atomicAdd(ptr_float + 2, hi.y + lo.y);
                         atomicAdd(ptr_float + 3, lo.y - (((tmpy + hi.y) - tmpy) - hi.y));
                     }}";
                 }
@@ -585,13 +585,13 @@ namespace TensorShaderCudaBackend {
                     static __inline__ __device__ void floatfloat_atomicadd(float4 *ptr, float4 hi, float4 lo){{
                         float *ptr_float = (float*)ptr;
 
-                        float tmpx = atomicAdd(ptr_float, hi.x);
+                        float tmpx = atomicAdd(ptr_float, hi.x + lo.x);
                         atomicAdd(ptr_float + 1, lo.x - (((tmpx + hi.x) - tmpx) - hi.x));
-                        float tmpy = atomicAdd(ptr_float + 2, hi.y);
+                        float tmpy = atomicAdd(ptr_float + 2, hi.y + lo.y);
                         atomicAdd(ptr_float + 3, lo.y - (((tmpy + hi.y) - tmpy) - hi.y));
-                        float tmpz = atomicAdd(ptr_float + 4, hi.z);
+                        float tmpz = atomicAdd(ptr_float + 4, hi.z + lo.z);
                         atomicAdd(ptr_float + 5, lo.z - (((tmpz + hi.z) - tmpz) - hi.z));
-                        float tmpw = atomicAdd(ptr_float + 6, hi.w);
+                        float tmpw = atomicAdd(ptr_float + 6, hi.w + lo.w);
                         atomicAdd(ptr_float + 7, lo.w - (((tmpw + hi.w) - tmpw) - hi.w));
                     }}";
                 }
