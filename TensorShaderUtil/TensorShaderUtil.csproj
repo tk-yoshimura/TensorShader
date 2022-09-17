@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Platforms>x64</Platforms>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Deterministic>false</Deterministic>
@@ -10,13 +10,13 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DocumentationFile>bin\x64\Debug\net5.0\TensorShaderUtil.xml</DocumentationFile>
+    <DocumentationFile>bin\x64\Debug\net6.0\TensorShaderUtil.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DocumentationFile>bin\x64\Release\net5.0\TensorShaderUtil.xml</DocumentationFile>
+    <DocumentationFile>bin\x64\Release\net6.0\TensorShaderUtil.xml</DocumentationFile>
     <DefineConstants>TRACE</DefineConstants>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
@@ -24,10 +24,10 @@
 
   <ItemGroup>
     <Reference Include="TensorShader">
-      <HintPath>..\TensorShader\bin\x64\Release\net5.0\TensorShader.dll</HintPath>
+      <HintPath>..\TensorShader\bin\x64\Release\net6.0\TensorShader.dll</HintPath>
     </Reference>
     <Reference Include="TensorShaderCudaBackend">
-      <HintPath>..\TensorShaderCudaBackend\bin\x64\Release\net5.0\TensorShaderCudaBackend.dll</HintPath>
+      <HintPath>..\TensorShaderCudaBackend\bin\x64\Release\net6.0\TensorShaderCudaBackend.dll</HintPath>
     </Reference>
   </ItemGroup>
 

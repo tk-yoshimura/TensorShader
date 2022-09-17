@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <Deterministic>false</Deterministic>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -17,10 +17,10 @@
 
   <ItemGroup>
     <Reference Include="TensorShader">
-      <HintPath>..\TensorShader\bin\x64\Debug\net5.0\TensorShader.dll</HintPath>
+      <HintPath>..\TensorShader\bin\x64\Debug\net6.0\TensorShader.dll</HintPath>
     </Reference>
     <Reference Include="TensorShaderCudaBackend">
-      <HintPath>..\TensorShader\bin\x64\Debug\net5.0\TensorShaderCudaBackend.dll</HintPath>
+      <HintPath>..\TensorShader\bin\x64\Debug\net6.0\TensorShaderCudaBackend.dll</HintPath>
     </Reference>
   </ItemGroup>
 
