@@ -8,7 +8,7 @@
 
 **Supports High-Dimensional Convolution Neural Networks.** (Complex, Quaternion, Vector3D)
 
-For regression problems: **High precision calculate** by FP32-FP32 arithmetic (1/8 error of FP32 arithmetic)
+For regression problems: **High precision calculate** by FP32-FP32 arithmetic
 
 ## Requirement  
 .NET 6.0  

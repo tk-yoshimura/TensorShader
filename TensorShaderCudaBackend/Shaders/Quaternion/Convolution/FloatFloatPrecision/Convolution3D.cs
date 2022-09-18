@@ -111,7 +111,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution.FloatFloatPreci
                 { (OutChannels % ThreadsX != 0 ? $"if(outch < {OutChannels}){{" : "") }
                     unsigned int outmap_idx = outch + {OutChannels} * (ox + outwidth * (oy + outheight * oz));
 
-                    outmap[outmap_idx] = ctor_float4(uv_hi.x + uv_lo.x, uv_hi.y + uv_lo.y, uv_hi.z + uv_lo.z, uv_hi.w + uv_lo.w);
+                    outmap[outmap_idx] = ctor_float4(uv_hi.x, uv_hi.y, uv_hi.z, uv_hi.w);
                 { (OutChannels % ThreadsX != 0 ? "}" : "") }
             }}";
 

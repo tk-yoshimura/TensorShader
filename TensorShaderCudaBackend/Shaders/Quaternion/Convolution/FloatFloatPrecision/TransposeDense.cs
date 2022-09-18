@@ -75,7 +75,7 @@ namespace TensorShaderCudaBackend.Shaders.Quaternion.Convolution.FloatFloatPreci
                         filter_idx += {OutChannels};
                     }}
 
-                    outmap[outch] = ctor_float4(uv_hi.x + uv_lo.x, uv_hi.y + uv_lo.y, uv_hi.z + uv_lo.z, uv_hi.w + uv_lo.w);
+                    outmap[outch] = ctor_float4(uv_hi.x, uv_hi.y, uv_hi.z, uv_hi.w);
                 { (OutChannels % ThreadsX != 0 ? "}" : "") }
             }}";
 

@@ -89,7 +89,7 @@ namespace TensorShaderCudaBackend.Shaders.Trivector.Convolution.FloatFloatPrecis
                 { (OutChannels % ThreadsX != 0 ? $"if(outch < {OutChannels}){{" : "") }
                     unsigned int outmap_idx = outch + {OutChannels} * ox;
 
-                    outmap[outmap_idx] = ctor_float3(vq_hi.x + vq_lo.x, vq_hi.y + vq_lo.y, vq_hi.z + vq_lo.z);
+                    outmap[outmap_idx] = ctor_float3(vq_hi.x, vq_hi.y, vq_hi.z);
                 { (OutChannels % ThreadsX != 0 ? "}" : "") }
             }}";
 

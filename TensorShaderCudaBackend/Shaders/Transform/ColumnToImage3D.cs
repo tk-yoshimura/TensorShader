@@ -81,7 +81,7 @@ namespace TensorShaderCudaBackend.Shaders.Transform {
                 }}
 
                 unsigned int outmap_idx = ch + {Channels} * (ox + outwidth * (oy + outheight * oz));
-                outmap[outmap_idx] = hi + lo;
+                outmap[outmap_idx] = hi;
             }}";
 
             this.Kernel = new Kernel(code, "column_to_image_3d");

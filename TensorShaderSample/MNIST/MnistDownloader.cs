@@ -30,8 +30,8 @@ namespace MNIST {
                     }
 
                     if (!File.Exists(filepath)) {
-                        using HttpResponseMessage res = await client.GetAsync($"{url}{filename}");
-                        using (Stream stream = await res.Content.ReadAsStreamAsync()) {
+                        using HttpResponseMessage res = client.GetAsync($"{url}{filename}").Result;
+                        using (Stream stream = res.Content.ReadAsStreamAsync().Result) {
                             using FileStream fs = new(filepath_temp, FileMode.CreateNew);
                             stream.CopyTo(fs);
                         }

@@ -402,7 +402,7 @@ namespace TensorShaderCudaBackend {
                 public static string AtomicAdd =>
                 $@"
                 static __inline__ __device__ void floatfloat_atomicadd(float *ptr, float hi, float lo){{
-                    float tmp = atomicAdd(ptr, hi + lo);
+                    float tmp = atomicAdd(ptr, hi);
                     atomicAdd(ptr + 1, lo - (((tmp + hi) - tmp) - hi));
                 }}";
 
@@ -465,9 +465,9 @@ namespace TensorShaderCudaBackend {
                     static __inline__ __device__ void floatfloat_atomicadd(float2 *ptr, float2 hi, float2 lo){{
                         float *ptr_float = (float*)ptr;
 
-                        float tmpx = atomicAdd(ptr_float, hi.x + lo.x);
+                        float tmpx = atomicAdd(ptr_float, hi.x);
                         atomicAdd(ptr_float + 1, lo.x - (((tmpx + hi.x) - tmpx) - hi.x));
-                        float tmpy = atomicAdd(ptr_float + 2, hi.y + lo.y);
+                        float tmpy = atomicAdd(ptr_float + 2, hi.y);
                         atomicAdd(ptr_float + 3, lo.y - (((tmpy + hi.y) - tmpy) - hi.y));
                     }}";
                 }
@@ -585,13 +585,13 @@ namespace TensorShaderCudaBackend {
                     static __inline__ __device__ void floatfloat_atomicadd(float4 *ptr, float4 hi, float4 lo){{
                         float *ptr_float = (float*)ptr;
 
-                        float tmpx = atomicAdd(ptr_float, hi.x + lo.x);
+                        float tmpx = atomicAdd(ptr_float, hi.x);
                         atomicAdd(ptr_float + 1, lo.x - (((tmpx + hi.x) - tmpx) - hi.x));
-                        float tmpy = atomicAdd(ptr_float + 2, hi.y + lo.y);
+                        float tmpy = atomicAdd(ptr_float + 2, hi.y);
                         atomicAdd(ptr_float + 3, lo.y - (((tmpy + hi.y) - tmpy) - hi.y));
-                        float tmpz = atomicAdd(ptr_float + 4, hi.z + lo.z);
+                        float tmpz = atomicAdd(ptr_float + 4, hi.z);
                         atomicAdd(ptr_float + 5, lo.z - (((tmpz + hi.z) - tmpz) - hi.z));
-                        float tmpw = atomicAdd(ptr_float + 6, hi.w + lo.w);
+                        float tmpw = atomicAdd(ptr_float + 6, hi.w);
                         atomicAdd(ptr_float + 7, lo.w - (((tmpw + hi.w) - tmpw) - hi.w));
                     }}";
                 }

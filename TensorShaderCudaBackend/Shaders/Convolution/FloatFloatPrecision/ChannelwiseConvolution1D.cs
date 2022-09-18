@@ -59,7 +59,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution.FloatFloatPrecision {
 
                 unsigned int outmap_idx = ch + {Channels} * ox;
 
-                outmap[outmap_idx] = uv_hi + uv_lo;
+                outmap[outmap_idx] = uv_hi;
             }}";
 
             this.Kernel = new Kernel(code, "chwise_convolution_1d");

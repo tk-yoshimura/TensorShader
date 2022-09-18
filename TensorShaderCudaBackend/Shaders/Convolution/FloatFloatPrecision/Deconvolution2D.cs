@@ -97,7 +97,7 @@ namespace TensorShaderCudaBackend.Shaders.Convolution.FloatFloatPrecision {
                 { (OutChannels % ThreadsX != 0 ? $"if(outch < {OutChannels}){{" : "") }
                     unsigned int outmap_idx = outch + {OutChannels} * (ox + outwidth * oy);
 
-                    outmap[outmap_idx] = uv_hi + uv_lo;
+                    outmap[outmap_idx] = uv_hi;
                 { (OutChannels % ThreadsX != 0 ? "}" : "") }
             }}";
 
